@@ -1,0 +1,2685 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+ If not stated otherwise in this file or this component's Licenses.txt
+ file the following copyright and licenses apply:
+
+ Copyright 2025 RDK Management
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<parameters>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.InterfaceNumberOfEntries</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>8</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>8</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.LinkNumberOfEntries</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>4</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>4</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Enable</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Status</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down,Unknown,Dormant,NotPresent,LowerLayerDown,Error</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Alias</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>Interface1</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Interface1,Inter_1</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Name</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>sw_1</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>sw_1</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.LastChange</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.LowerLayers</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue/>
+		<!--  the range of values acceptable  -->
+		<expectedValues/>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Upstream</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.MACAddress</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.MaxBitRate</name>
+		<!-- type of the parameter  -->
+		<type>int</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.CurrentBitRate</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.DuplexMode</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Auto,Full</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.X_CISCO_COM_AssociatedDevice</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue/>
+		<!--  the range of values acceptable  -->
+		<expectedValues/>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.X_RDKCENTRAL-COM_AssociatedDeviceNumberOfEntries</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.BytesSent</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.BytesReceived</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.PacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.PacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.ErrorsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.ErrorsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.UnicastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.UnicastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.DiscardPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.DiscardPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.MulticastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.MulticastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.BroadcastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.BroadcastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.1.Stats.UnknownProtoPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Enable</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Status</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down,Unknown,Dormant,NotPresent,LowerLayerDown,Error</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Alias</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>Interface2</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Interface2,Inter_2</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Name</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>sw_2</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>sw_2</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.LastChange</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.LowerLayers</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue/>
+		<!--  the range of values acceptable  -->
+		<expectedValues/>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Upstream</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.MACAddress</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.MaxBitRate</name>
+		<!-- type of the parameter  -->
+		<type>int</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.CurrentBitRate</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.DuplexMode</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Auto,Full</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.X_CISCO_COM_AssociatedDevice</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue/>
+		<!--  the range of values acceptable  -->
+		<expectedValues/>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.X_RDKCENTRAL-COM_AssociatedDeviceNumberOfEntries</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.BytesSent</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.BytesReceived</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.PacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.PacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.ErrorsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.ErrorsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.UnicastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.UnicastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.DiscardPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.DiscardPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.MulticastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.MulticastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.BroadcastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.BroadcastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.2.Stats.UnknownProtoPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Enable</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Status</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down,Unknown,Dormant,NotPresent,LowerLayerDown,Error</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Alias</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>Interface3</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Interface3,Inter_3</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Name</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>sw_3</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>sw_3</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.LastChange</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.LowerLayers</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue/>
+		<!--  the range of values acceptable  -->
+		<expectedValues/>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Upstream</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.MACAddress</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.MaxBitRate</name>
+		<!-- type of the parameter  -->
+		<type>int</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.CurrentBitRate</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.DuplexMode</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Auto,Full</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.X_CISCO_COM_AssociatedDevice</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue></defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues></expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.X_RDKCENTRAL-COM_AssociatedDeviceNumberOfEntries</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.BytesSent</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.BytesReceived</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.PacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.PacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.ErrorsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.ErrorsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.UnicastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.UnicastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.DiscardPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.DiscardPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.MulticastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.MulticastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.BroadcastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.BroadcastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.3.Stats.UnknownProtoPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Enable</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Status</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down,Unknown,Dormant,NotPresent,LowerLayerDown,Error</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Alias</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>Interface4</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Interface4,Inter_4</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Name</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>sw_4</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>sw_4</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.LastChange</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		</parameter>
+		<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.LowerLayers</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue/>
+		<!--  the range of values acceptable  -->
+		<expectedValues/>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Upstream</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.MACAddress</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.MaxBitRate</name>
+		<!-- type of the parameter  -->
+		<type>int</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.CurrentBitRate</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.DuplexMode</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Auto,Full,Half</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.X_CISCO_COM_AssociatedDevice</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue/>
+		<!--  the range of values acceptable  -->
+		<expectedValues/>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.X_RDKCENTRAL-COM_AssociatedDeviceNumberOfEntries</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.BytesSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.BytesReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.PacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.PacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.ErrorsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.ErrorsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.UnicastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.UnicastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.DiscardPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.DiscardPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.MulticastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.MulticastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+	<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.BroadcastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.BroadcastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.4.Stats.UnknownProtoPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Enable</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Status</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down,Unknown,Dormant,NotPresent,LowerLayerDown,Error</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Alias</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>Interface5</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Intrer5,Interface5</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Name</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>sw_5</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>sw_5</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.LastChange</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.LowerLayers</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue/>
+		<!--  the range of values acceptable  -->
+		<expectedValues/>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Upstream</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.MACAddress</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.MaxBitRate</name>
+		<!-- type of the parameter  -->
+		<type>int</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.CurrentBitRate</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.DuplexMode</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Auto,Full</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.X_CISCO_COM_AssociatedDevice</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue/>
+		<!--  the range of values acceptable  -->
+		<expectedValues/>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.X_RDKCENTRAL-COM_AssociatedDeviceNumberOfEntries</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.BytesSent</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.BytesReceived</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.PacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.PacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.ErrorsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.ErrorsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.UnicastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.UnicastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.DiscardPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.DiscardPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.MulticastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.MulticastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.BroadcastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.BroadcastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Interface.5.Stats.UnknownProtoPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Enable</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Status</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down,Unknown,Dormant,NotPresent,LowerLayerDown,Error</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Alias</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Guest Network 1,Wan EthLink,Primary LAN</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Name</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>brlan0,erouter0,brlan7</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.LastChange</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.LowerLayers</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.MACAddress</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.PriorityTagging</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.BytesSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.BytesReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.PacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.PacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.ErrorsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.ErrorsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.UnicastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.UnicastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.DiscardPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.DiscardPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.MulticastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.MulticastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.BroadcastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.BroadcastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.1.Stats.UnknownProtoPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Enable</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Status</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down,Unknown,Dormant,NotPresent,LowerLayerDown,Error</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Alias</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Guest Network 1,Home Security</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Name</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>brlan0,erouter0,brlan1</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.LastChange</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.LowerLayers</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.MACAddress</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.PriorityTagging</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.BytesSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.BytesReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.PacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.PacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.ErrorsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.ErrorsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.UnicastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.UnicastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.DiscardPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.DiscardPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.MulticastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.MulticastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.BroadcastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.BroadcastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.2.Stats.UnknownProtoPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Enable</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Status</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down,Unknown,Dormant,NotPresent,LowerLayerDown,Error</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Alias</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Guest Network 1,Wan EthLink</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Name</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<defaultValue>sw_5</defaultValue> 
+		<expectedValues>sw_5</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.LastChange</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.LowerLayers</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.MACAddress</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.PriorityTagging</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.BytesSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		</parameter>
+		<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.BytesReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.PacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.PacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.ErrorsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.ErrorsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.UnicastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.UnicastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.DiscardPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.DiscardPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.MulticastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.MulticastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.BroadcastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.BroadcastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+	<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.3.Stats.UnknownProtoPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Enable</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Status</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down,Unknown,Dormant,NotPrsent,Error,LoweLayerDown</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Alias</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Guest Network 1,Wan EthLink,</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Name</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>brlan0,erouter0,brlan7</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.LastChange</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.LowerLayers</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.MACAddress</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.PriorityTagging</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.BytesSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.BytesReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.PacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.PacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.ErrorsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.ErrorsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.UnicastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.UnicastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.DiscardPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.DiscardPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.MulticastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.MulticastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.BroadcastPacketsSent</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.BroadcastPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.Link.4.Stats.UnknownProtoPacketsReceived</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDKCENTRAL-COM_EthHost_Sync</name>
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>false</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDK_InterfaceNumberOfEntries</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>4</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>4</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDKCENTRAL-COM_WAN.Enabled</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>true</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDKCENTRAL-COM_WAN.Port</name>
+		<!-- type of the parameter  -->
+		<type>uint</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>0</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>0</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDK_Interface.1.Upstream</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>true</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDK_Interface.1.WanValidated</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDK_Interface.1.Name</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>lan0</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>lan0</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDK_Interface.1.Status</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down,Unknown,Dormant,NotPresent,LowerLayerDown,Error</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDK_Interface.1.WanStatus</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Up,Down</expectedValues>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDK_Interface.1.Enable</name>
+		<!-- type of the parameter  -->
+		<type>bool</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>true</persistentSet>
+		<!--  the range of values acceptable  -->
+		<expectedValues>true,false</expectedValues>
+		<RFCEnabled>true</RFCEnabled>
+	</parameter>
+	<parameter>
+		<!-- the tr-181 parameter name  -->
+		<name>Device.Ethernet.X_RDK_Interface.1.LowerLayers</name>
+		<!-- type of the parameter  -->
+		<type>string</type>
+		<!-- whether set is applicable or not  -->
+		<writable>false</writable>
+		<!--  whether set value will be retained and set should be followed by a get or not  -->
+		<persistentSet>false</persistentSet>
+		<!-- default value of the param after factory reset  -->
+		<defaultValue>Device.Ethernet.X_RDK_Interface.1</defaultValue>
+		<!--  the range of values acceptable  -->
+		<expectedValues>Device.Ethernet.X_RDK_Interface.1</expectedValues>
+	</parameter>
+</parameters>
