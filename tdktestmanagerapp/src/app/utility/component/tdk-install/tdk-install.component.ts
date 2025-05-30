@@ -67,9 +67,11 @@ export class TdkInstallComponent {
   createlogs: string = '';
   installLogs: string = '';
   isLoading: boolean = false;
+  isUploadLoading: boolean = false;
   dispMessage: string = '';
   selectedPackageName: any = null;
   showLoader: boolean = false; // Flag to control loader visibility
+  loadPackage: boolean = false; // Flag to control package loading
   loadingMessage: string = '';
   modalHeading: string = 'Upload Package File'; // Default heading
   uploadPackageForm!: FormGroup;
@@ -135,6 +137,7 @@ export class TdkInstallComponent {
         next: (res) => {
           this.isLoading = false;
           this.showLoader = false;
+          this.fetchPackageNames();
           this.createlogs = res.data.logs;
           this._snakebar.open(res.message, '', {
             duration: 3000,
@@ -145,6 +148,7 @@ export class TdkInstallComponent {
         error: (err) => {
           this.isLoading = false;
           this.showLoader = false;
+          this.createlogs = err.data.logs;
           this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
@@ -223,7 +227,7 @@ export class TdkInstallComponent {
     
     this.createlogs='';
     this.loadingMessage =
-      'Package installation is in progress. Please wait for a while!';
+      'Package installation is in progress. Please wait for 2-3 minutes';
     this.isLoading = true;
     this.showLoader = true; // Show the loader
     let installPackageObj = {
@@ -251,6 +255,7 @@ export class TdkInstallComponent {
         error: (err) => {
           this.isLoading = false;
           this.showLoader = false;
+          this.createlogs = err.data.logs;
           this._snakebar.open(err.message, '', {
             duration: 3000,
             panelClass: ['err-msg'],
@@ -288,13 +293,14 @@ export class TdkInstallComponent {
   fetchPackageNames() {
     this.dispMessage = '';
     this.selectedPackageName = '';
-
+    this.loadPackage = true; // Show the loader while fetching package names
     this.packagemanagerservice
       .getPackageList(this.selectedPackage, this.data)
       .subscribe({
         next: (res) => {
           console.log(res);
-          this.packageNames = res.data;
+          this.loadPackage = false;
+          this.packageNames = (res.data || []).sort((a: string, b: string) => b.localeCompare(a));
           if (res.data == null && res.statusCode == 200) {
             this.dispMessage = res.message;
           }
@@ -326,7 +332,7 @@ export class TdkInstallComponent {
     this.uploadFormSubmitted = true;
 
     if (this.uploadPackageForm.invalid) {
-      this.isLoading = false;
+      this.isUploadLoading = false;
       return;
     }
 
@@ -334,14 +340,14 @@ export class TdkInstallComponent {
       this.uploadFileError = null;
       // Determine which API to call based on the type
       const uploadFile = this.uploadFileName as File;
-      this.isLoading = true;
+      this.isUploadLoading = true;
       if (this.type === 'generic') {
         this.packagemanagerservice
           .uploadGenericPackage(this.selectedPackage, this.data, uploadFile)
           .subscribe({
             next: (res) => {
               this.fetchPackageNames();
-              this.isLoading = false;
+              this.isUploadLoading = false;
               this._snakebar.open(res.message, '', {
                 duration: 3000,
                 panelClass: ['success-msg'],
@@ -351,7 +357,7 @@ export class TdkInstallComponent {
               this.closeModal();
             },
             error: (err) => {
-              this.isLoading = false;
+              this.isUploadLoading = false;
               this._snakebar.open(err.message, '', {
                 duration: 2000,
                 panelClass: ['err-msg'],
@@ -365,7 +371,7 @@ export class TdkInstallComponent {
           .uploadPackage(this.selectedPackage, this.data, uploadFile)
           .subscribe({
             next: (res) => {
-              this.isLoading = false;
+              this.isUploadLoading = false;
               this.fetchPackageNames(); // Fetch package names again after upload
               this._snakebar.open(res.message, '', {
                 duration: 3000,
@@ -376,7 +382,7 @@ export class TdkInstallComponent {
               this.closeModal();
             },
             error: (err) => {
-              this.isLoading = false;
+              this.isUploadLoading = false;
               this._snakebar.open(err.message, '', {
                 duration: 2000,
                 panelClass: ['err-msg'],
@@ -426,6 +432,9 @@ export class TdkInstallComponent {
   onTabClick(event: any) {
     let label = event.tab.textLabel;
     this.selectedPackage = label;
+    this.createlogs = '';
+    this.packageNames = []; // Clear old list
+    this.loadPackage = true;
     this.fetchPackageNames();
   }
 

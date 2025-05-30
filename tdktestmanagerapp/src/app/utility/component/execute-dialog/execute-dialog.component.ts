@@ -496,11 +496,8 @@ export class ExecuteDialogComponent {
    *
    * @param items - An array of items to be processed (not used in the current implementation).
    */  
-  onScriptSelectAll(items: any[]):void{
-   let scripts = this.scriptTestsuiteOptions.filter(
-    (item:any)=> !this.scriptNameArr.find((selected)=>selected.id === item.id)
-   );
-   this.scriptNameArr = scripts.map((item:any)=>item.scriptName);
+   onScriptSelectAll(items: any[]): void {
+    this.scriptNameArr = items.map((item: any) => item.scriptName);
   }
   /**
    * Deselects all scripts by clearing the scriptNameArr array.

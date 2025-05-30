@@ -35,6 +35,7 @@ limitations under the License.
                   type="button"
                   class="download-btn execution-select"
                   (click)="onCreatePackage()"
+                  matTooltip="Create Package File"
                 >
                   Create Package
                 </button>
@@ -44,6 +45,7 @@ limitations under the License.
                   class="download-btn execution-select"
                   (click)="onInstallPackage()"
                   [disabled]="isLoading || !selectedPackageName"
+                  [matTooltip]="(!selectedPackageName && !isLoading) ? 'Select a package for installation' : 'Install Package File'"
                 >
                   Install Package
                 </button>
@@ -82,16 +84,16 @@ limitations under the License.
                 </ul>
               </div>
               <div class="title-sec mt-2" *ngIf="!selectedPackageName">
-                <span class="sub-titel" style="margin: 8px;"
-                  > Select the
+                <span class="sub-titel" style="margin: 8px">
+                  Select the
                   <span class="sub-titel">{{ selectedPackage }}</span> package
                   for installation</span
                 >
               </div>
               <!-- Display the selected package name -->
               <div class="title-sec mt-2" *ngIf="selectedPackageName">
-                <span class="sub-titel" style="margin: 8px;"
-                  > Selected package name:
+                <span class="sub-titel" style="margin: 8px">
+                  Selected package name:
                   <span class="sub-titel">{{ selectedPackageName }}</span></span
                 >
               </div>
@@ -99,31 +101,37 @@ limitations under the License.
                 <div *ngIf="dispMessage" class="display-message">
                   {{ dispMessage }}
                 </div>
-                <div
-                  *ngFor="let package of packageNames; let i = index"
-                  class="check-sec"
-                >
-                  <input
-                    type="radio"
-                    [id]="'chk' + i"
-                    [value]="package"
-                    name="packageSelection"
-                    (change)="onPackageSelect(package)"
-                  />
-                  <!-- [(ngModel)]="selectedPackages[package]"
-                          (change)="onCheckboxChange(package, $event)"> -->
-                  <label [for]="'chk' + i" class="label-check">{{
-                    package
-                  }}</label>
+                <div *ngIf="loadPackage" class="row loader-row">
+                  <app-loader></app-loader>
                 </div>
-
+                <div *ngIf="!loadPackage">
+                  <div
+                    *ngFor="let package of packageNames; let i = index"
+                    class="check-sec"
+                  >
+                    <input
+                      type="radio"
+                      [id]="'chk' + i"
+                      [value]="package"
+                      name="packageSelection"
+                      (change)="onPackageSelect(package)"
+                    />
+                    <!-- [(ngModel)]="selectedPackages[package]"
+                          (change)="onCheckboxChange(package, $event)"> -->
+                    <label [for]="'chk' + i" class="label-check">{{
+                      package
+                    }}</label>
+                  </div>
+                </div>
                 <!-- <ul>
                         <li *ngFor="let name of selectedList">{{ name }}</li>
                       </ul> -->
               </div>
 
               <div class="logsection">
-                <span class ="sub-titel">Package Creation/Installation logs</span>
+                <span class="sub-titel"
+                  >Package Creation/Installation logs</span
+                >
               </div>
               <div class="execution-result mb-3">
                 <div *ngIf="isLoading" class="loading-message">
@@ -137,7 +145,7 @@ limitations under the License.
               <button class="close-btn" type="button" (click)="close()">
                 Close
               </button>
-            </div>  
+            </div>
           </mat-tab>
           <mat-tab label="VTS">
             <div class="col-md-12 mt-3">
@@ -150,6 +158,7 @@ limitations under the License.
                   type="button"
                   class="download-btn execution-select"
                   (click)="onCreatePackage()"
+                  matTooltip="Create Package File"
                 >
                   Create Package
                 </button>
@@ -162,10 +171,10 @@ limitations under the License.
                   class="download-btn execution-select"
                   (click)="onInstallPackage()"
                   [disabled]="isLoading || !selectedPackageName"
+                  [matTooltip]="(!selectedPackageName && !isLoading) ? 'Select a package for installation' : 'Install Package File'"
                 >
                   Install Package
                 </button>
-
 
                 <button
                   type="button"
@@ -201,7 +210,7 @@ limitations under the License.
                 </ul>
               </div>
               <div class="title-sec mt-2" *ngIf="!selectedPackageName">
-                <span class="sub-titel" style="margin: 8px;"
+                <span class="sub-titel" style="margin: 8px"
                   >Select the
                   <span class="sub-titel">{{ selectedPackage }}</span> package
                   for installation</span
@@ -209,7 +218,7 @@ limitations under the License.
               </div>
               <!-- Display the selected package name -->
               <div class="title-sec mt-2" *ngIf="selectedPackageName">
-                <span class="sub-titel" style="margin: 8px;"
+                <span class="sub-titel" style="margin: 8px"
                   >Selected package name:
                   <span class="sub-titel">{{ selectedPackageName }}</span></span
                 >
@@ -218,30 +227,38 @@ limitations under the License.
                 <div *ngIf="dispMessage" class="display-message">
                   {{ dispMessage }}
                 </div>
-                <div
-                  *ngFor="let package of packageNames; let i = index"
-                  class="check-sec"
-                >
-                  <input
-                    type="radio"
-                    [id]="'chk' + i"
-                    [value]="package"
-                    name="packageSelection"
-                    (change)="onPackageSelect(package)"
-                  />
-                  <!-- (change)="onCheckboxChange(package, $event)"> -->
-                  <label [for]="'chk' + i" class="label-check">{{
-                    package
-                  }}</label>
-                </div>
 
+                <!-- Show loader while loading packages -->
+                <div *ngIf="loadPackage" class="row loader-row">
+                  <app-loader></app-loader>
+                </div>
+                <div *ngIf="!loadPackage">
+                  <div
+                    *ngFor="let package of packageNames; let i = index"
+                    class="check-sec"
+                  >
+                    <input
+                      type="radio"
+                      [id]="'chk' + i"
+                      [value]="package"
+                      name="packageSelection"
+                      (change)="onPackageSelect(package)"
+                    />
+                    <!-- (change)="onCheckboxChange(package, $event)"> -->
+                    <label [for]="'chk' + i" class="label-check">{{
+                      package
+                    }}</label>
+                  </div>
+                </div>
                 <!-- <ul>
                         <li *ngFor="let name of selectedList">{{ name }}</li>
                       </ul> -->
               </div>
 
               <div class="logsection">
-                <span class ="sub-titel">Package Creation/Installation logs</span>
+                <span class="sub-titel"
+                  >Package Creation/Installation logs</span
+                >
               </div>
               <div class="execution-result mb-3">
                 <div *ngIf="isLoading" class="loading-message">
@@ -252,7 +269,6 @@ limitations under the License.
                 </div>
                 <pre class="logs-content">{{ createlogs }}</pre>
               </div>
-              
             </div>
             <button class="close-btn" type="button" (click)="close()">
               Close
@@ -306,7 +322,6 @@ limitations under the License.
         </div>
         <div class="modal-body">
           <div class="container mt-4">
-            
             <div class="row mb-3">
               <label for="uploadfile" class="col-md-4 col-form-label"
                 >Select the Package file<span
@@ -323,21 +338,25 @@ limitations under the License.
                   (change)="onFileChange($event)"
                   #fileInput
                 />
-                <div *ngIf="uploadFormSubmitted && uploadPackageForm.controls['file']?.invalid" class="text-danger">
+                <div
+                  *ngIf="
+                    uploadFormSubmitted &&
+                    uploadPackageForm.controls['file']?.invalid
+                  "
+                  class="text-danger"
+                >
                   <small>Please select a file to upload.</small>
                 </div>
                 <small *ngIf="uploadFileError" class="errorupload">{{
                   uploadFileError
                 }}</small>
-                
               </div>
-              
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <div *ngIf="isLoading" >
-            <p class="upload-message">Package Upload is in progress...</p>
+          <div *ngIf="isUploadLoading" class="upload-message">
+            Package upload in in progress, Please wait for two minutes .
           </div>
           <button
             type="button"

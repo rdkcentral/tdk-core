@@ -50,7 +50,11 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
           errorMessage = error.error   
 
         }
-       
+       if(error.status == 503){
+          errorMessage = error.error   
+
+        }
+
       } else if (isProgressEventError(error)) {
         errorMessage = 'Network error: Please check your internet connection or the backend server may be down.';
 
