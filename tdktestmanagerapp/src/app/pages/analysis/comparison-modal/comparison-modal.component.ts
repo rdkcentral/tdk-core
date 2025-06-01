@@ -296,11 +296,26 @@ public columnDefs: ColDef[] = [
         const utcMoment =  moment.tz(locaToDateTime, moment.tz.guess()).endOf('day');
         this.toUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
       }
+
+        // Get values from the form
+      const scriptSingle = this.filterForm.get('scriptSingle')?.value;
+      const testSuiteSingke = this.filterForm.get('testSuiteSingke')?.value;
+
+
+      // Set scriptTestSuite based on execution type
+      let scriptTestSuite = '';
+      if (this.executionTypeName === 'SINGLESCRIPT') {
+        scriptTestSuite = scriptSingle;
+      } else if (this.executionTypeName === 'TESTSUITE') {
+        scriptTestSuite = testSuiteSingke;
+      }
+
+
       let obj = {
         "startDate": this.fromUTCTime,
         "endDate": this.toUTCTime,
         "executionType": this.executionTypeName,
-        "scriptTestSuite": '',
+        "scriptTestSuite": scriptTestSuite,
         "deviceType": this.deviceName,
         "category": this.selectedDfaultCategory
         

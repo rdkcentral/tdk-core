@@ -53,7 +53,7 @@ export class PreferedCategoryComponent {
    * Initializes the component.
    */
   ngOnInit(): void {
-    this.categorySelect = this.preferedCategory?this.preferedCategory:this.userCategory;
+    this.categorySelect = this.userCategory ? this.userCategory : this.preferedCategory;   
     this.categoryForm = this.fb.group({
       catgegory: [this.categorySelect, Validators.required]
     });
@@ -81,11 +81,14 @@ export class PreferedCategoryComponent {
             duration: 2000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
-            })
-            localStorage.setItem('preferedCategory', this.categorySelect);
-            setTimeout(() => {
+          })
+          // Update userCategory in loggedinUser
+          this.loggedinUser.userCategory = this.categorySelect;
+          localStorage.setItem('loggedinUser', JSON.stringify(this.loggedinUser));
+          localStorage.setItem('preferedCategory', this.categorySelect);
+          setTimeout(() => {
             this.router.navigate(["/configure"]);
-            }, 1000);
+          }, 1000);
           },
           error:(err)=>{
            

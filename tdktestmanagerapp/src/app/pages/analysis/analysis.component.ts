@@ -292,6 +292,7 @@ export class AnalysisComponent {
     if (val === 'RDKB') {
       this.categoryName = 'Broadband';
       this.selectedDfaultCategory = 'RDKB';
+      localStorage.setItem('preferedCategory', 'RDKB');
       this.authservice.selectedCategory = this.selectedDfaultCategory;
       this.getDeviceByCategory();
     } else if (val === 'RDKC') {
@@ -300,6 +301,7 @@ export class AnalysisComponent {
       this.authservice.selectedCategory = this.selectedDfaultCategory;
     } else {
       this.selectedDfaultCategory = 'RDKV';
+      localStorage.setItem('preferedCategory', 'RDKV');
       this.categoryName = 'Video';
       this.authservice.selectedCategory = this.selectedDfaultCategory;
       this.getDeviceByCategory();

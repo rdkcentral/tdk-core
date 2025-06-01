@@ -72,11 +72,13 @@ export class ConfigureComponent implements OnInit {
       this.rdkvVisible = false;
       this.service.selectedConfigVal = 'RDKB';
       this.service.showSelectedCategory = "Broadband";
+      localStorage.setItem('preferedCategory', 'RDKB');
     } else {
       this.rdkvVisible = true;
       this.rdkbVisible = false;
       this.service.selectedConfigVal = 'RDKV';
       this.service.showSelectedCategory = "Video";
+      localStorage.setItem('preferedCategory', 'RDKV')
     }
   }
 

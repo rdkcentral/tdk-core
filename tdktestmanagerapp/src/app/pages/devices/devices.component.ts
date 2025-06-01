@@ -183,6 +183,7 @@ export class DevicesComponent {
       this.selectedDeviceCategory = 'RDKB';
       this.authservice.selectedConfigVal = 'RDKB';
       this.authservice.showSelectedCategory = "Broadband";
+      localStorage.setItem('preferedCategory', 'RDKB');
       this.findallbyCategory();
     }
     else{
@@ -190,6 +191,7 @@ export class DevicesComponent {
       this.categoryName = 'Video';
       this.authservice.selectedConfigVal = 'RDKV';
       this.authservice.showSelectedCategory = "Video";
+      localStorage.setItem('preferedCategory', 'RDKV');
       this.findallbyCategory();
     }
 

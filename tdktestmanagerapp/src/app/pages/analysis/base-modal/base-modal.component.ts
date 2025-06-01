@@ -291,11 +291,14 @@ public columnDefs: ColDef[] = [
         const utcMoment =  moment.tz(locaToDateTime, moment.tz.guess()).endOf('day');
         this.toUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
       }
+      const scriptSingle = this.filterForm.get('scriptSingle')?.value;
+      const testSuiteSingke = this.filterForm.get('testSuiteSingke')?.value
+
       let obj = {
         "startDate": this.fromUTCTime,
         "endDate": this.toUTCTime,
         "executionType": this.executionTypeName,
-        "scriptTestSuite": '',
+        "scriptTestSuite": this.executionTypeName === 'SINGLESCRIPT' ? scriptSingle : (this.executionTypeName === 'TESTSUITE' ? testSuiteSingke : ''),
         "deviceType": this.deviceName,
         "category": this.selectedDfaultCategory
         

@@ -187,18 +187,7 @@ export class ScriptListComponent {
     this.selectedCategory = this.preferedCategory?this.preferedCategory:this.userCategory;
     let localViewName = localStorage.getItem('viewName') || '';
     localStorage.setItem('category', this.selectedCategory);
-    // this.viewName = localViewName?localViewName:'scripts';
-    // if(this.viewName === 'testsuites'){
-    //   this.testsuitTable = true;
-    //   this.scriptTable = false;
-    //   this.allTestSuilteListByCategory();
-    //   this.toggleSortSuite();
-    // }else{
-    //   this.testsuitTable = false;
-    //   this.scriptTable = true;
-    //   this.findallScriptsByCategory(this.selectedCategory);
-    //   this.scriptSorting();
-    // }
+    this.setCategoryName(this.selectedCategory);
     this.findallScriptsByCategory(this.selectedCategory);
     this.scriptSorting();
     this.viewChange(this.viewName);
@@ -252,6 +241,16 @@ export class ScriptListComponent {
       }
     })
   }
+
+   setCategoryName(category: string) {
+    if (category === 'RDKB') {
+      this.categoryName = 'Broadband';
+    } else if (category === 'RDKC') {
+      this.categoryName = 'Camera';
+    } else {
+      this.categoryName = 'Video';
+    }
+  }
   /**
    * Handles the change of category selection and updates the relevant data and view accordingly.
    * 
@@ -279,12 +278,14 @@ export class ScriptListComponent {
       if (val === 'RDKB') {
         this.categoryName = 'Broadband';
         this.selectedCategory = 'RDKB';
+        localStorage.setItem('preferedCategory', 'RDKB');
         this.authservice.selectedCategory = this.selectedCategory;
         this.allTestSuilteListByCategory();
       } 
       else {
         this.selectedCategory = 'RDKV';
         this.categoryName = 'Video';
+        localStorage.setItem('preferedCategory', 'RDKV');
         this.authservice.selectedCategory = this.selectedCategory;
         this.allTestSuilteListByCategory();
       }
@@ -293,15 +294,13 @@ export class ScriptListComponent {
       if (val === 'RDKB') {
         this.categoryName = 'Broadband';
         this.selectedCategory = 'RDKB';
-        // localStorage.setItem('category', this.selectedCategory);
-        // localStorage.setItem('categoryname',this.categoryName);
+        localStorage.setItem('preferedCategory', 'RDKB');        
         this.findallScriptsByCategory(this.selectedCategory);
       } 
       else {
         this.selectedCategory = 'RDKV';
-        this.categoryName = 'Video';
-        // localStorage.setItem('category', this.selectedCategory);
-        // localStorage.setItem('categoryname',this.categoryName);
+        this.categoryName = 'Video';      
+        localStorage.setItem('preferedCategory', 'RDKV');
         this.findallScriptsByCategory(this.selectedCategory);
       }
     }

@@ -610,6 +610,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       this.categoryName = 'Broadband';
       this.selectedDfaultCategory = 'RDKB';
       this.authservice.selectedCategory = this.selectedDfaultCategory;
+      localStorage.setItem('preferedCategory', 'RDKB')
       this.deviceStatusDestroy$.next();
       this.executionDestroy$.next();
       this.getDeviceStatus();
@@ -626,6 +627,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       this.allExecutionScheduler();
     } else {
       this.selectedDfaultCategory = 'RDKV';
+      localStorage.setItem('preferedCategory', 'RDKV');
       this.categoryName = 'Video';
       this.authservice.selectedCategory = this.selectedDfaultCategory;
       this.deviceStatusDestroy$.next();
