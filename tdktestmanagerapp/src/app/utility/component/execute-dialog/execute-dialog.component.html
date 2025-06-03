@@ -13,395 +13,343 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div class="container">
-            <h1 class="title">Trigger Execution</h1>
-                <form [formGroup]="executeForm" class="executeForm mt-2">
-                    <div class="row" *ngIf="showExecute">
-                        <div *ngIf="deviceStatucClick">
-                            <div class="row mb-2 width-row" *ngIf="categoryName !== 'RDKB' && categoryName !== 'RDKC'">
-                                <label for="device" class="col-md-4 col-form-label">Is Thunder Enabled</label>
-                                <div class="col-md-8">
-                                    <input class="form-check-input" type="checkbox" id="isthunder"
-                                        formControlName="isThunder" (change)="isThunderCheck($event)">
-                                </div>
-                            </div>
-                            <div class="row mb-2 width-row">
-                                <label for="device" class="col-md-4 col-form-label">Device/s<span
-                                        style="color:red; margin-left: 0.75em;">*</span></label>
-                                <div class="col-md-8">
-                                    <ng-multiselect-dropdown #multiSelect id="devicetype"
-                                        [placeholder]="'Select an option'" [settings]="devicetypeSettings"
-                                        [data]="deviceList" formControlName="devicetype" (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" 
-                                        (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)"
-                                       >
-                                    </ng-multiselect-dropdown>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="normalExecutionClick">
-                            <div class="row mb-2 width-row" *ngIf="categoryName !== 'RDKB' && categoryName !== 'RDKC'">
-                                <label for="device" class="col-md-4 col-form-label">Is Thunder Enabled</label>
-                                <div class="col-md-8">
-                                    <input class="form-check-input" type="checkbox" id="isthunder"
-                                        formControlName="isThunder" (change)="isThunderFromButton($event)">
-                                </div>
-                            </div>
-                            <div class="row mb-2 width-row">
-                                <label for="device" class="col-md-4 col-form-label">Device/s<span
-                                        style="color:red; margin-left: 0.75em;">*</span></label>
-                                <div class="col-md-8">
-                                    <ng-multiselect-dropdown #multiSelect id="devicetype"
-                                        [placeholder]="'Select an option'" [settings]="normalDeviceSettings"
-                                        [data]="deviceList" formControlName="devicetype" (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" 
-                                        (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)"
-                                       >
-                                    </ng-multiselect-dropdown>
-                                </div>
-                            </div>
-                        </div>
-                            <div class="row mb-2 row-align">
-                                <label for="testtype" class="col-md-4 col-form-label">Test Type<span
-                                    style="color:red; margin-left: 0.75em;">*</span></label>
-                                <div class="col-md-8">
-                                    <select class="form-select" aria-label="Default select example" id="testtype"
-                                    formControlName="testType" (change)="testTypeChange($event)">
-                                    <option value="" default>Select</option>
-                                    <option value="Other">Other</option>
-                                    <option value="Sanity">Sanity</option>
-                                    <option value="Developer">Developer</option>
-                                    <option value="Release">Release</option>
-                                    
-                                </select>
-                                </div>
-                            </div>
-                            <div class="row mb-2 row-align">
-                                <label for="testtype" class="col-md-4 col-form-label">Execution Name</label>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" formControlName="executionName" value="{{executionName}}"
-                                    (input)="valueChange($event)">
-                                </div>
-                            </div>
-                            <div class="row mb-2 row-align">
-                                <label for="type" class="col-md-4 col-form-label">Select Type<span
-                                        style="color:red; margin-left: 0.75em;">*</span></label>
-                                <div class="col-md-8">
-                                    <div class="viewgroup">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input rdkradio" type="radio"
-                                                id="scripts" value="script" formControlName="selectType" (change)="selectScriptType('script')">
-                                            <label class="form-check-label radio-text" for="scripts">Script</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input rdkradio" type="radio"
-                                                id="testsuites" value="testsuite" formControlName="selectType" (change)="selectScriptType('testsuite')">
-                                            <label class="form-check-label radio-text"
-                                                for="testsuites">TestSuite</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-3 row-align" >
-                                <label *ngIf="scriptVisible" for="selectscript" class="col-md-4 col-form-label">Select Script/s<span
-                                        style="color:red; margin-left: 0.75em;">*</span></label>
-                                        <label *ngIf="testsuiteVisible" for="selectscript" class="col-md-4 col-form-label">Select TestSuite/s<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-                                <div class="col-md-8" *ngIf="scriptVisible">
-                                    <ng-multiselect-dropdown #multiSelectScript appFocus id="script" [placeholder]="'Select an option'"
-                                        [settings]="scriptSettings" [data]="scriptTestsuiteOptions" formControlName="scriptTestsuite" (onSelect)="onScriptSelect($event)" (onDeSelect)="onScriptDeSelect($event)" 
-                                        (onSelectAll)="onScriptSelectAll($event)" (onDeSelectAll)="onScriptDeSelectAll($event)"
-                                        >
-                                    </ng-multiselect-dropdown>
-                                </div>
-                                <div class="col-md-8" *ngIf="testsuiteVisible">
-                                    <ng-multiselect-dropdown #multiSelectTestSuite appFocus id="script" [placeholder]="'Select an option'"
-                                        [settings]="testSuiteSettings" [data]="scriptTestsuiteOptions" formControlName="scriptTestsuite" (onSelect)="testSuiteSelect($event)" (onDeSelect)="testSuiteDeSelect($event)" 
-                                        (onSelectAll)="testSuiteSelectAll($event)" (onDeSelectAll)="testSuiteDeSelectAll($event)"
-                                     >
-                                    </ng-multiselect-dropdown>
-                                </div>
-                                <div *ngIf="FormSubmitted && executeForm.controls['script']?.errors" class="text-danger">
-                                    <small *ngIf="executeForm.controls['script']?.errors?.['required']">Please select Script/s.</small>
-                                </div>
-                            </div>
-                            <div class="row mb-2 row-align">
-                                <label for="type" class="col-md-4 col-form-label">Repeat Test Type<span
-                                        style="color:red; margin-left: 0.75em;">*</span></label>
-                                <div class="col-md-8">
-                                    <div class="viewgroup">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input rdkradio" type="radio"
-                                                id="scripts" value="full" formControlName="fullIndvidual" (change)="fullOrIndividual($event)">
-                                            <label class="form-check-label radio-text" for="scripts">Full execution </label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input rdkradio" type="radio"
-                                                id="testsuites" value="individual" formControlName="fullIndvidual" (change)="fullOrIndividual($event)">
-                                            <label class="form-check-label radio-text"
-                                                for="testsuites">Individual scripts</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
-                    <div class="row" *ngIf="showExecute">
-                        <div class="col">
-                            <div class="row mb-3">
-                                <label for="executionnumber" class="col-md-8 col-form-label">Number of
-                                    Executions</label>
-                                <div class="col-md-4 ps-1">
-                                    <input type="number" class="form-control" id="executionnumber"
-                                        formControlName="executionnumber"  min="1" max="10"
-                                        step="1" [value]="defaultValue" (input)="onNumberChange($event)" >
-                                    <small *ngIf="message" class="text-danger">{{ message }}</small>
-                                </div>
-                            </div>
-                            <div class="row mb-2">
-                                <label for="rerun" class="col-md-8 col-form-label">Re-Run on Failure</label>
-                                <div class="col-md-4 ps-1">
-                                    <div class="viewgroup">
-                                        <div class="rerun-input">
-                                            <input class="form-check-input" type="checkbox" id="rerun" formControlName="rerun" matTooltip="If execution is failed, a rerun of the execution will happen"
-                                            (change)="reRunChange($event)" aria-label="Button that displays a tooltip when focused or hovered over">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-
-                        </div>
-                        <div class="row mb-3">
-                            <label for="options" class="col-md-4 col-form-label">Additional log options
-                            </label>
-
-                            <div class="col-md-8" >
-                                <mat-slide-toggle 
-                                class="toggle-add" 
-                                (change)="toggleAdditinalField($event)">
-                              </mat-slide-toggle>
-                                <div class="form-check form-check-inline list-logs" *ngIf="showToggleField">
-                                    <input class="form-check-input logs-check" type="checkbox" id="inlineCheckbox1"
-                                    formControlName="diagnosis" (change)="diagnosisChange($event)">
-                                    <label class="form-check-label radio-text" for="inlineCheckbox1">Diagnosis log</label>
-                                </div>
-                                <div class="form-check form-check-inline list-logs" *ngIf="showToggleField">
-                                    <input class="form-check-input logs-check" type="checkbox" id="inlineCheckbox2"
-                                    formControlName="performance" (change)="performanceChange($event)">
-                                    <label class="form-check-label radio-text" for="inlineCheckbox2">Performance log</label>
-                                </div>
-                                <div class="form-check form-check-inline list-logs" *ngIf="showToggleField">
-                                    <input class="form-check-input logs-check" type="checkbox" id="inlineCheckbox3"
-                                    formControlName="logTransfer" (change)="logTransferChange($event)">
-                                    <label class="form-check-label radio-text" for="inlineCheckbox3">Device log</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" *ngIf="showSchedule">
-                        <div class="row mb-2 row-align">
-                            <label for="type" class="col-md-4 col-form-label">Select Schedule Type :<span
-                                    style="color:red; margin-left: 0.75em;">*</span></label>
-                            <div class="col-md-8">
-                                <div class="viewgroup">
-                                    <select class="form-select" aria-label="Default select example" id="priority"
-                                        formControlName="scheduleType" (change)="scheduleType($event)">
-                                        <option value="" default>Select</option>
-                                        <option value="OnetimeSchedule">Onetime Schedule</option>
-                                        <option value="ReccurenceSchedule">Reccurence Schedule</option>
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row mb-2 row-align" *ngIf="onetime">
-                            <label for="type" class="col-md-4 col-form-label">Select Date & Time :<span
-                                    style="color:red; margin-left: 0.75em;">*</span></label>
-                            <div class="col-md-8">
-                                <div class="viewgroup">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text group-texts" id="basic-addon2"><i
-                                                class="bi bi-calendar-event-fill calendar-icon"></i></span>
-                                        <input type="text" class="form-control" formControlName="date" bsDatepicker [bsConfig]="bsConfig"/>
-                                    </div>
-                                    <div class="time-sec">
-                                        <timepicker formControlName="time" [showSpinners]="false"></timepicker>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-2 row-align" *ngIf="reccurence">
-                            <label for="type" class="col-md-4 col-form-label">
-                                <div class="">
-                                    <div class="form-check ">
-                                        <input class="form-check-input rdkradio" type="radio" name="viewradio"
-                                            id="daily" value="daily" (change)="reccurenceChange('daily')">
-                                        <label class="form-check-label radio-text" for="daily">Daily</label>
-                                    </div>
-                                    <div class="form-check ">
-                                        <input class="form-check-input rdkradio" type="radio" name="viewradio"
-                                            id="weekly" value="weekly" (change)="reccurenceChange('weekly')">
-                                        <label class="form-check-label radio-text" for="weekly">Weekly</label>
-                                    </div>
-                                    <div class="form-check ">
-                                        <input class="form-check-input rdkradio" type="radio" name="viewradio"
-                                            id="monthly" value="monthly" (change)="reccurenceChange('monthly')">
-                                        <label class="form-check-label radio-text" for="monthly">Monthly</label>
-                                    </div>
-                                </div>
-                                <div class="date-group mt-3">
-                                    <span>StartDate :</span>
-                                </div>
-                                <div class="date-group">
-                                    <span class="date-groupend">EndDate :</span>
-                                </div>
-                            </label>
-                            <div class="col-md-8">
-                                <div class="viewgroup">
-                                    <div class="input-group  days-group" *ngIf="dailyGroup">
-                                        <span class="every common-label">Every</span>
-                                        <input type="text" class="form-control days-input" />
-                                        <span class="common-label">days</span>
-                                    </div>
-                                    <div class="weekly-group" *ngIf="weeklyGroup">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
-                                                value="option1">
-                                            <label class="form-check-label common-label"
-                                                for="inlineCheckbox1">SUN</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
-                                                value="option2">
-                                            <label class="form-check-label common-label"
-                                                for="inlineCheckbox2">MON</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
-                                                value="option3">
-                                            <label class="form-check-label common-label" for="inlineCheckbox3">TUE
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
-                                                value="option1">
-                                            <label class="form-check-label common-label"
-                                                for="inlineCheckbox1">WED</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
-                                                value="option2">
-                                            <label class="form-check-label common-label"
-                                                for="inlineCheckbox2">THU</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
-                                                value="option3">
-                                            <label class="form-check-label common-label" for="inlineCheckbox3">FRI
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
-                                                value="option3">
-                                            <label class="form-check-label common-label" for="inlineCheckbox3">SAT
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="monthly-group" *ngIf="monthlyGroup">
-                                        <div class="form-check firstmonth-group">
-                                            <input class="form-check-input rdkradio" type="radio" name="monthDay"
-                                                id="daily" value="daily">
-                                            <label class="form-check-label radio-text radio-label"
-                                                for="daily">Day</label>
-                                            <input type="text" class="form-control first-input" />
-                                            <span class="common-label of-every">of every </span>
-                                            <input type="text" class="form-control second-input" />
-                                            <span class="common-label">months</span>
-                                        </div>
-                                        <div class="form-check firstmonth-group mt-3 mb-2">
-                                            <input class="form-check-input rdkradio" type="radio" name="monthDay"
-                                                id="weekly" value="weekly">
-                                            <label class="form-check-label radio-text radio-label"
-                                                for="weekly">The</label>
-                                            <select class="form-select first-select" aria-label="Default select example"
-                                                id="priority">
-                                                <option value="" default>Select</option>
-                                                <option value="first">first</option>
-                                                <option value="second">second</option>
-                                                <option value="third">third</option>
-                                                <option value="fourth">fourth</option>
-                                                <option value="last">last</option>
-                                            </select>
-                                            <select class="form-select second-select"
-                                                aria-label="Default select example" id="priority">
-                                                <option value="" default>Select</option>
-                                                <option value="Sunday">Sunday</option>
-                                                <option value="Monday">Monday</option>
-                                                <option value="Thuesday">Thuesday</option>
-                                                <option value="Wednesday">Wednesday</option>
-                                                <option value="Thursday">Thursday</option>
-                                                <option value="Friday">Friday</option>
-                                                <option value="Saturday">Saturday</option>
-                                            </select>
-                                            <span class="common-label of-every">of every </span>
-                                            <input type="text" class="form-control third-input" />
-                                            <span class="common-label">months</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="viewgroup">
-                                    <div class="input-group mb-2">
-                                        <span class="input-group-text group-texts" id="basic-addon2"><i
-                                                class="bi bi-calendar-event-fill calendar-icon"></i></span>
-                                        <input type="text" class="form-control" formControlName="startdate"
-                                            bsDatepicker />
-                                    </div>
-                                    <div class="time-sec">
-                                        <timepicker formControlName="time" [showSpinners]="false"></timepicker>
-                                    </div>
-                                </div>
-                                <div class="viewgroup">
-                                    <div class="input-group mb-2">
-                                        <span class="input-group-text group-texts" id="basic-addon2"><i
-                                                class="bi bi-calendar-event-fill calendar-icon"></i></span>
-                                        <input type="text" class="form-control" formControlName="enddate"
-                                            bsDatepicker />
-                                    </div>
-                                    <div class="time-sec">
-                                        <timepicker formControlName="time" [showSpinners]="false"></timepicker>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row row-align" *ngIf="showExecute">
-                        <div class="col-md-12 mt-2 text-end">
-                            <button class="all-btn" (click)="close()">Close</button>
-                            <button class="all-btn" (click)="scheduleOpen('schedule')" [matTooltip]="!executeForm.valid ?'Enter all Mandatory fields before scheduling execution': '' " [disabled]="!executeForm.valid">Schedule</button>
-                            <button type="submit" class="all-btn submit-btn" [matTooltip]="!executeForm.valid ?'Enter all Mandatory fields before triggering execution': '' " [disabled]="!executeForm.valid" (click)="triggerExecute()">Execute Now</button>
-                        </div>
-                    </div>
-
-                    <div class="row row-align" *ngIf="showSchedule">
-                        <div class="col-md-12 mt-4 text-end">
-                            <button class="all-btn" (click)="close()">Close</button>
-                            <button class="all-btn" (click)="back()">Back</button>
-                            <button class="all-btn" (click)="scheduleExecute()">Schedule</button>
-                        </div>
-                    </div>
-
-                </form>
-                <div class="row exe-result mt-3 mb-2" *ngIf="showLogs">
-                    <div class="result-display">
-                            <label for="device" class="col-md-4 col-form-label exe-label">Execution Status :</label>
-                            <div class="col-md-8">
-                                <div class="execution-result">
-                                    <p>Execution Trigger Status : {{triggerExecuteDetails}}</p>
-                                    <p>Message : {{triggerMessage}}</p>
-                                </div>
-                            </div>
+    <h1 class="title">Trigger Execution</h1>
+    <form [formGroup]="executeForm" class="executeForm mt-2">
+        <div class="row" *ngIf="showExecute">
+            <div *ngIf="deviceStatucClick">
+                <div class="row mb-2 width-row" *ngIf="categoryName !== 'RDKB' && categoryName !== 'RDKC'">
+                    <label for="device" class="col-md-4 col-form-label">Is Thunder Enabled</label>
+                    <div class="col-md-8">
+                        <input class="form-check-input" type="checkbox" id="isthunder" formControlName="isThunder"
+                            (change)="isThunderCheck($event)">
                     </div>
                 </div>
-                <div class="row result-row" *ngIf="showLoader">
-                    <app-loader></app-loader>
+                <div class="row mb-2 width-row">
+                    <label for="device" class="col-md-4 col-form-label">Device/s<span
+                            style="color:red; margin-left: 0.75em;">*</span></label>
+                    <div class="col-md-8">
+                        <ng-multiselect-dropdown #multiSelect id="devicetype" [placeholder]="'Select an option'"
+                            [settings]="devicetypeSettings" [data]="deviceList" formControlName="devicetype"
+                            (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)"
+                            (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                        </ng-multiselect-dropdown>
+                    </div>
                 </div>
+            </div> 
+            <div *ngIf="normalExecutionClick">
+                <div class="row mb-2 width-row" *ngIf="categoryName !== 'RDKB' && categoryName !== 'RDKC'">
+                    <label for="device" class="col-md-4 col-form-label">Is Thunder Enabled</label>
+                    <div class="col-md-8">
+                        <input class="form-check-input" type="checkbox" id="isthunder" formControlName="isThunder"
+                            (change)="isThunderFromButton($event)">
+                    </div>
+                </div>
+                <div class="row mb-2 width-row">
+                    <label for="device" class="col-md-4 col-form-label">Device/s<span
+                            style="color:red; margin-left: 0.75em;">*</span></label>
+                    <div class="col-md-8">
+                        <ng-multiselect-dropdown #multiSelect id="devicetype" [placeholder]="'Select an option'"
+                            [settings]="normalDeviceSettings" [data]="deviceList" formControlName="devicetype"
+                            (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)"
+                            (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                        </ng-multiselect-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2 row-align">
+                <label for="testtype" class="col-md-4 col-form-label">Test Type<span
+                        style="color:red; margin-left: 0.75em;">*</span></label>
+                <div class="col-md-8">
+                    <select class="form-select" aria-label="Default select example" id="testtype"
+                        formControlName="testType" (change)="testTypeChange($event)">
+                        <option value="" default>Select</option>
+                        <option value="Other">Other</option>
+                        <option value="Sanity">Sanity</option>
+                        <option value="Developer">Developer</option>
+                        <option value="Release">Release</option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-2 row-align">
+                <label for="testtype" class="col-md-4 col-form-label">Execution Name</label>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" formControlName="executionName" value="{{executionName}}"
+                        (input)="valueChange($event)">
+                </div>
+            </div>
+            <div class="row mb-2 row-align">
+                <label for="type" class="col-md-4 col-form-label">Select Type<span
+                        style="color:red; margin-left: 0.75em;">*</span></label>
+                <div class="col-md-8">
+                    <div class="viewgroup">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input rdkradio" type="radio" id="scripts" value="script"
+                                formControlName="selectType" (change)="selectScriptType('script')">
+                            <label class="form-check-label radio-text" for="scripts">Script</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input rdkradio" type="radio" id="testsuites" value="testsuite"
+                                formControlName="selectType" (change)="selectScriptType('testsuite')">
+                            <label class="form-check-label radio-text" for="testsuites">TestSuite</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3 row-align">
+                <label *ngIf="scriptVisible" for="selectscript" class="col-md-4 col-form-label">Select Script/s<span
+                        style="color:red; margin-left: 0.75em;">*</span></label>
+                <label *ngIf="testsuiteVisible" for="selectscript" class="col-md-4 col-form-label">Select
+                    TestSuite/s<span style="color:red; margin-left: 0.75em;">*</span></label>
+                <div class="col-md-8" *ngIf="scriptVisible">
+                    <ng-multiselect-dropdown #multiSelectScript appFocus id="script" [placeholder]="'Select an option'"
+                        [settings]="scriptSettings" [data]="scriptTestsuiteOptions" formControlName="scriptTestsuite"
+                        (onSelect)="onScriptSelect($event)" (onDeSelect)="onScriptDeSelect($event)"
+                        (onSelectAll)="onScriptSelectAll($event)" (onDeSelectAll)="onScriptDeSelectAll($event)">
+                    </ng-multiselect-dropdown>
+                </div>
+                <div class="col-md-8" *ngIf="testsuiteVisible">
+                    <ng-multiselect-dropdown #multiSelectTestSuite appFocus id="script"
+                        [placeholder]="'Select an option'" [settings]="testSuiteSettings"
+                        [data]="scriptTestsuiteOptions" formControlName="scriptTestsuite"
+                        (onSelect)="testSuiteSelect($event)" (onDeSelect)="testSuiteDeSelect($event)"
+                        (onSelectAll)="testSuiteSelectAll($event)" (onDeSelectAll)="testSuiteDeSelectAll($event)">
+                    </ng-multiselect-dropdown>
+                </div>
+                <div *ngIf="FormSubmitted && executeForm.controls['script']?.errors" class="text-danger">
+                    <small *ngIf="executeForm.controls['script']?.errors?.['required']">Please select Script/s.</small>
+                </div>
+            </div>
+            <div class="row mb-2 row-align">
+                <label for="type" class="col-md-4 col-form-label">Repeat Test Type<span
+                        style="color:red; margin-left: 0.75em;">*</span></label>
+                <div class="col-md-8">
+                    <div class="viewgroup">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input rdkradio" type="radio" id="scripts" value="full"
+                                formControlName="fullIndvidual" (change)="fullOrIndividual($event)">
+                            <label class="form-check-label radio-text" for="scripts">Full execution </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input rdkradio" type="radio" id="testsuites" value="individual"
+                                formControlName="fullIndvidual" (change)="fullOrIndividual($event)">
+                            <label class="form-check-label radio-text" for="testsuites">Individual scripts</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="showExecute">
+            <div class="col">
+                <div class="row mb-3">
+                    <label for="executionnumber" class="col-md-8 col-form-label">Number of
+                        Executions</label>
+                    <div class="col-md-4 ps-1">
+                        <input type="number" class="form-control" id="executionnumber" formControlName="executionnumber"
+                            min="1" max="10" step="1" [value]="defaultValue" (input)="onNumberChange($event)">
+                        <small *ngIf="message" class="text-danger">{{ message }}</small>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label for="rerun" class="col-md-8 col-form-label">Re-Run on Failure</label>
+                    <div class="col-md-4 ps-1">
+                        <div class="viewgroup">
+                            <div class="rerun-input">
+                                <input class="form-check-input" type="checkbox" id="rerun" formControlName="rerun"
+                                    matTooltip="If execution is failed, a rerun of the execution will happen"
+                                    (change)="reRunChange($event)"
+                                    aria-label="Button that displays a tooltip when focused or hovered over">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+
+            </div>
+            <div class="row mb-3">
+                <label for="options" class="col-md-4 col-form-label">Additional log options
+                </label>
+
+                <div class="col-md-8">
+                    <mat-slide-toggle class="toggle-add" (change)="toggleAdditinalField($event)">
+                    </mat-slide-toggle>
+                    <div class="form-check form-check-inline list-logs" *ngIf="showToggleField">
+                        <input class="form-check-input logs-check" type="checkbox" id="inlineCheckbox1"
+                            formControlName="diagnosis" (change)="diagnosisChange($event)">
+                        <label class="form-check-label radio-text" for="inlineCheckbox1">Diagnosis log</label>
+                    </div>
+                    <div class="form-check form-check-inline list-logs" *ngIf="showToggleField">
+                        <input class="form-check-input logs-check" type="checkbox" id="inlineCheckbox2"
+                            formControlName="performance" (change)="performanceChange($event)">
+                        <label class="form-check-label radio-text" for="inlineCheckbox2">Performance log</label>
+                    </div>
+                    <div class="form-check form-check-inline list-logs" *ngIf="showToggleField">
+                        <input class="form-check-input logs-check" type="checkbox" id="inlineCheckbox3"
+                            formControlName="logTransfer" (change)="logTransferChange($event)">
+                        <label class="form-check-label radio-text" for="inlineCheckbox3">Device log</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="showSchedule">
+            <div class="row mb-2 row-align">
+                <label for="type" class="col-md-4 col-form-label">Select Schedule Type :<span
+                        style="color:red; margin-left: 0.75em;">*</span></label>
+                <div class="col-md-8">
+                    <div class="viewgroup">
+                        <select class="form-select" aria-label="Default select example" id="priority"
+                            formControlName="scheduleType" (change)="scheduleType($event)">
+                            <option value="" default>Select</option>
+                            <option value="OnetimeSchedule">Onetime Schedule</option>
+                            <option value="ReccurenceSchedule">Reccurence Schedule</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row mb-2 row-align" *ngIf="onetime">
+                <label for="type" class="col-md-4 col-form-label">Select Date & Time :<span
+                        style="color:red; margin-left: 0.75em;">*</span></label>
+                <div class="col-md-8">
+                    <div class="viewgroup">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text group-texts" id="basic-addon2"><i
+                                    class="bi bi-calendar-event-fill calendar-icon"></i></span>
+                            <input type="text" class="form-control" formControlName="date" bsDatepicker
+                                [bsConfig]="bsConfig" />
+                        </div>
+                        <div class="time-sec">
+                            <timepicker formControlName="time" [showSpinners]="false"></timepicker>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2 row-align" *ngIf="reccurence">
+                <label for="type" class="col-md-4 col-form-label">
+                    <div class="">
+                        <div class="form-check ">
+                            <input class="form-check-input rdkradio" type="radio" name="viewradio" id="daily"
+                                value="daily" checked (change)="reccurenceChange('daily')">
+                            <label class="form-check-label radio-text" for="daily">Daily</label>
+                        </div>
+                        <div class="form-check ">
+                            <input class="form-check-input rdkradio" type="radio" name="viewradio" id="weekly"
+                                value="weekly" (change)="reccurenceChange('weekly')">
+                            <label class="form-check-label radio-text" for="weekly">Weekly</label>
+                        </div>
+                        <div class="form-check ">
+                            <input class="form-check-input rdkradio" type="radio" name="viewradio" id="monthly"
+                                value="monthly" (change)="reccurenceChange('monthly')">
+                            <label class="form-check-label radio-text" for="monthly">Monthly</label>
+                        </div>
+                    </div>
+                    <div class="date-group mt-3">
+                        <span>StartDate :</span>
+                    </div>
+                    <div class="date-group">
+                        <span class="date-groupend">EndDate :</span>
+                    </div>
+                </label>
+                <div class="col-md-8">
+                    <div class="viewgroup">
+                        <!-- Daily Group -->
+                        <!-- Daily Group -->
+                        <div *ngIf="dailyGroup" class="daily-inline-group">
+                            <label>
+                                <input type="radio" formControlName="dailyOption" value="days"
+                                    [checked]="executeForm.value.dailyOption !== 'weekdays'" />
+                                Every
+                                <input type="number" class="form-control inline-number" formControlName="dailyValue"
+                                    min="1" placeholder="Enter number of days" (keydown)="preventNonNumeric($event)"
+                                    [disabled]="executeForm.value.dailyOption === 'weekdays'"
+                                    style="display: inline-block; width: 120px; margin: 0 8px; vertical-align: middle; font-size: 1.1rem;" />
+                                days
+                            </label>
+                            <label style="margin-left: 16px;">
+                                <input type="radio" formControlName="dailyOption" value="weekdays"
+                                    [checked]="executeForm.value.dailyOption === 'weekdays'" />
+                                Every Week days
+                            </label>
+                            <br><br>
+                        </div>
+                        <div class="weekly-group" *ngIf="weeklyGroup">
+                            <div class="form-check form-check-inline"
+                                *ngFor="let day of ['SUN','MON','TUE','WED','THU','FRI','SAT']">
+                                <input class="form-check-input" type="checkbox" [value]="day"
+                                    [checked]="selectedWeekDays.includes(day)" (change)="onWeekDayChange(day, $event)">
+                                <label class="form-check-label common-label">{{day}}</label>
+                            </div>
+                        </div>
+                        <!-- Monthly Group -->
+                        <div *ngIf="monthlyGroup" class="monthly-inline-group">
+                            Day
+                            <input type="number" class="form-control inline-number" formControlName="monthlyDay" min="1"
+                                max="31" placeholder="Day" (keydown)="preventNonNumeric($event)"
+                                style="display: inline-block; width: 120px; margin: 0 8px; vertical-align: middle; font-size: 1.1rem;" />
+                            of every
+                            <input type="number" class="form-control inline-number" formControlName="monthlyInterval"
+                                min="1" placeholder="Month interval" (keydown)="preventNonNumeric($event)"
+                                style="display: inline-block; width: 140px; margin: 0 8px; vertical-align: middle; font-size: 1.1rem;" />
+                            months
+                        </div>
+                    </div>
+                    <div class="viewgroup">
+                        <div class="input-group mb-2">
+                            <span class="input-group-text group-texts" id="basic-addon2"><i
+                                    class="bi bi-calendar-event-fill calendar-icon"></i></span>
+                            <input type="text" class="form-control" formControlName="startdate" bsDatepicker />
+                        </div>
+                        <div class="time-sec">
+                            <timepicker formControlName="starttime" [showSpinners]="false"></timepicker>
+                        </div>
+                    </div>
+                    <div class="viewgroup">
+                        <div class="input-group mb-2">
+                            <span class="input-group-text group-texts" id="basic-addon2"><i
+                                    class="bi bi-calendar-event-fill calendar-icon"></i></span>
+                            <input type="text" class="form-control" formControlName="enddate" bsDatepicker />
+                        </div>
+                        <div class="time-sec">
+                            <timepicker formControlName="endtime" [showSpinners]="false"></timepicker>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row row-align" *ngIf="showExecute">
+            <div class="col-md-12 mt-2 text-end">
+                <button class="all-btn" (click)="close()">Close</button>
+                <button class="all-btn" (click)="scheduleOpen('schedule')"
+                    [matTooltip]="!executeForm.valid ?'Enter all Mandatory fields before scheduling execution': '' "
+                    [disabled]="!executeForm.valid">Schedule</button>
+                <button type="submit" class="all-btn submit-btn"
+                    [matTooltip]="!executeForm.valid ?'Enter all Mandatory fields before triggering execution': '' "
+                    [disabled]="!executeForm.valid" (click)="triggerExecute()">Execute Now</button>
+            </div>
+        </div>
+
+        <div class="row row-align" *ngIf="showSchedule">
+            <div class="col-md-12 mt-4 text-end">
+                <button class="all-btn" (click)="close()">Close</button>
+                <button class="all-btn" (click)="back()">Back</button>
+                <button class="all-btn" (click)="scheduleExecute()">Schedule</button>
+            </div>
+        </div>
+
+    </form>
+    <div class="row exe-result mt-3 mb-2" *ngIf="showLogs">
+        <div class="result-display">
+            <label for="device" class="col-md-4 col-form-label exe-label">Execution Status :</label>
+            <div class="col-md-8">
+                <div class="execution-result">
+                    <p>Execution Trigger Status : {{triggerExecuteDetails}}</p>
+                    <p>Message : {{triggerMessage}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row result-row" *ngIf="showLoader">
+        <app-loader></app-loader>
+    </div>
 </div>

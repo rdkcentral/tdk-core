@@ -293,3 +293,10 @@ h6 {
 ::ng-deep .multiselect-dropdown .dropdown-list{
   overflow: hidden !important;
 }
+/* Add to your execute-dialog.component.css */
+.daily-inline-group {
+  margin-bottom: 44px; /* or any value you prefer */
+}
+.monthly-inline-group {
+  margin-bottom: 54px; /* or any value you prefer */
+}

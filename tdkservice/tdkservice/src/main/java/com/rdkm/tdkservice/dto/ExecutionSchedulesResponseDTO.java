@@ -71,4 +71,9 @@ public class ExecutionSchedulesResponseDTO {
 	 */
 	private String status;
 
+	/**
+	 * The type of schedule (e.g., "ONCE", "REPEAT").
+	 */
+	private String scheduleType;
+
 }

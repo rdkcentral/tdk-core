@@ -268,6 +268,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     {
       headerName: 'Job Name',
       field: 'jobName',
+      flex: 1.7,
       filter: 'agTextColumnFilter',
       width:190,
       sortable: true,
@@ -275,20 +276,53 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       resizable: false
     },
     {
-      headerName: 'Execution Time',
-      field: 'executionTime',
+  headerName: 'Execution/Start Time',
+  field: 'executionStartTime', // Ensure this matches the correct field in your rowData
+  filter: 'agTextColumnFilter',
+  flex: 1.5, // Flex value to allow the header to take up available space
+  width: 180, // Fixed width for the header
+  minWidth: 180, // Minimum width for the header
+  sortable: true,
+  resizable: true,
+  headerClass: 'header-center',
+  wrapHeaderText: true, // Enable wrapping for the header text
+  autoHeaderHeight: true, // Automatically adjust header height
+  cellStyle: { 'white-space': 'normal', 'text-align': 'center' }, // Allow multi-line text
+  cellRenderer: (params: any) => {
+    const value = params.data.cronStartTime || params.data.executionTime;
+    if (value) {
+      const formattedValue = this.formatTime(value); // Format the date and time
+      const [date, time] = formattedValue.split(', '); // Split into date and time
+      return `<div style="white-space: normal; text-align: center;">
+                <span>${date}</span><br>
+                <span>${time}</span>
+              </div>`;
+    }
+    return ''; // Return empty if no value exists
+  }
+},
+    {
+      headerName: 'End Time',
+      field: 'executionEndTime',
       filter: 'agTextColumnFilter',
       width:180,
       sortable: true,
       resizable: false,
       headerClass: 'header-center',
-      cellRenderer: (params: any) => this.formatTime(params.value),
-    },      
+      cellRenderer: (params: any) => {
+        // If cronEndTime exists, it's a recurring schedule
+        if (params.data.cronEndTime) {
+          return this.formatTime(params.data.cronEndTime);
+        }
+        // Otherwise, it's one-time
+        return 'N/A';
+      }
+    },
     {
       headerName: 'Scripts/Testsuite',
       field: 'scriptTestSuite',
       filter: 'agTextColumnFilter',
-      flex: 2,
+      flex: 2.5,
       sortable: true,
       resizable: false,
       headerClass: 'header-center',
@@ -297,7 +331,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       headerName: 'Device',
       field: 'device',
       filter: 'agTextColumnFilter',
-      flex: 1,
+      flex: 1.5,
       sortable: true,
       resizable: false,
       headerClass: 'header-center',
@@ -307,36 +341,50 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       field: 'details',
       filter: 'agDateColumnFilter',
       filterParams: this.filterParams,
-      flex: 1,
+      flex: 1.5,
       sortable: true,
       resizable: false,
       headerClass: 'header-center',
     },
     {
-      headerName: 'Status',
-      field: 'status',
-      filter: 'agTextColumnFilter',
-      flex: 1,
-      sortable: true,
-      resizable: false,
-      headerClass: 'header-center',
-    },
+  headerName: 'Status',
+  field: 'status',
+  filter: 'agTextColumnFilter',
+  flex: 1.5,
+  sortable: true,
+  resizable: false,
+  headerClass: 'header-center',
+  cellClass: 'status-nowrap', // <-- Add this line
+  cellRenderer: (params: any) => {
+    const status = params.value;
+    let colorClass = '';
+    if (status === 'SCHEDULED') colorClass = 'scheduled-color';
+    else if (status === 'CANCELLED') colorClass = 'cancelled-color';
+    else if (status === 'COMPLETED') colorClass = 'completed-color';
+    return `<span class="status-text ${colorClass}" title="${status}">${status}</span>`;
+  },
+  cellStyle: {
+    'text-align': 'center'
+  }
+},
     {
       headerName: 'Action',
       field: '',
       sortable: false,
       resizable: false,
       headerClass: 'no-sort header-center',
-      flex: 1,
+      flex: 1.5,
       cellRenderer: ScheduleButtonComponent,
       cellRendererParams: (params: any) => ({
         onDeleteClick: this.deleteSchedule.bind(this),
+        onStopClick: this.stopSchedule.bind(this),
+        onStartClick: this.scheduleAgain.bind(this),
         selectedRowCount: () => this.selectedRowCount,
       })
     },
   ];
   gridOptions = {
-    rowHeight: 45
+    rowHeight: 55
   };
   gridOptionsHistory: GridOptions = { 
     getRowId: (params:any) => {
@@ -1222,6 +1270,64 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     dialogModal.afterClosed().subscribe(() => {
 
     });
+  }
+  
+   /**
+   * This method is for stopping a scheduled execution.
+   */
+  stopSchedule(data: any): void {
+    if (confirm("Are you sure you want to stop this schedule?")) {
+      if (data) {
+        this.executionservice.cancelTask(data.id).subscribe({
+          next: (res) => {
+            console.log('Backend response:', res);
+            this._snakebar.open(res.message, '', { // <-- Use res.message here
+              duration: 1000,
+              panelClass: ['success-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            });
+            this.allExecutionScheduler();
+          },
+          error: (err) => {
+            this._snakebar.open(err.message, '', {
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            });
+          }
+        });
+      }
+    }
+  }
+  /**
+   * This method is for starting a scheduled execution again.
+   */
+  scheduleAgain(data: any): void {
+    if (confirm("Are you sure you want to start this schedule again?")) {
+      if (data) {
+        this.executionservice.scheduleAgain(data.id).subscribe({
+          next: (res) => {
+            this._snakebar.open(res.message, '', {
+              duration: 1000,
+              panelClass: ['success-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            });
+            this.allExecutionScheduler();
+          },
+          error: (err) => {
+            this._snakebar.open(err.message, '', {
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            });
+          }
+        });
+      }
+    }
   }
 
 

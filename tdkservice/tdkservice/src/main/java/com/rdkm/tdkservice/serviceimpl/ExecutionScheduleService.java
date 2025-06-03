@@ -558,7 +558,7 @@ public class ExecutionScheduleService {
 			responseDTO.setId(executionSchedule.getId().toString());
 			responseDTO.setCronEndTime(executionSchedule.getCronEndTime());
 			responseDTO.setCronStartTime(executionSchedule.getCronStartTime());
-
+			responseDTO.setScheduleType(executionSchedule.getScheduleType().toString());
 			if (executionSchedule.getDevice() != null) {
 				responseDTO.setDevice(executionSchedule.getDevice());
 			}

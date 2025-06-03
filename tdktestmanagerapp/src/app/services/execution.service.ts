@@ -331,6 +331,23 @@ getExecutionLogsLinks(exeId:string):Observable<any>{
   return this.http.get(`${this.config.apiUrl}execution/getExecutionLogs?executionResultID=${exeId}`, { headers, responseType: 'text' });
 }
 
+scheduleAgain(executionId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${this.config.apiUrl}api/v1/executionScheduler/scheduleAgain?executionID=${executionId}`, { headers});
+  }
 
+cancelTask(executionId: string): Observable<any> {
+  const headers = new HttpHeaders({
+    'Authorization': this.authService.getApiToken()
+  });
 
+  // Use executionID (uppercase ID) as required by backend
+  return this.http.get(
+    `${this.config.apiUrl}api/v1/executionScheduler/cancel?executionID=${executionId}`,
+    { headers }
+  );
+}
+ 
 }

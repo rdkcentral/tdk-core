@@ -33,13 +33,50 @@ interface customcellRenderparams extends ICellRendererParams{
   standalone: true,
   imports: [MaterialModule,CommonModule],
   template: `
-    <button  class="btn  btn-sm delete-btn"  matTooltip="Delete" (click)="onDeleteClick($event)"><mat-icon class="delete-icon icons extra-icon">delete_forever</mat-icon></button>
-  `,  
-  styles:[
-    `.delete-btn{
+  <div class="action-btn-group-row">
+  <!-- Delete button -->
+  <button class="icon-btn" matTooltip="Delete" (click)="onDeleteClick(params.data)">
+    <mat-icon [ngClass]="{
+        'completed-color': params.data.status === 'COMPLETED',
+        'cancelled-color': params.data.status === 'CANCELLED',
+        'scheduled-color': params.data.status === 'SCHEDULED'
+      }"
+      class="delete-icon icons extra-icon">delete_forever</mat-icon>
+  </button>
+
+  <!-- Start button (for CANCELLED status) -->
+  <button *ngIf="params.data.status === 'CANCELLED'" class="icon-btn" matTooltip="Start" (click)="params.onStartClick(params.data)">
+    <mat-icon [ngClass]="'cancelled-color'">play_circle</mat-icon>
+  </button>
+
+  <!-- Stop button (for SCHEDULED status) -->
+  <button *ngIf="params.data.status === 'SCHEDULED'" class="icon-btn" matTooltip="Stop" (click)="params.onStopClick(params.data)">
+    <mat-icon [ngClass]="'scheduled-color'">stop_circle</mat-icon>
+  </button>
+</div>
+  `,
+  styles: [
+    `.action-btn-group-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start; /* Align buttons to the left */
+        gap: 3px; /* Adjust spacing between buttons */
+    }
+    .icon-btn {
         border: none;
-        padding: 0px;
-        background:none;
+        background: none;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        outline: none;
+        box-shadow: none;
+        min-width: unset;
+        min-height: unset;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
     .icons{
       font-size: 1.3rem;
@@ -47,10 +84,21 @@ interface customcellRenderparams extends ICellRendererParams{
       justify-content: center;
       align-items: center;
     }
-    .delete-icon{
-      color: #808080;
+    .scheduled-color {
+      color: #1976d2;
     }
- 
+    .cancelled-color {
+      color: #ffa000;
+    }
+    .completed-color {
+      color: #388e3c;
+    }
+    .delete-icon {
+  color: gray !important;
+  vertical-align: middle !important; /* Align icon vertically */
+  margin-top: 0px !important; /* Move the icon slightly down */
+  
+}
     `
   ]
   })
@@ -61,34 +109,27 @@ export class ScheduleButtonComponent implements OnInit{
   currentNodeId: string | undefined;
   textforedit!:string;
 
-    agInit(params:customcellRenderparams): void {
-      this.params = params;
-      this.selectedRowCount = params.selectedRowCount();
-      this.lastSelectedNodeId = params.lastSelectedNodeId;
-      this.currentNodeId = params.node.id
-      
+  agInit(params: customcellRenderparams): void {
+    this.params = params;
+    this.selectedRowCount = params.selectedRowCount();
+    this.lastSelectedNodeId = params.lastSelectedNodeId;
+    this.currentNodeId = params.node.id
+  }
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit(): void {}
+
+  refresh(params: customcellRenderparams): boolean {
+    this.selectedRowCount = params.selectedRowCount();
+    this.lastSelectedNodeId = params.lastSelectedNodeId;
+    this.currentNodeId = params.node.id
+    return true;
+  }
+
+  onDeleteClick($event: any) {
+    if (this.params.onDeleteClick instanceof Function) {
+      this.params.onDeleteClick(this.params.node.data);
     }
-    constructor(private route: ActivatedRoute) { }
-  
-    ngOnInit(): void {
-      
-    }
-
-    refresh(params: customcellRenderparams): boolean {
-      this.selectedRowCount = params.selectedRowCount();
-      this.lastSelectedNodeId = params.lastSelectedNodeId;
-      this.currentNodeId = params.node.id
-      return true;
-    }
-  
-
-    onDeleteClick($event:any){
-      if (this.params.onDeleteClick instanceof Function) {
-        this.params.onDeleteClick(this.params.node.data);
-      }
-      
-    }
-
-
-
+  }
 }
+

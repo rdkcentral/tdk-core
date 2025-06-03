@@ -82,6 +82,7 @@ export class ExecuteDialogComponent {
   onetime = true;
   reccurence = false;
   dailyGroup = true;
+  selectedWeekDays: string[] = [];
   weeklyGroup = false;
   monthlyGroup = false;
   defaultValue: number = 1;
@@ -252,8 +253,8 @@ export class ExecuteDialogComponent {
         date: [new Date()],
         time: [new Date()],
         scheduleType: ['OnetimeSchedule'],
-        startdate: [new Date()],
-        enddate: [new Date()]
+        recurrenceStartDate: [null, Validators.required],
+        recurrenceEndDate: [null, Validators.required],
       });
       this.isThunderEnable = this.isThunderEnable;
       this.scriptTestsuiteOptions = [];
@@ -266,6 +267,12 @@ export class ExecuteDialogComponent {
       this.selectScriptType(value);
     });
     this.selectedType = this.executeForm.value.selectType;
+    this.executeForm.addControl('dailyValue', this.fb.control(''));
+    this.executeForm.addControl('monthlyDay', this.fb.control(''));
+    this.executeForm.addControl('monthlyInterval', this.fb.control(''));
+    this.executeForm.addControl('starttime', this.fb.control(new Date()));
+    this.executeForm.addControl('dailyOption', this.fb.control('days'));
+    this.executeForm.addControl('endtime', this.fb.control(new Date()));
   }
 
   toggleAdditinalField(event:any){
@@ -765,6 +772,15 @@ export class ExecuteDialogComponent {
       }, 1500);
     }
 
+     onWeekDayChange(day: string, event: any): void {
+    if (event.target.checked) {
+      if (!this.selectedWeekDays.includes(day)) {
+        this.selectedWeekDays.push(day);
+      }
+    } else {
+      this.selectedWeekDays = this.selectedWeekDays.filter(d => d !== day);
+    }
+  }
   /**
    * schedule execution cron job method.
    */
@@ -781,46 +797,125 @@ export class ExecuteDialogComponent {
       this.utcTime = utcTime;
     } else {
     }
-    let schedulerObj={
-      executionTime: this.utcTime,
-      scheduleType:'ONCE',
-      executionTriggerDTO:{
-        deviceList:this.deviceNameArr,
-        scriptList:this.scriptNameArr,
-        testSuite:this.testSuiteNameArr,
-        testType:this.executeForm.value.testType,
+
+    let scheduleType = this.executeForm.value.scheduleType;
+    if (scheduleType === 'ReccurenceSchedule') {
+      scheduleType = 'REPEAT';
+    } else if (scheduleType === 'OnetimeSchedule') {
+      scheduleType = 'ONCE';
+    }
+
+    let crontype = '';
+    let cronquery = '';
+    let startUtcDateTime = '';
+    let endUtcDateTime = '';
+    // Map UI selection to corntype and cornquery
+    if (scheduleType === 'REPEAT') {
+      const startDate: Date = this.executeForm.value.startdate;
+      const startTime: Date = this.executeForm.value.starttime;
+
+      const endDate: Date = this.executeForm.value.enddate;
+      const endTime: Date = this.executeForm.value.endtime;
+      if (startDate && startTime) {
+        const combinedStartDateTime = new Date(
+          startDate.getFullYear(),
+          startDate.getMonth(),
+          startDate.getDate(),
+          startTime.getHours(),
+          startTime.getMinutes(),
+          startTime.getSeconds()
+        );
+        startUtcDateTime = combinedStartDateTime.toISOString().replace('.000', '');
+      }
+
+      if (endDate && endTime) {
+        const combinedEndDateTime = new Date(
+          endDate.getFullYear(),
+          endDate.getMonth(),
+          endDate.getDate(),
+          endTime.getHours(),
+          endTime.getMinutes(),
+          endTime.getSeconds()
+        );
+        endUtcDateTime = combinedEndDateTime.toISOString().replace('.000', '');
+      }
+
+      if (this.dailyGroup) {
+        crontype = 'Daily';
+        const val = this.executeForm.value.dailyValue;
+        cronquery = `every ${val} days`;
+      } else if (this.weeklyGroup) {
+        crontype = 'Weekly';
+        cronquery = this.selectedWeekDays.join(',');
+      } else if (this.monthlyGroup) {
+        crontype = 'Monthly';
+        const day = this.executeForm.value.monthlyDay;
+        const every = this.executeForm.value.monthlyInterval;
+        cronquery = `day ${day} of every ${every} month`;
+      }
+
+    }
+    let schedulerObj: any = {
+      executionTime: this.utcTime, //reecerrence skip
+      scheduleType: scheduleType,
+      cronType: crontype,
+      cronQuery: cronquery,
+      cronStartTime: startUtcDateTime,
+      cronEndTime: endUtcDateTime,
+
+      executionTriggerDTO: {
+
+        deviceList: this.deviceNameArr,
+        scriptList: this.scriptNameArr,
+        testSuite: this.testSuiteNameArr,
+        testType: this.executeForm.value.testType,
         individualRepeatExecution: this.repeatTypeBoolean,
-        user:this.loggedinUser.userName,
-        category:this.userCategory,
-        executionName:this.executionName,
-        repeatCount:this.executeForm.value.executionnumber,
+        user: this.loggedinUser.userName,
+        category: this.userCategory,
+        executionName: this.executionName,
+        repeatCount: this.executeForm.value.executionnumber,
         deviceLogsNeeded: this.logTransfer,
         diagnosticLogsNeeded: this.diagnosis,
         performanceLogsNeeded: this.performance,
-        rerunOnFailure:this.reRunFail
+        rerunOnFailure: this.reRunFail
       }
-    }
+    };
 
     this.executionservice.schedularExecution(schedulerObj).subscribe({
-      next:(res)=>{
+      next: (res) => {
         this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
-        })
+        });
         setTimeout(() => {
           this.close();
         }, 3000);
       },
-      error:(err)=>{
+      error: (err) => {
         this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
           verticalPosition: 'top'
-        })
+        });
       }
-    })
+    });
+  }
+  /**
+   * Prevents non-numeric input in the execution number field.
+   * 
+   * @param event - The keyboard event triggered by the user.
+   */
+  preventNonNumeric(event: KeyboardEvent): void {
+    if (
+      event.key.length === 1 &&
+      !/[0-9]/.test(event.key) &&
+      event.key !== 'Backspace' &&
+      event.key !== 'Tab'
+    ) {
+      event.preventDefault();
+    }
   }
 
 
