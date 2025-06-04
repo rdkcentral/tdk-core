@@ -143,13 +143,20 @@ start_tdk() {
     echo -e "\nEnable TDK service\n"
     systemctl enable tdk
     sleep 1
-    echo -e "Going to reboot the device\n"
+    echo -e "Going to start tdk service\n"
     sleep 1
-    reboot
+    systemctl restart tdk
 }
  
 # Check if TDK_Package.tar.gz is present in / folder.
 cd /
+
+if [[ "$tdk_package" == *FNCS* ]];then
+   echo "Package is a FNCS package"
+   tar -xvf $tdk_package
+   exit
+fi
+
 if [[ -z "$tdk_package" ]]; then
    echo "Packagename is not provided as command line argument"
    echo "Searching for package name \"TDK_Package*tar.gz\" "
