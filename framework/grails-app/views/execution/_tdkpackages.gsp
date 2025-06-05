@@ -311,12 +311,15 @@ button.buttons {
         <div id="uploadSuccess" style="display: none; color: #28A745; font-weight: bold; font-size: 1.2em;">
             Package uploaded successfully!
         </div>
-
+			
         <!-- Upload Error Message -->
         <div id="uploadError" style="display: none; color: red; font-weight: bold; font-size: 1.2em;">
             Failed to upload package. Please try again.
         </div>
+		<!-- Larger version -->
+		<div id="uploadingText" style="display: none; color: green; font-size: 18px; font-weight: 600; margin-top: 10px;"></div>
 
+		
         <!-- Logs Output (Shared for Both Actions) -->
         <pre id="scriptOutput" style="background: #f5f5f5; padding: 10px; border-radius: 5px; border: 1px solid #ddd;
              font-family: monospace; white-space: pre-wrap; max-height: 300px; overflow-y: auto;display: none;"></pre>
@@ -424,6 +427,8 @@ button.buttons {
         <div id="vtsuploadError" style="display: none; color: red; font-weight: bold; font-size: 1.2em;">
             Failed to upload package. Please try again.
         </div>
+
+		<div id="vtsUploadingText" style="display: none; color: green; font-size: 16px; font-weight: 500; margin-top: 10px;"></div>
 
         <!-- Logs Output (Shared for Both Actions) -->
         <pre id="vtsscriptOutput" style="background: #f5f5f5; padding: 10px; border-radius: 5px; border: 1px solid #ddd;
