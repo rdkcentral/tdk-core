@@ -571,7 +571,7 @@
             <testStep testStepId="5" name="Create_New_Model_ID" action="externalFnCall" saveResult="true">
                 <conditionalExecution enable="true" Id="4" useMethodTag="system_check_existing_rule" arguments="existing_model_id"/>
                 <resultGeneration useMethodTag="system_check_and_create_configuration_rule" >
-                        <arguments value="system_check_model_id,new_rule,updates/models.json" usePreviousResult="true" Id="3" useMethodTag="system_get_device_details"/>
+                        <arguments value="system_check_model_id,new_rule,updates/models" usePreviousResult="true" Id="3" useMethodTag="system_get_device_details"/>
                 </resultGeneration>
             </testStep>
             <testStep testStepId="6" name="Check_Existing_Firmware_Configuration" action="externalFnCall" saveResult="true">
@@ -582,7 +582,7 @@
             <testStep testStepId="7" name="Create_New_Firmware_Configuration" action="externalFnCall" saveResult="true">
                 <conditionalExecution enable="true" Id="6" useMethodTag="system_check_existing_rule" arguments="existing_firmware_configuration"/>
                 <resultGeneration useMethodTag="system_check_and_create_configuration_rule" >
-                        <arguments value="system_check_firmware_configuration,new_rule,updates/firmwares.json" usePreviousResult="true" Id="3" useMethodTag="system_get_device_details"/>
+                        <arguments value="system_check_firmware_configuration,new_rule,updates/firmwares" usePreviousResult="true" Id="3" useMethodTag="system_get_device_details"/>
                 </resultGeneration>
             </testStep>
             <testStep testStepId="8" name="Get_ESTB_MAC" method="Get_Device_Info" saveResult="true" >
