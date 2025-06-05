@@ -4127,7 +4127,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             success = str(result.get("success")).lower() == "true"
             info["enabled"] = enabled
             info["success"] = success
-            if success and str(enabled) in expectedValues:
+            if success and (str(enabled).lower()) in (str(expectedValues).lower()):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
@@ -4649,6 +4649,15 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             maintenance_status = testStepResults[0].get("maintenanceStatus")
             if arg[0].lower() == maintenance_status.lower():
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        # Miracast Plugin Response result parser steps
+        elif tag == "miracast_getpreviousenable":
+            testStepResults = list(testStepResults[0].values())[0]
+            enabled = testStepResults[0].get("enabled")
+            if str(enabled).lower() == "false":
                 result = "TRUE"
             else:
                 result = "FALSE"
@@ -5754,6 +5763,15 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         elif tag =="monitor_get_webkit_presence":
             testStepResults = list(testStepResults[0].values())[0]
             info["webkit_presence"] = testStepResults[0].get("webkitbrowser_details_presence")
+
+        # Miracast Response result parser steps
+        elif tag =="miracast_toggle_enabled_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            enabled = testStepResults[0].get("enabled")
+            if str(enabled).lower() == "true":
+                info["enabled"] = False
+            else:
+                info["enabled"] = True
 
         # Common Response result parser steps
         elif tag =="toggle_enabled_status":
