@@ -37,7 +37,7 @@
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>8</execution_time>
+  <execution_time>15</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -109,6 +109,9 @@ if "SUCCESS" in result.upper():
     module = "L1 rmfAudioCapture"
     #Set binary name
     binaryName = rmfAudioCapture_binaryName
+    #Set TestCase Config
+    binaryConfig = rmfAudioCapture_binaryConfig
+    print("BinaryConfig : ",binaryConfig)
     #Set Custom List of TestCases
     testCaseList = rmfAudioCapture_L1_List
     #Set basepath of test
@@ -119,7 +122,7 @@ if "SUCCESS" in result.upper():
     words[0], words[-1] = words[-1], words[0]
     plugin_name = " ".join(words)
 
-    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, "", module)
+    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
 
     try:
         if testList:

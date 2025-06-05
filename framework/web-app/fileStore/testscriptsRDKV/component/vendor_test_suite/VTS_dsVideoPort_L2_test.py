@@ -124,7 +124,7 @@ if "SUCCESS" in result.upper():
     #Configuring plugin name
     plugin_name = "dsVideoPort L2"
 
-    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
+    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module, True)
 
     try:
         if testList:

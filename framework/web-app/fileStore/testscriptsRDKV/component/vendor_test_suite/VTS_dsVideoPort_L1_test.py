@@ -37,7 +37,7 @@
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>20</execution_time>
+  <execution_time>80</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -126,7 +126,7 @@ if "SUCCESS" in result.upper():
     words[0], words[-1] = words[-1], words[0]
     plugin_name = " ".join(words)
 
-    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
+    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module, True)
 
     try:
         if testList:

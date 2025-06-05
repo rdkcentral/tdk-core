@@ -111,6 +111,8 @@ if "SUCCESS" in result.upper():
     module = "L1 plat_power"
     #Set binary name
     binaryName = PowerManager_binaryName
+    #Set binary config
+    binaryConfig = PowerManager_binaryConfig
     #Set Custom List of TestCases
     testCaseList = PowerManager_L1_List
     #Set basepath of test
@@ -121,7 +123,7 @@ if "SUCCESS" in result.upper():
     words[0], words[-1] = words[-1], words[0]
     plugin_name = " ".join(words)
 
-    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, "", module)
+    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
 
     try:
         if testList:
