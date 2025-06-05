@@ -66,6 +66,13 @@
       <function name='TestMgr_rdkfwupdater_GetPDRIVersion' />
       <function name='TestMgr_rdkfwupdater_getCurrentSysTimeSec' />
       <function name='TestMgr_rdkfwupdater_isOCSPEnable' />
+      <function name='TestMgr_rdkfwupdater_GetTR181Url' />
+      <function name='TestMgr_rdkfwupdater_GetInstalledBundles' />
+      <function name='TestMgr_rdkfwupdater_getRFCSettings' />
+      <function name='TestMgr_rdkfwupdater_read_RFCProperty' />
+      <function name='TestMgr_rdkfwupdater_write_RFCProperty' />
+      <function name='TestMgr_rdkfwupdater_isMtlsEnabled' />
+      <function name='TestMgr_rdkfwupdater_isThrottleEnabled' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -140,6 +147,31 @@
       <parameter funName='TestMgr_rdkfwupdater_GetServURL' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
       <parameter funName='TestMgr_rdkfwupdater_GetPDRIVersion' parameterName='null_param' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_rdkfwupdater_GetPDRIVersion' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetTR181Url' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetTR181Url' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetTR181Url' parameterName='eURL_enum' parameterType='INTEGER' range='0-9' />
+      <parameter funName='TestMgr_rdkfwupdater_GetInstalledBundles' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetInstalledBundles' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_getRFCSettings' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_read_RFCProperty' parameterName='rfctype' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_read_RFCProperty' parameterName='rfckey' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_read_RFCProperty' parameterName='data_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_read_RFCProperty' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_read_RFCProperty' parameterName='type_null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_read_RFCProperty' parameterName='key_null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_write_RFCProperty' parameterName='rfctype' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_write_RFCProperty' parameterName='rfckey' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_write_RFCProperty' parameterName='rfcdata' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_write_RFCProperty' parameterName='dataType' parameterType='INTEGER' range='1-10' />
+      <parameter funName='TestMgr_rdkfwupdater_write_RFCProperty' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_write_RFCProperty' parameterName='type_null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_write_RFCProperty' parameterName='key_null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_isMtlsEnabled' parameterName='devicename' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_isThrottleEnabled' parameterName='devicename' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_isThrottleEnabled' parameterName='rebootflag' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_isThrottleEnabled' parameterName='appmode' parameterType='INTEGER' range='-1-10' />
+      <parameter funName='TestMgr_rdkfwupdater_isThrottleEnabled' parameterName='devname_null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_isThrottleEnabled' parameterName='reboot_null_param' parameterType='INTEGER' range='0-1' />
     </parameters>
   </module>
 </xml>

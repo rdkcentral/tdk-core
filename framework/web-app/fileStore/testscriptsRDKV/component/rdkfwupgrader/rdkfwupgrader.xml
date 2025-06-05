@@ -14,7 +14,7 @@
  limitations under the License.
 -->
 <xml>
-  <module testGroup="Component" name="rdkfwupgrader">
+  <module name="rdkfwupgrader" testGroup="Component">
     <primitiveTests>
       <primitiveTest name="rdkfwupgrader_RunCommand" id=" " version="2">
         <function>TestMgr_rdkfwupdater_RunCommand</function>
@@ -256,6 +256,66 @@
       <primitiveTest name="rdkfwupgrader_isOCSPEnable" id="" version="1">
         <function>TestMgr_rdkfwupdater_isOCSPEnable</function>
         <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetTR181Url" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetTR181Url</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="eURL_enum" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetInstalledBundles" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetInstalledBundles</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_getRFCSettings" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_getRFCSettings</function>
+        <parameters>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_read_RFCProperty" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_read_RFCProperty</function>
+        <parameters>
+          <parameter name="data_size" value=""/>
+          <parameter name="key_null_param" value=""/>
+          <parameter name="null_param" value=""/>
+          <parameter name="rfckey" value=""/>
+          <parameter name="rfctype" value=""/>
+          <parameter name="type_null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_write_RFCProperty" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_write_RFCProperty</function>
+        <parameters>
+          <parameter name="dataType" value=""/>
+          <parameter name="key_null_param" value=""/>
+          <parameter name="null_param" value=""/>
+          <parameter name="rfcdata" value=""/>
+          <parameter name="rfckey" value=""/>
+          <parameter name="rfctype" value=""/>
+          <parameter name="type_null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_isMtlsEnabled" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_isMtlsEnabled</function>
+        <parameters>
+          <parameter name="devicename" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_isThrottleEnabled" id=" " version="2">
+        <function>TestMgr_rdkfwupdater_isThrottleEnabled</function>
+        <parameters>
+          <parameter name="devicename" value=""/>
+          <parameter name="rebootflag" value=""/>
+          <parameter name="appmode" value=""/>
+          <parameter name="devname_null_param" value=""/>
+          <parameter name="reboot_null_param" value=""/>
+        </parameters>
       </primitiveTest>
     </primitiveTests>
   </module>
