@@ -107,7 +107,7 @@ def rdkservice_getSSHParams(realpath,deviceIP):
         ssh_dict["ssh_method"] = ssh_method
         if password.upper() == "NONE":
             password = ""
-            ssh_dict["credentials"] = deviceIP +","+ user_name +","+ password
+        ssh_dict["credentials"] = deviceIP +","+ user_name +","+ password
     ssh_dict = json.dumps(ssh_dict)
     return ssh_dict
 
