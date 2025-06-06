@@ -79,6 +79,7 @@ Display_L2_List = []
 # RMF Audio Capture HAL test Configurations
 rmfAudioCapture_basePath = "rmf_audio_capture/"
 rmfAudioCapture_binaryName = "hal_test_rmf_audio_capture"
+rmfAudioCapture_binaryConfig = "rmfAudioCaptureAuxNotSupported.yaml"
 rmfAudioCapture_L1_List = []
 rmfAudioCapture_L2_List = []
 
@@ -86,8 +87,7 @@ rmfAudioCapture_L2_List = []
 HDMICEC_basePath = "hdmi_cec/"
 HDMICEC_binaryName = "hal_test_hdmi_cec"
 HDMICEC_binaryConfig = "source_hdmiCEC.yml"
-HDMICEC_L1_common_List = []
-HDMICEC_L1_stb_List = []
+HDMICEC_L1_List = []
 HDMICEC_L2_List = []
 
 # PowerManager HAL test configurations

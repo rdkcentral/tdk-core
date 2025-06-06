@@ -37,7 +37,7 @@
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>30</execution_time>
+  <execution_time>45</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -58,7 +58,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>VTS_Test_01</test_case_id>
+    <test_case_id>VTS_Test_02</test_case_id>
     <test_objective>Execute VTS dsVideoDevice L1 testcases</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video Accelerator, RPI</test_setup>
@@ -123,7 +123,7 @@ if "SUCCESS" in result.upper():
     words[0], words[-1] = words[-1], words[0]
     plugin_name = " ".join(words)
 
-    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
+    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module, True)
 
     try:
         if testList:

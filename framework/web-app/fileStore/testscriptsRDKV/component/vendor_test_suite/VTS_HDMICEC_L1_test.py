@@ -118,15 +118,9 @@ if "SUCCESS" in result.upper():
     plugin_name = "HDMICEC L1"
 
     for module in modules:
-        if module == "L1 HDMICEC Common TestCase":
-            testCaseList = HDMICEC_L1_common_List
-            testCaseID = "HDMICEC L1 Common"
-        elif module == "L1 HDMI CEC Source TestCase":
-            testCaseList = []
+        if module == "L1 HDMI CEC Source TestCase":
+            testCaseList = HDMICEC_L1_List
             testCaseID = "HDMICEC L1 CEC Source TestCase"
-        else:
-            testCaseList = HDMICEC_L1_stb_List
-            testCaseID = "HDMICEC L1 STB"
         testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
 
         try:

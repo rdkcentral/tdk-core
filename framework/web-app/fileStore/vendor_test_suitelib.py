@@ -27,10 +27,16 @@ import configparser
 import json
 import sys
 
-# Maximum time a command can run in seconds
-defaultMaxRunTime = 30
-
+#Global variables
 failed_testCases = []
+#----------------------------------------------------------------------------------------------------------------
+# "longWait" can be set to True for certain Test Suites where API has high response time
+#  This high response time causes test to run for a longer duration than expected time
+#  Even though this is an issue from HAL side, framework must execute and capture the test logs.
+#  Whenever "longWait" is set to True and the test suite is run, tester must also analyse why this was necessary
+#  and what API is causing this issue and report it as an issue.
+#----------------------------------------------------------------------------------------------------------------
+longWait = False
 
 #-------------------------------------------------------------------------
 # Function:    init_module
@@ -226,9 +232,14 @@ def stopSession(client,session):
 #              - str: The output of the last executed command.
 #-------------------------------------------------------------------
 def executeCommands(session, commands, runTime=0):
-    global defaultMaxRunTime
-    maxCommandRunTime = defaultMaxRunTime
-    if runTime > maxCommandRunTime:
+    maxCommandRunTime = 10
+    global longWait
+    if longWait:
+        defaultRunTime=30
+    else:
+        defaultRunTime=10
+    maxCommandRunTime = defaultRunTime
+    if runTime:
        maxCommandRunTime = runTime
        print("Running time changed to ",runTime)
     numberOfCommands = len(commands)
@@ -236,6 +247,7 @@ def executeCommands(session, commands, runTime=0):
         print("\nERROR: No SSH session to execute commands found")
         return "No SSH session"
     commandIterator = 1
+    last_data_time = time.time()
     for command in commands:
         if "hal" in command:
             print("Executing command : ",command)
@@ -244,24 +256,30 @@ def executeCommands(session, commands, runTime=0):
             session.send(command + "\n")
             time.sleep(1)  # Initial wait for the command to start executing
             output = ""
-            last_data_time = time.time()
             while time.time() - commandStartTime < maxCommandRunTime:
-                if session.recv_ready():
-                    data = session.recv(1024).decode()
-                    output += data
-                    last_data_time = time.time()
+                # Wait for command to finish by checking if the channel is closed
+                if longWait:
+                    if session.recv_ready():
+                        data = session.recv(1024).decode('utf-8',errors='ignore')
+                        output += data
+                        last_data_time = time.time()
+                    else:
+                        # Check if we've received no data for a while
+                        if time.time() - last_data_time > maxCommandRunTime:
+                            break
+                        time.sleep(0.1)
                 else:
-                    # Check if we've received no data for a while
-                    if time.time() - last_data_time > maxCommandRunTime:
-                        break
-                    time.sleep(0.2)
-                if "Enter command:" in output:
+                    if session.recv_ready():
+                        output += session.recv(1024).decode('utf-8',errors='ignore')
+                if "Enter command:" in output:  # Check if command has completed
+                    break
+                if session.exit_status_ready() and maxCommandRunTime == defaultRunTime:
+                    break
+                if ("Segmentation fault" in output) or ("symbol lookup error" in output) or ("core dumped" in output):
                     break;
-                if ("Segmentation fault" in output) or ("symbol lookup error" in output):
-                    break;
-            if maxCommandRunTime != defaultMaxRunTime:
-                maxCommandRunTime = defaultMaxRunTime
-                print("Running time reverted to ",defaultMaxRunTime)
+            if maxCommandRunTime != defaultRunTime:
+                maxCommandRunTime = defaultRunTime
+                print("Running time reverted to ",defaultRunTime)
             if commandIterator == numberOfCommands:
                 return output
             commandIterator += 1
@@ -297,6 +315,30 @@ def getSuiteNumber(output, module):
                 print ("Suite Number : ",suiteNumber)
                 break;
     return suiteNumber
+
+#------------------------------------------------------------------------
+# Function:    setupEnvironmentInSession
+# Description: Executes /setup_environment.env if present in basePath
+#              This sets up any pre-requisites required for module test
+# Parameters:
+#              - session : SSH session
+#              - basePath : path where setup_environment.env can be found
+# Return:
+#              - NIL
+#------------------------------------------------------------------------
+def setupEnvironmentInSession(session,basePath):
+    #Check if environment setup is present
+    env_present = "ls " + basePath + "/setup_environment.env"
+    print ("Checking if setup_environment.env is present")
+    commands = [env_present]
+    output = executeCommands(session,commands);
+    if "No such file or directory" not in output:
+        print ("setup_environment.env is present for device")
+        source_command = "cd " + basePath + ";" + " source ./setup_environment.env"
+        commands = [source_command]
+        output = executeCommands(session,commands)
+        print (output)
+        print("Environment set successfully")
 
 #-------------------------------------------------------------------
 # Function:    startBinary
@@ -378,19 +420,28 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
             else:
                 if "test_l2_rmfAudioCapture_primary_d" in test:
                     runTime=100
+                if "dsGetDisplay_L1" in test or "dsGetDisplayAspectRatio_L1" in test or "dsGetDisplayAspectRatio_L1_" in test:
+                    runTime=30
                 output = executeCommands(session,commands,runTime);
         def escape_ansi(line):
-            if isinstance(line, bytes):  # Ensure it's a string
-                line = line.decode("utf-8", errors="ignore") 
+            if isinstance(line, bytes):
+                try:
+                    line = line.decode("utf-8", errors="ignore")
+                except UnicodeDecodeError as e:
+                    print(f"Decode error: {e}")
+                    line = ""  # fallback if decode fails even with ignore
+            elif not isinstance(line, str):
+                line = str(line)  # fallback for unexpected types
             ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
             print(ansi_escape.sub('', line))
         for line in output.splitlines():
             escape_ansi(line)
+        testResult = {}
         if "TESTCASE FAILURE" in output:
             status="FAILURE"
         elif "TESTCASE SKIPPED" not in output:
             setFailure = False
-            if ("Segmentation fault" in output) or ("symbol lookup error" in output): 
+            if ("Segmentation fault" in output) or ("symbol lookup error" in output) or ("core dumped" in output):
                 print ("Marking test as Failure")
                 setFailure = True
             else:
@@ -443,7 +494,7 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
 # Return:
 #              - dict: Dictionary containing the list of test cases.
 #----------------------------------------------------------------------
-def SetupPreRequisites(host, username, password, basePath, binaryName, binaryConfig, module):
+def SetupPreRequisites(host, username, password, basePath, binaryName, binaryConfig, module, setupEnvironment = False):
     global client
     global session
     binaryPath = "cd " + basePath + " ; ./" + binaryName
@@ -453,6 +504,8 @@ def SetupPreRequisites(host, username, password, basePath, binaryName, binaryCon
     print("\nPre Requisite : Setting_up_VTS_binary\nPre Requisite No : 1")
     try:
         client,session = startSession(host,username,password)
+        if setupEnvironment:
+            setupEnvironmentInSession(session,basePath)
         output = startBinary(session, binaryPath, module)
         testList = parseTestList(output)
         if not testList:
