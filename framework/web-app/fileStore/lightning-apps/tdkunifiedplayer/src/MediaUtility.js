@@ -98,7 +98,7 @@
 
 
   // Method to perform video progress position validation
-  export function getPosValResult(pos_list,pos_index){
+  export function getPosValResult(pos_list,pos_index,live_test_flag = 0){
     var pos_val_status = "SUCCESS"
     var critical_mismatch_flag = false
     var vid_pos_list = []
@@ -122,8 +122,10 @@
             });
         }
         if (vid_pos_list.length > 1){
-	    if (!validationState.initialPosCheckDone) {
+	    if (!validationState.initialPosCheckDone && live_test_flag == 0) {
 	         if (vid_pos_list[0] > 3){
+		    mismatch = "Pos:" + "0" + "-" + vid_pos_list[0] + ",diff=" + vid_pos_list[0]
+                    pos_mismatch_list.push(mismatch)
                     critical_mismatch_flag = true
                  }
 	         validationState.initialPosCheckDone = true
@@ -140,7 +142,7 @@
                     }
                     // check whether pos diff is >= to the required diff
                     // for video operations except pause
-                    if (!(pos_diff >= pos_index)){
+                    if (!(pos_diff == pos_index)){
                         pos_mismatch_count += 1
                         mismatch = "Pos:"+vid_pos_list[i+1]+"-"+vid_pos_list[i]+",diff="+pos_diff
                         pos_mismatch_list.push(mismatch)
