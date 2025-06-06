@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2021 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>6</version>
+  <version>7</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_CERT_MVS_Video_Play_Live_DASH</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
@@ -49,7 +49,7 @@
   <!--  -->
   <box_types>
     <box_type>RDKTV</box_type>
-    <!-- -->
+    <!--  -->
     <box_type>RPI-Client</box_type>
     <!--  -->
     <box_type>RPI-HYB</box_type>
@@ -137,6 +137,7 @@ if expectedResult in result.upper():
         # Setting VideoPlayer test app URL arguments
         setURLArgument("url",videoURL)
         setURLArgument("operations",operations)
+        setURLArgument("options","live")
         setURLArgument("autotest","true")
         setURLArgument("type","dash")
         appArguments = getURLArguments()
@@ -150,7 +151,7 @@ if expectedResult in result.upper():
 
         #Example video test url
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkvideoplayer/build/index.html?
-        #url=<video_url>.mpd&operations=close(60)&autotest=true&type=dash
+        #url=<video_url>.mpd&operations=close(60)&options=live&autotest=true&type=dash
 
         # Setting the video test url in webkit instance using RDKShell
         for video_test_url in video_test_urls:

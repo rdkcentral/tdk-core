@@ -701,7 +701,7 @@ export default class App extends Lightning.Component {
   }
   updatePrevPosValidationResult(){
       this.pos_val_flag = 0
-      this.pos_val_result.push(getPosValResult(this.pos_list,this.pos_val_index))
+      this.pos_val_result.push(getPosValResult(this.pos_list,this.pos_val_index,this.live_test_flag))
       this.pos_list = [];
   }
 
@@ -749,11 +749,9 @@ export default class App extends Lightning.Component {
           }
 	  // display the video progress message and capture the video position
           logMsg(this.progressEventMsg)
-	  if (this.pos_val_index == 0){
-	      this.pos_list.push(pos)
-	      logMsg(this.progressEventMsg)
+	  if (this.pos_val_index != 0){
+	      this.progressEventMsg = ""
 	  }
-	  this.progressEventMsg = ""
           if(this.pos_val_flag == 1){
      	      this.pos_list.push(pos)
           }
@@ -866,6 +864,7 @@ export default class App extends Lightning.Component {
     this.progressLogger    = null
     this.secondaryURL = "";
     this.loop_test_flag = 0
+    this.live_test_flag = 0
     this.check_end_duration = 0
     this.pos_zero_count = 0
     this.pos_end_flag	= 0
@@ -919,6 +918,9 @@ export default class App extends Lightning.Component {
     if (this.options.includes("looptest")){
         this.loop_test_flag = 1
         VideoPlayer.loop()
+    }
+    if (this.options.includes("live")){
+        this.live_test_flag = 1
     }
     if (this.options.includes("mute"))
         VideoPlayer.mute()
