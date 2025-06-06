@@ -1132,6 +1132,47 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["Test_Step_Status"] = "FAILURE"
                 print(e)
 
+        # UserSettings Events response result parser steps
+        elif tag == "usersettings_check_enabled_change_event":
+            result = result[0]
+            info = result
+            if str(result.get("enabled")).lower() == str(expectedValues[0]).lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usersettings_check_pinControl_change_event":
+            result = result[0]
+            info = result
+            if str(result.get("pinControl")).lower() == str(expectedValues[0]).lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usersettings_check_liveWatershed_change_event":
+            result = result[0]
+            info = result
+            if str(result.get("liveWatershed")).lower() == str(expectedValues[0]).lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usersettings_check_state_change_event":
+            result = result[0]
+            info = result
+            if str(result.get(arg[0])).lower() == str(expectedValues[0]).lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usersettings_check_playbackWatershed_change_event":
+            result = result[0]
+            info = result
+            if str(result.get("playbackWatershed")).lower() == str(expectedValues[0]).lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         # Common Events response result parser steps
         elif tag == "check_event_unavailability":
             if len(arg) and arg[0] == "check_empty_event":

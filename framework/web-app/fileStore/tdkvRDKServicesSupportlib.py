@@ -4169,6 +4169,42 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        # UserSettings Response result parser steps
+        elif tag == "usersettings_get_status":
+            info[arg[0]] = result
+            if str(result).strip() in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usersettings_get_enabled_status":
+            info["enabled"] = result
+            if str(result).strip() in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usersettings_get_pinControl_status":
+            info["pinControl"] = result
+            if str(result).strip() in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usersettings_get_liveWatershed_status":
+            info["liveWatershed"] = result
+            if str(result).strip() in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usersettings_get_playbackWatershed_status":
+            info["playbackWatershed"] = result
+            if str(result).strip() in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
@@ -5778,6 +5814,47 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["enabled"] = False
             else:
                 info["enabled"] = True
+
+        # UserSettings Response result parser steps
+        elif tag == "usersettings_toggle_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            status = testStepResults[0].get(arg[0])
+            if str(status).lower().strip() == "true":
+                info[arg[0]] = False
+            else:
+                info[arg[0]] = True
+
+        elif tag == "usersettings_toggle_enabled_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            enabled = testStepResults[0].get("enabled")
+            if str(enabled).lower().strip() == "true":
+                info["enabled"] = False
+            else:
+                info["enabled"] = True
+
+        elif tag == "usersettings_toggle_pinControl_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            pinControl = testStepResults[0].get("pinControl")
+            if str(pinControl).lower().strip() == "true":
+                info["pinControl"] = False
+            else:
+                info["pinControl"] = True
+
+        elif tag == "usersettings_toggle_liveWatershed_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            liveWatershed = testStepResults[0].get("liveWatershed")
+            if str(liveWatershed).lower().strip() == "true":
+                info["liveWatershed"] = False
+            else:
+                info["liveWatershed"] = True
+
+        elif tag == "usersettings_toggle_playbackWatershed_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            playbackWatershed = testStepResults[0].get("playbackWatershed")
+            if str(playbackWatershed).lower().strip() == "true":
+                info["playbackWatershed"] = False
+            else:
+                info["playbackWatershed"] = True
 
         # Common Response result parser steps
         elif tag =="toggle_enabled_status":

@@ -2821,4 +2821,101 @@
             </params>
         </method>
     </plugin>
+
+    <!-- UserSettings Plugin Information -->
+    <plugin pluginName="UserSettings" serviceName="org.rdk.UserSettings" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="UserSettings_getAudioDescription" api="getAudioDescription" type="method" desc="Returns Audio Description">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="UserSettings_setAudioDescription" api="setAudioDescription" type="method" desc="Setting Audio Description">
+            <params>
+                <param tag="enabled" type="bool"/>
+            </params>
+        </method>
+        <method name="UserSettings_getCaptions" api="getCaptions" type="method" desc="Getting Captions Enabled">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="UserSettings_setCaptions" api="setCaptions" type="method" desc="Setting Captions">
+            <params>
+                <param tag="enabled" type="bool"/>
+            </params>
+        </method>
+        <method name="UserSettings_getPinControl" api="getPinControl" type="method" desc="Returns Pin Control">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="UserSettings_setPinControl" api="setPinControl" type="method" desc="Setting PinControl">
+            <params>
+                <param tag="pinControl" type="bool"/>
+            </params>
+        </method>
+        <method name="UserSettings_getLiveWatershed" api="getLiveWatershed" type="method" desc="Returns Live Watershed">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="UserSettings_setLiveWatershed" api="setLiveWatershed" type="method" desc="Setting LiveWatershed">
+            <params>
+                <param tag="liveWatershed" type="bool"/>
+            </params>
+        </method>
+        <method name="UserSettings_getPlaybackWatershed" api="getPlaybackWatershed" type="method" desc="Returns Playback Watershed">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="UserSettings_setPlaybackWatershed" api="setPlaybackWatershed" type="method" desc="Setting PlaybackWatershed">
+            <params>
+                <param tag="playbackWatershed" type="bool"/>
+            </params>
+        </method>
+        <method name="UserSettings_getBlockNotRatedContent" api="getBlockNotRatedContent" type="method" desc="Returns BlockNotRatedContent">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="UserSettings_setBlockNotRatedContent" api="setBlockNotRatedContent" type="method" desc="Setting BlockNotRatedContent">
+            <params>
+                <param tag="blockNotRatedContent" type="bool"/>
+            </params>
+        </method>
+        <method name="UserSettings_getPinOnPurchase" api="getPinOnPurchase" type="method" desc="Returns getPinOnPurchase">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="UserSettings_setPinOnPurchase" api="setPinOnPurchase" type="method" desc="Setting PinOnPurchase">
+            <params>
+                <param tag="pinOnPurchase" type="bool"/>
+            </params>
+        </method>
+        <method name="UserSettings_getHighContrast" api="getHighContrast" type="method" desc="Returns HighContrast">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="UserSettings_setHighContrast" api="setHighContrast" type="method" desc="Setting HighContrast">
+            <params>
+                <param tag="enabled" type="bool"/>
+            </params>
+        </method>
+        <method name="UserSettings_getVoiceGuidance" api="getVoiceGuidance" type="method" desc="Returns VoiceGuidance">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="UserSettings_setVoiceGuidance" api="setVoiceGuidance" type="method" desc="Setting VoiceGuidance">
+            <params>
+                <param tag="enabled" type="bool"/>
+            </params>
+        </method>
+        <method name="UserSettings_getVoiceGuidanceHints" api="getVoiceGuidanceHints" type="method" desc="Returns VoiceGuidanceHints">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="UserSettings_setVoiceGuidanceHints" api="setVoiceGuidanceHints" type="method" desc="Setting VoiceGuidanceHints">
+            <params>
+                <param tag="hints" type="bool"/>
+            </params>
+        </method>
+
+        <!-- Event Definitions -->
+        <event name="Event_On_AudioDescriptionChanged" eventName="onAudioDescriptionChanged" eventId="client.events.1" type="event" desc="Triggered when the audio description changes"/>
+        <event name="Event_On_CaptionsChanged" eventName="onCaptionsChanged" eventId="client.events.1" type="event" desc="Triggered when the captions changes"/>
+        <event name="Event_On_PinControlChanged" eventName="onPinControlChanged" eventId="client.events.1" type="event" desc="Triggered when the pincontrol changes"/>
+        <event name="Event_On_LiveWatershedChanged" eventName="onLiveWatershedChanged" eventId="client.events.1" type="event" desc="Triggered when the liveWatershed changes"/>
+        <event name="Event_On_PlaybackWatershedChanged" eventName="onPlaybackWatershedChanged" eventId="client.events.1" type="event" desc="Triggered when the playbackWatershed changes"/>
+        <event name="Event_On_BlockNotRatedContentChanged" eventName="onBlockNotRatedContentChanged" eventId="client.events.1" type="event" desc="Triggered when the blockNotRatedContent changes"/>
+        <event name="Event_On_PinOnPurchaseChanged" eventName="onPinOnPurchaseChanged" eventId="client.events.1" type="event" desc="Triggered when the PinOnPurchase changes"/>
+        <event name="Event_On_HighContrastChanged" eventName="onHighContrastChanged" eventId="client.events.1" type="event" desc="Triggered when the HighContrast changes"/>
+        <event name="Event_On_VoiceGuidanceChanged" eventName="onVoiceGuidanceChanged" eventId="client.events.1" type="event" desc="Triggered when the VoiceGuidance changes"/>
+        <event name="Event_On_VoiceGuidanceHintsChanged" eventName="onVoiceGuidanceHintsChanged" eventId="client.events.1" type="event" desc="Triggered when the VoiceGuidanceHints changes"/>
+    </plugin>
 </thunderPlugins>
