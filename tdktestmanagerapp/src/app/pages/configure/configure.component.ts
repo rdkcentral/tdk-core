@@ -60,6 +60,8 @@ export class ConfigureComponent implements OnInit {
       this.rdkvVisible = true;
       this.rdkbVisible = false;
     }
+     //Resets the view for scripts when moving to other tabs
+    localStorage.setItem('viewName', 'scripts');
   }
   /**
    * Handles the radiobutton of category change event.

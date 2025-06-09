@@ -197,7 +197,7 @@ public class TestSuiteService implements ITestSuiteService {
 			if (testSuiteDTO.getScripts() != null) {
 				List<ScriptListDTO> scriptsList = testSuiteDTO.getScripts();
 				// Delete all the existing test suite mappings
-				scriptTestSuiteRepository.deleteAllByTestSuite(testSuite);
+				scriptTestSuiteRepository.deleteByTestSuite(testSuite);
 				saveScriptList(scriptsList, testSuite.getCategory(), testSuite);
 			}
 		} catch (Exception e) {
@@ -333,8 +333,7 @@ public class TestSuiteService implements ITestSuiteService {
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.TEST_SUITE, id.toString()));
 		try {
 			// Delete all the script test suite mapping for the test suite
-			List<ScriptTestSuite> scriptTestSuiteList = scriptTestSuiteRepository.findAllByTestSuite(testSuite);
-			scriptTestSuiteRepository.deleteAll(scriptTestSuiteList);
+			scriptTestSuiteRepository.deleteByTestSuite(testSuite);
 			// loop through the script test suite list and delete each script test suite
 			testSuiteRepository.delete(testSuite);
 		} catch (DataIntegrityViolationException e) {

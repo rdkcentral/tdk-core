@@ -32,9 +32,15 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
 .container-fluid{
   margin-bottom: 1rem;
 }
-/* .table-container{
-  height: 480px;
-} */
+
+.table-container,
+.table-container * {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+}
+
 .download-row{
   text-align: right;
 }
@@ -536,3 +542,31 @@ width:19px;
   top: 50%;
   z-index: 1;
 }
+
+/* For ag-Grid cells */
+.ag-cell, .ag-cell-value, .ag-row, .ag-center-cols-container {
+  user-select: text !important;
+}
+
+/* For accordion content */
+.accordion-body, .accordion-header, .accordion-button {
+  user-select: text !important;
+}
+
+/* Enable text selection for all ag-Grid content */
+.ag-root,
+.ag-root * {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+}
+
+
+.ag-unselectable {
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text !important;
+}
+

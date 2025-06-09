@@ -66,7 +66,7 @@ export class CustomTestsuiteComponent {
       modules:[[], [Validators.required, this.arrayNotEmptyValidator]]
     })
    
-    this.getCategory = this.loggedinUser.userCategory;
+    this.getCategory = localStorage.getItem('preferedCategory') || this.loggedinUser.userCategory;
     this.getAllModule(this.getCategory);
     this.getAlldeviceType();
   }

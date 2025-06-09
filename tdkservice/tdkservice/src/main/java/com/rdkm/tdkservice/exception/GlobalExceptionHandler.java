@@ -131,6 +131,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleGlobalException(Exception ex, WebRequest request) {
 		logger.info("Internal server error that is not handled: " + ex.getMessage());
+		ex.printStackTrace();
 		Response errorResponse = new Response("Something went wrong, Please report to administrator", HttpStatus.INTERNAL_SERVER_ERROR.value());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 	}

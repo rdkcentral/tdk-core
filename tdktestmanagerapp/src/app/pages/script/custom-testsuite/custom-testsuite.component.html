@@ -125,8 +125,7 @@ limitations under the License.
                   <div class="col-md-4"></div>
             </div>
             <div class="mt-2">
-              <span class="titlemodule">Module List</span>
-              <div class="error-row">
+                <span class="titlemodule mb-2 d-block">Module List</span>              <div class="error-row">
                 <div *ngIf="formSubmitted && customFormGroup.controls['modules']?.errors" class="text-danger">
                   <small *ngIf="customFormGroup.controls['modules']?.errors?.['required']">At least one module must be selected.</small>
                 </div>
@@ -150,6 +149,7 @@ limitations under the License.
                 </div>
               </div>
             </div>
+            
             <div class="row form-row">
               <div class="mt-1 mb-3 text-end btn-grp">
                   <button class="reset-btn" (click)="goBack()">Back</button>

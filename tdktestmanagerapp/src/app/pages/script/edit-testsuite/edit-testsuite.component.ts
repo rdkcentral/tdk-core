@@ -28,11 +28,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ScriptsService } from '../../../services/scripts.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../auth/auth.service';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
+
 
 @Component({
   selector: 'app-edit-testsuite',
   standalone: true,
-  imports: [CommonModule,HttpClientModule,ReactiveFormsModule,MaterialModule,FormsModule,DragDropModule],
+  imports: [CommonModule,HttpClientModule,ReactiveFormsModule,MaterialModule,FormsModule,DragDropModule,LoaderComponent],
   templateUrl: './edit-testsuite.component.html',
   styleUrl: './edit-testsuite.component.css'
 })
@@ -47,10 +49,13 @@ export class EditTestsuiteComponent {
   container2ScriptArr: any[]  = [];
   scriptGrous: string[] = [];
   selectedCategory:any;
+  userCategory:any;
+  preferedCategory:any;
   testSuiteArr:any[] = [];
   loggedinUser: any;
   testSuiteEidtData:any;
   viewName!:string;
+  isLoadingScripts: boolean = false;
   onlyVideoCategory!:string;
   onlyVideoCategoryName!:string;
   categoryName!:string;
@@ -64,13 +69,14 @@ export class EditTestsuiteComponent {
     const dataString = this.router.getCurrentNavigation();
     this.testSuiteEidtData = dataString?.extras.state?.['testSuiteData'];
     this.viewName = localStorage.getItem('viewName') || '';
+    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
+    this.userCategory = this.loggedinUser.userCategory;
+    this.preferedCategory = localStorage.getItem('preferedCategory') || '';
   }
 
   ngOnInit(): void {
     this.onlyVideoCategory = localStorage.getItem('onlyVideoCategory')||'';
-    // let category = localStorage.getItem('category') || '';
-    // this.selectedCategory = category?category:'RDKV';
-    this.selectedCategory = this.onlyVideoCategory?this.onlyVideoCategory:this.selectedCategory;
+    this.selectedCategory = this.preferedCategory?this.preferedCategory:this.userCategory;
     if(this.onlyVideoCategory){
       if(this.onlyVideoCategory === 'RDKV_RDKSERVICE'){
         this.onlyVideoCategoryName = 'Video-Thunder';
@@ -98,14 +104,19 @@ export class EditTestsuiteComponent {
     this.allScripts();
   }
 
-  allScripts(){
-    this.scriptservice.findTestSuitebyCategory(this.selectedCategory).subscribe(res=>{
+  allScripts() {
+    this.isLoadingScripts = true;
+    this.scriptservice.findTestSuitebyCategory(this.selectedCategory).subscribe(res => {
       this.container1 = res.data
       const idsToRemove = new Set(this.container2ScriptArr.map((obj) => obj.id));
       this.container1 = this.container1.filter((obj) => !idsToRemove.has(obj.id));
-    })
-
+      this.isLoadingScripts = false;
+    }, error => {
+      this.isLoadingScripts = false;
+    });
   }
+
+
   toggleSec(scripts:any, side: 'left' | 'right'){
     if(side === 'left'){
       this.selectedLeft.has(scripts.id)?this.selectedLeft.delete(scripts.id):this.selectedLeft.add(scripts.id);
@@ -155,9 +166,18 @@ export class EditTestsuiteComponent {
     }
       return this.filteredLeftList;
   }
-  toggleSortOrder() :void{
+
+  toggleSortOrder(): void {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    this.filteredLeftList.sort((a: any, b: any) => {
+      if (this.sortOrder === 'asc') {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    })
   }
+  
   get container2(): any[] {
     let filteredList2 = this.container2ScriptArr;
     this.testSuiteArr = filteredList2;
@@ -176,8 +196,15 @@ export class EditTestsuiteComponent {
     };
   }
 
-  toggleSortRightSide() :void{
+  toggleSortRightSide(): void {
     this.sortOrderRight = this.sortOrderRight === 'asc' ? 'desc' : 'asc';
+    this.container2ScriptArr.sort((a: any, b: any) => {
+      if (this.sortOrderRight === 'asc') {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
   }
   goBack():void{
     this.router.navigate(['/script']);

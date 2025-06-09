@@ -115,12 +115,12 @@ body, *:not(.material-icons) {
 .move-btns{
     position: absolute;
     top: 0;
-    left: 98%;
+    left: 94%;
 }
 .move-ritebtns{
     position: absolute;
     top: 0;
-    left: 94%;
+    left: 88%;
 }
 .icon-move{
     font-size: 1.3rem;

@@ -44,7 +44,11 @@ interface customcellRenderparams extends ICellRendererParams {
     &nbsp;
     <button *ngIf="downloadSriptZip" class="btn  btn-sm delete-btn" (click)="onDownloadZip($event)" matTooltip="Download Zip" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
     &nbsp;
-    <button *ngIf="downloadScriptMd" class="btn  btn-sm delete-btn" (click)="onDownloadMd($event)" matTooltip="Download MD" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
+    <button *ngIf="downloadScriptMd" class="btn btn-sm delete-btn" (click)="onDownloadMd($event)" matTooltip="Download MD">
+    <span style="display: inline-block; width: 28px; height: 28px; border-radius: 50%; background: #fff; color: #00B2DC; font-weight: bold; line-height: 28px; text-align: center; font-size: 0.85rem;">
+      MD
+    </span>
+    </button>
     &nbsp;
     <button *ngIf="downloadConfigShow" class="btn  btn-sm delete-btn download-config" (click)="onDownloadClick($event)" matTooltip="Download Config File" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
 

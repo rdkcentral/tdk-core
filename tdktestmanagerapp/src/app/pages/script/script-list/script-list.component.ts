@@ -28,7 +28,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef,GridApi,GridReadyEvent } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -45,20 +45,20 @@ interface Module {
   moduleName: string;
   scripts: Script[];
   testGroupName: string;
-  expanded?: boolean; 
+  expanded?: boolean;
 }
 interface SuiteModule {
   id: string;
   name: string;
   scripts: Script[];
   description: string;
-  expanded?: boolean; 
+  expanded?: boolean;
 }
 @Component({
   selector: 'app-script-list',
   standalone: true,
-  imports: [CommonModule,AgGridAngular, FormsModule, ReactiveFormsModule, MaterialModule,ScrollingModule,
-              LoaderComponent],
+  imports: [CommonModule, AgGridAngular, FormsModule, ReactiveFormsModule, MaterialModule, ScrollingModule,
+    LoaderComponent],
   templateUrl: './script-list.component.html',
   styleUrl: './script-list.component.css'
 })
@@ -70,17 +70,17 @@ export class ScriptListComponent {
   @ViewChild('filterInputSuite') filterInputSuite!: ElementRef;
   @ViewChild('filterButton') filterButton!: ElementRef;
   @ViewChild('filterButtonSuite') filterButtonSuite!: ElementRef;
-  @ViewChild('scriptModal', {static: false}) scriptModal?:ElementRef;
-  @ViewChild('testSuiteModal', {static: false}) testSuiteModal?:ElementRef;
+  @ViewChild('scriptModal', { static: false }) scriptModal?: ElementRef;
+  @ViewChild('testSuiteModal', { static: false }) testSuiteModal?: ElementRef;
   categories = ['Video', 'Broadband', 'Camera'];
-  selectedCategory! : string;
+  selectedCategory!: string;
   categoryName!: string;
-  uploadScriptForm!:FormGroup;
-  uploadtestSuiteForm!:FormGroup;
+  uploadScriptForm!: FormGroup;
+  uploadtestSuiteForm!: FormGroup;
   uploadFormSubmitted = false;
   xmlFormSubmitted = false;
-  uploadFileName! :File | null;
-  xmlFileName!:File | null;
+  uploadFileName!: File | null;
+  xmlFileName!: File | null;
   viewName: string = 'scripts';
   testsuitTable = false;
   scriptTable = true;
@@ -93,58 +93,62 @@ export class ScriptListComponent {
   public gridApi!: GridApi;
   allPageSize = 10;
   currentPage = 0;
-  paginatedSuiteData:SuiteModule[]=[];
-  paginatedScriptData:Module[]=[];
+  paginatedSuiteData: SuiteModule[] = [];
+  paginatedScriptData: Module[] = [];
   filterText: string = '';
   filterTextSuite: string = '';
   globalSearchTerm: string = '';
   showFilterInput = false;
   showFilterInputsuite = false;
   scriptFilteredData: Module[] = [];
-  testSuiteFilteredData:SuiteModule[]=[];
-  scriptDataArr : Module[] = [];
-  testSuiteDataArr:SuiteModule[] = [];
+  testSuiteFilteredData: SuiteModule[] = [];
+  scriptDataArr: Module[] = [];
+  testSuiteDataArr: SuiteModule[] = [];
   panelOpenState = false;
   suitePanelOpen = false;
   sortOrder: 'asc' | 'desc' = 'asc';
   gridColumnApi: any;
-  noScriptFound!:string;
-  scriptDetails:any;
+  noScriptFound!: string;
+  scriptDetails: any;
   uploadFileError: string | null = null;
-  loggedinUser:any;
-  preferedCategory!:string;
-  userCategory!:string;
+  loggedinUser: any;
+  preferedCategory!: string;
+  userCategory!: string;
   showLoader = false;
+  debounceTimer: any = null;
 
   public columnDefs: ColDef[] = [
     {
       headerName: 'Sl. No.',
       valueGetter: (params) => params.node?.childIndex ? params.node?.childIndex + 1 : '1',
-      flex:1,
+      flex: 1,
       pinned: 'left'
     },
     {
       headerName: 'Script Name',
       field: 'name',
       filter: 'agTextColumnFilter',
-      flex:2,
-      sortable: true
+      flex: 2,
+      sortable: true,
+      cellRenderer: (params: any) => {
+        return `<span style="user-select: text;">${params.value}</span>`;
+      }
     },
     {
       headerName: 'Action',
       field: '',
       sortable: false,
-      flex:1,
+      flex: 1,
       headerClass: 'no-sort',
       cellRenderer: ButtonComponent,
       cellRendererParams: (params: any) => ({
         onEditClick: this.editScript.bind(this),
         onDeleteClick: this.deleteScript.bind(this),
         onDownloadZip: this.downloadScriptZip.bind(this),
-        onDownloadMd: this.downloadMdFile.bind(this), // <-- Add this line
-
+        onDownloadMd: this.downloadMdFile.bind(this), 
         selectedRowCount: () => this.selectedRowCount,
-      })
+      }),
+
     }
   ];
   public testSutiteColumn: ColDef[] = [
@@ -159,20 +163,23 @@ export class ScriptListComponent {
       field: 'name',
       filter: 'agTextColumnFilter',
       flex: 1,
-      sortable: true
+      sortable: true,
+      cellRenderer: (params: any) => {
+        return `<span style="user-select: text;">${params.value}</span>`;
+      }
     }
   ];
   gridOptions = {
     rowHeight: 30
   };
 
-  constructor(private router: Router, private authservice: AuthService,private fb:FormBuilder,
-    private _snakebar: MatSnackBar, public dialog: MatDialog, private cdRef: ChangeDetectorRef, 
-    private scriptservice: ScriptsService, private renderer: Renderer2,private appRef: ApplicationRef) { 
-      this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
-      this.userCategory = this.loggedinUser.userCategory;
-      this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
-    }
+  constructor(private router: Router, private authservice: AuthService, private fb: FormBuilder,
+    private _snakebar: MatSnackBar, public dialog: MatDialog, private cdRef: ChangeDetectorRef,
+    private scriptservice: ScriptsService, private renderer: Renderer2, private appRef: ApplicationRef) {
+    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
+    this.userCategory = this.loggedinUser.userCategory;
+    this.preferedCategory = localStorage.getItem('preferedCategory') || '';
+  }
   /**
    * Initializes the component. This method is called once the component has been initialized.
    * It sets up the initial state of the component by determining the selected category, view name, 
@@ -184,19 +191,17 @@ export class ScriptListComponent {
    * @returns {void}
    */
   ngOnInit(): void {
-    this.selectedCategory = this.preferedCategory?this.preferedCategory:this.userCategory;
-    let localViewName = localStorage.getItem('viewName') || '';
+    this.selectedCategory = this.preferedCategory ? this.preferedCategory : this.userCategory;
+    let localViewName = localStorage.getItem('viewName') || 'scripts';
     localStorage.setItem('category', this.selectedCategory);
-    this.setCategoryName(this.selectedCategory);
-    this.findallScriptsByCategory(this.selectedCategory);
-    this.scriptSorting();
-    this.viewChange(this.viewName);
+    this.setCategoryName(this.selectedCategory);    
+    this.viewChange(localViewName);
     this.uploadScriptForm = new FormGroup({
       uploadZip: new FormControl<string | null>('', { validators: Validators.required }),
     })
     this.uploadtestSuiteForm = this.fb.group({
       uploadXML: [null, Validators.required]
-    }) 
+    })
   }
   /**
    * Event handler for the grid's "ready" event.
@@ -206,7 +211,7 @@ export class ScriptListComponent {
    * 
    * @param params - The event parameters containing the grid API instance.
    */
-  onGridReady(params:GridReadyEvent<any>) {
+  onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
   }
   /**
@@ -217,32 +222,33 @@ export class ScriptListComponent {
    * If an error occurs during the fetch, the error message is stored in `noScriptFound`.
    * 
    * @param category - The category to filter scripts by.
-   */  
-  findallScriptsByCategory(category:any){
+   */
+  findallScriptsByCategory(category: any) {
     this.showLoader = true;
     this.scriptservice.getallbymodules(category).subscribe({
-      next:(res)=>{
-        if(res){
+      next: (res) => {
+        if (res) {
           this.scriptDataArr = res.data;
           this.cdRef.detectChanges();
           this.filterScript();
           this.scriptSorting();
           this.showLoader = false;
-        }else{
+        } else {
           this.cdRef.detectChanges();
-          this.scriptDataArr =[];
+          this.scriptDataArr = [];
+          this.showLoader = false;
         }
       },
-      error:(err)=>{
+      error: (err) => {
         let errmsg = err.message;
-        if(errmsg && errmsg.includes("No script found for category")){
+        if (errmsg && errmsg.includes("No script found for category")) {
           this.noScriptFound = 'No Rows To Show';
         }
       }
     })
   }
 
-   setCategoryName(category: string) {
+  setCategoryName(category: string) {
     if (category === 'RDKB') {
       this.categoryName = 'Broadband';
     } else if (category === 'RDKC') {
@@ -267,21 +273,21 @@ export class ScriptListComponent {
    * - Calls `allTestSuilteListByCategory` or `findallScriptsByCategory` based on the view name and selected category.
    * - Updates local storage with the selected category and category name.
    * - Resets `authservice.videoCategoryOnly` to an empty string.
-   */ 
-  categoryChange(event:any): void {
+   */
+  categoryChange(event: any): void {
     let val = event.target.value;
-    this.scriptDataArr=[];
+    this.scriptDataArr = [];
     this.testSuiteDataArr = [];
     this.paginatedSuiteData = [];
     this.paginatedScriptData = [];
-    if(this.viewName ==='testsuites'){
+    if (this.viewName === 'testsuites') {
       if (val === 'RDKB') {
         this.categoryName = 'Broadband';
         this.selectedCategory = 'RDKB';
         localStorage.setItem('preferedCategory', 'RDKB');
         this.authservice.selectedCategory = this.selectedCategory;
         this.allTestSuilteListByCategory();
-      } 
+      }
       else {
         this.selectedCategory = 'RDKV';
         this.categoryName = 'Video';
@@ -290,22 +296,22 @@ export class ScriptListComponent {
         this.allTestSuilteListByCategory();
       }
     }
-    if(this.viewName ==='scripts'){
+    if (this.viewName === 'scripts') {
       if (val === 'RDKB') {
         this.categoryName = 'Broadband';
         this.selectedCategory = 'RDKB';
-        localStorage.setItem('preferedCategory', 'RDKB');        
+        localStorage.setItem('preferedCategory', 'RDKB');
         this.findallScriptsByCategory(this.selectedCategory);
-      } 
+      }
       else {
         this.selectedCategory = 'RDKV';
-        this.categoryName = 'Video';      
+        this.categoryName = 'Video';
         localStorage.setItem('preferedCategory', 'RDKV');
         this.findallScriptsByCategory(this.selectedCategory);
       }
     }
     localStorage.setItem('category', this.selectedCategory);
-    localStorage.setItem('categoryname',this.categoryName);
+    localStorage.setItem('categoryname', this.categoryName);
     this.authservice.videoCategoryOnly = "";
   }
   /**
@@ -318,23 +324,25 @@ export class ScriptListComponent {
    */
   viewChange(name: string): void {
     this.viewName = name;
-    this.globalSearchTerm ='';
-    localStorage.setItem('viewName',this.viewName);
+    this.globalSearchTerm = '';
+    this.showLoader = true; // Show loader immediately
+
+    localStorage.setItem('viewName', this.viewName);
     if (name === 'testsuites') {
       this.testsuitTable = true;
       this.scriptTable = false;
 
       this.allTestSuilteListByCategory();
-      if(this.paginatedSuiteData.length>0){
+      if (this.paginatedSuiteData.length > 0) {
         this.showLoader = false;
       }
-    } 
+    }
     if (name === 'scripts') {
       this.testsuitTable = false;
       this.scriptTable = true;
 
       this.findallScriptsByCategory(this.selectedCategory);
-      if(this.paginatedScriptData.length>0){
+      if (this.paginatedScriptData.length > 0) {
         this.showLoader = false;
       }
     }
@@ -351,28 +359,28 @@ export class ScriptListComponent {
    * In case of an error, it parses the error message and sets the `noScriptFound` property.
    * 
    * @returns {void}
-   */  
-  allTestSuilteListByCategory(){    
+   */
+  allTestSuilteListByCategory() {
     this.showLoader = true;
     this.scriptservice.getAllTestSuite(this.selectedCategory).subscribe({
-      next:(res)=>{
-        if(res){
+      next: (res) => {
+        if (res) {
           this.testSuiteDataArr = res.data
           this.cdRef.detectChanges();
           this.applyFilterSuite();
           this.toggleSortSuite();
           this.showLoader = false;
-        }else{
+        } else {
           this.cdRef.detectChanges();
-          this.testSuiteDataArr =[];
+          this.testSuiteDataArr = [];
         }
       },
-      error:(err)=>{
+      error: (err) => {
         let errmsg = err.message;
-        if(errmsg.message === " Test suite - 'RDKB' doesnt exist"){
+        if (errmsg.message === " Test suite - 'RDKB' doesnt exist") {
           this.noScriptFound = 'No Rows To Show';
         }
-        if(errmsg.message === " Test suite - 'RDKV' doesnt exist"){
+        if (errmsg.message === " Test suite - 'RDKV' doesnt exist") {
           this.noScriptFound = 'No Rows To Show';
         }
       }
@@ -388,8 +396,8 @@ export class ScriptListComponent {
    * change detection to update the view.
    * 
    * @returns {void}
-   */  
-  scriptDataPagination(){
+   */
+  scriptDataPagination() {
     if (!this.paginator) {
       return;
     }
@@ -407,7 +415,7 @@ export class ScriptListComponent {
    * If the `paginator` is not available, the method returns early without performing any operations.
    * 
    * @returns {void}
-   */ 
+   */
   paginateSuiteData() {
     if (!this.paginator) {
       return;
@@ -422,10 +430,10 @@ export class ScriptListComponent {
    * Updates the current page index and triggers the appropriate data pagination method.
    *
    * @param event - The page change event object.
-   */  
+   */
   onPageChange(event: any): void {
     this.currentPage = event.pageIndex;
-    if(this.viewName ==='testsuites'){
+    if (this.viewName === 'testsuites') {
       this.paginateSuiteData();
     }
   }
@@ -441,12 +449,12 @@ export class ScriptListComponent {
    * @remarks
    * This method modifies the `sortOrder` property of the component and sorts the `scriptFilteredData` array.
    * It then calls the `scriptDataPagination` method to update the pagination of the sorted data.
-   */  
-  scriptSorting(){
+   */
+  scriptSorting() {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     this.scriptFilteredData.sort((a, b) => {
       if (this.sortOrder === 'asc') {
-        return a.moduleName.localeCompare(b.moduleName); 
+        return a.moduleName.localeCompare(b.moduleName);
       } else {
         return b.moduleName.localeCompare(a.moduleName);
       }
@@ -457,23 +465,23 @@ export class ScriptListComponent {
    * Toggles the sort order of the test suite data between ascending and descending.
    * Sorts the `testSuiteFilteredData` array based on the current sort order.
    * After sorting, it calls the `paginateSuiteData` method to update the displayed data.
-   */  
-  toggleSortSuite(){
+   */
+  toggleSortSuite() {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     this.testSuiteFilteredData.sort((a, b) => {
       if (this.sortOrder === 'asc') {
-        return a.name.localeCompare(b.name); 
+        return a.name.localeCompare(b.name);
       } else {
         return b.name.localeCompare(a.name);
       }
     });
     this.paginateSuiteData();
   }
-   /**
-   * Toggles the visibility of the filter input field.
-   * If the filter input is hidden, it resets the filter text,
-   * applies the filter to the script list, and sorts the scripts.
-   */ 
+  /**
+  * Toggles the visibility of the filter input field.
+  * If the filter input is hidden, it resets the filter text,
+  * applies the filter to the script list, and sorts the scripts.
+  */
   toggleFilterInput() {
     this.showFilterInput = !this.showFilterInput;
     if (!this.showFilterInput) {
@@ -486,8 +494,8 @@ export class ScriptListComponent {
    * Toggles the visibility of the filter input field for test suites.
    * If the filter input is hidden, it resets the filter text,
    * applies the filter to the test suite list, and sorts the test suites.
-   */  
-  toggleFilterInputSuite(){
+   */
+  toggleFilterInputSuite() {
     this.showFilterInputsuite = !this.showFilterInputsuite;
     if (!this.showFilterInputsuite) {
       this.filterTextSuite = '';
@@ -504,8 +512,8 @@ export class ScriptListComponent {
    * and sorts the scripts.
    * 
    * After filtering, it resets the paginator to the first page and updates the paginated data.
-   */  
-  filterScript(){
+   */
+  filterScript() {
     if (this.filterText) {
       this.scriptFilteredData = this.scriptDataArr.filter((parent: any) =>
         parent.moduleName.toLowerCase().includes(this.filterText.toLowerCase())
@@ -526,7 +534,7 @@ export class ScriptListComponent {
    * and toggles the sorting of the suite.
    * 
    * After filtering, it resets the paginator to the first page and paginates the filtered data.
-   */  
+   */
   applyFilterSuite() {
     if (this.filterTextSuite) {
       this.testSuiteFilteredData = this.testSuiteDataArr.filter((parent: any) =>
@@ -537,8 +545,19 @@ export class ScriptListComponent {
       this.toggleSortSuite();
     }
     this.paginator.firstPage();
-    this.paginateSuiteData(); 
+    this.paginateSuiteData();
   }
+
+onSearchInput() {
+  if (this.debounceTimer) {
+    clearTimeout(this.debounceTimer);
+  }
+  this.debounceTimer = setTimeout(() => {
+    this.globalSearch();
+  }, 2000); // 2 seconds debounce
+}
+
+
   /**
    * Performs a global search on the test suites or scripts based on the view name.
    * 
@@ -551,79 +570,79 @@ export class ScriptListComponent {
    * script filtered data to the original script data array.
    * 
    * @returns {void}
-   */  
+   */
   globalSearch() {
-      const searchTerm = this.globalSearchTerm.toLowerCase();
-      if(this.viewName ==='testsuites'){
-        if(searchTerm){
-          this.paginatedSuiteData = this.testSuiteDataArr.map((suite:SuiteModule)=>{
-            const filteredScripts = suite.scripts.filter((script) =>
-              script.name.toLowerCase().includes(searchTerm)
-            );
-            return {
-              ...suite,
-              scripts: filteredScripts, 
-              expanded: filteredScripts.length > 0,
-            };
-          });
-          this.paginatedSuiteData = this.paginatedSuiteData.filter(
-            (suite) => suite.scripts.length > 0
+    const searchTerm = this.globalSearchTerm.toLowerCase();
+    if (this.viewName === 'testsuites') {
+      if (searchTerm) {
+        this.paginatedSuiteData = this.testSuiteDataArr.map((suite: SuiteModule) => {
+          const filteredScripts = suite.scripts.filter((script) =>
+            script.name.toLowerCase().includes(searchTerm)
           );
-        }else{
-          this.paginatedSuiteData = [...this.testSuiteDataArr];
-          this.paginateSuiteData();
-        }
+          return {
+            ...suite,
+            scripts: filteredScripts,
+            expanded: filteredScripts.length > 0,
+          };
+        });
+        this.paginatedSuiteData = this.paginatedSuiteData.filter(
+          (suite) => suite.scripts.length > 0
+        );
+      } else {
+        this.paginatedSuiteData = [...this.testSuiteDataArr];
+        this.paginateSuiteData();
+      }
 
-      }else{
-        
-        if(searchTerm){
-        this.paginatedScriptData = this.scriptDataArr.map((module:Module) => {
+    } else {
+
+      if (searchTerm) {
+        this.paginatedScriptData = this.scriptDataArr.map((module: Module) => {
           const filteredScripts = module.scripts.filter((script) =>
             script.name.toLowerCase().includes(searchTerm)
           );
           return {
             ...module,
-            scripts: filteredScripts, 
+            scripts: filteredScripts,
             expanded: filteredScripts.length > 0,
           };
         });
         this.paginatedScriptData = this.paginatedScriptData.filter(
           (module) => module.scripts.length > 0
         );
-        
-      }else{
+
+      } else {
         this.paginatedScriptData = [...this.scriptDataArr];
         this.scriptDataPagination();
       }
-      }
     }
-  /**
-   * Closes the modal  by click on button .
-   */
-  close(){
-    (this.scriptModal?.nativeElement as HTMLElement).style.display = 'none';
-    this.renderer.removeStyle(document.body, 'overflow');
-    this.renderer.removeStyle(document.body, 'padding-right');
-    
   }
   /**
    * Closes the modal  by click on button .
    */
-  closeSuiteModal(){
+  close() {
+    (this.scriptModal?.nativeElement as HTMLElement).style.display = 'none';
+    this.renderer.removeStyle(document.body, 'overflow');
+    this.renderer.removeStyle(document.body, 'padding-right');
+
+  }
+  /**
+   * Closes the modal  by click on button .
+   */
+  closeSuiteModal() {
     this.uploadtestSuiteForm.value.uploadXML = '';
     (this.testSuiteModal?.nativeElement as HTMLElement).style.display = 'none';
     this.renderer.removeStyle(document.body, 'overflow');
     this.renderer.removeStyle(document.body, 'padding-right');
-    
+
   }
   /**
    * Handles the file change event when a file is selected for upload.
    * @param event - The file change event object.
    */
-  onFileChange(event:any){
+  onFileChange(event: any) {
     this.uploadFileName = event.target.files[0].name;
     const file: File = event.target.files[0];
-    if(file){
+    if (file) {
       if (file.name.endsWith('.zip')) {
         this.uploadScriptForm.patchValue({ file: file });
         this.uploadFileName = file;
@@ -632,7 +651,7 @@ export class ScriptListComponent {
         this.uploadScriptForm.patchValue({ file: null });
         this.uploadFileError = 'Please upload a valid zip file.';
       }
-    }  
+    }
   }
   /**
    * Handles the submission of the upload script form.
@@ -648,32 +667,32 @@ export class ScriptListComponent {
    * the component, closes the form, and resets the upload form.
    * 
    * @returns {void}
-   */  
-  uploadScriptSubmit(){
+   */
+  uploadScriptSubmit() {
     this.uploadFormSubmitted = true;
-    if(this.uploadScriptForm.invalid){
+    if (this.uploadScriptForm.invalid) {
       return
-     }else{
-      if(this.uploadFileName){
+    } else {
+      if (this.uploadFileName) {
         this.uploadFileError = null;
         this.scriptservice.uploadZipFile(this.uploadFileName).subscribe({
-          next:(res)=>{
+          next: (res) => {
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
               verticalPosition: 'top'
             })
-              this.close();
-              this.ngOnInit();
+            this.close();
+            this.ngOnInit();
           },
-          error:(err)=>{
-            
+          error: (err) => {
+
             this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
             })
             this.ngOnInit();
             this.close();
@@ -681,7 +700,7 @@ export class ScriptListComponent {
           }
         })
       }
-     }
+    }
   }
   /**
    * Handles the file input event for uploading a test suite XML file.
@@ -693,11 +712,11 @@ export class ScriptListComponent {
    * - Checks if the file is of type 'text/xml'.
    *   - If the file is a valid XML file, it updates the form with the file and clears any upload errors.
    *   - If the file is not a valid XML file, it resets the form file value and sets an upload error message.
-   */  
-  testSuiteXMLFile(event:any){
+   */
+  testSuiteXMLFile(event: any) {
     this.xmlFileName = event.target.files[0].name;
     const file: File = event.target.files[0];
-    if(file){
+    if (file) {
       if (file.type === 'text/xml') {
         this.uploadtestSuiteForm.patchValue({ file: file });
         this.xmlFileName = file;
@@ -722,32 +741,32 @@ export class ScriptListComponent {
    * closes the modal, and resets the form.
    * 
    * @returns {void}
-   */  
-  testSuiteFileSubmit(){
+   */
+  testSuiteFileSubmit() {
     this.xmlFormSubmitted = true;
-    if(this.uploadtestSuiteForm.invalid){
+    if (this.uploadtestSuiteForm.invalid) {
       return
-     }else{
-      if(this.xmlFileName){
+    } else {
+      if (this.xmlFileName) {
         this.uploadFileError = null;
         this.scriptservice.uploadTestSuiteXML(this.xmlFileName).subscribe({
-          next:(res)=>{
+          next: (res) => {
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
               verticalPosition: 'top'
             })
-              this.uploadtestSuiteForm.reset();
-              this.closeSuiteModal();
-              this.allTestSuilteListByCategory();
+            this.uploadtestSuiteForm.reset();
+            this.closeSuiteModal();
+            this.allTestSuilteListByCategory();
           },
-          error:(err)=>{
+          error: (err) => {
             this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
             })
             this.ngOnInit();
             this.close();
@@ -755,7 +774,7 @@ export class ScriptListComponent {
           }
         })
       }
-     }
+    }
   }
   /**
    * Navigates to the 'create-scripts' page.
@@ -775,8 +794,8 @@ export class ScriptListComponent {
    * Navigates to the script creation group page with the specified video category.
    *
    * @param value - The category of the video to be used for script creation.
-   */  
-  createScriptVideo(value:string){
+   */
+  createScriptVideo(value: string) {
     let onlyVideoCategory = value;
     this.authservice.videoCategoryOnly = onlyVideoCategory;
     this.router.navigate(['script/create-script-group']);
@@ -784,8 +803,8 @@ export class ScriptListComponent {
   /**
    * Navigates to the custom test suite page.
    * This method uses the Angular Router to navigate to the 'script/custom-testsuite' route.
-   */  
-  customTestSuite(){
+   */
+  customTestSuite() {
     this.router.navigate(['script/custom-testsuite']);
   }
   /**
@@ -796,7 +815,7 @@ export class ScriptListComponent {
    * in the local storage, and navigates to the script editing page.
    * 
    * @param editData - The data containing the ID of the script to be edited.
-   */  
+   */
   editScript(editData: any): void {
     this.scriptservice.scriptFindbyId(editData.id).subscribe(
       {
@@ -813,7 +832,7 @@ export class ScriptListComponent {
             verticalPosition: 'top'
           })
         }
-      }        
+      }
     )
   }
   /**
@@ -826,26 +845,26 @@ export class ScriptListComponent {
    * 
    * On successful deletion, it displays a success message using the snackbar and refreshes the script list by category.
    * On error, it displays an error message using the snackbar.
-   */  
-  deleteScript(data:any) {
+   */
+  deleteScript(data: any) {
     if (confirm("Are you sure to delete ?")) {
-      if(data){
+      if (data) {
         this.scriptservice.delete(data.id).subscribe({
-          next:(res)=>{
+          next: (res) => {
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
               verticalPosition: 'top'
-              })
-              this.findallScriptsByCategory(this.selectedCategory);
+            })
+            this.findallScriptsByCategory(this.selectedCategory);
           },
-          error:(err)=>{
+          error: (err) => {
             this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
             })
           }
         })
@@ -862,18 +881,18 @@ export class ScriptListComponent {
    *
    * @param downloadData - An object containing the name of the script to be downloaded.
    */
-  downloadScriptZip(downloadData:any){
-    this.scriptservice.downloadSriptZip(downloadData.name).subscribe(blob=>{
-        const xmlBlob = new Blob([blob], { type: 'application/zip' });
-        const url = window.URL.createObjectURL(xmlBlob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${downloadData.name}.zip`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      })
+  downloadScriptZip(downloadData: any) {
+    this.scriptservice.downloadSriptZip(downloadData.name).subscribe(blob => {
+      const xmlBlob = new Blob([blob], { type: 'application/zip' });
+      const url = window.URL.createObjectURL(xmlBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${downloadData.name}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    })
   }
 
   /**
@@ -887,18 +906,18 @@ export class ScriptListComponent {
    * The file is named using the script name with an `.md` extension.
    */
   downloadMdFile(downloadData: any) {
-  this.scriptservice.downloadMdFile(downloadData.name).subscribe(blob => {
-    const mdBlob = new Blob([blob], { type: 'text/markdown' });
-    const url = window.URL.createObjectURL(mdBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${downloadData.name}.md`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  });
-}
+    this.scriptservice.downloadMdFile(downloadData.name).subscribe(blob => {
+      const mdBlob = new Blob([blob], { type: 'text/markdown' });
+      const url = window.URL.createObjectURL(mdBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${downloadData.name}.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    });
+  }
 
 
 
@@ -936,8 +955,8 @@ export class ScriptListComponent {
    * subscribes to the resulting blob, and creates a downloadable script file.
    * The file is named using the script name with an `.zip` extension.
    */
-  downloadScript(params:any):void{
-    if(params.name){
+  downloadScript(params: any): void {
+    if (params.name) {
       this.scriptservice.downloadScript(params.name).subscribe(blob => {
         const xmlBlob = new Blob([blob], { type: 'application/zip' }); // Ensure correct MIME type
         const url = window.URL.createObjectURL(xmlBlob);
@@ -961,14 +980,15 @@ export class ScriptListComponent {
    * 
    * @returns {void}
    */
-  downloadTestCases(){
-    this.category =  this.authservice.selectedConfigVal;
-    this.scriptservice.downloadTestCasesZip( this.category).subscribe(blob => {
-      const xmlBlob = new Blob([blob], { type: 'application/zip' }); 
+  downloadTestCases() {  
+      console.log('Download button clicked');
+  
+      this.scriptservice.downloadTestCasesZip(this.selectedCategory).subscribe(blob => {
+      const xmlBlob = new Blob([blob], { type: 'application/zip' });
       const url = window.URL.createObjectURL(xmlBlob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Testcase_${ this.category}.zip`;
+      a.download = `Testcase_${this.selectedCategory}.zip`;
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
@@ -984,14 +1004,14 @@ export class ScriptListComponent {
    * is initiated, and the object URL is revoked to free up memory.
    * 
    * @returns {void}
-   */  
-  downloadAllSuitesZIP(){
+   */
+  downloadAllSuitesZIP() {
     this.scriptservice.downloadalltestsuitexmlZip(this.selectedCategory).subscribe(blob => {
-      const xmlBlob = new Blob([blob], { type: 'application/zip' }); 
+      const xmlBlob = new Blob([blob], { type: 'application/zip' });
       const url = window.URL.createObjectURL(xmlBlob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Testcases_${this.selectedCategory}.zip`;
+      a.download = `TestSuites_${this.selectedCategory}.zip`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -1010,13 +1030,13 @@ export class ScriptListComponent {
    * After the download is triggered, the temporary anchor element is removed
    * from the document and the object URL is revoked.
    */
-  downloadSuiteXML(params:any){
-    if(params.name){
+  downloadSuiteXML(params: any) {
+    if (params.name) {
       this.scriptservice.downloadTestSuiteXML(params.name).subscribe(blob => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${params.name}.xml`; 
+        a.download = `${params.name}.xml`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1029,11 +1049,11 @@ export class ScriptListComponent {
    *
    * @param params - An object containing the parameters for the download.
    * @param params.name - The name of the test suite to download.
-   */  
-  downloadSuiteExcel(params:any){
-    if(params.name){
+   */
+  downloadSuiteExcel(params: any) {
+    if (params.name) {
       this.scriptservice.downloadTestSuiteXLSX(params.name).subscribe(blob => {
-        const xmlBlob = new Blob([blob], { type: 'application/xml' }); 
+        const xmlBlob = new Blob([blob], { type: 'application/xml' });
         const url = window.URL.createObjectURL(xmlBlob);
         const a = document.createElement('a');
         a.href = url;
@@ -1058,30 +1078,30 @@ export class ScriptListComponent {
    * calling `allTestSuilteListByCategory` after detecting changes with `cdRef.detectChanges`.
    * 
    * If an error occurs during the deletion process, it parses the error message and displays it using `_snakebar`.
-   */  
-  deleteSuite(params:any){
+   */
+  deleteSuite(params: any) {
     if (confirm("Are you sure to delete ?")) {
-      if(params.id){
+      if (params.id) {
         this.scriptservice.deleteTestSuite(params.id).subscribe({
-          next:(res)=>{
+          next: (res) => {
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
               verticalPosition: 'top'
-              })
-              const rowToRemove = this.paginatedSuiteData.find((row:any) => row.id === params.id);
-              if (rowToRemove) {
-                this.cdRef.detectChanges();
-                this.allTestSuilteListByCategory();
-              }
+            })
+            const rowToRemove = this.paginatedSuiteData.find((row: any) => row.id === params.id);
+            if (rowToRemove) {
+              this.cdRef.detectChanges();
+              this.allTestSuilteListByCategory();
+            }
           },
-          error:(err)=>{
+          error: (err) => {
             this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
             })
           }
         })
@@ -1092,9 +1112,9 @@ export class ScriptListComponent {
    * Navigates to the edit test suite page with the provided test suite data.
    *
    * @param testSuiteData - The data of the test suite to be edited.
-   */  
-  editTestSuite(testSuiteData:any){
-    this.router.navigate(['script/edit-testsuite'], {state:{testSuiteData}});
+   */
+  editTestSuite(testSuiteData: any) {
+    this.router.navigate(['script/edit-testsuite'], { state: { testSuiteData } });
   }
 
   @HostListener('document:click', ['$event'])
@@ -1119,7 +1139,7 @@ export class ScriptListComponent {
    * Toggles the expansion state of a given parent panel and updates the component's panel open state.
    *
    * @param parent - The parent object whose expanded state is to be toggled.
-   */  
+   */
   togglePanel(parent: any) {
     parent.expanded = !parent.expanded;
     this.panelOpenState = !this.panelOpenState;
@@ -1128,8 +1148,8 @@ export class ScriptListComponent {
    * Toggles the expanded state of a test suite and updates the suite panel state.
    * 
    * @param suite - The test suite object whose expanded state is to be toggled.
-   */  
-  toggleTestSuite(suite:any){
+   */
+  toggleTestSuite(suite: any) {
     suite.expanded = !suite.expanded;
     this.suitePanelOpen = !this.suitePanelOpen;
   }

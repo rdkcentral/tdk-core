@@ -28,6 +28,10 @@ import org.springframework.stereotype.Repository;
 import com.rdkm.tdkservice.model.ScriptTestSuite;
 import com.rdkm.tdkservice.model.TestSuite;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import jakarta.transaction.Transactional;
 
 /**
@@ -41,8 +45,8 @@ public interface ScriptTestSuiteRepository extends JpaRepository<ScriptTestSuite
 	 * 
 	 * @param testSuite
 	 */
-	@Transactional
-	void deleteAllByTestSuite(TestSuite testSuite);
+	@Modifying @Transactional @Query("DELETE FROM ScriptTestSuite sts WHERE sts.testSuite = :testSuite") 
+	void deleteByTestSuite(@Param("testSuite") TestSuite testSuite);
 
 	/**
 	 * This method is used to find all the test suite mapping for a script

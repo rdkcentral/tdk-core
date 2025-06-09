@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import { ScriptsService } from '../../../services/scripts.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../auth/auth.service';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 interface scriptType {
   id: string,
@@ -36,7 +37,7 @@ interface scriptType {
 @Component({
   selector: 'app-create-script-group',
   standalone: true,
-  imports: [CommonModule,HttpClientModule,ReactiveFormsModule,MaterialModule,FormsModule,DragDropModule],
+  imports: [CommonModule,HttpClientModule,ReactiveFormsModule,MaterialModule,FormsModule,DragDropModule,LoaderComponent],
   templateUrl: './create-script-group.component.html',
   styleUrl: './create-script-group.component.css'
 })
@@ -60,6 +61,7 @@ export class CreateScriptGroupComponent {
   selectedLeft = new Set<number>();
   selectedRight = new Set<number>();
   filteredLeftList:any;
+  isLoadingScripts: boolean = false;
 
   constructor(private authservice : AuthService,private fb: FormBuilder,private router: Router,private scriptservice:ScriptsService,
     private _snakebar: MatSnackBar ) {
@@ -101,11 +103,19 @@ export class CreateScriptGroupComponent {
   /**
    * Method to get all scripts of leftside container
    */ 
-  allScripts(){
-    this.scriptservice.findTestSuitebyCategory(this.selectedCategory).subscribe(res=>{
-      this.container1 = res.data;
-    })
+  allScripts() {
+    this.isLoadingScripts = true;
+    this.scriptservice.findTestSuitebyCategory(this.selectedCategory).subscribe({
+      next: (res) => {
+        this.container1 = res.data;
+        this.isLoadingScripts = false;
+      },
+      error: () => {
+        this.isLoadingScripts = false;
+      }
+    });
   }
+  
   toggleSec(scripts:any, side: 'left' | 'right'){
     if(side === 'left'){
       this.selectedLeft.has(scripts.id)?this.selectedLeft.delete(scripts.id):this.selectedLeft.add(scripts.id);
@@ -145,40 +155,7 @@ export class CreateScriptGroupComponent {
       
     }
   }
-// Handle multi-select using Ctrl (Cmd on Mac) + click
-  // selectItem(event: MouseEvent, item: string) :void{
-  //   if (event.ctrlKey || event.metaKey) {
-  //     if (this.selectedItems.has(item)) {
-  //       this.selectedItems.delete(item);
-  //     } else {
-  //       this.selectedItems.add(item);
-  //     }
-  //   } else {
-  //     this.selectedItems.clear();
-  //     this.selectedItems.add(item);
-  //   }
-  // }
-  /**
-   * Method to drag and drop functionality
-   */ 
-  // drop(event: CdkDragDrop<string[]>) :void{
-  //   const selectedArray = Array.from(this.selectedItems);
-  //   if (event.previousContainer === event.container) {
-  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  //   } else {
-  //     for (let selectedItem of selectedArray) {
-  //       const index = event.previousContainer.data.indexOf(selectedItem);
-  //       if (index !== -1) {
-  //         event.previousContainer.data.splice(index, 1);
-  //         event.container.data.splice(event.currentIndex, 0, selectedItem);
-  //       }
-  //     }
-  //     this.selectedItems.clear();
-  //   }
-  //   this.testSuiteFrom.get('container2Scripts')?.setValue(this.container2);
-  //   this.testSuiteFrom.get('container2Scripts')?.markAsTouched();
-  //   this.testSuiteFrom.get('container2Scripts')?.updateValueAndValidity();
-  // }
+
   get filteredContainer1(): any[]{
     const searchTerm = this.testSuiteFrom.get('search')?.value || ''; 
     this.filteredLeftList = this.container1;
@@ -187,15 +164,14 @@ export class CreateScriptGroupComponent {
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-      return this.filteredLeftList;
-    
-    // return filteredList.sort((a:any, b:any) => {
-    //   if (this.sortOrder === 'asc') {
-    //     return a.name.localeCompare(b.name);
-    //   } else {
-    //     return b.name.localeCompare(a.name);
-    //   }
-    // });
+    // Sort the filtered list based on the current sort order    
+    return this.filteredLeftList.sort((a:any, b:any) => {
+      if (this.sortOrder === 'asc') {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
   }
   /**
    * Method to toggle scorting asc/desc
@@ -211,17 +187,7 @@ export class CreateScriptGroupComponent {
     })
     // this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
   }
-  // get container2(): any[] {
-  //   let filteredList2 = this.container2ScriptArr;
-  //   return this.testSuiteArr = filteredList2;
-    // return filteredList2.sort((a, b) => {
-    //   if (this.sortOrderRight === 'asc') {
-    //     return a.name.localeCompare(b.name);
-    //   } else {
-    //     return b.name.localeCompare(a.name);
-    //   }
-    // });
-  // }
+
   /**
    * Validation for rightside container
    */ 

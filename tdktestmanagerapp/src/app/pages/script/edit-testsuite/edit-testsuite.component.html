@@ -18,131 +18,149 @@ limitations under the License.
         <div class="col">
         </div>
         <div class="col">
-            <h1 class="title"><h1 class="title">Update {{onlyVideoCategoryName?onlyVideoCategoryName:categoryName}} TestSuite</h1></h1>
+            <h1 class="title">
+                <h1 class="title">Update {{onlyVideoCategoryName?onlyVideoCategoryName:categoryName}} TestSuite</h1>
+            </h1>
         </div>
         <div class="col">
         </div>
     </div>
     <div class="row mt-1">
         <div class="col-md-12">
-                <form [formGroup]="testSuiteEditFrom" (ngSubmit)="testSuiteEditSubmit()">
-                    <div class="row form-row mt 2">
-                        <div class="col-md-6">
-                            <div class="row mb-1">
-                                <div class="col-md-2">
-                                    <label for="suitename" class="col-form-label name-lable">Name<span style="color:red; margin-left: 0.75em;">*</span></label>
-                                </div>
-                                <div class="col-md-10">
-                                    <input type="text" class="form-control" id="suitename" formControlName="testSuiteName" autocomplete="off" placeholder="Enter testsuite name">
-                                    <div *ngIf="testSuiteFormSubmitted && testSuiteEditFrom.controls['testSuiteName']?.errors" class="text-danger">
-                                        <small *ngIf="testSuiteEditFrom.controls['testSuiteName']?.errors?.['required']">Please enter testsuite name.</small>
-                                    </div>
-                                </div>
-                                 
+            <form [formGroup]="testSuiteEditFrom" (ngSubmit)="testSuiteEditSubmit()">
+                <div class="row form-row mt 2">
+                    <div class="col-md-6">
+                        <div class="row mb-1">
+                            <div class="col-md-2">
+                                <label for="suitename" class="col-form-label name-lable">Name<span
+                                        style="color:red; margin-left: 0.75em;">*</span></label>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="row mb-1">
-                                <div class="col-md-2">
-                                    <label for="desc" class="col-form-label">Description<span style="color:red; margin-left: 0.75em;">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="suitename" formControlName="testSuiteName"
+                                    autocomplete="off" placeholder="Enter testsuite name">
+                                <div *ngIf="testSuiteFormSubmitted && testSuiteEditFrom.controls['testSuiteName']?.errors"
+                                    class="text-danger">
+                                    <small
+                                        *ngIf="testSuiteEditFrom.controls['testSuiteName']?.errors?.['required']">Please
+                                        enter testsuite name.</small>
                                 </div>
-                                <div class="col-md-10">
-                                    <textarea rows="5" class="form-control" id="desc" formControlName="description" autocomplete="off" placeholder="Enter description"></textarea>
-                                    <!-- <input type="text" class="form-control" id="suitename" formControlName="testSuiteName" autocomplete="off" placeholder="Enter testsuite name"> -->
-                                    <div *ngIf="testSuiteFormSubmitted && testSuiteEditFrom.controls['testSuiteName']?.errors" class="text-danger">
-                                        <small *ngIf="testSuiteEditFrom.controls['testSuiteName']?.errors?.['required']">Please enter description.</small>
-                                    </div>
-                                </div>
-                                 
                             </div>
+
                         </div>
-                        <div class="row">
-                            <span class="col-form-label">All Scripts</span>
-                            <div class="col sort-search">
-                                  <button type="button" (click)="toggleSortOrder()" class="sort-button">
-                                    <i class="bi sort-icon" [ngClass]="sortOrder === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'"></i>
-                                  </button>
-                                  <span class="info"><mat-icon class="info-icon" matTooltip ="Select the required scripts from here . 
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-1">
+                            <div class="col-md-2">
+                                <label for="desc" class="col-form-label">Description<span
+                                        style="color:red; margin-left: 0.75em;">*</span></label>
+                            </div>
+                            <div class="col-md-10">
+                                <textarea rows="5" class="form-control" id="desc" formControlName="description"
+                                    autocomplete="off" placeholder="Enter description"></textarea>
+                                <!-- <input type="text" class="form-control" id="suitename" formControlName="testSuiteName" autocomplete="off" placeholder="Enter testsuite name"> -->
+                                <div *ngIf="testSuiteFormSubmitted && testSuiteEditFrom.controls['testSuiteName']?.errors"
+                                    class="text-danger">
+                                    <small
+                                        *ngIf="testSuiteEditFrom.controls['testSuiteName']?.errors?.['required']">Please
+                                        enter description.</small>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <span class="col-form-label">All Scripts</span>
+                        <div class="col sort-search">
+                            <button type="button" (click)="toggleSortOrder()" class="sort-button">
+                                <i class="bi sort-icon"
+                                    [ngClass]="sortOrder === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'"></i>
+                            </button>
+                            <span class="info"><mat-icon class="info-icon"
+                                    matTooltip="Select the required scripts from here . 
                                     Then drag and drop in the next table. Multi select is also supported">info</mat-icon></span>
-                                <div class="searchrow">
-                                    <input 
-                                    type="text" 
-                                    placeholder="Search script..." 
-                                    formControlName="search"
-                                    class="form-control searchscript"
-                                  />
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="col sort-search">
-                                    <button type="button" (click)="toggleSortRightSide()" class="sort-button">
-                                      <i class="bi sort-icon" [ngClass]="sortOrderRight === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'"></i>
-                                    </button>
-                                    <span class="info"><mat-icon class="info-icon" matTooltip ="Select and Drag the scripts for ordering. 
-                                        You can also use the sort option to order as per the module">info</mat-icon></span>
-                                </div>
+                            <div class="searchrow">
+                                <input type="text" placeholder="Search script..." formControlName="search"
+                                    class="form-control searchscript" />
                             </div>
                         </div>
-                        <div class="row">
-                           
-                            <div class="col left-sec">
-                                <div class="name-list">
-                                    <div *ngIf="filteredContainer1.length === 0" class="nodata">
-                                        <span class="drag-nodata">No data found...</span>
-                                    </div>
-                                    <div class="list-box">
-                                        <ul>
-                                            <li *ngFor=" let scripts of filteredLeftList"
-                                            (click)="toggleSec(scripts, 'left')"
-                                            [class.selected]="selectedLeft.has(scripts.id)">
-                                                {{scripts.name}}
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="move-btns">
-                                        <button type="button" (click)="moveToRight()" class="sort-button arrow-btn">
-                                            <i class="bi bi-box-arrow-right icon-move" ></i>
-                                        </button>
-                                        <button type="button" (click)="moveToLeft()" class="sort-button arrow-btn">
-                                            <i class="bi bi-box-arrow-left icon-move" ></i>
-                                        </button>
-                                    </div>
-                                </div>
+                        <div class="col">
+                            <div class="col sort-search">
+                                <button type="button" (click)="toggleSortRightSide()" class="sort-button">
+                                    <i class="bi sort-icon"
+                                        [ngClass]="sortOrderRight === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'"></i>
+                                </button>
+                                <span class="info"><mat-icon class="info-icon"
+                                        matTooltip="Select and Drag the scripts for ordering. 
+                                        You can also use the sort option to order as per the module">info</mat-icon></span>
                             </div>
-                            <div class="col right-sec">
-                                <div class="ritename-list">
-                                    <div class="list-box">
-                                        <ul>
-                                            <li *ngFor=" let scripts of container2ScriptArr; let i = index"
-                                            (click)="toggleSec(scripts, 'right')"
-                                            [class.selected]="selectedRight.has(scripts.id)">
-                                                {{scripts.name}}
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="move-ritebtns">
-                                        <button type="button" (click)="moveToUp()" class="sort-button arrow-btn">
-                                            <i class="bi bi-box-arrow-up icon-move" ></i>
-                                          </button>
-                                          <button type="button" (click)="moveToDown()" class="sort-button arrow-btn">
-                                            <i class="bi bi-box-arrow-down icon-move" ></i>
-                                          </button>
-                                    </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col left-sec">
+                            <div class="name-list">
+                                <div *ngIf="filteredContainer1.length === 0 && !isLoadingScripts" class="nodata">
+                                    <span class="drag-nodata">No data found...</span>
+                                </div>
+                                <div *ngIf="isLoadingScripts" class="nodata d-flex justify-content-center align-items-center"
+                                    style="min-height: 100px;">
+                                    <app-loader></app-loader>
                                 </div>
 
-                                <div *ngIf="(testSuiteEditFrom.get('container2Scripts')?.hasError('container2Empty') && (testSuiteEditFrom.get('container2Scripts')?.touched || testSuiteFormSubmitted))">
-                                    <small class="script-err">Add at least one script.</small>
+                                <div class="list-box">
+                                    <ul>
+                                        <li *ngFor=" let scripts of filteredLeftList"
+                                            (click)="toggleSec(scripts, 'left')"
+                                            [class.selected]="selectedLeft.has(scripts.id)">
+                                            {{scripts.name}}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="move-btns">
+                                    <button type="button" (click)="moveToRight()" class="sort-button arrow-btn">
+                                        <i class="bi bi-box-arrow-right icon-move"></i>
+                                    </button>
+                                    <button type="button" (click)="moveToLeft()" class="sort-button arrow-btn">
+                                        <i class="bi bi-box-arrow-left icon-move"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row form-row">
-                        <div class="mt-3 mb-3 text-end">
-                            <button class="reset-btn" (click)="goBack()">Back</button>
-                            <button type="submit" class="create-btn">Update</button>
+                        <div class="col right-sec">
+                            <div class="ritename-list">
+                                <div class="list-box">
+                                    <ul>
+                                        <li *ngFor=" let scripts of container2ScriptArr; let i = index"
+                                            (click)="toggleSec(scripts, 'right')"
+                                            [class.selected]="selectedRight.has(scripts.id)">
+                                            {{scripts.name}}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="move-ritebtns">
+                                    <button type="button" (click)="moveToUp()" class="sort-button arrow-btn">
+                                        <i class="bi bi-box-arrow-up icon-move"></i>
+                                    </button>
+                                    <button type="button" (click)="moveToDown()" class="sort-button arrow-btn">
+                                        <i class="bi bi-box-arrow-down icon-move"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div
+                                *ngIf="(testSuiteEditFrom.get('container2Scripts')?.hasError('container2Empty') && (testSuiteEditFrom.get('container2Scripts')?.touched || testSuiteFormSubmitted))">
+                                <small class="script-err">Add at least one script.</small>
+                            </div>
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="row form-row">
+                    <div class="mt-3 mb-3 text-end">
+                        <button class="reset-btn" (click)="goBack()">Back</button>
+                        <button type="submit" class="create-btn">Update</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
