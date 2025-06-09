@@ -30,24 +30,28 @@ import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
   standalone: true,
   imports: [ReactiveFormsModule, MonacoEditorModule, CommonModule],
   templateUrl: './edit-rdk-certification.component.html',
-  styleUrl: './edit-rdk-certification.component.css'
+  styleUrl: './edit-rdk-certification.component.css',
 })
 /**
  * Component for editing RDK certification.
- * 
+ *
  * This component provides a form to edit the RDK certification details, including the file name and Python script content.
  * It initializes the form with the user's name and retrieves the file content to populate the Python editor.
  * The component also handles form submission to update the certification script and provides navigation back to the list of RDK certifications.
- * 
+ *
  */
 export class EditRdkCertificationComponent {
-
   certificationFormGroup!: FormGroup;
   editorOptions = { theme: 'vs-dark', language: 'python' };
   submitted = false;
   user: any;
 
-  constructor(private fb: FormBuilder, private service: RdkService, private _snakebar: MatSnackBar, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private service: RdkService,
+    private _snakebar: MatSnackBar,
+    private router: Router
+  ) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
     if (!this.user) {
       this.router.navigate(['configure/list-rdk-certifications']);
@@ -56,23 +60,25 @@ export class EditRdkCertificationComponent {
 
   /**
    * Initializes the component and sets up the form group for certification.
-   * 
+   *
    * - Creates a form group with `fileName` and `pythonEditor` fields.
    * - Retrieves the file content based on the `fileName` and sets the content to the `pythonEditor` field.
    * - Handles errors by displaying a snackbar with the error message.
-   * 
+   *
    * @returns {void}
    */
   ngOnInit(): void {
     this.certificationFormGroup = this.fb.group({
-      fileName: [{value:this.user.name, disabled: true}],
-      pythonEditor: ['', Validators.required]
+      fileName: [{ value: this.user.name, disabled: true }],
+      pythonEditor: ['', Validators.required],
     });
-    const fileName = this.certificationFormGroup.get('fileName')?.value
-    const file=encodeURIComponent(fileName);
+    const fileName = this.certificationFormGroup.get('fileName')?.value;
+    const file = encodeURIComponent(fileName);
     this.service.getFileContent(file).subscribe({
       next: (res) => {
-        const blob = new Blob([res.content], { type: res.content.type || 'text/plain' });
+        const blob = new Blob([res.content], {
+          type: res.content.type || 'text/plain',
+        });
         blob.text().then((text) => {
           this.certificationFormGroup.get('pythonEditor')?.setValue(text);
         });
@@ -83,48 +89,54 @@ export class EditRdkCertificationComponent {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
-          verticalPosition: 'top'
-        })
-      }
-    })
+          verticalPosition: 'top',
+        });
+      },
+    });
   }
 
   /**
    * Handles the form submission for the RDK certification edit form.
-   * 
+   *
    * This method retrieves the Python script content from the form, creates a file object,
    * and sends it to the server using the `createScript` service method. Upon successful
    * submission, it displays a success message and navigates to the list of RDK certifications.
    * If an error occurs, it displays an error message.
-   * 
+   *
    * @returns {void}
    */
-  onSubmit() : void {
-    const pythonContent = this.certificationFormGroup.value.pythonEditor;
-    const fileName = this.certificationFormGroup.get('fileName')?.value;
-    const scriptFileName = `${fileName}.py`;
-    const scriptFile = new File([pythonContent], scriptFileName, { type: 'text/x-python' });
-    this.service.updateScript(scriptFile).subscribe({
-      next: (res) => {
-        this._snakebar.open(res.message, '', {
-          duration: 2000,
-          panelClass: ['success-msg'],
-          verticalPosition: 'top'
-        })
-        setTimeout(() => {
-          this.router.navigate(["/configure/list-rdk-certifications"]);
-        }, 1000);
-      },
-      error: (err) => {
-       
-        this._snakebar.open(err.message, '', {
-          duration: 2000,
-          panelClass: ['err-msg'],
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        })
-      }
-    })
+  onSubmit(): void {
+    this.submitted = true;
+    if (this.certificationFormGroup.invalid) {
+      return;
+    } else {
+      const pythonContent = this.certificationFormGroup.value.pythonEditor;
+      const fileName = this.certificationFormGroup.get('fileName')?.value;
+      const scriptFileName = `${fileName}.py`;
+      const scriptFile = new File([pythonContent], scriptFileName, {
+        type: 'text/x-python',
+      });
+      this.service.updateScript(scriptFile).subscribe({
+        next: (res) => {
+          this._snakebar.open(res.message, '', {
+            duration: 2000,
+            panelClass: ['success-msg'],
+            verticalPosition: 'top',
+          });
+          setTimeout(() => {
+            this.router.navigate(['/configure/list-rdk-certifications']);
+          }, 1000);
+        },
+        error: (err) => {
+          this._snakebar.open(err.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+          });
+        },
+      });
+    }
   }
 
   /**
@@ -132,7 +144,6 @@ export class EditRdkCertificationComponent {
    * This method uses the Angular Router to navigate to the "configure/list-rdk-certifications" route.
    */
   goBack(): void {
-    this.router.navigate(["configure/list-rdk-certifications"]);
+    this.router.navigate(['configure/list-rdk-certifications']);
   }
-
 }

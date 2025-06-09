@@ -619,8 +619,17 @@ public class DeviceService implements IDeviceService {
 				" Thunder port for thunder devices");
 		appendElement(deviceElement, Constants.XML_TAG_Device_TYPE, device.getDeviceType().getName(),
 				" device type for STB");
-		appendElement(deviceElement, Constants.XML_TAG_OEM, device.getOem().getName(), " oem for the STB");
-		appendElement(deviceElement, Constants.XML_TAG_SOC, device.getSoc().getName(), " SoC for the STB");
+		if (device.getOem() != null && device.getOem().getName() != null) {
+			appendElement(deviceElement, Constants.XML_TAG_OEM, device.getOem().getName(), " oem for the STB");
+		} else {
+			appendElement(deviceElement, Constants.XML_TAG_OEM, "", " oem for the STB");
+		}
+
+		if (device.getSoc() != null && device.getSoc().getName() != null) {
+			appendElement(deviceElement, Constants.XML_TAG_SOC, device.getSoc().getName(), " SoC for the STB");
+		} else {
+			appendElement(deviceElement, Constants.XML_TAG_SOC, "", " SoC for the STB");
+		}
 		appendElement(deviceElement, Constants.XML_TAG_CATEGORY, device.getCategory().toString(),
 				" Category for the STB");
 		return doc;

@@ -46,6 +46,11 @@ limitations under the License.
                                 <div style="height: 400px;">
                                     <ngx-monaco-editor [options]="editorOptions" formControlName="pythonEditor">
                                     </ngx-monaco-editor>
+                                    <div *ngIf="submitted && certificationFormGroup.controls['pythonEditor']?.errors" class="text-danger">
+                                        <small *ngIf="certificationFormGroup.controls['pythonEditor']?.errors?.['required']">
+                                            Please enter some content in the editor.
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                             <div class="mt-2 text-end">

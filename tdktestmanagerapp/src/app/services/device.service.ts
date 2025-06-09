@@ -137,14 +137,14 @@ export class DeviceService {
     });
     const formData: FormData = new FormData();
     formData.append('uploadFile', file, file.name);
-    return this.http.post(`${this.config.apiUrl}api/v1/device/uploadDeviceConfigFile?isThunderEnabled=${isThunder}`, formData, { headers, responseType: 'text' });
+    return this.http.post(`${this.config.apiUrl}api/v1/device/uploadDeviceConfigFile?isThunderEnabled=${isThunder}`, formData, { headers });
   }
 
-  deleteDeviceConfigFile(deviceConfigFileName: any) {
+  deleteDeviceConfigFile(deviceConfigFileName: any ,isThunder:boolean) {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${this.config.apiUrl}api/v1/device/deleteDeviceConfigFile?deviceConfigFileName=${deviceConfigFileName}`, { headers, responseType: 'text' });
+    return this.http.delete(`${this.config.apiUrl}api/v1/device/deleteDeviceConfigFile?deviceConfigFileName=${deviceConfigFileName}&isThunderEnabled=${isThunder}`, { headers, responseType: 'text' });
   }
 
 }

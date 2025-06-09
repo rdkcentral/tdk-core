@@ -93,4 +93,9 @@ public class DeviceResponseDTO {
 	 */
 	@NotBlank
 	private String category;
+	
+	/**
+	 * Represents the configure port status.
+	 */
+	private boolean isDevicePortsConfigured;
 }

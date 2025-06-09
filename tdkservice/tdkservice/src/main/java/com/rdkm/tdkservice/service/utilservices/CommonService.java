@@ -511,7 +511,7 @@ public class CommonService {
 		if (!configFile.getOriginalFilename().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
 			LOGGER.error("Invalid file extension: " + configFile.getOriginalFilename());
 			throw new UserInputException(
-					"Invalid file extension: " + configFile.getOriginalFilename() + " The File must be .py file");
+					"Please upload a .py file.");
 		}
 	}
 
