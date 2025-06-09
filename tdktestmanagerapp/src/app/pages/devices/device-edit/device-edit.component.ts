@@ -35,17 +35,19 @@ import { AuthService } from '../../../auth/auth.service';
 @Component({
   selector: 'app-device-edit',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,NgxEditorModule,MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, NgxEditorModule, MaterialModule],
   templateUrl: './device-edit.component.html',
-  styleUrl: './device-edit.component.css'
+  styleUrl: './device-edit.component.css',
 })
 export class DeviceEditComponent {
-  @ViewChild('dialogTemplate', { static: true }) dialogTemplate!: TemplateRef<any>;
-  @ViewChild('newDeviceTemplate', { static: true }) newDeviceTemplate!: TemplateRef<any>;
+  @ViewChild('dialogTemplate', { static: true })
+  dialogTemplate!: TemplateRef<any>;
+  @ViewChild('newDeviceTemplate', { static: true })
+  newDeviceTemplate!: TemplateRef<any>;
   configureName!: string;
   editDeviceVForm!: FormGroup;
-  rdkBForm!:FormGroup;
-  rdkCForm!:FormGroup;
+  rdkBForm!: FormGroup;
+  rdkCForm!: FormGroup;
   editDeviceVFormSubmitted = false;
   rdkbFormSubmitted = false;
   rdkcFormSubmitted = false;
@@ -53,13 +55,13 @@ export class DeviceEditComponent {
   showPortFile = false;
   showConfigPort = false;
   showConfigPortB = false;
-  allDeviceType:any;
-  allOem:any;
-  allsoc:any;
-  rowData:any = [];
-  public themeClass: string = "ag-theme-quartz";
+  allDeviceType: any;
+  allOem: any;
+  allsoc: any;
+  rowData: any = [];
+  public themeClass: string = 'ag-theme-quartz';
   public paginationPageSize = 5;
-  public paginationPageSizeSelector: number[] | boolean = [5,10, 50, 100];
+  public paginationPageSizeSelector: number[] | boolean = [5, 10, 50, 100];
   public tooltipShowDelay = 500;
   gridApi!: any;
   showHideCreateFormV = true;
@@ -68,62 +70,72 @@ export class DeviceEditComponent {
   isGateway!: any;
   isrecorderId = false;
   isThunderchecked = false;
-public frameworkComponents :any;
+  public frameworkComponents: any;
   visibleGateway = true;
-  streamingMapObj!: { streamId: any; ocapId: any; }[];
+  streamingMapObj!: { streamId: any; ocapId: any }[];
   loggedinUser: any;
-  agentport = "8087";
-  agentStatusPort = "8088";
-  agentMonitoPort = "8090";
+  agentport = '8087';
+  agentStatusPort = '8088';
+  agentMonitoPort = '8090';
   user: any;
-  selectedDeviceCategory! : string;
+  selectedDeviceCategory!: string;
   categoryName!: string;
   visibleDeviceconfigFile = false;
-  configFileName!:string;
+  configFileName!: string;
   editor!: Editor;
   editor2!: Editor;
   uploadConfigForm!: FormGroup;
-  uploadDeviceConfigForm!:FormGroup;
-  filesList:any[]=[];
+  uploadDeviceConfigForm!: FormGroup;
+  filesList: any[] = [];
   stbNameChange!: string;
-  configData:any;
+  configData: any;
   deviceTypeValue!: string;
   existConfigSubmitted = false;
   uploadExistConfigHeading!: string;
   uploadExistFileContent!: string;
   isEditingFile = false;
-  fileNameArray:string[]=[];
+  fileNameArray: string[] = [];
   currentIndex: number = 0;
   existingConfigEditor = true;
   uploadExistingConfig = false;
   showExistUploadButton = true;
   backToExistEditorbtn = false;
-  uploadFileName! :File;
+  uploadFileName!: File;
   submitted = false;
-  uploadCreateHeading: string ='Create New Device Config File';
+  uploadCreateHeading: string = 'Create New Device Config File';
   uploadFileNameConfig!: string;
-  uploadFileContent! : string ;
+  uploadFileContent!: string;
   deviceEditor = true;
   uploadConfigSec = false;
   backToEditorbtn = false;
   showUploadButton = true;
   dialogRef!: MatDialogRef<any>;
   newDeviceDialogRef!: MatDialogRef<any>;
-  selectedDeviceType:any;
+  selectedDeviceType: any;
   newFileName!: string;
   findboxType: any[] = [];
 
-  constructor(private fb:FormBuilder, private router: Router,
-    private _snakebar :MatSnackBar, private oemService:OemService, private authservice: AuthService,
-    private service:DeviceService, private socService:SocService, private devicetypeService:DevicetypeService,
-    private renderer:Renderer2, public dialog:MatDialog) { 
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private _snakebar: MatSnackBar,
+    private oemService: OemService,
+    private authservice: AuthService,
+    private service: DeviceService,
+    private socService: SocService,
+    private devicetypeService: DevicetypeService,
+    private renderer: Renderer2,
+    public dialog: MatDialog
+  ) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
     console.log(this.user);
-    
-    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
+
+    this.loggedinUser = JSON.parse(
+      localStorage.getItem('loggedinUser') || '{}'
+    );
     this.frameworkComponents = {
-      inputCellRenderer: InputComponent
-    }
+      inputCellRenderer: InputComponent,
+    };
   }
 
   /**
@@ -137,73 +149,123 @@ public frameworkComponents :any;
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
     this.selectedDeviceCategory = this.configureName;
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
       this.showHideCreateFormV = false;
       this.showHideCreateFormB = true;
-    }else{
+    } else {
       this.categoryName = 'Video';
       this.showHideCreateFormV = true;
       this.showHideCreateFormB = false;
     }
-    let ipregexp: RegExp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    let macregexp: RegExp = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+    let ipregexp: RegExp =
+      /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     this.editDeviceVForm = this.fb.group({
-      stbname: [this.user.deviceName, [Validators.required,Validators.pattern(/^[a-zA-Z0-9_]+$/)] ],
-      stbip: [this.user.deviceIp, [Validators.required, Validators.pattern(ipregexp)]],
-      macaddr: [this.user.macId, [Validators.required]],
+      stbname: [
+        this.user.deviceName,
+        [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)],
+      ],
+      stbip: [
+        this.user.deviceIp,
+        [Validators.required, Validators.pattern(ipregexp)],
+      ],
+      macaddr: [
+        this.user.macId,
+        [Validators.required, Validators.pattern(macregexp)],
+      ],
       devicetype: [this.user.deviceTypeName, [Validators.required]],
-      oem: [this.user.oemName],
-      soc: [this.user.socName],
+      oem: [this.user.oemName || ''],
+      soc: [this.user.socName || ''],
       gateway: [this.user.gatewayDeviceName],
-      thunderport:[this.user.thunderPort],
+      thunderport: [this.user.thunderPort],
+
       isThunder: [this.user.thunderEnabled],
-      configuredevicePorts:[this.user.devicePortsConfigured],
-      agentport: [this.user.stbPort?this.user.stbPort:this.agentport],
-      agentstatusport: [this.user.statusPort?this.user.statusPort:this.agentStatusPort],
-      agentmonitorport: [this.user.agentMonitorPort?this.user.agentMonitorPort:this.agentMonitoPort],
-      recorderId: [this.user.recorderId]
-    })
+      configuredevicePorts: [this.user.devicePortsConfigured],
+      agentport: [this.user.devicePort ? this.user.devicePort : this.agentport],
+      agentstatusport: [
+        this.user.statusPort ? this.user.statusPort : this.agentStatusPort,
+      ],
+      agentmonitorport: [
+        this.user.agentMonitorPort
+          ? this.user.agentMonitorPort
+          : this.agentMonitoPort,
+      ],
+      recorderId: [this.user.recorderId],
+    });
 
     this.rdkBForm = this.fb.group({
-      gatewayName:[this.user.deviceName, [Validators.required,Validators.pattern(/^[a-zA-Z0-9_]+$/)] ],
-      gatewayIp: [this.user.deviceIp, [Validators.required]],
-      macaddr: [this.user.macId, [Validators.required]],
+      gatewayName: [
+        this.user.deviceName,
+        [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)],
+      ],
+      gatewayIp: [
+        this.user.deviceIp,
+        [Validators.required, Validators.pattern(ipregexp)],
+      ],
+      macaddr: [
+        this.user.macId,
+        [Validators.required, Validators.pattern(macregexp)],
+      ],
       devicetype: [this.user.deviceTypeName, [Validators.required]],
-      oem: [this.user.oemName],
-      soc: [this.user.socName],
-      agentPortb: [this.user.stbPort?this.user.stbPort:this.agentport],
-      agentStatusportB: [this.user.statusPort?this.user.statusPort:this.agentStatusPort],
-      agentMonitorportB: [this.user.agentMonitorPort?this.user.agentMonitorPort:this.agentMonitoPort]
-    })
+      oem: [this.user.oemName || ''],
+      soc: [this.user.socName || ''],
+      configuredevicePortB: [this.user.devicePortsConfigured],
+      agentPortb: [
+        this.user.devicePort ? this.user.devicePort : this.agentport,
+      ],
+      agentStatusportB: [
+        this.user.statusPort ? this.user.statusPort : this.agentStatusPort,
+      ],
+      agentMonitorportB: [
+        this.user.agentMonitorPort
+          ? this.user.agentMonitorPort
+          : this.agentMonitoPort,
+      ],
+    });
 
     this.rdkCForm = this.fb.group({
-      cameraName: [this.user.deviceName, [Validators.required,Validators.pattern(/^[a-zA-Z0-9_]+$/)] ],
-      stbIp:[this.user.deviceIp, [Validators.required]],
-      macaddr: [this.user.macId, [Validators.required]],
+      cameraName: [
+        this.user.deviceName,
+        [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)],
+      ],
+      stbIp: [this.user.deviceIp, [Validators.required]],
+      macaddr: [
+        this.user.macId,
+        [Validators.required, Validators.pattern(macregexp)],
+      ],
       devicetype: [this.user.deviceTypeName, [Validators.required]],
       oem: [this.user.oemName],
       soc: [this.user.socName],
-      agentPortb: [this.user.stbPort?this.user.stbPort:this.agentport],
-      agentStatusportB:[this.user.statusPort?this.user.statusPort:this.agentStatusPort],
-      agentMonitorportB:[this.user.agentMonitorPort?this.user.agentMonitorPort:this.agentMonitoPort]
-    })
+      agentPortb: [this.user.stbPort ? this.user.stbPort : this.agentport],
+      agentStatusportB: [
+        this.user.statusPort ? this.user.statusPort : this.agentStatusPort,
+      ],
+      agentMonitorportB: [
+        this.user.agentMonitorPort
+          ? this.user.agentMonitorPort
+          : this.agentMonitoPort,
+      ],
+    });
+    this.showConfigPortB = !!this.user.devicePortsConfigured;
     this.getAlldeviceType();
     this.getAllOem();
     this.getAllsoc();
     this.isEditChecked(this.user.thunderEnabled);
-    this.isCheckedConfigPort(this.user.devicePortsConfigured)
+    this.isCheckedConfigPort(this.user.devicePortsConfigured);
     this.visibilityConfigFile();
     this.editor = new Editor();
     this.editor2 = new Editor();
     this.uploadConfigForm = this.fb.group({
-      editorFilename:['',{disabled: true}],
-      editorContent: [''],
+      editorFilename: ['', { disabled: true }],
+      editorContent: ['', [Validators.required]],
+      uploadConfigFileModal: ['', [Validators.required]],
     });
-    this.filesList =[];
+    this.filesList = [];
     this.uploadDeviceConfigForm = this.fb.group({
-      editorFilename:['',{disabled: true}],
-      editorContent: [''],
-      uploadConfigFile:['']
+      editorFilename: ['', { disabled: true }],
+      editorContent: ['', [Validators.required]],
+      uploadDeviceConfigFileModal: ['', [Validators.required]],
     });
     this.editDeviceVForm.get('thunderport')?.valueChanges.subscribe((value) => {
       const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
@@ -221,22 +283,26 @@ public frameworkComponents :any;
         });
       }
     });
-    this.editDeviceVForm.get('agentstatusport')?.valueChanges.subscribe((value) => {
-      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
-      if (cleanedValue !== value) {
-        this.editDeviceVForm.get('agentstatusport')?.setValue(cleanedValue, {
-          emitEvent: false,
-        });
-      }
-    });
-    this.editDeviceVForm.get('agentmonitorport')?.valueChanges.subscribe((value) => {
-      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
-      if (cleanedValue !== value) {
-        this.editDeviceVForm.get('agentmonitorport')?.setValue(cleanedValue, {
-          emitEvent: false,
-        });
-      }
-    });
+    this.editDeviceVForm
+      .get('agentstatusport')
+      ?.valueChanges.subscribe((value) => {
+        const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+        if (cleanedValue !== value) {
+          this.editDeviceVForm.get('agentstatusport')?.setValue(cleanedValue, {
+            emitEvent: false,
+          });
+        }
+      });
+    this.editDeviceVForm
+      .get('agentmonitorport')
+      ?.valueChanges.subscribe((value) => {
+        const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+        if (cleanedValue !== value) {
+          this.editDeviceVForm.get('agentmonitorport')?.setValue(cleanedValue, {
+            emitEvent: false,
+          });
+        }
+      });
     this.rdkBForm.get('agentPortb')?.valueChanges.subscribe((value) => {
       const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
       if (cleanedValue !== value) {
@@ -285,9 +351,9 @@ public frameworkComponents :any;
         });
       }
     });
-    this.editDeviceVForm.get('devicename')?.valueChanges.subscribe((value) => {
+    this.editDeviceVForm.get('stbname')?.valueChanges.subscribe((value) => {
       if (value) {
-        this.editDeviceVForm.get('devicename')?.setValue(value.toUpperCase());
+        this.editDeviceVForm.get('stbname')?.setValue(value.toUpperCase());
       }
     });
     this.rdkBForm.get('gatewayName')?.valueChanges.subscribe((value) => {
@@ -300,6 +366,24 @@ public frameworkComponents :any;
         this.rdkCForm.get('cameraName')?.setValue(value.toUpperCase());
       }
     });
+
+    // Ensure thunderport is required if Thunder is enabled on load
+    if (this.editDeviceVForm.get('isThunder')?.value) {
+      this.editDeviceVForm
+        .get('thunderport')
+        ?.setValidators([Validators.required]);
+      this.editDeviceVForm.get('thunderport')?.updateValueAndValidity();
+    }
+
+    this.uploadDeviceConfigForm.get('editorContent')?.setValidators([Validators.required]);
+    this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.clearValidators();
+    this.uploadDeviceConfigForm.get('editorContent')?.updateValueAndValidity();
+    this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.updateValueAndValidity();
+
+    this.uploadConfigForm.get('editorContent')?.setValidators([Validators.required]);
+    this.uploadConfigForm.get('uploadConfigFileModal')?.clearValidators();
+    this.uploadConfigForm.get('editorContent')?.updateValueAndValidity();
+    this.uploadConfigForm.get('uploadConfigFileModal')?.updateValueAndValidity();
   }
 
   /**
@@ -313,68 +397,73 @@ public frameworkComponents :any;
   /**
    * Retrieves all box types based on the selected device category.
    */
-  getAlldeviceType(){
-    this.devicetypeService.getfindallbycategory(this.selectedDeviceCategory).subscribe(res=>{
-      this.allDeviceType = res.data
-      this.findboxType = this.allDeviceType;
-      for (let i = 0; i < this.findboxType.length; i++) {
-        const element = this.findboxType[i];
-        if(this.deviceTypeValue === element.boxTypeName){
-          this.selectedDeviceType = element;
-          const selectedType = this.findboxType.find((item:any) => item.type === this.selectedDeviceType.type);
+  getAlldeviceType() {
+    this.devicetypeService
+      .getfindallbycategory(this.selectedDeviceCategory)
+      .subscribe((res) => {
+        this.allDeviceType = res.data;
+        this.findboxType = this.allDeviceType;
+        for (let i = 0; i < this.findboxType.length; i++) {
+          const element = this.findboxType[i];
+          if (this.deviceTypeValue === element.boxTypeName) {
+            this.selectedDeviceType = element;
+            const selectedType = this.findboxType.find(
+              (item: any) => item.type === this.selectedDeviceType.type
+            );
+          }
         }
-      }
-
-    })
+      });
   }
 
   /**
    * Retrieves all box manufactures based on the selected device category.
    */
-  getAllOem(){
-    this.oemService.getOemByList(this.selectedDeviceCategory).subscribe(res=>{
-      this.allOem = res.data;
-      
-    })
+  getAllOem() {
+    this.oemService
+      .getOemByList(this.selectedDeviceCategory)
+      .subscribe((res) => {
+        this.allOem = res.data;
+      });
   }
 
   /**
    * Retrieves all SOC vendors based on the selected device category.
    */
-  getAllsoc(){
-    this.socService.getSoc(this.selectedDeviceCategory).subscribe(res=>{
+  getAllsoc() {
+    this.socService.getSoc(this.selectedDeviceCategory).subscribe((res) => {
       this.allsoc = res.data;
-      
-    })
+    });
   }
   /**
    * Handles the change event of the box type dropdown.
    * @param event - The event object containing the target element.
    */
-  devicetypeChange(event:any){
+  devicetypeChange(event: any) {
     this.visibleDeviceconfigFile = false;
     let value = event.target.value;
     this.deviceTypeValue = value;
-    this.checkIsThunderValidity();
-    if(this.isThunderchecked){
-      this.showPortFile = true;
-      this.visibilityConfigFile();
-    }
+    this.visibilityConfigFile();
   }
   /**
    * Handles the change event when the checkbox is checked or unchecked.
    * @param event - The event object containing information about the checkbox change.
    */
-  isChecked(event:any){
+
+  
+  isChecked(event: any) {
     this.isThunderchecked = this.editDeviceVForm.get('isThunder')?.value;
-    if(event.target.checked){
+    if (event.target.checked) {
       this.isThunderchecked = true;
       this.showPortFile = true;
-      this.visibilityConfigFile();
-    }else{
+      this.editDeviceVForm.get('thunderport')?.setValidators([Validators.required]);
+      this.editDeviceVForm.get('thunderport')?.updateValueAndValidity();
+    } else {
       this.showPortFile = false;
       this.isThunderchecked = false;
+      this.editDeviceVForm.get('thunderport')?.clearValidators();
+      this.editDeviceVForm.get('thunderport')?.updateValueAndValidity();
     }
+    this.visibilityConfigFile();
   }
   /**
    * Updates the state of the component based on the value of `val`.
@@ -382,48 +471,49 @@ public frameworkComponents :any;
    * If `val` is false, it hides the port file and sets the Thunder checkbox to false.
    * @param val - The value to check.
    */
-  isEditChecked(val:boolean){
-    if(val === true){
+  isEditChecked(val: boolean) {
+    if (val === true) {
       this.showPortFile = true;
       this.isThunderchecked = true;
-    }else{
+    } else {
       this.showPortFile = false;
       this.isThunderchecked = false;
     }
   }
-  isCheckedConfig(event:any){
-    if(event.target.checked){
+  isCheckedConfig(event: any) {
+    if (event.target.checked) {
       this.showConfigPort = true;
-    }else{
+    } else {
       this.showConfigPort = false;
     }
   }
-  isCheckedConfigPort(val:boolean):void{
-    if(val === true){
+  isCheckedConfigPort(val: boolean): void {
+    if (val === true) {
       this.showConfigPort = true;
-    }else{
+    } else {
       this.showConfigPort = false;
     }
   }
-  isCheckedConfigB(event:any){
-    if(event.target.checked){
+  isCheckedConfigB(event: any) {
+    if (event.target.checked) {
       this.showConfigPortB = true;
-    }else{
+    } else {
       this.showConfigPortB = false;
     }
   }
 
   /**
    * This methos is change the value of deviceName inputfield
-  */
-  valuechange(event:any):void{
+   */
+  valuechange(event: any): void {
+    this.visibilityConfigFile();
     this.stbNameChange = event.target.value;
-    if(this.isThunderchecked){
+    if (this.isThunderchecked) {
       this.showPortFile = true;
-      if(this.stbNameChange === undefined || this.stbNameChange){
+      if (this.stbNameChange === undefined || this.stbNameChange) {
         this.visibilityConfigFile();
       }
-      if(this.stbNameChange !== undefined && this.stbNameChange !== ""){
+      if (this.stbNameChange !== undefined && this.stbNameChange !== '') {
         this.visibleDeviceconfigFile = true;
       }
     }
@@ -431,129 +521,141 @@ public frameworkComponents :any;
   /**
    * The method to check thunder enable or disable.
    */
-    checkIsThunderValidity(): void{
-      const stbName = this.stbNameChange;
-      const boxType = this.deviceTypeValue;
-      if(stbName && boxType){
-        this.editDeviceVForm.get('isThunder')?.enable();
-      }else{
-        this.editDeviceVForm.get('isThunder')?.disable();
-        this.editDeviceVForm.get('isThunder')?.setValue(false);
-        this.showPortFile = false;
-        this.isThunderchecked = false;
-      }
+  checkIsThunderValidity(): void {
+    const stbName = this.stbNameChange;
+    const boxType = this.deviceTypeValue;
+    if (stbName && boxType) {
+      this.editDeviceVForm.get('isThunder')?.enable();
+    } else {
+      this.editDeviceVForm.get('isThunder')?.disable();
+      this.editDeviceVForm.get('isThunder')?.setValue(false);
+      this.showPortFile = false;
+      this.isThunderchecked = false;
     }
+  }
   /**
    * Show the Config file or device.config file beased on deviceName and devicetype
-  */  
-    visibilityConfigFile(): void{
-      let boxNameConfig = this.stbNameChange;
-      let boxTypeConfig = this.deviceTypeValue;
-      this.service.downloadDeviceConfigFile(boxNameConfig,boxTypeConfig,this.user.thunderEnabled)
-      .subscribe((res)=>{ 
+   */
+  visibilityConfigFile(): void {
+    let boxNameConfig = this.editDeviceVForm.value.stbname;
+    let boxTypeConfig = this.editDeviceVForm.value.devicetype;
+    let thunderStatus = this.editDeviceVForm.value.isThunder;
+    this.service
+      .downloadDeviceConfigFile(boxNameConfig, boxTypeConfig, thunderStatus)
+      .subscribe((res) => {
         this.configFileName = res.filename;
-        if(this.configFileName !== `${boxNameConfig}.config` && this.stbNameChange !== undefined && this.stbNameChange !== ""){
+        if (
+          this.configFileName !== `${boxNameConfig}.config` &&
+          this.stbNameChange !== undefined &&
+          this.stbNameChange !== ''
+        ) {
           this.visibleDeviceconfigFile = true;
-        }else{
+        } else {
           this.visibleDeviceconfigFile = false;
         }
-        if(this.configFileName === `${boxTypeConfig}.config`){
+        if (this.configFileName === `${boxTypeConfig}.config`) {
           this.visibleDeviceconfigFile = true;
-          this.newFileName =`${boxTypeConfig}.config`;
+          this.newFileName = `${boxTypeConfig}.config`;
         }
-        if(this.configFileName !== `${boxNameConfig}.config` && this.configFileName !== `${boxTypeConfig}.config`){
+        if (
+          this.configFileName !== `${boxNameConfig}.config` &&
+          this.configFileName !== `${boxTypeConfig}.config`
+        ) {
           this.visibleDeviceconfigFile = false;
-          this.newFileName =`${boxNameConfig}.config`;
+          this.newFileName = `${boxNameConfig}.config`;
         }
         this.readFileContent(res.content);
         this.uploadConfigForm.patchValue({
           editorFilename: this.configFileName,
-          editorContent: this.configData
-        })
-        this.readDeviceFileContent(res.content); 
+          editorContent: this.configData,
+        });
+        this.readDeviceFileContent(res.content);
         this.uploadDeviceConfigForm.patchValue({
-          editorFilename: this.stbNameChange+'.config',
-          editorContent: this.configData
-        })
-      })
-    }
+          editorFilename: this.stbNameChange + '.config',
+          editorContent: this.configData,
+        });
+      });
+  }
   /**
    * Reading the configfile
-  */ 
-  readFileContent(file:Blob): void{
+   */
+  readFileContent(file: Blob): void {
     let boxNameConfig = this.editDeviceVForm.value.stbname;
     const reader = new FileReader();
-    reader.onload = ()=>{
-      let htmlContent = reader.result
+    reader.onload = () => {
+      let htmlContent = reader.result;
       this.configData = this.formatContent(htmlContent);
-      if(this.configData){
-          this.uploadConfigForm.patchValue({
-            editorFilename: this.configFileName ===`${boxNameConfig}.config`?this.configFileName:this.newFileName,
-            editorContent: this.configData,
-          })
+      if (this.configData) {
+        this.uploadConfigForm.patchValue({
+          editorFilename:
+            this.configFileName === `${boxNameConfig}.config`
+              ? this.configFileName
+              : this.newFileName,
+          editorContent: this.configData,
+        });
       }
-    }
-    reader.readAsText(file)
+    };
+    reader.readAsText(file);
   }
 
   /**
    * Reading the device configfile
-  */ 
-  readDeviceFileContent(file:Blob): void{
+   */
+  readDeviceFileContent(file: Blob): void {
     const reader = new FileReader();
-    reader.onload = ()=>{
-      let htmlContent = reader.result
+    reader.onload = () => {
+      let htmlContent = reader.result;
       this.configData = this.formatContent(htmlContent);
-      if(this.configData){
-          this.uploadDeviceConfigForm.patchValue({
-            editorFilename: this.stbNameChange+'.config',
-            editorContent: this.configData
-          })
+      if (this.configData) {
+        this.uploadDeviceConfigForm.patchValue({
+          editorFilename: this.stbNameChange + '.config',
+          editorContent: this.configData,
+        });
       }
-    }
-    reader.readAsText(file)
+    };
+    reader.readAsText(file);
   }
-   /**
+  /**
    * Lifecycle hook that is called when the component is destroyed.
    * It is used to perform any necessary cleanup logic before the component is removed from the DOM.
    */
-   ngOnDestroy():void{
+  ngOnDestroy(): void {
     this.editor.destroy();
     this.editor2.destroy();
   }
   /**
    * Formats the content by replacing all occurrences of '#' with '<br># '.
-   * 
+   *
    * @param content - The content to be formatted.
    * @returns The formatted content.
    */
-  formatContent(content:any){
-    return `<p>${content.replace(/</g, '&lt;')
+  formatContent(content: any) {
+    return `<p>${content
+      .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/####/g, '#####')
       .replace(/=======/g, '=======')
-      .replace(/\n/g, '<br>')
-    }
+      .replace(/\n/g, '<br>')}
     </p>`;
   }
   /**
    * Navigates back to the devices page and removes the 'streamData' item from localStorage.
    */
-  goBack(){
+  goBack() {
     localStorage.removeItem('streamData');
     localStorage.removeItem('deviceCategory');
-    this.router.navigate(["/devices"]);
+    this.router.navigate(['/devices']);
   }
   /**
    * Downloads a device file.
    */
-  downloadFile(){
-    if(this.user.deviceName){
-      this.service.downloadDevice(this.user.deviceName).subscribe(blob => {
+  downloadFile() {
+    if (this.user.deviceName) {
+      this.service.downloadDevice(this.user.deviceName).subscribe((blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${this.user.deviceName}.xml`; 
+        a.download = `${this.user.deviceName}.xml`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -564,260 +666,322 @@ public frameworkComponents :any;
   /**
    * The submit method is update device for categort RDKV
    */
-  EditDeviceVSubmit(){
+  EditDeviceVSubmit() {
+    console.log("Test"+this.editDeviceVForm.value.thunderport);
     this.editDeviceVFormSubmitted = true;
-    if(this.editDeviceVForm.invalid){
-     return
-    }else{
-     let obj ={
-      id : this.user.id,
-      deviceIp : this.editDeviceVForm.value.stbip,
-      deviceName : this.editDeviceVForm.value.stbname,
-      stbPort: this.editDeviceVForm.value.agentport,
-      statusPort: this.editDeviceVForm.value.agentstatusport,
-      agentMonitorPort: this.editDeviceVForm.value.agentmonitorport,
-      macId: this.editDeviceVForm.value.macaddr,
-      deviceTypeName: this.editDeviceVForm.value.devicetype,
-      oemName: this.editDeviceVForm.value.oem,
-      socName: this.editDeviceVForm.value.soc,
-      devicestatus : "FREE",
-      thunderPort : this.editDeviceVForm.value.thunderport,
-      userGroupName : this.loggedinUser.userGroupName,
-      category : this.selectedDeviceCategory,
-      deviceStreams : this.streamingMapObj?this.streamingMapObj:null,
-      thunderEnabled :this.isThunderchecked,
-      configuredevicePorts:this.editDeviceVForm.value.configuredevicePorts
-      }
-    this.service.updateDevice(obj).subscribe({
-      next:(res)=>{
-        this._snakebar.open(res.message, '', {
-        duration: 3000,
-        panelClass: ['success-msg'],
-        verticalPosition: 'top'
-        })
-        setTimeout(() => {
-          this.router.navigate(["/devices"]);
-          localStorage.removeItem('streamData');
-        }, 1000);
-       
-      },
-      error:(err)=>{
-    
-        this._snakebar.open(err.message, '', {
-        duration: 2000,
-        panelClass: ['err-msg'],
-        horizontalPosition: 'end',
-        verticalPosition: 'top'
-        })
-      }
-      
-    })
+    if (this.editDeviceVForm.invalid) {
+      return;
+    } else {
+      let obj = {
+        id: this.user.id,
+        deviceIp: this.editDeviceVForm.value.stbip,
+        deviceName: this.editDeviceVForm.value.stbname,
+        devicePort: this.editDeviceVForm.value.agentport,
+        statusPort: this.editDeviceVForm.value.agentstatusport,
+        agentMonitorPort: this.editDeviceVForm.value.agentmonitorport,
+        macId: this.editDeviceVForm.value.macaddr,
+        deviceTypeName: this.editDeviceVForm.value.devicetype,
+        oemName: this.editDeviceVForm.value.oem,
+        socName: this.editDeviceVForm.value.soc,
+        devicestatus: 'FREE',
+        thunderPort: this.editDeviceVForm.value.thunderport,
+        userGroupName: this.loggedinUser.userGroupName,
+        category: this.selectedDeviceCategory,
+        deviceStreams: this.streamingMapObj ? this.streamingMapObj : null,
+        thunderEnabled: this.isThunderchecked,
+        devicePortsConfigured: this.editDeviceVForm.value.configuredevicePorts,
+      };
+      this.service.updateDevice(obj).subscribe({
+        next: (res) => {
+          this._snakebar.open(res.message, '', {
+            duration: 3000,
+            panelClass: ['success-msg'],
+            verticalPosition: 'top',
+          });
+          setTimeout(() => {
+            this.router.navigate(['/devices']);
+            localStorage.removeItem('streamData');
+          }, 1000);
+        },
+        error: (err) => {
+          this._snakebar.open(err.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+          });
+        },
+      });
     }
   }
   /**
    * The submit method is update device for categort RDKB
    */
-  editDeviceBSubmit(){
-    this.editDeviceVFormSubmitted = true;
-    if(this.editDeviceVForm.invalid){
-     return
-    }else{
-     let rdkBobj ={
-      id : this.user.id,
-      deviceIp : this.rdkBForm.value.gatewayIp,
-      deviceName : this.rdkBForm.value.gatewayName,
-      stbPort: this.rdkBForm.value.agentPortb,
-      statusPort: this.rdkBForm.value.agentStatusportB,
-      agentMonitorPort: this.rdkBForm.value.agentMonitorportB,
-      macId: this.rdkBForm.value.macaddr,
-      deviceTypeName: this.rdkBForm.value.devicetype,
-      oemName: this.rdkBForm.value.oem,
-      socName: this.rdkBForm.value.soc,
-      userGroupName : this.loggedinUser.userGroupName,
-      category : this.selectedDeviceCategory,
-
-      }
-    this.service.updateDevice(rdkBobj).subscribe({
-      next:(res)=>{
-        this._snakebar.open(res.message, '', {
-        duration: 3000,
-        panelClass: ['success-msg'],
-        verticalPosition: 'top'
-        })
-        setTimeout(() => {
-          this.router.navigate(["/devices"]);
-        }, 1000);
-      },
-      error:(err)=>{
-        this._snakebar.open(err.message, '', {
-        duration: 2000,
-        panelClass: ['err-msg'],
-        horizontalPosition: 'end',
-        verticalPosition: 'top'
-        })
-      }
-      
-    })
+  editDeviceBSubmit() {
+    this.rdkbFormSubmitted = true;
+  
+    if (this.rdkBForm.invalid) {
+      return;
+    } else {
+      let rdkBobj = {
+        id: this.user.id,
+        deviceIp: this.rdkBForm.value.gatewayIp,
+        deviceName: this.rdkBForm.value.gatewayName,
+        devicePort: this.rdkBForm.value.agentPortb,
+        statusPort: this.rdkBForm.value.agentStatusportB,
+        agentMonitorPort: this.rdkBForm.value.agentMonitorportB,
+        macId: this.rdkBForm.value.macaddr,
+        deviceTypeName: this.rdkBForm.value.devicetype,
+        oemName: this.rdkBForm.value.oem,
+        socName: this.rdkBForm.value.soc,
+        userGroupName: this.loggedinUser.userGroupName,
+        category: this.selectedDeviceCategory,
+        devicePortsConfigured: this.rdkBForm.value.configuredevicePortB,
+      };
+      this.service.updateDevice(rdkBobj).subscribe({
+        next: (res) => {
+          this._snakebar.open(res.message, '', {
+            duration: 3000,
+            panelClass: ['success-msg'],
+            verticalPosition: 'top',
+          });
+          setTimeout(() => {
+            this.router.navigate(['/devices']);
+          }, 1000);
+        },
+        error: (err) => {
+          this._snakebar.open(err.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+          });
+        },
+      });
     }
   }
 
   /**
    * Edit icon will show/hide in editor modal
    */
-    toggleIsEdit():void{
-      this.isEditingFile = !this.isEditingFile;
-      if(this.isEditingFile){
-        this.uploadConfigForm.get('editorFilename')?.enable();
-      }else{
-        this.uploadConfigForm.get('editorFilename')?.disable();
-      }
-      if(this.configFileName ==='sampleDevice.config'){
-        let deviceNameConfig = this.editDeviceVForm.value.stbname;
-        let deviceTypeConfig = this.editDeviceVForm.value.devicetype;
-        this.fileNameArray.push(deviceNameConfig,deviceTypeConfig);
-        this.currentIndex = (this.currentIndex + 1) % this.fileNameArray.length;
-        this.uploadConfigForm.patchValue({
-          editorFilename: `${this.fileNameArray[this.currentIndex]}.config`,
-        })
-      }
+  toggleIsEdit(): void {
+    this.isEditingFile = !this.isEditingFile;
+    if (this.isEditingFile) {
+      this.uploadConfigForm.get('editorFilename')?.enable();
+    } else {
+      this.uploadConfigForm.get('editorFilename')?.disable();
     }
-
-  replaceTags(content:string):string{
-      const replacepara = content.replace(/<\/?p>/g,'\n');
-      const replacebreakes = replacepara.replace(/<br\s*\/?>/g,'\n');
-      return replacebreakes.trim();
+    if (this.configFileName === 'sampleDevice.config') {
+      let deviceNameConfig = this.editDeviceVForm.value.stbname;
+      let deviceTypeConfig = this.editDeviceVForm.value.devicetype;
+      this.fileNameArray.push(deviceNameConfig, deviceTypeConfig);
+      this.currentIndex = (this.currentIndex + 1) % this.fileNameArray.length;
+      this.uploadConfigForm.patchValue({
+        editorFilename: `${this.fileNameArray[this.currentIndex]}.config`,
+      });
+    }
   }
-  configFileUpload(): void{
+
+  toggleFileNameDialog(): void {
+    const boxNameConfig = this.editDeviceVForm.value.stbname;
+    const deviceTypeConfig = this.editDeviceVForm.value.devicetype;
+    const currentName = this.uploadConfigForm.get('editorFilename')?.value;
+    let newName = '';
+    if (currentName === `${boxNameConfig}.config`) {
+      newName = `${deviceTypeConfig}.config`;
+    } else {
+      newName = `${boxNameConfig}.config`;
+    }
+    this.uploadConfigForm.patchValue({
+      editorFilename: newName,
+    });
+  }
+
+  toggleFileName(): void {
+    const boxNameConfig = this.editDeviceVForm.value.stbname;
+    const deviceTypeConfig = this.editDeviceVForm.value.devicetype;
+    const currentName =
+      this.uploadDeviceConfigForm.get('editorFilename')?.value;
+    let newName = '';
+    if (currentName === `${boxNameConfig}.config`) {
+      newName = `${deviceTypeConfig}.config`;
+    } else {
+      newName = `${boxNameConfig}.config`;
+    }
+    this.uploadDeviceConfigForm.patchValue({
+      editorFilename: newName,
+    });
+  }
+
+  replaceTags(content: string): string {
+    const replacepara = content.replace(/<\/?p>/g, '\n');
+    const replacebreakes = replacepara.replace(/<br\s*\/?>/g, '\n');
+    return replacebreakes.trim();
+  }
+  configFileUpload(): void {
     this.existConfigSubmitted = true;
     if (this.uploadConfigForm.invalid) {
       return;
-    }else if(this.uploadExistConfigHeading ==='Upload Configuration File'){
-      const editorFilename = this.uploadConfigForm.get('editorFilename')!.value;
-      const content = this.uploadExistFileContent;
-      const editorContent  = this.replaceTags(content);
-      const contentBlob = new Blob([editorContent], {type:'text/plain'});
-      const contentFile = new File([contentBlob],editorFilename);
-      this.service.uploadConfigFile(contentFile,this.user.thunderEnabled).subscribe({
-        next:(res)=>{
-          this._snakebar.open(res, '', {
-            duration: 3000,
-            panelClass: ['success-msg'],
-            verticalPosition: 'top'
-          })
-          setTimeout(() => {
-            this.uploadConfigForm.get('uploadExistConfigFile')?.reset();
-            this.dialogRef.close();
-            this.visibilityConfigFile();
-            this.uploadExistConfigHeading ='';
-
-          }, 1000);
-        },
-        error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message?errmsg.message:errmsg, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
-        }
-      })
-    }else{
-      const formData = new FormData();
-      const editorFilename = this.uploadConfigForm.get('editorFilename')!.value;
-      const content = this.uploadConfigForm.get('editorContent')!.value;
-      const editorContent  = this.replaceTags(content);
-      const contentBlob = new Blob([editorContent], {type:'text/plain'});
-      const contentFile = new File([contentBlob],editorFilename);
-      this.service.uploadConfigFile(contentFile,this.user.thunderEnabled).subscribe({
-        next:(res)=>{
-          this._snakebar.open(res, '', {
-            duration: 3000,
-            panelClass: ['success-msg'],
-            verticalPosition: 'top'
-          })
-          setTimeout(() => {
-            this.dialogRef.close();
-            this.visibilityConfigFile();
-          }, 1000);
-        },
-        error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message?errmsg.message:errmsg, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
-        }
-      })
     }
+
+    // Get the file input control and value (if you have a file input for this form)
+    const fileInputControl = this.uploadConfigForm.get('uploadConfigFileModal');
+    const fileInputValue = fileInputControl?.value;
+
+    // If a file was selected via file input
+    if (fileInputValue && fileInputValue instanceof File) {
+      const file: File = fileInputValue;
+
+      if (file.name.endsWith('.config')) {
+        // Use the editor filename and content
+        const editorFilename =
+          this.uploadConfigForm.get('editorFilename')!.value;
+        const reader = new FileReader();
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          const content = e.target?.result as string;
+          const editorContent = this.replaceTags(content);
+          const contentBlob = new Blob([editorContent], { type: 'text/plain' });
+          const contentFile = new File([contentBlob], editorFilename);
+          this.uploadConfigFileAndHandleResponse(contentFile,'dialog');
+        };
+        reader.readAsText(file);
+        return; // Prevent further execution, upload will happen in callback
+      } else {
+        // Not a .config file, upload as-is
+        this.uploadConfigFileAndHandleResponse(file,'dialog');
+        return;
+      }
+    }
+
+    // If uploading from the editor (no file input)
+    const editorFilename = this.uploadConfigForm.get('editorFilename')!.value;
+    const content = this.uploadConfigForm.get('editorContent')!.value;
+    const editorContent = this.replaceTags(content);
+    const contentBlob = new Blob([editorContent], { type: 'text/plain' });
+    const contentFile = new File([contentBlob], editorFilename);
+    this.uploadConfigFileAndHandleResponse(contentFile,'dialog');
   }
-    /**
+
+  // Helper function for upload and response handling
+  private uploadConfigFileAndHandleResponse(file: File ,modalType: 'dialog' | 'newDevice'): void {
+    const isThunder = this.editDeviceVForm.get('isThunder')?.value;
+    this.service.uploadConfigFile(file, isThunder).subscribe({
+      next: (res) => {
+        this._snakebar.open(res.message, '', {
+          duration: 3000,
+          panelClass: ['success-msg'],
+          verticalPosition: 'top',
+        });
+        setTimeout(() => {
+        if (modalType === 'dialog') {
+          this.uploadConfigForm.get('uploadConfigFileModal')?.reset();
+          this.closeDialog();
+        } else {
+           this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.reset();
+          this.closeNewDeviceDialog();
+        }
+          this.visibilityConfigFile();
+        }, 1000);
+      },
+      error: (err) => {
+        this._snakebar.open(err.message, '', {
+          duration: 2000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+        });
+      },
+    });
+  }
+  /**
    * Opens the upload file section and sets the necessary flags and values.
    * @param value - The value to set the uploadCreateHeading property to.
    */
-    openUploadFile(value:string):void{
-      this.deviceEditor = false;
-      this.uploadConfigSec = true;
-      this.backToEditorbtn = true;
-      this.showUploadButton = false;
-      this.uploadCreateHeading = value;
-  
-    }
-    /**
+  openUploadFile(value: string): void {
+      this.submitted = false;
+  this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.setValidators([Validators.required]);
+  this.uploadDeviceConfigForm.get('editorContent')?.clearValidators();
+  this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.updateValueAndValidity();
+  this.uploadDeviceConfigForm.get('editorContent')?.updateValueAndValidity();
+    this.deviceEditor = false;
+    this.uploadConfigSec = true;
+    this.backToEditorbtn = true;
+    this.showUploadButton = false;
+    this.uploadCreateHeading = value;
+  }
+  /**
    * Navigates back to the device editor and updates the component's state.
-   * 
+   *
    * @param value - The value to set for the `uploadCreateHeading` property.
    */
-    backToEditor(value:string):void{
-      this.deviceEditor = true;
-      this.uploadConfigSec = false;
-      this.backToEditorbtn = false;
-      this.showUploadButton = true;
-      this.uploadCreateHeading = value;
-    }
+  backToEditor(value: string): void {
+     this.submitted = false;
+  this.uploadDeviceConfigForm.get('editorContent')?.setValidators([Validators.required]);
+  this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.clearValidators();
+  this.uploadDeviceConfigForm.get('editorContent')?.updateValueAndValidity();
+  this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.updateValueAndValidity();
+
+
+    this.deviceEditor = true;
+    this.uploadConfigSec = false;
+    this.backToEditorbtn = false;
+    this.showUploadButton = true;
+    this.uploadCreateHeading = value;
+  }
   /**
    * Opens the existing modal with the specified value.
    * @param val - The value to be passed to the modal.
    */
-  openExistingModal(val:string) :void{
+  openExistingModal(val: string): void {
+    this.existConfigSubmitted = false;
+   this.uploadConfigForm.get('uploadConfigFileModal')?.setValidators([Validators.required]);
+  this.uploadConfigForm.get('editorContent')?.clearValidators();
+  this.uploadConfigForm.get('uploadConfigFileModal')?.updateValueAndValidity();
+  this.uploadConfigForm.get('editorContent')?.updateValueAndValidity();
     this.existingConfigEditor = false;
     this.uploadExistingConfig = true;
     this.showExistUploadButton = false;
     this.backToExistEditorbtn = true;
     this.uploadExistConfigHeading = val;
- 
   }
   /**
    * Navigates back to the existing config editor.
    */
-  backToExistingEditor():void{
+  backToExistingEditor(): void {
+    this.existConfigSubmitted = false;
+    this.uploadConfigForm.get('editorContent')?.setValidators([Validators.required]);
+    this.uploadConfigForm.get('uploadConfigFileModal')?.clearValidators();
+    this.uploadConfigForm.get('editorContent')?.updateValueAndValidity();
+    this.uploadConfigForm.get('uploadConfigFileModal')?.updateValueAndValidity();
     this.existingConfigEditor = true;
     this.uploadExistingConfig = false;
     this.showExistUploadButton = true;
     this.backToExistEditorbtn = false;
     this.uploadExistConfigHeading = '';
   }
-  onExistConfigChange(event:Event):void{
+  onExistConfigChange(event: Event): void {
     let fileInput = event.target as HTMLInputElement;
-    if(fileInput && fileInput.files){
+    if (fileInput && fileInput.files) {
       const file = fileInput.files[0];
       this.uploadFileName = file;
-      this.uploadExistConfigContent(file)
+      this.uploadExistConfigContent(file);
     }
   }
-  uploadExistConfigContent(file:File): void{
+
+  uploadExistConfigContent(file: File): void {
     const reader = new FileReader();
-    reader.onload = (e:ProgressEvent<FileReader>)=>{
+    reader.onload = (e: ProgressEvent<FileReader>) => {
       const content = e.target?.result as string;
-      this.uploadExistFileContent = content
+      this.uploadExistFileContent = content;
+      let filename = file.name.endsWith('.config')
+        ? this.editDeviceVForm.value.stbname + '.config'
+        : file.name;
       this.uploadConfigForm.patchValue({
-        editorFilename: this.configFileName,
+        editorFilename: filename,
         editorContent: this.uploadExistFileContent,
-      })
-    }
-    reader.readAsText(file)
+      });
+    };
+    reader.readAsText(file);
   }
   /**
    * Deletes a device configuration file.
@@ -825,139 +989,198 @@ public frameworkComponents :any;
    */
   deleteDeviceConfigFile(configFileName: any) {
     if (configFileName) {
-      if (confirm("Are you sure to delete ?")) {
-        this.service.deleteDeviceConfigFile(configFileName).subscribe({
-          next: (res) => {
-            this._snakebar.open(res, '', {
-              duration: 1000,
-              panelClass: ['success-msg'],
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
-            this.dialogRef.close();
-            this.ngOnInit();
-            this.showPortFile = false;
-          },
-          error: (err) => {
-            let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
-              duration: 2000,
-              panelClass: ['err-msg'],
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
-          }
-        })
-
+      if (confirm('Are you sure to delete ?')) {
+        this.service
+          .deleteDeviceConfigFile(configFileName, this.isThunderchecked)
+          .subscribe({
+            next: (res) => {
+              this._snakebar.open(res, '', {
+                duration: 1000,
+                panelClass: ['success-msg'],
+                horizontalPosition: 'end',
+                verticalPosition: 'top',
+              });
+              this.dialogRef.close();
+              this.showPortFile = false;
+              this.visibilityConfigFile();
+            },
+            error: (err) => {
+              let errmsg = JSON.parse(err.error);
+              this._snakebar.open(errmsg.message, '', {
+                duration: 2000,
+                panelClass: ['err-msg'],
+                horizontalPosition: 'end',
+                verticalPosition: 'top',
+              });
+            },
+          });
       }
     }
-
   }
-  onModalFileChange(event:Event):void{
+  /**
+   * The method is upload the configfile of fileupload
+   */
+  onModalFileChange(event: Event): void {
     let fileInput = event.target as HTMLInputElement;
-    if(fileInput && fileInput.files){
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
       const file = fileInput.files[0];
-      this.uploadFileNameConfig = file.name
-      this.uploadReadFileContent(file)
+      this.uploadFileNameConfig = file.name;
+      this.uploadReadFileContent(file);
+      // Set the File object directly into the form control
+      this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.setValue(file);
+    } else {
+      // If no file selected, clear the form control
+      this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.setValue('');
     }
   }
-  uploadReadFileContent(file:File): void{
+
+  uploadReadFileContent(file: File): void {
     const reader = new FileReader();
-    reader.onload = (e:ProgressEvent<FileReader>)=>{
+    reader.onload = (e: ProgressEvent<FileReader>) => {
       const content = e.target?.result as string;
-      this.uploadFileContent = content
-    }
-    reader.readAsText(file)
+      this.uploadFileContent = content;
+      let filename = file.name.endsWith('.config')
+        ? this.editDeviceVForm.value.stbname + '.config'
+        : file.name;
+      this.uploadDeviceConfigForm.patchValue({
+        editorFilename: filename,
+        editorContent: content,
+      });
+    };
+    reader.readAsText(file);
   }
   /**
    * The method is upload the default device configfile of editor modal
    */
-  configDeviceFileUpload(): void{
+  /**
+   * The method is upload the default device configfile of editor modal
+   */
+  configDeviceFileUpload(): void {
+    console.log('configDeviceFileUpload called');
     this.submitted = true;
-      if(this.uploadDeviceConfigForm.invalid){
-        return
-      }else if(this.uploadCreateHeading ==='Upload Configuration File'){
-        const editorFilename = this.uploadFileNameConfig;
-        const content = this.uploadFileContent;
-        const editorContent  = this.replaceTags(content);
-        const contentBlob = new Blob([editorContent], {type:'text/plain'});
-        const contentFile = new File([contentBlob],editorFilename);
-        this.service.uploadConfigFile(contentFile,this.user.thunderEnabled).subscribe({
-          next:(res)=>{
-            this._snakebar.open(res, '', {
-              duration: 3000,
-              panelClass: ['success-msg'],
-              verticalPosition: 'top'
-            })
-            setTimeout(() => {
-              this.uploadDeviceConfigForm.get('uploadConfigFileModal')?.reset();
-              this.newDeviceDialogRef.close();
-              this.visibilityConfigFile();
-            }, 1000);
-          },
-          error:(err)=>{
-            let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message?errmsg.message:errmsg, '', {
-              duration: 2000,
-              panelClass: ['err-msg'],
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
-          }
-        })
-    }else{
-      const editorFilename = this.uploadDeviceConfigForm.get('editorFilename')!.value;
-      const content = this.uploadDeviceConfigForm.get('editorContent')!.value;
-      const editorContent  = this.replaceTags(content);
-      const contentBlob = new Blob([editorContent], {type:'text/plain'});
-      const contentFile = new File([contentBlob],editorFilename);
-      this.service.uploadConfigFile(contentFile,this.user.thunderEnabled).subscribe({
-        next:(res)=>{
-          this._snakebar.open(res, '', {
-            duration: 3000,
-            panelClass: ['success-msg'],
-            verticalPosition: 'top'
-          })
-          setTimeout(() => {
-            this.newDeviceDialogRef.close();
-            this.visibilityConfigFile();
-          }, 1000);
-        },
-        error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message?errmsg.message:errmsg, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
-        }
-      })
+    if (this.uploadDeviceConfigForm.invalid) {
+      return;
     }
-  }  
+
+    // Get the file input control and value
+    const fileInputControl = this.uploadDeviceConfigForm.get(
+      'uploadDeviceConfigFileModal'
+    );
+    const fileInputValue = fileInputControl?.value;
+
+    // If a file was selected via file input
+    if (fileInputValue && fileInputValue instanceof File) {
+      const file: File = fileInputValue;
+
+      if (file.name.endsWith('.config')) {
+        // Use the editor filename and content
+          const editorFilename =
+          this.uploadDeviceConfigForm.get('editorFilename')!.value;
+          const reader = new FileReader();
+          reader.onload = (e: ProgressEvent<FileReader>) => {
+          const content = e.target?.result as string;
+          const editorContent = this.replaceTags(content);
+          const contentBlob = new Blob([editorContent], { type: 'text/plain' });
+          const contentFile = new File([contentBlob], editorFilename);
+          this.uploadConfigFileAndHandleResponse(contentFile,'newDevice');
+        };
+        reader.readAsText(file);
+        return; // Prevent further execution, upload will happen in callback
+      } else {
+        // Not a .config file, upload as-is
+        this.uploadConfigFileAndHandleResponse(file,'newDevice');
+        return;
+      }
+    }
+
+    // If uploading from the editor (no file input)
+    const editorFilename =
+    this.uploadDeviceConfigForm.get('editorFilename')!.value;
+    const content = this.uploadDeviceConfigForm.get('editorContent')!.value;
+    const editorContent = this.replaceTags(content);
+    const contentBlob = new Blob([editorContent], { type: 'text/plain' });
+    const contentFile = new File([contentBlob], editorFilename);
+    this.uploadConfigFileAndHandleResponse(contentFile,'newDevice');
+  }
   /**
    * The method is open the existing device config modal onclick button
    */
-  existDeviceDialog(): void {
-    this.dialogRef = this.dialog.open(this.dialogTemplate, {
-      width: '90vw', 
-      height: '90vh' 
-    });
+  existDeviceDialog(fileName: any): void {
+    this.showExistUploadButton = true;
+    this.existingConfigEditor = true;
+    this.uploadExistingConfig = false;
+    this.backToExistEditorbtn = false;
+    if (fileName === 'sampleDevice.config') {
+      const deviceName = this.editDeviceVForm.value.stbname || '';
+      this.uploadDeviceConfigForm.patchValue({
+        editorFilename: deviceName + '.config',
+        editorContent: this.configData,
+      });
+      this.showUploadButton = true;
+      this.deviceEditor = true;
+      this.uploadConfigSec = false;
+      this.backToEditorbtn = false;
+      this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
+        width: '90vw',
+        height: '90vh',
+      });
+    } else {
+      this.dialogRef = this.dialog.open(this.dialogTemplate, {
+        width: '90vw',
+        height: '90vh',
+      });
+    }
   }
-    /**
+  /**
    * The method is close the exeisting device config modal
    */
   closeDialog(): void {
     this.dialogRef.close();
   }
-    /**
+  /**
    * The method is open the device config modal onclick button
    */
   openNewDeviceDialog(): void {
-    this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
-      width: '90vw', 
-      height: '90vh'
-    });
+    this.showUploadButton = true;
+    this.deviceEditor = true;
+    this.uploadConfigSec = false;
+    this.backToEditorbtn = false;
+
+    const deviceName = this.editDeviceVForm.value.stbname || '';
+    const deviceType = this.editDeviceVForm.value.devicetype || '';
+    const isThunder = this.editDeviceVForm.value.isThunder;
+
+    // Always fetch the sample config for "Create New Device Config File"
+    this.service
+      .downloadDeviceConfigFile('sampleDevice', deviceType, isThunder)
+      .subscribe((res) => {
+        let content = '';
+        if (res.content instanceof Blob) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            content = this.formatContent(reader.result as string);
+            this.uploadDeviceConfigForm.patchValue({
+              editorFilename: deviceName + '.config',
+              editorContent: content,
+            });
+            this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
+              width: '90vw',
+              height: '90vh',
+            });
+          };
+          reader.readAsText(res.content);
+        } else if (typeof res.content === 'string') {
+          content = this.formatContent(res.content);
+          this.uploadDeviceConfigForm.patchValue({
+            editorFilename: deviceName + '.config',
+            editorContent: content,
+          });
+          this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
+            width: '90vw',
+            height: '90vh',
+          });
+        }
+      });
   }
   /**
    * The method is close the device config modal
@@ -965,6 +1188,4 @@ public frameworkComponents :any;
   closeNewDeviceDialog(): void {
     this.newDeviceDialogRef.close();
   }
-
-
 }

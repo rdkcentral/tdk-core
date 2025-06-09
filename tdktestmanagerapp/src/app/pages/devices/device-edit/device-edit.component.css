@@ -220,6 +220,13 @@ http://www.apache.org/licenses/LICENSE-2.0
     display: block;
     border: 1px solid #ddd;
     border-radius: 5px;
+    font-size: 0.8rem;
+}
+
+.info-icon {
+  font-size: 20px;
+  color: #00b2dc;
+  margin-bottom: -10px;
 }
 .uploadconfig{
     text-align: right;

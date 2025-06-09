@@ -63,6 +63,7 @@ limitations under the License.
                                         autocomplete="off">
                                         <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['macaddr']?.errors" class="text-danger">
                                             <small *ngIf="editDeviceVForm.controls['macaddr']?.errors?.['required']">Please enter mac addr.</small>
+                                            <small *ngIf="editDeviceVForm.controls['macaddr']?.errors?.['pattern']">Please enter valid mac address (e.g. AA:BB:CC:DD:EE:FF).</small>
                                         </div>
                                     </div>
                                   </div>
@@ -98,17 +99,23 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
-                                  <div class="row mb-3" *ngIf="showPortFile"> 
-                                    <label for="deviceconfigfile" class="col-md-3  col-form-label">Device Config File</label>
+                                  <div class="row mb-3" > 
+                                    <label for="deviceconfigfile" class="col-md-3  col-form-label">Device Config File :<mat-icon class="info-icon"
+                                        matTooltip="Add a device config file to the device. If you don't have a config file, you can create a new one.">info</mat-icon></label>
                                     <div class="col-md-8">
                                       <div class="configbtngrp">
-                                        <button type="button" class="btn btn-outline-secondary newconfigfile" 
-                                        (click)="existDeviceDialog()">
-                                        <span>{{configFileName ==='sampleDevice.config'? 'Create New Device Config': configFileName}}</span> File
-                                      </button>
-                                      <button type="button" class="btn btn-outline-secondary newconfigfile" 
-                                        *ngIf="visibleDeviceconfigFile" (click)="openNewDeviceDialog()">Create New Config File
-                                      </button>
+                                        <button type="button" class="btn btn-outline-secondary newconfigfile" (click)="existDeviceDialog(configFileName)">
+                                          <span>{{
+                                            configFileName === "sampleDevice.config"
+                                            ? "Create New Device Config"
+                                            : configFileName
+                                            }}</span>
+                                          File
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary newconfigfile" *ngIf="visibleDeviceconfigFile"
+                                          (click)="openNewDeviceDialog()">
+                                          Create New Device Config File
+                                        </button>
                                       </div>
                                     </div>
                                   </div>
@@ -155,7 +162,7 @@ limitations under the License.
                                   <div class="row mb-3" *ngIf="showConfigPort"> 
                                     <label for="agentport" class="col-md-3 offset-1 col-form-label">Agent Port</label>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control" id="agentport" formControlName="agentport" autocomplete="off" [(ngModel)]="agentport">
+                                        <input type="text" class="form-control" id="agentport" formControlName="agentport" autocomplete="off">
                                         <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['agentport']?.errors" class="text-danger">
                                             <small *ngIf="editDeviceVForm.controls['agentport']?.errors?.['required']">Please enter agent port.</small>
                                         </div>
@@ -164,7 +171,7 @@ limitations under the License.
                                   <div class="row mb-3" *ngIf="showConfigPort"> 
                                     <label for="agentstatusport" class="col-md-3 offset-1 col-form-label">Agent Status Port</label>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control" id="agentstatusport" formControlName="agentstatusport" autocomplete="off" [(ngModel)]="agentStatusPort">
+                                        <input type="text" class="form-control" id="agentstatusport" formControlName="agentstatusport" autocomplete="off" >
                                         <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['agentstatusport']?.errors" class="text-danger">
                                             <small *ngIf="editDeviceVForm.controls['agentstatusport']?.errors?.['required']">Please enter agent status port.</small>
                                         </div>
@@ -173,7 +180,7 @@ limitations under the License.
                                   <div class="row mb-3" *ngIf="showConfigPort"> 
                                     <label for="agentmonitorport" class="col-md-3 offset-1 col-form-label">Agent Monitor Port</label>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control" id="agentmonitorport" formControlName="agentmonitorport" autocomplete="off" [(ngModel)]="agentMonitoPort">
+                                        <input type="text" class="form-control" id="agentmonitorport" formControlName="agentmonitorport" autocomplete="off" >
                                         <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['agentmonitorport']?.errors" class="text-danger">
                                             <small *ngIf="editDeviceVForm.controls['agentmonitorport']?.errors?.['required']">Please enter agent monitor port.</small>
                                         </div>
@@ -183,9 +190,8 @@ limitations under the License.
                         </div>
                         <div class="row">
                             <div class="mt-2 text-end">
-                                <button class="reset-btn" (click)="goBack()">Back</button>
-                                <button type="button" class="reset-btn" (click)="downloadFile()"> Download</button>
-                                <button type="submit" class="create-btn">Update</button>
+                                <button class="reset-btn" matTooltip="Go back" (click)="goBack()">Back</button>
+                                <button type="submit" class="create-btn" matTooltip="Update device">Update</button>
                             </div>
                         </div>
                     </form>
@@ -223,6 +229,7 @@ limitations under the License.
                                       autocomplete="off">
                                       <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['macaddr']?.errors" class="text-danger">
                                           <small *ngIf="rdkBForm.controls['macaddr']?.errors?.['required']">Please enter mac addr.</small>
+                                          <small *ngIf="rdkBForm.controls['macaddr']?.errors?.['pattern']">Please enter valid mac address (e.g. AA:BB:CC:DD:EE:FF).</small>
                                       </div>
                                   </div>
                                 </div>
@@ -276,7 +283,7 @@ limitations under the License.
                                   <div class="col-md-8">
                                       <div class="form-check form-check-inline form-check-reverse">
                                           <input class="form-check-input thunder" type="checkbox" id="configuredevicePortB" 
-                                           (change)="isCheckedConfigB($event)">
+                                          formControlName="configuredevicePortB" (change)="isCheckedConfigB($event)">
                                         </div>
                                   </div>
                                 </div>
@@ -311,9 +318,8 @@ limitations under the License.
                       </div>
                       <div class="row">
                           <div class="mt-2 text-end">
-                              <button class="reset-btn" (click)="goBack()">Back</button>
-                              <button type="button" class="reset-btn" (click)="downloadFile()"> Download</button>
-                              <button type="submit" class="create-btn">Update</button>
+                              <button class="reset-btn" matTooltip="Go back" (click)="goBack()">Back</button>
+                              <button type="submit" matTooltip="Update device"class="create-btn">Update</button>
                           </div>
                       </div>
                   </form>
@@ -330,15 +336,26 @@ limitations under the License.
       <div class="config-content">
         <form [formGroup]="uploadConfigForm" (ngSubmit)="configFileUpload()">
         <div class="config-header">
-           <input type="text" id="configFilename" class="form-control config-input" formControlName="editorFilename"  readonly>
-           <div *ngIf="configFileName == 'sampleDevice.config'">
-              <button type="button" class="btn btn-outline-primary btn-sm delete-config config-editbtn" (click)="toggleIsEdit()"  matTooltip="Change FileName" >
-              <i class="bi bi-toggles2 toogle-name"></i>
-            </button>
-           </div>
-            <button type="button" class="btn btn-outline-primary btn-sm delete-config" (click)="deleteDeviceConfigFile(configFileName)" matTooltip="Delete Config File">
-              <i class="bi bi-trash-fill delete-fill"></i>
+          <input type="text" id="configFilename" class="form-control config-input" formControlName="editorFilename" readonly />
+          
+          <button type="button" class="btn btn-outline-primary btn-sm delete-config config-editbtn"
+            (click)="toggleFileNameDialog()" matTooltip="Toggle FileName" *ngIf="
+                              editDeviceVForm.value.stbname &&
+                              editDeviceVForm.value.devicetype &&
+                              visibleDeviceconfigFile == true &&
+                              configFileName != 'sampleDevice.config'
+                            ">
+            <i class="bi bi-toggles2 toogle-name"></i>
           </button>
+          <div *ngIf="
+                          visibleDeviceconfigFile == false &&
+                          configFileName !== 'sampleDevice.config'
+                        ">
+            <button type="button" class="btn btn-outline-primary btn-sm delete-config"
+              (click)="deleteDeviceConfigFile(configFileName)" matTooltip="Delete Config File">
+              <i class="bi bi-trash-fill delete-fill"></i>
+            </button>
+          </div>
   
           <button type="button" class="btn btn-outline-primary btn-sm delete-config"  matTooltip ="Download config file">
             <i class="bi bi-download download-icon"></i>
@@ -349,8 +366,8 @@ limitations under the License.
             <div class="col changefile-name">
             </div>
             <div class="col uploadconfig">
-              <button type="button" class="download-btn backEditor" (click)="backToExistingEditor()" *ngIf="backToExistEditorbtn">Back</button>
-              <button type="button" class="download-btn" (click)="openExistingModal('Upload Configuration File')" *ngIf="showExistUploadButton">Upload Configuration File</button>
+              <button type="button" class="download-btn backEditor" (click)="backToExistingEditor()" matTooltip="Go back" *ngIf="backToExistEditorbtn">Back</button>
+              <button type="button" class="download-btn" (click)="openExistingModal('Upload Configuration File')" matTooltip="Upload configuration file" *ngIf="showExistUploadButton">Upload Configuration File</button>
             </div>
           </div>
             <div class="editor-container mt-1 exist-config" *ngIf="existingConfigEditor">
@@ -362,16 +379,19 @@ limitations under the License.
   
             <div class="container mt-5 upload-container" *ngIf="uploadExistingConfig">
               <div class="row mb-3"> 
-                  <label for="uploadConfigFileModal" class="col-md-4  col-form-label">Upload Configuration file<span style="color:red; margin-left: 0.75em;">*</span></label>
+                  <label for="uploadConfigFileModal" class="col-md-4  col-form-label" style="  font-size: 1em; font-family: Roboto;font-weight: 500;">Upload Configuration file<span style="color:red; margin-left: 0.75em;">*</span></label>
                       <div class="col-md-8">
-                          <input class="form-control form-control-sm" id="uploadConfigFileModal" type="file" (change)="onExistConfigChange($event)">
-                  </div>
+                          <input class="form-control form-control-sm" id="uploadConfigFileModal" type="file"  formControlName="uploadConfigFileModal"(change)="onExistConfigChange($event)">
+                          <div *ngIf="existConfigSubmitted && uploadConfigForm.controls['uploadConfigFileModal']?.errors?.['required']" class="text-danger">
+                             <small>Please select a configuration file.</small>
+                          </div>
+                        </div>
               </div>
           </div>
         </div>
         <div class="modal-btns">
-          <button type="button" class="download-btn" (click)="closeDialog()">Close</button>
-          <button type="submit" class="download-btn">Upload</button>
+          <button type="button" class="download-btn" matTooltip="Close"(click)="closeDialog()">Close</button>
+          <button type="submit" class="download-btn" matTooltip="Upload File">Upload</button>
         </div>
         </form>
       </div>
@@ -392,15 +412,27 @@ limitations under the License.
         <div class="existModal-body">
           <div class="row">
             <div class="col changefile-name">
-              <input type="text" id="configFilename" class="form-control config-input device-input" formControlName="editorFilename"  [readOnly]="!isEditingFile">
-              <button type="button" class="btn bbtn-outline-primary btn-sm delete-config config-editbtn" (click)="toggleIsEdit()" 
-                matTooltip="Change FileName" >
-              <i [class]=" 'bi ' + (isEditingFile ? 'bi-check-circle' : 'bi-pencil') "></i>
-            </button>
-            </div>
+              <input type="text" id="configFilename" class="form-control config-input device-input" formControlName="editorFilename"
+                [readOnly]="!isEditingFile" />
+              <button type="button" class="btn bbtn-outline-primary btn-sm delete-config config-editbtn" (click)="toggleIsEdit()"
+                matTooltip="Change FileName">
+                <i [class]="
+                                    'bi ' + (isEditingFile ? 'bi-check-circle' : 'bi-pencil')
+                                  "></i>
+              </button>
+              <button type="button" class="btn btn-outline-primary btn-sm delete-config config-editbtn" (click)="toggleFileName()"
+                matTooltip="Toggle FileName" *ngIf="
+                                  editDeviceVForm.value.stbname &&
+                                  editDeviceVForm.value.devicetype &&
+                                  visibleDeviceconfigFile == false &&
+                                  configFileName == 'sampleDevice.config'
+                                ">
+                <i class="bi bi-toggles2 toogle-name"></i>
+              </button>
+              </div>
             <div class="col uploadconfig">
-              <button type="button" class="download-btn backEditor" (click)="backToEditor('Create New Device Config File')" *ngIf="backToEditorbtn">Back</button>
-              <button type="button" class="download-btn" (click)="openUploadFile('Upload Configuration File')" *ngIf="showUploadButton">Upload Configuration File</button>
+              <button type="button" class="download-btn backEditor" (click)="backToEditor('Create New Device Config File')" matTooltip="Go back"*ngIf="backToEditorbtn">Back</button>
+              <button type="button" class="download-btn" (click)="openUploadFile('Upload Configuration File')" matTooltip="Upload file" *ngIf="showUploadButton">Upload Configuration File</button>
             </div>
           </div>
   
@@ -413,17 +445,20 @@ limitations under the License.
   
             <div class="container mt-5 upload-container" *ngIf="uploadConfigSec">
               <div class="row mb-3"> 
-                  <label for="uploadConfigFileModal" class="col-md-4  col-form-label">Upload Configuration file<span style="color:red; margin-left: 0.75em;">*</span></label>
+                  <label for="uploadDeviceConfigFileModal" class="col-md-4  col-form-label" style="  font-size: 1em; font-family: Roboto;font-weight: 500;">Upload Configuration file<span style="color:red; margin-left: 0.75em;">*</span></label>
                       <div class="col-md-8">
-                          <input class="form-control form-control-sm" id="uploadConfigFileModal" type="file" formControlName="uploadConfigFileModal" (change)="onModalFileChange($event)">
+                          <input class="form-control form-control-sm" id="uploadDeviceConfigFileModal" type="file" formControlName="uploadDeviceConfigFileModal" (change)="onModalFileChange($event)">
+                          <div *ngIf="submitted && uploadDeviceConfigForm.controls['uploadDeviceConfigFileModal']?.errors?.['required']" class="text-danger">
+                             <small>Please select a configuration file.</small>
+                          </div>
                   </div>
               </div>
           </div>
   
         </div>
         <div class="modal-btns">
-          <button type="button" class="download-btn" (click)="closeNewDeviceDialog()">Close</button>
-          <button type="submit" class="download-btn">Upload</button>
+          <button type="button" class="download-btn" matTooltip="Close" (click)="closeNewDeviceDialog()">Close</button>
+          <button type="submit" class="download-btn" matTooltip="Upload file">Upload</button>
         </div>
         </form>
       </div>

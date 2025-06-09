@@ -316,21 +316,16 @@ public class DeviceController {
 	@ApiResponse(responseCode = "500", description = "Internal server error in uploading device configuration file")
 	@ApiResponse(responseCode = "400", description = "When the file is empty")
 	@PostMapping("/uploadDeviceConfigFile")
-	public ResponseEntity<String> uploadFile(@RequestParam("uploadFile") MultipartFile file,
+	public ResponseEntity<Response> uploadFile(@RequestParam("uploadFile") MultipartFile file,
 			@RequestParam boolean isThunderEnabled) {
 		LOGGER.info("Received upload device config file request: " + file.getOriginalFilename());
-		if (file.isEmpty()) {
-			LOGGER.error("Please select a file to upload.");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select a file to upload.");
-		}
 		boolean isfileUploaded = deviceConfigService.uploadDeviceConfigFile(file, isThunderEnabled);
 		if (isfileUploaded) {
 			LOGGER.info("File upload is succesful");
-			return ResponseEntity.status(HttpStatus.OK).body("File uploaded successfully");
+			return ResponseUtils.getCreatedResponse("File uploaded successfully");
 		} else {
-			LOGGER.error("Could not upload the device config file");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Could not upload the device config file");
+			LOGGER.error("Failed to upload file");
+			throw new TDKServiceException("Failed to upload file");
 		}
 	}
 

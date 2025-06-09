@@ -241,6 +241,12 @@ h6 {
   text-align: right;
   margin-right: 10px;
 }
+
+.info-icon {
+  font-size: 20px;
+  color: #00b2dc;
+  margin-bottom: -10px;
+}
 .upload-container {
   height: 200px;
 }

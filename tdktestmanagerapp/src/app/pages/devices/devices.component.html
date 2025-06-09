@@ -97,6 +97,7 @@ limitations under the License.
         [animateRows]="true"
         [context]="this"
         [gridOptions]="gridOptions"
+        [enableCellTextSelection]="true"
       ></ag-grid-angular>
 
     </div>
@@ -125,6 +126,7 @@ limitations under the License.
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
+            (click)="resetUploadForm()"
           ></button>
         </div>
         <div class="modal-body">
@@ -164,7 +166,7 @@ limitations under the License.
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="modal-btns" data-bs-dismiss="modal">
+          <button type="button" class="modal-btns" data-bs-dismiss="modal" (click)="resetUploadForm()">
             Close
           </button>
           <button type="submit" class="modal-btns">Upload</button>

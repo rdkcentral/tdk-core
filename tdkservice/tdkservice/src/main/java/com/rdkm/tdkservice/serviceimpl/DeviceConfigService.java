@@ -102,9 +102,13 @@ public class DeviceConfigService implements IDeviceConfigService {
 	 * @throws IOException - if an I/O error occurs
 	 */
 	private Resource addHeader(Resource resource) throws IOException {
+		
 		// Read the file content as a String
 		String fileContent = new String(Files.readAllBytes(resource.getFile().toPath()));
-
+		if (fileContent.contains(Constants.HEADER_FINDER)) {
+			LOGGER.info("Header already exists in the file");
+			return resource;
+		}
 		String headerFileLocation = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
 				+ Constants.TDK_UTIL_FILE_LOCATION;
 		Path path = Paths.get(headerFileLocation);
@@ -187,7 +191,7 @@ public class DeviceConfigService implements IDeviceConfigService {
 		} else {
 			path = path + Constants.TDKV_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR;
 		}
-		Path filePath = Paths.get(path).resolve(deviceConfigFileName + Constants.CONFIG_FILE_EXTENSION);
+		Path filePath = Paths.get(path).resolve(deviceConfigFileName);
 		try {
 			Files.delete(filePath);
 			LOGGER.info("File deleted successfully: {}", deviceConfigFileName);
@@ -244,7 +248,7 @@ public class DeviceConfigService implements IDeviceConfigService {
 		String fileName = file.getOriginalFilename();
 		if (fileName == null || !fileName.endsWith(Constants.CONFIG_FILE)) {
 			LOGGER.error("The uploaded file must have a .config extension {}", fileName);
-			throw new UserInputException("The uploaded file must be a .config file.");
+			throw new UserInputException("Please upload a .config file.");
 		}
 		if (file.isEmpty()) {
 			LOGGER.error("The uploaded file is empty");

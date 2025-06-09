@@ -70,7 +70,7 @@ export class ListRdkCertificationComponent {
   categoryName!: string;
   uploadConfigurationForm!: FormGroup;
   uploadFormSubmitted = false;
-  uploadFileName!: File;
+  uploadFileName: File | undefined;
   configureName!: string;
   showLoader = false;
   /**
@@ -193,15 +193,21 @@ export class ListRdkCertificationComponent {
    * 
    * @param event - The file input change event containing the selected file.
    */
-  onFileChange(event: any) : void {
-    this.uploadFileName = event.target.files[0].name;
-    const file: File = event.target.files[0];
-    if (file && file.name.toLowerCase().endsWith('.py')) {
-      this.uploadFileName = file;
-    } else {
-      alert('Please select a valid Python (.py) file.');
-    }
+onFileChange(event: any): void {
+  const file: File = event.target.files[0];
+  this.uploadConfigurationForm.get('uploadConfig')?.setValue(file || null);
+}
+
+
+  resetUploadForm(): void {
+  this.uploadConfigurationForm.reset();
+  this.uploadFormSubmitted = false;
+  // Clear the file input element
+  const fileInput = document.getElementById('uploadfile') as HTMLInputElement;
+  if (fileInput) {
+    fileInput.value = '';
   }
+}
 
 
   /**
@@ -231,9 +237,10 @@ export class ListRdkCertificationComponent {
     this.uploadFormSubmitted = true;
     if (this.uploadConfigurationForm.invalid) {
       return
-    } else {
-      if (this.uploadFileName) {
-        this.service.uploadConfigFile(this.uploadFileName).subscribe({
+    } 
+     const file = this.uploadConfigurationForm.get('uploadConfig')?.value;
+      if (file) {
+        this.service.uploadConfigFile(file).subscribe({
           next: (res) => {
             this._snakebar.open(res.message, '', {
               duration: 1000,
@@ -243,6 +250,8 @@ export class ListRdkCertificationComponent {
             })
             this.close();
             this.ngOnInit();
+            this.uploadConfigurationForm.reset();
+            this.uploadFormSubmitted = false;
           },
           error: (err) => {
             let errmsg = err.message;
@@ -253,12 +262,11 @@ export class ListRdkCertificationComponent {
               verticalPosition: 'top'
             })
             this.ngOnInit();
-            this.close();
             this.uploadConfigurationForm.reset();
           }
         })
       }
-    }
+    
   }
 
   /**

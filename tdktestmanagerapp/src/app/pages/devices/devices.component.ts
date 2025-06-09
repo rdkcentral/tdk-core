@@ -60,6 +60,7 @@ export class DevicesComponent {
   preferedCategory!:string;
   userCategory!:string;
   showLoader = false;
+  uploadXml! :File | null ;
 
   public gridApi!: GridApi;  public columnDefs: ColDef[] = [
     {
@@ -147,6 +148,8 @@ export class DevicesComponent {
     this.uploadXMLForm = this.fb.group({
       uploadXml: [null, Validators.required]
     })
+    //Resets the view for scripts when moving to other tabs
+    localStorage.setItem('viewName', 'scripts');
   }
 
   /**
@@ -285,12 +288,20 @@ export class DevicesComponent {
 
   }
 
+  resetUploadForm(){
+    this.uploadXMLForm.reset();
+    this.uploadXml = null;
+    this.uploadFileError = "";
+    this.uploadFormSubmitted = false;
+  }
+
   /**
    * Handles the submission of the uploadXMLForm.
    */
   uploadXMLSubmit(){
     this.uploadFormSubmitted = true;
-    if(this.uploadXMLForm.invalid){
+    if(this.uploadXMLForm.invalid || this.uploadFileError != null){
+      return;
      }else{
       if(this.uploadFileName){
         this.uploadFileError = null;
@@ -302,6 +313,7 @@ export class DevicesComponent {
               horizontalPosition: 'end',
               verticalPosition: 'top'
             })
+             this.resetUploadForm();
               this.close();
               this.ngOnInit();
           },
@@ -314,7 +326,7 @@ export class DevicesComponent {
             })
             this.ngOnInit();
             this.close();
-            this.uploadXMLForm.reset();
+            this.resetUploadForm();
           }
         })
       }

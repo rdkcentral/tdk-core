@@ -54,7 +54,7 @@ limitations under the License.
             <form [formGroup]="uploadConfigurationForm" (ngSubmit)="uploadConfigurationSubmit()">
                 <div class="modal-header modaltitle">
                     <h1 class="modal-title custom-title" id="certificateModalLabel">Upload Configuration File</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetUploadForm()"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container mt-4">
@@ -75,7 +75,7 @@ limitations under the License.
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="modal-btns" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="modal-btns" data-bs-dismiss="modal" (click)="resetUploadForm()">Close</button>
                     <button type="submit" class="modal-btns">Upload Config File</button>
                 </div>
             </form>
