@@ -96,6 +96,23 @@ if $extract_fncs_package; then
     exit
 fi
 
+setup_graphics_softlinks() {
+    echo -e "\nSetting up EGL and wayland softlinks\n"
+
+    echo -e "\nCreating softlinks for Graphics libraries\n"
+    GLESv2_library=`find /usr/lib -iname "libGLESv2.so*" | head -n1`
+    echo "/usr/lib/libtdk-GLESv2.so.0 --> " $GLESv2_library
+    ln -sf $GLESv2_library /usr/lib/libtdk-GLESv2.so.0
+
+    EGL_library=`find /usr/lib -iname "libEGL.so*" | head -n1`
+    echo "/usr/lib/libtdk-EGL.so.0 --> "$EGL_library
+    ln -sf $EGL_library /usr/lib/libtdk-EGL.so.0
+
+    wayland_egl_library=`find /usr/lib -iname "libwayland-egl.so*" | head -n1`
+    echo "/usr/lib/libtdk-wayland-egl.so.0 --> "$wayland_egl_library
+    ln -sf $wayland_egl_library /usr/lib/libtdk-wayland-egl.so.0
+}
+
 start_tdk() {
     echo -e "\nExtract TDK files to respective folders \n"
     log_file=".tdk_extracted_files.log"
@@ -127,18 +144,7 @@ start_tdk() {
         done
     fi
 
-    echo -e "\nCreating softlinks for Graphics libraries\n" 
-    GLESv2_library=`find /usr/lib -iname "libGLESv2.so*" | head -n1`
-    echo "/usr/lib/libtdk-GLESv2.so.0 --> " $GLESv2_library
-    ln -sf $GLESv2_library /usr/lib/libtdk-GLESv2.so.0
-
-    EGL_library=`find /usr/lib -iname "libEGL.so*" | head -n1`
-    echo "/usr/lib/libtdk-EGL.so.0 --> "$EGL_library
-    ln -sf $EGL_library /usr/lib/libtdk-EGL.so.0
-
-    wayland_egl_library=`find /usr/lib -iname "libwayland-egl.so*" | head -n1`
-    echo "/usr/lib/libtdk-wayland-egl.so.0 --> "$wayland_egl_library
-    ln -sf $wayland_egl_library /usr/lib/libtdk-wayland-egl.so.0
+    setup_graphics_softlinks
 
     echo -e "\nEnable TDK service\n"
     systemctl enable tdk
@@ -151,17 +157,18 @@ start_tdk() {
 # Check if TDK_Package.tar.gz is present in / folder.
 cd /
 
-if [[ "$tdk_package" == *FNCS* ]];then
-   echo "Package is a FNCS package"
-   tar -xvf $tdk_package
-   exit
-fi
-
 if [[ -z "$tdk_package" ]]; then
    echo "Packagename is not provided as command line argument"
    echo "Searching for package name \"TDK_Package*tar.gz\" "
-   mv TDK_Package*tar.gz TDK_Package.tar.gz
-   tdk_package="TDK_Package.tar.gz"
+   tdk_package=`ls TDK_Package*tar.gz | head -n 1`
+   echo -e "Processing $tdk_package\n"
+fi
+
+if [[ "$tdk_package" == *FNCS* ]];then
+   echo "Package is a FNCS package"
+   tar -xvf $tdk_package
+   setup_graphics_softlinks
+   exit
 fi
 
 if [ -f "/$tdk_package" ]; then
