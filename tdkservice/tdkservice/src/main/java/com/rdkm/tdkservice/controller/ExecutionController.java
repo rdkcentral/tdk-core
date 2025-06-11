@@ -29,6 +29,8 @@ import java.util.UUID;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1266,6 +1268,41 @@ public class ExecutionController {
 			LOGGER.info("Execution details fetched successfully");
 			return ResponseUtils.getSuccessDataResponse("Execution details fetched successfully", response);
 		}
+	}
+
+	/**
+	 * Generates a comparison Excel report based on the base execution name and a
+	 * list of execution names.
+	 *
+	 * @param baseExecName    The base execution name for comparison.
+	 * @param executionNames  The list of execution names to be compared.
+	 * @return A ResponseEntity containing the generated Excel report as a byte
+	 *         array, or an error message if the report generation fails.
+	 */
+	@Operation(summary = "Generate Comparison Excel Report")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Excel report generated successfully"),
+			@ApiResponse(responseCode = "400", description = "Invalid input parameters"),
+			@ApiResponse(responseCode = "500", description = "Failed to generate Excel report")
+	})
+	@PostMapping("/comparisonExcelByNames")
+	public ResponseEntity<?> generateComparisonExcelReportByNames(
+			@RequestParam("baseExecName") String baseExecName,
+			@RequestBody List<String> executionNames
+	) {
+		LOGGER.info("Generating comparison Excel report for base execution name: {} and execution names: {}", baseExecName, executionNames);
+
+		// Delegate the logic to the service layer
+		ByteArrayInputStream excelData = exportExcelService.generateComparisonExcelReportByNames(baseExecName, executionNames);
+		if (excelData == null || excelData.available() == 0) {
+			throw new TDKServiceException("Failed to generate Excel report.");
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDispositionFormData("attachment", "Comparison_Report.xlsx");
+		LOGGER.info("Comparison Excel report generated successfully.");
+		return ResponseEntity.status(HttpStatus.OK).headers(headers).body(excelData.readAllBytes());
 	}
 
 }

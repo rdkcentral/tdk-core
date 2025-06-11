@@ -2703,4 +2703,44 @@ public class ExportExcelService implements IExportExcelService {
 		return rowCount;
 	}
 
+	/** * Generates a comparison Excel report for the specified base execution and a list of execution names.
+	 *
+	 * @param baseExecName     The name of the base execution to compare against.
+	 * @param executionNames   A list of execution names to compare with the base execution.
+	 * @return A ByteArrayInputStream containing the generated Excel report.
+	 */
+	@Override
+	public ByteArrayInputStream generateComparisonExcelReportByNames(String baseExecName, List<String> executionNames) {
+		LOGGER.info("Fetching execution IDs for base execution name: {} and execution names: {}", baseExecName, executionNames);
+
+		// Retrieve the base execution ID using the name
+		Execution baseExecution = executionRepository.findByName(baseExecName);
+		if (baseExecution == null) {
+			LOGGER.error("Base execution not found for name: {}", baseExecName);
+			try {
+				throw new TDKServiceException("Base execution not found for name: " + baseExecName);
+			} catch (TDKServiceException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		UUID baseExecId = baseExecution.getId();
+		// Retrieve execution IDs for the provided names
+		List<UUID> executionIds = new ArrayList<>();
+		for (String name : executionNames) {
+			Execution execution = executionRepository.findByName(name);
+			if (execution == null) {
+				LOGGER.error("Execution not found for name: {}", name);
+				throw new TDKServiceException("Execution not found for name: " + name);
+			}
+			executionIds.add(execution.getId());
+		}
+
+		// Generate the comparison Excel report
+		try {
+			return generateComparisonExcelReport(baseExecId, executionIds);
+		} catch (Exception e) {
+			LOGGER.error("Error generating comparison Excel report", e);
+			throw new TDKServiceException("Failed to generate comparison report");
+		}
+	}
 }
