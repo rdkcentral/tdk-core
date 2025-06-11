@@ -77,7 +77,7 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 	 * @param pageable   - pageable object
 	 * @return Pagination for execution
 	 */
-	@Query("SELECT ed.execution FROM ExecutionDevice ed WHERE ed.device.name LIKE %:deviceName%")
+	@Query("SELECT ed.execution FROM ExecutionDevice ed WHERE ed.device LIKE %:deviceName%")
 	Page<Execution> findByDeviceName(String deviceName, Pageable pageable);
 
 	/**
@@ -109,7 +109,7 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 	 * @param pageable - pageable object
 	 * @return Pagination for execution
 	 */
-	Page<Execution> findByUserAndCategory(User user, Category category, Pageable pageable);
+	Page<Execution> findByUserAndCategory(String user, Category category, Pageable pageable);
 
 	/**
 	 * This method is used to get execution list between date ranges

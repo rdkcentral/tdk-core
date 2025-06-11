@@ -79,7 +79,6 @@ import com.rdkm.tdkservice.enums.ExecutionResultStatus;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.exception.UserInputException;
-import com.rdkm.tdkservice.model.Device;
 import com.rdkm.tdkservice.model.Execution;
 import com.rdkm.tdkservice.model.ExecutionDevice;
 import com.rdkm.tdkservice.model.ExecutionMethodResult;
@@ -389,11 +388,11 @@ public class ExportExcelService implements IExportExcelService {
 		try {
 			String[] deviceHeaders = { "Device", "DeviceIP", "Execution Time (min)", "Image", "Overall Pass %" };
 			ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
-			String deviceName = executionDevice != null && executionDevice.getDevice().getName() != null
-					? executionDevice.getDevice().getName()
+			String deviceName = executionDevice != null && executionDevice.getDevice() != null
+					? executionDevice.getDevice()
 					: "N/A";
-			String deviceIp = executionDevice != null && executionDevice.getDevice().getIp() != null
-					? executionDevice.getDevice().getIp()
+			String deviceIp = executionDevice != null && executionDevice.getDeviceIp() != null
+					? executionDevice.getDeviceIp()
 					: "N/A";
 			String executionTime = String.valueOf(execution.getExecutionTime());
 			String imageName = fileService.getImageName(String.valueOf(execution.getId()));
@@ -1301,9 +1300,6 @@ public class ExportExcelService implements IExportExcelService {
 				// Fetch ExecutionDevice details associated with the execution
 				ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 
-				// Fetch Device details
-				Device device = executionDevice.getDevice();
-
 				// Fetch execution results
 				List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
 
@@ -1321,8 +1317,8 @@ public class ExportExcelService implements IExportExcelService {
 
 				// Prepare device details map
 				Map<String, Object> deviceDetails = new HashMap<>();
-				deviceDetails.put("device", device.getName());
-				deviceDetails.put("deviceIp", device.getIp());
+				deviceDetails.put("device", executionDevice.getDevice());
+				deviceDetails.put("deviceIp", executionDevice.getDeviceIp());
 				deviceDetails.put("executionTime", execution.getExecutionTime());
 				deviceDetails.put("overallPassPercent", overallPassPercent);
 				deviceDetails.put("deviceImage", executionDevice.getBuildName());
@@ -1606,10 +1602,10 @@ public class ExportExcelService implements IExportExcelService {
 			double overallSuccessPercentage = totalSummary != null ? totalSummary.getSuccessPercentage() : 0.0;
 
 			String deviceName = executionDevice != null && executionDevice.getDevice() != null
-					? executionDevice.getDevice().getName()
+					? executionDevice.getDevice()
 					: "N/A";
-			String deviceIp = executionDevice != null && executionDevice.getDevice() != null
-					? executionDevice.getDevice().getIp()
+			String deviceIp = executionDevice != null && executionDevice.getDeviceIp() != null
+					? executionDevice.getDeviceIp()
 					: "N/A";
 			String executionTime = String.valueOf(execution.getExecutionTime());
 			String imageName = executionDevice != null ? executionDevice.getBuildName() : null; // Placeholder, replace
@@ -1668,8 +1664,8 @@ public class ExportExcelService implements IExportExcelService {
 		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 		// Device element
 		Element device = doc.createElement("device");
-		device.setAttribute("name", executionDevice.getDevice().getName());
-		device.setAttribute("deviceIp", executionDevice.getDevice().getIp());
+		device.setAttribute("name", executionDevice.getDevice());
+		device.setAttribute("deviceIp", executionDevice.getDeviceIp());
 		device.setAttribute("executiondate", execution.getCreatedDate().toString());
 		device.setAttribute("timetakentoexecute", String.valueOf(execution.getExecutionTime()));
 		device.setAttribute("status", execution.getExecutionStatus().toString());
@@ -1951,6 +1947,8 @@ public class ExportExcelService implements IExportExcelService {
 		String[] headers = { "Sl No", "Execution Name", "Test Suite", "Image Name", "Executed", "SUCCESS", "FAILURE",
 				"SCRIPT TIME OUT", "N/A", "SKIPPED", "Pass %", "New Failure Script Count", "New Timedout Script Count",
 				"New Script Count" };
+		ExecutionDevice execDevice = executionDeviceRepository
+				.findByExecution(executionRepository.findById(baseExecId).orElse(null));
 
 		Row baseExecutionRow = sheet.createRow(0);
 		Cell baseExecutionCell = baseExecutionRow.createCell(1);
@@ -1962,8 +1960,7 @@ public class ExportExcelService implements IExportExcelService {
 		Cell deviceNameCell = deviceNameRow.createCell(1);
 		deviceNameCell.setCellValue("Device Name");
 		Cell deviceName = deviceNameRow.createCell(2);
-		deviceName.setCellValue(executionDeviceRepository
-				.findByExecution(executionRepository.findById(baseExecId).get()).getDevice().getName());
+		deviceName.setCellValue(execDevice.getDevice());
 
 		// Add style to above two cells
 		CellStyle style = createArialStyle(workBook);

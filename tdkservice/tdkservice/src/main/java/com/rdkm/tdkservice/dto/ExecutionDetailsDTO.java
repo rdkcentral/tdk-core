@@ -54,7 +54,7 @@ public class ExecutionDetailsDTO {
 	/*
 	 * Represents the user.
 	 */
-	private User user;
+	private String user;
 	/*
 	 * Represents the category.
 	 */

@@ -221,12 +221,12 @@ public class DeviceStatusService {
 	 * @param device       - device for which the status needs to be set
 	 * @return boolean - true if the status was set successfully
 	 */
-	public boolean setDeviceStatus(DeviceStatus deviceStatus, Device device) {
+	public boolean setDeviceStatus(DeviceStatus deviceStatus, String device) {
 		try {
 			// Fetch the device from the repository
-			Device existingDevice = deviceRepository.findById(device.getId()).orElse(null);
+			Device existingDevice = deviceRepository.findByName(device);
 			if (existingDevice == null) {
-				LOGGER.warn("Device not found: " + device.getName());
+				LOGGER.warn("Device not found");
 				return false;
 			}
 
@@ -235,10 +235,10 @@ public class DeviceStatusService {
 
 			// Save the updated device back to the repository
 			deviceRepository.save(existingDevice);
-			LOGGER.debug("Device status updated successfully for device: " + device.getName());
+			LOGGER.debug("Device status updated successfully for device: " + device);
 			return true;
 		} catch (Exception e) {
-			LOGGER.error("Error updating device status for device: " + device.getName(), e);
+			LOGGER.error("Error updating device status for device: " + device, e);
 			return false;
 		}
 
@@ -256,7 +256,7 @@ public class DeviceStatusService {
 			DeviceStatus deviceStatus = fetchDeviceStatus(device);
 			if (deviceStatus != null) {
 				// Update the device status in the database
-				return setDeviceStatus(deviceStatus, device);
+				return setDeviceStatus(deviceStatus, device.getName());
 			} else {
 				LOGGER.warn("Failed to fetch status for device: " + device.getName());
 				return false;

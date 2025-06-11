@@ -93,8 +93,7 @@ public class Execution extends BaseEntity {
 	 * The user
 	 *
 	 */
-	@ManyToOne
-	private User user;
+	private String user;
 
 	/*
 	 * The test type

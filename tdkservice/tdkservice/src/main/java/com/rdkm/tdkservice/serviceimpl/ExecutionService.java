@@ -665,7 +665,7 @@ public class ExecutionService implements IExecutionService {
 		if (executionTriggerDTO.getUser() != null) {
 			User user = userRepository.findByUsername(executionTriggerDTO.getUser());
 			if (null != user) {
-				executionDetailsDTO.setUser(user);
+				executionDetailsDTO.setUser(user.getUsername());
 			}
 
 		}
@@ -1082,7 +1082,7 @@ public class ExecutionService implements IExecutionService {
 		}
 
 		Pageable pageable = getPageable(page, size, sortBy, sortDir);
-		Page<Execution> pageExecutions = executionRepository.findByUserAndCategory(user, category, pageable);
+		Page<Execution> pageExecutions = executionRepository.findByUserAndCategory(user.getUsername(), category, pageable);
 		ExecutionListResponseDTO executionListResponseDTO = getExecutionListResponseFromSearchResult(pageExecutions);
 		return executionListResponseDTO;
 
@@ -1142,12 +1142,12 @@ public class ExecutionService implements IExecutionService {
 			// Find ExecutionDevice for execution
 			ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 			if (executionDevice != null) {
-				executionDTO.setDevice(executionDevice.getDevice().getName());
+				executionDTO.setDevice(executionDevice.getDevice());
 			}
 
-			User user = execution.getUser();
+			String user = execution.getUser();
 			if (user != null) {
-				executionDTO.setUser(user.getUsername());
+				executionDTO.setUser(user);
 			}
 			executionDTO.setExecutionId(execution.getId().toString());
 			ExecutionType executionType = execution.getExecutionType();
@@ -1533,17 +1533,11 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Execution Device not found for execution with id: {}", execId);
 			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + execId.toString());
 		}
-		if (executionDevice.getDevice().getDeviceStatus() != DeviceStatus.FREE) {
+		Device device = deviceRepository.findByName(executionDevice.getDevice());
+		if (device == null || device.getDeviceStatus() != DeviceStatus.FREE) {
 			LOGGER.error(" Device not available for execution");
 			throw new UserInputException("The device not available for execution");
 		}
-
-		Device device = executionDevice.getDevice();
-		if (device == null) {
-			LOGGER.error("Device not found for execution with id: {}", execId);
-			throw new ResourceNotFoundException("Device", "for Execution ID: " + execId.toString());
-		}
-
 		try {
 			List<ExecutionResult> executionResult = execution.getExecutionResults();
 			List<String> scriptNames = executionResult.stream().map(ExecutionResult::getScript).toList();
@@ -1570,7 +1564,7 @@ public class ExecutionService implements IExecutionService {
 				executionTriggerDTO.setTestType(execution.getTestType());
 			}
 			if (Utils.isEmpty(user) && null != execution.getUser()) {
-				executionTriggerDTO.setUser(execution.getUser().getUsername());
+				executionTriggerDTO.setUser(execution.getUser());
 			} else {
 				executionTriggerDTO.setUser(user);
 			}
@@ -1612,15 +1606,11 @@ public class ExecutionService implements IExecutionService {
 			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + execId.toString());
 		}
 
-		Device device = executionDevice.getDevice();
-		if (device == null) {
-			LOGGER.error("Device not found for execution with id: {}", execId);
-			throw new ResourceNotFoundException("Device", "for Execution ID: " + execId.toString());
-		}
+		Device device = deviceRepository.findByName(executionDevice.getDevice());
 
-		if (!device.getDeviceStatus().equals(DeviceStatus.FREE)) {
-			LOGGER.error("Device with name: {} is not available for execution", device.getName());
-			throw new UserInputException("Device selected is not available for execution");
+		if (device == null || device.getDeviceStatus() != DeviceStatus.FREE) {
+			LOGGER.error(" Device not available for execution");
+			throw new UserInputException("The device not available for execution");
 		}
 
 		List<ExecutionResult> execResults = execution.getExecutionResults();
@@ -1630,13 +1620,13 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("No failed scripts found for execution with id: {}", execId);
 			throw new ResourceNotFoundException("Failed Scripts", "for Execution ID: " + execId.toString());
 		}
-		User triggerUser = null;
+		String triggerUser = null;
 		if (Utils.isEmpty(user)) {
 			LOGGER.error("User not found for execution with id: {}", execId);
 			triggerUser = execution.getUser();
-
 		} else {
-			triggerUser = userRepository.findByUsername(user);
+			User userName = userRepository.findByUsername(user);
+			triggerUser = userName.getUsername();
 		}
 		try {
 			List<String> failedScripts = failedResults.stream().map(ExecutionResult::getScript).toList();
@@ -1644,7 +1634,7 @@ public class ExecutionService implements IExecutionService {
 			List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
 					.collect(Collectors.toList());
 			String execName = getNextRerunExecutionName(execution.getName(), executionNames);
-			executionAsyncService.prepareAndExecuteMultiScript(executionDevice.getDevice(), scripts, triggerUser,
+			executionAsyncService.prepareAndExecuteMultiScript(device, scripts, triggerUser,
 					execName, execution.getCategory().name(), execution.getTestType(), 1, false,
 					execution.isDeviceLogsNeeded(), execution.isDiagnosticLogsNeeded(),
 					execution.isDiagnosticLogsNeeded(), false, execution.getTestType(), null, null);
@@ -1875,11 +1865,11 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Execution Device not found for execution with id: {}", id);
 			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + id + " not found");
 		}
-		Device device = executionDevice.getDevice();
+		
 		ExecutionDetailsResponseDTO response = new ExecutionDetailsResponseDTO();
-		response.setDeviceName(device.getName());
-		response.setDeviceIP(device.getIp());
-		response.setDeviceMac(device.getMacId());
+		response.setDeviceName(executionDevice.getDevice());
+		response.setDeviceIP(executionDevice.getDeviceIp());
+		response.setDeviceMac(executionDevice.getDeviceMac());
 
 		String deviceDetails = fileTransferService.getDeviceDetailsFromVersionFile(id.toString());
 		if (null != deviceDetails) {
@@ -2001,13 +1991,13 @@ public class ExecutionService implements IExecutionService {
 	public List<String> getUniqueUsers() {
 		LOGGER.info("Fetching unique users");
 		List<Execution> executions = executionRepository.findAll();
-		Set<User> users = new HashSet<>();
+		Set<String> users = new HashSet<>();
 		for (Execution execution : executions) {
 			if (execution.getUser() != null) {
 				users.add(execution.getUser());
 			}
 		}
-		List<String> uniqueUsers = users.stream().map(User::getUsername).toList();
+		List<String> uniqueUsers = users.stream().sorted().collect(Collectors.toList());
 		LOGGER.info("Successfully fetched unique users");
 		return uniqueUsers;
 	}
@@ -2267,8 +2257,7 @@ public class ExecutionService implements IExecutionService {
 		for (Execution execution : filteredExecutionList) {
 			ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 			if (executionDevice != null) {
-				Device device = executionDevice.getDevice();
-				if (device != null && device.getDeviceType().getName().equalsIgnoreCase(deviceType)) {
+				if (executionDevice != null && executionDevice.getDeviceType().equalsIgnoreCase(deviceType)) {
 					filteredExecutionListByDeviceType.add(execution);
 				}
 			}

@@ -60,6 +60,7 @@ import com.rdkm.tdkservice.model.ExecutionMethodResult;
 import com.rdkm.tdkservice.model.ExecutionResult;
 import com.rdkm.tdkservice.model.Script;
 import com.rdkm.tdkservice.model.User;
+import com.rdkm.tdkservice.repository.DeviceRepositroy;
 import com.rdkm.tdkservice.repository.ExecutionDeviceRepository;
 import com.rdkm.tdkservice.repository.ExecutionMethodResultRepository;
 import com.rdkm.tdkservice.repository.ExecutionRepository;
@@ -95,6 +96,9 @@ public class ExecutionAsyncService {
 	private ScriptRepository scriptRepository;
 
 	@Autowired
+	private DeviceRepositroy deviceRepository;
+	
+	@Autowired
 	private CommonService commonService;
 
 	@Autowired
@@ -129,12 +133,12 @@ public class ExecutionAsyncService {
 	 *                         should be rerun on failure.
 	 */
 	@Async
-	public void prepareAndExecuteSingleScript(Device device, Script script, User user, String executionName,
+	public void prepareAndExecuteSingleScript(Device device, Script script, String user, String executionName,
 			int repeatCount, boolean isRerunOnFailure, boolean isDeviceLogsNeeded, boolean isPerformanceLogsNeeded,
 			boolean isDiagnosticLogsNeeded, String testType, String callBackUrl, String imageVersion) {
 		LOGGER.info("Going to execute script: {} on device: {}", script.getName(), device.getName());
 		// Busy lock in the database device entity before execution
-		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device);
+		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
 		try {
 			String realExecutionName = "";
 
@@ -284,12 +288,12 @@ public class ExecutionAsyncService {
 	 * 
 	 */
 	@Async
-	public void prepareAndExecuteMultiScript(Device device, List<Script> scriptList, User user, String executionName,
+	public void prepareAndExecuteMultiScript(Device device, List<Script> scriptList, String user, String executionName,
 			String category, String testSuiteName, int repeatCount, boolean isRerunOnFailure,
 			boolean isDeviceLogsNeeded, boolean isDiagnosticsLogsNeeded, boolean isPerformanceNeeded,
 			boolean isIndividualRepeatExecution, String testType, String callBackUrl, String imageVersion) {
 		LOGGER.info("Executing multiple scripts execution in device:" + device.getName());
-		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device);
+		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
 		try {
 			if (repeatCount == 0) {
 				repeatCount = 1;
@@ -347,9 +351,11 @@ public class ExecutionAsyncService {
 
 				// Create and save ExecutionDevice
 				ExecutionDevice executionDevice = new ExecutionDevice();
-				executionDevice.setDevice(device);
-				executionDevice.setExecution(execution);
-
+				executionDevice.setDevice(device.getName());
+				executionDevice.setDeviceIp(device.getIp());
+				executionDevice.setDeviceMac(device.getMacId());
+				executionDevice.setDeviceType(device.getDeviceType().getName());
+				executionDevice.setExecution(savedExecution);
 				String executionID = savedExecution.getId().toString();
 
 				ExecutionDevice savedExecutionDevice = executionDeviceRepository.save(executionDevice);
@@ -514,7 +520,8 @@ public class ExecutionAsyncService {
 		if (executionDevice != null) {
 			CIDeviceDTO ciDeviceDTO = new CIDeviceDTO();
 			ciDeviceDTO.setDevice(getDeviceNameFromConfigFile(imageVersion));
-			ciDeviceDTO.setDeviceType(executionDevice.getDevice().getDeviceType().getName());
+			Device device = deviceRepository.findByName(executionDevice.getDevice());
+			ciDeviceDTO.setDeviceType(device.getDeviceType().getName());
 			ciDeviceDTO.setImageName(imageVersion);
 
 			ArrayList<CIComponentLevelDTO> componentLevelDTOList = new ArrayList<>();
@@ -696,8 +703,8 @@ public class ExecutionAsyncService {
 	private boolean executeScriptinDevice(Script script, Execution execution, ExecutionResult executionResult,
 			ExecutionDevice executionDevice) {
 		String output = "";
-		LOGGER.info("Executing script: {} on device: {}", script.getName(), executionDevice.getDevice().getName());
-		Device device = executionDevice.getDevice();
+		LOGGER.info("Executing script: {} on device: {}", script.getName(), executionDevice.getDevice());
+		Device device = deviceRepository.findByName(executionDevice.getDevice());
 		StringBuilder remarksString = new StringBuilder();
 		remarksString.append("Execution started in device: ").append(device.getName()).append(" for script: ")
 				.append(script.getName()).append("\n");
@@ -994,7 +1001,7 @@ public class ExecutionAsyncService {
 	 * @return ExecutionEntities
 	 * 
 	 */
-	private ExecutionEntities getExecutionEntitiesForExecution(Device device, Script script, User user,
+	private ExecutionEntities getExecutionEntitiesForExecution(Device device, Script script, String user,
 			String executionName, boolean isRerunOnFailure, boolean isDeviceLogsNeeded, boolean isPerformanceLogsNeeded,
 			boolean isDiagnosticLogsNeeded, String testType) {
 		Execution execution = new Execution();
@@ -1015,9 +1022,12 @@ public class ExecutionAsyncService {
 
 		// Create and save ExecutionDevice
 		ExecutionDevice executionDevice = new ExecutionDevice();
-		executionDevice.setDevice(device);
-		executionDevice.setExecution(savedExecution);
+		executionDevice.setDevice(device.getName());
+		executionDevice.setDeviceIp(device.getIp());
+		executionDevice.setDeviceMac(device.getMacId());
+		executionDevice.setDeviceType(device.getDeviceType().getName());
 		// Before saving the execution device, get the latest build name from the device
+		executionDevice.setExecution(savedExecution);
 		executionDeviceRepository.save(executionDevice);
 
 		ExecutionResult executionResult = new ExecutionResult();

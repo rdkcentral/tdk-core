@@ -39,16 +39,29 @@ import lombok.EqualsAndHashCode;
 public class ExecutionDevice extends BaseEntity {
 
 	/**
-	 * The device entity.
+	 * The device name.
 	 */
-	@ManyToOne
-	@JoinColumn(name = "device_id", nullable = false)
-	Device device;
+	String device;
 
 	/**
 	 * The build name.
 	 */
 	String buildName;
+	
+	/**
+	 * The device ip address.
+	 */
+	String deviceIp;
+
+	/**
+	 * The device mac address.
+	 */
+	String deviceMac;
+
+	/**
+	 * The device type.
+	 */
+	String deviceType;
 
 	/**
 	 * The execution entity

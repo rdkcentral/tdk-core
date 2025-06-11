@@ -212,7 +212,7 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 
 		DeviceStatus deviceStatus = deviceStatusService.fetchDeviceStatus(deviceObj);
 		if (deviceStatus == DeviceStatus.FREE) {
-			deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, deviceObj);
+			deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, deviceObj.getName());
 		} else if (deviceStatus == DeviceStatus.NOT_FOUND) {
 			LOGGER.error("Device is offline");
 			throw new UserInputException("Device " + device + " is down");
