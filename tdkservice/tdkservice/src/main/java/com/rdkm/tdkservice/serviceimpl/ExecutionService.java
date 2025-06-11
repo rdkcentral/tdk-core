@@ -2418,6 +2418,7 @@ public class ExecutionService implements IExecutionService {
 			executionDetail.setExecutionScriptName(executionResult.getScript());
 			executionDetail.setExecutionStatus(executionResult.getResult().name());
 			executionDetail.setExecutionLogs(getExecutionLogs(executionResult.getId().toString()));
+			executionDetail.setExecutionResultID(executionResult.getId().toString());
 			executionDetail.setLogLinkUrl(getLogLinkUrl(executionResult.getId().toString()));
 			executionDetails.add(executionDetail);
 		}

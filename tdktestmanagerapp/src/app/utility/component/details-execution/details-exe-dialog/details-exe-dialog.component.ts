@@ -941,16 +941,14 @@ downloadAsHtml(){
         <th >Execution Log
         <div> <a href="${this.config.apiUrl}execution/getExecutionLogs?executionResultID=${key.executionResultID}" target="_blank" rel="noopener noreferrer">Log link</a></div>
         </th>
-        <td>${key.executionLogs}
-       
-        </td>
+        <td>${key.executionLogs ? key.executionLogs.replace(/\n/g, '<br>') : ''}</td>
       </tr>
 `).join('');
 
   const htmlContent = `
     <html>
     <head>
-      <title>Exported Table</title>
+      <title>Execution Result Report</title>
       <style>
         body,
         *:not(.material-icons) {
@@ -976,7 +974,7 @@ downloadAsHtml(){
               </tr>
               <tr >
                 <th >Image Details :</th>
-                <td >${this.displayContent}</td>
+                <td >${this.deviceDetails}</td>
               </tr>
               <tr >
                 <th >Date of Execution :</th>

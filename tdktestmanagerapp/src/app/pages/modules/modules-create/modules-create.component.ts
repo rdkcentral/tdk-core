@@ -39,8 +39,8 @@ export class ModulesCreateComponent {
   createModuleForm!:FormGroup;
   moduleFormSubmitted = false;
   testGroupArr:any;
-  crashFilesArr: string[] = ['/opt/logs'];
-  logFilesArr: string[] = ['/opt/logs'];
+  crashFilesArr: string[] = [];
+  logFilesArr: string[] = [];
   isThunder :boolean = false;
   loggedinUser: any;
   displayName!: string;

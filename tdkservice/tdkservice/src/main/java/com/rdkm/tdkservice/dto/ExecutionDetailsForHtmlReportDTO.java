@@ -31,6 +31,11 @@ import lombok.Data;
 public class ExecutionDetailsForHtmlReportDTO {
 
 	/**
+	 * The unique identifier for the execution result.
+     */
+	private String executionResultID;
+	
+	/**
 	 * The name of the execution script.
 	 */
 	private String executionScriptName;

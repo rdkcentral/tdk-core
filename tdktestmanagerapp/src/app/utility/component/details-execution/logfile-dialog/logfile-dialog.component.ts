@@ -43,7 +43,7 @@ export class LogfileDialogComponent {
   }
 
   ngOnInit(): void {
-    this.logFileNames = JSON.parse(this.data.logFileNames);
+    this.logFileNames = this.data.logFileNames;
   }
 
   downloadLogFile(logFile:any){
