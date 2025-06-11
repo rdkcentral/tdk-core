@@ -103,4 +103,12 @@ public interface IExportExcelService {
 	 */
 	ByteArrayInputStream generateComparisonExcelReport(UUID baseExecId, List<UUID> executionIds);
 
+	/**
+	 * Generates an Excel report comparing the specified executions by their names.
+	 *
+	 * @param baseExecName       the name of the base execution to compare against
+	 * @param executionNames     a list of names of the executions to be compared
+	 * @return a ByteArrayInputStream containing the generated Excel report
+	 */
+	ByteArrayInputStream generateComparisonExcelReportByNames(String baseExecName, List<String> executionNames);
 }

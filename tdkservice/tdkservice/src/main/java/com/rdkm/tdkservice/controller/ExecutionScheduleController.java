@@ -93,8 +93,8 @@ public class ExecutionScheduleController {
 	@ApiResponse(responseCode = "200", description = "Execution Schedule cancelled successfully")
 	@ApiResponse(responseCode = "500", description = "Error in cancelling the execution schedule")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@PostMapping("/cancel")
-	public ResponseEntity<Response> cancelExecutionSchedule(@RequestBody UUID executionID) {
+	@GetMapping("/cancel")
+	public ResponseEntity<Response> cancelExecutionSchedule(@RequestParam UUID executionID) {
 		LOGGER.info("Cancelling the execution schedule");
 		boolean executionSchedule = executionScheduleService.cancelScheduleExecution(executionID);
 		if (executionSchedule) {
@@ -115,7 +115,7 @@ public class ExecutionScheduleController {
 	@ApiResponse(responseCode = "200", description = "Execution Schedule reverted successfully")
 	@ApiResponse(responseCode = "500", description = "Error in reverting the cancel of the execution schedule")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@PostMapping("/scheduleAgain")
+	@GetMapping("/scheduleAgain")
 	public ResponseEntity<Response> revertCancelTask(@RequestParam UUID executionID) {
 		LOGGER.info("Reverting the cancel of the execution schedule");
 		boolean executionSchedule = executionScheduleService.revertCancelTask(executionID);

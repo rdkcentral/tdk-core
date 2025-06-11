@@ -224,7 +224,7 @@ export class AnalysisComponent {
   selectionErrorMessage: string = '';
   showReportBtn = false;
   showLoader = false;
-
+isDownloading: boolean = false;
   constructor(
     private authservice: AuthService,
     private fb: FormBuilder,
@@ -244,27 +244,29 @@ export class AnalysisComponent {
 
   ngOnInit(): void {
     this.selectedDfaultCategory = this.preferedCategory
-      ? this.preferedCategory
-      : this.userCategory;
+        ? this.preferedCategory
+        : this.userCategory;
+
     this.reportForm = this.fb.group({
-      baseName: ['', Validators.required],
-      comparisonName: ['', [Validators.required, this.validateBaseNotInComparison.bind(this)]],
+        baseName: ['', Validators.required],
+        comparisonName: ['', [Validators.required, this.validateBaseNotInComparison.bind(this)]],
     });
     this.combinedForm = this.fb.group(
-      {
-        fromDate: ['', Validators.required],
-        toDate: ['', Validators.required],
-        deviceType: ['', Validators.required],
-        executionType: ['', Validators.required],
-        category: [{value:this.selectedDfaultCategory, disabled:true}],
-        scriptSingle: [''],
-        testSuiteSingke: [''],
-      },
-      {
-        validators: this.dateRangeValidator,
-      }
+        {
+            fromDate: ['', Validators.required],
+            toDate: ['', Validators.required],
+            deviceType: ['', Validators.required],
+            executionType: ['', Validators.required],
+            category: [{ value: this.selectedDfaultCategory, disabled: true }],
+            scriptSingle: [''], // No validators
+            testSuiteSingke: [''], // No validators
+        },
+        {
+            validators: this.dateRangeValidator,
+        }
     );
     this.getDeviceByCategory();
+    localStorage.setItem('viewName', 'scripts');
   }
 
   onGridReady(params: GridReadyEvent):void {
@@ -314,20 +316,22 @@ export class AnalysisComponent {
     let val = event.target.value;
     this.deviceName = val;
   }
-  changeExecutionType(event: any): void {
+ changeExecutionType(event: any): void {
     let val = event.target.value;
     this.executionTypeName = val;
-    if (this.executionTypeName === 'SINGLESCRIPT') {
-      this.showScript = true;
-    } else {
-      this.showScript = false;
-    }
-    if (this.executionTypeName === 'TESTSUITE') {
-      this.testSuiteShow = true;
-    } else {
-      this.testSuiteShow = false;
-    }
-  }
+
+    // Clear existing validators
+    this.combinedForm.get('scriptSingle')?.clearValidators();
+    this.combinedForm.get('testSuiteSingke')?.clearValidators();
+
+    // Update validity of the form controls
+    this.combinedForm.get('scriptSingle')?.updateValueAndValidity();
+    this.combinedForm.get('testSuiteSingke')?.updateValueAndValidity();
+
+    // Update visibility flags
+    this.showScript = this.executionTypeName === 'SINGLESCRIPT';
+    this.testSuiteShow = this.executionTypeName === 'TESTSUITE';
+}
 
   onTabClick(event: any): void {
     const label = event.tab.textLabel;
@@ -348,35 +352,117 @@ export class AnalysisComponent {
   }
 
 /** Update Form Control when the user edits the textarea manually */
-    updateComparisonFormValue(event: Event) {
-      const inputValue = (event.target as HTMLTextAreaElement).value;
-      const newNames = inputValue.split(',').map(name => name.trim()).filter(name => name);
-      this.compNamesArr = this.compNamesArr.filter((item:any) => newNames.includes(item.name));
-  
-      this.selectComparisonNames = newNames.join(', ');
-      this.reportForm.patchValue({ comparisonName: this.selectComparisonNames });
-      this.reportForm.get('comparisonName')?.updateValueAndValidity();
-    }
-  compReportSubmit(): void {
+   updateComparisonFormValue(event: Event): void {
+    const inputValue = (event.target as HTMLTextAreaElement).value;
+
+    // Allow the user to type freely, including commas
+    this.selectComparisonNames = inputValue;
+
+    // Split the input value by commas, trim spaces, and filter out empty values
+    const newNames = inputValue.split(',').map(name => name.trim()).filter(name => name);
+
+    // Update the comparison names array
+    this.compNamesArr = newNames.map(name => ({ id: null, name })); // Map names to objects with id as null
+
+    // Update the form control value
+    this.reportForm.patchValue({ comparisonName: this.selectComparisonNames });
+    this.reportForm.get('comparisonName')?.updateValueAndValidity();
+}
+ compReportSubmit(): void {
     this.reportSubmitted = true;
-    if (this.reportForm.invalid) {
-      return;
-    }else{
-        this.anlysisService.compReportGenerate(this.finalBaseName,this.compNamesArr.map((item:any) => item.id)).subscribe({
-          next:(blob)=>{
-            const xmlBlob = new Blob([blob], { type: 'application/xml' }); 
-            const url = window.URL.createObjectURL(xmlBlob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${this.selectExecutionName}_comparisionreport.xlsx`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-          },
-          error:(err)=>{
-          }
+
+    // Validate baseName and comparisonName fields
+    if (!this.reportForm.get('baseName')?.value) {
+        this._snakebar.open('Base Execution Name is required.', '', {
+            duration: 3000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
         });
+        return;
+    }
+
+    if (!this.reportForm.get('comparisonName')?.value) {
+        this._snakebar.open('Comparison Execution Names are required.', '', {
+            duration: 3000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+        });
+        return;
+    }
+
+    // Ensure compNamesArr is not empty
+    if (!this.compNamesArr || this.compNamesArr.length === 0) {
+        this._snakebar.open('Please provide valid Comparison Execution Names or IDs.', '', {
+            duration: 3000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+        });
+        return;
+    }
+
+    const baseExecution = this.finalBaseName || this.reportForm.get('baseName')?.value; // Base execution ID or name
+    const comparisonExecutions = this.compNamesArr.map((item: any) => item.id || item.name); // Comparison execution IDs or names
+
+    this.isDownloading = true; // Set loading state to true
+
+    // Always send baseExecution as name for backend call
+    const baseExecutionName = this.reportForm.get('baseName')?.value;
+
+    if (this.compNamesArr.every((item: any) => item.id)) {
+      // Use IDs for comparisonExecutions, but baseExecution as name
+      this.anlysisService.compReportGenerate(baseExecutionName, comparisonExecutions).subscribe({
+        next: (blob) => {
+          const xmlBlob = new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(xmlBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${baseExecutionName}_comparison_report.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          this.isDownloading = false; // Set loading state to false
+        },
+        error: (err) => {
+          console.error('Error generating report:', err);
+          this._snakebar.open('Failed to generate report. Please try again.', '', {
+            duration: 3000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+          this.isDownloading = false; // Set loading state to false
+        },
+      });
+    } else {
+      // Use names for both baseExecution and comparisonExecutions
+      this.anlysisService.comparisonExcelByNames(baseExecutionName, comparisonExecutions).subscribe({
+        next: (blob) => {
+          const xmlBlob = new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(xmlBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${baseExecutionName}_comparison_report.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          this.isDownloading = false; // Set loading state to false
+        },
+        error: (err) => {
+          console.error('Error generating report:', err);
+          this._snakebar.open('Failed to generate report. Please try again.', '', {
+            duration: 3000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+          this.isDownloading = false; // Set loading state to false
+        },
+      });
     }
   }
   openModal() {
@@ -428,42 +514,38 @@ export class AnalysisComponent {
   onCombinedSubmit(): void {
     this.combinedSubmitted = true;
     if (this.combinedForm.invalid) {
-      return;
-    } else {
-      const locaFromDateTime = this.combinedForm.get('fromDate')?.value;
-      const locaToDateTime = this.combinedForm.get('toDate')?.value;
-      if (locaFromDateTime) {
+        return;
+    }
+
+    const locaFromDateTime = this.combinedForm.get('fromDate')?.value;
+    const locaToDateTime = this.combinedForm.get('toDate')?.value;
+
+    if (locaFromDateTime) {
         const utcMoment = moment.tz(locaFromDateTime, moment.tz.guess()).startOf('day');
         this.combinedFromUTC = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
       }
       if (locaToDateTime) {
         const utcMoment = moment.tz(locaToDateTime, moment.tz.guess()).endOf('day');
         this.combinedToUTC = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
-      }
-      let obj = {
-        "startDate": this.combinedFromUTC,
-        "endDate": this.combinedToUTC,
-        "executionType": this.executionTypeName,
-        "scriptTestSuite": '',
-        "deviceType": this.deviceName,
-        "category": this.selectedDfaultCategory
-        
-      };
-      this.showLoader = true;
-      this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
-        let response = res.data;
-        if(response){
-          this.rowData = response;
-          this.showTable = true;
-          this.showLoader = false;
-        }else{
-          this.rowData = [];
-          this.showTable = true;
-          this.showLoader = false;
-        }
-      })
     }
-  }
+
+    const obj = {
+        startDate: this.combinedFromUTC,
+        endDate: this.combinedToUTC,
+        executionType: this.executionTypeName,
+        scriptTestSuite: this.executionTypeName === 'SINGLESCRIPT' ? this.combinedForm.get('scriptSingle')?.value : '',
+        deviceType: this.deviceName,
+        category: this.selectedDfaultCategory,
+    };
+
+    this.showLoader = true;
+    this.anlysisService.getcombinedByFilter(obj).subscribe((res) => {
+        const response = res.data;
+        this.rowData = response || [];
+        this.showTable = true;
+        this.showLoader = false;
+    });
+}
 
   onSelectionChanged() {
     this.selectedExecutions = this.gridApi.getSelectedRows();
@@ -471,25 +553,46 @@ export class AnalysisComponent {
   }
   updateSelectedExecutionNames() {
     this.selectionErrorMessage = '';
+
+    // Check if the base execution ID is in the selected executions
+    const baseExecutionId = this.finalBaseName;
+    const selectedExecutionIds = this.selectedExecutions.map(execution => execution.executionId);
+
+    if (baseExecutionId && selectedExecutionIds.includes(baseExecutionId)) {
+        this.selectionErrorMessage = 'Base Execution ID cannot be selected in the Execution IDs list.';
+        this._snakebar.open(this.selectionErrorMessage, '', {
+            duration: 3000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+        });
+
+        // Remove the base execution ID from the selection
+        this.selectedExecutions = this.selectedExecutions.filter(execution => execution.executionId !== baseExecutionId);
+        this.gridApi.deselectAll();
+        this.selectedExecutions.forEach(execution => {
+            this.gridApi.getRowNode(execution.executionId)?.setSelected(true);
+        });
+    }
+
+    // Validate the number of selected executions
     if (this.selectedExecutions.length < 2 || this.selectedExecutions.length > 10) {
-      this.selectionErrorMessage = 'Number of executions selected must be between 2 and 10';
-      this.showReportBtn = false;
-      this.selectedExecutionNames = [];
-      return;
+        this.selectionErrorMessage = 'Number of executions selected must be between 2 and 10.';
+        this.showReportBtn = false;
+        this.selectedExecutionNames = [];
+        return;
     }
-    if(this.selectedExecutions.length > 2 || this.selectedExecutions.length <= 10){
-      this.showReportBtn = true;
-    }else{
-      this.showReportBtn = false;
-    }
+
+    this.showReportBtn = true;
     this.selectedExecutionNames = this.selectedExecutions.map(execution => execution.executionId);
   }
 
-  generateReport():void{
-    if(this.selectedExecutionNames){
+  generateReport(): void {
+    if (this.selectedExecutionNames) {
+      this.isDownloading = true; // Set loading state to true
       this.anlysisService.combinnedReportGenerate(this.selectedExecutionNames).subscribe({
-        next:(blob)=>{
-          const xmlBlob = new Blob([blob], { type: 'application/xml' }); 
+        next: (blob) => {
+          const xmlBlob = new Blob([blob], { type: 'application/xml' });
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
@@ -498,16 +601,18 @@ export class AnalysisComponent {
           a.click();
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
+          this.isDownloading = false; // Set loading state to false
         },
-        error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg,'',{
+        error: (err) => {
+          const errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
-        }
+            verticalPosition: 'top',
+          });
+          this.isDownloading = false; // Set loading state to false
+        },
       });
     }
 

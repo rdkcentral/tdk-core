@@ -201,6 +201,18 @@ isJiraAutomation():Observable<any>{
   });
   return this.http.get(`${this.config.apiUrl}api/v1/analysis/isJiraAutomationImplemented`, { headers});
  }
+  comparisonExcelByNames(baseExecutionName: string, comparisonExecutionNames: string[]): Observable<any> {
+    const headers = new HttpHeaders({
+        Authorization: this.authService.getApiToken(),
+    });
 
- 
+    // Construct the API endpoint with baseExecName as a query parameter
+    const url = `${this.config.apiUrl}execution/comparisonExcelByNames?baseExecName=${baseExecutionName}`;
+
+    // Send executionNames in the request body
+    return this.http.post(url, comparisonExecutionNames, {
+        headers,
+        responseType: 'blob', // Expecting a file (Excel) as the response
+    });
+}
 }

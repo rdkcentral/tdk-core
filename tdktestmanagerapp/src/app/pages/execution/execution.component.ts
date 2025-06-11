@@ -457,6 +457,8 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     this.deviceInterval = setInterval(() => {
       this.getDeviceStatus();
     }, 10000);
+     //Resets the view for scripts when moving to other tabs
+    localStorage.setItem('viewName', 'scripts');
   }
   refreshExeHistory():void{
     this.storeSelection();
