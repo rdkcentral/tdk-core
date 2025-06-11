@@ -273,7 +273,7 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
         if "FAILURE" not in config_status:
             credentials = deviceIP + ',' + user_name + ',' + password
             #check feature already present or not
-            command='curl -sX  GET '+"'"+xconfdomainname+'feature/filtered?APPLICATION_TYPE=stb&NAME='+feature_name+"'"+' -H "Content-Type: application/json" -H "Accept: application/json" | cut -d "," -f 1 | cut -d ":" -f 2'
+            command='curl -sX  GET '+"'"+xconfdomainname+'/xconfAdminService/feature/filtered?applicationType=stb&name='+feature_name+"'"+' -H "Content-Type: application/json" -H "Accept: application/json" | cut -d "," -f 1 | cut -d ":" -f 2'
             print("Executing Command : %s" %command)
             #execute in DUT function
             result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -284,7 +284,7 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                 print("Feature is already present")
                 print(feature_name+" "+"feature retrieved successfully")
                 #check feature rule already present or not
-                command='curl -sX  GET '+"'"+xconfdomainname+'featurerule/filtered?APPLICATION_TYPE=stb&NAME='+feature_name+"'"+' -H "Content-Type: application/json" -H "Accept: application/json" | cut -d "," -f 1 | cut -d ":" -f 2'
+                command='curl -sX  GET '+"'"+xconfdomainname+'/xconfAdminService/featurerule/filtered?applicationType=stb&name='+feature_name+"'"+' -H "Content-Type: application/json" -H "Accept: application/json" | cut -d "," -f 1 | cut -d ":" -f 2'
                 print("Executing Command : %s" %command)
                 #execute in DUT function
                 result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -295,7 +295,7 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                     print("Feature rule is already present")
                     print(feature_name+" "+"feature rule retrieved successfully")
                     #Update feature
-                    command='curl -sX POST '+xconfdomainname+'feature/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_id+'","name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}]\''
+                    command='curl -sX POST '+xconfdomainname+'/xconfAdminService/feature/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_id+'","name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}]\''
                     print("Executing Command : %s" %command)
                     #execute in DUT function
                     result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -303,7 +303,7 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                         print("\nSUCCESS : Feature updated successfully")
                         feature_rule_id=feature_rule_id.strip()
                         #Update feature rule
-                        command='curl -sX POST '+xconfdomainname+'featurerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_rule_id+'","name":"'+feature_name+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"estbIP"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceIP+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"estbMacAddress"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]}]},"priority":4,"featureIds":["'+feature_id+'"],"applicationType":"stb"}]\''
+                        command='curl -sX POST '+xconfdomainname+'/xconfAdminService/featurerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_rule_id+'","name":"'+feature_name+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"estbIP"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceIP+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"estbMacAddress"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]}]},"priority":4,"featureIds":["'+feature_id+'"],"applicationType":"stb"}]\''
                         print("Executing Command : %s" %command)
                         #execute in DUT function
                         result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -322,7 +322,7 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
             else:
                 print(feature_name+" : "+"Creating the feature please wait....")
                 #Create feature
-                command='curl -sX POST '+xconfdomainname+'feature -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}\''
+                command='curl -sX POST '+xconfdomainname+'/xconfAdminService/feature?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}\''
                 print("Executing Command : %s" %command)
                 #execute in DUT function
                 result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -334,7 +334,7 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                     print(feature_name+" : feature created Successfully")
                     #Create feature rule
                     print(feature_name+" : "+"Creating the feature rule please wait....")
-                    command='curl -sX POST '+xconfdomainname+'featurerule -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"estbIP"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceIP+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"estbMacAddress"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]}]},"priority":4,"featureIds":["'+feature_id+'"],"applicationType":"stb"}\''
+                    command='curl -sX POST '+xconfdomainname+'/xconfAdminService/featurerule?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"estbIP"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceIP+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"estbMacAddress"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]}]},"priority":4,"featureIds":["'+feature_id+'"],"applicationType":"stb"}\''
                     print("Executing Command : %s" %command)
                     #execute in DUT function
                     result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -367,7 +367,7 @@ def rfc_checkconfiguredata(xconfdomainname,rfcparameter,expectedvalue,feature_na
         config_status=rfc_obtainCredentials()
         if "FAILURE" not in config_status:
             credentials = deviceIP + ',' + user_name + ',' + password
-            command="curl -si '"+xconfdomainname+"featureControl/getSettings?estbMacAddress="+deviceMAC+"&estbIP="+deviceIP+"'"
+            command="curl -si '"+xconfdomainname+"/featureControl/getSettings/stb?estbMacAddress="+deviceMAC+"&estbIP="+deviceIP+"'"
             print("Executing Command : %s" %command)
             #execute in DUT function
             result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -422,7 +422,7 @@ def rfc_deletefeature(xconfdomainname):
     if "FAILURE" not in config_status:
         credentials = deviceIP + ',' + user_name + ',' + password
         print("\nInitialized deleting the feature")
-        command="curl -i -sX DELETE "+xconfdomainname+"feature/"+feature_id
+        command="curl -i -sX DELETE "+xconfdomainname+"/xconfAdminService/feature/"+feature_id+"?applicationType=stb"
         print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -450,7 +450,7 @@ def rfc_deletefeaturerule(xconfdomainname):
     if "FAILURE" not in config_status:
         credentials = deviceIP + ',' + user_name + ',' + password
         print("\nInitialized deleting the feature rule")
-        command="curl -i -sX DELETE "+xconfdomainname+"featurerule/"+feature_rule_id
+        command="curl -i -sX DELETE "+xconfdomainname+"/xconfAdminService/featurerule/"+feature_rule_id+"?applicationType=stb"
         print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -511,7 +511,7 @@ def rfc_datfilechecker():
 #---------------------------------------------------------------
 # CHECK for THE PRESENCE OF the PARTNERS_DEFAULTS JSON FILE
 #---------------------------------------------------------------
-def rfc_partnersdefaultschecker():
+def rfc_partnersdefaultschecker(xconfdomainname):
     partnersdefaultscheckerstatus="SUCCESS"
     config_status=rfc_obtainCredentials()
     if "FAILURE" not in config_status:
@@ -526,7 +526,7 @@ def rfc_partnersdefaultschecker():
         if result == 1:
             print("\nSUCCESS : partners_defaults.json file is available")
             #check if the xconf domain URL exists in /etc/partners_defaults.json
-            command="sed -n '/community/,/}/p' /etc/partners_defaults.json | grep -q '"+'"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Bootstrap.XconfUrl" *: *"https://xconf.rdkcentral.com:19092"'+"' /etc/partners_defaults.json && echo 1 || echo 0"
+            command="sed -n '/community/,/}/p' /etc/partners_defaults.json | grep -q '"+'"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Bootstrap.XconfUrl" *: *"'+xconfdomainname+'"'+"' /etc/partners_defaults.json && echo 1 || echo 0"
             print("Executing Command : %s" %command)
             #execute in DUT function
             result=rfc_executeInDUT (sshMethod, credentials, command)
