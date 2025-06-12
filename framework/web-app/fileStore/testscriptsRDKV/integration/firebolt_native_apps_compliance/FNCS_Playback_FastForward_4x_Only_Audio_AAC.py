@@ -111,7 +111,16 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 expectedResult="SUCCESS"
 
-if "SUCCESS" in result.upper():
+tdkTestObj = obj.createTestStep('getDeviceConfigValue')
+tdkTestObj.addParameter("configKey","FIREBOLT_COMPLIANCE_FASTFORWARD_3x_4x_ENABLED")
+tdkTestObj.executeTestCase(expectedResult);
+actualresult = tdkTestObj.getResult();
+supported = tdkTestObj.getResultDetails();
+if supported == "no":
+    print("4x is not supported by the device as set in config file\n");
+    obj.setAsNotApplicable();
+
+if "SUCCESS" in result.upper() and supported != "no":
     
     #The test name specifies the test case to be executed from the mediapipeline test suite
     test_name = "test_trickplay"
