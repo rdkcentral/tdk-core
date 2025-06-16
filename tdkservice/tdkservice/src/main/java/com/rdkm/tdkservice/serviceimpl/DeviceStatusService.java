@@ -62,7 +62,7 @@ public class DeviceStatusService {
 	 * @return boolean - true if the status update was successful for all devices,
 	 *         false otherwise
 	 */
-	@Scheduled(initialDelay = 5000, fixedDelay = 30000)
+	@Scheduled(initialDelay = 5000, fixedDelay = 5000)
 	public void updateAllDeviceStatus() {
 		LOGGER.debug("Updating status for all devices");
 		// The status of BUSY, HANG devices should be checked first, as the
@@ -94,14 +94,43 @@ public class DeviceStatusService {
 
 					LOGGER.warn("Failed to fetch status for device: " + device.getName());
 				}
-			} catch (
-
-			Exception e) {
+			} catch (Exception e) {
 				LOGGER.error("Error updating status for device: " + device.getName(), e);
 			}
 		}
 		LOGGER.debug("Status updated for all devices");
 
+	}
+
+	/**
+	 * Updates the status of all devices filtered by category.
+	 *
+	 * @param category - the category of devices to update
+	 */
+	public void updateAllDeviceStatusByCategory(Category category) {
+		LOGGER.debug("Updating status for all devices in category: " + category);
+		List<Device> devices = deviceRepository.findAllSortedByDeviceStatus().stream()
+				.filter(device -> device.getCategory().equals(category)).toList();
+		for (Device device : devices) {
+			try {
+				if (!deviceRepository.existsById(device.getId())) {
+					LOGGER.warn("Device not found: " + device.getName());
+					continue;
+				}
+				DeviceStatus deviceStatus = fetchDeviceStatus(device);
+				if (deviceStatus != null) {
+					if (!device.getDeviceStatus().equals(DeviceStatus.IN_USE)) {
+						device.setDeviceStatus(deviceStatus);
+					}
+					deviceRepository.save(device);
+				} else {
+					LOGGER.warn("Failed to fetch status for device: " + device.getName());
+				}
+			} catch (Exception e) {
+				LOGGER.error("Error updating status for device: " + device.getName(), e);
+			}
+		}
+		LOGGER.debug("Status updated for all devices in category: " + category);
 	}
 
 	/**

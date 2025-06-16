@@ -45,6 +45,14 @@ export class ExecutionService {
     return this.http.get(`${this.config.apiUrl}api/v1/device/getalldevicestatus?category=${category}`, { headers, responseType: 'text' });
   }
 
+
+  getDeviceStatusForRefresh(category: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.put(`${this.config.apiUrl}api/v1/device/updateAndGetAllDeviceStatus?category=${category}`, { headers, responseType: 'text' });
+  }
+
   toggleThunderEnabled(deviceIp:any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -57,6 +65,17 @@ export class ExecutionService {
       'Authorization': this.authService.getApiToken()
     });
     return this.http.get(`${this.config.apiUrl}api/v1/device/getDeviceByCategoryAndThunderstatus?category=${category}&isThunderEnabled=${isThunderEnabled}`, { headers });
+  }
+
+
+  getDeviceStatusByIP(deviceIP: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(
+      `${this.config.apiUrl}api/v1/device/getDeviceStatusByIP?deviceIP=${deviceIP}`,
+      { headers }
+    );
   }
   
   getscriptByCategory(category:string,isThunderEnabled:boolean): Observable<any>{

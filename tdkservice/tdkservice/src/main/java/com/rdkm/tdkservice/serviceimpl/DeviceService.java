@@ -120,6 +120,9 @@ public class DeviceService implements IDeviceService {
 	@Autowired
 	CommonService commonService;
 
+	@Autowired
+	DeviceStatusService deviceStatusService;
+
 	/**
 	 * This method is used to create a new device. It receives a POST request at the
 	 * "/createDevice" endpoint with a DeviceDTO object in the request body. The
@@ -970,6 +973,10 @@ public class DeviceService implements IDeviceService {
 
 		device.setThunderEnabled(!device.isThunderEnabled());
 		deviceRepository.save(device);
+
+		DeviceStatus deviceStatus = deviceStatusService.fetchDeviceStatus(device);
+		device.setDeviceStatus(deviceStatus);
+		deviceRepository.save(device);
 		LOGGER.info("Completed setting Thunder enabled status for device with ip: {}", deviceIP);
 		return device.isThunderEnabled();
 	}
@@ -999,6 +1006,31 @@ public class DeviceService implements IDeviceService {
 				device.getDeviceStatus());
 		return deviceStatusResponseDTO;
 
+	}
+
+	/**
+	 * Updates the status of all devices by category and retrieves the updated list
+	 * of devices.
+	 *
+	 * This method performs the following steps: 1. Calls the
+	 * `updateAllDeviceStatusByCategory` method from `DeviceStatusService` to update
+	 * the status of all devices belonging to the specified category. 2. Retrieves
+	 * and returns the updated list of devices in the specified category from the
+	 * `DeviceRepositroy`.
+	 *
+	 * @param category The category of devices to update and retrieve. This
+	 *                 parameter is of type {@link Category}.
+	 * @return A list of updated {@link Device} objects belonging to the specified
+	 *         category.
+	 */
+	public List<DeviceStatusResponseDTO> updateAndGetAllDeviceStatus(String category) {
+		Category catgoryValue = commonService.validateCategory(category);
+
+		// Update the status of all devices in the specified category
+		deviceStatusService.updateAllDeviceStatusByCategory(catgoryValue);
+
+		// Retrieve and return the updated list of devices in the specified category
+		return this.getAllDeviceStatus(category);
 	}
 
 }

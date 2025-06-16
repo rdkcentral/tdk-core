@@ -230,7 +230,7 @@ public class FileTransferService implements IFileService {
 			String fileName = fnameArray[fnameArray.length - 1];
 			if (!logTransferScriptFilePath.isEmpty()) {
 				String[] cmd = commandForTransferThunderEnabledLogFiles(commonService.getPythonCommandFromConfig(),
-						logTransferScriptFilePath, device.getIp(), fileName, logFilesPath, fileName);
+						logTransferScriptFilePath, device.getIp(), filePathInDevice, logFilesPath, fileName);
 				scriptExecutorService.executeScript(cmd, 60);
 			} else {
 				LOGGER.warn("Device log transfer script file path is empty, skipping execution.");

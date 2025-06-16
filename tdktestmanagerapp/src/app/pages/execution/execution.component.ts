@@ -130,6 +130,13 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       wrapText:true,
       headerClass: 'header-center',
       resizable: false,
+      cellRenderer:(params:any)=>{
+        const text = params.value || '';
+        if(text.length > 50){
+          return `${text.slice(0,50)}...`;
+        }
+        return text;
+      },
       valueFormatter: (params) => {
         if (params.value) {
           return params.value.toString().toUpperCase();
@@ -730,6 +737,51 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     })
     this.stayFocus();
   }
+
+
+  /**
+  * TODO -This method is for initialize the device status for Refresh.
+  */
+  getDeviceStatusForRefresh():void{
+
+    const isInputFocused = document.activeElement === this.deviceSearchInput?.nativeElement;
+    this.executionservice.getDeviceStatusForRefresh(this.selectedDfaultCategory)
+    .subscribe({
+      next: (res) => {
+          this.deviceStausArray = this.formatData(JSON.parse(res));
+          this.filteredDeviceStausArray = [...this.deviceStausArray];
+          if (isInputFocused) {
+            setTimeout(() => {
+              if (this.deviceSearchInput) {
+                this.deviceSearchInput.nativeElement.focus();
+                this.deviceSearchInput.nativeElement.setSelectionRange(
+                  this.deviceSearchInput.nativeElement.value.length,
+                  this.deviceSearchInput.nativeElement.value.length
+                );
+              }
+            }, 0);
+          }
+          this.filterAndSortDevices(this.searchDevice);
+          this.deviceStausArray[0].childData.forEach((element:any) => {
+            this.toolTipText +=
+            element.deviceName + '\n' +
+            element.ip + '\n' +
+            element.deviceType + '\n' +
+            element.status + '\n';
+          });
+      },
+      error: (err) => {
+        this._snakebar.open(err, '', {
+          duration: 2000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+        })
+      }
+
+    })
+    this.stayFocus();
+  }
   /**
    * This method is for format the tree view of device status
   */
@@ -838,7 +890,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   */
   enableDisable(deviceIP:any):void{
     this.executionservice.toggleThunderEnabled(deviceIP).subscribe({
-      next:(res)=>{
+      next: (res) => {
+        if (res.message) {
+          this.getDeviceStatus();
+        }
+
         this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
@@ -997,6 +1053,54 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     }
   }
 
+
+  openModalExecute(params: any) {
+  if (params.status === 'FREE') {
+    this.executionservice.getDeviceStatusByIP(params.ip).subscribe({
+      next: (res) => {
+        if (res.data && res.data.status === 'FREE') {
+          const deviceExeModal = this.triggerDialog.open(ExecuteDialogComponent, {
+            width: '68%',
+            height: '96vh',
+            maxWidth: '100vw',
+            panelClass: 'custom-modalbox',
+            data: { params },
+            autoFocus: false,
+          });
+
+          deviceExeModal.afterClosed().subscribe(() => {
+            this.getAllExecutions();
+            this.getDeviceStatus();
+          });
+        } else {
+          this._snakebar.open('The device is not available for execution', '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+          return;
+        }
+      },
+      error: (err) => {
+        this._snakebar.open(err.message, '', {
+          duration: 2000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+        });
+      }
+    });
+  } else {
+    this._snakebar.open('The device is not available for execution', '', {
+      duration: 2000,
+      panelClass: ['err-msg'],
+      horizontalPosition: 'end',
+      verticalPosition: 'top'
+    });
+  }
+}
+
   /**
    * This methos is for expand and collapse the accordian.
   */
@@ -1005,37 +1109,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     // this.panelOpenState = !this.panelOpenState;
   }
 
-  /**
-   * This method will open the trigger execution modal.
-  */ 
-  openModalExecute(params:any){
-    if(params.status ==='FREE'){
-      const deviceExeModal = this.triggerDialog.open(ExecuteDialogComponent, {
-        width: '68%',
-        height: '96vh',
-        maxWidth: '100vw',
-        panelClass: 'custom-modalbox',
-        data: {
-          params
-        },
-        autoFocus: false,
-      });
   
-      deviceExeModal.afterClosed().subscribe(() => {
-        setTimeout(() => {
-        this.getAllExecutions();
-        }, 2000);
-      });
-    }else{
-      this._snakebar.open('The device is not available for execution','',{
-        duration: 2000,
-        panelClass: ['err-msg'],
-        horizontalPosition: 'end',
-        verticalPosition: 'top'
-      })
-    }
-
-  }
   /**
    * This method will open the trigger execution modal.
   */  
