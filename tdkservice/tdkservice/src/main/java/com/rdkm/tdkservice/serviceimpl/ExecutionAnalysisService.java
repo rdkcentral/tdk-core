@@ -426,10 +426,14 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 			return null;
 		}
 		AnalysisResultDTO analysisResultDTO = new AnalysisResultDTO();
-		analysisResultDTO.setAnalysisDefectType(executionResultAnalysis.getAnalysisDefectType().getValue());
-		analysisResultDTO.setAnalysisRemark(executionResultAnalysis.getAnalysisRemark());
+		if (executionResultAnalysis.getAnalysisDefectType() != null
+				&& executionResultAnalysis.getAnalysisDefectType().getValue() != null)
+			analysisResultDTO.setAnalysisDefectType(executionResultAnalysis.getAnalysisDefectType().getValue());
+		if (executionResultAnalysis.getAnalysisRemark() != null)
+			analysisResultDTO.setAnalysisRemark(executionResultAnalysis.getAnalysisRemark());
 		analysisResultDTO.setAnalysisTicketID(executionResultAnalysis.getAnalysisTicketID());
-		analysisResultDTO.setAnalysisUser(executionResultAnalysis.getAnalysisUser());
+		if (executionResultAnalysis.getAnalysisUser() != null)
+			analysisResultDTO.setAnalysisUser(executionResultAnalysis.getAnalysisUser());
 		LOGGER.info("Successfully fetched analysis result for execution result id: {}", executionResultID.toString());
 
 		return analysisResultDTO;

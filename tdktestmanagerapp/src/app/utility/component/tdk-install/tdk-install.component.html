@@ -42,16 +42,6 @@ limitations under the License.
 
                 <button
                   type="button"
-                  class="download-btn execution-select"
-                  (click)="onInstallPackage()"
-                  [disabled]="isLoading || !selectedPackageName"
-                  [matTooltip]="(!selectedPackageName && !isLoading) ? 'Select a package for installation' : 'Install Package File'"
-                >
-                  Install Package
-                </button>
-
-                <button
-                  type="button"
                   class="download-btn execution-select dropdown-toggle"
                   id="uploadDropdown"
                   data-bs-toggle="dropdown"
@@ -84,7 +74,7 @@ limitations under the License.
                 </ul>
               </div>
               <div class="title-sec mt-2" *ngIf="!selectedPackageName">
-                <span class="sub-titel" style="margin: 8px">
+                <span class="sub-titel" style="margin: 8px; color: #06667d;">
                   Select the
                   <span class="sub-titel">{{ selectedPackage }}</span> package
                   for installation</span
@@ -92,7 +82,7 @@ limitations under the License.
               </div>
               <!-- Display the selected package name -->
               <div class="title-sec mt-2" *ngIf="selectedPackageName">
-                <span class="sub-titel" style="margin: 8px">
+                <span class="sub-titel" style="margin: 8px; color: #06667d;">
                   Selected package name:
                   <span class="sub-titel">{{ selectedPackageName }}</span></span
                 >
@@ -128,8 +118,19 @@ limitations under the License.
                       </ul> -->
               </div>
 
+            <div class="button-grp">
+              <button type="button" class="close-btn install-btn" (click)="onInstallPackage()"
+                [disabled]="isLoading || !selectedPackageName"
+                [matTooltip]="(!selectedPackageName && !isLoading) ? 'Select a package for installation' : 'Install Package File'">
+                Install
+              </button>
+              <button class="close-btn" type="button" (click)="close()">
+                Close
+              </button>
+            </div>
+
               <div class="logsection">
-                <span class="sub-titel"
+                <span class="sub-titel" style="color: #06667d;"
                   >Package Creation/Installation logs</span
                 >
               </div>
@@ -140,11 +141,12 @@ limitations under the License.
                 <div class="row loader-row" *ngIf="showLoader">
                   <app-loader></app-loader>
                 </div>
-                <pre class="logs-content">{{ createlogs }}</pre>
+                <div class="logs-content">
+                <ng-container *ngFor="let line of coloredLogLines">
+                <span [ngClass]="{'log-success': line.isSuccess}">{{ line.text }}</span>
+                </ng-container>
+                </div>
               </div>
-              <button class="close-btn" type="button" (click)="close()">
-                Close
-              </button>
             </div>
           </mat-tab>
           <mat-tab label="VTS">
@@ -161,19 +163,6 @@ limitations under the License.
                   matTooltip="Create Package File"
                 >
                   Create Package
-                </button>
-                <!-- <button type="button" class="download-btn execution-select">
-                  Upload Package
-                </button> -->
-
-                <button
-                  type="button"
-                  class="download-btn execution-select"
-                  (click)="onInstallPackage()"
-                  [disabled]="isLoading || !selectedPackageName"
-                  [matTooltip]="(!selectedPackageName && !isLoading) ? 'Select a package for installation' : 'Install Package File'"
-                >
-                  Install Package
                 </button>
 
                 <button
@@ -210,7 +199,7 @@ limitations under the License.
                 </ul>
               </div>
               <div class="title-sec mt-2" *ngIf="!selectedPackageName">
-                <span class="sub-titel" style="margin: 8px"
+                <span class="sub-titel" style="margin: 8px; color: #06667d;"
                   >Select the
                   <span class="sub-titel">{{ selectedPackage }}</span> package
                   for installation</span
@@ -218,7 +207,7 @@ limitations under the License.
               </div>
               <!-- Display the selected package name -->
               <div class="title-sec mt-2" *ngIf="selectedPackageName">
-                <span class="sub-titel" style="margin: 8px"
+                <span class="sub-titel" style="margin: 8px; color: #06667d;"
                   >Selected package name:
                   <span class="sub-titel">{{ selectedPackageName }}</span></span
                 >
@@ -254,9 +243,18 @@ limitations under the License.
                         <li *ngFor="let name of selectedList">{{ name }}</li>
                       </ul> -->
               </div>
-
+              <div class="button-grp">
+                <button type="button" class="close-btn install-btn" (click)="onInstallPackage()"
+                  [disabled]="isLoading || !selectedPackageName"
+                  [matTooltip]="(!selectedPackageName && !isLoading) ? 'Select a package for installation' : 'Install Package File'">
+                  Install
+                </button>
+                <button class="close-btn" type="button" (click)="close()">
+                  Close
+                </button>
+              </div>
               <div class="logsection">
-                <span class="sub-titel"
+                <span class="sub-titel" style=" color: #06667d;"
                   >Package Creation/Installation logs</span
                 >
               </div>
@@ -267,29 +265,15 @@ limitations under the License.
                 <div class="row loader-row" *ngIf="showLoader">
                   <app-loader></app-loader>
                 </div>
-                <pre class="logs-content">{{ createlogs }}</pre>
+                <div class="logs-content">
+                <ng-container *ngFor="let line of coloredLogLines">
+                <span [ngClass]="{'log-success': line.isSuccess}">{{ line.text }}</span>
+                </ng-container>
+                </div>
               </div>
             </div>
-            <button class="close-btn" type="button" (click)="close()">
-              Close
-            </button>
           </mat-tab>
         </mat-tab-group>
-        <!-- <div class="row mt-2">
-          <div class="col-md-12 text-end btns-grp">
-            <button
-              type="button"
-              class="close-btn install-btn"
-              (click)="onInstallPackage()"
-              [disabled]="isLoading"
-            >
-              Install
-            </button>
-            <button class="close-btn" type="button" (click)="close()">
-              Close
-            </button>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
@@ -356,7 +340,8 @@ limitations under the License.
         </div>
         <div class="modal-footer">
           <div *ngIf="isUploadLoading" class="upload-message">
-            Package upload in in progress, Please wait for two minutes .
+            Package upload is in progress, Please wait...
+            <app-loader></app-loader>
           </div>
           <button
             type="button"

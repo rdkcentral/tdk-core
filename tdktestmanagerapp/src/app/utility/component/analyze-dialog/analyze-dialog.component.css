@@ -51,9 +51,11 @@ http://www.apache.org/licenses/LICENSE-2.0
   position: absolute;
   bottom: 2px;
   right: 110px;
+  margin-bottom: 38px;
   }
   .save-btn:disabled{
     background-color: gray;
+    margin-bottom: 38px;
 }
   .download-icon{
     color: #00B2DC;

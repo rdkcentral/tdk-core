@@ -366,7 +366,7 @@ export class CreateJiraComponent {
       this.jiraCreateForm.markAllAsTouched();
       return ;
     } else {
-      if(this.isPlatFormProject == 'false'){
+      if(this.isPlatFormProject == false){
         let createObj = {
           "executionResultId": this.data.executionResultID,
           "projectName": this.jiraCreateForm.value.projectname,

@@ -875,9 +875,11 @@ export class DeviceEditComponent {
         setTimeout(() => {
         if (modalType === 'dialog') {
           this.uploadConfigForm.get('uploadConfigFileModal')?.reset();
+          this.backToExistingEditor();
           this.closeDialog();
         } else {
-           this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.reset();
+          this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.reset();
+          this.backToEditor('Create New Device Config File');
           this.closeNewDeviceDialog();
         }
           this.visibilityConfigFile();
@@ -890,6 +892,12 @@ export class DeviceEditComponent {
           horizontalPosition: 'end',
           verticalPosition: 'top',
         });
+      // Clear the editor content and filename if upload failed
+      if (modalType === 'dialog') {
+        this.uploadConfigForm.get('uploadConfigFileModal')?.reset();
+      } else {    
+        this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.reset();
+      }
       },
     });
   }
@@ -965,6 +973,9 @@ export class DeviceEditComponent {
       const file = fileInput.files[0];
       this.uploadFileName = file;
       this.uploadExistConfigContent(file);
+      this.uploadConfigForm.get('uploadConfigFileModal')?.setValue(file);
+    }else{
+      this.uploadConfigForm.get('uploadConfigFileModal')?.setValue('');
     }
   }
 
@@ -976,10 +987,14 @@ export class DeviceEditComponent {
       let filename = file.name.endsWith('.config')
         ? this.editDeviceVForm.value.stbname + '.config'
         : file.name;
-      this.uploadConfigForm.patchValue({
-        editorFilename: filename,
-        editorContent: this.uploadExistFileContent,
-      });
+       if (file.name.endsWith('.config')) {
+         this.uploadConfigForm.patchValue({
+           editorFilename: filename,
+           editorContent: this.uploadExistFileContent,
+         });
+       } else {
+         this.uploadConfigForm.patchValue({});
+       }
     };
     reader.readAsText(file);
   }
@@ -1002,6 +1017,7 @@ export class DeviceEditComponent {
               });
               this.dialogRef.close();
               this.showPortFile = false;
+              this.backToEditor('Create New Device Config File');
               this.visibilityConfigFile();
             },
             error: (err) => {
@@ -1042,10 +1058,14 @@ export class DeviceEditComponent {
       let filename = file.name.endsWith('.config')
         ? this.editDeviceVForm.value.stbname + '.config'
         : file.name;
-      this.uploadDeviceConfigForm.patchValue({
-        editorFilename: filename,
-        editorContent: content,
-      });
+      if (file.name.endsWith('.config')) {
+        this.uploadDeviceConfigForm.patchValue({
+          editorFilename: filename,
+          editorContent: this.uploadFileContent,
+        });
+      } else {
+        this.uploadDeviceConfigForm.patchValue({});
+      }
     };
     reader.readAsText(file);
   }

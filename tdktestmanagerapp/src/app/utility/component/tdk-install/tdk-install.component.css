@@ -43,6 +43,10 @@ body,
   right: 110px;
   }
 
+  .log-success {
+  color: green;
+  font-weight: bold;
+  }
   .close-btn {
     background-color: #00b2dc;
     color: #fff;
@@ -179,10 +183,12 @@ body,
 }
 
 .logs-content {
+  font-size: 1em;
+  line-height: 1.3;
   padding: 20px;
   margin-top: 2px;
   white-space: pre-wrap;
-  font-family: monospace;
+  font-family: Consolas, Menlo, Monaco, 'Liberation Mono', 'Courier New', monospace !important;
 }
 
 .display-message {
@@ -193,6 +199,11 @@ body,
 .upload-message {
   margin: 0;
   text-align: left;
+  margin-right: 40px;
+}
+
+.button-grp{
+  margin-top: 5px;
 }
 
 .title-sec{
@@ -273,4 +284,8 @@ button:disabled {
   border-radius: 6px;
   letter-spacing: 0.5px;
   cursor: pointer;
+}
+
+::ng-deep .mat-mdc-tab-body.mat-mdc-tab-body-active.mat-mdc-tab-body-content{
+  overflow-y: hidden !important;
 }

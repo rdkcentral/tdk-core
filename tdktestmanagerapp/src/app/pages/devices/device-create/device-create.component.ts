@@ -645,6 +645,9 @@ export class DeviceCreateComponent implements OnInit {
       const file = fileInput.files[0];
       this.uploadFileName = file;
       this.uploadExistConfigContent(file);
+      this.uploadConfigForm.get('uploadFileModal')?.setValue(file);
+    }else{
+      this.uploadConfigForm.get('uploadFileModal')?.setValue('');
     }
   }
   uploadExistConfigContent(file: File): void {
@@ -655,10 +658,14 @@ export class DeviceCreateComponent implements OnInit {
       let filename = file.name.endsWith('.config')
         ? this.deviceForm.value.devicename + '.config'
         : file.name;
-      this.uploadConfigForm.patchValue({
-        editorFilename: filename,
-        editorContent: this.uploadExistFileContent,
-      });
+      if (file.name.endsWith('.config')) {
+        this.uploadConfigForm.patchValue({
+          editorFilename: filename,
+          editorContent: content,
+        });
+      } else {
+        this.uploadConfigForm.patchValue({});
+      }
     };
     reader.readAsText(file);
   }
@@ -733,10 +740,15 @@ export class DeviceCreateComponent implements OnInit {
       let filename = file.name.endsWith('.config')
         ? this.deviceForm.value.devicename + '.config'
         : file.name;
-      this.uploadDeviceConfigForm.patchValue({
-        editorFilename: filename,
-        editorContent: content,
-      });
+      if (file.name.endsWith('.config')) {
+        this.uploadDeviceConfigForm.patchValue({
+          editorFilename: filename,
+          editorContent: content,
+        });
+      } else {
+        this.uploadDeviceConfigForm.patchValue({
+        });
+      }
     };
     reader.readAsText(file);
   }
@@ -810,9 +822,11 @@ export class DeviceCreateComponent implements OnInit {
       setTimeout(() => {
         if (modalType === 'dialog') {
           this.uploadConfigForm.get('uploadFileModal')?.reset();
-          this.closeDialog();
+          this.backToExistingEditor();
+          this.closeDialog();      
         } else {
-           this.uploadDeviceConfigForm.get('uploadConfigFileModal')?.reset();
+          this.uploadDeviceConfigForm.get('uploadConfigFileModal')?.reset();
+          this.backToEditor('Create New Device Config File');
           this.closeNewDeviceDialog();
         }
         this.visibilityConfigFile();
@@ -825,6 +839,12 @@ export class DeviceCreateComponent implements OnInit {
         horizontalPosition: 'end',
         verticalPosition: 'top',
       });
+      // Clear the editor content and filename if upload failed
+      if (modalType === 'dialog') {
+        this.uploadConfigForm.get('uploadFileModal')?.reset();
+      } else {
+        this.uploadDeviceConfigForm.get('uploadConfigFileModal')?.reset();
+      }
     },
   });
 }
@@ -920,6 +940,7 @@ export class DeviceCreateComponent implements OnInit {
                 this.showPortFile = true;
               }
               this.visibilityConfigFile();
+              this.backToEditor('Create New Device Config File');
             },
             error: (err) => {
               let errmsg = JSON.parse(err.error);

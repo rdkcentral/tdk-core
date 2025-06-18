@@ -164,6 +164,12 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 		isValidFileType(type, fileName);
 
 		Device deviceObj = validateDeviceAndSoc(device);
+		String regex = type+"_Package_" + deviceObj.getSoc().getName().toLowerCase() + "_.*$";
+		if (!fileName.matches(regex)) {
+			LOGGER.error("Invalid file name pattern. Expected: {}", regex);
+			throw new UserInputException(
+					"Please upload a valid package file.Package file uploaded not suited for this device");
+		}
 		// Determine package folder based on type
 		String packageFolder = getPackageFolder(type);
 
@@ -251,42 +257,75 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 		String user = "root";
 		String userPassword = "root";
 		String vtsPackageCommand = "\"find / -maxdepth 1 -name 'VTS_Package' -type d -cmin -5\"";
+		String tdkPackageCommand = "systemctl status tdk | grep 'Active: active (running)'";
+		String fncsCommand = "command -v tdk_mediapipelinetests";
 		String[] copyPackageCommand = { sshPass, "-p", password, "scp", scpOption, tdkPackagesLocation,
 				user + "@" + deviceIp + ":/" };
 		String[] copyScriptCommand = { sshPass, "-p", password, "scp", scpOption, scriptPath,
 				user + "@" + deviceIp + ":/" };
 		String[] executeScriptCommand = { sshPass, "-p", userPassword, "ssh", sshOptions, user + "@" + deviceIp,
-				"mkdir -p $(dirname " + remoteFilePath + ") && sh /" + scriptName + " \"" + packageName + "\" > "
-						+ remoteFilePath + " && cat " + remoteFilePath };
+				"'" + "mkdir -p $(dirname " + remoteFilePath + ") && sh /" + scriptName + " \"" + packageName + "\" > "
+						+ remoteFilePath + "'" };
+		String[] logsCommand = { sshPass, "-p", userPassword, "ssh", "-o", "StrictHostKeyChecking=no",
+				user + "@" + deviceIp, "/bin/cat " + remoteFilePath };
+
 		String[] vtsPackageVerificationCommand = { sshPass, "-p", password, "ssh", user + "@" + deviceIp,
 				vtsPackageCommand };
+		String[] tdkPackageVerificationCommand = { sshPass, "-p", password, "ssh", user + "@" + deviceIp,
+				tdkPackageCommand };
+		String[] fncsVerificationCommand = { sshPass, "-p", password, "ssh", user + "@" + deviceIp, fncsCommand };
 
 		LOGGER.info("copyPackageCommand: " + Arrays.toString(copyPackageCommand));
 		LOGGER.info("copyScriptCommand: " + Arrays.toString(copyScriptCommand));
 		LOGGER.info("executeScriptCommand: " + Arrays.toString(executeScriptCommand));
+		LOGGER.info("logsCommand: " + Arrays.toString(logsCommand));
 		LOGGER.info("vtsPackageVerificationCommand: " + Arrays.toString(vtsPackageVerificationCommand));
+		LOGGER.info("tdkPackageVerificationCommand: " + Arrays.toString(tdkPackageVerificationCommand));
 		try {
 
 			scriptExecutorService.executeScript(copyPackageCommand, 60);
 			scriptExecutorService.executeScript(copyScriptCommand, 60);
-			String output = scriptExecutorService.executeScript(executeScriptCommand, 60);
-
+			scriptExecutorService.executeScript(executeScriptCommand, 60);
+			String output = scriptExecutorService.executeScript(logsCommand, 60);
+			LOGGER.info("Script output: {}", output);
 			PackageResponse installPackageResponse = new PackageResponse();
 			if ("TDK".equalsIgnoreCase(type)) {
-				if (output.contains("Enable TDK service")) {
-					String message = "\nTDK Package installed successfully.";
-					output = output + message;
-					installPackageResponse = new PackageResponse();
-					installPackageResponse.setStatusCode(HttpStatus.OK.value());
-					installPackageResponse.setLogs(output);
+				if (packageName.contains("fncs") || packageName.contains("FNCS")) {
+					// If package is fncs then we need to verify fncs installation
+					String fncsVerification = scriptExecutorService.executeScript(fncsVerificationCommand, 60);
+					if (fncsVerification != null && !fncsVerification.isEmpty()) {
+						String message = "\nTDK Package installed successfully.";
+						output = output + message;
+						installPackageResponse.setStatusCode(HttpStatus.OK.value());
+						installPackageResponse.setLogs(output);
+					} else {
+						String errorMessage = "\n Error Occured While Installation";
+						output = output + errorMessage;
+						installPackageResponse.setStatusCode(HttpStatus.SERVICE_UNAVAILABLE.value());
+						installPackageResponse.setLogs(output);
+					}
 
-				} else {
-					String errorMessage = "\n Error Occured While Installation";
-					output = output + errorMessage;
-					installPackageResponse = new PackageResponse();
-					installPackageResponse.setStatusCode(HttpStatus.SERVICE_UNAVAILABLE.value());
-					installPackageResponse.setLogs(output);
+				} else if (packageName.contains("tdk") || packageName.contains("TDK")) {
+					String tdkVerification = scriptExecutorService.executeScript(tdkPackageVerificationCommand, 0);
+					if (tdkVerification != null && !tdkVerification.isEmpty()) {
+						LOGGER.info("TDK Package installed successfully" + tdkVerification);
+						String message = "\nTDK Package installed successfully.";
+						LOGGER.info("Message: " + output + message);
+						output = output + message;
+						installPackageResponse = new PackageResponse();
+						installPackageResponse.setStatusCode(HttpStatus.OK.value());
+						installPackageResponse.setLogs(output);
+
+					} else {
+						String errorMessage = "\n Error Occured While Installation";
+						output = output + errorMessage;
+						installPackageResponse = new PackageResponse();
+						installPackageResponse.setStatusCode(HttpStatus.SERVICE_UNAVAILABLE.value());
+						installPackageResponse.setLogs(output);
+					}
+
 				}
+
 			} else if ("VTS".equalsIgnoreCase(type)) {
 				// After VTS package installation we can see VTS_Package folder in the device
 				String vtsVerification = scriptExecutorService.executeScript(vtsPackageVerificationCommand, 30);
@@ -334,6 +373,14 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 		// Validate file name and type
 		String fileName = uploadFile.getOriginalFilename();
 		isValidFileType(type, fileName);
+		String regex = "^VTS_Package_\\d+.*$";
+		if (type.equalsIgnoreCase(Constants.TDK) && !fileName.contains("Generic")) {
+			LOGGER.error("Invalid file format for TDK package");
+			throw new UserInputException("Please upload a generic package file");
+		} else if (type.equalsIgnoreCase(Constants.VTS) && !fileName.matches(regex)) {
+			LOGGER.error("Invalid file format for VTS package");
+			throw new UserInputException("Please upload a generic package file");
+		}
 		// Determine package folder based on type
 		String packageFolder = getPackageFolder(type);
 
@@ -413,8 +460,7 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 			LOGGER.error("Device not found");
 			throw new UserInputException("Device " + device + " not found");
 		}
-
-		String socName = deviceObj.getSoc().getName();
+		String socName = deviceObj.getSoc() != null ? deviceObj.getSoc().getName() : null;
 		if (socName == null || socName.isEmpty()) {
 			LOGGER.error("Soc name not found for the device");
 			throw new UserInputException("Soc name not found for this device");

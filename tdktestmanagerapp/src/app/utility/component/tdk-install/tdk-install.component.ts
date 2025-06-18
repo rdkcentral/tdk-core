@@ -82,7 +82,7 @@ export class TdkInstallComponent {
 
   /**
    * Constructs an instance of the TdkInstallComponent.
-   * 
+   *
    * @param dialogRef - Reference to the dialog opened for this component.
    * @param data - Data passed into the dialog component.
    * @param packagemanagerservice - Service for managing package-related operations.
@@ -97,7 +97,7 @@ export class TdkInstallComponent {
 
   /**
    * Lifecycle hook that is called after Angular has initialized all data-bound properties of the component.
-   * 
+   *
    * - Initializes the component by fetching package names.
    * - Sets up the `uploadPackageForm` with a `file` form control that is required.
    */
@@ -107,7 +107,6 @@ export class TdkInstallComponent {
       file: new FormControl(null, Validators.required), // Add 'file' control
     });
   }
-
 
   /**
    * Initiates the creation of a package based on the selected package type and device data.
@@ -122,7 +121,7 @@ export class TdkInstallComponent {
    * @returns void
    */
   onCreatePackage() {
-    this.createlogs='';
+    this.createlogs = '';
     let createPackageObj = {
       type: this.selectedPackage,
       device: this.data,
@@ -161,12 +160,12 @@ export class TdkInstallComponent {
 
   /**
    * Closes the modal dialog with the ID 'packageUploadModal'.
-   * 
+   *
    * This method retrieves the modal element from the DOM and uses the Bootstrap
    * modal instance to hide it. If the modal element or its instance is not found,
    * an error is logged to the console. Additionally, it resets the `uploadFileName`
    * property to `null` when the modal is successfully closed.
-   * 
+   *
    * @returns {void}
    */
   closeModal(): void {
@@ -182,12 +181,11 @@ export class TdkInstallComponent {
     }
   }
 
-
   /**
    * Handles the file input change event and validates the selected file.
-   * 
+   *
    * @param event - The file input change event containing the selected file.
-   * 
+   *
    * This method performs the following actions:
    * - Retrieves the selected file from the event.
    * - Checks if the file has a valid extension (e.g., `.tgz`, `.tar.gz`).
@@ -224,10 +222,8 @@ export class TdkInstallComponent {
    * @returns {void}
    */
   onInstallPackage() {
-    
-    this.createlogs='';
-    this.loadingMessage =
-      'Package installation is in progress. Please wait for 2-3 minutes';
+    this.createlogs = '';
+    this.loadingMessage = 'Package installation is in progress. Please wait...';
     this.isLoading = true;
     this.showLoader = true; // Show the loader
     let installPackageObj = {
@@ -266,7 +262,13 @@ export class TdkInstallComponent {
       });
   }
 
-  
+  get coloredLogLines(): { text: string; isSuccess: boolean }[] {
+    return (this.createlogs || '').split('\n').map((line) => ({
+      text: line + '\n',
+      isSuccess: /(?:TDK|VTS) Package installed successfully/i.test(line),
+    }));
+  }
+
   /**
    * Handles the selection of a package by updating the selected package name.
    *
@@ -276,17 +278,16 @@ export class TdkInstallComponent {
     this.selectedPackageName = packageName; // Update the selected package name
   }
 
-  
   /**
    * Fetches the list of package names based on the selected package and data.
    * Clears any previously displayed messages and resets the selected package name.
    * Subscribes to the package manager service to retrieve the package list.
-   * 
+   *
    * On a successful response:
    * - Logs the response to the console.
    * - Updates the `packageNames` property with the retrieved data.
    * - Displays a message if the response data is null and the status code is 200.
-   * 
+   *
    * On an error response:
    * - Logs the error to the console.
    */
@@ -300,7 +301,9 @@ export class TdkInstallComponent {
         next: (res) => {
           console.log(res);
           this.loadPackage = false;
-          this.packageNames = (res.data || []).sort((a: string, b: string) => b.localeCompare(a));
+          this.packageNames = (res.data || []).sort((a: string, b: string) =>
+            b.localeCompare(a)
+          );
           if (res.data == null && res.statusCode == 200) {
             this.dispMessage = res.message;
           }
@@ -311,16 +314,15 @@ export class TdkInstallComponent {
       });
   }
 
-
   /**
    * Handles the submission of the package upload form.
-   * 
+   *
    * This method validates the form, checks for the presence of a file to upload,
    * and determines the appropriate API to call based on the type of package.
    * It provides feedback to the user via a snackbar and resets the form upon success.
-   * 
+   *
    * @returns {void} This method does not return a value.
-   * 
+   *
    * @remarks
    * - If the form is invalid, the method exits early and sets `isLoading` to `false`.
    * - If no file is selected, an error message is set in `uploadFileError`.
@@ -399,11 +401,11 @@ export class TdkInstallComponent {
 
   /**
    * Resets the upload package form to its initial state.
-   * 
+   *
    * - Clears the form fields and resets the form submission flag.
    * - Clears the selected file and any associated error messages.
    * - Resets the file input element to ensure no file is selected.
-   * 
+   *
    * @returns {void}
    */
   resetForm(): void {
@@ -419,10 +421,10 @@ export class TdkInstallComponent {
 
   /**
    * Handles the tab click event and updates the selected package.
-   * 
-   * @param event - The event object triggered by the tab click. 
+   *
+   * @param event - The event object triggered by the tab click.
    *                It contains information about the clicked tab.
-   * 
+   *
    * Updates:
    * - Extracts the text label of the clicked tab.
    * - Logs the label to the console.
@@ -438,17 +440,16 @@ export class TdkInstallComponent {
     this.fetchPackageNames();
   }
 
-
   packageChange(value: string) {
     console.log(value);
   }
 
   /**
    * Handles the change event of a checkbox.
-   * 
+   *
    * @param name - The name associated with the checkbox.
    * @param event - The change event triggered by the checkbox.
-   * 
+   *
    * Updates:
    * - If the checkbox is checked, adds the name to `selectedList`.
    * - If unchecked, removes the name from `selectedList`.
@@ -479,9 +480,10 @@ export class TdkInstallComponent {
     this.resetForm();
     this.type = type;
     if (type === 'generic') {
-      this.modalHeading = 'Upload Generic '+this.selectedPackage+' Package File';
+      this.modalHeading =
+        'Upload Generic ' + this.selectedPackage + ' Package File';
     } else {
-      this.modalHeading = 'Upload '+this.selectedPackage +' Package File';
+      this.modalHeading = 'Upload ' + this.selectedPackage + ' Package File';
     }
 
     // Open the modal programmatically
