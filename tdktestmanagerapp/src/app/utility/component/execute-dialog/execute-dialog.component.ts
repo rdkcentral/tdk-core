@@ -841,18 +841,24 @@ export class ExecuteDialogComponent {
       }
 
       if (this.dailyGroup) {
-        crontype = 'Daily';
-        const val = this.executeForm.value.dailyValue;
-        cronquery = `every ${val} days`;
-      } else if (this.weeklyGroup) {
-        crontype = 'Weekly';
-        cronquery = this.selectedWeekDays.join(',');
-      } else if (this.monthlyGroup) {
-        crontype = 'Monthly';
-        const day = this.executeForm.value.monthlyDay;
-        const every = this.executeForm.value.monthlyInterval;
-        cronquery = `day ${day} of every ${every} month`;
-      }
+  crontype = 'Daily';
+  const dailyOption = this.executeForm.value.dailyOption;
+
+  if (dailyOption === 'days') {
+    const val = this.executeForm.value.dailyValue;
+    cronquery = `every ${val} days`;
+  } else if (dailyOption === 'weekdays') {
+    cronquery = 'every week day';
+  }
+} else if (this.weeklyGroup) {
+  crontype = 'Weekly';
+  cronquery = this.selectedWeekDays.join(',');
+} else if (this.monthlyGroup) {
+  crontype = 'Monthly';
+  const day = this.executeForm.value.monthlyDay;
+  const every = this.executeForm.value.monthlyInterval;
+  cronquery = `day ${day} of every ${every} month`;
+}
 
     }
     let schedulerObj: any = {
@@ -888,6 +894,7 @@ export class ExecuteDialogComponent {
           panelClass: ['success-msg'],
           verticalPosition: 'top'
         });
+        window.location.reload();
         setTimeout(() => {
           this.close();
         }, 3000);

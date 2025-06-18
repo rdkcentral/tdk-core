@@ -65,12 +65,14 @@ limitations under the License.
                                 <span class="thunderport-info"><i class="bi bi-info-circle info-icon" matTooltip ="Select 1- 10 executions for the comparison report"></i></span>
                             </label>
                             <div class="col-md-5">
-                                                    <textarea
-                        formControlName="comparisonName"
-                        (input)="updateComparisonFormValue($event)"
-                        class="form-control"
-                        placeholder="Enter comparison execution names separated by commas"
-                    ></textarea>
+                            <textarea
+                                formControlName="comparisonName"
+                                (input)="updateComparisonFormValue($event)"
+                                class="form-control"
+                                placeholder="Enter comparison execution names separated by commas"
+                                rows="5" 
+                                cols="25"
+                            ></textarea>
                                 <div *ngIf="reportSubmitted && reportForm.controls['comparisonName']?.errors" class="text-danger">
                                     <small *ngIf="reportForm.controls['comparisonName']?.errors?.['required']">Give list of execution names separated by comma (Min: 1 and Max: 10) or choose.</small>
                                     <small *ngIf="reportForm.controls['comparisonName']?.errors?.['baseFoundInComparison']">
