@@ -401,7 +401,7 @@ isDownloading: boolean = false;
 
     // Ensure compNamesArr is not empty
     if (!this.compNamesArr || this.compNamesArr.length === 0) {
-        this._snakebar.open('Please provide valid Comparison Execution Names or IDs.', '', {
+        this._snakebar.open('Please provide valid Comparison Execution Names.', '', {
             duration: 3000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -410,68 +410,37 @@ isDownloading: boolean = false;
         return;
     }
 
-    const baseExecution = this.finalBaseName || this.reportForm.get('baseName')?.value; // Base execution ID or name
-    const comparisonExecutions = this.compNamesArr.map((item: any) => item.id || item.name); // Comparison execution IDs or names
+    const baseExecutionName = this.reportForm.get('baseName')?.value; // Base execution name
+    const comparisonExecutions = this.compNamesArr.map((item: any) => item.name); // Use names only
 
     this.isDownloading = true; // Set loading state to true
 
-    // Always send baseExecution as name for backend call
-    const baseExecutionName = this.reportForm.get('baseName')?.value;
-
-    if (this.compNamesArr.every((item: any) => item.id)) {
-      // Use IDs for comparisonExecutions, but baseExecution as name
-      this.anlysisService.compReportGenerate(baseExecutionName, comparisonExecutions).subscribe({
+    // Use names for both baseExecution and comparisonExecutions
+    this.anlysisService.comparisonExcelByNames(baseExecutionName, comparisonExecutions).subscribe({
         next: (blob) => {
-          const xmlBlob = new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-          const url = window.URL.createObjectURL(xmlBlob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `${baseExecutionName}_comparison_report.xlsx`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-          this.isDownloading = false; // Set loading state to false
+            const xmlBlob = new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(xmlBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${baseExecutionName}_comparison_report.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            this.isDownloading = false; // Set loading state to false
         },
         error: (err) => {
-          console.error('Error generating report:', err);
-          this._snakebar.open('Failed to generate report. Please try again.', '', {
-            duration: 3000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
-          this.isDownloading = false; // Set loading state to false
+            console.error('Error generating report:', err);
+            this._snakebar.open('Failed to generate report. Please try again.', '', {
+                duration: 3000,
+                panelClass: ['err-msg'],
+                horizontalPosition: 'end',
+                verticalPosition: 'top'
+            });
+            this.isDownloading = false; // Set loading state to false
         },
-      });
-    } else {
-      // Use names for both baseExecution and comparisonExecutions
-      this.anlysisService.comparisonExcelByNames(baseExecutionName, comparisonExecutions).subscribe({
-        next: (blob) => {
-          const xmlBlob = new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-          const url = window.URL.createObjectURL(xmlBlob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `${baseExecutionName}_comparison_report.xlsx`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-          this.isDownloading = false; // Set loading state to false
-        },
-        error: (err) => {
-          console.error('Error generating report:', err);
-          this._snakebar.open('Failed to generate report. Please try again.', '', {
-            duration: 3000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
-          this.isDownloading = false; // Set loading state to false
-        },
-      });
-    }
-  }
+    });
+}
   openModal() {
     const dialogRef = this.baseDialog.open(BaseModalComponent, {
       width: '85%',

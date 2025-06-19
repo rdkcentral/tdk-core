@@ -886,10 +886,15 @@ public class ExportExcelService implements IExportExcelService {
 			// Add Execution Summary Data
 			rowNum = addCombinedExecutionSummary(sheet, rowNum, executionIds);
 
-			// Auto resize columns for summary sheet
-			for (int i = 4; i <= 11; i++) { // Adjust columns E to L
-				sheet.autoSizeColumn(i);
-			}
+			// Explicitly set column widths for summary sheet
+			sheet.setColumnWidth(4, 256 * 20); // Set width for Column E
+			sheet.setColumnWidth(5, 256 * 25); // Set width for Column F
+			sheet.setColumnWidth(6, 256 * 15); // Set width for Column G
+			sheet.setColumnWidth(7, 256 * 15); // Set width for Column H
+			sheet.setColumnWidth(8, 256 * 15); // Set width for Column I
+			sheet.setColumnWidth(9, 256 * 15); // Set width for Column J
+			sheet.setColumnWidth(10, 256 * 15); // Set width for Column K
+			sheet.setColumnWidth(11, 256 * 15); // Set width for Column L
 
 			LOGGER.info("Summary sheet created successfully.");
 		} catch (Exception e) {
@@ -1385,13 +1390,14 @@ public class ExportExcelService implements IExportExcelService {
 			headerCell.setCellValue(headers[i]);
 			headerCell.setCellStyle(createBoldCellStyle(sheet.getWorkbook())); // Apply bold style to headers
 
-			row.createCell(5).setCellValue(values[i]); // Value in Column G
+			Cell valueCell = row.createCell(5); // Value in Column G
+			valueCell.setCellValue(values[i]);
 		}
 
 		// Calculate overall success rate
-		double overallSuccessRate = 0;
+		int overallSuccessRate = 0;
 		if ((totalExecutionCount - totalNaCount) != 0) {
-			overallSuccessRate = ((double) totalSuccessCount * 100) / (totalExecutionCount - totalNaCount);
+			overallSuccessRate = (int) Math.round(((double) totalSuccessCount * 100) / (totalExecutionCount - totalNaCount));
 		}
 
 		// Add overall success rate to the sheet
