@@ -160,4 +160,12 @@ public interface IDeviceService {
 	 */
 	public DeviceStatusResponseDTO getDeviceStatus(String deviceIp);
 
+	/**
+	 * This method is used to update the status of all devices in the given category
+	 * 
+	 * @param category - RDKV, RDKB
+	 * @return List<Device> - List of devices with updated status
+	 */
+	public List<DeviceStatusResponseDTO> updateAndGetAllDeviceStatus(String category);
+
 }

@@ -125,11 +125,18 @@ export class AnalysisComponent {
       sortable: true,
       tooltipField: 'executionName',
       cellClass: 'selectable',
-      flex:2,
-      cellStyle:{'white-space': 'normal',' word-break': 'break-word'},
-      wrapText:true,
+      flex: 2,
+      cellStyle: { 'white-space': 'normal', ' word-break': 'break-word' },
+      wrapText: true,
       headerClass: 'header-center',
       resizable: false,
+      cellRenderer: (params: any) => {
+        const text = params.value || '';
+        if (text.length > 50) {
+          return `${text.slice(0, 50)}...`;
+        }
+        return text;
+      },
     },
     {
       headerName: 'Scripts/Testsuite',

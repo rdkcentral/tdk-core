@@ -478,13 +478,39 @@ public class DeviceController {
 	@ApiResponse(responseCode = "200", description = "device status fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Error in fetching device status data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/getDeviceStatusByName")
-	public ResponseEntity<?> getDeviceStatusByName(@RequestParam String deviceName) {
-		LOGGER.info("Received request to fetch status for device: " + deviceName);
-		DeviceStatusResponseDTO deviceStatus = deviceService.getDeviceStatus(deviceName);
-		LOGGER.info("Fetched status for device: " + deviceName);
-		return ResponseUtils.getSuccessDataResponse("Device status fetched successfully for :" + deviceName,
+	@GetMapping("/getDeviceStatusByIP")
+	public ResponseEntity<?> getDeviceStatusByIP(@RequestParam String deviceIP) {
+		LOGGER.info("Received request to fetch status for device: " + deviceIP);
+		DeviceStatusResponseDTO deviceStatus = deviceService.getDeviceStatus(deviceIP);
+		LOGGER.info("Fetched status for device: " + deviceIP);
+		return ResponseUtils.getSuccessDataResponse("Device status fetched successfully for :" + deviceIP,
 				deviceStatus);
+	}
+
+	/**
+	 * Updates the status of all devices in a specified category and retrieves the
+	 * updated list.
+	 *
+	 * @param category The category of devices to update and retrieve.
+	 * @return ResponseEntity<DataResponse> containing the updated list of devices.
+	 */
+	@Operation(summary = "Update and Get All Device Status by Category", description = "Updates the status of all devices in the specified category and retrieves the updated list.")
+	@ApiResponse(responseCode = "200", description = "Device statuses updated and retrieved successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@ApiResponse(responseCode = "500", description = "Internal server error")
+	@GetMapping("/updateAndGetAllDeviceStatus")
+	public ResponseEntity<?> updateAndGetAllDeviceStatus(@RequestParam String category) {
+		LOGGER.info("Received request to update and get all device statuses for category: " + category);
+		List<DeviceStatusResponseDTO> updatedDevices = deviceService.updateAndGetAllDeviceStatus(category);
+		if (updatedDevices != null && !updatedDevices.isEmpty()) {
+			LOGGER.info("Device statuses updated and retrieved successfully for category: " + category);
+			return ResponseUtils.getSuccessDataResponse("Device statuses updated and retrieved successfully",
+					updatedDevices);
+		} else {
+			LOGGER.warn("No devices found for the category: " + category);
+			return ResponseUtils.getSuccessDataResponse("No devices found for the category", null);
+		}
+
 	}
 
 }

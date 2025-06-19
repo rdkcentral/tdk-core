@@ -199,6 +199,11 @@ public class ExecutionService implements IExecutionService {
 		// Check if the devices are available for execution
 		List<Device> freeDevices = this.filterFreeDevices(deviceList, responseLogs);
 		if (freeDevices.isEmpty()) {
+			if (deviceList.size() > 1 ) {
+				LOGGER.error("No free devices found in the request");
+			} else {
+				LOGGER.error("No free device found in the request");
+			}
 			LOGGER.error("No valid devices found for execution");
 			ExecutionResponseDTO executionResponseDTO = createExecutionResponseDTO(responseLogs.toString(),
 					ExecutionTriggerStatus.NOTTRIGGERED);
@@ -757,7 +762,7 @@ public class ExecutionService implements IExecutionService {
 		if (availableDevices.isEmpty()) {
 			LOGGER.error("Device not available for execution");
 			responseString.append("No devices available for execution\n");
-			throw new ResourceNotFoundException("Device not available for execution", "");
+
 		}
 		return availableDevices;
 	}
