@@ -39,55 +39,59 @@ export class LivelogDialogComponent {
   logs: string = '';
   executionResultId: any;
   loader = false;
+  liveLogInterval: any;
   private destroy$ = new Subject<void>();
 
   constructor(
     public dialogRef: MatDialogRef<LivelogDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public dialog: MatDialog, private executionservice: ExecutionService,
-    public liveLogDialog:MatDialog,private _snakebar: MatSnackBar) {
+    public liveLogDialog: MatDialog, private _snakebar: MatSnackBar) {
   }
 
   ngOnInit(): void {
     this.logs = this.data.logs;
-    this.autoRefreshLog();
+    this.refreshLiveLogs(); // Initial fetch
+    this.liveLogInterval = setInterval(() => {
+      this.autoRefreshLiveLogs();
+    }, 60000); // 30 seconds
   }
+
   scrollToBottom() {
     const logArea = this.logArea.nativeElement;
     logArea.scrollTop = logArea.scrollHeight;
   }
 
-  refreshLiveLogs(){
+  refreshLiveLogs() {
     this.loader = true;
     this.executionservice.getLiveLogs(this.data.executionId).subscribe(
       (response) => {
         setTimeout(() => {
-        this.logs = response;
-        this.loader = false;
+          this.logs = response;
+          this.loader = false;         
         }, 1500);
       });
   }
 
-  autoRefreshLog(): void {
-    interval(10000)
-      .pipe(startWith(0),
-        switchMap(() => this.executionservice.getLiveLogs(this.data.executionId)),
-        takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
+  autoRefreshLiveLogs() {
+    this.loader = true;
+    this.executionservice.getLiveLogs(this.data.executionId).subscribe(
+      (response) => {
+        setTimeout(() => {
           this.logs = response;
-        },
-        error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message,'',{
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
-        },
+          this.loader = false;
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 0);
+        }, 1500);
       });
   }
+
+
   ngOnDestroy(): void {
+    if (this.liveLogInterval) {
+      clearInterval(this.liveLogInterval);
+    }
+    this.destroy$.next();    // <-- This notifies the subscription to unsubscribe
     this.destroy$.complete(); // Complete the destroy$ subject
   }
 

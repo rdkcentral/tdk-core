@@ -385,10 +385,11 @@ limitations under the License.
                         </h2>
                       <div [class.show]="parent.expanded" class="accordion-collapse collapse">
                         <div class="accordion-body" >
-                          <mat-card class="details-card">
-                            <div class="row loader-row" *ngIf="showLoader">
+                          <mat-card class="details-card"  [ngClass]="{'loading-card': parent.detailsLoading}">
+                            <div class="row loader-row" *ngIf="parent.detailsLoading">
                               <app-loader></app-loader>
                             </div>
+                            <ng-container *ngIf="!parent.detailsLoading">
                             <div class="method-sec mt-3">
                               <mat-accordion>
                                 <mat-expansion-panel class="method-panel">
@@ -477,6 +478,7 @@ limitations under the License.
                                     <a (click)="togglePanel(parent, parent.executionResultID, i)"><i class="bi bi-chevron-up"></i></a>
                                   </div>
                               </div>
+                              </ng-container>
                           </mat-card>
 
                         </div>

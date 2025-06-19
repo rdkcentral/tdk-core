@@ -55,7 +55,7 @@ export type ChartOptions = {
 @Component({
   selector: 'app-details-exe-dialog',
   standalone: true,
-  imports: [CommonModule,MaterialModule,FormsModule,NgApexchartsModule, LoaderComponent],
+  imports: [CommonModule, MaterialModule, FormsModule, NgApexchartsModule, LoaderComponent],
   templateUrl: './details-exe-dialog.component.html',
   styleUrl: './details-exe-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -67,55 +67,55 @@ export class DetailsExeDialogComponent {
   encapsulation!: ViewEncapsulation.None;
   public themeClass: string = "ag-theme-quartz";
   rowData: any = [];
-  rowDataSchudle:any =[];
-  executionResultData:any;
+  rowDataSchudle: any = [];
+  executionResultData: any;
   // panelOpenState = false;
   allChecked = false;
   selectedDetails: any[] = [];
-  filteredData:any[] = [];
+  filteredData: any[] = [];
   filterStatus = 'all';
-  scriptDetailsData:any;
-  trendsArr : string[]=[];
+  scriptDetailsData: any;
+  trendsArr: string[] = [];
   isFlipped = false;
-  moduleTableTitle:any;
-  moduleTableData:any;
+  moduleTableTitle: any;
+  moduleTableData: any;
   analysisTableData: any;
-  analysisSummaryData:any;
+  analysisSummaryData: any;
   keys: string[] = [];
-  analysisKeys:string[] = [];
+  analysisKeys: string[] = [];
   formatLogs!: string;
-  executionResultId:any;
+  executionResultId: any;
   logFileNames: string[] = [];
   executionId!: string;
-  liveLogsData:any;
+  liveLogsData: any;
   liveLogDestroy$ = new Subject<void>();
-  deviceDetails:any;
+  deviceDetails: any;
   loggedinUser: any;
   isExpanded = false;
   maxLength: number = 75;
   showAnalyzeLink = false;
   analysisResult: any;
-  executionIdLocalStroge:any;
+  executionIdLocalStroge: any;
   showPopupFlag = false;
   detailKeys: string[] = ['testCaseCount', 'timeTaken', 'logs'];
   expandedIndexes: number[] = [];
   showFailedZipOption = false;
   safeHtmlContent: SafeHtml | undefined;
-  exeLogs:any;
+  exeLogs: any;
   htmlDetails: any;
   scriptStatus: any;
   showLoader = false;
 
   constructor(
     public dialogRef: MatDialogRef<DetailsExeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public liveLogDialog:MatDialog,
-     public logFilesDialog:MatDialog, private executionservice: ExecutionService,
-     private _snakebar :MatSnackBar,public analyzeDialog:MatDialog,
-     private changeDetectorRef: ChangeDetectorRef, private sanitizer: DomSanitizer,
-     @Inject('APP_CONFIG') private config: any) {
+    @Inject(MAT_DIALOG_DATA) public data: any, public liveLogDialog: MatDialog,
+    public logFilesDialog: MatDialog, private executionservice: ExecutionService,
+    private _snakebar: MatSnackBar, public analyzeDialog: MatDialog,
+    private changeDetectorRef: ChangeDetectorRef, private sanitizer: DomSanitizer,
+    @Inject('APP_CONFIG') private config: any) {
     this.executionIdLocalStroge = localStorage.getItem('executionId');
-    
-    }
+
+  }
   /**
    * Lifecycle hook that is called after data-bound properties of a directive are initialized.
    * Initializes the component by calling several methods to set up result details, pie chart data,
@@ -125,7 +125,7 @@ export class DetailsExeDialogComponent {
    * @returns {void}
    */
   ngOnInit(): void {
-    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
     this.resultDetails();
     this.pieChartData();
     this.modulewiseExeSummary();
@@ -136,10 +136,10 @@ export class DetailsExeDialogComponent {
     this.deviceDetails = details.replace(/\n/g, '<br>');
     this.changeDetectorRef.detectChanges();
   }
-  get displayContent(): string{
-    return this.isExpanded ? this.deviceDetails : this.deviceDetails.slice(0, this.maxLength) + (this.deviceDetails.length > this.maxLength ? '...':'');
+  get displayContent(): string {
+    return this.isExpanded ? this.deviceDetails : this.deviceDetails.slice(0, this.maxLength) + (this.deviceDetails.length > this.maxLength ? '...' : '');
   }
-  toggleMoreLess():void{
+  toggleMoreLess(): void {
     this.isExpanded = !this.isExpanded;
   }
   /**
@@ -160,7 +160,7 @@ export class DetailsExeDialogComponent {
    * 
    * @returns {void}
    */
-  pieChartData():void{
+  pieChartData(): void {
     const summaryData = this.data?.summary || {};
     const fullLabels = [
       'Success',
@@ -196,7 +196,7 @@ export class DetailsExeDialogComponent {
       summaryData.aborted || 0,
     ];
     const filteredData = series.map((value, index) => ({ value, label: fullLabels[index], color: fullColors[index] }))
-    .filter(item => item.value > 0);
+      .filter(item => item.value > 0);
     this.chartOptions = {
       series: filteredData.map(item => item.value),
       chart: {
@@ -232,7 +232,7 @@ export class DetailsExeDialogComponent {
    *
    * @param dateValue - The date string to be converted.
    * @returns The localized date and time string if the input is valid, otherwise an empty string.
-   */  
+   */
   convertDate(dateValue: string): string {
     return dateValue ? (new Date(dateValue)).toLocaleString() : '';
   }
@@ -245,17 +245,17 @@ export class DetailsExeDialogComponent {
    *
    * @returns {void}
    */
-  resultDetails():void {
-  this.executionResultData = this.data.executionResults.map((item:any)=>({
-    ...item,
-    checked: false,
-    details: null
-  }))
-  this.filteredData = [...this.executionResultData];
+  resultDetails(): void {
+    this.executionResultData = this.data.executionResults.map((item: any) => ({
+      ...item,
+      checked: false,
+      details: null
+    }))
+    this.filteredData = [...this.executionResultData];
     for (let i = 0; i < this.filteredData.length; i++) {
       this.scriptStatus = this.filteredData[i];
       console.log(this.scriptStatus.status);
-      
+
     }
   }
 
@@ -273,39 +273,43 @@ export class DetailsExeDialogComponent {
    * newline characters with `<br>` tags. If the panel is collapsed, it sets the `details` property of 
    * the parent object to null.
    */
-  togglePanel(parent: any, id:any, index:number):void {
+  togglePanel(parent: any, id: any, index: number): void {
     parent.expanded = !parent.expanded;
     this.executionResultId = id;
     if (parent.expanded) {
       this.expandedIndexes.push(index);
-      if (!parent.details && parent.executionResultID) {        
+      if (!parent.details && parent.executionResultID) {
+        parent.detailsLoading = true; // Start loading
         this.executionservice.scriptResultDetails(parent.executionResultID).subscribe({
           next: (res) => {
-          parent.details = res.data
-          const logs = parent.details.logs;
-          parent.formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
-          this.changeDetectorRef.detectChanges();
-          
-        },
-        error:(err)=>{
-          this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
+            parent.details = res.data
+            const logs = parent.details.logs;
+            parent.formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
+            parent.detailsLoading = false; // Stop loading
+            this.changeDetectorRef.detectChanges();
+
+          },
+          error: (err) => {
+            parent.detailsLoading = false; // Stop loading on error
+            this._snakebar.open(err.message, '', {
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            })
+          }
         }
-      }           
-      );
+        );
       }
     } else {
-      parent.details = null; 
+      parent.details = null;
       parent.formatLogs = '';
+      parent.detailsLoading = false;
       this.expandedIndexes = this.expandedIndexes.filter(i => i !== index);
     }
   }
 
-  getExelogDetails(){
+  getExelogDetails() {
     this.executionservice.DetailsForHtmlReport(this.data.executionId).subscribe(res => {
       let details = res.data
       this.htmlDetails = details;
@@ -330,9 +334,9 @@ export class DetailsExeDialogComponent {
    * to the value of `allChecked`. Finally, it calls `updateSelectedDetails` and `updateFilteredData`
    * to refresh the relevant data.
    */
-  toggleAll(event: Event):void {
+  toggleAll(event: Event): void {
     this.allChecked = (event.target as HTMLInputElement).checked;
-    this.executionResultData.forEach((item:any) => (item.checked = this.allChecked));
+    this.executionResultData.forEach((item: any) => (item.checked = this.allChecked));
     this.updateSelectedDetails();
     this.updateFilteredData();
   }
@@ -347,9 +351,9 @@ export class DetailsExeDialogComponent {
    * property to true if all items in the execution result data are checked, and
    * calls the `updateSelectedDetails` method to reflect the changes.
    */
-  toggleCheckbox(index: number, event: Event):void {
+  toggleCheckbox(index: number, event: Event): void {
     this.executionResultData[index].checked = (event.target as HTMLInputElement).checked;
-    this.allChecked = this.executionResultData.every((item:any) => item.checked);
+    this.allChecked = this.executionResultData.every((item: any) => item.checked);
     this.updateSelectedDetails();
   }
   /**
@@ -365,9 +369,9 @@ export class DetailsExeDialogComponent {
    * 
    * @returns {void}
    */
-  clearSelections():void {
+  clearSelections(): void {
     this.allChecked = false;
-    this.executionResultData.forEach((item:any) => (item.checked = false));
+    this.executionResultData.forEach((item: any) => (item.checked = false));
     this.updateSelectedDetails();
     this.filterStatus = 'all';
     this.resultDetails();
@@ -380,11 +384,11 @@ export class DetailsExeDialogComponent {
    * Additionally, updates the `allChecked` property to indicate whether all filtered items are checked,
    * and calls `updateSelectedDetails` to refresh the selected details.
    */
-  applyFilter():void {
+  applyFilter(): void {
     if (this.filterStatus === 'all') {
       this.filteredData = [...this.executionResultData];
     } else {
-      this.filteredData = this.executionResultData.filter((item:any) => item.status === this.filterStatus);
+      this.filteredData = this.executionResultData.filter((item: any) => item.status === this.filterStatus);
     }
     this.allChecked = this.filteredData.every(item => item.checked);
     this.updateSelectedDetails();
@@ -395,7 +399,7 @@ export class DetailsExeDialogComponent {
    * 
    * @returns {void}
    */
-  updateFilteredData():void {
+  updateFilteredData(): void {
     this.applyFilter();
   }
   /**
@@ -404,8 +408,8 @@ export class DetailsExeDialogComponent {
    *
    * @returns {void}
    */
-  updateSelectedDetails():void {
-    this.selectedDetails = this.executionResultData.filter((item:any) => item.checked);
+  updateSelectedDetails(): void {
+    this.selectedDetails = this.executionResultData.filter((item: any) => item.checked);
   }
   /**
    * Initiates a live log polling mechanism that fetches live logs every 5 seconds.
@@ -416,40 +420,19 @@ export class DetailsExeDialogComponent {
    * 
    * @returns {void}
    */
-  liveLogs():void {
-   const dialogRef =  this.liveLogDialog.open( LivelogDialogComponent,{
+  liveLogs(): void {
+    this.liveLogDialog.open(LivelogDialogComponent, {
       width: '80%',
       height: '80vh',
-      maxWidth:'100vw',
+      maxWidth: '100vw',
       panelClass: 'custom-modalbox',
       data: {
         logs: this.liveLogsData,
         executionId: this.executionResultId
-      } 
+      }
     });
-     interval(5000)
-        .pipe(
-          startWith(0),
-          takeUntil(this.liveLogDestroy$),
-          switchMap(() => {
-            return this.executionservice.getLiveLogs(this.executionResultId);
-          })
-        )
-        .subscribe({
-          next:(res)=>{
-            this.liveLogsData = res;
-            dialogRef.afterClosed().subscribe(result => {
-              this.dataUpdate();
-              if (result) {
-                this.dataUpdate();
-              }
-            });
-          },
-          error:(err)=>{
-
-          }
-        })
   }
+
   /**
    * Fetches device logs for the current execution result and opens a dialog to display them.
    * 
@@ -460,33 +443,33 @@ export class DetailsExeDialogComponent {
    * 
    * @returns {void}
    */
-  logFiles():void {
+  logFiles(): void {
     this.executionservice.getDeviceLogs(this.executionResultId).subscribe(
       (res) => {
-        this.logFilesDialog.open( LogfileDialogComponent,{
+        this.logFilesDialog.open(LogfileDialogComponent, {
           width: '50%',
           height: '70vh',
-          maxWidth:'100vw',
+          maxWidth: '100vw',
           panelClass: 'custom-modalbox',
-          data:{
-            logFileNames : res.data,
-            executionId : this.executionResultId
+          data: {
+            logFileNames: res.data,
+            executionId: this.executionResultId
           },
         });
       });
-   
+
   }
-  crashLogFiles():void{
+  crashLogFiles(): void {
     this.executionservice.getCrashLogs(this.executionResultId).subscribe(
       (res) => {
-        this.logFilesDialog.open( CrashlogfileDialogComponent,{
+        this.logFilesDialog.open(CrashlogfileDialogComponent, {
           width: '50%',
           height: '70vh',
-          maxWidth:'100vw',
+          maxWidth: '100vw',
           panelClass: 'custom-modalbox',
-          data:{
-            logFileNames : res,
-            executionId : this.executionResultId
+          data: {
+            logFileNames: res,
+            executionId: this.executionResultId
           },
         });
       });
@@ -498,8 +481,8 @@ export class DetailsExeDialogComponent {
    * This method is typically called when the user cancels or closes the dialog without confirming the action.
    *
    * @returns {void} This method does not return a value.
-   */  
-  onClose():void {
+   */
+  onClose(): void {
     this.dialogRef.close(false);
     localStorage.removeItem('executionIdLocalStroge');
   }
@@ -513,17 +496,17 @@ export class DetailsExeDialogComponent {
    * On error, it displays an error message using the `_snakebar` service.
    * 
    * @returns {void}
-   */  
-  repeatExecution():void{
-    this.executionservice.repeatExecution(this.data.executionId,this.loggedinUser.userName).subscribe({
-      next:(res)=>{
+   */
+  repeatExecution(): void {
+    this.executionservice.repeatExecution(this.data.executionId, this.loggedinUser.userName).subscribe({
+      next: (res) => {
         this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
         })
       },
-      error:(err)=>{
+      error: (err) => {
         this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
@@ -538,17 +521,17 @@ export class DetailsExeDialogComponent {
    * Displays a success message if the rerun is successful, or an error message if it fails.
    *
    * @returns {void}
-   */  
-  rerunFailure():void{
-    this.executionservice.rerunOnFailure(this.data.executionId,this.loggedinUser.userName).subscribe({
-      next:(res)=>{
+   */
+  rerunFailure(): void {
+    this.executionservice.rerunOnFailure(this.data.executionId, this.loggedinUser.userName).subscribe({
+      next: (res) => {
         this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
         })
       },
-      error:(err)=>{
+      error: (err) => {
         this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
@@ -570,21 +553,21 @@ export class DetailsExeDialogComponent {
    * In case of an error, it parses the error message and displays it using a snackbar.
    * 
    * @returns {void}
-   */  
-  modulewiseExeSummary():void{
+   */
+  modulewiseExeSummary(): void {
     this.executionservice.modulewiseSummary(this.data.executionId).subscribe({
-      next:(res)=>{
+      next: (res) => {
         this.moduleTableData = res.data
         this.keys = Object.keys(this.moduleTableData);
         this.moduleTableTitle = this.keys
-        .filter((key) => key !== 'Total')
-        .map((key) => ({ name: key, ...this.moduleTableData[key] }));
-  
-      const totalData = this.moduleTableData['Total'];
-      this.moduleTableTitle.push({ name: 'Total', ...totalData });
-      this.changeDetectorRef.detectChanges(); 
+          .filter((key) => key !== 'Total')
+          .map((key) => ({ name: key, ...this.moduleTableData[key] }));
+
+        const totalData = this.moduleTableData['Total'];
+        this.moduleTableTitle.push({ name: 'Total', ...totalData });
+        this.changeDetectorRef.detectChanges();
       },
-      error:(err)=>{
+      error: (err) => {
         let errmsg = JSON.parse(err.error);
         this._snakebar.open(errmsg.message, '', {
           duration: 2000,
@@ -597,20 +580,20 @@ export class DetailsExeDialogComponent {
   }
   /**
    * This method is for showing the table view of analysis summary .
-   */   
-  analysisSummary():void{
+   */
+  analysisSummary(): void {
     this.executionservice.getModulewiseAnalysisSummary(this.data.executionId).subscribe({
-      next:(res)=>{
+      next: (res) => {
         this.analysisTableData = res.data;
         this.keys = Object.keys(this.analysisTableData);
         this.analysisSummaryData = this.keys
-        .filter((key) => key !== 'Total')
-        .map((key) => ({ name: key, ...this.analysisTableData[key] }));
-  
-      const totalData = this.analysisTableData['Total'];
-      this.analysisSummaryData.push({ name: 'Total', ...totalData });
+          .filter((key) => key !== 'Total')
+          .map((key) => ({ name: key, ...this.analysisTableData[key] }));
+
+        const totalData = this.analysisTableData['Total'];
+        this.analysisSummaryData.push({ name: 'Total', ...totalData });
       },
-      error:(err)=>{        
+      error: (err) => {
         this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
@@ -627,8 +610,8 @@ export class DetailsExeDialogComponent {
    *
    * @returns {void}
    */
-  dataUpdate():void{
-    this.executionservice.resultDetails(this.executionIdLocalStroge).subscribe(res=>{
+  dataUpdate(): void {
+    this.executionservice.resultDetails(this.executionIdLocalStroge).subscribe(res => {
       this.data = res.data
       this.pieChartData();
       this.resultDetails();
@@ -637,15 +620,15 @@ export class DetailsExeDialogComponent {
   }
   /**
    * This method is for tabchange .
-   */ 
+   */
   onTabClick(event: any): void {
     const label = event.tab.textLabel;
     this.changeDetectorRef.detectChanges();
   }
   /**
    * This method is open the modal for link the JIRA ticket.
-   */ 
-  openAnalyzeDialog(patent:any):void{
+   */
+  openAnalyzeDialog(patent: any): void {
     const dialogRef = this.analyzeDialog.open(AnalyzeDialogComponent, {
       width: '99%',
       height: '96vh',
@@ -660,50 +643,50 @@ export class DetailsExeDialogComponent {
       }
     });
   }
-   /**
-   * This method is LInk the JIRA ticket of the scripts.
-   */   
-  openAnalyzeLinkDialog(parent:any, isAnalyze:any):void{
-    if(parent.analysisTicket){
+  /**
+  * This method is LInk the JIRA ticket of the scripts.
+  */
+  openAnalyzeLinkDialog(parent: any, isAnalyze: any): void {
+    if (parent.analysisTicket) {
       this.executionservice.getAnalysisResult(parent.executionResultID)
-      .subscribe(async (res) => {
-        this.analysisResult = res.data; 
-        this.analysisResult.name = parent.name; 
-        this.analysisResult.executionResultID = parent.executionResultID; 
-        const dialogRef = this.analyzeDialog.open(AnalyzeDialogComponent, { 
-          width: '99%',
-          height: '96vh',
-          maxWidth: '90vw',
-          panelClass: 'custom-modalbox',
-          data: this.analysisResult 
-        })
-        const dialogResult = await firstValueFrom(dialogRef.afterClosed());  
-        if (dialogResult) {
-          this.dataUpdate();
-        }
-      });
+        .subscribe(async (res) => {
+          this.analysisResult = res.data;
+          this.analysisResult.name = parent.name;
+          this.analysisResult.executionResultID = parent.executionResultID;
+          const dialogRef = this.analyzeDialog.open(AnalyzeDialogComponent, {
+            width: '99%',
+            height: '96vh',
+            maxWidth: '90vw',
+            panelClass: 'custom-modalbox',
+            data: this.analysisResult
+          })
+          const dialogResult = await firstValueFrom(dialogRef.afterClosed());
+          if (dialogResult) {
+            this.dataUpdate();
+          }
+        });
     }
   }
   /**
    * This method is open the popup.
-   */ 
-  showPopup():void {
+   */
+  showPopup(): void {
     this.showPopupFlag = true;
   }
-   /**
-   * This method is close the popup.
-   */ 
-  closePopup():void {
+  /**
+  * This method is close the popup.
+  */
+  closePopup(): void {
     this.showPopupFlag = false;
   }
-   /**
-   * This method is for download the raw Report of executions as excel format.
-   */   
-  rawReportDownload(): void{
-    if(this.data.executionId){
+  /**
+  * This method is for download the raw Report of executions as excel format.
+  */
+  rawReportDownload(): void {
+    if (this.data.executionId) {
       this.executionservice.rawExcelReport(this.data.executionId).subscribe({
-        next:(blob)=>{
-          const xmlBlob = new Blob([blob], { type: 'application/xml' }); 
+        next: (blob) => {
+          const xmlBlob = new Blob([blob], { type: 'application/xml' });
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
@@ -713,9 +696,9 @@ export class DetailsExeDialogComponent {
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
         },
-        error:(err)=>{
+        error: (err) => {
           let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg,'',{
+          this._snakebar.open(errmsg, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -725,14 +708,14 @@ export class DetailsExeDialogComponent {
       });
     }
   }
-   /**
-   * This method is for download the consolidatedReport of executions as excel format.
-   */   
-  consolidatedReport(): void{
-    if(this.data.executionId){
+  /**
+  * This method is for download the consolidatedReport of executions as excel format.
+  */
+  consolidatedReport(): void {
+    if (this.data.executionId) {
       this.executionservice.excelReportConsolidated(this.data.executionId).subscribe({
-        next:(blob)=>{
-          const xmlBlob = new Blob([blob], { type: 'application/xml' }); 
+        next: (blob) => {
+          const xmlBlob = new Blob([blob], { type: 'application/xml' });
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
@@ -742,9 +725,9 @@ export class DetailsExeDialogComponent {
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
         },
-        error:(err)=>{
+        error: (err) => {
           let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg,'',{
+          this._snakebar.open(errmsg, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -754,26 +737,26 @@ export class DetailsExeDialogComponent {
       });
     }
   }
-   /**
-   * This method is for download the executions as XML format.
-   */ 
-  XMLReportDownload(){
-    if(this.data.executionId){
+  /**
+  * This method is for download the executions as XML format.
+  */
+  XMLReportDownload() {
+    if (this.data.executionId) {
       this.executionservice.XMLReport(this.data.executionId).subscribe({
-        next:(blob)=>{
+        next: (blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
           a.download = `ExecutionReport_${this.data.deviceName}_${this.data.executionId}.xml`;
- 
+
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
         },
-        error:(err)=>{
+        error: (err) => {
           let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg,'',{
+          this._snakebar.open(errmsg, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -786,12 +769,12 @@ export class DetailsExeDialogComponent {
   }
   /**
    * This method is for download all the execution results.
-   */  
-  resultsZIP():void{
-    if(this.data.executionId){
+   */
+  resultsZIP(): void {
+    if (this.data.executionId) {
       this.executionservice.resultsZIP(this.data.executionId).subscribe({
-        next:(blob)=>{
-          const xmlBlob = new Blob([blob], { type: 'application/zip' }); 
+        next: (blob) => {
+          const xmlBlob = new Blob([blob], { type: 'application/zip' });
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
@@ -801,9 +784,9 @@ export class DetailsExeDialogComponent {
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
         },
-        error:(err)=>{
+        error: (err) => {
           let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg,'',{
+          this._snakebar.open(errmsg, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -814,13 +797,13 @@ export class DetailsExeDialogComponent {
       });
     }
   }
-  shwHideFailedDownload():void{
-    if(this.data.executionId){
-      this.executionservice.isfailedExecution(this.data.executionId).subscribe(res=>{
+  shwHideFailedDownload(): void {
+    if (this.data.executionId) {
+      this.executionservice.isfailedExecution(this.data.executionId).subscribe(res => {
         let resData = res.data;
-        if(resData === true){
+        if (resData === true) {
           this.showFailedZipOption = true;
-        }else{
+        } else {
           this.showFailedZipOption = false;
         }
       })
@@ -828,12 +811,12 @@ export class DetailsExeDialogComponent {
   }
   /**
    * This method is for download all failed execution results.
-   */    
-  failResultsZIP():void{
-    if(this.data.executionId){
+   */
+  failResultsZIP(): void {
+    if (this.data.executionId) {
       this.executionservice.failedResultsZIP(this.data.executionId).subscribe({
-        next:(blob)=>{
-          const xmlBlob = new Blob([blob], { type: 'application/zip' }); 
+        next: (blob) => {
+          const xmlBlob = new Blob([blob], { type: 'application/zip' });
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
@@ -843,9 +826,9 @@ export class DetailsExeDialogComponent {
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
         },
-        error:(err)=>{
+        error: (err) => {
           let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg,'',{
+          this._snakebar.open(errmsg, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -857,15 +840,15 @@ export class DetailsExeDialogComponent {
   }
   /**
    * This method is for download all options at a time.
-   */  
-  downLoadAll():void{
+   */
+  downLoadAll(): void {
     this.rawReportDownload();
     this.consolidatedReport();
     this.XMLReportDownload();
     this.resultsZIP();
     this.failResultsZIP();
     this.downloadAsHtml();
-    
+
   }
   closeLastExpanded() {
     if (this.expandedIndexes.length > 0) {
@@ -876,42 +859,39 @@ export class DetailsExeDialogComponent {
     }
   }
 
-  scriptDownload(parent:any):void{
-        if (parent.executionResultID) {
-          this.executionservice.DownloadScript(parent.executionResultID).subscribe({
-            next: (res) => {
-              const filename = res.filename;
-              const blob = new Blob([res.content], { type: res.content.type || 'application/json' });
-              saveAs(blob, filename);
-            },
-            error: (err) => {
-              // let errmsg = err.error;
-              this._snakebar.open(err, '', {
-                duration: 2000,
-                panelClass: ['err-msg'],
-                horizontalPosition: 'end',
-                verticalPosition: 'top'
-              })
-            }
+  scriptDownload(parent: any): void {
+    if (parent.executionResultID) {
+      this.executionservice.DownloadScript(parent.executionResultID).subscribe({
+        next: (res) => {
+          const filename = res.filename;
+          const blob = new Blob([res.content], { type: res.content.type || 'application/json' });
+          saveAs(blob, filename);
+        },
+        error: (err) => {
+          // let errmsg = err.error;
+          this._snakebar.open(err, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
           })
         }
-      }
+      })
+    }
+  }
 
-openDynamicLink(id: string) {
-        this.executionservice.getExecutionLogsLinks(id).subscribe(res=>{
-          if(res){
-            const url = `${this.config.apiUrl}execution/getExecutionLogs?executionResultID=${id}`
-            window.open(url, '_blank', 'noopener noreferrer');
-          }
-        })
-      }
-openLogLink(){
-  const url = `${this.config.apiUrl}execution/getExecutionLogs?executionResultID`
-  window.open(url, '_blank', 'noopener noreferrer');
-}
+  openDynamicLink(id: string) {
+    const url = `${this.config.apiUrl}execution/getExecutionLogs?executionResultID=${id}`;
+    window.open(url, '_blank', 'noopener,noreferrer');   
+  }
+  
+  openLogLink() {
+    const url = `${this.config.apiUrl}execution/getExecutionLogs?executionResultID`
+    window.open(url, '_blank', 'noopener noreferrer');
+  }
 
-downloadAsHtml(){
-  const tableRows = this.moduleTableTitle.map((key:any) => `
+  downloadAsHtml() {
+    const tableRows = this.moduleTableTitle.map((key: any) => `
     <tr class="method">
       <td>${key.name}</td>
       <td>${key.totalScripts}</td>
@@ -928,7 +908,7 @@ downloadAsHtml(){
     </tr>
   `).join('');
 
-  const scripNames = this.htmlDetails.map((key:any) => `
+    const scripNames = this.htmlDetails.map((key: any) => `
       <tr >
         <th >Script Name</th>
         <td>${key.executionScriptName}</td>
@@ -945,7 +925,7 @@ downloadAsHtml(){
       </tr>
 `).join('');
 
-  const htmlContent = `
+    const htmlContent = `
     <html>
     <head>
       <title>Execution Result Report</title>
