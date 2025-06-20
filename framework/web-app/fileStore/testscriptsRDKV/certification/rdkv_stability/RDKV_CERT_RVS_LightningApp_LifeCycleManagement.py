@@ -27,7 +27,7 @@
   <status>FREE</status>
   <synopsis>The objective of this test is to launch LightningApp plugin then set URL, suspend, resume, move behind and front then destroy. The script will repeat this for a minimum of 1000 times.</synopsis>
   <groups_id/>
-  <execution_time>5000</execution_time>
+  <execution_time>1500</execution_time>
   <long_duration>false</long_duration>
   <advanced_script>false</advanced_script>
   <remarks/>
