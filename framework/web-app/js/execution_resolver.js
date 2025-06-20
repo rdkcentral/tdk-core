@@ -1477,85 +1477,78 @@ function  executionTriggeredPopUp(){
  */
 function submitForm(event) {
     event.preventDefault();
-    var result = confirm("Device is going to reboot. Do you want to proceed?");
-    
+
     $('#outputDiv').hide();
     $('#LogsFetched').hide();
     $('#progressContainer').hide();
     $('#InstalltionCompleted').hide();
     $('#installation').show();
 
-    if (result) {
+    $("#popup").show();
+
+    var selectedFiles = [];
+    var checkboxes = document.getElementsByName('selectedFiles');
+
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            selectedFiles.push(checkboxes[i].value);
+        }
+    }
+
+    $('#progressContainer').show();
+    $('#progressBar').show();
+    simulateProgress();
+    $('#progressBar').css('width', '100%');
+
+    var testFiles = JSON.stringify(selectedFiles);
+    $('#copyFiles').show();
+
+    $.get('installPackages', { deviceeeId: deviceeeId, selectedFiles: testFiles }, function(response) {
         $("#popup").show();
-
-        var selectedFiles = [];
-        var checkboxes = document.getElementsByName('selectedFiles');
-
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) {
-                selectedFiles.push(checkboxes[i].value);
-            }
-        }
-
-        $('#progressContainer').show();
-        $('#progressBar').show();
-        simulateProgress();
-        $('#progressBar').css('width', '100%');
-
-        var testFiles = JSON.stringify(selectedFiles);
-        $('#copyFiles').show();
-
-        $.get('installPackages', { deviceeeId: deviceeeId, selectedFiles: testFiles }, function(response) {
-            $("#popup").show();
-            $('#copyFiles').hide();
-            $("#LogsFetched").hide();
-            $('#installButton').hide();
-            $("#InstalltionCompleted").show();
-            $('#outputDiv').show();
+        $('#copyFiles').hide();
+        $("#LogsFetched").hide();
+        $('#installButton').hide();
+        $("#InstalltionCompleted").show();
+        $('#outputDiv').show();
+        
+        if (response.trim() !== "") {
+            $('#LogsFetched').show();
+            $('#installation').hide();
             
-            if (response.trim() !== "") {
-                $('#LogsFetched').show();
-                $('#installation').hide();
-                
-                var logsHtml = "<pre style='text-align: left; margin: 0; padding: 10px;'>" + response + "</pre>";
-                $('#outputDiv').html(logsHtml); // first show only logs
-                
-                // Then append the success or failure message
-                if (response.trim().includes("running")) {
-                  
-                    $('#outputDiv').append(
-                        "<div style='margin-top: 20px; font-weight: bold; color: green; font-size: 1.2em;'>TDK Installed Successfully</div>"
-                    );
-                } else {
-                    
-                    $('#outputDiv').append(
-                        "<div style='margin-top: 20px; font-weight: bold; color: red; font-size: 1.2em;'>TDK Installation Failed</div>"
-                    );
-                }
+            var logsHtml = "<pre style='text-align: left; margin: 0; padding: 10px;'>" + response + "</pre>";
+            $('#outputDiv').html(logsHtml);
 
+            if (response.trim().includes("running") || response.trim().toLowerCase().includes("tdk_mediapipelinetests")) {
+                $('#outputDiv').append(
+                    "<div style='margin-top: 20px; font-weight: bold; color: green; font-size: 1.2em;'>TDK Installed Successfully</div>"
+                );
             } else {
-                $('#LogsFetched').hide();
-                $('#outputDiv').hide();
-                $('#installation').hide();
+                $('#outputDiv').append(
+                    "<div style='margin-top: 20px; font-weight: bold; color: red; font-size: 1.2em;'>TDK Installation Failed</div>"
+                );
             }
 
-            $("#popup").hide();
-
-            var flashMessage = $("<div>").html(response).find('#flashMessage').text();
-            if (flashMessage.trim() !== "") {
-                alert(flashMessage);
-            }
-        });
-
-        if ($('.shell-script-container').find('p').length > 0) {
-            $('.shell-script-container').css('border', 'none');
         } else {
-            $('.shell-script-container').css('border', '1px solid #ccc');
+            $('#LogsFetched').hide();
+            $('#outputDiv').hide();
+            $('#installation').hide();
         }
+
+        $("#popup").hide();
+
+        var flashMessage = $("<div>").html(response).find('#flashMessage').text();
+        if (flashMessage.trim() !== "") {
+            alert(flashMessage);
+        }
+    });
+
+    if ($('.shell-script-container').find('p').length > 0) {
+        $('.shell-script-container').css('border', 'none');
     } else {
-        alert("Installation cancelled.");
+        $('.shell-script-container').css('border', '1px solid #ccc');
     }
 }
+
 
 /**
  * function will show progess for packages installation
@@ -1599,27 +1592,37 @@ function createTDKPackage() {
     $.ajax({
         url: "createTDKPackage",
         type: "GET",
-        data: { deviceeeId: deviceeeId },
+        data: { deviceId: deviceeeId },
         success: function (response) {
             document.getElementById("scriptOutput").style.display = "block";
             const output = response.output || "";
-            if (!output.includes("not")) {
-                $("#packageSuccess").show();
-                $("#scriptOutput").text(output || "TDK Package Created Successfully!");
+			
+            if (output.includes("successfully")) {
+				 $("#scriptOutput").text(output);
+                $("#packageSuccess").show().html(`
+                    ? TDK Package Created Successfully.
+                    <br>
+                    <a href="javascript:void(0)" onclick="document.getElementById('packageFilee').click()" 
+                       style="color: #007BFF; text-decoration: underline; font-size: 1em; display: inline-flex; align-items: center; margin-top: 8px;">
+                        <img src="../images/reorder_up.png" alt="Upload Icon" 
+                             style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                        Create with Custom Generic Package
+                    </a>
+                    <input type="file" id="packageFilee" name="packageFilee" style="display: none;" onchange="uploadGenericPackage()">
+                `);
+               
             } else if (output.includes("not")) {
                 $("#packageError").show().html(`
-    ? Failed to create package. Please upload a generic package manually.
-    <br>
-    <a href="javascript:void(0)" onclick="document.getElementById('packageFilee').click()" 
-       style="color: #007BFF; text-decoration: underline; font-size: 1em; display: inline-flex; align-items: center; margin-top: 8px;">
-        <img src="../images/reorder_up.png" alt="Upload Icon" 
-             style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-        Upload Generic Package
-    </a>
-    <input type="file" id="packageFilee" name="packageFilee" style="display: none;" onchange="uploadGenericPackage()">
-`);
-
-
+                    Failed to create package. Please upload a generic package manually.
+                    <br>
+                    <a href="javascript:void(0)" onclick="document.getElementById('packageFilee').click()" 
+                       style="color: #007BFF; text-decoration: underline; font-size: 1em; display: inline-flex; align-items: center; margin-top: 8px;">
+                        <img src="../images/reorder_up.png" alt="Upload Icon" 
+                             style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                        Upload Generic Package
+                    </a>
+                    <input type="file" id="packageFilee" name="packageFilee" style="display: none;" onchange="uploadGenericPackage()">
+                `);
                 $("#scriptOutput").text(output).show();
             } else {
                 $("#packageError").show().text("Package creation failed.");
@@ -1634,6 +1637,7 @@ function createTDKPackage() {
         }
     });
 }
+
 /**
  * function will create TDK Generic package
  */
@@ -1645,28 +1649,63 @@ function uploadGenericPackage() {
         $("#uploadError").show().text("Please select a package file.");
         return;
     }
-	$("#packageError").hide()
+
+    console.log("File selected:", file.name, file.size + " bytes");
+
+    // Hide scriptOutput and show uploading message
+    $("#scriptOutput").hide();
+    $("#packageError, #uploadError, #uploadSuccess").hide();
+    $("#uploadingText").show().text("Uploading...");
+
     const formData = new FormData();
     formData.append("packageFilee", file);
-    formData.append("deviceeeId", deviceeeId);
+    formData.append("deviceId", deviceeeId);
 
-    $.ajax({
-        url: "uploadGenericTDKPackage",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            if (response.status === "success") {
-                $("#uploadSuccess").show().text("Generic TDK Package uploaded successfully.");
-            } else {
-                $("#uploadError").show().text(response.message || "Upload failed.");
-            }
-        },
-        error: function () {
-            $("#uploadError").show().text("Error while uploading the package.");
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.addEventListener("progress", function (evt) {
+        console.log("Upload progress event triggered");
+        if (evt.lengthComputable) {
+            const percentComplete = Math.round((evt.loaded / evt.total) * 100);
+            console.log("Upload progress:", percentComplete + "% (" + evt.loaded + "/" + evt.total + ")");
+            $("#uploadingText").text("Uploading... " + percentComplete + "%");
+        } else {
+            console.log("Upload progress not computable");
         }
-    });
+    }, false);
+
+    xhr.onreadystatechange = function () {
+        console.log("XHR readyState changed:", xhr.readyState);
+        if (xhr.readyState === 4) {
+            $("#uploadingText").hide(); // hide upload progress
+            console.log("Upload finished with status:", xhr.status);
+
+            // Show scriptOutput again if needed
+            $("#scriptOutput").hide();
+
+            if (xhr.status === 200) {
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    console.log("Response received:", response);
+                    if (response.status === "success") {
+                        $("#uploadSuccess").show().text("Generic TDK Package uploaded successfully.");
+                    } else {
+                        $("#uploadError").show().text(response.message || "Upload failed.");
+                    }
+                } catch (e) {
+                    console.error("Failed to parse JSON response:", xhr.responseText);
+                    $("#uploadError").show().text("Invalid response format.");
+                }
+            } else {
+                console.error("Upload error: status =", xhr.status);
+                $("#uploadError").show().text("Error while uploading the package.");
+            }
+        }
+    };
+
+    console.log("Initiating upload to: uploadGenericTDKPackage");
+    xhr.open("POST", "uploadGenericTDKPackage", true);
+    xhr.send(formData);
 }
 
 /**
@@ -1851,32 +1890,55 @@ bindCheckboxLogic();
  */
 function createVTSPackage() {
     // Clear previous logs before new request
-    $("#scriptVTSOutput").text(""); 
+    $("#vtsscriptOutput").text(""); 
     $("#vtspackageSuccess").hide();
     $("#vtspackageError").hide();
     $("#vtsuploadSuccess").hide();
     $("#vtsuploadError").hide();
 
-    // Show progress message and disable button
+    // Disable the button while processing
     $("#createVTSPackageButton").prop("disabled", true).css("cursor", "not-allowed");
 
-    // Make AJAX call to backend API
     $.ajax({
         url: "createVTSPackage",
         type: "GET",
-        data: { deviceeeId: deviceeeId }, // Ensure correct deviceId
+        data: { deviceeeId: deviceeeId },
         success: function (response) {
-            
-            if (response.status === "success") {
-            	 document.getElementById("vtsscriptOutput").style.display = "block";
-                $("#vtspackageSuccess").show();
-                $("#vtsscriptOutput").text(response.output || "VTS Package Created Successfully!");
+            document.getElementById("vtsscriptOutput").style.display = "block";
+            const output = response.output || "";
+
+            if (output.includes("successfully")) {
+                $("#vtsscriptOutput").text(output);
+                $("#vtspackageSuccess").show().html(`
+                    ? VTS Package Created Successfully.
+                    <br>
+                    <a href="javascript:void(0)" onclick="document.getElementById('vtsPackageFile').click()" 
+                       style="color: #007BFF; text-decoration: underline; font-size: 1em; display: inline-flex; align-items: center; margin-top: 8px;">
+                        <img src="../images/reorder_up.png" alt="Upload Icon" 
+                             style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                        Create with Custom Generic VTS Package
+                    </a>
+                    <input type="file" id="vtsPackageFile" name="vtsPackageFile" style="display: none;" onchange="uploadGenericVTSPackage()">
+                `);
+            } else if (output.includes("not")) {
+                $("#vtspackageError").show().html(`
+                    Failed to create VTS package. Please upload a generic VTS package manually.
+                    <br>
+                    <a href="javascript:void(0)" onclick="document.getElementById('vtsPackageFile').click()" 
+                       style="color: #007BFF; text-decoration: underline; font-size: 1em; display: inline-flex; align-items: center; margin-top: 8px;">
+                        <img src="../images/reorder_up.png" alt="Upload Icon" 
+                             style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                        Upload Generic VTS Package
+                    </a>
+                    <input type="file" id="vtsPackageFile" name="vtsPackageFile" style="display: none;" onchange="uploadGenericVTSPackage()">
+                `);
+                $("#vtsscriptOutput").text(output).show();
             } else {
-            	 document.getElementById("vtsscriptOutput").style.display = "block";
-                $("#vtspackageError").show().text(response.message || "VTS Package creation failed.");
+                $("#vtspackageError").show().text("VTS package creation failed.");
+                $("#vtsscriptOutput").text(output).show();
             }
         },
-        error: function (xhr, status, error) {
+        error: function () {
             $("#vtspackageError").show().text("Error processing the request.");
         },
         complete: function () {
@@ -1884,6 +1946,61 @@ function createVTSPackage() {
         }
     });
 }
+function uploadGenericVTSPackage() {
+    const fileInput = document.getElementById('vtsPackageFile');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        $("#vtsuploadError").show().text("Please select a VTS package file.");
+        return;
+    }
+
+    // Hide previous messages and script output
+    $("#vtsscriptOutput").hide();  // <-- Hide script output here
+    $("#vtspackageError, #vtsuploadError, #vtsuploadSuccess").hide();
+    $("#vtsUploadingText").show().text("Uploading...");
+
+    const formData = new FormData();
+    formData.append("vtsPackageFile", file);
+    formData.append("deviceeeId", deviceeeId);
+
+    $.ajax({
+        url: "uploadGenericVTSPackage",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+
+        xhr: function () {
+            const xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener("progress", function (evt) {
+                if (evt.lengthComputable) {
+                    const percentComplete = Math.round((evt.loaded / evt.total) * 100);
+                    $("#vtsUploadingText").text("Uploading... " + percentComplete + "%");
+                }
+            }, false);
+            return xhr;
+        },
+
+        success: function (response) {
+            if (response.status === "success") {
+                $("#vtsuploadSuccess").show().text("Generic VTS Package uploaded successfully.");
+            } else {
+                $("#vtsuploadError").show().text(response.message || "VTS Upload failed.");
+            }
+        },
+
+        error: function () {
+            $("#vtsuploadError").show().text("Error while uploading the VTS package.");
+        },
+
+        complete: function () {
+            $("#vtsUploadingText").hide();
+        }
+    });
+}
+
+
 /**
  * function will upload VTS package
  */
@@ -1945,73 +2062,65 @@ function uploadVTSPackage() {
 function submitVtsForm(event) {
     event.preventDefault();
 
-    var result = confirm("Device is going to reboot for VTS installation. Do you want to proceed?");
-    
     // Hide previous logs or messages
     $('#vtsoutputDiv').hide();
     $('#vtsLogsFetched').hide();
     $('#vtsinstallation').show();
     $('#vtssuccess').hide();
 
-    if (result) {
-        var selectedVtsFiles = [];
-        var checkboxes = document.getElementsByName('selectedVtsFiles');
+    var selectedVtsFiles = [];
+    var checkboxes = document.getElementsByName('selectedVtsFiles');
 
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) {
-                selectedVtsFiles.push(checkboxes[i].value);
-            }
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            selectedVtsFiles.push(checkboxes[i].value);
         }
-
-        if (selectedVtsFiles.length === 0) {
-            alert("Please select at least one VTS package to install.");
-            $('#vtsinstallation').hide();
-            return;
-        }
-
-        var testFiles = JSON.stringify(selectedVtsFiles);
-        $('#vtsinstallation').show();
-
-        // Replace `deviceeeId` with actual value or dynamically get it if needed
-        $.get('installPackages', {
-            deviceeeId: deviceeeId,
-            selectedVtsFiles: testFiles
-        }, function(response) {
-            $('#vtsinstallation').hide();
-
-            if (response.trim() !== "") {
-                $('#vtsLogsFetched').show();
-                $('#vtssuccess').show();
-
-                var finalVtsLogs = "<div style='background-color: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 14px; white-space: pre-wrap; overflow-x: auto;'>"
-                                    + response
-                                    + "</div>";
-
-                // Add success or failure message after VTS logs
-                if (response.trim().includes("enabled")) {
-                    finalVtsLogs += "<div style='margin-top: 20px; font-weight: bold; color: green; font-size: 1.2em;'> VTS Installed Successfully</div>";
-                } else {
-                    finalVtsLogs += "<div style='margin-top: 20px; font-weight: bold; color: red; font-size: 1.2em;'> VTS Installation Failed</div>";
-                }
-
-                // Show logs and final status message
-                $('#vtsoutputDiv').show().html(finalVtsLogs);
-            } else {
-                $('#vtsLogsFetched').hide();
-                $('#vtsoutputDiv').hide();
-            }
-
-            // Optional: extract flash message
-            var flashMessage = $("<div>").html(response).find('#flashMessage').text();
-            if (flashMessage.trim() !== "") {
-                alert(flashMessage);
-            }
-        });
-    } else {
-        $('#vtsinstallation').hide();
-        alert("VTS installation cancelled.");
     }
+
+    if (selectedVtsFiles.length === 0) {
+        alert("Please select at least one VTS package to install.");
+        $('#vtsinstallation').hide();
+        return;
+    }
+
+    var testFiles = JSON.stringify(selectedVtsFiles);
+    $('#vtsinstallation').show();
+
+    // Replace `deviceeeId` with actual value or dynamically get it if needed
+    $.get('installPackages', {
+        deviceeeId: deviceeeId,
+        selectedVtsFiles: testFiles
+    }, function(response) {
+        $('#vtsinstallation').hide();
+
+        if (response.trim() !== "") {
+            $('#vtsLogsFetched').show();
+            $('#vtssuccess').show();
+
+            var finalVtsLogs = "<div style='background-color: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 14px; white-space: pre-wrap; overflow-x: auto;'>"
+                                + response
+                                + "</div>";
+
+            // Add success or failure message after VTS logs
+            if (response.trim().includes("enabled")) {
+                finalVtsLogs += "<div style='margin-top: 20px; font-weight: bold; color: green; font-size: 1.2em;'> VTS Installed Successfully</div>";
+            } else {
+                finalVtsLogs += "<div style='margin-top: 20px; font-weight: bold; color: red; font-size: 1.2em;'> VTS Installation Failed</div>";
+            }
+
+            $('#vtsoutputDiv').show().html(finalVtsLogs);
+        } else {
+            $('#vtsLogsFetched').hide();
+            $('#vtsoutputDiv').hide();
+        }
+
+        var flashMessage = $("<div>").html(response).find('#flashMessage').text();
+        if (flashMessage.trim() !== "") {
+            alert(flashMessage);
+        }
+    });
 }
+
 
 
 

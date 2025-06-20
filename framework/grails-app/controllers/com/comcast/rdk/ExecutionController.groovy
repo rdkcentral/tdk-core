@@ -6479,76 +6479,55 @@ def tdkpackages() {
 
     try {
         def device = Device.findById(checkDeviceId)
-        if (device?.deviceStatus?.toString() != "FREE") {
+
+        if (!device) {
+            render(status: 404, text: "Device not found")
+            return
+        }
+
+        if (device.deviceStatus?.toString() != "FREE") {
             deviceNotFree = true
         }
 
-        def socVendors = SoCVendor.findAll()
         def normalize = { it?.toLowerCase()?.replaceAll(/[^a-z0-9]/, "") }
+
+        def deviceVendor = device?.soCVendor
+        def normalizedDeviceVendor = normalize(deviceVendor?.name)
 
         // === TDK PACKAGES ===
         def tdkDirectoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
         def tdkDirectory = new File(tdkDirectoryPath)
 
         if (tdkDirectory.exists() && tdkDirectory.isDirectory()) {
-           
+            def matched = false
             tdkDirectory.listFiles()?.each { dir ->
                 def normalizedDirName = normalize(dir.name)
-                
-                def matchedVendor = socVendors.find { vendor ->
-                    def normalizedVendor = normalize(vendor.name)
-                   
-                    return normalizedVendor.contains(normalizedDirName)
-                }
 
-                if (matchedVendor) {
-                    
-                    def deviceInstanceList = Device.findAllBySoCVendor(matchedVendor)
-                    deviceInstanceList.each { d ->
-                        if (d.deviceStatus?.toString() == "FREE" && checkDeviceId == d.id?.toString()) {
-                            def subDir = new File(dir.absolutePath)
-                            if (subDir.exists() && subDir.isDirectory()) {
-                                def files = subDir.listFiles()?.collect { it.name } ?: []
-                                totalAllFilesList.addAll(files)
-                            }
-                        }
-                    }
+                if (normalizedDirName.contains(normalizedDeviceVendor) || normalizedDeviceVendor.contains(normalizedDirName)) {
+                    matched = true
+                    def files = dir.listFiles()?.collect { it.name } ?: []
+                    totalAllFilesList.addAll(files)
                 }
             }
+            
         }
-
         // === VTS PACKAGES ===
         def vtsDirectoryPath = grailsApplication.parentContext.getResource("/fileStore/vts_packages").file.path
         def vtsDirectory = new File(vtsDirectoryPath)
 
         if (vtsDirectory.exists() && vtsDirectory.isDirectory()) {
-           
+            def matched = false
             vtsDirectory.listFiles()?.each { dir ->
                 def normalizedDirName = normalize(dir.name)
-                
-                def matchedVendor = socVendors.find { vendor ->
-                    def normalizedVendor = normalize(vendor.name)
-                   
-                    return normalizedVendor.contains(normalizedDirName)
-                }
 
-                if (matchedVendor) {
-                   
-                    def deviceInstanceList = Device.findAllBySoCVendor(matchedVendor)
-                    deviceInstanceList.each { d ->
-                        if (d.deviceStatus?.toString() == "FREE" && checkDeviceId == d.id?.toString()) {
-                            def subDir = new File(dir.absolutePath)
-                            if (subDir.exists() && subDir.isDirectory()) {
-                                def files = subDir.listFiles()?.collect { it.name } ?: []
-                                
-                                totalVtsAllFilesList.addAll(files)
-                            }
-                        }
-                    }
+                if (normalizedDirName.contains(normalizedDeviceVendor) || normalizedDeviceVendor.contains(normalizedDirName)) {
+                    matched = true
+                    def files = dir.listFiles()?.collect { it.name } ?: []
+                    totalVtsAllFilesList.addAll(files)
                 }
             }
-        }
-
+            
+        } 
         noTdkFiles = totalAllFilesList.isEmpty()
         noVtsFiles = totalVtsAllFilesList.isEmpty()
 
@@ -6728,8 +6707,12 @@ def tdkpackages() {
 						}
 
 						// --------- Check TDK Status ----------
-
-						def statusCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no ${user}@${deviceIp} 'systemctl status tdk'"
+						String statusCommand
+						if (selectedPackage?.toLowerCase()?.contains("fncs")) {
+							statusCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no ${user}@${deviceIp} 'command -v tdk_mediapipelinetests'"
+						} else {
+							statusCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no ${user}@${deviceIp} 'systemctl status tdk'"
+						}
 						def statusProcess = new ProcessBuilder("bash", "-c", statusCommand).start()
 						def statusReader = new BufferedReader(new InputStreamReader(statusProcess.getInputStream()))
 
@@ -6856,16 +6839,16 @@ def tdkpackages() {
                             reader.close()
                             if (result) {
                                 jsonMessageLogs = "tdk agent log file ready for download"
-                                def scpCopyPackage = "sshpass -p '' scp -o StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//tdk_packages//${socVendorInstance?.name}//${result} ${user}@${deviceIp}:/"
+                                def scpCopyPackage = "sshpass -p '' scp -O StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//tdk_packages//${socVendorInstance?.name}//${result} ${user}@${deviceIp}:/"
 								def scpFileProcess = scpCopyPackage.execute()
                                 scpFileProcess.waitFor()
-                                def scpCopyShellScript = "sshpass -p '' scp -o StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//InstallTDKPackage.sh ${user}@${deviceIp}:/"
+                                def scpCopyShellScript = "sshpass -p '' scp -O StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//InstallTDKPackage.sh ${user}@${deviceIp}:/"
 								def scpScriptProcess = scpCopyShellScript.execute()
                                 scpScriptProcess.waitFor()
                             } else {
                                 jsonMessageLogs = "No valid packages are available"
                             }
-                            String executeSSHCommand = "sshpass -p '${password}' ssh -o StrictHostKeyChecking=no -t ${user}@${deviceIp} 'mkdir -p \$(dirname ${remoteFilePath}) && ${shellScriptCommand} > ${remoteFilePath}; cat ${remoteFilePath}'"
+                            String executeSSHCommand = "sshpass -p '${password}' ssh -O StrictHostKeyChecking=no -t ${user}@${deviceIp} 'mkdir -p \$(dirname ${remoteFilePath}) && ${shellScriptCommand} > ${remoteFilePath}; cat ${remoteFilePath}'"
 							ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", executeSSHCommand)
                             Process process = processBuilder.start()
                             process.waitFor()
@@ -6925,60 +6908,68 @@ def tdkpackages() {
 	 * @return
 	 */
 	def createTDKPackage() {
-		try {
+	try {
+		// Ensure 'tdk_packages' directory exists
+		def tdkPackagesDirPath = "${request.getRealPath('/')}/fileStore/tdk_packages"
+def tdkPackagesDir = new File(tdkPackagesDirPath)
 
-			def scriptFile = grailsApplication.mainContext.getResource("/fileStore/createTDKPackage.sh")?.file
+if (!tdkPackagesDir.exists()) {
+    boolean created = tdkPackagesDir.mkdirs()
+} 
 
-			if (!scriptFile || !scriptFile.exists()) {
-				render([status: "error", message: "Script file not found"] as JSON)
-				return
-			}
-
-
-			def scriptFileName = scriptFile.name
-			def scriptDirectory = scriptFile.parent
-
-			def checkDeviceId = params?.deviceeeId
-			Device device = Device.findById(checkDeviceId)
-
-			if (!device) {
-				render([status: "error", message: "Device not found"] as JSON)
-				return
-			}
-
-			def chmodProcess = [
-				"chmod",
-				"777",
-				"${scriptFile.absolutePath}"
-			].execute()
-			def chmodExit = chmodProcess.waitFor()
-			if (chmodExit != 0) {
-				def chmodError = chmodProcess.errorStream.text.trim()
-				render([status: "error", message: "Failed to set execute permissions", output: chmodError] as JSON)
-				return
-			}
-
-			def process = [
-				"sh",
-				"-c",
-				"cd ${scriptDirectory} && ./${scriptFileName} ${device?.soCVendor}"
-			].execute()
-
-			def exitCode = process.waitFor()
-			def output = process.inputStream.text.trim()
-			def errorOutput = process.errorStream.text.trim()
-
-
-			if (exitCode == 0) {
-				render([status: "success", message: "Package created successfully", output: output] as JSON)
-			} else {
-				render([status: "error", message: "Script execution failed", output: errorOutput] as JSON)
-			}
-
-		} catch (Exception e) {
-			render([status: "error", message: "Exception: ${e.message}"] as JSON)
+		// Load the script file from classpath
+		def scriptFile = grailsApplication.mainContext.getResource("/fileStore/createTDKPackage.sh")?.file
+		if (!scriptFile || !scriptFile.exists()) {
+			render([status: "error", message: "Script file not found"] as JSON)
+			return
 		}
+
+		def scriptFileName = scriptFile.name
+		def scriptDirectory = scriptFile.parent
+
+		// Retrieve device ID from params
+		def checkDeviceId = params?.deviceId
+		Device device = Device.findById(checkDeviceId)
+		if (!device) {
+			render([status: "error", message: "Device not found"] as JSON)
+			return
+		}
+
+		// Set execute permission on the script
+		def chmodProcess = [
+			"chmod",
+			"777",
+			"${scriptFile.absolutePath}"
+		].execute()
+		def chmodExit = chmodProcess.waitFor()
+		if (chmodExit != 0) {
+			def chmodError = chmodProcess.errorStream.text.trim()
+			render([status: "error", message: "Failed to set execute permissions", output: chmodError] as JSON)
+			return
+		}
+
+		// Run the script with the device SoCVendor as an argument
+		def process = [
+			"sh",
+			"-c",
+			"cd ${scriptDirectory} && ./${scriptFileName} ${device?.soCVendor}"
+		].execute()
+
+		def exitCode = process.waitFor()
+		def output = process.inputStream.text.trim()
+		def errorOutput = process.errorStream.text.trim()
+
+		if (exitCode == 0) {
+			render([status: "success", message: "Package created successfully", output: output] as JSON)
+		} else {
+			render([status: "error", message: "Script execution failed", output: errorOutput] as JSON)
+		}
+
+	} catch (Exception e) {
+		render([status: "error", message: "Exception: ${e.message}"] as JSON)
 	}
+}
+
 
 
 	/**
@@ -7041,63 +7032,66 @@ def tdkpackages() {
 	 * @return
 	 */
 	def createVTSPackage() {
-		try {
-
-			def scriptFile = grailsApplication.mainContext.getResource("/fileStore/createVTSPackage.sh")?.file
-
-			if (!scriptFile || !scriptFile.exists()) {
-				render([status: "error", message: "Script file not found"] as JSON)
-				return
-			}
-
-
-			def scriptFileName = scriptFile.name
-			def scriptDirectory = scriptFile.parent
-
-			def checkDeviceId = params?.deviceeeId
-			Device device = Device.findById(checkDeviceId)
-
-			if (!device) {
-				render([status: "error", message: "Device not found"] as JSON)
-				return
-			}
-
-
-			def chmodProcess = [
-				"chmod",
-				"777",
-				"${scriptFile.absolutePath}"
-			].execute()
-			def chmodExit = chmodProcess.waitFor()
-			if (chmodExit != 0) {
-				def chmodError = chmodProcess.errorStream.text.trim()
-				render([status: "error", message: "Failed to set execute permissions", output: chmodError] as JSON)
-				return
-			}
-
-
-			def process = [
-				"sh",
-				"-c",
-				"cd ${scriptDirectory} && ./${scriptFileName} ${device?.soCVendor}"
-			].execute()
-
-
-			def exitCode = process.waitFor()
-			def output = process.inputStream.text.trim()
-			def errorOutput = process.errorStream.text.trim()
-
-
-			if (exitCode == 0) {
-				render([status: "success", message: "Package created successfully", output: output] as JSON)
-			} else {
-				render([status: "error", message: "Script execution failed", output: errorOutput] as JSON)
-			}
-
-		} catch (Exception e) {
-			render([status: "error", message: "Exception: ${e.message}"] as JSON)
+	try {
+		
+		def vtsPackagesDirPath = "${request.getRealPath('/')}/fileStore/vts_packages"
+		def vtsPackagesDir = new File(vtsPackagesDirPath)
+		if (!vtsPackagesDir.exists()) {
+			vtsPackagesDir.mkdirs()
 		}
+
+		def scriptFile = grailsApplication.mainContext.getResource("/fileStore/createVTSPackage.sh")?.file
+
+		if (!scriptFile || !scriptFile.exists()) {
+			render([status: "error", message: "Script file not found"] as JSON)
+			return
+		}
+
+		def scriptFileName = scriptFile.name
+		def scriptDirectory = scriptFile.parent
+
+		def checkDeviceId = params?.deviceeeId
+		Device device = Device.findById(checkDeviceId)
+
+		if (!device) {
+			render([status: "error", message: "Device not found"] as JSON)
+			return
+		}
+
+		def chmodProcess = [
+			"chmod",
+			"777",
+			scriptFile.absolutePath
+		].execute()
+		def chmodExit = chmodProcess.waitFor()
+		if (chmodExit != 0) {
+			def chmodError = chmodProcess.errorStream.text.trim()
+			render([status: "error", message: "Failed to set execute permissions", output: chmodError] as JSON)
+			return
+		}
+
+		def process = [
+			"sh",
+			"-c",
+			"cd ${scriptDirectory} && ./${scriptFileName} ${device?.soCVendor}"
+		].execute()
+
+		def exitCode = process.waitFor()
+		def output = process.inputStream.text.trim()
+		def errorOutput = process.errorStream.text.trim()
+
+		if (exitCode == 0) {
+			render([status: "success", message: "Package created successfully", output: output] as JSON)
+		} else {
+			render([status: "error", message: "Script execution failed", output: errorOutput] as JSON)
+		}
+
+	} catch (Exception e) {
+		render([status: "error", message: "Exception: ${e.message}"] as JSON)
 	}
+}
+
+
 
 
 	/**
@@ -7155,53 +7149,48 @@ def tdkpackages() {
 	 * @return
 	 */
 	def getvtsPackages() {
-
 		List<String> totalVtsAllFilesList = []
 		def checkDeviceId = params?.deviceId
 		boolean checkStatus = false
 
-
 		try {
-			def directoryPath = grailsApplication.parentContext.getResource("/fileStore/vts_packages").file.path
-			def directory = new File(directoryPath)
+			def device = Device.findById(checkDeviceId)
 
+			if (!device) {
+				render(status: 404, text: "Device not found")
+				return
+			}
 
-			if (directory.exists() && directory.isDirectory()) {
+			if (device.deviceStatus?.toString() != "FREE") {
+				render([allVtsFilesList: []] as JSON)
+				return
+			}
 
-				directory.listFiles().each { fileee ->
-					def socVendorInstance = SoCVendor.findByNameIlike("${fileee.name}%")
-					def deviceInstanceList = Device.findAllBySoCVendor(socVendorInstance)
+			def normalize = { it?.toLowerCase()?.replaceAll(/[^a-z0-9]/, "") }
+			def deviceVendor = device?.soCVendor
+			def normalizedDeviceVendor = normalize(deviceVendor?.name)
 
-					deviceInstanceList.each { deviceeid ->
+			def vtsDirectoryPath = grailsApplication.parentContext.getResource("/fileStore/vts_packages").file.path
+			def vtsDirectory = new File(vtsDirectoryPath)
 
-						if ((deviceeid?.deviceStatus?.toString() == "FREE") && (checkDeviceId == deviceeid?.id?.toString())) {
-							checkStatus = true
-							def subDirectoryPath = grailsApplication.parentContext.getResource("/fileStore/vts_packages/${fileee.name}/").file.path
-							def subDirectory = new File(subDirectoryPath)
+			if (vtsDirectory.exists() && vtsDirectory.isDirectory()) {
+				def matched = false
+				vtsDirectory.listFiles()?.each { dir ->
+					def normalizedDirName = normalize(dir.name)
 
-							if (subDirectory.exists() && subDirectory.isDirectory()) {
-								def allFiles = subDirectory.listFiles().collect { it.name }
-								//  No filtering, include all files
-								totalVtsAllFilesList.addAll(allFiles)
-							}
-						}
+					if (normalizedDirName.contains(normalizedDeviceVendor) || normalizedDeviceVendor.contains(normalizedDirName)) {
+						matched = true
+						def files = dir.listFiles()?.collect { it.name } ?: []
+						totalVtsAllFilesList.addAll(files)
 					}
 				}
-			}
-
-			if (!checkStatus) {
-				return render(view: "tdkpackages", model: [allVtsFilesList: []])
-
 
 			}
+
 		} catch (Exception e) {
-
 			e.printStackTrace()
 		}
-
-
 		render([allVtsFilesList: totalVtsAllFilesList] as JSON)
-
 	}
 
 	/**
@@ -7210,6 +7199,46 @@ def tdkpackages() {
 	 * @return
 	 */
 	def uploadGenericTDKPackage() {
+		try {
+			def deviceId = params?.deviceId
+
+			Device device = Device.findById(deviceId)
+			if (!device) {
+				render([status: "error", message: "Invalid device ID"] as JSON)
+				return
+			}
+
+			def packageFile = request.getFile("packageFilee") as MultipartFile
+			if (!packageFile || packageFile.isEmpty()) {
+				render([status: "error", message: "No file uploaded"] as JSON)
+				return
+			}
+
+			def baseDir = new File(servletContext.getRealPath("/fileStore/tdk_packages"))
+			if (!baseDir.exists()) {
+				baseDir.mkdirs()
+			}
+
+			// Remove existing files starting with "Generic_TDK"
+			baseDir.listFiles()?.findAll { it.name.startsWith("Generic_TDK") }?.each { it.delete() }
+
+			// Save the new file
+			def targetFile = new File(baseDir, packageFile.originalFilename)
+			packageFile.transferTo(targetFile)
+
+			render([status: "success", message: "Package uploaded successfully!", filePath: targetFile.absolutePath] as JSON)
+
+		} catch (Exception e) {
+			e.printStackTrace()
+			render([status: "error", message: "Exception: ${e.message}"] as JSON)
+		}
+	}
+	/**
+	 * Method to upload Generic VTS Package
+	 * this method upload Generic VTS Package
+	 * @return
+	 */
+	def uploadGenericVTSPackage() {
 		try {
 
 			def deviceId = params?.deviceeeId
@@ -7220,23 +7249,24 @@ def tdkpackages() {
 				return
 			}
 
-
-			def packageFile = request.getFile("packageFilee") as MultipartFile
+			def packageFile = request.getFile("vtsPackageFile") as MultipartFile
 			if (!packageFile || packageFile.isEmpty()) {
 				render([status: "error", message: "No file uploaded"] as JSON)
 				return
 			}
 
-
-			def baseDir = new File(servletContext.getRealPath("/fileStore/tdk_packages"))
+			def baseDir = new File(servletContext.getRealPath("/fileStore/vts_packages"))
 
 			if (!baseDir.exists()) {
 				baseDir.mkdirs()
+			} 			// Remove existing files starting with "Generic_VTS"
+			def existingFiles = baseDir.listFiles()?.findAll { it.name.startsWith("Generic_VTS") }
+			existingFiles?.each {
+				it.delete()
 			}
 
-
+			// Save the new file
 			def targetFile = new File(baseDir, packageFile.originalFilename)
-
 			packageFile.transferTo(targetFile)
 
 			render([status: "success", message: "Package uploaded successfully!", filePath: targetFile.absolutePath] as JSON)
@@ -7246,4 +7276,5 @@ def tdkpackages() {
 			render([status: "error", message: "Exception: ${e.message}"] as JSON)
 		}
 	}
+
 }
