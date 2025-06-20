@@ -497,6 +497,15 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
 def SetupPreRequisites(host, username, password, basePath, binaryName, binaryConfig, module, setupEnvironment = False):
     global client
     global session
+    try:
+        configuredPath = getDeviceConfigValues("VTS_BASE_PATH")
+        print("configuredPath : " ,configuredPath)
+        moduleName = os.path.basename(os.path.normpath(basePath)) + "/"
+        basePath = configuredPath + moduleName
+        print("basePath : ", basePath)
+    except:
+        print("Using default basePath :  ", basePath)
+
     binaryPath = "cd " + basePath + " ; ./" + binaryName
     if binaryConfig:
         binaryPath = binaryPath + " -p " + binaryConfig
@@ -602,13 +611,14 @@ def getDeviceConfigValues (configKey):
                 output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
                 print(output)
                 result = "FAILURE"
-
             #Continue only if the device config file exists
             if (len (deviceConfigFile) != 0):
                 configParser = configparser.ConfigParser()
                 configParser.read(r'%s' % deviceConfigFile)
                 #Retrieve the value of config key from device config file
                 configValue = configParser.get('device.config', configKey)
+                if "SSH" not in configKey:
+                    return configValue
             else:
                 print("DeviceConfig file not available")
                 result = "FAILURE"
