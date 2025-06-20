@@ -1732,3 +1732,116 @@ def wait_for_namespace(obj, maxwait, sleeptime, namespace, expectedresult):
         tdkTestObj.setResultStatus("FAILURE");
         print("%s namepsace is NOT available" %namespace);
     return found, tdkTestObj;
+
+# getSecurityModeEnabledConfig
+
+# Syntax      : getSecurityModeEnabledConfig(obj, mode, index)
+# Description : Function to get the security mode configuration
+# Parameters  : obj - module object
+#             : mode - current security mode
+#             : index - the AP index
+# Return Value: tdkTestObj - test object
+#             : actualresult - SUCCESS/FAILURE
+#             : config - security mode config dictionary
+
+def getSecurityModeEnabledConfig(obj, mode, index):
+    config = {};
+    paramNames = []
+    actualresult = "SUCCESS"
+    if "Personal" in mode:
+        if "WPA3" not in mode:
+            # Get the initial keypassphrase and Encryption method
+            paramNames = [
+                f"Device.WiFi.AccessPoint.{index}.Security.KeyPassphrase",
+                f"Device.WiFi.AccessPoint.{index}.Security.X_CISCO_COM_EncryptionMethod"
+            ]
+        else:
+            # Get the initial SAEpassphrase and Encryption method
+            paramNames = [
+                f"Device.WiFi.AccessPoint.{index}.Security.SAEPassphrase",
+                f"Device.WiFi.AccessPoint.{index}.Security.X_CISCO_COM_EncryptionMethod"
+            ]
+
+    elif "Enterprise" in mode:
+        # Get the security mode enabled, radius server, port and radius secret
+        paramNames = [
+            f"Device.WiFi.AccessPoint.{index}.Security.RadiusServerIPAddr",
+            f"Device.WiFi.AccessPoint.{index}.Security.RadiusServerPort",
+            f"Device.WiFi.AccessPoint.{index}.Security.RadiusSecret"
+        ]
+
+    for paramName in paramNames:
+        tdkTestObj, actualresult, paramValue = wifi_GetParam(obj, paramName)
+        if actualresult != "SUCCESS":
+            break;
+        else:
+            config[paramName] = paramValue
+            print(f"{paramName} : {paramValue}")
+
+    # For None mode
+    if paramNames == []:
+        tdkTestObj = obj.createTestStep('WIFIAgent_Get')
+
+    return tdkTestObj, actualresult, config
+
+# setSecurityModeEnabledConfig
+
+# Syntax      : setSecurityModeEnabledConfig(obj, modeToSet, index, config, currMode = "")
+# Description : Function to set the security mode configuration
+# Parameters  : obj - module object
+#             : modeToSet - security mode to be set
+#             : index - the AP index
+#             : config - security mode config dictionary
+#             : currMode - current security mode (in case of revert, if current and initial modes are personal,
+#               only the mode needs to be changed, same for Enterprise or None modes)
+# Return Value: tdkTestObj - test object
+#             : actualresult - SUCCESS/FAILURE
+
+def setSecurityModeEnabledConfig(obj, modeToSet, index, config, currMode = ""):
+
+    paramName = f"Device.WiFi.AccessPoint.{index}.Security.ModeEnabled"
+    paramValue = modeToSet
+    paramType = "string"
+    tdkTestObj, actualresult = wifi_SetParam(obj, paramName, paramValue, paramType)
+
+    paramNames = []
+
+    if actualresult == "SUCCESS":
+        if "Personal" in modeToSet and "Personal" not in currMode:
+            if "WPA3" not in modeToSet:
+                # Set the keypassphrase and Encryption method
+                paramNames = [
+                    f"Device.WiFi.AccessPoint.{index}.Security.KeyPassphrase",
+                    f"Device.WiFi.AccessPoint.{index}.Security.X_CISCO_COM_EncryptionMethod"
+                ]
+            else:
+                # Set the SAE passphrase and Encryption method
+                paramNames = [
+                    f"Device.WiFi.AccessPoint.{index}.Security.SAEPassphrase",
+                    f"Device.WiFi.AccessPoint.{index}.Security.X_CISCO_COM_EncryptionMethod"
+                ]
+
+            # Perform SET operation
+            tdkTestObj = obj.createTestStep("WIFIAgent_SetMultiple")
+            paramList = ("%s|%s|string|%s|%s|string|" %(paramNames[0], config[paramNames[0]], paramNames[1], config[paramNames[1]]))
+            tdkTestObj.addParameter("paramList", paramList)
+            tdkTestObj.executeTestCase(expectedresult)
+            actualresult = tdkTestObj.getResult()
+
+        elif "Enterprise" in modeToSet and "Enterprise" not in currMode:
+            # Set the radius server, port and radius secret
+            paramNames = [
+                f"Device.WiFi.AccessPoint.{index}.Security.RadiusServerIPAddr",
+                f"Device.WiFi.AccessPoint.{index}.Security.RadiusServerPort",
+                f"Device.WiFi.AccessPoint.{index}.Security.RadiusSecret"
+            ]
+
+            # Perform SET operation
+            RADIUS_SECRET = "Aa12345678"
+            tdkTestObj = obj.createTestStep("WIFIAgent_SetMultiple")
+            paramList = ("%s|%s|string|%s|%s|unsignedint|%s|%s|string|" %(paramNames[0], config[paramNames[0]], paramNames[1], config[paramNames[1]], paramNames[2], RADIUS_SECRET))
+            tdkTestObj.addParameter("paramList", paramList)
+            tdkTestObj.executeTestCase(expectedresult)
+            actualresult = tdkTestObj.getResult()
+
+    return tdkTestObj, actualresult
