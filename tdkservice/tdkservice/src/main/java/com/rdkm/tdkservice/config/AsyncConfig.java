@@ -19,8 +19,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.config;
 
+import java.util.concurrent.Executor;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
  * This configuration class is designed to enable the asynchronous processing in
@@ -29,4 +33,24 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Configuration
 @EnableAsync
 public class AsyncConfig {
+
+	/**
+	 * Creates a ThreadPoolTaskExecutor bean that is used to execute tasks
+	 * asynchronously. Mainly for the execution triggers.
+	 * 
+	 * @return Executor instance configured with a thread pool.
+	 */
+	@Bean(name = "taskExecutor")
+	public Executor taskExecutor() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+
+		executor.setCorePoolSize(50); // Start with 50 threads immediately
+		executor.setMaxPoolSize(100); // Allow it to scale up to 100 threads if needed
+		executor.setQueueCapacity(10); // Allow only 10 tasks to queue before new threads are created (up to
+										// maxPoolSize)
+
+		executor.setThreadNamePrefix("Automation-");
+		executor.initialize();
+		return executor;
+	}
 }
