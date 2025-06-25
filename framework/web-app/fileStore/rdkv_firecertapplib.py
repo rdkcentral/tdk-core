@@ -61,11 +61,12 @@ def rdkv_firecertapp_createURL(url_type):
 def rdkv_firecertapp_execute(sequence):
     sequence = sequence.split(",")
     param = ''
+    browser='LightningApp'
     for code in sequence:
         if sequence.index(code) == len(sequence)-1:
-            param = param + '{"keyCode":'+code + ',"modifiers": [],"delay":1.0}'
+            param = param + '{"keyCode":'+code + ',"modifiers": [],"delay":1.0' + '"callsign":' +browser+',"client":' + browser+ '}'
         else:
-            param = param + '{"keyCode":'+code + ',"modifiers": [],"delay":1.0},'
+            param = param + '{"keyCode":'+code + ',"modifiers": [],"delay":1.0' + '"callsign":' +browser+',"client":' + browser+ '},'
     params = '{"keys":[ ' + param + ' ]}'
     print (params)
     result = rdkservice_setValue("org.rdk.RDKShell.1.generateKey",params)
