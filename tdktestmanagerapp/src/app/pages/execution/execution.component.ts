@@ -466,6 +466,9 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     }, 10000);
      //Resets the view for scripts when moving to other tabs
     localStorage.setItem('viewName', 'scripts');
+    this.executionservice.getRefreshSchedulerObservable().subscribe(() => {
+      this.allExecutionScheduler(); // Refresh the schedule list
+    });
   }
   refreshExeHistory():void{
     this.storeSelection();

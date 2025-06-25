@@ -888,25 +888,27 @@ export class ExecuteDialogComponent {
     };
 
     this.executionservice.schedularExecution(schedulerObj).subscribe({
-      next: (res) => {
-        this._snakebar.open(res.message, '', {
-          duration: 3000,
-          panelClass: ['success-msg'],
-          verticalPosition: 'top'
-        });
-        window.location.reload();
-        setTimeout(() => {
-          this.close();
-        }, 3000);
-      },
-      error: (err) => {
-        this._snakebar.open(err.message, '', {
-          duration: 2000,
-          panelClass: ['err-msg'],
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        });
-      }
+        next: (res) => {
+            this._snakebar.open(res.message, '', {
+                duration: 3000,
+                panelClass: ['success-msg'],
+                verticalPosition: 'top',
+            });
+
+            setTimeout(() => {
+                this.close();
+            }, 3000);
+            this.executionservice.triggerRefreshScheduler(); 
+        },
+        
+        error: (err) => {
+            this._snakebar.open(err.message, '', {
+                duration: 2000,
+                panelClass: ['err-msg'],
+                horizontalPosition: 'end',
+                verticalPosition: 'top',
+            });
+        },
     });
   }
   /**

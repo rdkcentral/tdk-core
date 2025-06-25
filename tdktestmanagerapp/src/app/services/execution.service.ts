@@ -368,5 +368,12 @@ cancelTask(executionId: string): Observable<any> {
     { headers }
   );
 }
- 
+private refreshSchedulerSubject = new Subject<void>();
+ triggerRefreshScheduler(): void {
+    this.refreshSchedulerSubject.next();
+  }
+
+  getRefreshSchedulerObservable() {
+    return this.refreshSchedulerSubject.asObservable();
+  }
 }

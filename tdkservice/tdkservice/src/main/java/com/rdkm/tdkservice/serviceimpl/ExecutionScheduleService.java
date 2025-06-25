@@ -22,11 +22,7 @@ package com.rdkm.tdkservice.serviceimpl;
 
 import java.io.File;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.regex.Matcher;
@@ -537,6 +533,11 @@ public class ExecutionScheduleService {
 		if (listOfExecutionSchedules == null) {
 			return null;
 		} else {
+			// Sort by creation date in descending order
+			listOfExecutionSchedules = listOfExecutionSchedules.stream()
+					.sorted(Comparator.comparing(ExecutionSchedule::getCreatedDate).reversed())
+					.collect(Collectors.toList());
+
 			return getResponseDTOList(listOfExecutionSchedules);
 		}
 
