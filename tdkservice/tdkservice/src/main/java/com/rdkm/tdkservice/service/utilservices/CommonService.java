@@ -510,8 +510,7 @@ public class CommonService {
 		}
 		if (!configFile.getOriginalFilename().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
 			LOGGER.error("Invalid file extension: " + configFile.getOriginalFilename());
-			throw new UserInputException(
-					"Please upload a .py file.");
+			throw new UserInputException("Please upload a .py file.");
 		}
 	}
 
@@ -914,4 +913,30 @@ public class CommonService {
 		return true;
 	}
 
+	/**
+	 * Removes all files starting with "tempScript_" in the base folder.
+	 */
+	public void removeTemporaryScriptFiles() {
+		String baseFolderPath = AppConfig.getBaselocation();
+		File baseFolder = new File(baseFolderPath);
+
+		if (!baseFolder.exists() || !baseFolder.isDirectory()) {
+			LOGGER.error("Base folder does not exist or is not a directory: {}", baseFolderPath);
+			return;
+		}
+
+		File[] files = baseFolder.listFiles((dir, name) -> name.startsWith("tempScript_"));
+		if (files == null || files.length == 0) {
+			LOGGER.info("No temporary script files found in the base folder: {}", baseFolderPath);
+			return;
+		}
+
+		for (File file : files) {
+			if (file.delete()) {
+				LOGGER.info("Deleted temporary script file: {}", file.getName());
+			} else {
+				LOGGER.error("Failed to delete temporary script file: {}", file.getName());
+			}
+		}
+	}
 }

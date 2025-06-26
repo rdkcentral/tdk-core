@@ -26,6 +26,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,12 +59,13 @@ import com.rdkm.tdkservice.model.ExecutionDevice;
 import com.rdkm.tdkservice.model.ExecutionEntities;
 import com.rdkm.tdkservice.model.ExecutionMethodResult;
 import com.rdkm.tdkservice.model.ExecutionResult;
+import com.rdkm.tdkservice.model.ExecutionResultAnalysis;
 import com.rdkm.tdkservice.model.Script;
-import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.repository.DeviceRepositroy;
 import com.rdkm.tdkservice.repository.ExecutionDeviceRepository;
 import com.rdkm.tdkservice.repository.ExecutionMethodResultRepository;
 import com.rdkm.tdkservice.repository.ExecutionRepository;
+import com.rdkm.tdkservice.repository.ExecutionResultAnalysisRepository;
 import com.rdkm.tdkservice.repository.ExecutionResultRepository;
 import com.rdkm.tdkservice.repository.ScriptRepository;
 import com.rdkm.tdkservice.service.utilservices.CommonService;
@@ -90,6 +92,9 @@ public class ExecutionAsyncService {
 	private ExecutionMethodResultRepository executionMethodResultRepository;
 
 	@Autowired
+	private ExecutionResultAnalysisRepository executionResultAnalysisRepository;
+
+	@Autowired
 	private ExecutionDeviceRepository executionDeviceRepository;
 
 	@Autowired
@@ -97,7 +102,7 @@ public class ExecutionAsyncService {
 
 	@Autowired
 	private DeviceRepositroy deviceRepository;
-	
+
 	@Autowired
 	private CommonService commonService;
 
@@ -295,9 +300,13 @@ public class ExecutionAsyncService {
 		LOGGER.info("Executing multiple scripts execution in device:" + device.getName());
 		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
 		try {
+			// repeatCount means how many times the execution needs to be done
+			// If 0 is added by the user , then the execution won't happen
+			// So if the repeatcount is 0, then it is defaulted to 1
 			if (repeatCount == 0) {
 				repeatCount = 1;
 			}
+
 			for (int repeatIndex = 0; repeatIndex < repeatCount; repeatIndex++) {
 				String currentExecutionName = executionName;
 
@@ -347,6 +356,9 @@ public class ExecutionAsyncService {
 				execution.setDiagnosticLogsNeeded(isDiagnosticsLogsNeeded);
 				execution.setPerformanceLogsNeeded(isPerformanceNeeded);
 				execution.setUser(user);
+				execution.setRepeatCount(repeatCount);
+				execution.setRerunOnFailure(isRerunOnFailure);
+
 				Execution savedExecution = executionRepository.save(execution);
 
 				// Create and save ExecutionDevice
@@ -1153,20 +1165,20 @@ public class ExecutionAsyncService {
 	private String prepareReplacementString(Device device, Execution execution, ExecutionDevice executionDevice,
 			ExecutionResult executionResult, Script script) {
 		return Constants.METHOD_TOKEN + Constants.LEFT_PARANTHESIS + Constants.SINGLE_QUOTES
-				+ commonService.getTMUrlFromConfigFileForTestExecution() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
-				+ Constants.SINGLE_QUOTES + AppConfig.getRealPath() + Constants.SINGLE_QUOTES
-				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + commonService.getBaseLogPath()
-				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + execution.getId()
+				+ commonService.getTMUrlFromConfigFileForTestExecution() + Constants.SINGLE_QUOTES
+				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + AppConfig.getRealPath()
 				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES
-				+ executionDevice.getId() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
-				+ Constants.SINGLE_QUOTES + executionResult.getId() + Constants.SINGLE_QUOTES
-				+ Constants.REPLACE_BY_TOKEN + device.getAgentMonitorPort() + Constants.COMMA_SEPERATOR
-				+ device.getStatusPort() + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + script.getId()
-				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + device.getId()
-				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + false
-				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + false
-				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + false
-				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR;
+				+ commonService.getBaseLogPath() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
+				+ Constants.SINGLE_QUOTES + execution.getId() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
+				+ Constants.SINGLE_QUOTES + executionDevice.getId() + Constants.SINGLE_QUOTES
+				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + executionResult.getId()
+				+ Constants.SINGLE_QUOTES + Constants.REPLACE_BY_TOKEN + device.getAgentMonitorPort()
+				+ Constants.COMMA_SEPERATOR + device.getStatusPort() + Constants.COMMA_SEPERATOR
+				+ Constants.SINGLE_QUOTES + script.getId() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
+				+ Constants.SINGLE_QUOTES + device.getId() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
+				+ Constants.SINGLE_QUOTES + false + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
+				+ Constants.SINGLE_QUOTES + false + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
+				+ Constants.SINGLE_QUOTES + false + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR;
 	}
 
 	/**
@@ -1259,6 +1271,335 @@ public class ExecutionAsyncService {
 	 */
 	private double roundOfToThreeDecimals(double time) {
 		return Math.round(time * 1000.0) / 1000.0;
+	}
+
+	/**
+	 * This method is used to restart the multi script execution that was
+	 * interrupted after the application restart.
+	 * 
+	 * @param execution the execution object that was interrupted
+	 */
+	@Async
+	public void restartMultiScriptExecution(Execution execution) {
+		LOGGER.info("Restarting multi script execution: {}", execution.getName().toUpperCase());
+		try {
+
+			// Retrieve the associated device and check if it is available ,set
+			// the status of the execution results as aborted if the device is not
+			// available
+			ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+			Device device = deviceRepository.findByName(executionDevice.getDevice());
+			if (!isDeviceAvailableForExecution(device, execution)) {
+				return;
+			}
+
+			// List of ExecutionResults with INPROGRESS or PENDING status remaining in the
+			// ongoing execution before the app restart
+			List<ExecutionResult> executionResults = processExecutionResults(execution);
+			if (executionResults.isEmpty()) {
+				LOGGER.warn("No valid execution results found for execution: {}", execution.getName());
+				this.abortPendingAndInProgressResultsWhileRestart(execution);
+				return;
+			}
+
+			// Set the device status to IN_USE state if not already set
+			deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
+
+			// Execute the scripts that were in progress or pending before the restart
+			this.executeThePendingExecutionResultsOnRestart(execution, executionResults);
+
+		} catch (Exception e) {
+			LOGGER.error("Error occurred while restarting multi script execution: {}", execution.getName(), e);
+			return;
+		}
+
+	}
+
+	/**
+	 * This method is used to restart the single script execution that was
+	 * interrupted after the application restart.
+	 * 
+	 * @param execution the execution object that was interrupted
+	 */
+	@Async
+	public void restartSingleScriptExecution(Execution execution) {
+		LOGGER.info("Restarting single script execution: {}", execution.getName().toUpperCase());
+		// Retrieve the associated device and check if it is available ,set
+		// the status of the execution results as aborted if the device is not
+		// available
+		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+		Device device = deviceRepository.findByName(executionDevice.getDevice());
+		if (!isDeviceAvailableForExecution(device, execution)) {
+			return;
+		}
+
+		try {
+
+			LOGGER.info("Device {} is available for execution: {}", device.getName(), execution.getName());
+
+			// Get the execution results that was in progress or pending before the restart
+			ExecutionResult executionResult = this.processExecutionResultForSingleScriptRestart(execution);
+
+			Script script = scriptRepository.findByName(executionResult.getScript());
+
+			// Set the device status to IN_USE state if not already set
+			deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
+
+			executeScriptinDevice(script, execution, executionResult, executionDevice);
+
+			double executionStartTime = execution.getCreatedDate().toEpochMilli();
+			double executionEndTime = System.currentTimeMillis();
+			double executionTime = this
+					.roundOfToThreeDecimals(this.computeTimeDifference(executionStartTime, executionEndTime));
+
+			double realExecutionTime = this.getRealExcecutionTime(new ArrayList<>(execution.getExecutionResults()));
+			this.setExecutionTime(execution, executionTime, realExecutionTime);
+
+			this.setFinalStatusOfExecution(execution);
+
+		} catch (Exception e) {
+			LOGGER.error("Error occurred while restarting single script execution: {}", execution.getName(), e);
+			return;
+		}
+		if (device != null) {
+			deviceStatusService.fetchAndUpdateDeviceStatus(device);
+		}
+
+	}
+
+	/**
+	 * This method checks if the device is available for execution.
+	 * 
+	 * @param device    the device to check availability for execution
+	 * @param execution the execution object containing the device information
+	 * @return true if the device is available for execution, false otherwise
+	 */
+	private boolean isDeviceAvailableForExecution(Device device, Execution execution) {
+		if (device == null) {
+			LOGGER.warn("Device {} not found in the repository", execution.getExecutionDevice().getDevice());
+			abortPendingAndInProgressResultsWhileRestart(execution);
+			return false;
+		}
+
+		DeviceStatus deviceStatus = deviceStatusService.fetchDeviceStatus(device);
+		if (deviceStatus != DeviceStatus.FREE) {
+			LOGGER.warn("Device {} is not available for re-run of execution: {}", device.getName(),
+					execution.getName());
+			abortPendingAndInProgressResultsWhileRestart(execution);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * This method processes the execution result for a single script restart.
+	 * 
+	 * @param execution the execution object that was interrupted
+	 * @return ExecutionResult or null if no valid execution result is found
+	 */
+	private ExecutionResult processExecutionResultForSingleScriptRestart(Execution execution) {
+		List<ExecutionResult> executionResultsList = executionResultRepository.findByExecution(execution); // Process
+																											// any
+																											// INPROGRESS
+		LOGGER.info("Processing execution results for execution: {}", execution.getName());
+		LOGGER.info("Number of execution results found: {}", executionResultsList.size());
+		if (executionResultsList == null || executionResultsList.isEmpty() || executionResultsList.size() > 1) {
+			LOGGER.warn("No valid execution result found for execution: {}", execution.getName());
+			// Abort all pending and in progress results
+			this.abortPendingAndInProgressResultsWhileRestart(execution);
+			return null;
+		} else {
+			ExecutionResult executionResult = executionResultsList.get(0);
+			LOGGER.info("Going to restart the Execution Result: {} ", executionResult.getId());
+
+			return executionResult;
+
+		}
+	}
+
+	/**
+	 * This method retrieves all execution results associated with the execution
+	 * that are either INPROGRESS or PENDING. Processes the INPROGRESS results by
+	 * deleting their associated ExecutionMethodResults and ExecutionResultAnalysis,
+	 * then updates their status to PENDING. Finally, it saves the updated
+	 * ExecutionResults back to the repository for it to be executed again.
+	 * 
+	 * @param execution the execution object containing the execution results to be
+	 *                  processed
+	 * @return a list of ExecutionResults that were processed
+	 */
+	private List<ExecutionResult> processExecutionResults(Execution execution) {
+		// Retrieve all ExecutionResults with INPROGRESS status
+		List<ExecutionResult> executionResultsInprogress = executionResultRepository.findByExecution(execution).stream()
+				.filter(result -> result.getStatus() == ExecutionStatus.INPROGRESS)
+				.sorted(Comparator.comparing(ExecutionResult::getCreatedDate)).toList();
+
+		List<ExecutionResult> executionResultsPending = executionResultRepository.findByExecution(execution).stream()
+				.filter(result -> result.getResult() == ExecutionResultStatus.PENDING)
+				.sorted(Comparator.comparing(ExecutionResult::getCreatedDate)).toList();
+
+		for (ExecutionResult executionResult : executionResultsInprogress) {
+
+			// Delete all ExecutionMethodResults under the ExecutionResult
+			List<ExecutionMethodResult> executionMethodResults = executionMethodResultRepository
+					.findByExecutionResult(executionResult);
+			if (executionMethodResults != null && !executionMethodResults.isEmpty()) {
+				executionMethodResultRepository.deleteAll(executionMethodResults);
+			}
+
+			// Delete the ExecutionResultAnalysis associated with the ExecutionResult
+			ExecutionResultAnalysis executionResultAnalyses = executionResultAnalysisRepository
+					.findByExecutionResult(executionResult);
+			if (executionResultAnalyses != null) {
+				executionResultAnalysisRepository.delete(executionResultAnalyses);
+			}
+
+			// Set the status to PENDING
+			executionResult.setResult(ExecutionResultStatus.PENDING);
+			executionResult.setStatus(null);
+
+			// Save the updated ExecutionResult
+			executionResultRepository.save(executionResult);
+		}
+
+		List<ExecutionResult> orderedExecutionResults = new ArrayList<>();
+		orderedExecutionResults.addAll(executionResultsInprogress);
+		orderedExecutionResults.addAll(executionResultsPending);
+		return orderedExecutionResults;
+
+	}
+
+	/**
+	 * This method executes the pending execution results for the given execution.
+	 * 
+	 * @param execution
+	 * @param executionResults
+	 */
+	public void executeThePendingExecutionResultsOnRestart(Execution execution,
+			List<ExecutionResult> executionResults) {
+		UUID executionId = execution.getId();
+		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+		Device device = deviceRepository.findByName(executionDevice.getDevice());
+
+		int executedScript = 0;
+		try {
+			for (ExecutionResult execRes : executionResults) {
+				if (this.isExecutionAborted(executionId)) {
+					for (ExecutionResult execResults : executionResults) {
+						if (execResults.getResult() == ExecutionResultStatus.INPROGRESS
+								|| execResults.getResult() == ExecutionResultStatus.PENDING) {
+							execResults.setResult(ExecutionResultStatus.ABORTED);
+							execResults.setExecutionRemarks("Execution aborted by user");
+							executionResultRepository.save(execResults);
+						}
+					}
+					Execution executionAborted = executionRepository.findById(executionId).orElse(null);
+					executionAborted.setExecutionStatus(ExecutionProgressStatus.ABORTED);
+					executionAborted.setResult(ExecutionOverallResultStatus.ABORTED);
+					executionRepository.save(executionAborted);
+					LOGGER.info("Execution aborted for device: {}", executionDevice.getDevice());
+					break;
+				}
+				execRes.setExecutionRemarks(
+						"Executing script: " + execRes.getScript() + " on device: " + executionDevice.getDevice());
+				executionResultRepository.save(execRes);
+				Script script = scriptRepository.findByName(execRes.getScript());
+				boolean executionResult = executeScriptinDevice(script, execution, execRes, executionDevice);
+
+				if (executionResult) {
+					LOGGER.info("Execution result success for {} on device: {}", script.getName(),
+							executionDevice.getDevice());
+				} else {
+					LOGGER.info("Execution result failed for {} on device: {}", script.getName(),
+							executionDevice.getDevice());
+				}
+
+				executedScript++;
+				Execution executionCompleted = executionRepository.findById(executionId).orElse(null);
+
+				// The total execution time is valculated based on the time taken for execution
+				// of all
+				// the scripts executed so far
+				double executionStartTime = execution.getCreatedDate().toEpochMilli();
+				double currentExecTime = System.currentTimeMillis();
+				double executionTime = this.computeTimeDifference(executionStartTime, currentExecTime);
+				executionCompleted.setExecutionTime(executionTime);
+				executionCompleted.setExecutedScriptCount(executionCompleted.getExecutedScriptCount() + executedScript);
+				executionRepository.save(executionCompleted);
+
+			}
+
+			Execution finalExecution = executionRepository.findById(executionId).orElse(null);
+
+			// Total execution time based on the time taken by adding the time taken for
+			// execution
+			// of all scripts
+			List<ExecutionResult> allResultList = executionResultRepository.findByExecution(finalExecution);
+			if (allResultList != null) {
+				double realExecTime = this.getRealExcecutionTime(allResultList);
+				double roundOfValue = this.roundOfToThreeDecimals(realExecTime);
+				finalExecution.setRealExecutionTime(roundOfValue);
+			}
+
+			// Final execution time calculation after considering the execution of all
+			// scripts
+			// This is the time when the execution is completed from the start of the
+			// execution
+			double executionEndTime = System.currentTimeMillis();
+			double executionStartTime = finalExecution.getCreatedDate().toEpochMilli();
+			double executionTime = this.computeTimeDifference(executionStartTime, executionEndTime);
+			finalExecution.setExecutionTime(executionTime);
+
+			executionRepository.save(finalExecution);
+			this.setFinalStatusOfExecution(finalExecution);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// Unlock the device with the current status
+			deviceStatusService.fetchAndUpdateDeviceStatus(device);
+			LOGGER.error("Error in executing scripts: {} on device: {}", device.getName());
+			throw new TDKServiceException("Error in executing scripts: " + " on device: " + device.getName());
+		}
+		// Unlock the device with the current status
+		deviceStatusService.fetchAndUpdateDeviceStatus(device);
+	}
+
+	/**
+	 * Marks all PENDING and INPROGRESS ExecutionResults of the given Execution as
+	 * ABORTED while trying to restart because the device is not available for
+	 * execution.
+	 *
+	 * @param execution the Execution object whose results need to be updated
+	 */
+	private void abortPendingAndInProgressResultsWhileRestart(Execution execution) {
+		// Retrieve all ExecutionResults associated with the given Execution
+		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
+
+		for (ExecutionResult result : executionResults) {
+			// Check if the status is PENDING or INPROGRESS
+			if (result.getResult() == ExecutionResultStatus.PENDING
+					|| result.getResult() == ExecutionResultStatus.INPROGRESS) {
+				// Update the status to ABORTED
+				result.setStatus(ExecutionStatus.COMPLETED);
+				result.setResult(ExecutionResultStatus.ABORTED);
+				result.setExecutionRemarks(
+						"Execution aborted due to app restart and during the start up, the device is not available for execution.");
+
+				// Save the updated ExecutionResult
+				executionResultRepository.save(result);
+			}
+		}
+		// Update the Execution status to ABORTED
+		execution.setExecutionStatus(ExecutionProgressStatus.ABORTED);
+		execution.setResult(ExecutionOverallResultStatus.ABORTED);
+
+		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+		Device device = deviceRepository.findByName(executionDevice.getDevice());
+		// Unlock the device with the current status
+		deviceStatusService.fetchAndUpdateDeviceStatus(device);
+
+		// Save the updated Execution
+		executionRepository.save(execution);
 	}
 
 }

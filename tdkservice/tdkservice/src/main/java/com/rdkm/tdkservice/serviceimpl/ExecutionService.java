@@ -199,7 +199,7 @@ public class ExecutionService implements IExecutionService {
 		// Check if the devices are available for execution
 		List<Device> freeDevices = this.filterFreeDevices(deviceList, responseLogs);
 		if (freeDevices.isEmpty()) {
-			if (deviceList.size() > 1 ) {
+			if (deviceList.size() > 1) {
 				LOGGER.error("No free devices found in the request");
 			} else {
 				LOGGER.error("No free device found in the request");
@@ -1087,7 +1087,8 @@ public class ExecutionService implements IExecutionService {
 		}
 
 		Pageable pageable = getPageable(page, size, sortBy, sortDir);
-		Page<Execution> pageExecutions = executionRepository.findByUserAndCategory(user.getUsername(), category, pageable);
+		Page<Execution> pageExecutions = executionRepository.findByUserAndCategory(user.getUsername(), category,
+				pageable);
 		ExecutionListResponseDTO executionListResponseDTO = getExecutionListResponseFromSearchResult(pageExecutions);
 		return executionListResponseDTO;
 
@@ -1639,10 +1640,10 @@ public class ExecutionService implements IExecutionService {
 			List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
 					.collect(Collectors.toList());
 			String execName = getNextRerunExecutionName(execution.getName(), executionNames);
-			executionAsyncService.prepareAndExecuteMultiScript(device, scripts, triggerUser,
-					execName, execution.getCategory().name(), execution.getTestType(), 1, false,
-					execution.isDeviceLogsNeeded(), execution.isDiagnosticLogsNeeded(),
-					execution.isDiagnosticLogsNeeded(), false, execution.getTestType(), null, null);
+			executionAsyncService.prepareAndExecuteMultiScript(device, scripts, triggerUser, execName,
+					execution.getCategory().name(), execution.getTestType(), 1, false, execution.isDeviceLogsNeeded(),
+					execution.isDiagnosticLogsNeeded(), execution.isDiagnosticLogsNeeded(), false,
+					execution.getTestType(), null, null);
 			LOGGER.info("Successfully re-run failed scripts for execution with id: {}", execId);
 		} catch (Exception e) {
 			LOGGER.error("Error re-running failed scripts for execution with id: {}", execId, e);
@@ -1870,7 +1871,7 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Execution Device not found for execution with id: {}", id);
 			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + id + " not found");
 		}
-		
+
 		ExecutionDetailsResponseDTO response = new ExecutionDetailsResponseDTO();
 		response.setDeviceName(executionDevice.getDevice());
 		response.setDeviceIP(executionDevice.getDeviceIp());
@@ -1963,14 +1964,21 @@ public class ExecutionService implements IExecutionService {
 
 		ExecutionSummaryResponseDTO summary = new ExecutionSummaryResponseDTO();
 		summary.setTotalScripts(execution.getScriptCount());
-		summary.setExecuted(execution.getExecutedScriptCount());
 		summary.setInProgressCount((int) execution.getExecutionResults().stream()
 				.filter(r -> r.getStatus() == ExecutionStatus.INPROGRESS).count());
-		summary.setSuccess((int) execution.getExecutionResults().stream().filter(
+
+		// Calculate counts for SUCCESS AND FAILURE status, Since the
+		// status can be set while the script is in progress, we need to filter out
+		// the results that are still in progress.
+		int successCount = (int) execution.getExecutionResults().stream().filter(
 				r -> r.getResult() == ExecutionResultStatus.SUCCESS && r.getStatus() != ExecutionStatus.INPROGRESS)
-				.count());
-		summary.setFailure((int) execution.getExecutionResults().stream()
-				.filter(r -> r.getResult() == ExecutionResultStatus.FAILURE).count());
+				.count();
+		int failureCount = (int) execution.getExecutionResults().stream().filter(
+				r -> r.getResult() == ExecutionResultStatus.FAILURE && r.getStatus() != ExecutionStatus.INPROGRESS)
+				.count();
+		summary.setSuccess(successCount);
+		summary.setFailure(failureCount);
+		summary.setExecuted(failureCount + successCount);
 		summary.setPending((int) execution.getExecutionResults().stream()
 				.filter(r -> r.getResult() == ExecutionResultStatus.PENDING).count());
 		summary.setNa((int) execution.getExecutionResults().stream()
@@ -2442,6 +2450,48 @@ public class ExecutionService implements IExecutionService {
 		String logLink = appConfig.getBaseURL() + "/execution/getExecutionLogs?executionResultID=" + execResultId;
 		return logLink;
 
+	}
+
+	/**
+	 * Re-runs the stopped executions after the service restart. This method checks
+	 * for executions that were in progress at the time of the service restart, and
+	 * attempts to re-run them based on their execution type.
+	 */
+	public void reRunTheStoppedExecutionsAfterRestart() {
+		LOGGER.info("Re-running the stopped executions on restart");
+		// Removes all temporary script files created during the past executions
+		commonService.removeTemporaryScriptFiles();
+
+		// Fetch all executions that are in progress and created within the last 10 days
+		// This is considering the long running executions that might have been
+		// interrupted .Calculate the date range
+		Instant tenDaysAgo = Instant.now().minusSeconds(10 * 24 * 60 * 60); // 10 days in seconds
+		LOGGER.info("Fetching executions in progress from {} to now", tenDaysAgo);
+		Instant now = Instant.now();
+		LOGGER.info("Current time: {}", now);
+		List<Execution> stoppedExecutions = executionRepository
+				.findExecutionListInDateRange(ExecutionProgressStatus.INPROGRESS, tenDaysAgo, now);
+		if (stoppedExecutions.isEmpty()) {
+			LOGGER.info("No stopped executions found to re-run after restart");
+			return;
+		}
+
+		for (Execution execution : stoppedExecutions) {
+			LOGGER.info("Re-running execution: {} with status: {}", execution.getName(),
+					execution.getExecutionStatus());
+			if (execution.getExecutionType() == ExecutionType.MULTISCRIPT
+					|| execution.getExecutionType() == ExecutionType.MULTITESTSUITE
+					|| execution.getExecutionType() == ExecutionType.TESTSUITE) {
+				LOGGER.info("Re-running multi script execution: {}", execution.getName());
+				executionAsyncService.restartMultiScriptExecution(execution);
+			} else if (execution.getExecutionType() == ExecutionType.SINGLESCRIPT) {
+				LOGGER.info("Re-running single script execution: {}", execution.getName());
+				executionAsyncService.restartSingleScriptExecution(execution);
+			} else {
+				LOGGER.warn("Unsupported execution type: {} for re-run", execution.getExecutionType());
+			}
+		}
+		LOGGER.info("Re-running of stopped executions completed");
 	}
 
 }

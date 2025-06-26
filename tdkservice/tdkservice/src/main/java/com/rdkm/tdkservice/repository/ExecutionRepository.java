@@ -28,13 +28,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.ExecutionOverallResultStatus;
+import com.rdkm.tdkservice.enums.ExecutionProgressStatus;
 import com.rdkm.tdkservice.enums.ExecutionType;
 import com.rdkm.tdkservice.model.Execution;
-import com.rdkm.tdkservice.model.User;
 
 /**
  * Repository interface for Execution entity. This interface provides methods
@@ -110,6 +111,27 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 	 * @return Pagination for execution
 	 */
 	Page<Execution> findByUserAndCategory(String user, Category category, Pageable pageable);
+
+	/**
+	 * Retrieves all Executions filtered by execution progress status.
+	 *
+	 * @param progressStatus the progress status of the execution
+	 * @return a list of filtered Executions
+	 */
+	List<Execution> findByExecutionStatus(ExecutionProgressStatus executionProgressStats);
+
+	/**
+	 * Retrieves all Executions with the given ExecutionStatus created within the
+	 * last 10 days.
+	 *
+	 * @param executionStatus the progress status of the execution
+	 * @param tenDaysAgo      the date 10 days before the current date
+	 * @param now             the current date
+	 * @return a list of filtered Executions
+	 */
+	@Query("SELECT ex FROM Execution ex WHERE ex.executionStatus = :executionStatus AND ex.createdDate BETWEEN :start AND :now")
+	List<Execution> findExecutionListInDateRange(@Param("executionStatus") ExecutionProgressStatus executionStatus,
+			@Param("start") Instant start, @Param("now") Instant now);
 
 	/**
 	 * This method is used to get execution list between date ranges

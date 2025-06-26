@@ -182,9 +182,7 @@ public class DeviceStatusService {
 
 		DeviceStatus deviceStatus = getDeviceStatusFromOutput(deviceStatusOutput);
 		LOGGER.debug("Device status fetched for device: " + device.getName() + " is: " + deviceStatus.toString());
-		// System.out.println("Device status fetched for device: " + device.getName() +
-		// " is: " + deviceStatus.toString());
-		return deviceStatus;
+	    return deviceStatus;
 	}
 
 	/**
