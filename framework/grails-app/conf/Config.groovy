@@ -177,3 +177,8 @@ grails.mail.default.to=emailConfig?.get('default_to')
 					   "mail.smtp.port":emailConfig?.get('port')]
 		}
 	}
+
+// Add the TDK version property
+        tdk {
+            version = "TDK-137"
+        }
