@@ -49,28 +49,39 @@ formatted_date=$(echo "$system_date" | awk '{ printf "%02d%02d%04d_%02d%02d%02d\
 
 #Create temp directory
 cd vts_packages
+mkdir -p $platform
+cd $platform
 temp_dir="${platform}_${formatted_date}"
 echo "Creating package in $temp_dir"
 mkdir $temp_dir
 cd $temp_dir
 
-#Attempt to clone, suppressing error output
-export GIT_ASKPASS=/bin/false
-export GIT_TERMINAL_PROMPT=0
-export GIT_CONFIG_NOSYSTEM=1
-git clone "$platform_repo" tdk_platform_repo >/dev/null 2>&1
-#Check if git clone was successful
-if [ $? -ne 0 ]; then
-    echo "ERROR: Failed to clone the repository: $platform_repo"
-    echo "Please update credentials to clone $platform_repo in ~/.netrc"
-    cd ..
-    rm -rf $temp_dir
-    exit 1 
+if [[ ! -d "../tdk_${platform}_repo" ]];then
+    #Attempt to clone, suppressing error output
+    export GIT_ASKPASS=/bin/false
+    export GIT_TERMINAL_PROMPT=0
+    export GIT_CONFIG_NOSYSTEM=1
+    git clone "$platform_repo" tdk_${platform}_repo >/dev/null 2>&1
+    echo -e "\nCloned platform repo"
+    #Check if git clone was successful
+    if [ $? -ne 0 ]; then
+       echo "ERROR: Failed to clone the repository: $platform_repo"
+       echo "Please update credentials to clone $platform_repo in ~/.netrc"
+       cd ..
+       rm -rf $temp_dir
+       exit 1 
+    fi
+else
+    cp -r ../tdk_${platform}_repo .
+    echo -e "\nCopied platform repo"
 fi
+
+echo `pwd`
+ls
 
 #Creating Vendor specific TDK package
 #Copy generic package into $temp_dir
-cp ../$GENERIC_PACKAGE .
+cp ../../$GENERIC_PACKAGE .
 tar -xvf $GENERIC_PACKAGE >/dev/null 2>&1
 cd VTS_Package
 for file in *vts_bin.tgz*; do
@@ -78,10 +89,18 @@ for file in *vts_bin.tgz*; do
 done
 rm -rf *vts_bin.tgz
 for dir in */; do
-    if [[ "$dir" != "tdk_platform_repo/" ]];then
-	 echo "Processing $dir"
-	 if [ -d "../tdk_platform_repo/VTS_profiles/$dir" ];then
-	      cp ../tdk_platform_repo/VTS_profiles/$dir/* $dir/
+    if [[ "$dir" != "tdk_${platform}_repo/" ]];then
+	 echo -e "\nProcessing $dir"
+	 if [ -d "../tdk_${platform}_repo/VTS_profiles/RDK7/$dir" ];then
+	      echo -e "Copying VTS_profiles/RDK7/$dir yaml files"
+	      cp ../tdk_${platform}_repo/VTS_profiles/RDK7/$dir/* $dir/
+	      rm -rf $dir/libraries.txt
+	      rm -rf $dir/lib/
+	      if [ ! -f "libut_control.so" ];then
+		     echo "Copying libut_control.so"
+		     cp $dir/libut_control.so .
+	      fi
+	      rm $dir/lib*.so
 	 fi
     fi
 done
@@ -96,12 +115,10 @@ for dir in */; do
     fi
 done
 cd ..
-rm -rf tdk_platform_repo $GENERIC_PACKAGE
+rm -rf tdk_${platform}_repo $GENERIC_PACKAGE
 tar -cvzf VTS_Package_${platform}_${formatted_date}.tgz * >/dev/null 2>&1
-
 cd ..
-mkdir -p $platform
-cp $temp_dir/VTS_Package_${platform}_${formatted_date}.tgz $platform
+cp $temp_dir/VTS_Package_${platform}_${formatted_date}.tgz .
 echo "Created VTS_Package_${platform}_${formatted_date}.tgz successfully"
 
 
