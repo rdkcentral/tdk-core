@@ -149,7 +149,9 @@ def execute_step(Data,IsPerformanceStressTest="NO"):
             print("\n Response : ", json_response, "\n")
             print("----------------------------------------------------------------------------------------------------\n")
             result = json_response.get("result")
-            if result != None and "'success': False" in str(result):
+            if result is None and "error" in json_response:
+                result = "EXCEPTION OCCURRED"
+            elif result != None and "'success': False" in str(result):
                 result = "EXCEPTION OCCURRED"
 
             #Whether to check the API response time

@@ -150,7 +150,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         plugin_validation_details = json.dumps(plugin_validation_details)
         for count in range(0,max_iterations):
             result_dict = {}
-            tdkTestObj = obj.createTestStep('rdkservice_executeLifeCycle')
+            tdkTestObj = obj.createTestStep('rdkservice_memcrApps_executeLifeCycle')
             tdkTestObj.addParameter("plugin",plugin)
             tdkTestObj.addParameter("operations",plugin_operations)
             tdkTestObj.addParameter("validation_details",plugin_validation_details)

@@ -18,13 +18,13 @@
 */
 
 var channels ={
-                ch1 : basepath + "DASH_HEVC_AAC_4K_Only/atfms_291_dash_tdk_hevc_aac_fmp4_4konly.mpd",
-                ch2 : basepath + "HLS_HEVC_AAC/master.m3u8",
-                ch3 : basepath + "HLS_H264_AAC/master.m3u8",
-                ch4 : basepath + "DASH_H264_AC3/atfms_291_dash_tdk_avc_ac3_fmp4.mpd",
-                ch5 : basepath + "DASH_H264_AAC/atfms_291_dash_tdk_avc_aac_fmp4.mpd",
-                ch6 : basepath + "DASH_H264_EC3/atfms_291_dash_tdk_avc_eac3_fmp4.mpd",
-                ch7 : basepath + "DASH_HEVC_AAC/atfms_291_dash_tdk_hevc_aac_fmp4.mpd",
-                ch8 : basepath + "HLS_H264_AAC/master.m3u8",
-                ch9 : basepath + "DASH_H264_AC3/atfms_291_dash_tdk_avc_ac3_fmp4.mpd"
+                ch1 : basepath + "TDK_Asset_Sunrise_23fps.mp4",
+                ch2 : basepath + "TDK_Asset_Sunrise_50fps.mp4",
+                ch3 : basepath + "TDK_Asset_Sunrise_AV1_30fps.mp4",
+                ch4 : basepath + "TDK_Asset_Sunrise_EAC3_AAC.mp4",
+                ch5 : basepath + "TDK_Asset_Sunrise_EAC3_AC3.mp4",
+                ch6 : basepath + "TDK_Asset_Sunrise_HEVC_24fps.mp4",
+                ch7 : basepath + "TDK_Asset_Sunrise_HEVC_60fps.mp4",
+                ch8 : basepath + "TDK_Asset_Sunrise_MP4.mp4",
+                ch9 : basepath + "atfms_291_dash_tdk_avc_aac_fmp4_audio_1.mp4"
 };
