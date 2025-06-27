@@ -185,7 +185,13 @@ def getDeviceConfigValue (configKey):
             configParser = configparser.ConfigParser()
             configParser.read(r'%s' % deviceConfigFile)
             #Retrieve the value of config key from device config file
-            configValue = configParser.get('device.config', configKey)
+            if configKey == "FIREBOLT_COMPLIANCE_FASTFORWARD_3x_4x_ENABLED":
+                try:
+                    configValue = configParser.get('device.config', configKey)
+                except:
+                    configValue = "yes"
+            else:
+                configValue = configParser.get('device.config', configKey)
             try:
                 use_aamp_for_hls = configParser.get('device.config',"FIREBOLT_COMPLIANCE_USE_AAMP_FOR_HLS")
             except:
@@ -296,7 +302,7 @@ def getMediaPipelineTestCommand (test_name, test_url, arguments):
     if test_streams_base_path:
         if not MediaValidationVariables.test_streams_base_path:
             test_url = test_streams_base_path + test_url
-        else: 
+        else:
             test_url = test_url.replace(MediaValidationVariables.test_streams_base_path,test_streams_base_path);
     #First construct the command with mandatory arguments
     command = "tdk_mediapipelinetests " + test_name + " " + test_url
