@@ -1541,6 +1541,8 @@ class ExecutedbService {
 			}
 		}
 		detailsMap.put("Image", image)
+		def tdkVersionFromConfig = grailsApplication.config.tdk.version
+		detailsMap.put("TDK Version", tdkVersionFromConfig)
 		coverPageMap.put("Details",detailsMap)
 		detailDataMap.put("CoverPage", coverPageMap)
 		int counter = 1
@@ -1865,10 +1867,19 @@ class ExecutedbService {
 			Map coverPageMap = [:]
 			detailDataMap.put("CoverPage", coverPageMap)
 			Map detailsMap = [:]
-			coverPageMap.put("Details",detailsMap)
+			// Retrieve the TDK version from Config.groovy
+			def tdkVersionFromConfig = grailsApplication.config.tdk.version
+			if(!tdkVersionFromConfig || tdkVersionFromConfig?.isEmpty()){
+				tdkVersionFromConfig = "Not Available"
+			}
+			coverPageMap.put("Details", detailsMap)
 			detailsMap.put("Device", deviceName)
 			detailsMap.put("DeviceIP", deviceIp)
 			detailsMap.put("Execution Time (min)", executionTime)
+
+			if (tdkVersionFromConfig) {
+				detailsMap.put("TDK Version", tdkVersionFromConfig)
+			}
 			try {
 				String image = "Not Available"
 				if(deviceDetails != null && deviceDetails.contains("imagename:")){
