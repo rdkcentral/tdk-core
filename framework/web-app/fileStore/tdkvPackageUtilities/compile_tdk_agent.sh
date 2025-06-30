@@ -1064,6 +1064,39 @@ pack_tdkv()
     mkdir -p TDK_Package/var/TDK
     mkdir -p TDK_Package/usr/lib
     mkdir -p TDK_Package/usr/bin
+    if [ -f "icrypto_bins.tar.gz" ];then
+        echo -e "iCrypto test binaries found"
+        cp icrypto_bins.tar.gz TDK_Package/usr/bin
+        cd TDK_Package/usr/bin
+        tar -xvf icrypto_bins.tar.gz >> $LOG_FILE 2>&1
+        rm icrypto_bins.tar.gz
+        cd $ROOT_DIR
+    fi
+    if ls waymetric_* 1>/dev/null 2>&1;then
+	    echo -e "Waymetric binary is found"
+	    if [[ $PLATFORM == "AMLOGIC" ]];then
+		    cp waymetric_aml TDK_Package/usr/bin
+		    cd TDK_Package/usr/bin
+		    mv waymetric_aml waymetric 
+		    echo -e "Waymetric binary is copied"
+		    cd $ROOT_DIR
+	    fi
+	    if [[ $PLATFORM == "BROADCOM" ]];then
+                    cp waymetric_bcm TDK_Package/usr/bin
+                    cd TDK_Package/usr/bin
+                    mv waymetric_bcm waymetric
+		    echo -e "Waymetric binary is copied"
+                    cd $ROOT_DIR
+            fi
+	    if [[ $PLATFORM == "REALTEK" ]];then
+                    cp waymetric_bcm TDK_Package/usr/bin
+                    cd TDK_Package/usr/bin
+                    mv waymetric_rtk waymetric
+		    echo -e "Waymetric binary is copied"
+                    cd $ROOT_DIR
+            fi
+    fi
+	    
     if [[ $FNCS_PACKAGE != "TRUE" ]];then
         mkdir -p TDK_Package/var/TDK/scripts
         mkdir -p TDK_Package/var/TDK/opensourcecomptest
@@ -1112,7 +1145,7 @@ pack_tdkv()
 	rm -rf ../TDK_Package/var/TDK/
 	cp MediaPipelineTests_stub/tdk_mediapipelinetests* ../TDK_Package/usr/bin/
 	cp FireboltCompliance_Validation/graphics_validation/Essos_TDKTestApp ../TDK_Package/usr/bin
-        cp FireboltCompliance_Validation/graphics_validation/Westeros_TDKTestApp ../TDK_Package/usr/bin
+        cp FireboltCompliance_Validation/graphics_validation/.libs/Westeros_TDKTestApp ../TDK_Package/usr/bin
 	cp FireboltCompliance_Validation/scripts/RunGraphicsTDKTest.sh ../TDK_Package/opt/TDK
     fi
 
@@ -1274,6 +1307,7 @@ exit_cleanup()
     else
 	echo -e "\e[1;42m TDK HAS BEEN COMPILED AND PACKED SUCCESSFULLY \e[0m \n" 2>&1 | tee -a $LOG_FILE
 	echo -e "Please check of \e[1;31m$PACKAGE_NAME\e[0m in the folder\n" 2>&1 | tee -a $LOG_FILE
+	
 	echo -e "Please check \e[1;31m$LOG_FILE \e[0mfor more information \n"
     fi
     cleanup
