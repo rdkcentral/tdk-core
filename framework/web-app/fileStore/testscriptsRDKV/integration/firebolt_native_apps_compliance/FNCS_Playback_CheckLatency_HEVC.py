@@ -51,10 +51,6 @@
     <box_type>Video_Accelerator</box_type>
     <box_type>RDKTV</box_type>
     <!--  -->
-    <box_type>RPI-CLIENT</box_type>
-    <!--  -->
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -64,7 +60,7 @@
     <test_case_id>FNCS_PLAYBACK_205</test_case_id>
     <test_objective>Check if latency observed during HEVC playback is within the threshold limit</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RDK TV,Video Accelerator, RPI</test_setup>
+    <test_setup>RDK TV,Video Accelerator</test_setup>
     <pre_requisite>1.tdk_mediapipelinetests application should be installed in the DUT
 2. Test stream url for an CheckLatency_HEVC stream should be updated in the config variable video_src_url_hevc inside MediaValidationVariables.py library inside filestore
 3. FIREBOLT_COMPLIANCE_CHECK_AV_STATUS configuration should be set as yes/no in the device config file
