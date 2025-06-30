@@ -126,6 +126,9 @@ if "SUCCESS" in result.upper():
         detail = detail.split(",")
         detail = detail[1]
         RFC_XCONF_URL=detail.strip()
+        #extracting the xconf domain from the full URL
+        slashparts = RFC_XCONF_URL.split('/')
+        xconfdomainname='/'.join(slashparts[:3])
         tdkTestObj.setResultStatus("SUCCESS")
 
         print("\n")
@@ -151,6 +154,7 @@ if "SUCCESS" in result.upper():
                 print("\n")
                 #Step 4: Check the presence of the partners_defaults.json file and ensure the Xconf domain URL is included in it
                 tdkTestObj = obj.createTestStep('rfc_partnersdefaultschecker')
+                tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
                 tdkTestObj.executeTestCase(expectedResult)
                 detail = tdkTestObj.getResultDetails()
                 if "FAILURE" not in detail:
@@ -169,7 +173,7 @@ if "SUCCESS" in result.upper():
                         print("\n")
                         #Step 6: Creating a feature name for configuration in the Xconf server
                         tdkTestObj = obj.createTestStep('rfc_formfeaturename')
-                        feature_name="AutoReboot.Enable"
+                        feature_name="DAB.Enable"
                         tdkTestObj.addParameter("feature_name",feature_name)
                         tdkTestObj.executeTestCase(expectedResult)
                         detail=tdkTestObj.getResultDetails()
@@ -185,8 +189,6 @@ if "SUCCESS" in result.upper():
                             print("\n")
                             #Step 7: Creating a feature and its corresponding rule in the Xconf server
                             tdkTestObj = obj.createTestStep('rfc_initializefeatures')
-                            slashparts = RFC_XCONF_URL.split('/')
-                            xconfdomainname='/'.join(slashparts[:3]) + '/'
                             if  "true" in actualvalue:
                                 expectedvalue="false"
                             elif "false" in actualvalue:

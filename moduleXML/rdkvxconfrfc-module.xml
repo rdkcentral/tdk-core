@@ -62,6 +62,7 @@
       <parameter funName='rfc_formfeaturename' parameterName='feature_name' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_deletefeature' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_deletefeaturerule' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_partnersdefaultschecker' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_enable_maintenance_manager' parameterName='method' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_enable_maintenance_manager' parameterName='params' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_disable_enable_maintenance_manager' parameterName='method' parameterType='STRING' range='A-Z' />

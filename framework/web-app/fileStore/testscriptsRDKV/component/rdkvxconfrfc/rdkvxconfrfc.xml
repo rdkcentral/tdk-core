@@ -71,9 +71,11 @@
           <parameter name="xconfdomainname" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest name="rfc_partnersdefaultschecker" id="" version="1">
+      <primitiveTest name="rfc_partnersdefaultschecker" id=" " version="2">
         <function>rfc_partnersdefaultschecker</function>
-        <parameters/>
+        <parameters>
+          <parameter name="xconfdomainname" value=""/>
+        </parameters>
       </primitiveTest>
       <primitiveTest name="rfc_datfilechecker" id="" version="1">
         <function>rfc_datfilechecker</function>
