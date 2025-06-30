@@ -131,7 +131,7 @@ video_src_url_short_duration_mp4      = test_streams_base_path + "TDK_Asset_Sunr
 #4K DASH Video URL
 video_src_url_short_duration_4k_dash = test_streams_base_path + "DASH_HEVC_AAC_4K_Only_30Sec/master.mpd"
 #4K MKV URL
-video_src_url_4k_av1_mkv = test_streams_base_path + "TDK_Asset_Waterfall_4K_MKV.mkv"
+video_src_url_4k_av1_mkv = test_streams_base_path + "TDK_Asset_Sunrise_AV1_MKV.mkv"
 #MKV Audio URL
 audio_src_url_mkv = test_streams_base_path + "TDK_Asset_Waterfall_Audio_MKV.mkv"
 #4K VP9 URL
@@ -255,8 +255,10 @@ video_src_url_aac = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_tdk_a
 #Sampling rate URL
 video_src_url_96khz_aac = test_streams_base_path + "TDK_Asset_Sunrise_AAC_96kHz.mp4"
 video_src_url_96khz_opus = test_streams_base_path + "TDK_Asset_Sunrise_OPUS_96kHz.mp4"
-video_src_url_44khz_aac =  test_streams_base_path + "TDK_Asset_Sunrise_AAC_44kHz.mp4"
 video_src_url_48khz_aac  = test_streams_base_path + "TDK_Asset_Sunrise_30fps.mp4"
+
+#Only Audio Stream
+video_src_url_44khz_aac =  test_streams_base_path + "TDK_Asset_Sunrise_AAC_44kHz_only_Audio.mp4"
 
 #Video bitrate URL
 video_src_url_bitrate_h264 = ""
