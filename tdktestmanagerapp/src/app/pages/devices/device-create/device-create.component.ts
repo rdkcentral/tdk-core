@@ -142,17 +142,20 @@ export class DeviceCreateComponent implements OnInit {
       this.showHideCreateFormB = false;
     }
     let ipregexp: RegExp =
-      /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    let macregexp: RegExp = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+      /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/; // IPv4 regex
+    let ipv6regexp: RegExp = /^[0-9a-fA-F:]+$/; // IPv6 regex
+    let combinedIpRegexp: RegExp = new RegExp(`(${ipregexp.source})|(${ipv6regexp.source})`); // Combined regex for IPv4 and IPv6
+    let macregexp: RegExp = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/; // MAC address regex
+
     this.deviceForm = new FormGroup({
       devicename: new FormControl<string | null>('', {
         validators: [
           Validators.required,
           Validators.pattern(/^[a-zA-Z0-9_]+$/),
         ],
-      }),
+      }),           
       deviceip: new FormControl<string | null>('', {
-        validators: [Validators.required, Validators.pattern(ipregexp)],
+        validators: [Validators.required, Validators.pattern(combinedIpRegexp)],
       }),
       macaddr: new FormControl<string | null>('', {
         validators: [Validators.required, Validators.pattern(macregexp)],
