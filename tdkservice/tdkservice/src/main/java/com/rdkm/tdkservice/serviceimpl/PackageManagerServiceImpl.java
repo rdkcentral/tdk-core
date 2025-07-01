@@ -163,8 +163,9 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 		String fileName = uploadFile.getOriginalFilename();
 		isValidFileType(type, fileName);
 
+		//Validation added to upload only packages that are applicable to particular device soc
 		Device deviceObj = validateDeviceAndSoc(device);
-		String regex = type+"_Package_" + deviceObj.getSoc().getName().toLowerCase() + "_.*$";
+		String regex = type + "_Package_" + deviceObj.getSoc().getName().toLowerCase() + "_.*$";
 		if (!fileName.matches(regex)) {
 			LOGGER.error("Invalid file name pattern. Expected: {}", regex);
 			throw new UserInputException(
@@ -264,8 +265,10 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 		String[] copyScriptCommand = { sshPass, "-p", password, "scp", scpOption, scriptPath,
 				user + "@" + deviceIp + ":/" };
 		String[] executeScriptCommand = { sshPass, "-p", userPassword, "ssh", sshOptions, user + "@" + deviceIp,
-				"'" + "mkdir -p $(dirname " + remoteFilePath + ") && sh /" + scriptName + " \"" + packageName + "\" > "
-						+ remoteFilePath + "'" };
+				"mkdir -p $(dirname " + remoteFilePath + ") && sh /" + scriptName + " \"" + packageName + "\" > "
+						+ remoteFilePath
+				// No single quotes around the remote command
+		};
 		String[] logsCommand = { sshPass, "-p", userPassword, "ssh", "-o", "StrictHostKeyChecking=no",
 				user + "@" + deviceIp, "/bin/cat " + remoteFilePath };
 
@@ -282,10 +285,14 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 		LOGGER.info("vtsPackageVerificationCommand: " + Arrays.toString(vtsPackageVerificationCommand));
 		LOGGER.info("tdkPackageVerificationCommand: " + Arrays.toString(tdkPackageVerificationCommand));
 		try {
-
-			scriptExecutorService.executeScript(copyPackageCommand, 60);
-			scriptExecutorService.executeScript(copyScriptCommand, 60);
-			scriptExecutorService.executeScript(executeScriptCommand, 60);
+			
+			// Execute the commands to copy the package file to the device root folder
+			scriptExecutorService.executeScript(copyPackageCommand, 300);
+			// Execute the commands to copy the shell script file to the device root folder
+			scriptExecutorService.executeScript(copyScriptCommand, 300);
+			//Execute the shellscript in device and writes the logs to the directory /opt/TDK/logs/tdk_agent.log
+			scriptExecutorService.executeScript(executeScriptCommand, 120);			
+			//cat output of the script execution logs
 			String output = scriptExecutorService.executeScript(logsCommand, 60);
 			LOGGER.info("Script output: {}", output);
 			PackageResponse installPackageResponse = new PackageResponse();
@@ -306,6 +313,7 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 					}
 
 				} else if (packageName.contains("tdk") || packageName.contains("TDK")) {
+					//Checks whether tdk agent status is Active
 					String tdkVerification = scriptExecutorService.executeScript(tdkPackageVerificationCommand, 0);
 					if (tdkVerification != null && !tdkVerification.isEmpty()) {
 						LOGGER.info("TDK Package installed successfully" + tdkVerification);

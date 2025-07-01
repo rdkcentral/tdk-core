@@ -138,9 +138,7 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 		});
 
 		String scriptName = executionResult.getScript();
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
-
+		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE;
 		String baseUrl = commonService.getConfigProperty(new File(configFilePath), Constants.TICKET_HANDLER_URL);
 		String apiUrl = baseUrl + Constants.SEARCH_SUMMARY_API_ENDPOINT;
 		IssueSearchRequestDTO searchRequest = new IssueSearchRequestDTO();
@@ -521,9 +519,26 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 			description.append("No reruns of the execution was performed for this result");
 		}
 
-		description.append("\n\n*Regression* : <Yes/No>");
-
 		return description.toString();
+	}
+
+	/*
+	 * The method to get the configuration file based on the category
+	 * 
+	 * @param category - the category of the configuration file
+	 * 
+	 * @return the path of the configuration file based on the category
+	 */
+	private String getConfigFileBasedOnCategory(String category) {
+		String configFile = null;
+		if ("RDKV".equalsIgnoreCase(category)) {
+			configFile = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ Constants.ISSUE_ANALYSER_CONFIG_RDKV;
+		} else if ("RDKB".equalsIgnoreCase(category)) {
+			configFile = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ Constants.ISSUE_ANALYSER_CONFIG_RDKB;
+		}
+		return configFile;
 	}
 
 	/**
@@ -560,10 +575,9 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	 *         null.
 	 */
 	@Override
-	public List<String> getListOfProjectIDs() {
+	public List<String> getListOfProjectIDs(String category) {
 		LOGGER.info("Fetching list of project IDs");
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
 		String projectIDs = commonService.getConfigProperty(new File(configFilePath), Constants.PROJECT_IDS);
 		if (null == projectIDs || projectIDs.isEmpty()) {
 			LOGGER.error("No project IDs found in the config file");
@@ -585,20 +599,19 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	 * @return true if the project ID is a platform project ID, false otherwise
 	 */
 	@Override
-	public boolean isPlatformProjectID(String projectID) {
+	public String getProjectCategory(String projectID, String category) {
 		LOGGER.info("Checking if the project ID is a platform project ID: {}", projectID);
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
 		String platformProjectIDs = commonService.getConfigProperty(new File(configFilePath),
 				Constants.PLATFORM_PROJECT_IDS);
 		if (null == platformProjectIDs || platformProjectIDs.isEmpty()) {
 			LOGGER.error("No platform project IDs found in the config file");
-			return false;
+			return projectID;
 		}
 		List<String> platformProjectIDList = List.of(platformProjectIDs.split(","));
 		boolean isPlatformProjectID = platformProjectIDList.contains(projectID);
 		LOGGER.info("Project ID: {} is a platform project ID: {}", projectID, isPlatformProjectID);
-		return isPlatformProjectID;
+		return isPlatformProjectID ? "PLATFORM" : projectID;
 	}
 
 	/**
@@ -611,10 +624,9 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	 * @return a list of labels if found, otherwise null
 	 */
 	@Override
-	public List<String> getListOfLabels() {
+	public List<String> getListOfLabels(String category) {
 		LOGGER.info("Fetching list of labels");
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
 		String labels = commonService.getConfigProperty(new File(configFilePath), Constants.LABELS);
 		if (null == labels || labels.isEmpty()) {
 			LOGGER.error("No labels found in the config file");
@@ -632,10 +644,9 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	 *         found in the config file.
 	 */
 	@Override
-	public List<String> getReleaseVersions() {
+	public List<String> getReleaseVersions(String category) {
 		LOGGER.info("Fetching list of release versions");
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
 		String releaseVersions = commonService.getConfigProperty(new File(configFilePath), Constants.RELEASE_VERSIONS);
 		if (null == releaseVersions || releaseVersions.isEmpty()) {
 			LOGGER.error("No release versions found in the config file");
@@ -653,10 +664,9 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	 *         configurations are found
 	 */
 	@Override
-	public List<String> getHardwareConfiguration() {
+	public List<String> getHardwareConfiguration(String category) {
 		LOGGER.info("Fetching list of hardware configurations");
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
 		String hardwareConfigurations = commonService.getConfigProperty(new File(configFilePath),
 				Constants.HARDWARE_CONFIGURATIONS);
 		if (null == hardwareConfigurations || hardwareConfigurations.isEmpty()) {
@@ -674,10 +684,9 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	 * @return a list of impacted platforms if found, otherwise null
 	 */
 	@Override
-	public List<String> getImpactedPlatforms() {
+	public List<String> getImpactedPlatforms(String category) {
 		LOGGER.info("Fetching list of impacted platforms");
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
 		String impactedPlatforms = commonService.getConfigProperty(new File(configFilePath),
 				Constants.IMPACTED_PLATFORMS);
 		if (null == impactedPlatforms || impactedPlatforms.isEmpty()) {
@@ -699,10 +708,9 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	 * @return a list of severities as strings, or null if no severities are found.
 	 */
 	@Override
-	public List<String> getSeverities() {
+	public List<String> getSeverities(String category) {
 		LOGGER.info("Fetching list of severities");
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
 		String severities = commonService.getConfigProperty(new File(configFilePath), Constants.SEVERITIES);
 		if (null == severities || severities.isEmpty()) {
 			LOGGER.error("No severities found in the config file");
@@ -727,10 +735,9 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	 *         is empty.
 	 */
 	@Override
-	public List<String> getFixedInVersions() {
+	public List<String> getFixedInVersions(String category) {
 		LOGGER.info("Fetching list of fixed in versions");
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
 		String fixedInVersions = commonService.getConfigProperty(new File(configFilePath), Constants.FIXED_IN_VERSIONS);
 		if (null == fixedInVersions || fixedInVersions.isEmpty()) {
 			LOGGER.error("No fixed in versions found in the config file");
@@ -748,10 +755,9 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	 *         the config file.
 	 */
 	@Override
-	public List<String> getComponentsImpacted() {
+	public List<String> getComponentsImpacted(String category) {
 		LOGGER.info("Fetching list of components impacted");
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
 		String componentsImpacted = commonService.getConfigProperty(new File(configFilePath),
 				Constants.COMPONENTS_IMPACTED);
 		if (null == componentsImpacted || componentsImpacted.isEmpty()) {
@@ -830,10 +836,9 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	 * @return a list of priorities as strings, or null if no priorities are found.
 	 */
 	@Override
-	public List<String> getPriorities() {
+	public List<String> getPriorities(String category) {
 		LOGGER.info("Fetching list of priorities");
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
 		String priorities = commonService.getConfigProperty(new File(configFilePath), Constants.PRIORITIES);
 		if (null == priorities || priorities.isEmpty()) {
 			LOGGER.error("No priorities found in the config file");
@@ -915,7 +920,8 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 		StringBuilder responseString = new StringBuilder();
 
 		try {
-			if (isPlatformProjectID(ticketCreateDTO.getProjectName())) {
+			if (this.getProjectCategory(ticketCreateDTO.getProjectName(), ticketCreateDTO.getCategory())
+					.equals("PLATFORM")) {
 				validatePlatformProjectFields(ticketCreateDTO);
 			}
 
@@ -924,7 +930,7 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 			}
 
 			String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-					+ Constants.ISSUE_ANALYSER_CONFIG;
+					+ Constants.TM_CONFIG_FILE;
 			String baseUrl = commonService.getConfigProperty(new File(configFilePath), Constants.TICKET_HANDLER_URL);
 			String apiUrl = baseUrl + Constants.CREATE_API_ENDPOINT;
 
@@ -1129,7 +1135,7 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 		StringBuilder responseString = new StringBuilder();
 		try {
 			String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-					+ Constants.ISSUE_ANALYSER_CONFIG;
+					+ Constants.TM_CONFIG_FILE;
 			String baseUrl = commonService.getConfigProperty(new File(configFilePath), Constants.TICKET_HANDLER_URL);
 			String apiUrl = baseUrl + Constants.UPDATE_API_ENDPOINT;
 
@@ -1171,8 +1177,7 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 	@Override
 	public boolean isJiraAutomationImplemented() {
 		LOGGER.info("Checking if Jira automation is implemented");
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-				+ Constants.ISSUE_ANALYSER_CONFIG;
+		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE;
 		String jiraAutomation = commonService.getConfigProperty(new File(configFilePath), Constants.JIRA_AUTOMATION);
 		if (null == jiraAutomation || jiraAutomation.isEmpty()) {
 			LOGGER.error("Jira automation not implemented");
@@ -1195,4 +1200,23 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 		return analysisDefectTypeList;
 	}
 
+	/**
+	 * Retrieves a list of RDK versions from the configuration file.
+	 *
+	 * @param category the category of the project (e.g., RDKV, RDKB)
+	 * @return a list of RDK versions if found, otherwise null
+	 */
+	@Override
+	public List<String> getRDKVersion(String category) {
+		LOGGER.info("Fetching list of RDK versions");
+		String configFilePath = this.getConfigFileBasedOnCategory(category);
+		String rdkVersions = commonService.getConfigProperty(new File(configFilePath), Constants.RDK_VERSIONS);
+		if (null == rdkVersions || rdkVersions.isEmpty()) {
+			LOGGER.error("No RDK versions found in the config file");
+			return null;
+		}
+		List<String> rdkVersionList = List.of(rdkVersions.split(","));
+		LOGGER.info("Successfully fetched list of RDK versions");
+		return rdkVersionList;
+	}
 }

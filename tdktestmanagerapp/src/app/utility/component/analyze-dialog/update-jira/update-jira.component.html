@@ -40,15 +40,15 @@ limitations under the License.
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="label" class="col-md-4 col-form-label">label :<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="label" class="col-md-4 col-form-label">Label :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example" id="label"
-                                            formControlName="label">
-                                            <option value="" default>Select</option>
-                                            @for (item of allLabels; track $index) {
-                                            <option value="{{item}}">{{item}}</option>
-                                            }
-                                        </select>
+                                        
+                                        <ng-multiselect-dropdown  id="label" style=" border-color: gray !important;font-size: 0.8rem;"
+                                           [placeholder]="'Select label(s)'" [settings]="labelDropdownSettings"
+                                            [data]="allLabels" formControlName="label"  
+                                            (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)"
+                                            (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                                        </ng-multiselect-dropdown>
                                         <div 
                                         *ngIf="jiraUpdateForm.controls['label']?.invalid && (jiraUpdateForm.controls['label']?.dirty || jiraUpdateSubmitted)"
                                             class="text-danger">

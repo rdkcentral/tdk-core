@@ -206,9 +206,9 @@ public class ExecutionAnalysisController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Project IDs fetched successfully"),
 			@ApiResponse(responseCode = "503", description = "Project IDs not available") })
 	@GetMapping("/getListOfProjectIDs")
-	public ResponseEntity<DataResponse> getListOfProjectIDs() {
+	public ResponseEntity<DataResponse> getListOfProjectIDs(@RequestParam String category) {
 		LOGGER.info("Going to get the list of project IDs");
-		List<String> projectIDs = executionAnalysisService.getListOfProjectIDs();
+		List<String> projectIDs = executionAnalysisService.getListOfProjectIDs(category);
 		if (projectIDs != null && !projectIDs.isEmpty()) {
 			LOGGER.info("Project IDs fetched successfully");
 			return ResponseUtils.getSuccessDataResponse("Project IDs fetched successfully", projectIDs);
@@ -230,10 +230,10 @@ public class ExecutionAnalysisController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Project ID is a platform project ID"),
 			@ApiResponse(responseCode = "200", description = "Project ID is not a platform project ID") })
 	@GetMapping("/isPlatformProjectID")
-	public ResponseEntity<DataResponse> isPlatformProjectID(@RequestParam String projectID) {
+	public ResponseEntity<DataResponse> isPlatformProjectID(@RequestParam String projectID,@RequestParam String category) {
 		LOGGER.info("Going to check if the project ID is a platform project ID");
-		boolean isPlatformProjectID = executionAnalysisService.isPlatformProjectID(projectID);
-		if (isPlatformProjectID) {
+		String isPlatformProjectID = executionAnalysisService.getProjectCategory(projectID, category);
+		if (null != isPlatformProjectID ) {
 			LOGGER.info("Project ID is a platform project ID");
 			return ResponseUtils.getSuccessDataResponse("Project ID is a platform project ID", isPlatformProjectID);
 		} else {
@@ -252,9 +252,9 @@ public class ExecutionAnalysisController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Labels fetched successfully"),
 			@ApiResponse(responseCode = "503", description = "Labels not available") })
 	@GetMapping("/getListOfLabels")
-	public ResponseEntity<DataResponse> getListOfLabels() {
+	public ResponseEntity<DataResponse> getListOfLabels(@RequestParam String category) {
 		LOGGER.info("Going to get the list of labels");
-		List<String> labels = executionAnalysisService.getListOfLabels();
+		List<String> labels = executionAnalysisService.getListOfLabels(category);
 		if (labels != null && !labels.isEmpty()) {
 			LOGGER.info("Labels fetched successfully");
 			return ResponseUtils.getSuccessDataResponse("Labels fetched successfully", labels);
@@ -275,9 +275,9 @@ public class ExecutionAnalysisController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Release versions fetched successfully"),
 			@ApiResponse(responseCode = "503", description = "Release versions not available") })
 	@GetMapping("/getReleaseVersions")
-	public ResponseEntity<DataResponse> getReleaseVersions() {
+	public ResponseEntity<DataResponse> getReleaseVersions(@RequestParam String category) {
 		LOGGER.info("Going to get the list of release versions");
-		List<String> releaseVersions = executionAnalysisService.getReleaseVersions();
+		List<String> releaseVersions = executionAnalysisService.getReleaseVersions(category);
 		if (releaseVersions != null && !releaseVersions.isEmpty()) {
 			LOGGER.info("Release versions fetched successfully");
 			return ResponseUtils.getSuccessDataResponse("Release versions fetched successfully", releaseVersions);
@@ -299,9 +299,9 @@ public class ExecutionAnalysisController {
 			@ApiResponse(responseCode = "200", description = "Hardware configuration fetched successfully"),
 			@ApiResponse(responseCode = "503", description = "Hardware configuration not available") })
 	@GetMapping("/getHardwareConfiguration")
-	public ResponseEntity<DataResponse> getHardwareConfiguration() {
+	public ResponseEntity<DataResponse> getHardwareConfiguration(@RequestParam String category) {
 		LOGGER.info("Going to get the hardware configuration");
-		List<String> hardwareConfiguration = executionAnalysisService.getHardwareConfiguration();
+		List<String> hardwareConfiguration = executionAnalysisService.getHardwareConfiguration(category);
 		if (hardwareConfiguration != null && !hardwareConfiguration.isEmpty()) {
 			LOGGER.info("Hardware configuration fetched successfully");
 			return ResponseUtils.getSuccessDataResponse("Hardware configuration fetched successfully",
@@ -325,9 +325,9 @@ public class ExecutionAnalysisController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Impacted platforms fetched successfully"),
 			@ApiResponse(responseCode = "503", description = "Impacted platforms not available") })
 	@GetMapping("/getImpactedPlatforms")
-	public ResponseEntity<DataResponse> getImpactedPlatforms() {
+	public ResponseEntity<DataResponse> getImpactedPlatforms(@RequestParam String category) {
 		LOGGER.info("Going to get the list of impacted platforms");
-		List<String> impactedPlatforms = executionAnalysisService.getImpactedPlatforms();
+		List<String> impactedPlatforms = executionAnalysisService.getImpactedPlatforms(category);
 		if (impactedPlatforms != null && !impactedPlatforms.isEmpty()) {
 			LOGGER.info("Impacted platforms fetched successfully");
 			return ResponseUtils.getSuccessDataResponse("Impacted platforms fetched successfully", impactedPlatforms);
@@ -348,9 +348,9 @@ public class ExecutionAnalysisController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Severities fetched successfully"),
 			@ApiResponse(responseCode = "503", description = "Severities not available") })
 	@GetMapping("/getSeverities")
-	public ResponseEntity<DataResponse> getSeverities() {
+	public ResponseEntity<DataResponse> getSeverities(@RequestParam String category) {
 		LOGGER.info("Going to get the list of severities");
-		List<String> severities = executionAnalysisService.getSeverities();
+		List<String> severities = executionAnalysisService.getSeverities(category);
 		if (severities != null && !severities.isEmpty()) {
 			LOGGER.info("Severities fetched successfully");
 			return ResponseUtils.getSuccessDataResponse("Severities fetched successfully", severities);
@@ -371,9 +371,9 @@ public class ExecutionAnalysisController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Fixed in versions fetched successfully"),
 			@ApiResponse(responseCode = "503", description = "Fixed in versions not available") })
 	@GetMapping("/getFixedInVersions")
-	public ResponseEntity<DataResponse> getFixedInVersions() {
+	public ResponseEntity<DataResponse> getFixedInVersions(@RequestParam String category) {
 		LOGGER.info("Going to get the list of fixed in versions");
-		List<String> fixedInVersions = executionAnalysisService.getFixedInVersions();
+		List<String> fixedInVersions = executionAnalysisService.getFixedInVersions(category);
 		if (fixedInVersions != null && !fixedInVersions.isEmpty()) {
 			LOGGER.info("Fixed in versions fetched successfully");
 			return ResponseUtils.getSuccessDataResponse("Fixed in versions fetched successfully", fixedInVersions);
@@ -395,9 +395,9 @@ public class ExecutionAnalysisController {
 			@ApiResponse(responseCode = "200", description = "Components impacted fetched successfully"),
 			@ApiResponse(responseCode = "204", description = "Components impacted not available") })
 	@GetMapping("/getComponentsImpacted")
-	public ResponseEntity<DataResponse> getComponentsImpacted() {
+	public ResponseEntity<DataResponse> getComponentsImpacted(@RequestParam String category) {
 		LOGGER.info("Going to get the list of components impacted");
-		List<String> componentsImpacted = executionAnalysisService.getComponentsImpacted();
+		List<String> componentsImpacted = executionAnalysisService.getComponentsImpacted(category);
 		if (componentsImpacted != null && !componentsImpacted.isEmpty()) {
 			LOGGER.info("Components impacted fetched successfully");
 			return ResponseUtils.getSuccessDataResponse("Components impacted fetched successfully", componentsImpacted);
@@ -468,9 +468,9 @@ public class ExecutionAnalysisController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Priorities fetched successfully"),
 			@ApiResponse(responseCode = "204", description = "Priorities not available") })
 	@GetMapping("/getPriorities")
-	public ResponseEntity<DataResponse> getPriorities() {
+	public ResponseEntity<DataResponse> getPriorities(@RequestParam String category) {
 		LOGGER.info("Going to get the list of priorities");
-		List<String> priorities = executionAnalysisService.getPriorities();
+		List<String> priorities = executionAnalysisService.getPriorities(category);
 		if (priorities != null && !priorities.isEmpty()) {
 			LOGGER.info("Priorities fetched successfully");
 			return ResponseUtils.getSuccessDataResponse("Priorities fetched successfully", priorities);
@@ -497,10 +497,7 @@ public class ExecutionAnalysisController {
 		String response = executionAnalysisService.createJiraTicket(ticketCreateDTO);
 		if (response != null) {
 			LOGGER.info("Jira ticket created successfully");
-			return ResponseUtils.getSuccessDataResponse("Jira ticket created successfully", response); // Return the
-																										// response with
-																										// the ticket
-																										// ID)
+			return ResponseUtils.getSuccessDataResponse("Jira ticket created successfully", response); 
 		} else {
 			LOGGER.error("Failed to create Jira ticket");
 			throw new TDKServiceException("Failed to create Jira ticket");
@@ -572,5 +569,28 @@ public class ExecutionAnalysisController {
 			return ResponseUtils.getNotFoundDataConfigResponse("AnalysisDefectType not available", analysisDefectType);
 		}
 	}
+	
+	/**
+	 * Endpoint to get the RDK version.
+	 *
+	 * @return ResponseEntity containing the RDK version if available, otherwise a
+	 *         message indicating that no RDK version is available.
+	 */
+	@Operation(summary = "Get the RDK version")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "RDK version fetched successfully"),
+			@ApiResponse(responseCode = "503", description = "RDK version not available") })
+	@GetMapping("/getRDKVersions")
+	public ResponseEntity<DataResponse> getRDKVersion(@RequestParam String category) {
+		LOGGER.info("Going to get the RDK version");
+		List<String> rdkVersion = executionAnalysisService.getRDKVersion(category);
+		if (rdkVersion != null && !rdkVersion.isEmpty()) {
+			LOGGER.info("RDK version fetched successfully");
+			return ResponseUtils.getSuccessDataResponse("RDK version fetched successfully", rdkVersion);
+		} else {
+			LOGGER.error("RDK version not available");
+			return ResponseUtils.getNotFoundDataConfigResponse("RDK version not available", rdkVersion);
+		}
+	}
+	
 
 }

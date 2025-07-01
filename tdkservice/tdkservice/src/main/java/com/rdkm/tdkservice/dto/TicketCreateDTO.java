@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.validation.constraints.NotBlank;
@@ -70,8 +72,7 @@ public class TicketCreateDTO {
 	/**
 	 * The labels associated with the issue. This field is mandatory.
 	 */
-	@NotBlank(message = "Labels is mandatory")
-	private String label;
+	private List<String> label;
 
 	/**
 	 * The release version in which the issue was found.
@@ -86,7 +87,7 @@ public class TicketCreateDTO {
 	/**
 	 * The platforms impacted by the issue.
 	 */
-	private String impactedPlatforms;
+	private List<String> impactedPlatforms;
 
 	/**
 	 * The environment setup for testing.
@@ -106,7 +107,7 @@ public class TicketCreateDTO {
 	/**
 	 * The components impacted by the issue.
 	 */
-	private String componentsImpacted;
+	private List<String> componentsImpacted;
 
 	/**
 	 * The version in which the issue is fixed.
@@ -167,4 +168,9 @@ public class TicketCreateDTO {
 	 * The User who analyse the isuue.
 	 */
 	private String analysisUser;
+	
+	/**
+	 * The category of the issue.
+	 */
+	private String category;
 }

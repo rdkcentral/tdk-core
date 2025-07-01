@@ -1001,6 +1001,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     this.executionservice.resultDetails(params.executionId).subscribe({next:(res)=>{
        this.resultDetailsData = res.data;
        this.resultDetailsData.executionId = params.executionId;
+       this.resultDetailsData.category = this.selectedDfaultCategory;
        if(this.resultDetailsData){
         let  resultDetailsModal  =  this.resultDialog.open(DetailsExeDialogComponent, {
           width: '99%',

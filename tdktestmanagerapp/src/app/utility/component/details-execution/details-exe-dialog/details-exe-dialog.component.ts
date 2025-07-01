@@ -634,7 +634,7 @@ export class DetailsExeDialogComponent {
       height: '96vh',
       maxWidth: '90vw',
       panelClass: 'custom-modalbox',
-      data: patent,
+      data: { ...patent, category: this.data.category }
     });
     dialogRef.afterClosed().subscribe(result => {
       this.dataUpdate();
@@ -653,6 +653,7 @@ export class DetailsExeDialogComponent {
           this.analysisResult = res.data;
           this.analysisResult.name = parent.name;
           this.analysisResult.executionResultID = parent.executionResultID;
+          this.analysisResult.category = this.data.category;
           const dialogRef = this.analyzeDialog.open(AnalyzeDialogComponent, {
             width: '99%',
             height: '96vh',

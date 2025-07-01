@@ -75,19 +75,25 @@ body,
 
   }
 .close-btn{
-    position: absolute;
+    position: relative;
     bottom: 15px;
-    right: 115px;
+    right: 15px;
 }
 .create-btn{
-    position: absolute;
+    position: relative;
     bottom: 15px;
-    right: 25px;
+    right: 0px;
 }
 .form-sec{
     margin: auto;
-    height: 470px;
+    height: auto;
     display: flex;
-    overflow-y: auto;
+    overflow-y: visible;
 }
 
+.readonly-field[readonly] {
+  background-color: #f0f0f0 !important;
+  color: #212529 !important;   /* Brighter/darker text */
+  cursor: not-allowed;
+  pointer-events: none;
+}
