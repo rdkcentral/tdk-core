@@ -54,6 +54,10 @@ public class DeviceStatusService {
 	@Autowired
 	private DeviceRepositroy deviceRepository;
 
+	@Autowired
+	private DeviceConfigService deviceConfigService;
+
+
 	/**
 	 * This method updates the status for all devices at a fixed rate. It fetches
 	 * the list of all devices from the repository, attempts to update their status,
@@ -152,8 +156,14 @@ public class DeviceStatusService {
 				LOGGER.error(" Thunder device status Script file not found ");
 				return null;
 			}
-			scriptExecutionCommand = new String[] { pythonCommand, pythonScriptPath, device.getIp(),
-					device.getThunderPort() };
+			scriptExecutionCommand = new String[] {
+					pythonCommand,
+					pythonScriptPath,
+					device.getIp(),
+					device.getThunderPort(),
+					deviceConfigService.getDeviceConfigFileName(device.getName(), device.getDeviceType().getName(), device.isThunderEnabled()),// Fetches the config file name
+					device.getMacId() != null ? device.getMacId() : null // Adds MAC ID or null
+			};
 
 		} else {
 			String pythonScriptPath = this.getAbsolutePath("calldevicestatus_cmndline.py");

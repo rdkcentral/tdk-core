@@ -256,4 +256,31 @@ public class DeviceConfigService implements IDeviceConfigService {
 		}
 	}
 
+	/** This method retrieves the configuration file name for a given device based on its name, type, or Thunder-enabled status. If neither the device name nor type is provided, it returns a default configuration file name.
+	 * @param deviceName
+	 * @param deviceType
+	 * @param isThunderEnabled
+	 * @return String - the name of the device configuration file
+	 */
+	public String getDeviceConfigFileName(String deviceName, String deviceType, boolean isThunderEnabled) {
+		LOGGER.info("Fetching device config file name for deviceName: {}, deviceType: {}", deviceName, deviceType);
+
+		// Check if deviceName is provided
+		if (!Utils.isEmpty(deviceName)) {
+			return deviceName + Constants.CONFIG_FILE_EXTENSION;
+		}
+
+		// Check if deviceType is provided
+		if (!Utils.isEmpty(deviceType)) {
+			return deviceType + Constants.CONFIG_FILE_EXTENSION;
+		}
+
+		// Return default config file name based on Thunder status
+		if (isThunderEnabled) {
+			return Constants.THUNDER_DEVICE_CONFIG_FILE;
+		} else {
+			return Constants.DEFAULT_DEVICE_CONFIG_FILE;
+		}
+	}
+
 }
