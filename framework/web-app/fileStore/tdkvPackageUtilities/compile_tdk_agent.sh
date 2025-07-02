@@ -1078,6 +1078,7 @@ pack_tdkv()
 		    cp waymetric_aml TDK_Package/usr/bin
 		    cd TDK_Package/usr/bin
 		    mv waymetric_aml waymetric 
+		    chmod +x waymetric
 		    echo -e "Waymetric binary is copied"
 		    cd $ROOT_DIR
 	    fi
@@ -1085,13 +1086,15 @@ pack_tdkv()
                     cp waymetric_bcm TDK_Package/usr/bin
                     cd TDK_Package/usr/bin
                     mv waymetric_bcm waymetric
+		    chmod +x waymetric
 		    echo -e "Waymetric binary is copied"
                     cd $ROOT_DIR
             fi
 	    if [[ $PLATFORM == "REALTEK" ]];then
-                    cp waymetric_bcm TDK_Package/usr/bin
+                    cp waymetric_rtk TDK_Package/usr/bin
                     cd TDK_Package/usr/bin
                     mv waymetric_rtk waymetric
+		    chmod +x waymetric
 		    echo -e "Waymetric binary is copied"
                     cd $ROOT_DIR
             fi
