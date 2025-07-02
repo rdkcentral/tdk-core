@@ -48,16 +48,9 @@ limitations under the License.
                                 <div class="row mb-3" *ngIf="showTDKVersion">
                                     <label for="version" class="col-md-4 col-form-label">TDK Version :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control" id="version"
-                                            formControlName="version" autocomplete="off"
+                                        <input type="text" class="form-control readonly-field" id="version"
+                                             [value]="versionName" readonly tabindex="-1"
                                             >
-                                        <div 
-                                        *ngIf="jiraCreateForm.controls['version']?.invalid && (jiraCreateForm.controls['version']?.dirty || jiraSubmitted)"
-                                            class="text-danger">
-                                            <small
-                                                *ngIf="jiraCreateForm.controls['version']?.errors?.['required']">Please
-                                                enter tdk version.</small>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -109,13 +102,12 @@ limitations under the License.
                                     </label>
                                     
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example" id="impacted"
-                                             formControlName="impacted">
-                                             <option value="" default>Select</option>
-                                             @for (item of allCompImpacted; track $index) {
-                                             <option value="{{item}}">{{item}}</option>
-                                             }
-                                         </select>     
+                                         <ng-multiselect-dropdown  id="impacted" style=" border-color: gray !important;font-size: 0.8rem;"
+                                           [placeholder]="'Select Options'" [settings]="componentsImpactedDropdownSettings"
+                                            [data]="allCompImpacted" formControlName="impacted"  
+                                            (onSelect)="onImpactedSelect($event)" (onDeSelect)="onImpactedDeSelect($event)"
+                                            (onSelectAll)="onImpactedSelectAll($event)" (onDeSelectAll)="onImpactedDeSelectAll($event)">
+                                        </ng-multiselect-dropdown>   
                                         <div 
                                         *ngIf="jiraCreateForm.controls['impacted']?.invalid && (jiraCreateForm.controls['impacted']?.dirty || jiraSubmitted)"
                                             class="text-danger">
@@ -210,16 +202,54 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <label for="label" class="col-md-4 col-form-label">label :<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                <div class="row mb-3" >
+                                    <label for="regression" class="col-md-4 col-form-label">Regression :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example" id="label"
-                                            formControlName="label">
+                                        <select class="form-select" aria-label="Default select example" id="regression"
+                                            formControlName="regression">
                                             <option value="" default>Select</option>
-                                            @for (item of allLabels; track $index) {
-                                            <option value="{{item}}">{{item}}</option>
-                                            }
+                                            <option value="YES" >YES</option>
+                                            <option value="NO" >NO</option>
                                         </select>
+                                        <div 
+                                        *ngIf="jiraCreateForm.controls['regression']?.invalid && (jiraCreateForm.controls['regression']?.dirty || jiraSubmitted)"
+                                            class="text-danger">
+                                            <small
+                                                *ngIf="jiraCreateForm.controls['regression']?.errors?.['required']">Please
+                                                select regression.</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3" *ngIf="showRDKVersion">
+                                    <label for="rdkversion" class="col-md-4 col-form-label">RDK Version :<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                        <select class="form-select" aria-label="Default select example" id="rdkversion"
+                                           formControlName="rdkversion">
+                                           <option value="" default>Select</option>
+                                           @for (item of allRDKVersion; track $index) {
+                                           <option value="{{item}}">{{item}}</option>
+                                           }
+                                       </select>
+                                        <div 
+                                        *ngIf="jiraCreateForm.controls['rdkversion']?.invalid && (jiraCreateForm.controls['rdkversion']?.dirty || jiraSubmitted)"
+                                            class="text-danger">
+                                            <small
+                                                *ngIf="jiraCreateForm.controls['rdkversion']?.errors?.['required']">Please
+                                                enter rdk version.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <label for="label" class="col-md-4 col-form-label">Label :<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                         <ng-multiselect-dropdown  id="label" style=" border-color: gray !important;font-size: 0.8rem;"
+                                           [placeholder]="'Select label(s)'" [settings]="labelDropdownSettings"
+                                            [data]="allLabels" formControlName="label"  
+                                            (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)"
+                                            (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                                        </ng-multiselect-dropdown>
                                         <div 
                                         *ngIf="jiraCreateForm.controls['label']?.invalid && (jiraCreateForm.controls['label']?.dirty || jiraSubmitted)"
                                             class="text-danger">
@@ -301,13 +331,12 @@ limitations under the License.
                                 <div class="row mb-3" *ngIf="showPlatform">
                                     <label for="platforms" class="col-md-4 col-form-label">Impacted Platforms :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example" id="platforms"
-                                            formControlName="platforms">
-                                            <option value="" default>Select</option>
-                                            @for (item of allImpPlatforms; track $index) {
-                                            <option value="{{item}}">{{item}}</option>
-                                            }
-                                        </select>
+                                         <ng-multiselect-dropdown  id="platforms" style=" border-color: gray !important;font-size: 0.8rem;"
+                                           [placeholder]="'Select Options'" [settings]="impactedPlatformsDropdownSettings"
+                                            [data]="allImpPlatforms" formControlName="platforms"  
+                                            (onSelect)="onPlatformSelect($event)" (onDeSelect)="onPlatformDeSelect($event)"
+                                            (onSelectAll)="onPlatformSelectAll($event)" (onDeSelectAll)="onPlatformDeSelectAll($event)">
+                                        </ng-multiselect-dropdown>
                                         <div 
                                         *ngIf="jiraCreateForm.controls['platforms']?.invalid && (jiraCreateForm.controls['platforms']?.dirty || jiraSubmitted)"
                                             class="text-danger">
@@ -365,13 +394,14 @@ limitations under the License.
                                 </div>
 
                             </div>
-                        </div>
+                       
                     <div class="row">
                     <div class="mt-2 text-end">
-                        <button class="close-btn" (click)="close()">Close</button>
+                        <button type="button" class="close-btn" (click)="close()">Close</button>
                         <button type="submit" class="create-btn" >Create</button>
                     </div>
                 </div>
+            </div>
             </form>
         </div>
     </div>

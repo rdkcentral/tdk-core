@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.validation.constraints.NotBlank;
@@ -51,7 +53,7 @@ public class TicketUpdateDTO {
 	/**
 	 * The label associated with the ticket.
 	 */
-	private String label;
+	private List<String> label;
 
 	/**
 	 * Indicates if device log is needed.
@@ -72,4 +74,9 @@ public class TicketUpdateDTO {
 	 * The password for the user.
 	 */
 	private String password;
+	
+	/**
+	 * The category of the ticket.
+	 */
+	private String category;
 }

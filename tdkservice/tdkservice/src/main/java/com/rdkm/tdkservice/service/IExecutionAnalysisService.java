@@ -82,68 +82,76 @@ public interface IExecutionAnalysisService {
 	JiraDescriptionDTO getDetailsForPopulatingTicketDetails(UUID execResultID);
 
 	/**
-	 * Retrieves a list of project IDs.
+	 * Retrieves a list of project IDs by category.
 	 *
+	 * @param category the category for which to retrieve project IDs
 	 * @return a list of project IDs
 	 */
-	List<String> getListOfProjectIDs();
+	List<String> getListOfProjectIDs(String category);
 
 	/**
 	 * Checks if the given project ID is a platform project ID.
 	 *
-	 * @param projectID the project ID to check
+	 * @param projectID list whether TDK,RDKPREINTG or PLATFORM
 	 * @return true if the project ID is a platform project ID
 	 */
-	boolean isPlatformProjectID(String projectID);
+	String getProjectCategory(String projectID, String category);
 
 	/**
-	 * Retrieves a list of labels.
+	 * Retrieves a list of labels by category.
 	 *
+	 * @param category the category for which to retrieve labels
 	 * @return a list of labels
 	 */
-	List<String> getListOfLabels();
+	List<String> getListOfLabels(String category);
 
 	/**
-	 * Retrieves a list of release versions.
+	 * Retrieves a list of release versions based on the provided category.
 	 *
+	 * @param category the category for which to retrieve release versions
 	 * @return a list of release versions
 	 */
-	List<String> getReleaseVersions();
+	List<String> getReleaseVersions(String category);
 
 	/**
-	 * Retrieves a list of hardware configurations.
+	 * Retrieves a list of hardware configurations by category.
 	 *
+	 * @param category the category for which to retrieve hardware configurations
 	 * @return a list of hardware configurations
 	 */
-	List<String> getHardwareConfiguration();
+	List<String> getHardwareConfiguration(String category);
 
 	/**
-	 * Retrieves a list of impacted platforms.
+	 * Retrieves a list of impacted platforms by category.
 	 *
+	 * @param category the category for which to retrieve impacted platforms
 	 * @return a list of impacted platforms
 	 */
-	List<String> getImpactedPlatforms();
+	List<String> getImpactedPlatforms(String category);
 
 	/**
-	 * Retrieves a list of severities.
+	 * Retrieves a list of severities based on the provided category.
 	 *
+	 * @param category the category for which to retrieve severities
 	 * @return a list of severities
 	 */
-	List<String> getSeverities();
+	List<String> getSeverities(String category);
 
 	/**
-	 * Retrieves a list of versions in which issues are fixed.
+	 * Retrieves a list of versions in which issues are fixed by category.
 	 *
+	 * @param category the category for which to retrieve fixed-in versions
 	 * @return a list of fixed-in versions
 	 */
-	List<String> getFixedInVersions();
+	List<String> getFixedInVersions(String category);
 
 	/**
-	 * Retrieves a list of impacted components.
+	 * Retrieves a list of impacted components by category.
 	 *
+	 * @param category the category for which to retrieve impacted components
 	 * @return a list of impacted components
 	 */
-	List<String> getComponentsImpacted();
+	List<String> getComponentsImpacted(String category);
 
 	/**
 	 * Retrieves a list of defect types.
@@ -161,11 +169,12 @@ public interface IExecutionAnalysisService {
 	String getStepsToReproduce(String scriptName);
 
 	/**
-	 * Retrieves a list of priorities.
-	 *
+	 * Retrieves a list of priorities by category.
+	 * 
+	 * @param category the category for which to retrieve priorities
 	 * @return a list of priorities
 	 */
-	List<String> getPriorities();
+	List<String> getPriorities(String category);
 
 	/**
 	 * Creates a Jira ticket based on the provided ticket creation DTO.
@@ -189,11 +198,19 @@ public interface IExecutionAnalysisService {
 	 * @return true if Jira automation is implemented
 	 */
 	boolean isJiraAutomationImplemented();
-	
+
 	/**
 	 * This method is used to get the analysis defect types.
 	 *
 	 * @return the list of analysis defect types
 	 */
 	List<String> getAnalysisDefectTypes();
+
+	/**
+	 * This method is used to get the RDK version for the given category.
+	 *
+	 * @param category - the category for which to retrieve the RDK version
+	 * @return a list of RDK versions for the specified category
+	 */
+	List<String> getRDKVersion(String category);
 }

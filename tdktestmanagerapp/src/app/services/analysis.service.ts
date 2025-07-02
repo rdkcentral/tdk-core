@@ -66,47 +66,47 @@ export class AnalysisService {
     );
   }
 
-  getProjectNames(): Observable<any> {
+  getProjectNames(category: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getListOfProjectIDs`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getListOfProjectIDs?category=${category}`, {
       headers
     });
   }
 
-  getPriorities(): Observable<any> {
+  getPriorities(category: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getPriorities`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getPriorities?category=${category}`, {
       headers
     });
   }
 
-  ListOfLabels(): Observable<any> {
+  listOfLabels(category: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getListOfLabels`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getListOfLabels?category=${category}`, {
       headers
     });
   }
 
-  getReleaseVersions(): Observable<any> {
+  getReleaseVersions(category: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getReleaseVersions`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getReleaseVersions?category=${category}`, {
       headers
     });
   }
 
-  getHardware(): Observable<any> {
+  getHardware(category: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getHardwareConfiguration`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getHardwareConfiguration?category=${category}`, {
       headers
     });
   }
@@ -118,36 +118,46 @@ export class AnalysisService {
       headers
   });
   }
-  getImpactedPlatforms(): Observable<any> {
+  getImpactedPlatforms(category: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getImpactedPlatforms`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getImpactedPlatforms?category=${category}`, {
       headers
     });
   }
-  getFixedInVersions(): Observable<any> {
+  getFixedInVersions(category: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getFixedInVersions`, {
-      headers
-    });
-  }
-  getSeverities(): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: this.authService.getApiToken(),
-    });
-    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getSeverities`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getFixedInVersions?category=${category}`, {
       headers
     });
   }
 
-  getComponentsImpacted(): Observable<any> {
+  getRDKVersions(category: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getComponentsImpacted`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getRDKVersions?category=${category}`, {
+      headers
+    });
+  }
+
+  getSeverities(category: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: this.authService.getApiToken(),
+    });
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getSeverities?category=${category}`, {
+      headers
+    });
+  }
+
+  getComponentsImpacted(category: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: this.authService.getApiToken(),
+    });
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getComponentsImpacted?category=${category}`, {
       headers
     });
   }
@@ -161,14 +171,15 @@ export class AnalysisService {
       responseType: 'text',
     });
   }
-  isPlatform(prjectId:string): Observable<any> {
+  isPlatform(prjectId:string ,category: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${this.config.apiUrl}api/v1/analysis/isPlatformProjectID?projectID=${prjectId}`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/isPlatformProjectID?projectID=${prjectId}&category=${category}`, {
       headers
     });
   }
+
   createJira(data:any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),

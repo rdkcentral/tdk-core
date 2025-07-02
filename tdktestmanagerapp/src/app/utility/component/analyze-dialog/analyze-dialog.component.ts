@@ -179,7 +179,7 @@ export class AnalyzeDialogComponent implements OnInit{
   }
 
   listProjectNAmes() {
-    this.analysiservice.getProjectNames().subscribe((res) => {
+    this.analysiservice.getProjectNames(this.data.category).subscribe((res) => {
       this.allProjectNames = res.data;
     });
   }

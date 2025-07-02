@@ -498,8 +498,10 @@ public class Constants {
 	public static final String RDK_CERTIFICATION_FILE_LIST = "rdkCertificationFileNames.config";
 	// Bug issue type
 	public static final String BUG_ISSUE_TYPE = "Bug";
-	// Issue analyser configuration file
-	public static final String ISSUE_ANALYSER_CONFIG = "issueAnalysis.config";
+	// Issue analyser configuration file rdkv
+	public static final String ISSUE_ANALYSER_CONFIG_RDKV = "issueAnalysisRDKV.config";
+	// Issue analyser configuration file rdkb
+	public static final String ISSUE_ANALYSER_CONFIG_RDKB = "issueAnalysisRDKB.config";
 	// Ticket handler URL
 	public static final String TICKET_HANDLER_URL = "ticketHandlerUrl";
 	// Project IDs
@@ -575,5 +577,7 @@ public class Constants {
 	public static final String VTS = "VTS";
 	// TDK package
 	public static final String TDK = "TDK";
+	//Rdk version
+	public static final String RDK_VERSIONS = "rdkVersions";
 
 }
