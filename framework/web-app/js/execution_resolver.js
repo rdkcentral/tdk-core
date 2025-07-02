@@ -1600,7 +1600,7 @@ function createTDKPackage() {
             if (output.includes("successfully")) {
 				 $("#scriptOutput").text(output);
                 $("#packageSuccess").show().html(`
-                    ? TDK Package Created Successfully.
+                    TDK Package Created Successfully.
                     <br>
                     <a href="javascript:void(0)" onclick="document.getElementById('packageFilee').click()" 
                        style="color: #007BFF; text-decoration: underline; font-size: 1em; display: inline-flex; align-items: center; margin-top: 8px;">
@@ -1910,7 +1910,7 @@ function createVTSPackage() {
             if (output.includes("successfully")) {
                 $("#vtsscriptOutput").text(output);
                 $("#vtspackageSuccess").show().html(`
-                    ? VTS Package Created Successfully.
+                    VTS Package Created Successfully.
                     <br>
                     <a href="javascript:void(0)" onclick="document.getElementById('vtsPackageFile').click()" 
                        style="color: #007BFF; text-decoration: underline; font-size: 1em; display: inline-flex; align-items: center; margin-top: 8px;">
@@ -2097,15 +2097,25 @@ function submitVtsForm(event) {
             $('#vtsLogsFetched').show();
             $('#vtssuccess').show();
 
+            var responseLines = response.trim().split('\n');
+
+            // Find the first line containing only "-------------------------"
+            var cutoffIndex = responseLines.findIndex(line => line.trim() === '-------------------------');
+
+            var cleanedLines = cutoffIndex !== -1
+                ? responseLines.slice(0, cutoffIndex)
+                : responseLines;
+
+            var cleanedResponse = cleanedLines.join('\n');
+
             var finalVtsLogs = "<div style='background-color: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 14px; white-space: pre-wrap; overflow-x: auto;'>"
-                                + response
+                                + cleanedResponse
                                 + "</div>";
 
-            // Add success or failure message after VTS logs
-            if (response.trim().includes("enabled")) {
-                finalVtsLogs += "<div style='margin-top: 20px; font-weight: bold; color: green; font-size: 1.2em;'> VTS Installed Successfully</div>";
+            if (response.includes("vts_installed")) {
+                finalVtsLogs += "<div style='margin-top: 20px; font-weight: bold; color: green; font-size: 1.2em;'>VTS Installed Successfully</div>";
             } else {
-                finalVtsLogs += "<div style='margin-top: 20px; font-weight: bold; color: red; font-size: 1.2em;'> VTS Installation Failed</div>";
+                finalVtsLogs += "<div style='margin-top: 20px; font-weight: bold; color: red; font-size: 1.2em;'>VTS Installation Failed</div>";
             }
 
             $('#vtsoutputDiv').show().html(finalVtsLogs);
@@ -2114,12 +2124,13 @@ function submitVtsForm(event) {
             $('#vtsoutputDiv').hide();
         }
 
-        var flashMessage = $("<div>").html(response).find('#flashMessage').text();
+        var flashMessage = $("<div>").html(cleanedResponse).find('#flashMessage').text();
         if (flashMessage.trim() !== "") {
             alert(flashMessage);
         }
     });
 }
+
 
 
 
