@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>FNCS_Playback_PlayPause_HEVC_MKV_MKV</name>
+  <name>FNCS_Playback_PlayPause_HEVC_MKV</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -82,7 +82,7 @@ timeout - a string to specify the time in seconds for which the videoplayback sh
 Checkpoint 2. Verify that the output returned from mediapipelinetests contains the strings "Failures: 0" and "Errors: 0", or "failed: 0"</expected_output>
     <priority>High</priority>
     <test_stub_interface>tdk_mediapipelinetests</test_stub_interface>
-    <test_script>FNCS_Playback_PlayPause_HEVC_MKV_MKV</test_script>
+    <test_script>FNCS_Playback_PlayPause_HEVC_MKV</test_script>
     <skipped>No</skipped>
     <release_version>M135</release_version>
     <remarks></remarks>
@@ -100,7 +100,7 @@ obj = tdklib.TDKScriptingLibrary("firebolt_native_apps_compliance","1",standAlon
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'FNCS_Playback_PlayPause_HEVC_MKV_MKV');
+obj.configureTestCase(ip,port,'FNCS_Playback_PlayPause_HEVC_MKV');
 
 #Set device configurations to default values
 checkAVStatus = "no"
