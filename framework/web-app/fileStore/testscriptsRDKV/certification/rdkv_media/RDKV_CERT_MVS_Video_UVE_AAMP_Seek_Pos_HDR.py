@@ -81,7 +81,7 @@ video_src_url_hevc_hdr: string</input_parameters>
     <test_stub_interface>rdkv_media</test_stub_interface>
     <test_script>RDKV_CERT_MVS_Video_UVE_AAMP_Seek_Pos_HDR</test_script>
     <skipped>No</skipped>
-    <release_version>M139</release_version>
+    <release_version>M138</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>

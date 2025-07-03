@@ -82,7 +82,7 @@ video_src_url_mp4: string
     <test_stub_interface>rdkv_media</test_stub_interface>
     <test_script>RDKV_CERT_MVS_Video_FF4X_Play_MP4</test_script>
     <skipped>No</skipped>
-    <release_version>M139</release_version>
+    <release_version>M138</release_version>
     <remarks></remarks>
   </test_cases>
   <script_tags />

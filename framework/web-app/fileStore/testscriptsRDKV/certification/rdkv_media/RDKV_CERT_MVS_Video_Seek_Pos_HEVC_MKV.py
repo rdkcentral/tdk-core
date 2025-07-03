@@ -85,7 +85,7 @@ seekbwd_position:int</input_parameters>
     <test_stub_interface>rdkv_media</test_stub_interface>
     <test_script>RDKV_CERT_MVS_Video_Seek_Pos_HEVC_MKV</test_script>
     <skipped>No</skipped>
-    <release_version>M139</release_version>
+    <release_version>M138</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
