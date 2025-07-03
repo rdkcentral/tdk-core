@@ -277,7 +277,7 @@
         <testCase testCaseId="DS_13" testCaseName= "Check_Current_Output_Settings" desc="Check the current output settings of device">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Current_Output_Settings" method="Get_Current_Output_Settings">
-                <resultGeneration useMethodTag="check_current_output_settings"/>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
             </testStep>
         </testCase>
 

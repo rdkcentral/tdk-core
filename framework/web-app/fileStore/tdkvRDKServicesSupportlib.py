@@ -6351,6 +6351,15 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "disable_tr181_parameter":
+            #Command for disable tr181 parameter
+            command ="tr181 -d -s -v false "+arg[0]
+            output = executeCommand(execInfo, command)
+            if "set operation success" in output.lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "check_tr181_parameter":
             #Command for check tr181 parameter value
             command ="tr181 "+arg[0]
