@@ -117,11 +117,16 @@ if "SUCCESS" in result.upper():
     testCaseList = VideoDevice_L2_List
     #Set basepath of test
     basePath = VTS_Binary_basePath + DeviceSettings_basePath
+    #SkipTestCaseList
+    SkipTestCaseList = VideoDevice_L2_SkipTestCaseList
+    boxtype = obj.getDeviceBoxType();
+    if (boxtype == "RPI-Client"):
+        SkipTestCaseList = VideoDevice_L2_SkipTestCaseList_RPI
 
     #Configuring plugin name
     plugin_name = "dsVideoDevice L2"
 
-    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
+    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module, True)
 
     try:
         if testList:
@@ -130,7 +135,7 @@ if "SUCCESS" in result.upper():
             print("####################################################################################")
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
-            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, True)
+            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, SkipTestCaseList)
     
             executePostRequisites()
 

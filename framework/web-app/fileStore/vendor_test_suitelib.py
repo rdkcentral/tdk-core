@@ -339,6 +339,9 @@ def setupEnvironmentInSession(session,basePath):
         output = executeCommands(session,commands)
         print (output)
         print("Environment set successfully")
+        global longWait
+        print("Setting longWait to true")
+        longWait = True
 
 #-------------------------------------------------------------------
 # Function:    startBinary
@@ -392,6 +395,7 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
         TestToBeExecuted = testList.keys()
     for test in TestToBeExecuted:
         skipped = False
+        skipped_reason = ""
         if errorObserved:
             startBinary(session, binaryPath, module)
             errorObserved = False
@@ -404,6 +408,7 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
                 if skipTestCase in test:
                    print("SKIPPING TESTCASE: ",test)
                    print("REASON : ", SkipTestCaseList[test.split(".")[1].strip()])
+                   skipped_reason = SkipTestCaseList[test.split(".")[1].strip()]
                    output = "TESTCASE SKIPPED"
                    SkipTestCaseList.pop(skipTestCase,None)
                    skipped = True
@@ -474,6 +479,8 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
             print("#" * 80)
         else:
             status="SKIPPED"
+            if "RPI doesn't support" in skipped_reason or "Not applicable for RPI" in skipped_reason:
+                status = "N/A"
         print("\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(status))
         testIterator = int(testIterator) + 1
     return executionSummary
@@ -500,9 +507,10 @@ def SetupPreRequisites(host, username, password, basePath, binaryName, binaryCon
     try:
         configuredPath = getDeviceConfigValues("VTS_BASE_PATH")
         print("configuredPath : " ,configuredPath)
-        moduleName = os.path.basename(os.path.normpath(basePath)) + "/"
-        basePath = configuredPath + moduleName
-        print("basePath : ", basePath)
+        if configuredPath:
+            moduleName = os.path.basename(os.path.normpath(basePath)) + "/"
+            basePath = configuredPath + moduleName
+            print("basePath : ", basePath)
     except:
         print("Using default basePath :  ", basePath)
 

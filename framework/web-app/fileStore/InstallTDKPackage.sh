@@ -160,7 +160,7 @@ cd /
 if [[ -z "$tdk_package" ]]; then
    echo "Packagename is not provided as command line argument"
    echo "Searching for package name \"TDK_Package*tar.gz\" "
-   tdk_package=`ls TDK_Package*tar.gz | head -n 1`
+   tdk_package=`ls /TDK_Package*tar.gz | head -n 1`
    echo -e "Processing $tdk_package\n"
 fi
 

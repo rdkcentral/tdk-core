@@ -117,6 +117,11 @@ if "SUCCESS" in result.upper():
     testCaseList = DeepSleep_L2_List
     #Set basepath of test
     basePath = VTS_Binary_basePath + DeepSleep_basePath
+    #SkipTestCaseList
+    SkipTestCaseList = DeepSleep_L2_SkipTestCaseList
+    boxtype = obj.getDeviceBoxType();
+    if (boxtype == "RPI-Client"):
+        SkipTestCaseList = DeepSleep_L2_SkipTestCaseList_RPI
 
     #Configuring plugin name
     words = module.split()
@@ -132,7 +137,7 @@ if "SUCCESS" in result.upper():
             print("####################################################################################")
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName 
-            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, DeepSleep_L2_SkipTestCaseList)
+            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, SkipTestCaseList)
     
             executePostRequisites()
 

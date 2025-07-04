@@ -22,7 +22,7 @@
 vts_package=$1
 
 #directory in which VTS will be installed
-root_dir=`pwd`
+root_dir='/'
 
 rm -rf $root_dir/VTS_Package
 
@@ -34,7 +34,6 @@ install_vts()
         echo "Error extracting $vts_package. Exiting."
         exit 1
     fi
-    rm VTS_Package.tgz
 }
 
 # Check if VTS_Package.tgz is present in root_dir folder.
@@ -42,21 +41,23 @@ cd $root_dir
 if [[ -z "$vts_package" ]]; then
    echo "Packagename is not provided as command line argument"
    echo "Searching for package name \"VTS_Package*tgz\" "
-   mv VTS_Package*tgz VTS_Package.tgz
-   vts_package="VTS_Package.tgz"
+   vts_package=`ls /VTS_Package*tgz | head -n 1`
+   echo -e "Processing $vts_package\n"
 fi
 
 if [ -f "$root_dir/$vts_package" ]; then
     install_vts
     if [ -d "VTS_Package" ];then
         for FILE in "VTS_Package"/*;do
+            if [[ "$FILE" == "VTS_Package/libut_control.so" ]];then
+                continue
+            fi
             if [ ! -d $FILE ];then
                 echo $FILE
                 filename=$(basename $FILE)
                 echo $filename
                 cd VTS_Package
-                [[ "$FILE" == *.tgz ]] && tar -xvf $filename
-                [[ "$FILE" == *.tgz ]] && rm $filename
+                tar -xvf $filename
                 cd ..
             fi
         done
@@ -65,6 +66,7 @@ if [ -f "$root_dir/$vts_package" ]; then
         cp libut_control.so /usr/lib
         #Delete tar files
         rm -rf *.tgz
+	touch /vts_installed
     fi
 else
     echo -e "Please copy the VTS_Package.tgz file to $root_dir folder in the device"

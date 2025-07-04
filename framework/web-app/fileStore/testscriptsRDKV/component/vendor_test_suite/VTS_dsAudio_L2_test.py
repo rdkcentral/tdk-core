@@ -117,6 +117,11 @@ if "SUCCESS" in result.upper():
     testCaseList = Audio_L2_List
     #Set basepath of test
     basePath = VTS_Binary_basePath + DeviceSettings_basePath
+    #SkipTestCaseList
+    SkipTestCaseList = Audio_L2_SkipTestCaseList
+    boxtype = obj.getDeviceBoxType();
+    if (boxtype == "RPI-Client"):
+        SkipTestCaseList = Audio_L2_SkipTestCaseList_RPI
 
     #Configuring plugin name
     words = module.split()
@@ -133,7 +138,7 @@ if "SUCCESS" in result.upper():
             print("####################################################################################")
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
-            executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList)
+            executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList, SkipTestCaseList)
     
             executePostRequisites()
 

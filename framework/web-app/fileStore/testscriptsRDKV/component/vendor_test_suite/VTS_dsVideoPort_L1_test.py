@@ -120,6 +120,11 @@ if "SUCCESS" in result.upper():
     testCaseList = VideoPort_L1_List
     #Set basepath of test
     basePath = VTS_Binary_basePath + DeviceSettings_basePath
+    #SkipTestCaseList
+    SkipTestCaseList = VideoPort_L1_SkipTestCaseList
+    boxtype = obj.getDeviceBoxType();
+    if (boxtype == "RPI-Client"):
+        SkipTestCaseList = VideoPort_L1_SkipTestCaseList_RPI
 
     #Configuring plugin name
     words = module.split()
@@ -136,7 +141,7 @@ if "SUCCESS" in result.upper():
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
             print("BinaryPath : ",binaryPath)
-            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList)
+            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, SkipTestCaseList)
     
             executePostRequisites()
 

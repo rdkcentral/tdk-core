@@ -117,6 +117,11 @@ if "SUCCESS" in result.upper():
     binaryConfig = HDMICEC_binaryConfig
     #Set basepath of test
     basePath = VTS_Binary_basePath + HDMICEC_basePath
+    #SkipTestCaseList
+    SkipTestCaseList = HDMICEC_L2_SkipTestCaseList
+    boxtype = obj.getDeviceBoxType();
+    if (boxtype == "RPI-Client"):
+        SkipTestCaseList = HDMICEC_L2_SkipTestCaseList_RPI
 
     #Configuring plugin name
     plugin_name = "HDMICEC L2"
@@ -131,7 +136,7 @@ if "SUCCESS" in result.upper():
             print("####################################################################################")
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName 
-            executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList)
+            executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList, SkipTestCaseList)
     
             executePostRequisites()
 

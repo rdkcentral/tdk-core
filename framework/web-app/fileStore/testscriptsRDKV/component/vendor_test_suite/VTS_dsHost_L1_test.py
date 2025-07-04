@@ -115,6 +115,11 @@ if "SUCCESS" in result.upper():
     binaryConfig = Host_binaryConfig
     #Set basepath of test
     basePath = VTS_Binary_basePath + DeviceSettings_basePath
+    #SkipTestCaseList
+    SkipTestCaseList = Host_L1_SkipTestCaseList
+    boxtype = obj.getDeviceBoxType();
+    if (boxtype == "RPI-Client"):
+        SkipTestCaseList = Host_L1_SkipTestCaseList_RPI
 
     for module in modules:
         if module == "L1 dsHost":
@@ -134,7 +139,7 @@ if "SUCCESS" in result.upper():
                 print("####################################################################################")
 
                 binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
-                executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList)
+                executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList, SkipTestCaseList)
     
                 executePostRequisites()
    
