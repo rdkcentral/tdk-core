@@ -1,0 +1,59 @@
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2025 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<?xml version="1.0" encoding="UTF-8"?><xml>
+  <module name="rdkv_WebPA" testGroup="Component">
+    <primitiveTests>
+      <primitiveTest name="webpa_deviceconfig_value" id="" version="1">
+        <function>webpa_deviceconfig_value</function>
+        <parameters>
+          <parameter name="basePath" value=""/>
+          <parameter name="configKey" value=""/>
+          <parameter name="configKey2" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="webpa_get" id=" " version="1">
+        <function>webpa_get</function>
+        <parameters>
+          <parameter name="AUTH_TOKEN" value=""/>
+          <parameter name="paramName" value=""/>
+          <parameter name="WEBPA_URL" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="webpa_set" id=" " version="2">
+        <function>webpa_set</function>
+        <parameters>
+          <parameter name="paramName" value=""/>
+          <parameter name="testValue" value=""/>
+          <parameter name="WEBPA_URL" value=""/>
+          <parameter name="AUTH_TOKEN" value=""/>
+          <parameter name="dataType" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="webpa_validate_set" id=" " version="1">
+        <function>webpa_validate_set</function>
+        <parameters>
+          <parameter name="AUTH_TOKEN" value=""/>
+          <parameter name="paramName" value=""/>
+          <parameter name="testValue" value=""/>
+          <parameter name="WEBPA_URL" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="webpa_parodusstatuscheck" id="" version="1">
+        <function>webpa_parodusstatuscheck</function>
+        <parameters/>
+      </primitiveTest>
+    </primitiveTests>
+  </module>
+</xml>
