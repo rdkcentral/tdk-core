@@ -6553,7 +6553,6 @@ def tdkpackages() {
 	 * @return
 	 */
 	def installPackages() {
-
 		String deviceIp
 		Device device
 		List<String> allFilesList = []
@@ -6563,7 +6562,7 @@ def tdkpackages() {
 		def user = "root"
 		def password = ""
 		def remoteFilePath = "/opt/TDK/logs/tdk_agent.log"
-		boolean checkStatuss = false
+		boolean checkStatus = false
 		boolean allocated = false
 		List<String> selectedPackagesList = []
 		def sourcePath, shellScriptCommand
@@ -6571,27 +6570,30 @@ def tdkpackages() {
 		def isVtsPackage = false
 
 		try {
-
 			device = Device.findById(params?.deviceeeId)
 			deviceIp = device?.stbIp
 
 			if (!deviceIp) {
-
 				render text: "Device IP not found", contentType: "text/plain"
 				return
 			}
 
+			def directoryPath
+			if (params.selectedFiles) {
+				directoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
+			} else {
+				directoryPath = grailsApplication.parentContext.getResource("/fileStore/vts_packages").file.path
+			}
 
-			def directoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
 			def directory = new File(directoryPath)
 
 			if (directory.exists() && directory.isDirectory()) {
 				allFilesList = directory.listFiles().collect { it.name }
-
 			}
-			def selectedRaw = params.selectedFiles ?: params.selectedVtsFiles
-			if (!selectedRaw) {
 
+			def selectedRaw = params.selectedFiles ?: params.selectedVtsFiles
+
+			if (!selectedRaw) {
 				render text: "No package selected", contentType: "text/plain"
 				return
 			}
@@ -6606,13 +6608,11 @@ def tdkpackages() {
 			}
 
 			selectedPackagesList = new JsonSlurper().parseText(selectedRaw)
-			if (!selectedPackagesList || selectedPackagesList.isEmpty()) {
 
+			if (!selectedPackagesList || selectedPackagesList.isEmpty()) {
 				render text: "No valid packages found", contentType: "text/plain"
 				return
 			}
-
-
 
 			if (device?.deviceStatus?.toString() == "FREE") {
 
@@ -6629,14 +6629,12 @@ def tdkpackages() {
 				def selectedPackage = selectedPackagesList[0]
 				def baseDir = new File(request.getRealPath(sourcePath))
 
-
 				allFilesList.each { fileee ->
 					def socVendorInstance = SoCVendor.findAll().find {
 						it.name?.toLowerCase()?.startsWith(fileee.toLowerCase())
 					}
 
 					if (!socVendorInstance) {
-
 						return
 					}
 
@@ -6653,16 +6651,16 @@ def tdkpackages() {
 					}
 
 					def validFolders = matchedFolders?.findAll { folder ->
-						new File(folder, selectedPackage).exists()
+						def exists = new File(folder, selectedPackage).exists()
+						exists
 					}
 
-					if (!validFolders || validFolders.isEmpty()) {
 
+					if (!validFolders || validFolders.isEmpty()) {
 						return
 					}
 
 					validFolders.each { validFolder ->
-
 
 						def packagePath = "${request.getRealPath('/')}${sourcePath}${validFolder.name}/${selectedPackage}"
 						def scriptPath = "${request.getRealPath('/')}${fileStorePath}${shellScriptCommand.replace('sh ', '')}"
@@ -6671,11 +6669,9 @@ def tdkpackages() {
 						def scpCopyShellScript = "sshpass -p '' scp -o StrictHostKeyChecking=no ${scriptPath} ${user}@${deviceIp}:/"
 
 						scpCopyPackage.execute().waitFor()
-
 						scpCopyShellScript.execute().waitFor()
 
 						def executeSSHCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no -t ${user}@${deviceIp} 'mkdir -p \$(dirname ${remoteFilePath}) && ${shellScriptCommand} \"${selectedPackage}\" > ${remoteFilePath}; cat ${remoteFilePath}'"
-
 
 						def process = new ProcessBuilder("bash", "-c", executeSSHCommand).start()
 						def outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()))
@@ -6683,11 +6679,9 @@ def tdkpackages() {
 
 						String line
 						while ((line = outputReader.readLine()) != null) {
-
 							outputLines.add(line)
 						}
 						while ((line = errorReader.readLine()) != null) {
-
 							errorLines.add(line)
 						}
 
@@ -6695,24 +6689,25 @@ def tdkpackages() {
 						outputReader.close()
 						errorReader.close()
 
-						// Skip reboot for VTS packages
 						if (!isVtsPackage) {
-							
 							def rebootCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no ${user}@${deviceIp} 'nohup reboot >/dev/null 2>&1 &'"
 							def rebootProcess = ["bash", "-c", rebootCommand].execute()
 							def rebootExitCode = rebootProcess.waitForOrKill(2000) ?: -1
 
-
 							TimeUnit.SECONDS.sleep(10)
 						}
 
-						// --------- Check TDK Status ----------
 						String statusCommand
-						if (selectedPackage?.toLowerCase()?.contains("fncs")) {
+						if (isVtsPackage) {
+							statusCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no ${user}@${deviceIp} 'cd / && ls -lrt'"
+						} else if (selectedPackage?.toLowerCase()?.contains("fncs")) {
 							statusCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no ${user}@${deviceIp} 'command -v tdk_mediapipelinetests'"
+						} else if (selectedPackage?.toLowerCase()?.contains("tdk")) {
+							statusCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no ${user}@${deviceIp} 'systemctl status tdk'"
 						} else {
 							statusCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no ${user}@${deviceIp} 'systemctl status tdk'"
 						}
+
 						def statusProcess = new ProcessBuilder("bash", "-c", statusCommand).start()
 						def statusReader = new BufferedReader(new InputStreamReader(statusProcess.getInputStream()))
 
@@ -6723,37 +6718,31 @@ def tdkpackages() {
 						statusProcess.waitFor()
 						statusReader.close()
 
-						checkStatuss = true
+						checkStatus = true
 					}
 				}
 
 				if (allocated) {
-
 					executionService.deviceAllocatedList.remove(device.id)
 				}
 
-				if (!checkStatuss) {
-
+				if (!checkStatus) {
 					render text: "No valid package installed", contentType: "text/plain"
 				} else {
-
 					render text: outputLines.join("\n"), contentType: "text/plain"
 				}
 
 			} else {
-
 				flash.message = "Device is down or busy."
 				redirect(action: "tdkpackages")
 			}
 
 		} catch (Exception e) {
-
 			e.printStackTrace()
 			render text: "Error occurred: ${e.message}", contentType: "text/plain"
 		}
-
-
 	}
+
 
 
 
@@ -6902,129 +6891,142 @@ def tdkpackages() {
         }
     }
 	
-	/**
-	 * Method to create TDK Package
-	 * This method used to create TDK Packages
-	 * @return
-	 */
-	def createTDKPackage() {
-	try {
-		// Ensure 'tdk_packages' directory exists
-		def tdkPackagesDirPath = "${request.getRealPath('/')}/fileStore/tdk_packages"
-def tdkPackagesDir = new File(tdkPackagesDirPath)
+			/**
+			 * Method to create TDK Package
+			 * This method used to create TDK Packages
+			 * @return
+			 */
+			def createTDKPackage() {
+			try {
+				// Ensure 'tdk_packages' directory exists
+				def tdkPackagesDirPath = "${request.getRealPath('/')}/fileStore/tdk_packages"
+		def tdkPackagesDir = new File(tdkPackagesDirPath)
 
-if (!tdkPackagesDir.exists()) {
-    boolean created = tdkPackagesDir.mkdirs()
-} 
+		if (!tdkPackagesDir.exists()) {
+			boolean created = tdkPackagesDir.mkdirs()
+		} 
 
-		// Load the script file from classpath
-		def scriptFile = grailsApplication.mainContext.getResource("/fileStore/createTDKPackage.sh")?.file
-		if (!scriptFile || !scriptFile.exists()) {
-			render([status: "error", message: "Script file not found"] as JSON)
-			return
-		}
+				// Load the script file from classpath
+				def scriptFile = grailsApplication.mainContext.getResource("/fileStore/createTDKPackage.sh")?.file
+				if (!scriptFile || !scriptFile.exists()) {
+					render([status: "error", message: "Script file not found"] as JSON)
+					return
+				}
 
-		def scriptFileName = scriptFile.name
-		def scriptDirectory = scriptFile.parent
+				def scriptFileName = scriptFile.name
+				def scriptDirectory = scriptFile.parent
 
-		// Retrieve device ID from params
-		def checkDeviceId = params?.deviceId
-		Device device = Device.findById(checkDeviceId)
-		if (!device) {
-			render([status: "error", message: "Device not found"] as JSON)
-			return
-		}
+				// Retrieve device ID from params
+				def checkDeviceId = params?.deviceId
+				Device device = Device.findById(checkDeviceId)
+				if (!device) {
+					render([status: "error", message: "Device not found"] as JSON)
+					return
+				}
 
-		// Set execute permission on the script
-		def chmodProcess = [
-			"chmod",
-			"777",
-			"${scriptFile.absolutePath}"
-		].execute()
-		def chmodExit = chmodProcess.waitFor()
-		if (chmodExit != 0) {
-			def chmodError = chmodProcess.errorStream.text.trim()
-			render([status: "error", message: "Failed to set execute permissions", output: chmodError] as JSON)
-			return
-		}
+				// Set execute permission on the script
+				def chmodProcess = [
+					"chmod",
+					"777",
+					"${scriptFile.absolutePath}"
+				].execute()
+				def chmodExit = chmodProcess.waitFor()
+				if (chmodExit != 0) {
+					def chmodError = chmodProcess.errorStream.text.trim()
+					render([status: "error", message: "Failed to set execute permissions", output: chmodError] as JSON)
+					return
+				}
 
-		// Run the script with the device SoCVendor as an argument
-		def process = [
-			"sh",
-			"-c",
-			"cd ${scriptDirectory} && ./${scriptFileName} ${device?.soCVendor}"
-		].execute()
+				// Run the script with the device SoCVendor as an argument
+				def process = [
+					"sh",
+					"-c",
+					"cd ${scriptDirectory} && ./${scriptFileName} ${device?.soCVendor}"
+				].execute()
 
-		def exitCode = process.waitFor()
-		def output = process.inputStream.text.trim()
-		def errorOutput = process.errorStream.text.trim()
+				def exitCode = process.waitFor()
+				def output = process.inputStream.text.trim()
+				def errorOutput = process.errorStream.text.trim()
 
-		if (exitCode == 0) {
-			render([status: "success", message: "Package created successfully", output: output] as JSON)
-		} else {
-			render([status: "error", message: "Script execution failed", output: errorOutput] as JSON)
-		}
+				if (exitCode == 0) {
+					render([status: "success", message: "Package created successfully", output: output] as JSON)
+				} else {
+					render([status: "error", message: "Script execution failed", output: errorOutput] as JSON)
+				}
 
-	} catch (Exception e) {
-		render([status: "error", message: "Exception: ${e.message}"] as JSON)
-	}
-}
-
-
-
-	/**
-	 * Method to upload TDK packages
-	 * This method used to create TDK packages via UI
-	 * @return
-	 */
-	def processPackage() {
-		try {
-
-
-			def deviceId = params?.deviceeeId
-
-
-			Device device = Device.findById(deviceId)
-			if (!device) {
-				render([status: "error", message: "Invalid device ID"] as JSON)
-				return
+			} catch (Exception e) {
+				render([status: "error", message: "Exception: ${e.message}"] as JSON)
 			}
-
-
-			def soCVendor = device.soCVendor
-
-
-			def packageFile = request.getFile("packageFile") as MultipartFile
-			if (!packageFile || packageFile.isEmpty()) {
-				render([status: "error", message: "No file uploaded"] as JSON)
-				return
-			}
-
-			// Define base directory
-			def baseDir = new File(servletContext.getRealPath("/fileStore/tdk_packages"))
-
-			if (!baseDir.exists()) {
-				baseDir.mkdirs()
-			}
-
-
-			def vendorFolder = new File(baseDir, soCVendor?.toString())
-
-			if (!vendorFolder.exists()) {
-				boolean dirCreated = vendorFolder.mkdirs()
-			}
-			// Define target file path
-			def targetFile = new File(vendorFolder, packageFile.originalFilename)
-
-			packageFile.transferTo(targetFile)
-
-			render([status: "success", message: "Package uploaded successfully!", filePath: targetFile.absolutePath] as JSON)
-
-		} catch (Exception e) {
-			e.printStackTrace()
-			render([status: "error", message: "Exception: ${e.message}"] as JSON)
 		}
-	}
+
+
+
+		/**
+		 * Method to upload the TDK Packages
+		 * This method is used to upload TDK packages via UI
+		 */
+		def processPackage() {
+			try {
+				def deviceId = params?.deviceeeId
+				Device device = Device.findById(deviceId)
+
+				if (!device) {
+					render([status: "error", message: "Invalid device ID"] as JSON)
+					return
+				}
+
+				def soCVendor = device.soCVendor
+				def packageFile = request.getFile("packageFile") as MultipartFile
+
+				if (!packageFile || packageFile.isEmpty()) {
+					render([status: "error", message: "No file uploaded"] as JSON)
+					return
+				}
+
+				// Base directory for TDK packages
+				def baseDir = new File(servletContext.getRealPath("/fileStore/tdk_packages"))
+				if (!baseDir.exists()) {
+					baseDir.mkdirs()
+				}
+
+				// Normalization logic for SoC vendor name
+				def normalize = { str ->
+					str?.toLowerCase()?.split(/[\s\-]/)?.first()?.replaceAll(/[^a-z0-9]/, "")
+				}
+
+				def normalizedDeviceVendor = normalize(soCVendor?.name)
+
+				// Try to match an existing vendor folder using normalization
+				File matchedFolder = null
+				baseDir.listFiles()?.each { dir ->
+					if (dir.isDirectory()) {
+						def normalizedDirName = normalize(dir.name)
+						if (normalizedDirName == normalizedDeviceVendor) {
+							matchedFolder = dir
+						}
+					}
+				}
+
+				// If no folder matched, create a new one with the normalized name
+				if (!matchedFolder) {
+					matchedFolder = new File(baseDir, normalizedDeviceVendor)
+					if (!matchedFolder.exists()) {
+						matchedFolder.mkdirs()
+					}
+				}
+
+				// Save the uploaded file into the matched or created folder
+				def targetFile = new File(matchedFolder, packageFile.originalFilename)
+				packageFile.transferTo(targetFile)
+
+				render([status: "success", message: "Package uploaded successfully!", filePath: targetFile.absolutePath] as JSON)
+
+			} catch (Exception e) {
+				e.printStackTrace()
+				render([status: "error", message: "Exception: ${e.message}"] as JSON)
+			}
+		}
+
 
 	/**
 	 * Method to create VTS package
@@ -7096,43 +7098,60 @@ if (!tdkPackagesDir.exists()) {
 
 	/**
 	 * Method to upload the VTS Packages
-	 * this method used to upload VTS packges via UI
-	 * @return
+	 * This method is used to upload VTS packages via UI
 	 */
 	def processVtsPackage() {
 		try {
-
 			def deviceId = params?.deviceeeId
-
 			Device device = Device.findById(deviceId)
+
 			if (!device) {
 				render([status: "error", message: "Invalid device ID"] as JSON)
 				return
 			}
 
 			def soCVendor = device.soCVendor
-
 			def packageFile = request.getFile("vtspackageFile") as MultipartFile
+
 			if (!packageFile || packageFile.isEmpty()) {
 				render([status: "error", message: "No file uploaded"] as JSON)
 				return
 			}
 
+			// Base directory for VTS packages
 			def baseDir = new File(servletContext.getRealPath("/fileStore/vts_packages"))
-
 			if (!baseDir.exists()) {
 				baseDir.mkdirs()
 			}
 
-			def vendorFolder = new File(baseDir, soCVendor?.toString())
-
-			if (!vendorFolder.exists()) {
-				boolean dirCreated = vendorFolder.mkdirs()
+			// Normalization logic for SoC vendor name
+			def normalize = { str ->
+				str?.toLowerCase()?.split(/[\s\-]/)?.first()?.replaceAll(/[^a-z0-9]/, "")
 			}
 
-			def targetFile = new File(vendorFolder, packageFile.originalFilename)
+			def normalizedDeviceVendor = normalize(soCVendor?.name)
 
+			// Try to match an existing vendor folder using normalization
+			File matchedFolder = null
+			baseDir.listFiles()?.each { dir ->
+				if (dir.isDirectory()) {
+					def normalizedDirName = normalize(dir.name)
+					if (normalizedDirName == normalizedDeviceVendor) {
+						matchedFolder = dir
+					}
+				}
+			}
 
+			// If no folder matched, create a new one with the normalized name
+			if (!matchedFolder) {
+				matchedFolder = new File(baseDir, normalizedDeviceVendor)
+				if (!matchedFolder.exists()) {
+					matchedFolder.mkdirs()
+				}
+			}
+
+			// Save the uploaded file into the matched or created folder
+			def targetFile = new File(matchedFolder, packageFile.originalFilename)
 			packageFile.transferTo(targetFile)
 
 			render([status: "success", message: "Package uploaded successfully!", filePath: targetFile.absolutePath] as JSON)
@@ -7142,6 +7161,7 @@ if (!tdkPackagesDir.exists()) {
 			render([status: "error", message: "Exception: ${e.message}"] as JSON)
 		}
 	}
+
 
 	/**
 	 * Method to get all VTS Packages
