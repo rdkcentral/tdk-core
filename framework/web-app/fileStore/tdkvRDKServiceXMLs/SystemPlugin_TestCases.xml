@@ -1070,7 +1070,7 @@
                 </subtestStep>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_54" testCaseName="System_Check_RFC_Status" desc="Validates whether RFC Configuration is reflecting or not">
+       <!--testCase testCaseId="SYS_54" testCaseName="System_Check_RFC_Status" desc="Validates whether RFC Configuration is reflecting or not">
             <testCaseInfo testCaseType="loop" />
             <testStep testStepId="1" name="Disable_XDial"  action="externalFnCall" >
                   <resultGeneration useMethodTag="Check_And_Enable_XDial" arguments="disable_xdial" />
@@ -1096,6 +1096,42 @@
             <testStep testStepId="7" name="Get_System_RFC_Config" method="Get_RFC_Config">
                 <params>
                   <param tag="rfcList"  value="Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.XDial.Enable" />
+                </params>
+                <resultGeneration useMethodTag="system_get_rfc_info" arguments="check_expected_value" expectedValues="true"/>
+            </testStep>
+       </testCase-->
+       <testCase testCaseId="SYS_54" testCaseName="System_Check_RFC_Status" desc="Checks whether the RFC value is correctly reflected using getRFCConfig">
+            <testCaseInfo testCaseType="direct" />
+            <testStep testStepId="1" name="Check_RFC_Status"  action="externalFnCall" saveResult="true">
+                    <resultGeneration useMethodTag="check_tr181_parameter">
+                            <arguments useConfigFile="true" key="SYSTEM_RFC_PARAMETER_NAME"/>
+                    </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Disable_RFC_Parameter"  action="externalFnCall">
+                    <resultGeneration useMethodTag="disable_tr181_parameter">
+                            <arguments useConfigFile="true" key="SYSTEM_RFC_PARAMETER_NAME"/>
+                    </resultGeneration>
+            </testStep>
+            <testStep testStepId="3" name="System_reboot" method="Reboot" rebootStep="yes" delay ="5">
+                   <resultGeneration useMethodTag="system_check_set_operation"  />
+            </testStep>
+            <testStep testStepId="4" name="Get_System_RFC_Config" method="Get_RFC_Config">
+                <params>
+                  <param tag="rfcList" useConfigFile="true" key="SYSTEM_RFC_PARAMETER_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="system_get_rfc_info" arguments="check_expected_value" expectedValues="false"/>
+            </testStep>
+            <testStep testStepId="5" name="Enable_RFC_Parameter"  action="externalFnCall">
+                    <resultGeneration useMethodTag="enable_tr181_parameter">
+                            <arguments useConfigFile="true" key="SYSTEM_RFC_PARAMETER_NAME"/>
+                    </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="System_reboot" method="Reboot" rebootStep="yes" delay ="5">
+                   <resultGeneration useMethodTag="system_check_set_operation"  />
+            </testStep>
+            <testStep testStepId="7" name="Get_System_RFC_Config" method="Get_RFC_Config">
+                <params>
+                  <param tag="rfcList" useConfigFile="true" key="SYSTEM_RFC_PARAMETER_NAME"/>
                 </params>
                 <resultGeneration useMethodTag="system_get_rfc_info" arguments="check_expected_value" expectedValues="true"/>
             </testStep>
@@ -1162,17 +1198,17 @@
        <!-- Test case 59 -->
        <testCase testCaseId="SYS_59" testCaseName= "System_Check_Device_Type" desc="Check the device type of the DUT with getPlatformConfiguration API">
             <testCaseInfo testCaseType="direct"/>
-            <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
+            <!--testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
                 <resultGeneration useMethodTag="system_get_device_details_from_file" >
                   <arguments value="^DEVICE_TYPE" useConfigFile="true" key="DEVICEINFO_DEVICE_DETAILS_FILE_PATH"/>
                 </resultGeneration>
-            </testStep>
-            <testStep testStepId="2" name="Get_Platform_Configuration" method="Get_Platform_Configuration">
+            </testStep-->
+            <testStep testStepId="1" name="Get_Platform_Configuration" method="Get_Platform_Configuration">
                 <params>
                   <param tag="query" value="DeviceInfo.deviceType" />
                 </params>
                 <resultGeneration useMethodTag="system_check_platform_configurations"   arguments="check_devicetype">
-                  <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_get_device_details"/>
+                  <expectedValues useConfigFile="true" key="DEVICEINFO_DEVICE_TYPE"/>
                 </resultGeneration>
             </testStep>
        </testCase>
