@@ -4177,6 +4177,13 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "usersettings_get_api_info":
+            info[arg[0]] = result
+            if result:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "usersettings_get_enabled_status":
             info["enabled"] = result
             if str(result).strip() in expectedValues:
@@ -4204,6 +4211,19 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usersettings_get_contentpin_status":
+            info["contentPin"] = result
+            if expectedValues:
+                if str(result).strip() in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                if result:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))

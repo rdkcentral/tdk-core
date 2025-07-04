@@ -458,4 +458,20 @@
                 </resultGeneration>
             </testStep>
        </testCase>
+
+       <!-- Test case 24 -->
+       <testCase testCaseId="DI_24" testCaseName="DeviceInfo_Get_Device_SocName" desc="Checks the device SOC Name">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Device_SocName" method="Get_Device_SocName">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+        </testCase>
+	
+	<!-- Test case 25 -->
+       <testCase testCaseId="DI_25" testCaseName="DeviceInfo_Get_Device_Manufacturer" desc="Checks the device manufacturer">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Device_Manufacturer" method="Get_Device_Make">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+        </testCase>
 </testPlugin>

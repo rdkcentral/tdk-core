@@ -50,6 +50,10 @@
 		<event pluginName="UserSettings" eventName="Event_On_HighContrastChanged"/>
                 <event pluginName="UserSettings" eventName="Event_On_VoiceGuidanceChanged"/>
 		<event pluginName="UserSettings" eventName="Event_On_VoiceGuidanceHintsChanged"/>
+		<event pluginName="UserSettings" eventName="Event_On_ContentPinChanged"/>
+		<event pluginName="UserSettings" eventName="Event_On_PrivacyModeChanged"/>
+		<event pluginName="UserSettings" eventName="Event_On_PreferredAudioLanguagesChanged"/>
+		<event pluginName="UserSettings" eventName="Event_On_PresentationLanguageChanged"/>
       	  </prerequisite>
   	</pluginPreRequisite>
 
@@ -500,6 +504,186 @@
                 <resultGeneration useMethodTag="usersettings_get_status" arguments="hints">
                         <expectedValues usePreviousResult="true" Id="1" useMethodTag="usersettings_toggle_status" arguments="hints"/>
                 </resultGeneration>
+                </testStep>
+        </testCase>
+
+	<!-- Test case 21 -->
+        <testCase testCaseId="US_21" testCaseName="UserSettings_Set_Get_ContentPin" desc="Check whether the contentpin can be successfully set and retrieved">
+                <testCaseInfo testCaseType="setandget" revert="true" />
+                <testStep testStepId="1" name="Get_ContentPin" method="UserSettings_getContentPin" revertGet="yes">
+                        <resultGeneration useMethodTag="usersettings_get_contentpin_status"/>
+                </testStep>
+                <testStep testStepId="2" name="Set_ContentPin" method="UserSettings_setContentPin" revertSet="yes">
+                <params>
+                        <param tag="contentPin" useConfigFile="true" key="USERSETTINGS_CONTENT_PIN" revertParam="yes" />
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_contentPin" method="UserSettings_getContentPin" revertFlag="yes">
+                	<resultGeneration useMethodTag="usersettings_get_contentpin_status">
+                        	<expectedValues useConfigFile="true" key="USERSETTINGS_CONTENT_PIN"/>
+                	</resultGeneration>
+                </testStep>
+        </testCase>
+
+	<!-- Test case 22 -->
+        <testCase testCaseId="US_22" testCaseName="UserSettings_Check_On_ContentPinChanged_Event" desc="Check if the event is triggered when the content pin status changes">
+                <testCaseInfo testCaseType="setandget" revert="true" />
+                <testStep testStepId="1" name="Get_ContentPin" method="UserSettings_getContentPin" revertGet="yes">
+                        <resultGeneration useMethodTag="usersettings_get_contentpin_status"/>
+                </testStep>
+                <testStep testStepId="2" name="Set_ContentPin" method="UserSettings_setContentPin" revertSet="yes">
+                <params>
+                        <param tag="contentPin" useConfigFile="true" key="USERSETTINGS_CONTENT_PIN" revertParam="yes" />
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Check_On_ContentPinChanged_Event" event="Event_On_ContentPinChanged" action="eventListener" delay="3">
+                	<resultGeneration useMethodTag="usersettings_check_state_change_event" arguments="contentPin">
+                        	<expectedValues useConfigFile="true" key="USERSETTINGS_CONTENT_PIN"/>
+                	</resultGeneration>
+                </testStep>
+                <testStep testStepId="4" name="Get_contentPin" method="UserSettings_getContentPin" revertFlag="yes">
+                	<resultGeneration useMethodTag="usersettings_get_contentpin_status">
+                        	<expectedValues useConfigFile="true" key="USERSETTINGS_CONTENT_PIN"/>
+                	</resultGeneration>
+                </testStep>
+        </testCase>
+
+	<!-- Test case 23 -->
+        <testCase testCaseId="US_23" testCaseName="UserSettings_Set_Get_PrivacyMode" desc="Check whether the privacymode can be successfully set and retrieved">
+                <testCaseInfo testCaseType="loop" revert="true" />
+                <testStep testStepId="1" name="Get_PrivacyMode" method="UserSettings_getPrivacyMode" revertGet="yes">
+			<resultGeneration useMethodTag="usersettings_get_status" arguments="privacyMode">
+                        	<expectedValues useDefault="true"/>
+                	</resultGeneration>
+		</testStep>
+		<testStep testStepId="2" name="Set_Get_PrivacyMode" testStepType="loop">
+			<subtestStep subtestStepId="1" name="Set_PrivacyMode" method="UserSettings_setPrivacyMode" revertSet="yes">
+                		<params>
+                        		<param tag="privacyMode" useConfigFile="true" key="USERSETTINGS_PRIVACY_MODE" iteration="true" revertParam="yes"/>
+                		</params>
+                	</subtestStep>
+			<subtestStep subtestStepId="2" name="Get_PrivacyMode" method="UserSettings_getPrivacyMode" revertFlag="yes">
+                		<resultGeneration useMethodTag="usersettings_get_status" arguments="privacyMode">
+                        		<expectedValues useIterableValue="true"/>
+                		</resultGeneration>
+			</subtestStep>
+		</testStep>
+        </testCase>
+
+	<!-- Test case 24 -->
+        <testCase testCaseId="US_24" testCaseName="UserSettings_Check_On_PrivacyModeChanged_Event" desc="Check if the event is triggered when the privacy mode status changes">
+                <testCaseInfo testCaseType="loop" revert="true" />
+                <testStep testStepId="1" name="Get_PrivacyMode" method="UserSettings_getPrivacyMode" revertGet="yes">
+                        <resultGeneration useMethodTag="usersettings_get_status" arguments="privacyMode">
+                                <expectedValues useDefault="true"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_Get_PrivacyMode" testStepType="loop">
+                        <subtestStep subtestStepId="1" name="Set_PrivacyMode" method="UserSettings_setPrivacyMode" revertSet="yes">
+                                <params>
+                                        <param tag="privacyMode" useConfigFile="true" key="USERSETTINGS_PRIVACY_MODE" iteration="true" revertParam="yes"/>
+                                </params>
+                        </subtestStep>
+			<subtestStep subtestStepId="2" name="Check_On_PrivacyModeChanged_Event" event="Event_On_PrivacyModeChanged" action="eventListener" delay="3">
+                                <resultGeneration useMethodTag="usersettings_check_state_change_event" arguments="privacyMode">
+                                        <expectedValues useIterableValue="true"/>
+                                </resultGeneration>
+                        </subtestStep>
+			<subtestStep subtestStepId="3" name="Get_PrivacyMode" method="UserSettings_getPrivacyMode" revertFlag="yes">
+                                <resultGeneration useMethodTag="usersettings_get_status" arguments="privacyMode">
+                                        <expectedValues useIterableValue="true"/>
+                                </resultGeneration>
+                        </subtestStep>
+                </testStep>
+        </testCase>
+
+	<!-- Test case 25 -->
+        <testCase testCaseId="US_25" testCaseName="UserSettings_Set_Get_PreferredAudioLanguages" desc="Check whether the preferred audio languages can be successfully set and retrieved">
+                <testCaseInfo testCaseType="loop" revert="true" />
+                <testStep testStepId="1" name="Get_PreferredAudioLanguages" method="UserSettings_getPreferredAudioLanguages" revertGet="yes">
+			<resultGeneration useMethodTag="usersettings_get_api_info" arguments="preferredLanguages"/>
+                </testStep>
+                <testStep testStepId="2" name="Set_Get_PreferredAudioLanguages" testStepType="loop">
+                        <subtestStep subtestStepId="1" name="Set_PreferredAudioLanguages" method="UserSettings_setPreferredAudioLanguages" revertSet="yes">
+                                <params>
+                                        <param tag="preferredLanguages" useConfigFile="true" key="USERSETTINGS_PREFERRED_AUDIOLANGUAGES" iteration="true" revertParam="yes"/>
+                                </params>
+                        </subtestStep>
+                        <subtestStep subtestStepId="2" name="Get_PreferredAudioLanguages" method="UserSettings_getPreferredAudioLanguages" revertFlag="yes">
+                                <resultGeneration useMethodTag="usersettings_get_status" arguments="preferredLanguages">
+                                        <expectedValues useIterableValue="true"/>
+                                </resultGeneration>
+                        </subtestStep>
+                </testStep>
+        </testCase>
+
+	<!-- Test case 26 -->
+        <testCase testCaseId="US_26" testCaseName="UserSettings_Check_On_PreferredAudioLanguagesChanged_Event" desc="Check if the event is triggered when the preferred audio languages status changes">
+                <testCaseInfo testCaseType="loop" revert="true" />
+                <testStep testStepId="1" name="Get_PreferredAudioLanguages" method="UserSettings_getPreferredAudioLanguages" revertGet="yes">
+                        <resultGeneration useMethodTag="usersettings_get_api_info" arguments="preferredLanguages"/>
+                </testStep>
+                <testStep testStepId="2" name="Set_Get_PreferredAudioLanguages" testStepType="loop">
+                        <subtestStep subtestStepId="1" name="Set_PreferredAudioLanguages" method="UserSettings_setPreferredAudioLanguages" revertSet="yes">
+                                <params>
+                                        <param tag="preferredLanguages" useConfigFile="true" key="USERSETTINGS_PREFERRED_AUDIOLANGUAGES" iteration="true" revertParam="yes"/>
+                                </params>
+                        </subtestStep>
+			<subtestStep subtestStepId="2" name="Check_On_PreferredAudioLanguagesChanged_Event" event="Event_On_PreferredAudioLanguagesChanged" action="eventListener" delay="3">
+                                <resultGeneration useMethodTag="usersettings_check_state_change_event" arguments="preferredLanguages">
+                                        <expectedValues useIterableValue="true"/>
+                                </resultGeneration>
+			</subtestStep>
+			<subtestStep subtestStepId="3" name="Get_PreferredAudioLanguages" method="UserSettings_getPreferredAudioLanguages" revertFlag="yes">
+                                <resultGeneration useMethodTag="usersettings_get_status" arguments="preferredLanguages">
+                                        <expectedValues useIterableValue="true"/>
+                                </resultGeneration>
+                        </subtestStep>
+                </testStep>
+        </testCase>
+
+	<!-- Test case 27 -->
+        <testCase testCaseId="US_27" testCaseName="UserSettings_Set_Get_PresentationLanguage" desc="Check whether the presentation language can be successfully set and retrieved">
+                <testCaseInfo testCaseType="loop" revert="true" />
+                <testStep testStepId="1" name="Get_PresentationLanguage" method="UserSettings_getPresentationLanguage" revertGet="yes">
+                        <resultGeneration useMethodTag="usersettings_get_api_info" arguments="presentationLanguage"/>
+                </testStep>
+                <testStep testStepId="2" name="Set_Get_PresentationLanguage" testStepType="loop">
+                        <subtestStep subtestStepId="1" name="Set_PresentationLanguage" method="UserSettings_setPresentationLanguage" revertSet="yes">
+                                <params>
+                                        <param tag="presentationLanguage" useConfigFile="true" key="USERSETTINGS_PRESENTATION_LANGUAGES" iteration="true" revertParam="yes"/>
+                                </params>
+                        </subtestStep>
+                        <subtestStep subtestStepId="2" name="Get_PresentationLanguage" method="UserSettings_getPresentationLanguage" revertFlag="yes">
+                                <resultGeneration useMethodTag="usersettings_get_status" arguments="presentationLanguage">
+                                        <expectedValues useIterableValue="true"/>
+                                </resultGeneration>
+                        </subtestStep>
+                </testStep>
+        </testCase>
+
+	<!-- Test case 28 -->
+        <testCase testCaseId="US_28" testCaseName="UserSettings_Check_On_PresentationLanguageChanged_Event" desc="Check if the event is triggered when the presentation language status changes">
+                <testCaseInfo testCaseType="loop" revert="true" />
+                <testStep testStepId="1" name="Get_PresentationLanguage" method="UserSettings_getPresentationLanguage" revertGet="yes">
+                        <resultGeneration useMethodTag="usersettings_get_api_info" arguments="presentationLanguage"/>
+                </testStep>
+                <testStep testStepId="2" name="Set_Get_PresentationLanguage" testStepType="loop">
+			<subtestStep subtestStepId="1" name="Set_PresentationLanguage" method="UserSettings_setPresentationLanguage" revertSet="yes">
+                                <params>
+                                        <param tag="presentationLanguage" useConfigFile="true" key="USERSETTINGS_PRESENTATION_LANGUAGES" iteration="true" revertParam="yes"/>
+                                </params>
+                        </subtestStep>
+			<subtestStep subtestStepId="2" name="Check_On_PresentationLanguageChanged_Event" event="Event_On_PresentationLanguageChanged" action="eventListener" delay="3">
+				<resultGeneration useMethodTag="usersettings_check_state_change_event" arguments="presentationLanguage">
+                                        <expectedValues useIterableValue="true"/>
+                                </resultGeneration>
+                        </subtestStep>
+			<subtestStep subtestStepId="3" name="Get_PresentationLanguage" method="UserSettings_getPresentationLanguage" revertFlag="yes">
+                                <resultGeneration useMethodTag="usersettings_get_status" arguments="presentationLanguage">
+                                        <expectedValues useIterableValue="true"/>
+                                </resultGeneration>
+                        </subtestStep>
                 </testStep>
         </testCase>
 </testPlugin>

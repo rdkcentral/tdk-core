@@ -97,7 +97,9 @@
            </params>
    	</method>
 	<method name="Get_Model_ID" api="modelid" type="property" desc="Provides access to the device model number or SKU"/>
-        <method name="Get_Device_Type" api="devicetype" type="property" desc="Provides access to the device type"/>
+	<method name="Get_Device_Type" api="devicetype" type="property" desc="Provides access to the device type"/>
+	<method name="Get_Device_SocName" api="socname" type="property" desc="Provides access to the SOC Name"/>
+	<method name="Get_Device_Make" api="make" type="property" desc="Provides access to the device manufacturer"/>
     </plugin>
 
 
@@ -2905,8 +2907,34 @@
                 <param tag="hints" type="bool"/>
             </params>
         </method>
+	<method name="UserSettings_getContentPin" api="getContentPin" type="method" desc="Returns ContentPin"/>
+        <method name="UserSettings_setContentPin" api="setContentPin" type="method" desc="Setting ContentPin">
+            <params>
+                <param tag="contentPin" type="string"/>
+            </params>
+        </method>
+	<method name="UserSettings_getPrivacyMode" api="getPrivacyMode" type="method" desc="Getting Privacy Mode">
+		<expectedValues>SHARE,DO_NOT_SHARE</expectedValues>
+	</method>
+	<method name="UserSettings_setPrivacyMode" api="setPrivacyMode" type="method" desc="Setting Privacy Mode">
+            <params>
+                <param tag="privacyMode" type="string"/>
+            </params>
+        </method>
+	<method name="UserSettings_getPreferredAudioLanguages" api="getPreferredAudioLanguages" type="method" desc="Returns Preferred Audio Languages"/>
+	<method name="UserSettings_setPreferredAudioLanguages" api="setPreferredAudioLanguages" type="method" desc="Setting Preferred Audio Languages">
+            <params>
+                <param tag="preferredLanguages" type="string"/>
+            </params>
+        </method>
+	<method name="UserSettings_getPresentationLanguage" api="getPresentationLanguage" type="method" desc="Getting Presentation Languages"/>
+	<method name="UserSettings_setPresentationLanguage" api="setPresentationLanguage" type="method" desc="Setting Presentation Languages">
+            <params>
+                <param tag="presentationLanguage" type="string"/>
+            </params>
+        </method>
 
-        <!-- Event Definitions -->
+	<!-- Event Definitions -->
         <event name="Event_On_AudioDescriptionChanged" eventName="onAudioDescriptionChanged" eventId="client.events.1" type="event" desc="Triggered when the audio description changes"/>
         <event name="Event_On_CaptionsChanged" eventName="onCaptionsChanged" eventId="client.events.1" type="event" desc="Triggered when the captions changes"/>
         <event name="Event_On_PinControlChanged" eventName="onPinControlChanged" eventId="client.events.1" type="event" desc="Triggered when the pincontrol changes"/>
@@ -2916,6 +2944,10 @@
         <event name="Event_On_PinOnPurchaseChanged" eventName="onPinOnPurchaseChanged" eventId="client.events.1" type="event" desc="Triggered when the PinOnPurchase changes"/>
         <event name="Event_On_HighContrastChanged" eventName="onHighContrastChanged" eventId="client.events.1" type="event" desc="Triggered when the HighContrast changes"/>
         <event name="Event_On_VoiceGuidanceChanged" eventName="onVoiceGuidanceChanged" eventId="client.events.1" type="event" desc="Triggered when the VoiceGuidance changes"/>
-        <event name="Event_On_VoiceGuidanceHintsChanged" eventName="onVoiceGuidanceHintsChanged" eventId="client.events.1" type="event" desc="Triggered when the VoiceGuidanceHints changes"/>
+	<event name="Event_On_VoiceGuidanceHintsChanged" eventName="onVoiceGuidanceHintsChanged" eventId="client.events.1" type="event" desc="Triggered when the VoiceGuidanceHints changes"/>
+	<event name="Event_On_ContentPinChanged" eventName="onContentPinChanged" eventId="client.events.1" type="event" desc="Triggered when the ContentPin changes"/>
+	<event name="Event_On_PrivacyModeChanged" eventName="onPrivacyModeChanged" eventId="client.events.1" type="event" desc="Triggered when the Privacy Mode changes"/>
+	<event name="Event_On_PreferredAudioLanguagesChanged" eventName="onPreferredAudioLanguagesChanged" eventId="client.events.1" type="event" desc="Triggered when the audio preferred Audio languages changes"/>
+	<event name="Event_On_PresentationLanguageChanged" eventName="onPresentationLanguageChanged" eventId="client.events.1" type="event" desc="Triggered when the presentation Language changes"/>
     </plugin>
 </thunderPlugins>
