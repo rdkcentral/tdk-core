@@ -616,7 +616,7 @@
             <testStep testStepId="13" name="Check_disk_partition" action="externalFnCall" saveResult="true" >
              <resultGeneration useMethodTag="Check_disk_partition" />
             </testStep>
-            <testStep testStepId="14" name="Update_Firmware"  method="Update_Firmware" rebootStep="yes">
+            <testStep testStepId="14" name="Update_Firmware"  method="Update_Firmware" rebootStep="yes" delay="60" >
              <conditionalExecution enable="true" Id="13" useMethodTag="system_check_disk_partition" arguments="4" />
              <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
@@ -624,7 +624,7 @@
              <conditionalExecution enable="true" Id="13" useMethodTag="system_check_disk_partition" arguments="4"/>
              <resultGeneration useMethodTag="Check_disk_partition" expectedValues="4" arguments="after_reboot"/>
             </testStep>
-            <testStep testStepId="16" name="Update_Firmware"  method="Update_Firmware" >
+            <testStep testStepId="16" name="Update_Firmware"  method="Update_Firmware" delay="60" >
              <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
             <testStep testStepId="17" name="Check_Current_Version"  method="Get_Downloaded_Firmware_Info" delayKey="FIRMWARE_DOWNLOAD_REBOOT_IN_SECONDS" PluginOnStep="yes">
@@ -647,7 +647,7 @@
             <testStep testStepId="21" name="Check_disk_partition" action="externalFnCall" saveResult="true" >
              <resultGeneration useMethodTag="Check_disk_partition" />
             </testStep>
-            <testStep testStepId="22" name="Update_Firmware"  method="Update_Firmware" rebootStep="yes">
+            <testStep testStepId="22" name="Update_Firmware"  method="Update_Firmware" rebootStep="yes" delay="60">
              <conditionalExecution enable="true" Id="21" useMethodTag="system_check_disk_partition" arguments="4" />
              <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
@@ -655,7 +655,7 @@
              <conditionalExecution enable="true" Id="21" useMethodTag="system_check_disk_partition" arguments="4"/>
              <resultGeneration useMethodTag="Check_disk_partition" expectedValues="4" arguments="after_reboot"/>
             </testStep>
-            <testStep testStepId="24" name="Update_Firmware"  method="Update_Firmware">
+            <testStep testStepId="24" name="Update_Firmware"  method="Update_Firmware" delay="60">
              <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
             <testStep testStepId="25" name="Check_Current_Version"  method="Get_Downloaded_Firmware_Info" delayKey="FIRMWARE_DOWNLOAD_REBOOT_IN_SECONDS" PluginOnStep="yes">
@@ -667,7 +667,7 @@
              <resultGeneration useMethodTag="check_time_sync" />
             </testStep>
        </testCase>
-       
+
        <testCase testCaseId="SYS_39" testCaseName= "System_check_PreviousReboot_Info2_Custom_Reason" desc="Checks whether it returns custom reason provided in reboot API">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_reboot" method="Reboot" closeConn="false" rebootStep="yes" >
