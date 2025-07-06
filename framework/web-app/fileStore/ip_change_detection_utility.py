@@ -381,70 +381,68 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
     else:
         return status,deviceAvailability
 
-# Function to set default interface
-def set_default_interface(obj,interface,start_time_needed = False):
+def set_default_interface(obj, interface, start_time_needed=False):
     status = expectedResult = "SUCCESS"
-    deviceAvailability =  'Yes'
-    print("Set {} as default interface".format(interface))
-    params = '{ "interface":"'+interface+'", "persist":true}'
-    tdkTestObj = obj.createTestStep('rdkservice_setValue');
-    tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetPrimaryInterface");
-    tdkTestObj.addParameter("value",params);
+    deviceAvailability = 'Yes'
     start_time = str(datetime.utcnow()).split()[1]
-    tdkTestObj.executeTestCase(expectedResult);
-    result = tdkTestObj.getResult();
-    if expectedResult in result:
-        print("\n Set default interface method executed successfuly for {} interfce \n".format(interface))
-        tdkTestObj.setResultStatus("SUCCESS")
+    time.sleep(5)
+
+    if interface == "wlan0":
+        print("Disabling Ethernet interface to set Wifi as default interface")
+        params = '{"interface":"eth0", "enabled":false}'
+        tdkTestObj = obj.createTestStep('rdkservice_setValue')
+        tdkTestObj.addParameter("method", "org.rdk.NetworkManager.1.SetInterfaceState")
+        tdkTestObj.addParameter("value", params)
+        tdkTestObj.executeTestCase(expectedResult)
+        time.sleep(30)
+        result = tdkTestObj.getResult()
+        print("Disabled Ethernet interface")
+
+    elif interface == "eth0":
+        print("Enabling Ethernet interface")
+        params = '{"interface":"eth0", "enabled":true}'
+        tdkTestObj = obj.createTestStep('rdkservice_setValue')
+        tdkTestObj.addParameter("method", "org.rdk.NetworkManager.1.SetInterfaceState")
+        tdkTestObj.addParameter("value", params)
+        tdkTestObj.executeTestCase(expectedResult)
+        result = tdkTestObj.getResult()
         time.sleep(40)
-        if  interface == "wlan0":
-            print("Disabling Ethernet interface to set Wifi as default interface")
-            params = '{"interface":"eth0", "enabled":false}'
-            tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetInterfaceState");
-            tdkTestObj.addParameter("value",params);
-            tdkTestObj.executeTestCase(expectedResult);
-            time.sleep(30)
-            result = tdkTestObj.getResult();
-            print("Disabled Ethernet interface")
-        elif interface == "eth0":
-            print("Enabling Ethernet interface ")
-            params = '{"interface":"eth0", "enabled":true}'
-            tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetInterfaceState");
-            tdkTestObj.addParameter("value",params);
-            tdkTestObj.executeTestCase(expectedResult);
-            result = tdkTestObj.getResult();
-            time.sleep(40)
-        if result == "SUCCESS":
-            device_ip,device_status = getDeviceIP_and_Status(obj.url)
-            if "NOT FOUND" in device_status:
-                print ("Device is not accessible after the change in Interface")
-                deviceAvailability = "No"
-                status = "FAILURE"
-            elif (obj.IP != device_ip) and ("NOT FOUND" in device_status):
-                 print ("TM has been updated with the new IP after interface change. But the device is down")
-                 deviceAvailability = "No"
-                 status = "FAILURE"
-            elif (obj.IP != device_ip) and ("BUSY" in device_status):
-                 print ("TM has been updated with new IP after interface change. And device is available")
-                 obj.IP = device_ip
-            time.sleep(30)
-            if status == "SUCCESS":
-                print("Validate whether the device is available with the new IP:")
-                try:
-                    tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-                    tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetPrimaryInterface")
-                    tdkTestObj.addParameter("reqValue","interface")
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResult()
-                    if result == "SUCCESS":                    
-                        new_interface,revert = check_current_interface(obj)
-                        if interface not in new_interface:
-                            print("\n Current interface is: {} , unable to set {} interface \n".format(new_interface,interface))
-                            status = "FAILURE"
-                            deviceAvailability = "No"
-                except Exception as e:
+
+    # Check device accessibility after interface change
+    if result == "SUCCESS":
+        device_ip, device_status = getDeviceIP_and_Status(obj.url)
+
+        if "NOT FOUND" in device_status:
+            print("Device is not accessible after the change in interface")
+            deviceAvailability = "No"
+            status = "FAILURE"
+        elif (obj.IP != device_ip) and ("NOT FOUND" in device_status):
+            print("TM has been updated with the new IP after interface change. But the device is down")
+            deviceAvailability = "No"
+            status = "FAILURE"
+        elif (obj.IP != device_ip) and ("BUSY" in device_status):
+             print("TM has been updated with new IP after interface change. And device is available")
+             obj.IP = device_ip
+
+        time.sleep(30)
+
+        if status == "SUCCESS":
+            print("Validate whether the device is available with the new IP:")
+            try:
+                tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
+                tdkTestObj.addParameter("method", "org.rdk.NetworkManager.1.GetPrimaryInterface")
+                tdkTestObj.addParameter("reqValue", "interface")
+                tdkTestObj.executeTestCase(expectedResult)
+                result = tdkTestObj.getResult()
+
+                if result == "SUCCESS":
+                    new_interface, revert = check_current_interface(obj)
+                    if interface not in new_interface:
+                        print("\n Current interface is: {} , unable to set {} interface \n".format(new_interface, interface))
+                        status = "FAILURE"
+                        deviceAvailability = "No"
+
+            except Exception as e:
                        status = "FAILURE"
                        deviceAvailability = "No"
                        print("Error :")

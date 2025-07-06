@@ -75,28 +75,21 @@ import rdkv_performancelib
 import BrowserPerformanceVariables
 import json
 from StabilityTestUtility import *
-
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);
-
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Browser_Octane');
-
 #The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
-
-
 #Execution summary variable
 Summ_list=[]
-
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result.upper());
 obj.setLoadModuleStatus(result);
-
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     browser_test_url=BrowserPerformanceVariables.octane_test_url;
@@ -128,7 +121,6 @@ if expectedResult in result.upper():
             tdkTestObj.setResultStatus("SUCCESS");
             print("Current URL:",current_url)
             print("\nSet Octane test URL")
-
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method","WebKitBrowser.1.url");
             tdkTestObj.addParameter("value",browser_test_url);
@@ -136,7 +128,6 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResult();
             if expectedResult in result:
                 time.sleep(10)
-
                 print("\nValidate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method","WebKitBrowser.1.url");
@@ -146,7 +137,6 @@ if expectedResult in result.upper():
                 if new_url == browser_test_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS");
                     print("URL(",new_url,") is set successfully")
-
                     time.sleep(300)
                     tdkTestObj = obj.createTestStep('rdkservice_getBrowserScore_Octane');
                     tdkTestObj.executeTestCase(expectedResult);

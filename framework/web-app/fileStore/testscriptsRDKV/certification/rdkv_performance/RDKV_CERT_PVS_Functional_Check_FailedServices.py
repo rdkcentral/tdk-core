@@ -120,7 +120,7 @@ if expectedResult in result.upper():
         output = tdkTestObj.getResultDetails()
         if output != "EXCEPTION" and expectedResult in result:
             #command to get the number of failed services
-            command = 'systemctl --failed | grep "loaded units listed"'
+            command = 'systemctl --failed --no-legend --no-pager | grep ".service" | wc -l'
             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
             tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
             tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
@@ -130,7 +130,7 @@ if expectedResult in result.upper():
             output = tdkTestObj.getResultDetails()
             if output != "EXCEPTION" and expectedResult in result:
                 print("Validate failed services:")
-                services_count =int(output.split('\n')[1].split(' ')[0])
+                services_count =int(output.split('\n')[1])
                 #command to get the list of failed services
                 command = 'systemctl --failed | cut -d " " -f2 | grep "service"'
                 tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')

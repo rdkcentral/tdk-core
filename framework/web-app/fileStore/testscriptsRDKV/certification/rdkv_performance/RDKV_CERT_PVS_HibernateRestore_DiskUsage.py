@@ -226,8 +226,15 @@ if expectedResult in result.upper():
         obj.setLoadModuleStatus("FAILURE")
         obj.unloadModule("rdkv_performance");
     print("\n========================TEST SUMMARY==============================\n")
-    print("{} has diskusage: {}%  when cobalt is in hibernated state \n".format(partition,disk_space_usage_hibernate))
-    print("{} has diskusage: {}% when cobalt is restored from hibernated state\n".format(partition,disk_space_usage_restore))
+    if disk_space_usage_hibernate is not None:
+        print("{} has diskusage: {}% when cobalt is in hibernated state \n".format(partition, disk_space_usage_hibernate))
+    else:
+        print("Disk usage during cobalt hibernation was not calculated.\n")
+
+    if disk_space_usage_restore is not None:
+        print("{} has diskusage: {}% when cobalt is restored from hibernated state\n".format(partition, disk_space_usage_restore))
+    else:
+        print("Disk usage after restoring cobalt was not calculated.\n")
 else:
     obj.setLoadModuleStatus("FAILURE");
     print("Failed to load module")

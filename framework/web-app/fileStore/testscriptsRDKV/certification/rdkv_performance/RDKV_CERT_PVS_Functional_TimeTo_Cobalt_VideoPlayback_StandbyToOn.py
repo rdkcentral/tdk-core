@@ -17,28 +17,47 @@
 # limitations under the License.
 ##########################################################################
 '''
-<?xml version="1.0" encoding="UTF-8"?><xml>
-  <id/>
-  <version>2</version>
+<?xml version='1.0' encoding='utf-8'?>
+<xml>
+  <id></id>
+  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
+  <version>3</version>
+  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_CERT_PVS_Functional_TimeTo_Cobalt_VideoPlayback_StandbyToOn</name>
-  <primitive_test_id/>
+  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
+  <primitive_test_id> </primitive_test_id>
+  <!-- Do not change primitive_test_id if you are editing an existing script. -->
   <primitive_test_name>rdkservice_getRequiredLog</primitive_test_name>
+  <!--  -->
   <primitive_test_version>1</primitive_test_version>
+  <!--  -->
   <status>FREE</status>
+  <!--  -->
   <synopsis>The objective of this test is to get time to start playback in cobalt from standby mode.</synopsis>
-  <groups_id/>
+  <!--  -->
+  <groups_id />
+  <!--  -->
   <execution_time>10</execution_time>
+  <!--  -->
   <long_duration>false</long_duration>
+  <!--  -->
   <advanced_script>false</advanced_script>
-  <remarks/>
+  <!-- execution_time is the time out time for test execution -->
+  <remarks></remarks>
+  <!-- Reason for skipping the tests if marked to skip -->
   <skip>false</skip>
+  <!--  -->
   <box_types>
     <box_type>RPI-Client</box_type>
+    <!--  -->
     <box_type>RPI-HYB</box_type>
+    <!--  -->
     <box_type>Video_Accelerator</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
+    <!--  -->
   </rdk_versions>
   <test_cases>
     <test_case_id>RDKV_PERFORMANCE_35</test_case_id>
@@ -67,9 +86,9 @@ The time should be within the expected range.</expected_output>
     <test_script>RDKV_CERT_PVS_Functional_TimeTo_Cobalt_VideoPlayback_StandbyToOn</test_script>
     <skipped>No</skipped>
     <release_version>M87</release_version>
-    <remarks/>
+    <remarks></remarks>
   </test_cases>
-  <script_tags/>
+  <script_tags />
 </xml>
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
@@ -81,27 +100,22 @@ from web_socket_util import *
 import json
 import rdkv_performancelib
 from rdkv_performancelib import *
-
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);
-
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_Cobalt_VideoPlayback_StandbyToOn');
-
 #The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
-
 #Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
-
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print("Check Pre conditions")
@@ -271,21 +285,33 @@ if expectedResult in result.upper():
                                                             tdkTestObj.executeTestCase(expectedResult)
                                                             result = tdkTestObj.getResult()
                                                             cobalt_status = tdkTestObj.getResultDetails()
-                                                            if cobalt_status == 'suspended':
-                                                               time.sleep(10)
-                                                               print("\nCobalt is suspended and trying to resume it\n")
-                                                               resume_status,start_resume = launch_plugin(obj,"Cobalt")
-                                                               print("resume_status:",resume_status)
-                                                               if resume_status == expectedResult:
-                                                                   time.sleep(5)
-                                                                   tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
-                                                                   tdkTestObj.addParameter("plugin","Cobalt")
-                                                                   tdkTestObj.executeTestCase(expectedResult)
-                                                                   cobalt_status = tdkTestObj.getResultDetails()
-                                                                   result = tdkTestObj.getResult()
-                                                                   if cobalt_status == 'resumed' and expectedResult in result:
-                                                                       print("\nCobalt Resumed Successfully\n")
-                                                                       tdkTestObj.setResultStatus("SUCCESS")
+                                                            if cobalt_status == 'hibernated' and expectedResult in result:
+                                                                print("\nCobalt is in hibernated state. Restoring Cobalt\n")
+                                                                tdkTestObj.setResultStatus("SUCCESS")
+                                                                restore_status, restore_time = restore_plugin(obj,"Cobalt")
+                                                                if restore_status == expectedResult:
+                                                                    time.sleep(5)
+                                                                    resume_status, resume_time = launch_plugin(obj, "Cobalt")
+                                                                    if resume_status == expectedResult:
+                                                                        time.sleep(5)
+                                                                        tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
+                                                                        tdkTestObj.addParameter("plugin","Cobalt")
+                                                                        tdkTestObj.executeTestCase(expectedResult)
+                                                                        cobalt_status = tdkTestObj.getResultDetails()
+                                                                        if cobalt_status == 'resumed':
+                                                                             print("\n Cobalt resumed successfully after power-on")
+                                                                        else:                                                                                   
+                                                                             print("\n Cobalt did not enter resumed state, current:", cobalt_status)  
+                                                                             tdkTestObj.setResultStatus("FAILURE")
+                                                                    else:
+                                                                         print("\n Error in launching Cobalt")
+                                                                         tdkTestObj.setResultStatus("FAILURE")
+                                                                else:
+                                                                     print("\n Error while restoring Cobalt")
+                                                                     tdkTestObj.setResultStatus("FAILURE")
+                                                            else:
+                                                                 print("\n Cobalt is not in hibernated state")
+                                                                 tdkTestObj.setResultStatus("FAILURE")
                                                             print("\n Check video is started \n")
                                                             command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                                                             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
@@ -355,7 +381,6 @@ if expectedResult in result.upper():
                                             else:
                                                 print("\n Error while reverting the power state to {}\n".format(current_power_state))
                                                 tdkTestObj.setResultStatus("FAILURE")
-
                                     else:
                                         print("\n Video is not started playing \n")
                                         tdkTestObj.setResultStatus("FAILURE")
