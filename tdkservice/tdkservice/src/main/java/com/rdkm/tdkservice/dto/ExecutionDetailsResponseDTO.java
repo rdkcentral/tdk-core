@@ -85,6 +85,11 @@ public class ExecutionDetailsResponseDTO {
 	 * The real execution time for executing the scripts
 	 */
 	private double realExecutionTime;
+	
+	/*
+	 * * Indicates whether the device is a Thunder-enabled device.
+	 */
+	private boolean isDeviceThunderEnabled;
 
 	/**
 	 * A summary of the execution, encapsulated in an ExecutionSummaryResponseDTO

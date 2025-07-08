@@ -209,136 +209,112 @@ limitations under the License.
           <div class="col-md-12 mt-3">
             <span class="summary-label mt-3">Detailed Results</span>
             <div class="table-container mt-2" >
-              <div class="row seach-section" *ngIf="data.executionType === 'MULTISCRIPT'  && scriptStatus.status === 'SUCCESS' ">
-                <div class="col">
-                  <div class="row mt-1 row-align">
-                    <label for="device" class="col-md-3 col-form-label">Filter by</label>
-                    <div class="col-md-9">
-                      <select class="form-select select-filter" aria-label="Default select example"
-                          id="priority" [(ngModel)]="filterStatus" (change)="applyFilter()">
-                          <option value="all" default>Select</option>
-                          <option value="SUCCESS">SUCCESS</option>
-                          <option value="FAILURE">FAILURE</option>
-                      </select>
-                    </div>
-                  </div>
+              <div
+              class="row align-items-center seach-section"
+              *ngIf="data.executionStatus === 'COMPLETED'"
+            >
+              <!-- Repeat / Rerun Section (3/12) -->
+              <div class="col-md-3 d-flex align-items-center toolbar-section">
+                <div class="col-md-8">
+                  <span class="script-head">Rerun All / Failures:</span>
+                  <button
+                    type="button"
+                    class="btn btn-link p-0 ms-2 info-blue"
+                    matTooltip="Rerun all scripts or rerun failures on the same device"
+                    style="font-size: 1.2em"
+                    tabindex="-1"
+                  >
+                    <i class="bi bi-info-circle"></i>
+                  </button>
                 </div>
-                <div class="col">
-                  <div class="btns-option">
-                    <button type="button" class="script-btn" (click)="clearSelections()" matTooltip="Clear Filters">
-                      <i class="bi bi-arrow-clockwise download-icon"></i></button>
-                    <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
-                  </div>
+                <div class="col-md-2">
+                  <button
+                    type="button"
+                    class="script-btn ms-2"
+                    matTooltip="Rerun All"
+                    (click)="repeatExecution()"
+                  >
+                    <i class="bi bi-arrow-repeat download-icon"></i>
+                    <!-- <span class="fw-bold ms-1">Repeat All</span> -->
+                  </button>
                 </div>
-                <div class="col"></div>
+                <div
+                  class="col-md-2"
+                  *ngIf="
+                    data.executionType !== 'SINGLESCRIPT' &&
+                    data.result !== 'SUCCESS'
+                  "
+                >
+                  <button
+                    type="button"
+                    class="script-btn ms-2"
+                    matTooltip="Rerun failures"
+                    (click)="rerunFailure()"
+                  >
+                    <i class="bi bi-arrow-repeat download-icon text-danger"></i>
+                    <!-- <span class="fw-bold ms-1">ReRun Failures</span> -->
+                  </button>
+                </div>
               </div>
-              <div class="row seach-section" *ngIf="data.executionType === 'MULTISCRIPT'  && scriptStatus.status === 'FAILURE'">
-                <div class="col">
-                  <div class="row mt-1 row-align">
-                    <label for="device" class="col-md-3 col-form-label">Filter by</label>
-                    <div class="col-md-9">
-                      <select class="form-select select-filter" aria-label="Default select example"
-                          id="priority" [(ngModel)]="filterStatus" (change)="applyFilter()">
-                          <option value="all" default>Select</option>
-                          <option value="SUCCESS">SUCCESS</option>
-                          <option value="FAILURE">FAILURE</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="btns-option">
-                    <button type="button" class="script-btn" (click)="clearSelections()" matTooltip="Clear Filters">
-                      <i class="bi bi-arrow-clockwise download-icon"></i></button>
-                    <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
-                    <button type="button" class="script-btn" matTooltip="Rerun Of Failure Scripts" (click)="rerunFailure()">
-                      <i class="bi bi-arrow-repeat download-icon"></i>
-                    </button>
-                  </div>
-                </div>
-                <div class="col"></div>
+              <!-- Filtered Execution Section (9/12) -->
+              <div
+                class="col-md-9 d-flex align-items-center toolbar-section-filter"
+                *ngIf="data.executionType !== 'SINGLESCRIPT'"
+                >
+            
+                  <span class="script-head">Filtered Execution :</span>
+                  <button
+                    type="button"
+                    class="btn btn-link p-0 ms-2 info-blue"
+                    matTooltip="Select script based on the status or by checkbox and trigger execution of the scripts in another device or the same device."
+                    style="font-size: 1.2em"
+                    tabindex="-1"
+                  >
+                    <i class="bi bi-info-circle"></i>
+                  </button>
+                  <label for="filterStatus" class="me-1 mb-0 filter-label" style="margin-left: 10px;"
+                    >Filter by:</label
+                  >
+                  <select
+                    id="filterStatus"
+                    class="form-select form-select-sm d-inline-block w-auto me-3"
+                    style="min-width: 120px"
+                    [(ngModel)]="filterStatus"
+                    (change)="applyFilter()"
+                  >
+                    <option value="all">All</option>
+                    <option value="SUCCESS">SUCCESS</option>
+                    <option value="FAILURE">FAILURE</option>
+                  </select>
+                  <label for="filterStatus" class="me-1 mb-0">Device :</label>
+                  <ng-multiselect-dropdown
+                    id="deviceSelect"
+                    [settings]="dropdownSettings"
+                    [data]="deviceList"
+                    [(ngModel)]="selectedDevices"
+                    (onSelect)="onDeviceSelect($event)"
+                    (onDeSelect)="onDeviceDeSelect($event)"
+                    (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event)"
+                    [placeholder]="'Select Device'"
+                    class="device-dropdown"
+                    style="width: 225px !important"
+                  >
+                  </ng-multiselect-dropdown>
+                  <button
+                    type="button"
+                    class="view-btn close trigger-btn ms-2"
+                    matTooltip="Trigger Execution"
+                    (click)="triggerExecution()"
+                    [disabled]="
+                      !deviceListArray || deviceListArray.length === 0
+                    "
+                  >
+                    <span style="font-weight: normal">Execute Now</span>
+                  </button>
+                
               </div>
-              <div class="row seach-section" *ngIf="(data.executionType === 'MULTITESTSUITE' || data.executionType === 'TESTSUITE')  && scriptStatus.status === 'SUCCESS' ">
-                <div class="col">
-                  <div class="row mt-1 row-align">
-                    <label for="device" class="col-md-3 col-form-label">Filter by</label>
-                    <div class="col-md-9">
-                      <select class="form-select select-filter" aria-label="Default select example"
-                          id="priority" [(ngModel)]="filterStatus" (change)="applyFilter()">
-                          <option value="all" default>Select</option>
-                          <option value="SUCCESS">SUCCESS</option>
-                          <option value="FAILURE">FAILURE</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="btns-option">
-                    <button type="button" class="script-btn" (click)="clearSelections()" matTooltip="Clear Filters">
-                      <i class="bi bi-arrow-clockwise download-icon"></i></button>
-                    <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
-                  
-                  </div>
-                </div>
-                <div class="col"></div>
-              </div>
-              <div class="row seach-section" *ngIf="(data.executionType === 'MULTITESTSUITE' || data.executionType === 'TESTSUITE') && scriptStatus.status === 'FAILURE'">
-                <div class="col">
-                  <div class="row mt-1 row-align">
-                    <label for="device" class="col-md-3 col-form-label">Filter by</label>
-                    <div class="col-md-9">
-                      <select class="form-select select-filter" aria-label="Default select example"
-                          id="priority" [(ngModel)]="filterStatus" (change)="applyFilter()">
-                          <option value="all" default>Select</option>
-                          <option value="SUCCESS">SUCCESS</option>
-                          <option value="FAILURE">FAILURE</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="btns-option">
-                    <button type="button" class="script-btn" (click)="clearSelections()" matTooltip="Clear Filters">
-                      <i class="bi bi-arrow-clockwise download-icon"></i></button>
-                    <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
-                    <button type="button" class="script-btn" matTooltip="Rerun Of Failure Scripts" (click)="rerunFailure()">
-                      <i class="bi bi-arrow-repeat download-icon"></i>
-                    </button>
-                  </div>
-                </div>
-                <div class="col"></div>
-              </div>
-              <div class="row seach-section" *ngIf="data.executionType !== 'SINGLESCRIPT'  && data.result === 'INPROGRESS'">
-                <div class="col">
-                  <div class="row mt-1 row-align">
-                    <label for="device" class="col-md-3 col-form-label">Filter by</label>
-                    <div class="col-md-9">
-                      <select class="form-select select-filter" aria-label="Default select example"
-                          id="priority" [(ngModel)]="filterStatus" (change)="applyFilter()">
-                          <option value="all" default>Select</option>
-                          <option value="SUCCESS">SUCCESS</option>
-                          <option value="FAILURE">FAILURE</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col"></div>
-                <div class="col"></div>
-              </div>
-              <div class="row refrs-section" *ngIf="data.executionType === 'SINGLESCRIPT'  && scriptStatus.status === 'SUCCESS' ">
-                <div class="col">
-                  <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
-                </div>
-                <div class="col"></div>
-                <div class="col"></div>
-              </div>
-              <div class="row refrs-section" *ngIf="data.executionType === 'SINGLESCRIPT'  && scriptStatus.status === 'FAILURE' ">
-                <div class="col">
-                  <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
-                </div>
-                <div class="col"></div>
-                <div class="col"></div>
-              </div>
+            </div>
 
               <div class="row table-heading">
                 <div class="col-md-1 border-column">

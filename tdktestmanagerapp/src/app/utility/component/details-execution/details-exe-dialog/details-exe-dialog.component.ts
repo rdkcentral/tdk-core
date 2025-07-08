@@ -33,7 +33,7 @@ import { CrashlogfileDialogComponent } from '../crashlogfile-dialog/crashlogfile
 import { saveAs } from 'file-saver';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { LoaderComponent } from '../../loader/loader.component';
-
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 export type ChartOptions = {
   series: Array<{
@@ -55,7 +55,7 @@ export type ChartOptions = {
 @Component({
   selector: 'app-details-exe-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, FormsModule, NgApexchartsModule, LoaderComponent],
+  imports: [CommonModule, MaterialModule, FormsModule, NgApexchartsModule, LoaderComponent,NgMultiSelectDropDownModule],
   templateUrl: './details-exe-dialog.component.html',
   styleUrl: './details-exe-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -105,6 +105,14 @@ export class DetailsExeDialogComponent {
   htmlDetails: any;
   scriptStatus: any;
   showLoader = false;
+  deviceList: any;
+  selectedDevice: any;
+  executionName: any;
+  deviceNameArr: any;
+  scriptNameArr: any;
+  dropdownSettings = {}
+  deviceListArray: any[] = [];
+  selectedDevices: any[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<DetailsExeDialogComponent>,
@@ -135,7 +143,70 @@ export class DetailsExeDialogComponent {
     let details = this.data.deviceDetails
     this.deviceDetails = details.replace(/\n/g, '<br>');
     this.changeDetectorRef.detectChanges();
+
+    this.getDeviceByCategory(this.data.category, this.data.deviceThunderEnabled);
+
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'deviceName',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 1,
+      allowSearchFilter: true,
+    };
+
   }
+
+  /**
+   * Handles the selection of a device item. 
+   * Checks if the selected device is already present in the `deviceListArray` by comparing device names.
+   * If the device is not already selected, adds the device's name to the `deviceListArray`.
+   *
+   * @param item - The device item to be selected, expected to have a `deviceName` property.
+   */
+  onDeviceSelect(item:any):void{
+    if (!this.deviceListArray.some(selectedItem => selectedItem.deviceName === item.deviceName)) {
+      this.deviceListArray.push(item.deviceName);
+    }
+  }
+  
+  /**
+   * Handles the deselection of a device from the device list.
+   * 
+   * Removes the specified device from the `deviceListArray` based on its `deviceName` property.
+   *
+   * @param item - The device object to be deselected, expected to have a `deviceName` property.
+   */
+  onDeviceDeSelect(item:any):void{
+    let filterDevice = this.deviceListArray.filter(name => name != item.deviceName);
+    this.deviceListArray = filterDevice;
+  }
+  
+  /**
+   * Handles the selection of all items from the provided list.
+   * Filters out devices that are already present in `deviceListArray` based on their `id`,
+   * then updates `deviceListArray` with the `deviceName` of the remaining devices.
+   *
+   * @param items - The array of items to select from.
+   */
+  onSelectAll(items: any[]):void{
+   let devices = this.deviceList.filter(
+    (item:any)=> !this.deviceListArray.find((selected)=>selected.id === item.id)
+   );
+   this.deviceListArray = devices.map((item:any)=>item.deviceName);
+  }
+ 
+  /**
+   * Handles the event when all items are deselected.
+   * Clears the `deviceListArray`, effectively removing all selected devices.
+   *
+   * @param item - The event or data associated with the deselection action.
+   */
+  onDeSelectAll(item:any):void{
+    this.deviceListArray=[];
+  }
+
   get displayContent(): string {
     return this.isExpanded ? this.deviceDetails : this.deviceDetails.slice(0, this.maxLength) + (this.deviceDetails.length > this.maxLength ? '...' : '');
   }
@@ -248,7 +319,7 @@ export class DetailsExeDialogComponent {
   resultDetails(): void {
     this.executionResultData = this.data.executionResults.map((item: any) => ({
       ...item,
-      checked: false,
+      checked: true,
       details: null
     }))
     this.filteredData = [...this.executionResultData];
@@ -257,6 +328,15 @@ export class DetailsExeDialogComponent {
       console.log(this.scriptStatus.status);
 
     }
+    this.allChecked = true; // Set allChecked to true
+    this.updateSelectedDetails(); // Update selected details initially
+    this.updateScriptNames();
+  }
+
+
+  // Add new method to update script names array
+  updateScriptNames(): void {
+    this.scriptNameArr = this.selectedDetails.map(item => item.name);
   }
 
 
@@ -339,6 +419,8 @@ export class DetailsExeDialogComponent {
     this.executionResultData.forEach((item: any) => (item.checked = this.allChecked));
     this.updateSelectedDetails();
     this.updateFilteredData();
+    this.updateScriptNames();
+    
   }
   /**
    * Toggles the checkbox state for a specific item in the execution result data.
@@ -355,6 +437,7 @@ export class DetailsExeDialogComponent {
     this.executionResultData[index].checked = (event.target as HTMLInputElement).checked;
     this.allChecked = this.executionResultData.every((item: any) => item.checked);
     this.updateSelectedDetails();
+    this.updateScriptNames();
   }
   /**
    * Clears all selections in the execution result data.
@@ -1008,6 +1091,105 @@ export class DetailsExeDialogComponent {
     a.download = `${this.data.deviceName}.html`;
     a.click();
     URL.revokeObjectURL(a.href);
+  }
+
+
+/**
+ * Retrieves a list of devices based on the specified category and Thunder enablement status.
+ *
+ * @param category - The category of devices to retrieve.
+ * @param isThunderEnable - A boolean indicating whether to filter devices by Thunder enablement.
+ * @returns void
+ *
+ * @remarks
+ * This method calls the execution service to fetch devices matching the given category and Thunder status,
+ * and assigns the resulting device list to `this.deviceList`.
+ */
+getDeviceByCategory(category:string,isThunderEnable:boolean):void{
+    this.executionservice.getDeviceByCategory(category,isThunderEnable).subscribe(res=>{
+      this.deviceList = res.data;
+    })
+  }
+
+   /**
+   * Retrieves an execution name based on the current device list and a fixed test type ('Other').
+   * Sends a request to the execution service and assigns the resulting execution name to `this.executionName`.
+   *
+   * @remarks
+   * The method constructs an object containing the device names and test type, then calls the `geExecutionName`
+   * method of the execution service. The response's `data` property is assigned to the `executionName` property.
+   *
+   * @returns {void}
+   */
+  getExecutionName():void{
+    let obj ={
+      deviceNames: this.deviceListArray,
+      testType: 'Other'
+    }
+    this.executionservice.geExecutionName(obj).subscribe(res=>{
+      this.executionName = res.data;
+    })
+  }
+
+  /**
+   * Triggers the execution process based on the selected devices and scripts.
+   *
+   * This method constructs an execution trigger object with the current selection of devices,
+   * scripts, user information, and execution parameters. It then calls the execution service
+   * to initiate the execution. Upon successful triggering, it resets the device selection,
+   * refreshes the device list, and displays a success message. If an error occurs, an error
+   * message is shown to the user.
+   *
+   * @remarks
+   * - Relies on `this.deviceListArray`, `this.scriptNameArr`, `this.loggedinUser`, and `this.data`.
+   * - Uses Angular's ChangeDetectorRef and MatSnackBar for UI updates and notifications.
+   *
+   * @returns {void}
+   */
+  triggerExecution(){
+      this.getExecutionName();
+      let triggerObj={
+        deviceList: this.deviceListArray,
+        scriptList:this.scriptNameArr,
+        testSuite:[],
+        testType:'Other',
+        individualRepeatExecution: false,
+        user:this.loggedinUser.userName,
+        category:this.data.category,
+        executionName:this.executionName,
+        repeatCount:1,
+        deviceLogsNeeded: false,
+        diagnosticLogsNeeded: false,
+        performanceLogsNeeded: false,
+        rerunOnFailure:false
+      }
+      
+      this.executionservice.executioTrigger(triggerObj).subscribe({
+        next: (res) => {
+        if(res.statusCode===200 && res.data.executionTriggerStatus === "TRIGGERED"){
+
+        this.deviceListArray = [];
+        this.selectedDevices = [];
+        this.getDeviceByCategory(this.data.category, this.data.deviceThunderEnabled);
+        this.changeDetectorRef.detectChanges();
+        this._snakebar.open("Execution triggered", '', {
+          duration: 3000,
+          panelClass: ['success-msg'],
+          verticalPosition: 'top'
+        })}
+      },
+      error: (err) => {
+        this._snakebar.open(err.message, '', {
+          duration: 2000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+        })
+      }
+      })
+    
+
+
   }
 
 }

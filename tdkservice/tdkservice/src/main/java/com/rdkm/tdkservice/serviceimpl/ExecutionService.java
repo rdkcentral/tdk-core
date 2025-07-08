@@ -1871,12 +1871,14 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Execution Device not found for execution with id: {}", id);
 			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + id + " not found");
 		}
-
+		Device device = deviceRepository.findByName(executionDevice.getDevice());
 		ExecutionDetailsResponseDTO response = new ExecutionDetailsResponseDTO();
 		response.setDeviceName(executionDevice.getDevice());
 		response.setDeviceIP(executionDevice.getDeviceIp());
 		response.setDeviceMac(executionDevice.getDeviceMac());
-
+		if (null !=device) {
+			response.setDeviceThunderEnabled(device.isThunderEnabled());
+		}
 		String deviceDetails = fileTransferService.getDeviceDetailsFromVersionFile(id.toString());
 		if (null != deviceDetails) {
 			deviceDetails = deviceDetails.replace("imagename:", "");
