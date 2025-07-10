@@ -36,7 +36,7 @@ interface customcellRenderparams extends ICellRendererParams {
     <!-- <button [disabled]="isButtonDisabled()" class="btn btn-primary btn-sm delete-btn" (click)="onEditClick($event)"><mat-icon class="delete-icon">edit</mat-icon></button> -->
     <button   class="btn  btn-sm delete-btn" (click)="onEditClick($event)" matTooltip="{{textforedit}}"><mat-icon class="extra-icon edit">edit</mat-icon></button>
     &nbsp;
-    <button *ngIf="deleteShowHide" class="btn  btn-sm delete-btn" (click)="onDeleteClick($event)" matTooltip="Delete"><mat-icon class="delete-icon extra-icon">delete_forever</mat-icon></button>
+    <button *ngIf="shouldShowDeleteButton()" class="btn  btn-sm delete-btn" (click)="onDeleteClick($event)" matTooltip="Delete"><mat-icon class="delete-icon extra-icon">delete_forever</mat-icon></button>
    
     <!-- <button *ngIf="viewShowHide"  class="btn  btn-sm delete-btn" (click)="onViewClick($event)" matTooltip="View"><mat-icon class=" view extra-icon">remove_red_eye</mat-icon></button> -->
     &nbsp;
@@ -84,6 +84,21 @@ interface customcellRenderparams extends ICellRendererParams {
   ]
 })
 export class ButtonComponent implements OnInit {
+  
+  /**
+   * Determines whether the delete button should be shown based on the context or URL.
+   * @returns {boolean} - Returns false if in RDK Certification grid context, otherwise returns the value of deleteShowHide.
+   */
+  shouldShowDeleteButton(): boolean {
+    // Hide delete button for RDK Certification grid based on context or URL
+    const parent = this.params?.context?.componentParent;
+    const isRdkCertGrid = parent && (parent.constructor?.name === 'ListRdkCertificationComponent' || parent.categoryName === 'RDK Certification');
+    const isRdkCertUrl = window.location.pathname.includes('rdk-certification') || window.location.pathname.includes('list-rdk-certification');
+    if (isRdkCertGrid || isRdkCertUrl) {
+      return false;
+    }
+    return this.deleteShowHide;
+  }
   params: any
   selectedRowCount: number = 0;
   lastSelectedNodeId: string = '';

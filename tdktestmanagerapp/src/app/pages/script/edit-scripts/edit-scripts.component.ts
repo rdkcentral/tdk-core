@@ -60,7 +60,7 @@ export class EditScriptsComponent {
   newtestDialogRef!: MatDialogRef<any>;
   @ViewChild('newtestCaseTemplate', { static: true }) newtestCaseTemplate!: TemplateRef<any>;
   @ViewChild('stepper', { static: true }) stepper!: MatStepper;
-  isLinear = true;
+  isLinear = false;
   allModules: any;
   allPrimitiveTest: any[] = [];
   loggedinUser: any;

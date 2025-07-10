@@ -1125,6 +1125,7 @@ onSearchInput() {
    * @param event - The click event triggered by the user.
    */
   onClickOutside(event: Event) {
+    // Hide script filter input if click is outside
     if (
       this.showFilterInput &&
       this.filterInput &&
@@ -1133,6 +1134,16 @@ onSearchInput() {
       !this.filterButton.nativeElement.contains(event.target)
     ) {
       this.showFilterInput = false;
+    }
+    // Hide suite filter input if click is outside
+    if (
+      this.showFilterInputsuite &&
+      this.filterInputSuite &&
+      !this.filterInputSuite.nativeElement.contains(event.target) &&
+      this.filterButtonSuite &&
+      !this.filterButtonSuite.nativeElement.contains(event.target)
+    ) {
+      this.showFilterInputsuite = false;
     }
   }
   /**

@@ -23,11 +23,7 @@ package com.rdkm.tdkservice.serviceimpl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -794,7 +790,13 @@ public class TestSuiteService implements ITestSuiteService {
 				testSuites = testSuiteRepository.findAllByCategory(Category.valueOf(category));
 			}
 		}
-		return testSuites.stream().map(MapperUtils::convertToTestSuiteDetailsResponse).collect(Collectors.toList());
+
+		// Sort alphabetically by test suite name
+		testSuites.sort(Comparator.comparing(TestSuite::getName, String.CASE_INSENSITIVE_ORDER));
+
+		return testSuites.stream()
+				.map(MapperUtils::convertToTestSuiteDetailsResponse)
+				.collect(Collectors.toList());
 	}
 
 }

@@ -42,6 +42,86 @@ interface scriptType {
   styleUrl: './create-script-group.component.css'
 })
 export class CreateScriptGroupComponent {
+  // Drag-to-select support for right-side script list
+  dragSelectingRight: boolean = false;
+  dragStartIndexRight: number | null = null;
+  dragEndIndexRight: number | null = null;
+
+  onRightScriptMouseDown(index: number, event: MouseEvent): void {
+    if (event.button !== 0) return; // Only left mouse button
+    this.dragSelectingRight = true;
+    this.dragStartIndexRight = index;
+    this.dragEndIndexRight = index;
+    event.preventDefault();
+  }
+
+  onRightScriptMouseEnter(index: number): void {
+    if (this.dragSelectingRight && this.dragStartIndexRight !== null) {
+      this.dragEndIndexRight = index;
+    }
+  }
+
+  onRightScriptMouseUp(): void {
+    if (this.dragSelectingRight && this.dragStartIndexRight !== null && this.dragEndIndexRight !== null) {
+      const start = Math.min(this.dragStartIndexRight, this.dragEndIndexRight);
+      const end = Math.max(this.dragStartIndexRight, this.dragEndIndexRight);
+      const list = this.container2ScriptArr;
+      for (let i = start; i <= end; i++) {
+        const script = list[i];
+        if (script) {
+          if (this.selectedRight.has(script.id)) {
+            this.selectedRight.delete(script.id);
+          } else {
+            this.selectedRight.add(script.id);
+          }
+        }
+      }
+    }
+    this.dragSelectingRight = false;
+    this.dragStartIndexRight = null;
+    this.dragEndIndexRight = null;
+  }
+  // Handles both single and drag select on mouseup
+  handleMouseUp(index: number, script: any): void {
+    if (this.dragSelecting) {
+      this.onLeftScriptMouseUp();
+    } else {
+      // Toggle selection: select if not selected, unselect if selected
+      if (this.selectedLeft.has(script.id)) {
+        this.selectedLeft.delete(script.id);
+      } else {
+        this.selectedLeft.add(script.id);
+      }
+    }
+    // Always reset drag state after mouseup
+    this.dragSelecting = false;
+    this.dragStartIndex = null;
+    this.dragEndIndex = null;
+  }
+  // Combined single and drag select handler for left-side script list
+  selectSingleScript(index: number, script: any): void {
+    // Only select if not drag-selecting
+    if (!this.dragSelecting) {
+      if (this.selectedLeft.has(script.id)) {
+        this.selectedLeft.delete(script.id);
+      } else {
+        this.selectedLeft.add(script.id);
+      }
+    }
+  }
+  // Single select handler for left-side script list
+  onSingleSelect(index: number, script: any): void {
+    // Always allow single select on mouseup
+    if (this.dragSelecting) {
+      // If drag-selecting, do not toggle single
+      return;
+    }
+    if (this.selectedLeft.has(script.id)) {
+      this.selectedLeft.delete(script.id);
+    } else {
+      this.selectedLeft.add(script.id);
+    }
+  }
 
   testSuiteFormSubmitted = false;
   testSuiteFrom!:FormGroup;
@@ -58,10 +138,52 @@ export class CreateScriptGroupComponent {
   onlyVideoCategory!:string;
   onlyVideoCategoryName!:string;
   categoryName!:string;
-  selectedLeft = new Set<number>();
-  selectedRight = new Set<number>();
+  selectedLeft = new Set<string>();
+  selectedRight = new Set<string>();
   filteredLeftList:any;
   isLoadingScripts: boolean = false;
+
+
+
+  // Drag-to-select support for left-side script list
+  dragSelecting: boolean = false;
+  dragStartIndex: number | null = null;
+  dragEndIndex: number | null = null;
+
+  onLeftScriptMouseDown(index: number, event: MouseEvent): void {
+    if (event.button !== 0) return; // Only left mouse button
+    this.dragSelecting = true;
+    this.dragStartIndex = index;
+    this.dragEndIndex = index;
+    event.preventDefault();
+  }
+
+  onLeftScriptMouseEnter(index: number): void {
+    if (this.dragSelecting && this.dragStartIndex !== null) {
+      this.dragEndIndex = index;
+    }
+  }
+
+ onLeftScriptMouseUp(): void {
+  if (this.dragSelecting && this.dragStartIndex !== null && this.dragEndIndex !== null) {
+    const start = Math.min(this.dragStartIndex, this.dragEndIndex);
+    const end = Math.max(this.dragStartIndex, this.dragEndIndex);
+    const list = this.filteredContainer1;
+    for (let i = start; i <= end; i++) {
+      const script = list[i];
+      if (script) {
+        if (this.selectedLeft.has(script.id)) {
+          this.selectedLeft.delete(script.id);
+        } else {
+          this.selectedLeft.add(script.id);
+        }
+      }
+    }
+  }
+  this.dragSelecting = false;
+  this.dragStartIndex = null;
+  this.dragEndIndex = null;
+}
 
   constructor(private authservice : AuthService,private fb: FormBuilder,private router: Router,private scriptservice:ScriptsService,
     private _snakebar: MatSnackBar ) {
@@ -197,10 +319,17 @@ export class CreateScriptGroupComponent {
     };
   }
   /**
-   * Method to toggle scorting asc/desc
-   */ 
-  toggleSortRightSide() :void{
+   * Method to toggle sorting asc/desc for right side container
+   */
+  toggleSortRightSide(): void {
     this.sortOrderRight = this.sortOrderRight === 'asc' ? 'desc' : 'asc';
+    this.container2ScriptArr.sort((a: any, b: any) => {
+      if (this.sortOrderRight === 'asc') {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
   }
   /**
    * Navigates back to the list of scripts.
@@ -210,10 +339,18 @@ export class CreateScriptGroupComponent {
     localStorage.removeItem('categoryname');
   }
   /**
-   * Resets the form.
+   * Resets the form and both containers.
    */  
-  reset():void{
+  reset(): void {
     this.testSuiteFrom.reset();
+    // Move all scripts back to left container
+    this.container1 = [...this.container1, ...this.container2ScriptArr];
+    this.container2ScriptArr = [];
+    this.selectedLeft.clear();
+    this.selectedRight.clear();
+    this.testSuiteFrom.get('container2Scripts')?.setValue([]);
+    this.testSuiteFrom.get('container2Scripts')?.markAsTouched();
+    this.testSuiteFrom.get('container2Scripts')?.updateValueAndValidity();
   }
   /**
    * Method to create a testsuite
@@ -253,4 +390,5 @@ export class CreateScriptGroupComponent {
       })
     }
   }
+ 
 }

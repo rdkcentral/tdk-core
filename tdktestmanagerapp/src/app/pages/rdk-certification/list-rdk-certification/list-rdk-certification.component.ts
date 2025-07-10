@@ -105,7 +105,8 @@ export class ListRdkCertificationComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDownloadClick: this.downloadConfigFile.bind(this),
-        onDeleteClick: this.delete.bind(this),
+        // Hide delete icon for RDK Certification
+        showDelete: false,
         selectedRowCount: () => this.selectedRowCount,
       })
     }

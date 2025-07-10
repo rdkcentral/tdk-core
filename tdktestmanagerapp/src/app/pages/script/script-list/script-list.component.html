@@ -88,8 +88,12 @@ limitations under the License.
     <div class="mt-1">
       <div class="row">
         <div class="col search-header">
-          <span class="search">Search:<mat-icon class="info-icon"
-              matTooltip="Search by Script name here. For module name and Testsuite name search. Please use the filter option">info</mat-icon></span>
+          <span class="search">Search:
+            <mat-icon class="info-icon"
+              [matTooltip]="viewName === 'scripts' ? 'Search by script name here.\nFor module wise search, use column filters in the table.' : 'Search by script name here.\nFor TestSuite search, use column filters in the table.'">
+              info
+            </mat-icon>
+          </span>
           <input type="text" class="form-control seach-input" id="filter-text-box" [(ngModel)]="globalSearchTerm"
             (input)="onSearchInput()" placeholder="Search by Script name">
         </div>

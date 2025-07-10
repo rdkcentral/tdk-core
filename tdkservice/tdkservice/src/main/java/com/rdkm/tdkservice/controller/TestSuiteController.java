@@ -162,7 +162,7 @@ public class TestSuiteController {
 			return ResponseUtils.getSuccessDataResponse("Test suite fetched successfully", testSuiteDTOList);
 		} else {
 			LOGGER.error("No test suite found by category");
-			return ResponseUtils.getSuccessDataResponse("No Device details found for category" + category, null);
+			return ResponseUtils.getSuccessDataResponse("No Test suite details found for category" + category, null);
 		}
 	}
 
@@ -181,7 +181,7 @@ public class TestSuiteController {
 		boolean isScriptDeleted = testSuiteService.deleteTestSuite(id);
 		if (isScriptDeleted) {
 			LOGGER.info("Test suite deleted successfully");
-			return ResponseUtils.getSuccessResponse("Device is deleted successfully");
+			return ResponseUtils.getSuccessResponse("Test suite is deleted successfully");
 		} else {
 			LOGGER.error("Error in deleting test suite");
 			throw new TDKServiceException("Error in deleting test suite");

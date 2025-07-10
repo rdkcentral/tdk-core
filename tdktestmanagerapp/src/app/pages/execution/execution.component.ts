@@ -60,7 +60,7 @@ import { LoaderComponent } from '../../utility/component/loader/loader.component
 
   ],
   templateUrl: './execution.component.html',
-  styleUrl: './execution.component.css',
+  styleUrls: ['./execution.component.css'],
 })
 export class ExecutionComponent implements OnInit, OnDestroy{
   @ViewChild('deviceSearchInput') deviceSearchInput!: ElementRef;
@@ -70,7 +70,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
 
   executeName: string = 'Execute';
   selectedCategory: string = 'All';
-  public themeClass: string = 'ag-theme-quartz';
+  public themeClass: string = 'ag-theme-quartz ag-theme-quartz-copyable';
   rowData: any = [];
   rowDataSchudle: any = [];
   selectedRowCount = 0;
@@ -197,14 +197,14 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       sortable: true,
       cellClass: 'selectable',
       resizable: false,
-	    cellRenderer:(data:any)=>{
-		    return data.value ? (new Date(data.value)).toLocaleString() : ''; 
-	    }
+      cellRenderer:(data:any)=>{
+        return data.value ? (new Date(data.value)).toLocaleString() : ''; 
+      }
     },
     {
       headerName: 'User',
       field: 'user',
-      filter: 'agDateColumnFilter',
+      filter: 'agTextColumnFilter',
       filterParams: this.filterParams,
       width: 90,
       sortable: true,
@@ -280,7 +280,15 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       width:190,
       sortable: true,
       headerClass: 'header-center',
-      resizable: false
+      resizable: false,
+      cellClass: 'ag-cell-selectable',
+      cellRenderer: (params: any) => {
+        const text = params.value || '';
+        if (text.length > 40) {
+          return `${text.slice(0, 40)}...`;
+        }
+        return text;
+      },
     },
     {
   headerName: 'Execution/Start Time',
@@ -323,7 +331,8 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
         // Otherwise, it's one-time
         return 'N/A';
-      }
+      },
+      cellClass: 'ag-cell-selectable',
     },
     {
       headerName: 'Scripts/Testsuite',
@@ -333,6 +342,14 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       sortable: true,
       resizable: false,
       headerClass: 'header-center',
+      cellClass: 'ag-cell-selectable',
+      cellRenderer: (params: any) => {
+        const text = params.value || '';
+        if (text.length > 40) {
+          return `${text.slice(0, 40)}...`;
+        }
+        return text;
+      },
     },
     {
       headerName: 'Device',
@@ -342,6 +359,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       sortable: true,
       resizable: false,
       headerClass: 'header-center',
+      cellClass: 'ag-cell-selectable',
     },
     {
       headerName: 'Details',
@@ -352,6 +370,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       sortable: true,
       resizable: false,
       headerClass: 'header-center',
+      cellClass: 'ag-cell-selectable',
     },
     {
   headerName: 'Status',

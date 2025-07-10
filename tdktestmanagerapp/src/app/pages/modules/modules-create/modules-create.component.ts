@@ -91,7 +91,6 @@ export class ModulesCreateComponent {
           moduleName:this.createModuleForm.value.moduleName,
           testGroup: this.createModuleForm.value.testGroup,
           executionTime: this.createModuleForm.value.executionTime,
-          userGroup: this.loggedinUser.userGroupName,
           moduleLogFileNames:this.logFilesArr?this.logFilesArr:[],
           moduleCrashLogFiles:this.crashFilesArr?this.crashFilesArr:[],
           moduleCategory: this.loggedinUser.userCategory,

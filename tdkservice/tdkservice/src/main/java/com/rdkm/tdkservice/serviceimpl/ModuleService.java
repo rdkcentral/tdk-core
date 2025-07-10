@@ -107,10 +107,8 @@ public class ModuleService implements IModuleService {
 			LOGGER.error("Module with name {} already exists", moduleDTO.getModuleName());
 			throw new ResourceAlreadyExistsException(Constants.MODULE_NAME, moduleDTO.getModuleName());
 		}
-		UserGroup userGroup = userGroupRepository.findByName(moduleDTO.getUserGroup().toString());
-		LOGGER.info("UserGroup found: {}", userGroup);
 
-		Module module = MapperUtils.toModuleEntity(moduleDTO, userGroup);
+		Module module = MapperUtils.toModuleEntity(moduleDTO);
 
 		// Check if isThunderEnabled is true
 		if (moduleDTO.isModuleThunderEnabled()) {

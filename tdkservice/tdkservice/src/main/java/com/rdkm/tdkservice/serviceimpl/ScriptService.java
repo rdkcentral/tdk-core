@@ -31,12 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -1319,7 +1314,13 @@ public class ScriptService implements IScriptService {
 				scripts = scriptRepository.findAllByCategory(Category.valueOf(category));
 			}
 		}
-		return scripts.stream().map(MapperUtils::convertToScriptDetailsResponse).collect(Collectors.toList());
+
+		// Sort scripts by module name
+		scripts.sort(Comparator.comparing(script -> script.getModule().getName()));
+
+		return scripts.stream()
+				.map(MapperUtils::convertToScriptDetailsResponse)
+				.collect(Collectors.toList());
 	}
 
 	/**

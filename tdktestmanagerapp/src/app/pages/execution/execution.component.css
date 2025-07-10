@@ -610,3 +610,50 @@ body,
   gap: 5px; /* Add spacing between buttons */
   height: 100%; /* Ensure consistent height */
 }
+
+/* Remove ag-Grid cell hover and focus shadow for all schedule grid cells */
+::ng-deep .ag-theme-quartz-copyable .ag-cell.ag-cell-selectable:hover,
+::ng-deep .ag-theme-quartz-copyable .ag-cell.ag-cell-selectable:focus {
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+  background: inherit !important;
+}
+
+/* Make status and action columns copyable/selectable as well */
+::ng-deep .ag-theme-quartz-copyable .ag-cell.status-nowrap,
+::ng-deep .ag-theme-quartz-copyable .ag-cell:not(.ag-cell-selectable):not(.ag-cell-focus):not(.ag-cell-range-selected):not(.ag-cell-range-selected-1):not(.ag-cell-range-selected-2):not(.ag-cell-range-selected-3):not(.ag-cell-range-selected-4) {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  cursor: text !important;
+  background: inherit !important;
+}
+
+/* Remove shadow and enable copy for Execution/Start Time column */
+::ng-deep .ag-theme-quartz-copyable .ag-cell[col-id="executionStartTime"] {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  cursor: text !important;
+  background: inherit !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+}
+/* Enable text selection for ag-Grid cells in the schedule grid */
+::ng-deep .ag-theme-quartz-copyable .ag-cell.ag-cell-selectable {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  cursor: text !important;
+  background: inherit !important;
+}
+/** Ensure text color is inherited for selectable cells */
+::ng-deep .ag-theme-quartz-copyable .ag-cell.ag-cell-selectable span,
+::ng-deep .ag-theme-quartz-copyable .ag-cell.ag-cell-selectable div {
+  color: inherit !important;
+}

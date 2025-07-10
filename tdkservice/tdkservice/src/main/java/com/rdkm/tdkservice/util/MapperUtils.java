@@ -281,12 +281,11 @@ public class MapperUtils {
 	 * @param userGroup the user group associated with the module
 	 * @return the Module entity populated with the details from the DTO
 	 */
-	public static Module toModuleEntity(ModuleCreateDTO dto, UserGroup userGroup) {
+	public static Module toModuleEntity(ModuleCreateDTO dto) {
 		Module module = new Module();
 		module.setName(dto.getModuleName());
 		TestGroup testGroup = TestGroup.valueOf(dto.getTestGroup());
 		module.setTestGroup(testGroup);
-		module.setUserGroup(userGroup);
 		module.setExecutionTime(dto.getExecutionTime());
 		module.setLogFileNames(dto.getModuleLogFileNames());
 		module.setCrashLogFiles(dto.getModuleCrashLogFiles());

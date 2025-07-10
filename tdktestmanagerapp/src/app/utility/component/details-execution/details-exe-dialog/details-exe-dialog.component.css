@@ -755,7 +755,7 @@ background-color: transparent;
 .toolbar-section {
   background: #fff;
   border-radius: 10px;
-  border-left: 4px solid #00b2dc;
+  border-left: 4px solid #ccc;
   border-right: 1px solid #e0e0e0;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   height: 40px;
@@ -769,7 +769,7 @@ background-color: transparent;
 .toolbar-section-filter {
   background: #fff;
   border-radius: 10px;
-  border-left: 4px solid #00b2dc;
+  border-left: 4px solid #ccc;
   border-right: 1px solid #e0e0e0;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   height: 40px;
