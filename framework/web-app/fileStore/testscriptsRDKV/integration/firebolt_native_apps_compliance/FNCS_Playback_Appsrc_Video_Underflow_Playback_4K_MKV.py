@@ -116,7 +116,7 @@ checkAVStatus = "no"
 timeoutInSeconds = "10"
 
 #Threshold value for appsrc
-threshold = "38940939"
+threshold = "5511672"
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);

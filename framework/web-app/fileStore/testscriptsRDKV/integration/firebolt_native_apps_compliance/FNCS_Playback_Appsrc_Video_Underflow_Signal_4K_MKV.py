@@ -114,7 +114,7 @@ obj.configureTestCase(ip,port,'FNCS_Playback_Appsrc_Video_Underflow_Signal_4K_MK
 checkAVStatus = "no"
 
 #Threshold value for appsrc
-threshold = "38940939"
+threshold = "5511672"
 #Get the result of connection with test component in DUT
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
