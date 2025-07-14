@@ -575,6 +575,8 @@ def checkSupportedAudioModes(obj,mode):
                     else:
                         mode = mode_value;
                     break;
+            if mode_match == True:
+                break;
         if mode_match:
             check_status = "SUCCESS"
         else:
@@ -721,7 +723,10 @@ def setCurrentSoundMode(obj,mode):
         details = tdkTestObj.getResultDetails();
         if "SUCCESS" in result:
             status,new_mode = getCurrentSoundMode(obj)
-            new_mode = new_mode.replace(" ","")
+            if "AUTO" in new_mode:
+                new_mode = new_mode.split("(")[1].split(")")[0]
+            else:
+                new_mode = new_mode.replace(" ","")
             if mode.lower() in new_mode.lower():
                 mode_revert = True
                 set_status = "SUCCESS"
@@ -735,7 +740,12 @@ def setCurrentSoundMode(obj,mode):
             set_status = "FAILURE"
             tdkTestObj.setResultStatus("FAILURE")
             print("Unable to set the sound mode")
-
+    if "AUTO" in curr_mode:
+        current_mode = curr_mode.split("(")[1].split(")")[0]
+        auto_mode = 1
+    else:
+        current_mode = curr_mode
+        auto_mode = 0
     return set_status
 
 def setCurrentResolution(obj,res):
