@@ -238,10 +238,13 @@
                         <expectedValues value="true" />
                 </resultGeneration>
         </testStep>
-        </prerequisite>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	</prerequisite>
         </testCasePreRequisite>	    
 	
-	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
 	</testStep>
 	<testStep testStepId="2" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan" delay="5">
@@ -277,10 +280,13 @@
                         <expectedValues value="true" />
                 </resultGeneration>
         </testStep>
-        </prerequisite>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+	</prerequisite>
         </testCasePreRequisite>    
 	
-	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
 	<testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -391,11 +397,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>    
 	
-	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
 	<testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -446,11 +455,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>    
 	
-	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -514,11 +526,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>    
 	
-	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -537,7 +552,7 @@
                 </params>
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
-	<testStep testStepId="5" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" delay="5">
+	<testStep testStepId="5" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" delay="10">
                 <resultGeneration useMethodTag="networkmanager_check_onwifistatechange_event">
                         <expectedValues value="5,WIFI_STATE_CONNECTED"/>
                 </resultGeneration>
@@ -550,7 +565,7 @@
         <testStep testStepId="7" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
 	</testStep>
-	<testStep testStepId="8" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" delay="5">
+	<testStep testStepId="8" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" delay="10">
                 <resultGeneration useMethodTag="networkmanager_check_onwifistatechange_event">
                         <expectedValues value="2,WIFI_STATE_DISCONNECTED"/>
                 </resultGeneration>
@@ -584,11 +599,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>    
 	
-	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -639,11 +657,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>    
 	
-	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
 	<testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5" >
@@ -705,10 +726,13 @@
                         <expectedValues value="true" />
                 </resultGeneration>
 	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
 	</prerequisite>
 
 	<prerequisite requisiteId="2" requisiteName="Activate_RDKShell_Plugin">
-            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller" delay="3">
                 <params>
                   <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
                 </params>
@@ -887,11 +911,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>
 	
-	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -942,11 +969,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>    
 	
-	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -1002,11 +1032,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
 	</prerequisite>
 
 	<prerequisite requisiteId="2" requisiteName="Activate_RDKShell_Plugin">
-            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller" delay="3">
                 <params>
                   <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
                 </params>
@@ -1481,9 +1514,12 @@
                         <expectedValues value="true" />
                 </resultGeneration>
               </testStep>
-             </prerequisite>
+      	      <testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+      	     </prerequisite>
              </testCasePreRequisite>
-	     <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	     <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
 		     <resultGeneration useMethodTag="success_status_validation"/>
 	     </testStep>
 	     <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -1507,7 +1543,7 @@
                  <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
                 </resultGeneration>
               </testStep>
-	      <testStep testStepId="6" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" >
+	      <testStep testStepId="6" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" delay="5">
 	        <resultGeneration useMethodTag="networkmanager_check_wifi_state" arguments="check_wifi_expected_state">
 	           <expectedValues value="5,WIFI_STATE_CONNECTED"/>
                 </resultGeneration>
@@ -1515,7 +1551,7 @@
               <testStep testStepId="7" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="3">
 	        <resultGeneration useMethodTag="success_status_validation"/>
               </testStep> 
-              <testStep testStepId="8" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" >
+              <testStep testStepId="8" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" delay="5">
 	         <resultGeneration useMethodTag="networkmanager_check_wifi_state" arguments="check_wifi_expected_state">
 	            <expectedValues value="2,WIFI_STATE_DISCONNECTED"/>
                  </resultGeneration>		 
@@ -1545,7 +1581,7 @@
      </testCase>
 
      <!-- Test case 44 -->
-     <testCase testCaseId="NM_44" testCaseName="NetworkManager_Check_Wifi_State_On_Connecting_To_Wifi" desc="Check the wifi state on connecting to the wifi ssid">
+     <testCase testCaseId="NM_44" testCaseName="NetworkManager_Check_Wifi_State_After_Connecting_To_Wifi" desc="Check the wifi state after connecting to the wifi ssid">
 	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
@@ -1572,9 +1608,12 @@
                         <expectedValues value="true" />
                 </resultGeneration>
               </testStep>
+      	      <testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
              </prerequisite>
              </testCasePreRequisite>
-             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                      <resultGeneration useMethodTag="success_status_validation"/>
              </testStep>
              <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -1593,9 +1632,9 @@
                      </params>
               <resultGeneration useMethodTag="success_status_validation"/>
               </testStep>
-	      <testStep testStepId="5" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" >
+	      <testStep testStepId="5" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" delay="5">
                 <resultGeneration useMethodTag="networkmanager_check_wifi_state" arguments="check_wifi_expected_state">
-                   <expectedValues value="3,WIFI_STATE_PAIRING"/>
+                   <expectedValues value="5,WIFI_STATE_CONNECTED"/>
                 </resultGeneration>
               </testStep>
               <testStep testStepId="6" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" delay="5">
@@ -1636,9 +1675,12 @@
                         <expectedValues value="true" />
                 </resultGeneration>
               </testStep>
-             </prerequisite>
+              <testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+      	     </prerequisite>
              </testCasePreRequisite>
-             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                      <resultGeneration useMethodTag="success_status_validation"/>
              </testStep>
              <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -1684,9 +1726,12 @@
                         <expectedValues value="true" />
                 </resultGeneration>
               </testStep>
-             </prerequisite>
+      	      <testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+      	     </prerequisite>
              </testCasePreRequisite>
-             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                      <resultGeneration useMethodTag="success_status_validation"/>
              </testStep>
              <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -1705,7 +1750,7 @@
                      </params>
               	     <resultGeneration useMethodTag="success_status_validation"/>
               </testStep>
-	      <testStep testStepId="5" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" delay="2">
+	      <testStep testStepId="5" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" delay="5">
                 <resultGeneration useMethodTag="networkmanager_check_wifi_state" arguments="check_wifi_expected_state">
                    <expectedValues value="2,WIFI_STATE_DISCONNECTED"/>
                 </resultGeneration>
@@ -1759,9 +1804,12 @@
                         <expectedValues value="true" />
                 </resultGeneration>
               </testStep>
+      	      <testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
              </prerequisite>
              </testCasePreRequisite>
-             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                      <resultGeneration useMethodTag="success_status_validation"/>
              </testStep>
              <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -1780,17 +1828,17 @@
                      </params>
               <resultGeneration useMethodTag="success_status_validation"/>
               </testStep>
-	      <testStep testStepId="5" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" delay="5" clear="false">
+	      <testStep testStepId="5" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" delay="10" clear="false">
                 <resultGeneration useMethodTag="networkmanager_check_onwifistatechange_event">
                         <expectedValues value="4,WIFI_STATE_CONNECTING"/>
                 </resultGeneration>
               </testStep>
-              <testStep testStepId="6" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" >
+              <testStep testStepId="6" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener">
                 <resultGeneration useMethodTag="networkmanager_check_onwifistatechange_event">
                         <expectedValues value="5,WIFI_STATE_CONNECTED"/>
                 </resultGeneration>
               </testStep>
-              <testStep testStepId="7" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" >
+              <testStep testStepId="7" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" delay="5">
                 <resultGeneration useMethodTag="networkmanager_get_connected_ssid" arguments="check_ssid">
                  <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
                 </resultGeneration>
@@ -1908,11 +1956,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>
 
-        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
@@ -2828,11 +2879,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>
 
-        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
 		<params>
                         <param tag="frequency" value="2.4"/>
                 </params>
@@ -2873,11 +2927,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>
 
-        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
 		<params>
                         <param tag="frequency" value="5"/>
                 </params>
@@ -2918,11 +2975,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>
 
-	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <params>
 			<param tag="frequency" value="2.4"/>
 			<param tag="ssids" useConfigFile="true" key="WIFI_SSID_NAME"/>
@@ -2966,11 +3026,14 @@
                 <resultGeneration useMethodTag="get_enabled_status_validation">
                         <expectedValues value="true" />
                 </resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
         </prerequisite>
         </testCasePreRequisite>
 
-        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
                 <params>
                         <param tag="frequency" value="5"/>
                         <param tag="ssids" useConfigFile="true" key="WIFI_SSID_NAME_5GHZ"/>
