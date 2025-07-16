@@ -112,8 +112,23 @@ webkit_console_socket = None
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 
+config_status = ""
+tdkTestObj = obj.createTestStep('rdkv_media_test');
+tdkTestObj.executeTestCase(expectedResult);
+conf_file,result1 = getDeviceConfigFile(obj.realpath)
+setDeviceConfigFile(conf_file)
+result2,FFEnabledStatus  = readDeviceConfigKeyValue(conf_file,"MEDIA_VALIDATION_FASTFORWARD_3x_4x_ENABLED")
+if "SUCCESS" in result2:
+        if FFEnabledStatus.lower() == "no":
+            print("3x is not supported by the device as set in config file\n");
+            obj.setAsNotApplicable();
+else:
+    config_status = "FAILURE"
+    print("Failed to get the MEDIA_VALIDATION_FASTFORWARD_3x_4x_ENABLED value from device config file")
+
+
 expectedResult = "SUCCESS"
-if expectedResult in result.upper():
+if expectedResult in result.upper() and FFEnabledStatus.lower() != "no" and config_status != "FAILURE":
     print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
