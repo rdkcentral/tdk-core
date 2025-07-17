@@ -35,7 +35,7 @@ else
 fi
 
 #Check if Generic VTS Package is present
-GENERIC_PACKAGE=`find vts_packages -maxdepth 1 -iname "VTS_Package*tgz"`
+GENERIC_PACKAGE=`find vts_packages -maxdepth 1 -iname "Generic_VTS_Package*tgz"`
 if [ -z "$GENERIC_PACKAGE" ];then
     echo "Generic VTS Package not present in fileStore"
     echo "Please copy VTS_Package into fileStore/vts_packages before attempting to create new package"
