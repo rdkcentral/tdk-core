@@ -134,6 +134,16 @@ public showViewPasswordOnPress: boolean = true;
  */
 public showConfirmPasswordOnPress: boolean = true;
 
+  /**
+   * Constructor for LoginComponent.
+   * @param fb FormBuilder instance for reactive forms.
+   * @param router Angular Router for navigation.
+   * @param registerservice RegisterService instance for user registration.
+   * @param loginservice LoginService instance for authentication.
+   * @param authservice AuthService instance for authentication state.
+   * @param location Location service for navigation state.
+   * @param _snakebar MatSnackBar instance for notifications.
+   */
   constructor(private fb: FormBuilder, private router: Router,
     private registerservice: RegisterService,
     private loginservice: LoginService,
@@ -141,8 +151,9 @@ public showConfirmPasswordOnPress: boolean = true;
     private location : Location,
     private _snakebar: MatSnackBar,
   ) { }
+
   /**
-   * Initializes the component.
+   * Initializes the component and sets up forms and event listeners.
    */
   ngOnInit(): void {
 
@@ -230,9 +241,14 @@ public showConfirmPasswordOnPress: boolean = true;
       }
     })
   }
+
+  /**
+   * This method used display name
+   */
   get displayname(): AbstractControl {
     return this.registerForm.get('displayname')!;
   }
+
   /**
    * This method is no space is allow.
    */
@@ -240,6 +256,7 @@ public showConfirmPasswordOnPress: boolean = true;
     const value = control.value || '';
     return value.startsWith(' ') ? { noLeadingSpaces: true } : null;
   }
+
   /**
    * Validates if the password and retype password fields match.
    * @param regpassword - The name of the password control.
@@ -260,11 +277,13 @@ public showConfirmPasswordOnPress: boolean = true;
       }
     }
   }
+
   /**
    * Get the controls of the register form.
    * @returns The controls of the register form.
    */
   get f() { return this.registerForm.controls; }
+
 
   /**
    * Signs in the user.
@@ -274,6 +293,7 @@ public showConfirmPasswordOnPress: boolean = true;
     this.registerVisible = false;
     this.signinVisible = true;
   }
+
   /**
    * Registers the user.
    * Sets the visibility of the signin and register components accordingly.
@@ -283,6 +303,7 @@ public showConfirmPasswordOnPress: boolean = true;
     this.registerVisible = true;
     this.signinVisible = false;
   }
+
   /**
    * Change the category click on radio button.
    */
@@ -290,6 +311,7 @@ public showConfirmPasswordOnPress: boolean = true;
     let val = event.target.value;
     this.categorySelect = val;
   }
+
   /**
    * Toggles the form based on the provided form name.
    * @param formName - The name of the form to toggle.
@@ -314,6 +336,7 @@ public showConfirmPasswordOnPress: boolean = true;
     }
   }
 
+
   /**
    * Handles the event when the user is checked.
    * @param e - The event object.
@@ -325,6 +348,7 @@ public showConfirmPasswordOnPress: boolean = true;
     }
   }
 
+
   /**
    * Handles the event when the LDAP checkbox is checked.
    * @param e - The event object.
@@ -335,6 +359,7 @@ public showConfirmPasswordOnPress: boolean = true;
       this.ldapScreenVisible = false;
     }
   }
+
 
   /**
    * Handles the form submission when the user clicks the submit button.
@@ -375,6 +400,7 @@ public showConfirmPasswordOnPress: boolean = true;
 
   }
 
+
   /**
    * Handles the submission of the LDAP form.
    */
@@ -385,6 +411,7 @@ public showConfirmPasswordOnPress: boolean = true;
     } else {
     }
   }
+
 
   /**
    * Handles the registration process when the user clicks on the register button.
@@ -420,6 +447,7 @@ public showConfirmPasswordOnPress: boolean = true;
       })
     }
   }
+
   /**
    * Handles backend error for username and email is already exist.
    */  
@@ -435,24 +463,31 @@ public showConfirmPasswordOnPress: boolean = true;
     return errors;
   }
 
+
 /**
    * Method to view the password.
    */
+
 viewPassword(): void {
   this.showPasswordOnPress = !this.showPasswordOnPress;
 }
 
-/**
- * Method to view the password.
- */
-viewRegisterPassword(): void {
-  this.showViewPasswordOnPress = !this.showViewPasswordOnPress;
-}
 
 /**
  * Method to view the password.
  */
+
+viewRegisterPassword(): void {
+  this.showViewPasswordOnPress = !this.showViewPasswordOnPress;
+}
+
+
+/**
+ * Method to view the password.
+ */
+
 viewConfirmPassword(): void{
   this.showConfirmPasswordOnPress = !this.showConfirmPasswordOnPress;
 }
+
 }

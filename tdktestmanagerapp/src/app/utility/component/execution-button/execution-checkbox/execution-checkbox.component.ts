@@ -75,24 +75,42 @@ export class ExecutionCheckboxComponent {
   params:any
   isAllSelected = false;
 
+  /**
+   * ag-Grid initialization method for the header component.
+   * @param params The header parameters including label and grid API.
+   */
   agInit(params: IHeaderParams & { label: string }): void {
     this.params = params;
   }
 
+  /**
+   * Handles the select all checkbox event to select/deselect all rows.
+   * @param event The event object from the checkbox change.
+   */
   onSelectAll(event: Event) {
     this.isAllSelected = (event.target as HTMLInputElement).checked;
     this.params.api.forEachNode((node:any) => (node.setSelected(this.isAllSelected)));
   }
 
+  /**
+   * Calls the delete callback if provided in params to delete selected executions.
+   */
   onDelete() {
     if (this.params.deleteCallback) {
       this.params.deleteCallback();
     }
   }
 
+  /**
+   * ag-Grid refresh method for the header component. Returns false to avoid re-render.
+   * @returns false
+   */
   refresh(): boolean {
     return false;
   }
+  /**
+   * Calls the openDialog callback if provided in params to open the delete dialog.
+   */
   openDialog():void{
     if (this.params.openDialogCallback) { 
       this.params.openDialogCallback(); 

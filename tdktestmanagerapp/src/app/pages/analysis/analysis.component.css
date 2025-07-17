@@ -17,10 +17,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/* Global font family for body and all elements except material icons */
 body,
 *:not(.material-icons) {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/* Typography styles for headings */
 .mat-typography h1,
 .mat-typography h2,
 .mat-typography h3,
@@ -30,12 +33,18 @@ body,
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
 
+
+/* Row for radio box section */
 .radiobox-row {
   height: 479px;
 }
+
+/* Card combine section */
 .card-combine {
   height: 640px;
 }
+
+/* Radio box styles */
 .radiobox {
   display: flex;
   justify-content: start;
@@ -44,35 +53,49 @@ body,
   font-size: 0.78rem;
 }
 
+
+/* Heading styles */
 .heading {
   margin-top: 8px;
   margin-bottom: 0;
   font-size: 0.8rem;
   font-weight: 500;
 }
+
+/* RDK group styles */
 .rdkgroup {
   margin-left: 10px;
   font-weight: 500;
   font-size: 0.8rem;
 }
+
+/* Main section container */
 .main-sec {
   margin: auto;
 }
+
+/* RDK radio styles */
 .rdkradio {
   border: 2px solid #0e6f87;
 }
 
+
+/* Button group styles */
 .btns-grp {
   position: absolute;
   right: 10px;
   top: 5px;
 }
+
+/* Top section styles */
 .top-sec {
   display: flex;
   align-items: baseline;
   position: absolute;
   top: 0;
 }
+
+/* Download button styles */
 .download-btn {
   background-color: #fff;
   font-size: 0.8rem;
@@ -85,14 +108,19 @@ body,
   margin-right: 15px;
   box-shadow: 0px 3px 6px #0000005e;
 }
+
+/* Download icon styles */
 .download-icon {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
+
+/* Inline form check styles */
 .form-check-inline {
   margin-right: 1rem;
 }
+
 
 .rdkradio {
   border: 2px solid #0e6f87;
@@ -102,35 +130,46 @@ body,
   border-color: gray !important;
   box-shadow: none !important;
 }
+/* Row alignment styles */
 .row-align {
   display: flex;
   justify-content: left;
   align-items: baseline;
 }
+
 .form-check-inline {
   margin-right: 1rem;
 }
+/* Checked form check input styles */
 .form-check-input:checked {
   background-color: #0e6f87;
   border-color: #0e6f87;
 }
+
+/* Flavor row styles */
 .falvor-row {
   display: flex;
   align-items: baseline;
   margin-top: 5px;
   padding-left: 0;
 }
+
+/* Flavor label styles */
 .falvor-label {
   width: 75px;
   font-size: 0.8rem;
   font-weight: 500;
 }
 
+
+/* RDK dropdown styles */
 .rdk-dropdown {
   width: 120px;
   background-color: transparent;
 }
 
+
+/* Bottom border gradient styles */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -146,6 +185,8 @@ body,
   margin: 0 15px;
   /* padding-bottom: 4px; */
 }
+
+/* Title styles */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -153,17 +194,24 @@ body,
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+/* Main margin styles */
 .main-margin {
   margin: 0;
 }
+
+/* Common style for flex center */
 .common-style {
   display: flex;
   justify-content: center;
 }
+
+/* View group styles */
 .viewgroup {
   font-size: 0.8rem;
   margin-left: 23px;
 }
+
 ::ng-deep .mat-mdc-tab.mdc-tab {
   flex-grow: 0 !important;
 }
@@ -192,15 +240,22 @@ body,
 ::ng-deep .hegiht-body {
   height: 515px !important;
 }
+/* Report section styles */
 .report-section {
   margin: 15px 5px 5px 15px;
 }
+
+/* First row styles */
 .first-row {
   width: 101%;
 }
+
+/* Filter button styles */
 .filter-btn {
   margin-left: -12px;
 }
+
+/* Create button styles */
 .create-btn {
   background-color: #00b2dc;
   color: #fff;
@@ -213,17 +268,24 @@ body,
   cursor: pointer;
   margin-right: 12px;
 }
+
+/* Or text styles */
 .ortext {
   margin-right: 50px;
 }
+
+/* Info icon styles */
 .info-icon {
   font-size: 15px;
   color: #00b2dc;
   margin-left: 8px;
 }
+
+/* Report button styles */
 .reportbtn {
   width: 99%;
 }
+
 ::ng-deep .ag-theme-quartz .ag-icon-filter {
   font-size: 0.7rem !important;
   width: 10px !important;
@@ -245,11 +307,14 @@ body,
   text-align: center !important;
   justify-content: center;
 }
+/* Error message report styles */
 .errmsg-report {
   color: rgb(210, 64, 64);
   font-size: 0.8rem;
   margin-left: 5px;
 }
+
+/* Loader row styles */
 .loader-row{
   position: absolute;
   top: 50%;

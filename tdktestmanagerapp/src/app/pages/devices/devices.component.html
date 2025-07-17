@@ -12,10 +12,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<!-- Main container for devices page -->
 <div class="container-fluid">
+  <!-- Row for header and controls -->
   <div class="row borders-btm">
+    <!-- Left column for flavor selection -->
     <div class="col-md-5">
+      <!-- Row for flavor dropdown -->
       <div class="row">
+        <!-- Flavor row -->
         <div class="falvor-row">
           <span for="falvor" class="falvor-label">RDK flavor :</span>
           <select
@@ -31,10 +36,13 @@ limitations under the License.
         </div>
       </div>
     </div>
+    <!-- Center column for title -->
     <div class="col-md-2">
       <h1 class="title"> Devices</h1>
     </div>
+    <!-- Right column for buttons -->
     <div class="col-md-5">
+      <!-- Button group -->
       <div class="btns-group">
         <button
           type="button"
@@ -63,7 +71,9 @@ limitations under the License.
       </div>
     </div>
   </div>
+  <!-- Row for search and grid -->
   <div class="row mt-2 seach-row">
+    <!-- Search header -->
     <div class="col example-header">
       <span class="search"
         >Search:<mat-icon
@@ -80,10 +90,13 @@ limitations under the License.
         placeholder="Search..."
       />
     </div>
+    <!-- Empty column -->
     <div class="col"></div>
+    <!-- Loader row -->
     <div class="row loader-row" *ngIf="showLoader">
       <app-loader></app-loader>
     </div>
+    <!-- Grid container -->
     <div style="margin-top: 5px; margin-bottom: 12px" [class]="themeClass">
       <ag-grid-angular
         style="width: 100%; height: 446px"

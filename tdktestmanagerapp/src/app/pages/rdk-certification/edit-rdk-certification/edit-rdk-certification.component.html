@@ -13,23 +13,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for the edit RDK certification page -->
 <div class="container-fluid mb-3">
+    <!-- Row for header and action buttons -->
     <div class="row borders-btm">
+        <!-- Left column for spacing -->
         <div class="col"></div>
+        <!-- Center column for title -->
         <div class="col">
           <h1 class="title">Update RDK Certification</h1>
         </div>
+        <!-- Right column for spacing -->
         <div class="col"></div>
     </div>
+    <!-- Main content row -->
     <div class="row">
+        <!-- Main column for form and content -->
         <div class="col">
+            <!-- Parent container for form section -->
             <div class="parent mt-2">
+                <!-- Container for form box -->
                 <div class="container container-box" id="container-box">
+                    <!-- Form container for RDK certification update -->
                     <div class="form-container create-group">
+                        <!-- Form for updating RDK certification -->
                         <form [formGroup]="certificationFormGroup">
+                            <!-- Row for file name input -->
                             <div class="row mb-4">
                                 <label for="fileName" class="col-md-3 col-form-label offset-1">File Name<span
                                         style="color:red; margin-left: 0.75em;">*</span></label>
+                                <!-- Column for file name input and validation -->
                                 <div class="col-md-7">
                                     <input type="text" class="form-control" id="fileName" formControlName="fileName"
                                         placeholder="Enter file name">
@@ -41,7 +54,9 @@ limitations under the License.
                                     </div>
                                 </div>
                             </div>
+                            <!-- Row for monaco editor -->
                             <div class="row">
+                                <!-- Container for monaco editor -->
                                 <div style="height: 400px;">
                                     <ngx-monaco-editor [options]="editorOptions" formControlName="pythonEditor">
                                     </ngx-monaco-editor>
@@ -52,6 +67,7 @@ limitations under the License.
                                     </div>
                                 </div>
                             </div>
+                            <!-- Row for back and update buttons -->
                             <div class="mt-2 text-end">
                                 <button mat-button matStepperPrevious class="reset-btn" (click)="goBack()">Back</button>
                                 <button mat-button type="submit" (click)="onSubmit()" class="reset-btn">Update</button>

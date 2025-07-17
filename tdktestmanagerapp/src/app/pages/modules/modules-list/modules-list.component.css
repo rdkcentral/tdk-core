@@ -17,10 +17,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+/*
+ * Applies Roboto font to all elements except material icons
+ */
 body,
 *:not(.material-icons) {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/*
+ * Sets Roboto font for all heading elements inside .mat-typography
+ */
 .mat-typography h1,
 .mat-typography h2,
 .mat-typography h3,
@@ -29,9 +37,17 @@ body,
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
+
+/*
+ * Container for the main page with bottom margin
+ */
 .container-fluid {
   margin-bottom: 0.5rem;
 }
+
+/*
+ * Styles the header section
+ */
 .header {
   background-color: #0e6f87;
   color: #fff;
@@ -39,6 +55,9 @@ body,
   box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
 }
 
+/*
+ * Styles the title text for the page
+ */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -57,11 +76,19 @@ body,
   margin: 0 25px;
   font-weight: 500;
 }
+
+/*
+ * Styles the button group container
+ */
 .btn-grp {
   position: absolute;
   top: 5px;
   right: 40px;
 }
+
+/*
+ * Styles the create and back buttons
+ */
 .create-btn,
 .back-btn {
   background-color: #fff;
@@ -74,6 +101,10 @@ body,
   letter-spacing: 0.5px;
   cursor: pointer;
 }
+
+/*
+ * Styles the modal buttons
+ */
 .modal-btns {
   background-color: #00b2dc;
   color: #fff;
@@ -84,24 +115,43 @@ body,
   letter-spacing: 0.5px;
   cursor: pointer;
 }
+
+/*
+ * Styles the icon size for action icons
+ */
 .icon-size {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
+
+/*
+ * Adds right margin to back and download buttons
+ */
 .back-btn,
 .dwnld-btn {
   margin-right: 10px;
 }
 
+/*
+ * Styles the modal footer
+ */
 .modal-footer {
   border-top: none;
   padding: 1rem 1.45rem 2rem 2rem;
 }
+
+/*
+ * Styles the custom modal
+ */
 .custom-modal {
   max-width: 800px;
   margin-top: 100px;
 }
+
+/*
+ * Styles the modal title
+ */
 .modaltitle {
   margin: 0 10px 0px 10px;
   border-image: linear-gradient(
@@ -116,21 +166,41 @@ body,
   border-image-slice: 1;
   border-image-width: 0px 0px 4px 0px;
 }
+
+/*
+ * Styles the custom title text
+ */
 .custom-title {
   margin-bottom: 0;
   font-size: 1rem;
   color: #06667d;
 }
+
+/*
+ * Styles the table section with side padding
+ */
 .table-sec {
   padding: 0 25px;
 }
+
+/*
+ * Styles the error upload message
+ */
 .errorupload {
   color: #dc3545;
   font-size: 0.8rem;
 }
+
+/*
+ * Hides the ag-grid overlay when there are no rows
+ */
 ::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
   display: none !important;
 }
+
+/*
+ * Styles the loader row for loading state
+ */
 .loader-row{
   position: absolute;
   top: 50%;

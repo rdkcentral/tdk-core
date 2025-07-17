@@ -109,16 +109,34 @@ export class ScheduleButtonComponent implements OnInit{
   currentNodeId: string | undefined;
   textforedit!:string;
 
+  /**
+   * ag-Grid initialization method for the cell renderer component.
+   * @param params The custom cell renderer parameters including selected row count and node IDs.
+   */
   agInit(params: customcellRenderparams): void {
     this.params = params;
     this.selectedRowCount = params.selectedRowCount();
     this.lastSelectedNodeId = params.lastSelectedNodeId;
     this.currentNodeId = params.node.id
   }
+  /**
+   * Constructor for ScheduleButtonComponent.
+   * @param route ActivatedRoute for accessing route parameters.
+   */
   constructor(private route: ActivatedRoute) { }
 
+
+  /**
+   * Angular lifecycle hook called on component initialization.
+   */
   ngOnInit(): void {}
 
+
+  /**
+   * ag-Grid refresh method for the cell renderer component.
+   * @param params The custom cell renderer parameters.
+   * @returns True to indicate the component should be refreshed.
+   */
   refresh(params: customcellRenderparams): boolean {
     this.selectedRowCount = params.selectedRowCount();
     this.lastSelectedNodeId = params.lastSelectedNodeId;
@@ -126,6 +144,10 @@ export class ScheduleButtonComponent implements OnInit{
     return true;
   }
 
+  /**
+   * Handles the delete button click event.
+   * @param $event The event object or data for the delete action.
+   */
   onDeleteClick($event: any) {
     if (this.params.onDeleteClick instanceof Function) {
       this.params.onDeleteClick(this.params.node.data);

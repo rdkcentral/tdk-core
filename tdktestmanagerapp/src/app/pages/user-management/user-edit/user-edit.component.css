@@ -17,9 +17,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/* Container for the user edit form section */
 .container{
     margin-bottom: 2rem;
 }
+
+/* Bottom border with gradient for section separation */
 .borders-btm {
     border-image: linear-gradient(
       to right,
@@ -34,18 +37,24 @@ http://www.apache.org/licenses/LICENSE-2.0
     border-image-width: 0px 0px 4px 0px;
     margin: 0 15px;
   }
-  .title {
+
+/* Title styling for the user edit section */
+.title {
     font-size: 1rem;
     text-align: center;
     font-weight: 500;
     margin-top: 5px;
     margin-bottom: 10px;
   }
+
+/* User edit form container for margin adjustments */
 .editUserForm {
     margin-left: 25px;
     margin-right: 25px;
 }
 
+
+/* Styles for create and reset buttons */
 .create-btn,
 .reset-btn {
     background-color: #00B2DC;
@@ -59,16 +68,24 @@ http://www.apache.org/licenses/LICENSE-2.0
     cursor: pointer;
 }
 
+
+/* Margin adjustment for the reset button */
 .reset-btn {
     margin-right: 10px;
 }
+
+/* Padding for material card content */
 .mat-mdc-card-content {
     padding: 0 11px !important;
 }
+
  
+/* Padding for the last child of material card content */
 .mat-mdc-card-content:last-child {
     padding-bottom: 14px !important;
 }
+
+/* Remove border and shadow on focus for form controls */
 ::ng-deep.form-select:focus, .form-control:focus{
     border-color: gray !important;
     box-shadow: none !important;

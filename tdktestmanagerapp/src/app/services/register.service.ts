@@ -25,8 +25,18 @@ import { Observable, catchError, map, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class RegisterService {
+  /**
+   * Constructor for RegisterService.
+   * @param http HttpClient for HTTP requests
+   * @param config Application configuration injected as APP_CONFIG
+   */
   constructor(private http: HttpClient,@Inject('APP_CONFIG') private config: any) { }
 
+  /**
+   * Registers a new user.
+   * @param user The user data to register.
+   * @returns Observable with the registration result.
+   */
   registerUser(user: any): Observable<any> {
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

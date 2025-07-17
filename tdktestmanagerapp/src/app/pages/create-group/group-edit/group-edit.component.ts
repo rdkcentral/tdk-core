@@ -42,12 +42,20 @@ export class GroupEditComponent {
   placeholderName = 'User Group Name';
   labelName = 'Name';
   
+  /**
+   * Constructor for GroupEditComponent
+   * @param route - ActivatedRoute instance
+   * @param router - Router instance
+   * @param service - UsergroupService instance
+   * @param _snakebar - MatSnackBar for notifications
+   */
   constructor(private route: ActivatedRoute, private router: Router,
     public service: UsergroupService, private _snakebar: MatSnackBar
   ) {
     this.service.currentUrl = this.route.snapshot.url[1].path
     this.commonFormName = this.route.snapshot.url[1].path === 'group-edit' ? this.commonFormName + ' ' + 'User Group' : this.commonFormName;
   }
+
 
   /**
    * Initializes the component.
@@ -59,9 +67,10 @@ export class GroupEditComponent {
     this.record = data;
   }
 
+
   /**
    * Handles the form submission event.
-   * @param e The form submission event.
+   * @param groupName - The name of the user group to update.
    */  
   onFormSubmitted(groupName: any): void {
     let obj = {
@@ -78,7 +87,7 @@ export class GroupEditComponent {
         setTimeout(() => {
           this.router.navigate(["configure/create-group"]);
         }, 1000);
- 
+
       },
       error: (err) => {
         let errmsg = JSON.parse(err.error);
@@ -90,9 +99,10 @@ export class GroupEditComponent {
           verticalPosition: 'top'
         })
       }
- 
+
     })
   }
+
 
 
 }

@@ -17,6 +17,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/*
+ * Container box styling for login and registration forms.
+ */
 .container-box {
     background-color: #fff;
     border-radius: 10px;
@@ -26,13 +29,21 @@ http://www.apache.org/licenses/LICENSE-2.0
     width: 80%;
     max-width: 100%;
     min-height: 455px;
+
 }
 
+/*
+ * Logo image styling.
+ */
 .logo-img {
     width: 10%;
     margin-top: 8px;
+
 }
 
+/*
+ * Title text styling.
+ */
 .title {
     color: #00273F;
     font-size: 1.1rem;
@@ -44,22 +55,34 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin: 0 180px;
     padding-bottom: 5px;
 
+
 }
 
+/*
+ * Application title styling.
+ */
 .apptitle {
     color: #fff;
     font-size: 1.2rem !important;
     font-weight: 500;
     margin-left: 15px;
+
 }
 
+/*
+ * Paragraph styling inside container box.
+ */
 .container-box p {
     font-size: 0.78rem;
     line-height: 20px;
     letter-spacing: 0.3px;
     margin: 20px 0;
+
 }
 
+/*
+ * Anchor styling inside container box.
+ */
 .container-box a {
     color: #00b2dc;
     font-size: 0.78rem;
@@ -67,8 +90,12 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin: 15px 0 10px;
     font-weight: 500;
     cursor: pointer;
+
 }
 
+/*
+ * Button styling inside container box.
+ */
 .container-box button {
     background-color: #00B2DC;
     color: #fff;
@@ -79,18 +106,30 @@ http://www.apache.org/licenses/LICENSE-2.0
     font-weight: 500;
     letter-spacing: 0.5px;
     cursor: pointer;
+
 }
 
+/*
+ * Signup button styling.
+ */
 .container-box button.signup {
     background-color: transparent;
     border-color: #fff;
+
 }
 
+/*
+ * Signin button styling.
+ */
 .container-box button.signin {
     background-color: transparent;
     border-color: #fff;
+
 }
 
+/*
+ * Sign-in form styling.
+ */
 .signinform {
     background-color: #fff;
     display: flex !important;
@@ -98,66 +137,110 @@ http://www.apache.org/licenses/LICENSE-2.0
     flex-direction: column;
     padding: 0 35px;
     height: 75%;
+
 }
 
+/*
+ * Registration form styling.
+ */
 .registerform {
     margin-top: 30px !important;
     display: block !important;
     height: 70%;
     overflow-y: auto;
     padding: 10px 35px 0px 35px;
+
 }
 
+/*
+ * Form container positioning and transition.
+ */
 .form-container {
     position: absolute;
     top: 0;
     height: 100%;
     transition: all 0.6s ease-in-out;
+
 }
 input::placeholder{
     font-size: 0.78rem;
   }
+/*
+ * Form control input styling.
+ */
 .form-control {
     padding: .3rem .75rem;
     font-size: 0.78rem;
   }
-  .form-select{
+
+/*
+ * Form select input styling.
+ */
+.form-select{
     font-size: 0.78rem;
   }
-  ::ng-deep.form-select:focus, .form-control:focus{
+
+/*
+ * Focus state styling for form select and control.
+ */
+::ng-deep.form-select:focus, .form-control:focus{
     border-color: gray !important;
     box-shadow: none !important;
   }
+
+/*
+ * Sign-in panel styling.
+ */
 .sign-in {
     left: 0;
     width: 50%;
     z-index: 2;
+
 }
+/*
+ * Register button fixed positioning.
+ */
 .registerme-btn{
     position: fixed;
     right: 30px;
     bottom: 7px;
     font-size: 0.9rem;
+
 }
+/*
+ * Active state for sign-in panel.
+ */
 .container-box.active .sign-in {
     transform: translateX(100%);
+
 }
 
+/*
+ * Sign-up panel styling.
+ */
 .sign-up {
     left: 0;
     width: 50%;
     opacity: 0;
     z-index: 1;
     transition: all 0.5s;
+
 }
 
+/*
+ * Active state for sign-up panel.
+ */
 .container-box.active .sign-up {
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
     animation: move 0.6s;
+
 }
 
+/*
+ * Keyframes for panel transition animation.
+ */
 @keyframes move {
 
     0%,
@@ -171,8 +254,12 @@ input::placeholder{
         opacity: 1;
         z-index: 5;
     }
+
 }
 
+/*
+ * Toggle container styling for panel switch.
+ */
 .toggle-container {
     position: absolute;
     top: 0;
@@ -183,13 +270,21 @@ input::placeholder{
     transition: all 0.6s ease-in-out;
     border-radius: 150px 0 0 100px;
     z-index: 1000;
+
 }
 
+/*
+ * Active state for toggle container.
+ */
 .container-box.active .toggle-container {
     transform: translateX(-100%);
     border-radius: 0 150px 100px 0;
+
 }
 
+/*
+ * Toggle panel styling.
+ */
 .toggle {
     color: #fff;
     position: relative;
@@ -202,12 +297,20 @@ input::placeholder{
     background-size: 200% auto;
     background-position: 100% 0;
     transition: background-position .5s ease-in-out;
+
 }
 
+/*
+ * Active state for toggle panel.
+ */
 .container-box.active .toggle {
     transform: translateX(50%);
+
 }
 
+/*
+ * Toggle panel container styling.
+ */
 .toggle-panel {
     position: absolute;
     width: 50%;
@@ -221,61 +324,109 @@ input::placeholder{
     top: 0;
     transform: translateX(0);
     transition: all 0.6s ease-in-out;
+
 }
 
+/*
+ * Left toggle panel transition.
+ */
 .toggle-left {
     transform: translateX(-200%);
+
 }
 
+/*
+ * Heading styling for left toggle panel.
+ */
 .toggle-left h1 {
     font-size: 1.7rem;
     font-weight: 500;
+
 }
 
+/*
+ * Active state for left toggle panel.
+ */
 .container-box.active .toggle-left {
     transform: translateX(0);
+
 }
 
+/*
+ * Right toggle panel transition.
+ */
 .toggle-right {
     right: 0;
     transform: translateX(0);
+
 }
 
+/*
+ * Heading styling for right toggle panel.
+ */
 .toggle-right h1 {
     font-size: 1.7rem;
     font-weight: 500;
+
 }
 
+/*
+ * Active state for right toggle panel.
+ */
 .container-box.active .toggle-right {
     transform: translateX(200%);
+
 }
 
+/*
+ * Parent container for login/register layout.
+ */
 .parent {
     height: 88vh;
     display: flex;
     justify-content: center;
     align-items: center;
+
 }
 
+/*
+ * Header styling for login page.
+ */
 .header {
     background-color: #fff;
     background-image: linear-gradient(160deg, #fff 10%, #00b2dc);
     color: #000;
     height: 50px;
+
 }
 
+/*
+ * Sign-in button container styling.
+ */
 .signinbtn {
     text-align: center;
+
 }
+/*
+ * Eye icon alignment styling.
+ */
 .eye-align{
     display: flex;
     position: relative;
     flex-direction: column;
+
 }
+/*
+ * Login option label styling.
+ */
 .logingOptionlbl {
     font-size: 0.7rem;
+
 }
 
+/*
+ * Button active and checked state styling.
+ */
 .btn-check:checked+.btn,
 .btn.active,
 .btn.show,
@@ -283,86 +434,145 @@ input::placeholder{
 :not(.btn-check)+.btn:active {
     background-color: #00B2DC !important;
     color: #fff !important;
+
 }
 
+/*
+ * Button styling for unchecked state.
+ */
 .btn-check+.btn {
     color: #00273F !important;
+
 }
 
+/*
+ * Outline primary button styling.
+ */
 .btn-outline-primary {
     border: 1px solid #00B2DC !important;
-    ;
 }
 
+/*
+ * Success message styling for snack bar.
+ */
 ::ng-deep snack-bar-container .success-msg {
     background-color: green !important;
     color: #fff !important;
+
 }
 
+/*
+ * Registration success message container styling.
+ */
 .regsuccess {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     height: 40%;
+
 }
 
+/*
+ * Success icon styling.
+ */
 .successicon {
     font-size: 2rem;
     margin-bottom: 5px;
+
 }
 
+/*
+ * Message title styling.
+ */
 .messagetitle {
     font-size: 1.2rem;
+
 }
 
+/*
+ * Subtitle styling.
+ */
 .subtitle {
     font-size: 0.9rem;
+
 }
+/*
+ * Backend error message styling.
+ */
 .backend-error{
     font-size: 0.8rem;
     color: #dc3545;
+
 }
+/*
+ * Hide password reveal and clear icons in IE/Edge.
+ */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
     display: none;
 }
+
+/*
+ * Eye icon positioning for password visibility toggle.
+ */
 .eyeicon {
     position: absolute;
     /* top: 207px; */
     right: 50px;
     cursor: pointer;
+
 }
  
+/*
+ * Eye icon font styling.
+ */
 .eyeicon i {
     position: relative;
     font-size: 1.2em;
     top: -25px;
     transform: translateY(-50%);
+
 }
  
+/*
+ * Register eye icon positioning.
+ */
 .registerEyeicon {
     position: absolute;
     right: 28px;
     cursor: pointer;
+
 }
  
+/*
+ * Register eye icon font styling.
+ */
 .registerEyeicon i {
     position: relative;
     font-size: 1.2em;
     top: 4px;
     transform: translateY(-50%);
+
 }
  
+/*
+ * Confirm eye icon positioning.
+ */
 .confirmEyeicon {
     position: absolute;
     right: 28px;
     cursor: pointer;
+
 }
  
+/*
+ * Confirm eye icon font styling.
+ */
 .confirmEyeicon i {
     position: relative;
     font-size: 1.2em;
     top: 5px;
     transform: translateY(-50%);
+
 }

@@ -17,6 +17,16 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+/**
+ * Interface representing a user for management purposes.
+ * @property id - Unique identifier for the user
+ * @property username - Username of the user
+ * @property email - Email address of the user
+ * @property name - Full name of the user
+ * @property groupname - Group name the user belongs to
+ * @property role - Role assigned to the user
+ */
 export interface UserManageModel {
     id: number;
     username: string;
@@ -26,6 +36,11 @@ export interface UserManageModel {
     role: string;
 }
 
+/**
+ * Interface representing a test group.
+ * @property id - Unique identifier for the test group
+ * @property name - Name of the test group
+ */
 export interface testGroupModel {
     id:number,
     name:string

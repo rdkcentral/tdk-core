@@ -89,6 +89,10 @@ export class ButtonComponent implements OnInit {
    * Determines whether the delete button should be shown based on the context or URL.
    * @returns {boolean} - Returns false if in RDK Certification grid context, otherwise returns the value of deleteShowHide.
    */
+  /**
+   * Determines whether the delete button should be shown based on the context or URL.
+   * @returns {boolean} Returns false if in RDK Certification grid context, otherwise returns the value of deleteShowHide.
+   */
   shouldShowDeleteButton(): boolean {
     // Hide delete button for RDK Certification grid based on context or URL
     const parent = this.params?.context?.componentParent;
@@ -99,6 +103,7 @@ export class ButtonComponent implements OnInit {
     }
     return this.deleteShowHide;
   }
+
   params: any
   selectedRowCount: number = 0;
   lastSelectedNodeId: string = '';
@@ -111,6 +116,10 @@ export class ButtonComponent implements OnInit {
   deleteShowHide = true;
   downloadConfigShow = false;
 
+  /**
+   * ag-Grid lifecycle method for cell renderer initialization.
+   * @param params The cell renderer parameters, including custom methods and node info.
+   */
   agInit(params: customcellRenderparams): void {
     this.params = params;
     this.selectedRowCount = params.selectedRowCount();
@@ -118,8 +127,19 @@ export class ButtonComponent implements OnInit {
     this.currentNodeId = params.node.id
 
   }
+
+
+  /**
+   * Constructor for ButtonComponent.
+   * @param route ActivatedRoute for accessing route information.
+   */
   constructor(private route: ActivatedRoute) { }
 
+
+  /**
+   * Angular lifecycle hook called after component initialization.
+   * Sets up button visibility and text based on the current route.
+   */
   ngOnInit(): void {
     if (this.route.snapshot.url[0].path === 'devices') {
       this.downloadShowHide = true;
@@ -156,11 +176,24 @@ export class ButtonComponent implements OnInit {
     }
 
   }
+
   //** Condition for disable edit and delete button to own user */
+
+  /**
+   * Determines if the edit and delete buttons should be disabled for the current user selection.
+   * @returns {boolean} True if the button should be disabled, false otherwise.
+   */
   isButtonDisabled(): boolean {
     return !(this.selectedRowCount === 1 && this.lastSelectedNodeId === this.currentNodeId);
   }
 
+
+
+  /**
+   * Refreshes the cell renderer with new parameters.
+   * @param params The cell renderer parameters, including custom methods and node info.
+   * @returns {boolean} Always returns true.
+   */
   refresh(params: customcellRenderparams): boolean {
     this.selectedRowCount = params.selectedRowCount();
     this.lastSelectedNodeId = params.lastSelectedNodeId;
@@ -168,38 +201,75 @@ export class ButtonComponent implements OnInit {
     return true;
   }
 
+
+
+  /**
+   * Handles the edit button click event.
+   * @param $event The click event object.
+   */
   onEditClick($event: any) {
     if (this.params.onEditClick instanceof Function) {
       this.params.onEditClick(this.params.node.data);
     }
   }
+
+
+  /**
+   * Handles the delete button click event.
+   * @param $event The click event object.
+   */
   onDeleteClick($event: any) {
     if (this.params.onDeleteClick instanceof Function) {
       this.params.onDeleteClick(this.params.node.data);
     }
 
   }
+
+
+  /**
+   * Handles the view button click event.
+   * @param $event The click event object.
+   */
   onViewClick($event: any) {
     if (this.params.onViewClick instanceof Function) {
       this.params.onViewClick(this.params.node.data);
     }
   }
+
+
+  /**
+   * Handles the download button click event.
+   * @param $event The click event object.
+   */
   onDownloadClick($event: any) {
     if (this.params.onDownloadClick instanceof Function) {
       this.params.onDownloadClick(this.params.node.data);
     }
   }
+
+
+  /**
+   * Handles the download zip button click event.
+   * @param $event The click event object.
+   */
   onDownloadZip($event: any) {
     if (this.params.onDownloadZip instanceof Function) {
       this.params.onDownloadZip(this.params.node.data);
     }
   }
 
+
+
+  /**
+   * Handles the download MD button click event.
+   * @param data The data for the MD download (not used, uses node data).
+   */
   onDownloadMd(data: any) {
     if (this.params.onDownloadMd) {
       this.params.onDownloadMd(this.params.node.data);
     }
   }
+
 
 
 }

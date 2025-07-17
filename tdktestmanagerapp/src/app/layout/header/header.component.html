@@ -15,14 +15,17 @@ limitations under the License.
 
 <mat-toolbar class="main-heading">
   <img src="assets/logo/TDKLogoFinal.png" alt="TDK_logo" class="logo-img img-fluid" />
+  <!-- Divider: Contains navigation bar and menu -->
   <div class="divider">
     <nav class="navbar navbar-expand-lg header">
+      <!-- Container: Bootstrap container for navbar -->
       <div class="container">
         <a class="navbar-brand"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
           aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+        <!-- Displaymenu: Navigation links for main menu -->
         <div class="displaymenu" id="navbarText">
           <ul class="navbar-nav menulist">
             <li class="nav-item">
@@ -51,6 +54,7 @@ limitations under the License.
     </nav>
   </div>
 
+  <!-- Thememode: Theme toggle button area -->
   <div class="thememode">
       <button mat-icon-button class="theme-btn" (click)="toggleTheme()">
         @if (currentTheme ==='DARK') {

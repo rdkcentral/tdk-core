@@ -32,10 +32,20 @@ import { filter } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   title = 'TDKTestManagerApp';
   isBrowser: boolean;
+  /**
+   * Constructor for AppComponent.
+   * @param platformId The platform ID injected by Angular for platform checks.
+   * @param router The Angular Router instance for navigation events.
+   */
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
+
+  /**
+   * Angular lifecycle hook that is called after component initialization.
+   * Subscribes to router events and scrolls to top on navigation if in browser.
+   */
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.router.events.pipe(

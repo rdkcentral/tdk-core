@@ -13,20 +13,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for the user edit page -->
 <div class="container-fluid">
+    <!-- Row for the page title and border -->
     <div class="row borders-btm">
+        <!-- Empty column for spacing -->
         <div class="col"></div>
+        <!-- Column for the page title -->
         <div class="col">
             <h1 class="title">Update User</h1>
         </div>
+        <!-- Empty column for spacing -->
         <div class="col">
         </div>
     </div>
+    <!-- Row for the user form -->
     <div class="row">
+        <!-- Column for the user form -->
         <div class="col-md-12">
                     <form [formGroup]="editUserForm" (ngSubmit)="userEditSubmit()" class="editUserForm mt-3">
+                        <!-- Row for form fields -->
                         <div class="row">
+                            <!-- Column for left-side form fields -->
                             <div class="col">
+                                <!-- Row for username input -->
                                 <div class="row mb-3">
                                     <label for="username" class="col-md-3 col-form-label">User Name <span
                                         style="color:red; margin-left: 0.75em;">*</span></label>
@@ -43,6 +53,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Row for user email input -->
                                 <div class="row mb-3">
                                     <label for="useremail" class="col-md-3 col-form-label">Email </label>
                                     <div class="col-md-8">
@@ -59,6 +70,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Row for display name input -->
                                 <div class="row mb-3">
                                     <label for="userDisplayName" class="col-md-3 col-form-label">Display Name<span
                                         style="color:red; margin-left: 0.75em;">*</span>
@@ -76,6 +88,7 @@ limitations under the License.
                                     </div>
                                 </div>
                             </div>
+                            <!-- Column for right-side form fields -->
                             <div class="col">
                                 <!-- Hiding the usergroup column now, usergroup based data access won't be
                                  there in the first release in 2025-->
@@ -98,6 +111,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div> -->
+                                <!-- Row for role select -->
                                 <div class="row mb-3">
                                     <label for="rolename" class="col-md-3 offset-1 col-form-label">Role <span
                                         style="color:red; margin-left: 0.75em;">*</span></label>
@@ -117,6 +131,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Row for password input -->
                                 <div class="row mb-3">
                                     <label for="userpassword" class="col-md-3 offset-1 col-form-label">Password</label>
                                     <div class="col-md-8">
@@ -135,7 +150,9 @@ limitations under the License.
                                 </div>
                             </div>
                         </div>
+                        <!-- Row for form action buttons -->
                         <div class="row">
+                            <!-- Column for form action buttons -->
                             <div class="mt-2 text-end">
                                 <button class="reset-btn" (click)="goBack()">Back</button>
                                 <button type="submit" class="create-btn">Update</button>

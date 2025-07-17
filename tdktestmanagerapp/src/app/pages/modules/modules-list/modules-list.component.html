@@ -12,10 +12,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
+<!-- Main container for module list page -->
 <div class="container-fluid">
+    <!-- Row for header and controls -->
     <div class="row mt-2">
+        <!-- Main column for title and actions -->
         <div class="col-md-11">
             <h1 class="title">{{categoryName}} Module List</h1>
+            <!-- Button group for navigation and actions -->
             <div class="btn-grp text-end">
                 <button class="back-btn" (click)="goBack()" matTooltip="Back"><i class="bi bi-arrow-return-left icon-size"></i></button>
                 <button type="button" class="create-btn dwnld-btn" (click)="dowloadAllModule()" matTooltip=" Download all the {{categoryName}} Module Details">
@@ -30,10 +35,13 @@ limitations under the License.
         </div>
     </div>
     
+    <!-- Row for loader indicator -->
     <div class="row loader-row" *ngIf="showLoader">
         <app-loader></app-loader>
     </div>
+    <!-- Row for table section -->
     <div class="row table-sec mt-2">
+        <!-- Container for ag-grid table -->
         <div class="ag-table mb-3" style="display: flex; justify-content: center;">
             <ag-grid-angular style="width: 100%; height: 446px;" [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowData]="rowData"
@@ -46,15 +54,21 @@ limitations under the License.
     </div>
     <!-- Modal Start-->
  <div class="modal fade" #moduleListModal id="moduleListModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="moduleListModalLabel" aria-hidden="true">
+    <!-- Modal dialog container -->
     <div class="modal-dialog custom-modal">
+      <!-- Modal content container -->
       <div class="modal-content">
         <form [formGroup]="uploadXMLForm" (ngSubmit)="uploadXMLSubmit()">
+        <!-- Modal header section -->
         <div class="modal-header modaltitle">
           <h1 class="modal-title custom-title" id="moduleListModalLabel">Upload Module XML File</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <!-- Modal body section -->
         <div class="modal-body">
+            <!-- Container for upload form -->
             <div class="container mt-4">
+                <!-- Row for file input -->
                 <div class="row mb-3"> 
                     <label for="uploadfile" class="col-md-4  col-form-label">Select the module XML file<span style="color:red; margin-left: 0.75em;">*</span></label>
                         <div class="col-md-8">
@@ -67,6 +81,7 @@ limitations under the License.
                 </div>
             </div>
         </div>
+        <!-- Modal footer section -->
         <div class="modal-footer">
           <button type="button" class="download-btn modal-btns" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="download-btn modal-btns">Upload</button>

@@ -40,6 +40,10 @@ import { ModulesService } from '../../../services/modules.service';
 import { MaterialModule } from '../../../material/material.module';
 import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
+/**
+ * ModulesListComponent is responsible for displaying and managing the list of modules.
+ * It handles table rendering, navigation, file upload, and CRUD operations for modules.
+ */
 @Component({
   selector: 'app-modules-list',
   standalone: true,
@@ -121,6 +125,16 @@ export class ModulesListComponent {
   preferedCategory!:string;
   showLoader = false;
   
+  /**
+   * Constructor for ModulesListComponent.
+   * @param router Router instance for navigation
+   * @param authservice AuthService instance for authentication and config values
+   * @param fb FormBuilder instance for reactive forms
+   * @param _snakebar MatSnackBar instance for notifications
+   * @param dialog MatDialog instance for dialogs
+   * @param moduleservice ModulesService instance for module operations
+   * @param renderer Renderer2 instance for DOM manipulation
+   */
   constructor(private router: Router, private authservice: AuthService, private fb:FormBuilder,
     private _snakebar: MatSnackBar, public dialog:MatDialog, private moduleservice:ModulesService,private renderer: Renderer2
   ) {
@@ -128,9 +142,12 @@ export class ModulesListComponent {
     this.defaultCategory = this.loggedInUser.userCategory;
     this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
    }
+
   /**
-   * Initializes the component.
-  */
+   * Initializes the component and sets up the initial values.
+   * No parameters.
+   * No return value.
+   */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
     if(this.configureName === 'RDKB'){
@@ -143,8 +160,11 @@ export class ModulesListComponent {
       uploadXml: [null, Validators.required]
     })   
   }
- /**
-   * Finds all devices by category.
+ 
+  /**
+   * Finds all modules by category.
+   * No parameters.
+   * No return value.
    */
  findallbyCategory():void{
   this.showLoader = true;
@@ -155,6 +175,7 @@ export class ModulesListComponent {
     }
   })
 }
+  
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
@@ -162,48 +183,53 @@ export class ModulesListComponent {
   onGridReady(params: GridReadyEvent<any>):void{
     this.gridApi = params.api;
   }
-    /**
+  
+  /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-    onRowSelected(event: RowSelectedEvent) :void{
-      this.isRowSelected = event.node.isSelected();
-      this.rowIndex = event.rowIndex
-    }
+  onRowSelected(event: RowSelectedEvent) :void{
+    this.isRowSelected = event.node.isSelected();
+    this.rowIndex = event.rowIndex
+  }
   
   /**
-     * Event handler for when the selection is changed.
-     * @param event The selection changed event.
-  */
+   * Event handler for when the selection is changed.
+   * @param event The selection changed event.
+   */
   onSelectionChanged(event: SelectionChangedEvent):void{
-      this.selectedRowCount = event.api.getSelectedNodes().length;
-      const selectedNodes = event.api.getSelectedNodes();
-      this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
-      this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
-      if (this.gridApi) {
-        this.gridApi.refreshCells({ force: true })
-      }
+    this.selectedRowCount = event.api.getSelectedNodes().length;
+    const selectedNodes = event.api.getSelectedNodes();
+    this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
+    this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
+    if (this.gridApi) {
+      this.gridApi.refreshCells({ force: true })
     }
-
+  }
+  
   /**
-   * Creates a new box manufacturer.
+   * Navigates to the create module page.
+   * No parameters.
+   * No return value.
    */
   createModule():void{
     this.router.navigate(['/configure/modules-create']);
   }
   
-    /**
-   * Edits a user.
-   * @param user The user to edit.
-   * @returns The edited user.
+  /**
+   * Edits a module.
+   * @param modules The module object to edit.
+   * No return value.
    */
   userEdit(modules: any):void{
-      localStorage.setItem('modules', JSON.stringify(modules))
-      this.router.navigate(['configure/modules-edit']);
+    localStorage.setItem('modules', JSON.stringify(modules))
+    this.router.navigate(['configure/modules-edit']);
   }
+  
   /**
-   * Deletes a record.
+   * Deletes a module record.
    * @param data The data of the record to delete.
+   * No return value.
    */
   delete(data: any) :void{
     if (confirm("Are you sure to delete ?")) {
@@ -232,7 +258,12 @@ export class ModulesListComponent {
     }
 
   }
-
+  
+  /**
+   * Downloads all modules as XML files based on the selected device category.
+   * No parameters.
+   * No return value.
+   */
   dowloadAllModule():void{
     if(this.rowData.length > 0){
       this.moduleservice.downloadModuleByCategory(this.selectedDeviceCategory);
@@ -245,9 +276,11 @@ export class ModulesListComponent {
       })
     }
   }
-   /**
+   
+  /**
    * Handles the file change event when a file is selected for upload.
-   * @param event - The file change event object.
+   * @param event The file change event object.
+   * No return value.
    */
    onFileChange(event:any):void{
     this.uploadFileName = event.target.files[0].name;
@@ -263,6 +296,12 @@ export class ModulesListComponent {
       }
     }
   }
+  
+  /**
+   * Submits the XML upload form.
+   * No parameters.
+   * No return value.
+   */
   uploadXMLSubmit():void{
     this.uploadFormSubmitted = true;
     if(this.uploadXMLForm.invalid){
@@ -297,9 +336,12 @@ export class ModulesListComponent {
       }
      }
   }
+  
   /**
-   * download as xml file based on module name.
-   */  
+   * Downloads a module as an XML file based on module name.
+   * @param params The parameters containing the module name.
+   * No return value.
+   */
   downloadModuleXML(params:any):void{
     if(params.moduleName){
       this.moduleservice.downloadXMLModule(params.moduleName).subscribe(blob => {
@@ -314,11 +356,12 @@ export class ModulesListComponent {
       });
     }
   }
+  
   /**
    * Creates a function and stores the user data in the local storage.
    * Navigates to the '/configure/function-list' route.
-   * 
-   * @param data - The data to be stored in the local storage.
+   * @param data The data to be stored in the local storage.
+   * No return value.
    */
   createFunction(data:any):void{
     localStorage.setItem('modules', JSON.stringify(data));
@@ -327,22 +370,29 @@ export class ModulesListComponent {
 
   /**
    * Creates a parameter and navigates to the parameter list page.
-   * @param data - The data to be stored in the local storage.
+   * @param data The data to be stored in the local storage.
+   * No return value.
    */
   createParameter(data:any):void{
     localStorage.setItem('user', JSON.stringify(data));
     this.router.navigate(['/configure/parameter-list']);
   }
+  
   /**
-   * Closes the modal  by click on button .
+   * Closes the modal by clicking on the button.
+   * No parameters.
+   * No return value.
    */
   close():void{
     (this.moduleListModal?.nativeElement as HTMLElement).style.display = 'none';
     this.renderer.removeStyle(document.body, 'overflow');
     this.renderer.removeStyle(document.body, 'padding-right');
   }
+  
   /**
    * Navigates back to the previous page.
+   * No parameters.
+   * No return value.
    */
   goBack() :void{
     this.authservice.selectedConfigVal = 'RDKV';

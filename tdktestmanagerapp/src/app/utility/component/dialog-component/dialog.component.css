@@ -17,10 +17,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/**
+ * Sets the default font family for the body and all elements except .material-icons.
+ */
+
 body, *:not(.material-icons) {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 
 }
+/**
+ * Sets the font family for all heading elements inside .mat-typography.
+ */
+
 .mat-typography h1, 
 .mat-typography h2, 
 .mat-typography h3, 
@@ -30,24 +38,48 @@ body, *:not(.material-icons) {
 font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
 
+/**
+ * Centers text for elements with the divCenter class.
+ */
+
 .divCenter {
   text-align: center;
 }
+/**
+ * Styles for the custom modalbox dialog container with viewdata class (ng-deep).
+ */
+
 ::ng-deep.custom-modalbox .mat-mdc-dialog-container.viewdata {
   line-height: 2.2 !important;
 }
+
+/**
+ * Styles for the user form container.
+ */
 
 .userform{
   margin-left: 25px;
   margin-right: 25px;
 }
 
+/**
+ * Styles for the reset button.
+ */
+
 .reset-btn {
   margin-right: 10px;
 }
+/**
+ * Styles for the thunder class (bordered element).
+ */
+
 .thunder{
   border: 1px solid;
 }
+/**
+ * Styles for focused form select and form control elements (ng-deep).
+ */
+
 ::ng-deep.form-select:focus, .form-control:focus{
   border-color: gray !important;
   box-shadow: none !important;

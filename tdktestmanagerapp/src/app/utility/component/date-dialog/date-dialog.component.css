@@ -17,10 +17,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/*
+ * Sets the default font family for the body and all elements except material icons.
+ */
+
 body,
 *:not(.material-icons) {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+/*
+ * Ensures all heading tags in .mat-typography use the Roboto font.
+ */
+
 .mat-typography h1,
 .mat-typography h2,
 .mat-typography h3,
@@ -29,6 +37,10 @@ body,
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
+/*
+ * Styles for the title text in the date dialog.
+ */
+
 .title {
   font-size: 1rem !important;
   text-align: center;
@@ -46,10 +58,18 @@ body,
   border-image-width: 0px 0px 4px 0px;
   margin: 0;
 }
+/*
+ * Styles for the date range input field.
+ */
+
 .daterange{
     border: 1px solid gray;
     font-size: 0.8rem;
 }
+/*
+ * Styles for all main action buttons in the dialog.
+ */
+
 .all-btn {
   background-color: #00b2dc;
   color: #fff;
@@ -63,19 +83,35 @@ body,
   margin-top: 15px;
   margin-left: 15px;
 }
+/*
+ * Styles for the button input row.
+ */
+
 .btn-input{
   display: flex;
   align-items: baseline;
   margin-top: -15px;
 }
+/*
+ * Styles for the disabled state of action buttons.
+ */
+
 .all-btn:disabled{
   background-color: gray;
 }
+/*
+ * Styles for the close section container.
+ */
+
 .close-sec{
   float: right;
   margin-right: 30px;
   margin-top: 215px;
 }
+/*
+ * Styles for the close button.
+ */
+
 .close-btn{
   width: 100px;
 }

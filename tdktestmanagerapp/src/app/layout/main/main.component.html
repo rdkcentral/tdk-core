@@ -12,12 +12,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<!-- Main layout wrapper: applies current theme -->
 <div [ngClass]="currentTheme" >
   <app-header></app-header>
+  <!-- Main container: holds sidebar and main content -->
   <div class="main-container">
+    <!-- Sidebar navigation area -->
     <div class="side-nav">
       <app-sidebar></app-sidebar>
     </div>
+    <!-- Main content area -->
     <div class="main"></div>
   </div>
   <app-footer></app-footer>

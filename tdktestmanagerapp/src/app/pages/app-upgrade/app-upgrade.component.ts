@@ -36,9 +36,15 @@ export class AppUpgradeComponent {
   appSubmitted = false;
   appForm!: FormGroup;
 
+  /**
+   * Constructor for AppUpgradeComponent
+   * @param router - Router instance
+   * @param _snakebar - MatSnackBar for notifications
+   */
   constructor(private router: Router,
     private _snakebar: MatSnackBar
   ) { }
+
 
   /**
    * Initializes the component.
@@ -52,6 +58,7 @@ export class AppUpgradeComponent {
     })
   }
 
+
   /**
    * Navigates back to the previous page.
    */
@@ -59,6 +66,10 @@ export class AppUpgradeComponent {
     this.router.navigate(["/configure"]);
   }
 
+
+  /**
+   * Handles app upgrade form submission
+   */
   onAppSubmit(){
     this.appSubmitted = true;
     if(this.appForm.invalid){
@@ -68,4 +79,5 @@ export class AppUpgradeComponent {
     }
 
   }
+
 }

@@ -12,15 +12,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<!-- Main container for execution page -->
 <div class="container-fluid bg-container">
+    <!-- Main row for layout -->
     <div class="row ">
+        <!-- Sidebar column -->
         <div class="col-md-2 col-sidebar">
+            <!-- Sidebar navigation -->
             <div class="sidebar">
+                <!-- Execution dropdown section -->
                 <div class="execution-drop">
                     <button type="button" class="download-btn  execution-select" (click)="openDialog('normalExecutionClick')" >
                         {{executeName}}
                     </button>
                 </div>
+                <!-- Accordion for device status -->
                 <div class="accordion accor-margin" id="accordionExample">
                     <div class="row accord-row">
                       <div class="accordion-item device-section" *ngFor="let parent of filteredDeviceStausArray">
@@ -100,7 +106,9 @@ limitations under the License.
                 </div>
             </div>
         </div>
+        <!-- Main content column -->
         <div class="col-md-10">
+          <!-- Row for header and controls -->
           <div class="row borders-btm">
             <div class="col">
                 <div class="row ">
@@ -120,7 +128,9 @@ limitations under the License.
             <div class="col">
             </div>
         </div>
+            <!-- Example header for tabs -->
             <div class="col-md-12 example-header" *ngIf="tabName !=='Execution Schedules'">
+              <!-- Filter by section -->
               <div class="filterby">
                 <label for="filterDropdown" class="filter-label">Filter By:</label>
                 <div class="filter-drop-down">
@@ -133,6 +143,7 @@ limitations under the License.
                   </select>
                 </div>
               </div>
+              <!-- Search bar section -->
               <div class="search-bar" *ngIf="selectedCategory === 'Device' || selectedCategory === 'Scripts/Testsuite' || selectedCategory === 'ExecutionName'">
                 <label *ngIf="selectedCategory === 'ExecutionName'" class="search">Enter Execution Name</label>
                 <label *ngIf="selectedCategory === 'Scripts/Testsuite'" class="search">Enter Scripts/Testsuite</label>
@@ -144,7 +155,7 @@ limitations under the License.
                 </div>
               </div>
 
-      
+              <!-- Search user section -->
               <div class="search-user" *ngIf="selectedCategory === 'User'">
                 <div class="userby">
                   <label for="dynamicDropdown" class="userbylabel">Select User Name</label>
@@ -157,7 +168,7 @@ limitations under the License.
                 </div>
               </div>
             </div>
-            
+            <!-- Container for tabs and grids -->
             <div class="container table-container mt-3">
                 <!-- TABS CONTAINER -->
                 <mat-tab-group animationDuration="0ms" mat-align-tabs="start" (selectedTabChange)="onTabClick($event)">

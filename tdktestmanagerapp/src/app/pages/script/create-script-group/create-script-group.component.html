@@ -13,25 +13,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Container for the entire create script group page -->
 <div class="container-fluid">
+    <!-- Row for the top border and title section -->
     <div class="row borders-btm">
+        <!-- Left column (empty, for spacing) -->
         <div class="col">
         </div>
+        <!-- Center column for the page title -->
         <div class="col">
             <h1 class="title"><h1 class="title">Create {{onlyVideoCategoryName?onlyVideoCategoryName:categoryName}} TestSuite</h1></h1>
         </div>
+        <!-- Right column (empty, for spacing) -->
         <div class="col">
         </div>
     </div>
+    <!-- Row for the main form section -->
     <div class="row mt-1">
+        <!-- Column for the form -->
         <div class="col-md-12">
                 <form [formGroup]="testSuiteFrom" (ngSubmit)="testSuiteSubmit()">
+                    <!-- Row for form fields and script selection -->
                     <div class="row form-row mt 2">
+                        <!-- Left column for suite name input -->
                         <div class="col-md-6">
+                            <!-- Row for suite name label and input -->
                             <div class="row mb-1">
+                                <!-- Column for suite name label -->
                                 <div class="col-md-2">
                                     <label for="suitename" class="col-form-label name-lable">Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                                 </div>
+                                <!-- Column for suite name input and error -->
                                 <div class="col-md-10">
                                     <input type="text" class="form-control input-desc" id="suitename" formControlName="testSuiteName" autocomplete="off" placeholder="Enter testsuite name">
                                     <div *ngIf="testSuiteFormSubmitted && testSuiteFrom.controls['testSuiteName']?.errors" class="text-danger">
@@ -40,11 +52,15 @@ limitations under the License.
                                 </div>
                             </div>
                         </div>
+                        <!-- Right column for description input -->
                         <div class="col-md-6">
+                            <!-- Row for description label and input -->
                             <div class="row mb-1">
+                                <!-- Column for description label -->
                                 <div class="col-md-2">
                                     <label for="desc" class="col-form-label">Description<span style="color:red; margin-left: 0.75em;">*</span></label>
                                 </div>
+                                <!-- Column for description input and error -->
                                 <div class="col-md-10">
                                     <input type="text" class="form-control input-desc" id="desc" formControlName="description" autocomplete="off" placeholder="Enter description" />
                                     <div *ngIf="testSuiteFormSubmitted && testSuiteFrom.controls['testSuiteName']?.errors" class="text-danger">
@@ -54,8 +70,11 @@ limitations under the License.
                                  
                             </div>
                         </div>
+                        <!-- Row for script selection and sorting -->
                         <div class="row">
+                            <!-- Label for all scripts -->
                             <span class="col-form-label">All Scripts</span>
+                            <!-- Column for left script sorting and search -->
                             <div class="col sort-search">
                                   <button type="button" (click)="toggleSortOrder()" class="sort-button">
                                     <i class="bi sort-icon" [ngClass]="sortOrder === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'"></i>
@@ -71,7 +90,9 @@ limitations under the License.
                                   />
                                 </div>
                             </div>
+                            <!-- Column for right script sorting -->
                             <div class="col">
+                                <!-- Column for right script sorting and info -->
                                 <div class="col sort-search">
                                     <button type="button" (click)="toggleSortRightSide()" class="sort-button">
                                       <i class="bi sort-icon" [ngClass]="sortOrderRight === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'"></i>
@@ -82,16 +103,22 @@ limitations under the License.
                                 </div>
                             </div>
                         </div>
+                        <!-- Row for script lists and move buttons -->
                         <div class="row">
+                            <!-- Column for left script list -->
                             <div class="col left-sec">
+                                <!-- Container for left script name list -->
                                 <div class="name-list">
+                                    <!-- Message for no data in left list -->
                                     <div *ngIf="filteredContainer1.length === 0 && !isLoadingScripts" class="nodata">
                                         <span class="drag-nodata">No data found...</span>
                                     </div>
+                                    <!-- Loader for left script list -->
                                     <div *ngIf="isLoadingScripts" class="nodata d-flex justify-content-center align-items-center"
                                         style="min-height: 100px;">
                                         <app-loader></app-loader>
                                     </div>
+                                    <!-- List box for left scripts -->
                                     <div class="list-box">
                                         <ul>
                                             <li *ngFor="let scripts of filteredLeftList; let i = index"
@@ -105,6 +132,7 @@ limitations under the License.
                                             </li>
                                         </ul>
                                     </div>
+                                    <!-- Move buttons for left list -->
                                     <div class="move-btns">
                                         <button type="button"
                                             (click)="moveToRight()"
@@ -127,8 +155,11 @@ limitations under the License.
 
                             </div>
                             
+                            <!-- Column for right script list -->
                             <div class="col right-sec">
+                                <!-- Container for right script name list -->
                                 <div class="ritename-list">
+                                    <!-- List box for right scripts -->
                                     <div class="list-box">
                                         <ul>
                                             <li *ngFor=" let scripts of container2ScriptArr; let i = index"
@@ -141,6 +172,7 @@ limitations under the License.
                                             </li>
                                         </ul>
                                     </div>
+                                    <!-- Move buttons for right list -->
                                     <div class="move-ritebtns">
                                         <button type="button"
                                             (click)="moveToUp()"
@@ -160,13 +192,16 @@ limitations under the License.
                                         </button>
                                     </div>
                                 </div>
+                                <!-- Error message for empty right list -->
                                 <div *ngIf="(testSuiteFrom.get('container2Scripts')?.hasError('container2Empty') && (testSuiteFrom.get('container2Scripts')?.touched || testSuiteFormSubmitted))">
                                     <small class="script-err">Add at least one script.</small>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- Row for form action buttons -->
                     <div class="row form-row">
+                        <!-- Column for form action buttons -->
                         <div class="mt-2 mb-3 text-end">
                             <button class="reset-btn" (click)="goBack()">Back</button>
                             <button class="reset-btn" (click)="reset()">Reset</button>

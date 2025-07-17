@@ -115,6 +115,18 @@ export class DeviceCreateComponent implements OnInit {
   preferedCategory!: string;
 
 
+  /**
+   * Constructor for DeviceCreateComponent.
+   * @param router - Angular Router for navigation
+   * @param fb - FormBuilder for reactive forms
+   * @param authservice - AuthService for authentication
+   * @param _snakebar - MatSnackBar for notifications
+   * @param oemService - OemService for OEM operations
+   * @param service - DeviceService for device operations
+   * @param socService - SocService for SOC operations
+   * @param deviceTypeService - DevicetypeService for device type operations
+   * @param dialog - MatDialog for dialogs
+   */
   constructor( private router: Router,private fb:FormBuilder,private authservice: AuthService,
     private _snakebar :MatSnackBar, private oemService:OemService, 
     private service:DeviceService, private socService:SocService, private deviceTypeService:DevicetypeService,
@@ -126,8 +138,13 @@ export class DeviceCreateComponent implements OnInit {
     }
     this.preferedCategory = localStorage.getItem('preferedCategory') || '';
   }
+
   /**
    * The method to initialize the component.
+   */
+  /**
+   * Angular lifecycle hook - called on component initialization.
+   * No parameters.
    */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
@@ -298,13 +315,23 @@ export class DeviceCreateComponent implements OnInit {
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
+  /**
+   * Event handler for when the grid is ready.
+   * @param params - The grid ready event parameters.
+   */
   onGridReady(params: any): void {
+
     this.gridApi = params.api;
   }
   /**
    * list of all boxtype.
    */
+  /**
+   * Gets all device types by selected category.
+   * No parameters.
+   */
   getAlldeviceType(): void {
+
     this.deviceTypeService.getfindallbycategory(this.selectedDeviceCategory).subscribe(res=>{
       this.allDeviceType = res.data
     })
@@ -312,7 +339,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * list of all boxmanufacturer.
    */
+  /**
+   * Gets all OEMs by selected category.
+   * No parameters.
+   */
   getAllOem(): void {
+
     this.oemService.getOemByList(this.selectedDeviceCategory).subscribe(res=>{
         this.alloem = res.data;
     })
@@ -320,7 +352,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * list of all socVendors.
    */
+  /**
+   * Gets all SOC vendors by selected category.
+   * No parameters.
+   */
   getAllsoc(): void {
+
     this.socService.getSoc(this.selectedDeviceCategory).subscribe(res=>{
       this.allsoc = res.data;
     })
@@ -328,7 +365,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * This methos is change the value of stbname inputfield
    */
+  /**
+   * Handles value change for stbname input field.
+   * @param event - Input event
+   */
   valuechange(event: any): void {
+
     this.visibilityConfigFile();
     this.stbNameChange = event.target.value;
     if (this.isThunderchecked) {
@@ -345,7 +387,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * This methos is change the devicetype
    */
+  /**
+   * Handles device type change event.
+   * @param event - Input event
+   */
   devicetypeChange(event: any): void {
+
     this.visibleDeviceconfigFile = false;
     let value = event.target.value;
     this.deviceTypeValue = value;
@@ -354,7 +401,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * Isthunder is checked or unchecked
    */
+  /**
+   * Handles Thunder checkbox change event.
+   * @param event - Input event
+   */
   thunderChecked(event: any): void {
+
     this.isThunderPresent = event.target.checked;
     this.isThunderchecked = event.target.checked;
     if (this.isThunderchecked) {
@@ -374,7 +426,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * Show the Config file or device.config file beased on stbname and boxtype
    */
+  /**
+   * Shows the config file or device.config file based on stbname and boxtype.
+   * No parameters.
+   */
   visibilityConfigFile(): void {
+
     let boxNameConfig = this.deviceForm.value.devicename;
     let deviceTypeConfig = this.deviceForm.value.devicetype;
     this.service.downloadDeviceConfigFile(boxNameConfig,deviceTypeConfig,this.isThunderPresent)
@@ -412,7 +469,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * Reading the configfile
    */
+  /**
+   * Reads the config file content.
+   * @param file - Blob file to read
+   */
   readFileContent(file: Blob): void {
+
     let boxNameConfig = this.deviceForm.value.devicename;
     const reader = new FileReader();
     reader.onload = () => {
@@ -431,7 +493,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * Reading the device configfile
    */
+  /**
+   * Reads the device config file content.
+   * @param file - Blob file to read
+   */
   readDeviceFileContent(file: Blob): void {
+
     const reader = new FileReader();
     reader.onload = () => {
       let htmlContent = reader.result
@@ -452,7 +519,13 @@ export class DeviceCreateComponent implements OnInit {
    * @param content - The content to be formatted.
    * @returns The formatted content.
    */
+  /**
+   * Formats the content by replacing all occurrences of '#' with '<br># '.
+   * @param content - The content to be formatted
+   * @returns The formatted content
+   */
   formatContent(content: any) {
+
     return `<p>${content.replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/####/g, '#####')
@@ -462,7 +535,12 @@ export class DeviceCreateComponent implements OnInit {
     </p>`;
   }
 
+  /**
+   * Handles config device ports checkbox change.
+   * @param event - Input event
+   */
   isConfigDevicePorts(event: any): void {
+
     if (event.target.checked) {
       this.showConfigPort = true;
       this.configDevicePorts = true;
@@ -471,7 +549,12 @@ export class DeviceCreateComponent implements OnInit {
       this.configDevicePorts = false;
     }
   }
+  /**
+   * Handles config device ports B checkbox change.
+   * @param event - Input event
+   */
   isCheckedConfigB(event: any): void {
+
     if (event.target.checked) {
       this.showConfigPortB = true;
       this.configuredevicePortB = true;
@@ -484,30 +567,55 @@ export class DeviceCreateComponent implements OnInit {
    * Lifecycle hook that is called when the component is destroyed.
    * It is used to perform any necessary cleanup logic before the component is removed from the DOM.
    */
+  /**
+   * Angular lifecycle hook - called when component is destroyed.
+   * No parameters.
+   */
   ngOnDestroy(): void {
+
     this.editor.destroy();
     this.editor2.destroy();
   }
   /**
    * Go back to the previous page.
    */
+  /**
+   * Navigates back to the previous page.
+   * No parameters.
+   */
   goBack(): void {
+
     localStorage.removeItem('deviceCategory');
     this.router.navigate(["/devices"]);
   }
   /**
    * Reset the device form.
    */
+  /**
+   * Resets the device form.
+   * No parameters.
+   */
   reset(): void {
+
     this.deviceForm.reset();
   }
+  /**
+   * Resets the RDKB form.
+   * No parameters.
+   */
   resetFormB(): void {
+
     this.rdkBForm.reset();
   }
   /**
    * Submit the device form of RDKV category.
    */
+  /**
+   * Submits the device form of RDKV category.
+   * No parameters.
+   */
   deviceVSubmit(): void {
+
     this.deviceFormSubmitted = true;
     if (this.deviceForm.invalid) {
       return;
@@ -556,7 +664,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * Submit the device form of RDKB category.
    */
+  /**
+   * Submits the device form of RDKB category.
+   * No parameters.
+   */
   deviceBSubmit(): void {
+
     this.rdkbFormSubmitted = true;
     if (this.rdkBForm.invalid) {
       return;
@@ -602,7 +715,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * Edit icon will show/hide in editor modal
    */
+  /**
+   * Toggles the edit icon in editor modal.
+   * No parameters.
+   */
   toggleIsEdit(): void {
+
     this.isEditingFile = !this.isEditingFile;
     if (this.isEditingFile) {
       this.uploadDeviceConfigForm.get('editorFilename')?.enable();
@@ -611,7 +729,12 @@ export class DeviceCreateComponent implements OnInit {
     }
   }
 
+  /**
+   * Toggles the file name in the upload device config form.
+   * No parameters.
+   */
   toggleFileName(): void {
+
     const boxNameConfig = this.deviceForm.value.devicename;
     const deviceTypeConfig = this.deviceForm.value.devicetype;
     const currentName =
@@ -627,7 +750,12 @@ export class DeviceCreateComponent implements OnInit {
     });
   }
 
+  /**
+   * Toggles the file name in the upload config form dialog.
+   * No parameters.
+   */
   toggleFileNameDialog(): void {
+
     const boxNameConfig = this.deviceForm.value.devicename;
     const deviceTypeConfig = this.deviceForm.value.devicetype;
     const currentName = this.uploadConfigForm.get('editorFilename')?.value;
@@ -642,7 +770,12 @@ export class DeviceCreateComponent implements OnInit {
     });
   }
 
+  /**
+   * Handles change event for existing config file input.
+   * @param event - Input event
+   */
   onExistConfigChange(event: Event): void {
+
     let fileInput = event.target as HTMLInputElement;
     if (fileInput && fileInput.files) {
       const file = fileInput.files[0];
@@ -653,7 +786,12 @@ export class DeviceCreateComponent implements OnInit {
       this.uploadConfigForm.get('uploadFileModal')?.setValue('');
     }
   }
+  /**
+   * Uploads the content of the existing config file.
+   * @param file - File to upload
+   */
   uploadExistConfigContent(file: File): void {
+
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {
       const content = e.target?.result as string;
@@ -675,7 +813,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * The method is upload the configfile of editor modal
    */
+  /**
+   * Uploads the config file from editor modal.
+   * No parameters.
+   */
   configFileUpload(): void {
+
     this.existConfigSubmitted = true;
     if (this.uploadConfigForm.invalid) {
       return;
@@ -721,7 +864,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * The method is upload the configfile of fileupload
    */
+  /**
+   * Handles change event for modal file input.
+   * @param event - Input event
+   */
   onModalFileChange(event: Event): void {
+
     let fileInput = event.target as HTMLInputElement;
     if (fileInput && fileInput.files && fileInput.files.length > 0) {
       const file = fileInput.files[0];
@@ -735,7 +883,12 @@ export class DeviceCreateComponent implements OnInit {
     }
   }
 
+  /**
+   * Uploads and reads the content of the file for device config.
+   * @param file - File to upload and read
+   */
   uploadReadFileContent(file: File): void {
+
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {
       const content = e.target?.result as string;
@@ -756,7 +909,13 @@ export class DeviceCreateComponent implements OnInit {
     reader.readAsText(file);
   }
 
+  /**
+   * Replaces HTML tags in content with newlines.
+   * @param content - Content string to process
+   * @returns Processed content string
+   */
   replaceTags(content: string): string {
+
     const replacepara = content.replace(/<\/?p>/g, '\n');
     const replacebreakes = replacepara.replace(/<br\s*\/?>/g, '\n');
     return replacebreakes.trim();
@@ -764,7 +923,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * The method is upload the default device configfile of editor modal
    */
+  /**
+   * Uploads the default device config file from editor modal.
+   * No parameters.
+   */
   configDeviceFileUpload(): void {
+
     this.submitted = true;
     if (this.uploadDeviceConfigForm.invalid) {
       return;
@@ -814,7 +978,13 @@ export class DeviceCreateComponent implements OnInit {
   }
 
   // Helper function for upload and response handling
+  /**
+   * Helper function for upload and response handling.
+   * @param file - File to upload
+   * @param modalType - Type of modal ('dialog' or 'newDevice')
+   */
   private uploadConfigFileAndHandleResponse(file: File, modalType: 'dialog' | 'newDevice'): void {
+
   this.service.uploadConfigFile(file, this.isThunderPresent).subscribe({
     next: (res) => {
       this._snakebar.open(res.message, '', {
@@ -856,7 +1026,12 @@ export class DeviceCreateComponent implements OnInit {
    * Opens the upload file section and sets the necessary flags and values.
    * @param value - The value to set the uploadCreateHeading property to.
    */
+  /**
+   * Opens the upload file section and sets the necessary flags and values.
+   * @param value - Heading value for upload section
+   */
   openUploadFile(value: string): void {
+
   this.submitted = false;
   this.uploadDeviceConfigForm.get('uploadConfigFileModal')?.setValidators([Validators.required]);
   this.uploadDeviceConfigForm.get('editorContent')?.clearValidators();
@@ -874,7 +1049,12 @@ export class DeviceCreateComponent implements OnInit {
    *
    * @param value - The value to set for the `uploadCreateHeading` property.
    */
+  /**
+   * Navigates back to the device editor and updates the component's state.
+   * @param value - Heading value for editor section
+   */
   backToEditor(value: string): void {
+
   this.submitted = false;
   this.uploadDeviceConfigForm.get('editorContent')?.setValidators([Validators.required]);
   this.uploadDeviceConfigForm.get('uploadConfigFileModal')?.clearValidators();
@@ -893,7 +1073,12 @@ export class DeviceCreateComponent implements OnInit {
    * Opens the existing modal with the specified value.
    * @param val - The value to be passed to the modal.
    */
+  /**
+   * Opens the existing modal with the specified value.
+   * @param val - Value to be passed to modal
+   */
   openExistingModal(val: string): void {
+
   this.existConfigSubmitted = false;
    this.uploadConfigForm.get('uploadFileModal')?.setValidators([Validators.required]);
   this.uploadConfigForm.get('editorContent')?.clearValidators();
@@ -908,7 +1093,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * Navigates back to the existing config editor.
    */
+  /**
+   * Navigates back to the existing config editor.
+   * No parameters.
+   */
   backToExistingEditor(): void {
+
     this.existConfigSubmitted = false;
     this.uploadConfigForm.get('editorContent')?.setValidators([Validators.required]);
     this.uploadConfigForm.get('uploadFileModal')?.clearValidators();
@@ -925,7 +1115,12 @@ export class DeviceCreateComponent implements OnInit {
    * Deletes a device configuration file.
    * @param configFileName - The name of the configuration file to delete.
    */
+  /**
+   * Deletes a device configuration file.
+   * @param configFileName - Name of the configuration file to delete
+   */
   deleteDeviceConfigFile(configFileName: any) {
+
     if (configFileName) {
       if (confirm('Are you sure to delete ?')) {
         this.service
@@ -961,7 +1156,12 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * open the existing device config modal onclick button.
    */
+  /**
+   * Opens the existing device config modal on button click.
+   * @param fileName - Name of the file to open
+   */
   existDeviceDialog(fileName: any): void {
+
     this.showExistUploadButton = true;
     this.existingConfigEditor = true;
     this.uploadExistingConfig = false;
@@ -988,13 +1188,23 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * close the existing device config modal.
    */
+  /**
+   * Closes the existing device config modal.
+   * No parameters.
+   */
   closeDialog(): void {
+
     this.dialogRef.close();
   }
   /**
    * open the device config modal onclick button.
    */
+  /**
+   * Opens the device config modal on button click.
+   * No parameters.
+   */
   openNewDeviceDialog(): void {
+
     this.showUploadButton = true;
     this.deviceEditor = true;
     this.uploadConfigSec = false;
@@ -1062,13 +1272,23 @@ export class DeviceCreateComponent implements OnInit {
   /**
    * close the device config modal.
    */
+  /**
+   * Closes the device config modal.
+   * No parameters.
+   */
   closeNewDeviceDialog(): void {
+
     this.newDeviceDialogRef.close();
   }
   /**
    * Download the  configuration file.
    */
+  /**
+   * Downloads the configuration file.
+   * No parameters.
+   */
   downloadConfigFile() {
+
     this.service
       .downloadDeviceConfigFile(
         this.stbNameChange,

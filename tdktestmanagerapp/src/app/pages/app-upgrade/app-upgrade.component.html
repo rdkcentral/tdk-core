@@ -13,25 +13,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for app upgrade page -->
 <div class="container-fluid">
+    <!-- Row for header and title -->
     <div class="row borders-btm">
+        <!-- Empty column for spacing -->
         <div class="col"></div>
+        <!-- Column for app upgrade title -->
         <div class="col">
             <h1 class="title">App Upgrade</h1>
         </div>
+        <!-- Column for back button group -->
         <div class="col">
+            <!-- Button group for back button -->
             <div class="btns-group ">
                 <button class="back-btn" matTooltip="Back" (click)="goBack()"><i class="bi bi-arrow-return-left icon-size"></i></button>
             </div>
         </div>
     </div>
+    <!-- Row for table section and form -->
     <div class="row table-sec mt-2">
+        <!-- Form for app upgrade submission -->
         <form [formGroup]="appForm" (ngSubmit)="onAppSubmit()" class="appForm mt-3">
+            <!-- Row for form fields -->
             <div class="row">
+                <!-- Column for backend war and db password -->
                 <div class="col">
+                    <!-- Row for backend war upload -->
                     <div class="row mb-3">
                         <label for="backendWar" class="col-md-4 col-form-label">Upload Backend war<span
                                 style="color:red; margin-left: 0.75em;">*</span></label>
+                        <!-- Column for backend war input field -->
                         <div class="col-md-8">
                             <input
                             class="form-control form-control-sm"
@@ -52,9 +64,11 @@ limitations under the License.
                           </div>
                         </div>
                     </div>
+                    <!-- Row for db password input -->
                     <div class="row mb-3">
                         <label for="dbpassword" class="col-md-4 col-form-label">DB password<span
                                 style="color:red; margin-left: 0.75em;">*</span></label>
+                        <!-- Column for db password input field -->
                         <div class="col-md-8">
                             <input type="password" id="dbpassword" class="form-control"
                                 formControlName="dbPassword" placeholder="Enter db Password">
@@ -67,10 +81,13 @@ limitations under the License.
                         </div>
                     </div>
                 </div>
+                <!-- Column for database file and backup -->
                 <div class="col">
+                    <!-- Row for database file upload -->
                     <div class="row mb-3">
                         <label for="databaseFile" class="col-md-4 col-form-label">Upload Database file<span
                                 style="color:red; margin-left: 0.75em;">*</span></label>
+                        <!-- Column for database file input field -->
                         <div class="col-md-8">
                             <input
                             class="form-control form-control-sm"
@@ -92,9 +109,11 @@ limitations under the License.
                         </div>
                     </div>
                     
+                    <!-- Row for backup input -->
                     <div class="row mb-3">
                         <label for="backup" class="col-md-4 col-form-label">Take backup of the configuration<span
                                 style="color:red; margin-left: 0.75em;">*</span></label>
+                        <!-- Column for backup input field -->
                         <div class="col-md-8">
                             <input type="text" class="form-control" id="backup"
                                 formControlName="backup" autocomplete="off"
@@ -108,7 +127,9 @@ limitations under the License.
                     </div>
                 </div>
             </div>
+            <!-- Row for form action buttons -->
             <div class="row">
+                <!-- Column for deploy and back buttons -->
                 <div class="mt-2 text-end">
                     <button class="deploy-btn bk-btn" (click)="goBack()">Back</button>
                     <button type="submit" class="deploy-btn">Deploy</button>

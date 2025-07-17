@@ -31,30 +31,58 @@ export class LoginService {
   private logoutSubject = new Subject<void>();
   onLogout$ = this.logoutSubject.asObservable();
 
+  /**
+   * Constructor for LoginService.
+   * @param http HttpClient for HTTP requests
+   * @param authService AuthService for authentication and API token
+   * @param config Application configuration injected as APP_CONFIG
+   */
   constructor(
     private http: HttpClient,
     private authService: AuthService,
     @Inject('APP_CONFIG') private config: any  // <-- Inject runtime config
   ) {}
 
+  /**
+   * Logs in the user with provided credentials.
+   * @param data The login credentials.
+   * @returns Observable with the login result.
+   */
   userlogin(data: any): Observable<any> {
     return this.http.post(`${this.config.apiUrl}api/v1/auth/signin`, data);
   }
+
+  /**
+   * Gets the list of user groups.
+   * @returns Observable with the list of user groups.
+   */
   getuserGroup(): Observable<any> {
     return this.http.get(`${this.config.apiUrl}api/v1/auth/getList`);
   }
 
+  /**
+   * Gets the authenticated user from local storage.
+   * @returns The authenticated user object.
+   */
   getAuthenticatedUser() {
     const current_user = <string>localStorage.getItem('loggedinUser');
     return JSON.parse(current_user);
   }
 
+  /**
+   * Logs out the current user and clears local storage.
+   */
   logoutUser(): void {
     this.logoutSubject.next();
     this.isloggedIn = false;
     localStorage.clear();
   }
 
+  /**
+   * Resets the user's password.
+   * @param data The password reset data.
+   * @returns Observable with the reset result.
+   */
   restPassword(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -63,6 +91,12 @@ export class LoginService {
     return this.http.post(`${this.config.apiUrl}api/v1/users/changepassword`, data, { headers });
   }
 
+  /**
+   * Changes the user's category preference.
+   * @param username The username to change preference for.
+   * @param category The new category preference.
+   * @returns Observable with the change result.
+   */
   changePrefernce(username:any,category:any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()

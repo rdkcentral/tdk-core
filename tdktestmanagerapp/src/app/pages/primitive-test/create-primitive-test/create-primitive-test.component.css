@@ -17,9 +17,16 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/*
+ * Styles the main container for bottom margin.
+ */
 .container-fluid {
   margin-bottom: 2rem;
 }
+
+/*
+ * Adds a multi-color gradient border to the bottom of elements with borders-btm class.
+ */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -34,6 +41,9 @@ http://www.apache.org/licenses/LICENSE-2.0
   border-image-width: 0px 0px 4px 0px;
   margin: 0 15px;
 }
+/*
+ * Styles the title class for font size, alignment, and spacing.
+ */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -41,9 +51,13 @@ http://www.apache.org/licenses/LICENSE-2.0
   margin-top: 5px;
   margin-bottom: 10px;
 }
+/*
+ * Centers the table section horizontally.
+ */
 .table-sec {
   margin: auto;
 }
+
 /* .container-box {
     border-radius: 10px;
     box-shadow: 0px 1px 2px #333;
@@ -53,6 +67,9 @@ http://www.apache.org/licenses/LICENSE-2.0
     background-color: #f6f6f6;
 } */
 
+/*
+ * Styles the form inside container-box for layout and appearance.
+ */
 .container-box form {
   display: flex;
   justify-content: center;
@@ -61,16 +78,28 @@ http://www.apache.org/licenses/LICENSE-2.0
   height: 90%;
 }
 
+
+/*
+ * Styles the create button group for layout and spacing.
+ */
 .mt-2.createbtn {
   display: flex;
   justify-content: center;
   gap: 10px;
 }
+
+/*
+ * Removes border and shadow on focus for form-select and form-control.
+ */
 ::ng-deep.form-select:focus,
 .form-control:focus {
   border-color: gray !important;
   box-shadow: none !important;
 }
+
+/*
+ * Styles create and back buttons for appearance and interaction.
+ */
 .create-btn,
 .back-btn {
   background-color: #00b2dc;
@@ -85,6 +114,10 @@ http://www.apache.org/licenses/LICENSE-2.0
   margin-right: 10px;
 }
 
+
+/*
+ * Sets dropdown list position to relative.
+ */
 ::ng-deep .dropdown-list {
   position: relative !important;
 }

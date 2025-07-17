@@ -110,6 +110,18 @@ export class AnalyzeDialogComponent implements OnInit{
   jiraTitel = 'Map Tickets';
   showJiraTab: boolean = false;
 
+  /**
+   * Constructor for AnalyzeDialogComponent.
+   * @param dialogRef Reference to the dialog opened.
+   * @param data Data injected into the dialog.
+   * @param executionservice Service for execution operations.
+   * @param fb FormBuilder for reactive forms.
+   * @param _snakebar MatSnackBar for notifications.
+   * @param jiraCreateDialog MatDialog for opening create JIRA dialog.
+   * @param updateDialod MatDialog for opening update JIRA dialog.
+   * @param analysiservice Service for analysis operations.
+   */
+  
   constructor(
     public dialogRef: MatDialogRef<AnalyzeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -125,6 +137,10 @@ export class AnalyzeDialogComponent implements OnInit{
       
   }
 
+  /**
+   * Angular lifecycle hook called on component initialization.
+   */
+  
   ngOnInit(): void {
       this.analysisForm = this.fb.group({
         scriptName: [{ value: this.data.name, disabled: true}],
@@ -140,12 +156,25 @@ export class AnalyzeDialogComponent implements OnInit{
     this.isJiraPresent();
   }
 
+  /**
+   * Getter for analysis form controls.
+   */
+  
   get f() { return this.analysisForm.controls; }
 
+  /**
+   * Handles the grid ready event for AG Grid.
+   * @param params GridReadyEvent containing the grid API.
+   */
+  
   onGridReady(params: GridReadyEvent<any>):void {
     this.gridApi = params.api;
   }
 
+  /**
+   * Checks if JIRA automation is present and updates the tab visibility.
+   */
+  
   isJiraPresent(){
     this.analysiservice.isJiraAutomation().subscribe(res=>{
       
@@ -157,6 +186,11 @@ export class AnalyzeDialogComponent implements OnInit{
     })
   }
 
+  /**
+   * Handles tab click event to switch between tabs.
+   * @param event Tab change event.
+   */
+  
   onTabClick(event: any): void {
     const label = event.tab.textLabel;
     if(label ==="JIRA Integration"){
@@ -168,21 +202,38 @@ export class AnalyzeDialogComponent implements OnInit{
       this.jiraTitel = 'Map Tickets';
     }
   }
+  /**
+   * Closes the dialog.
+   */
+  
   onClose():void {
     this.dialogRef.close(false);
   }
 
+  /**
+   * Fetches all defect types from the execution service.
+   */
+  
   getAllDefects():void{
     this.executionservice.getDefectTypes().subscribe(res=>{
       this.allDeftesTypes = res.data ;
     })
   }
 
+  /**
+   * Fetches the list of project names from the analysis service.
+   */
+  
   listProjectNAmes() {
     this.analysiservice.getProjectNames(this.data.category).subscribe((res) => {
       this.allProjectNames = res.data;
     });
   }
+  /**
+   * Handles project change event and updates the ticket details grid.
+   * @param event Event triggered when the user selects a project.
+   */
+  
   onProjectChange(event:any){
     let prjName = event.target.value;
     let projectName = prjName?prjName:" ";
@@ -196,6 +247,10 @@ export class AnalyzeDialogComponent implements OnInit{
       }
     })
   }
+  /**
+   * Handles form submission for analysis data.
+   */
+  
   analysisSubmit():void{
     this.analysisFormSubmitted = true;
     if (this.analysisForm.invalid) {
@@ -230,6 +285,10 @@ export class AnalyzeDialogComponent implements OnInit{
       })
     }
   }
+  /**
+   * Opens the create JIRA dialog.
+   */
+  
   createJira():void{
      this.jiraCreateDialog.open(CreateJiraComponent, {
           width: '72%',
@@ -239,6 +298,11 @@ export class AnalyzeDialogComponent implements OnInit{
           data:this.data,
     });
   }
+  /**
+   * Opens the update JIRA dialog with the provided update data.
+   * @param update Data for updating the JIRA ticket.
+   */
+  
   userEdit(update:any){
     this.updateDialod.open(UpdateJiraComponent,{
       width: '72%',

@@ -70,6 +70,12 @@ import { AnalysisComponent } from './pages/analysis/analysis.component';
 import { CreateJiraComponent } from './utility/component/analyze-dialog/create-jira/create-jira.component';
 import { AppUpgradeComponent } from './pages/app-upgrade/app-upgrade.component';
 
+/**
+ * The main application route configuration for Angular Router.
+ * Defines all navigation paths, components, guards, and route metadata.
+ *
+ * @type {Routes}
+ */
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', title: 'Login', component: LoginComponent },

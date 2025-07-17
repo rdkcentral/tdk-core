@@ -12,18 +12,38 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<!--
+  Main container for the date dialog component.
+-->
+
 <div class="container-fluid">
     <h1 class="title">Execution delete by date-range</h1>
+    <!--
+      Row for the custom datepicker input and label.
+    -->
+
     <div class="row mt-3 custom-datepicker">
         <label for="device" class="col-md-3 col-form-label">Select Date Range :<span
             style="color:red; margin-left: 0.75em;">*</span></label>
+        <!--
+          Column for the datepicker input and delete button.
+        -->
+
         <div class="col-md-8">
+            <!--
+              Container for the date range input and delete button.
+            -->
+
             <div class="btn-input">
                 <input type="text" bsDaterangepicker class="form-control daterange" [(ngModel)]="selectedDate" [bsConfig]="bsConfig" (ngModelChange)="onDateChange($event)"/>
                 <button class="all-btn" [disabled]="!selectedDate" (click)="deleteData()">Delete</button>
             </div>
         </div>
     </div>
+    <!--
+      Row for the close button section.
+    -->
+
     <div class="row close-sec">
         <button class="all-btn close-btn" (click)="close()">Close</button>
     </div>

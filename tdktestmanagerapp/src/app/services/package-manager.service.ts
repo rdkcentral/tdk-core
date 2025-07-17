@@ -27,16 +27,22 @@ import { AuthService } from '../auth/auth.service';
 })
 export class PackageManagerService {
 
+  /**
+   * Constructor for PackageManagerService.
+   * @param http HttpClient for HTTP requests
+   * @param authService AuthService for authentication and API token
+   * @param config Application configuration injected as APP_CONFIG
+   */
   constructor(private http: HttpClient, private authService: AuthService,
     @Inject('APP_CONFIG') private config: any
   ) { }
 
   /**
-   * This method is used to create a package.
-   * @param data - The data to be sent in the request body.
-   * @returns An Observable of the HTTP response.
+   * Creates a package.
+   * @param type The type of the package to create.
+   * @param device The device for which the package is created.
+   * @returns Observable of the HTTP response.
    */
-
   createPackage(type:string,device:string):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -45,10 +51,10 @@ export class PackageManagerService {
   }
 
   /**
-   * This method is used to get the list of available packages.
-   * @param type - The type of package to be fetched.
-   * @param device - The device for which the package is to be fetched.
-   * @returns An Observable of the HTTP response.
+   * Gets the list of available packages.
+   * @param type The type of package to fetch.
+   * @param device The device for which the package is fetched.
+   * @returns Observable of the HTTP response.
    */
   getPackageList(type:string,device:string): Observable<any> {
     const headers = new HttpHeaders({
@@ -59,11 +65,10 @@ export class PackageManagerService {
 
   /**
    * Installs a package on a specified device.
-   *
-   * @param type - The type of the package to be installed.
-   * @param device - The target device where the package will be installed.
-   * @param packageName - The name of the package to be installed.
-   * @returns An `Observable` that emits the response of the installation request.
+   * @param type The type of the package to be installed.
+   * @param device The target device where the package will be installed.
+   * @param packageName The name of the package to be installed.
+   * @returns Observable that emits the response of the installation request.
    */
   installPackages(type:string,device:string,packageName:string): Observable<any> {
     const headers = new HttpHeaders({
@@ -72,14 +77,12 @@ export class PackageManagerService {
     return this.http.post(`${this.config.apiUrl}/api/v1/packagemanager/installPackage?type=${type}&device=${device}&packageName=${packageName }`, { headers });
   }
 
- 
   /**
    * Uploads a package to the server.
-   *
-   * @param type - The type of the package being uploaded.
-   * @param device - The target device for the package.
-   * @param uploadFile - The file to be uploaded.
-   * @returns An observable that emits the server's response.
+   * @param type The type of the package being uploaded.
+   * @param device The target device for the package.
+   * @param uploadFile The file to be uploaded.
+   * @returns Observable that emits the server's response.
    */
   uploadPackage(type:string,device:string,uploadFile:File): Observable<any> {
     const headers = new HttpHeaders({
@@ -91,14 +94,12 @@ export class PackageManagerService {
     return this.http.post(`${this.config.apiUrl}/api/v1/packagemanager/uploadPackage?type=${type}&device=${device}`,formData, { headers });
   }
 
- 
   /**
    * Uploads a generic package to the server.
-   *
-   * @param type - The type of the package being uploaded.
-   * @param device - The target device for the package.
-   * @param uploadFile - The file to be uploaded.
-   * @returns An `Observable` that emits the server's response.
+   * @param type The type of the package being uploaded.
+   * @param device The target device for the package.
+   * @param uploadFile The file to be uploaded.
+   * @returns Observable that emits the server's response.
    */
   uploadGenericPackage(type:string,device:string,uploadFile:File): Observable<any> {
     const headers = new HttpHeaders({
@@ -109,6 +110,5 @@ export class PackageManagerService {
 
     return this.http.post(`${this.config.apiUrl}/api/v1/packagemanager/uploadGenericPackage?type=${type}&device=${device}`,formData, { headers });
   }
-
 
 }

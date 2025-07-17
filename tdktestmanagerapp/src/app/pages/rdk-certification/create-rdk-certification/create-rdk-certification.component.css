@@ -17,6 +17,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/*
+ * Adds a multi-color gradient border to the bottom of elements with borders-btm class.
+ */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -31,6 +34,9 @@ http://www.apache.org/licenses/LICENSE-2.0
   border-image-width: 0px 0px 4px 0px;
   margin: 0 15px;
 }
+/*
+ * Styles the title class for font size, alignment, and spacing.
+ */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -39,6 +45,9 @@ http://www.apache.org/licenses/LICENSE-2.0
   margin-bottom: 10px;
 }
 
+/*
+ * Styles the form inside container-box for layout and appearance.
+ */
 .container-box form {
   display: flex;
   justify-content: center;
@@ -46,6 +55,10 @@ http://www.apache.org/licenses/LICENSE-2.0
   padding: 30px 18%;
   height: 90%;
 }
+
+/*
+ * Styles the reset button for appearance and spacing.
+ */
 .reset-btn {
   background-color: #00b2dc;
   color: #fff !important;

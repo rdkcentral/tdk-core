@@ -13,21 +13,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for function creation page -->
 <div class="container-fluid">
+    <!-- Row for header and controls -->
     <div class="row borders-btm">
+        <!-- Left column -->
         <div class="col">
         </div>
+        <!-- Center column for title -->
         <div class="col">
           <h1 class="title">Create Function</h1>
         </div>
+        <!-- Right column -->
         <div class="col">
         </div>
       </div>
+    <!-- Row for form section -->
     <div class="row mt-2">
+        <!-- Main form column -->
         <div class="col">
+                    <!-- Container box for form -->
                     <div class="container-box" id="container-box">
+                        <!-- Form container for function creation -->
                         <div class="form-container create-group">
                             <form [formGroup]="functionForm" (ngSubmit)="functionSubmit()" data-bs-spy="scroll">
+                                <!-- Row for function name input -->
                                 <div class="row mb-4">
                                     <label for="functionName" class="col-md-3 col-form-label offset-1">Name<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
@@ -42,6 +52,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Row for module name input -->
                                 <div class="row mb-4">
                                     <label for="module" class="col-md-3 col-form-label offset-1">Module<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
@@ -57,6 +68,7 @@ limitations under the License.
     
                                     </div>
                                 </div>
+                                <!-- Row for action buttons -->
                                 <div class="row">
                                     <div class="mt-2 createbtn">
                                         <button type="button" class="back-btn create-btn" (click)="goBack()">Back</button>

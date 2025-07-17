@@ -42,12 +42,20 @@ export class GroupAddComponent implements OnInit {
   placeholderName = 'User Group Name';
   labelName = 'Name';
   
+  /**
+   * Constructor for GroupAddComponent
+   * @param router - Router instance
+   * @param service - UsergroupService instance
+   * @param route - ActivatedRoute instance
+   * @param _snakebar - MatSnackBar for notifications
+   */
   constructor(private router: Router,
     public service: UsergroupService, private route: ActivatedRoute,
     private _snakebar: MatSnackBar) {
     this.commonFormName = this.route.snapshot.url[1].path === 'group-add' ? this.commonFormName + ' ' + 'User Group' : this.commonFormName;
 
   }
+
 
   /**
    * Handles the form submission event.
@@ -83,12 +91,14 @@ export class GroupAddComponent implements OnInit {
     }
 
   }
+
   
   /**
    * Initializes the component.
    */
   ngOnInit(): void {
   }
+
 
 
 

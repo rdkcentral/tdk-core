@@ -26,6 +26,19 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { httpErrorInterceptor } from './interceptor/http-error.interceptor';
+
+/**
+ * The main application configuration object for Angular's dependency injection system.
+ * Provides all core providers for routing, hydration, animations, HTTP client, and error interception.
+ *
+ * @type {ApplicationConfig}
+ */
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideClientHydration(), provideAnimationsAsync(), provideHttpClient(withInterceptors([httpErrorInterceptor])),provideAnimations()]
+  providers: [
+    provideRouter(routes),
+    provideClientHydration(),
+    provideAnimationsAsync(),
+    provideHttpClient(withInterceptors([httpErrorInterceptor])),
+    provideAnimations()
+  ]
 };

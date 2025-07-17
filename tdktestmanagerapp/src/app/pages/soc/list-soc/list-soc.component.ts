@@ -96,8 +96,16 @@ export class ListSocComponent {
     rowHeight: 36
   };
 
+  /**
+   * Constructor for ListSocComponent.
+   * @param router Angular Router for navigation
+   * @param service SocService for SoC operations
+   * @param authservice AuthService for authentication and user info
+   * @param _snakebar MatSnackBar for notifications
+   */
   constructor(private router: Router, private service: SocService,
     private authservice: AuthService, private _snakebar: MatSnackBar) { }
+
 
   /**
    * Initializes the component.

@@ -17,10 +17,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+/*
+ * Applies Roboto font to body and all elements except .material-icons
+ */
 body,
 *:not(.material-icons) {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/*
+ * Typography styles for headings inside .mat-typography
+ */
 .mat-typography h1,
 .mat-typography h2,
 .mat-typography h3,
@@ -29,9 +37,17 @@ body,
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
+
+/*
+ * Container for main content
+ */
 .container {
   margin-bottom: 1rem;
 }
+
+/*
+ * Bottom border gradient for borders-btm
+ */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -46,6 +62,10 @@ body,
   border-image-width: 0px 0px 4px 0px;
   margin: 0 15px;
 }
+
+/*
+ * Title styling
+ */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -53,17 +73,28 @@ body,
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+/*
+ * User form margin
+ */
 .userform {
   margin-left: 25px;
   margin-right: 25px;
 }
 
+/*
+ * Container box form layout
+ */
 .container-box form {
   display: flex;
   justify-content: center;
   flex-direction: column;
   padding: 30px 18%;
 }
+
+/*
+ * Create and reset button styling
+ */
 .create-btn,
 .reset-btn {
   background-color: #00b2dc;
@@ -77,12 +108,23 @@ body,
   margin-right: 10px;
 }
 
+/*
+ * Reset button margin
+ */
 .reset-btn {
   margin-right: 10px;
 }
+
+/*
+ * Create button alignment
+ */
 .createbtn {
   text-align: center;
 }
+
+/*
+ * Focus styles for form-select and form-control
+ */
 ::ng-deep.form-select:focus,
 .form-control:focus {
   border-color: gray !important;

@@ -34,66 +34,86 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './function-edit.component.html',
   styleUrl: './function-edit.component.css'
 })
+
+/**
+ * FunctionEditComponent is responsible for handling the update of existing functions.
+ * It manages the form, submission, and navigation logic for the function update page.
+ */
 export class FunctionEditComponent {
   configureName!:string;
   updateFunctionForm!:FormGroup;
   functionFormSubmitted = false;
   functionData:any;
 
+  /**
+   * Constructor for FunctionEditComponent.
+   * @param authservice AuthService instance for authentication and config values
+   * @param router Router instance for navigation
+   * @param moduleservice ModulesService instance for module operations
+   * @param _snakebar MatSnackBar instance for notifications
+   */
   constructor(private authservice: AuthService,private router: Router,
     private moduleservice: ModulesService,private _snakebar :MatSnackBar,
   ) {
     this.functionData = JSON.parse(localStorage.getItem('functions') || '{}');
    }
 
-    /**
-   * Initializes the component and sets up the initial values.
-   */
-    ngOnInit(): void {
-      this.configureName = this.authservice.selectedConfigVal;
-      this.updateFunctionForm = new FormGroup({
-        functionName: new FormControl<string | null>(this.functionData.functionName, { validators: Validators.required }),
-        moduleName: new FormControl<string | null>({value: this.functionData.moduleName, disabled: true}, { validators: Validators.required}),
-      })
-    }
   /**
-   * This method is Submit the update the function form.
+   * Initializes the component and sets up the initial values.
+   * No parameters.
+   * No return value.
    */
-    updateFunctionSubmit():void{
-      this.functionFormSubmitted = true;
-      if(this.updateFunctionForm.invalid){
-        return;
-      }
-      let data = {
-        id: this.functionData.id,
-        functionName: this.updateFunctionForm.value.functionName,
-        moduleName: this.functionData.moduleName,
-        functionCategory: this.functionData.functionCategory
-      }
-      this.moduleservice.updateFunction(data).subscribe({
-        next:(res)=>{
-          this._snakebar.open(res.message, '', {
-          duration: 3000,
-          panelClass: ['success-msg'],
-          verticalPosition: 'top'
-          })
-          setTimeout(() => {
-            this.updateFunctionForm.reset();
-            this.router.navigate(["/configure/function-list"]);
-          }, 1000);
-        },
-        error:(err)=>{       
-          this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
-        }
-      })
+  ngOnInit(): void {
+    this.configureName = this.authservice.selectedConfigVal;
+    this.updateFunctionForm = new FormGroup({
+      functionName: new FormControl<string | null>(this.functionData.functionName, { validators: Validators.required }),
+      moduleName: new FormControl<string | null>({value: this.functionData.moduleName, disabled: true}, { validators: Validators.required}),
+    })
+  }
+  
+  /**
+   * Submits the update function form.
+   * No parameters.
+   * No return value.
+   */
+  updateFunctionSubmit():void{
+    this.functionFormSubmitted = true;
+    if(this.updateFunctionForm.invalid){
+      return;
     }
+    let data = {
+      id: this.functionData.id,
+      functionName: this.updateFunctionForm.value.functionName,
+      moduleName: this.functionData.moduleName,
+      functionCategory: this.functionData.functionCategory
+    }
+    this.moduleservice.updateFunction(data).subscribe({
+      next:(res)=>{
+        this._snakebar.open(res.message, '', {
+        duration: 3000,
+        panelClass: ['success-msg'],
+        verticalPosition: 'top'
+        })
+        setTimeout(() => {
+          this.updateFunctionForm.reset();
+          this.router.navigate(["/configure/function-list"]);
+        }, 1000);
+      },
+      error:(err)=>{       
+        this._snakebar.open(err.message, '', {
+          duration: 2000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+        })
+      }
+    })
+  }
+  
   /**
    * Navigates back to the function list page.
+   * No parameters.
+   * No return value.
    */
   goBack():void{
     this.router.navigate(["/configure/function-list"]);

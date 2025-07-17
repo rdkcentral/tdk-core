@@ -42,41 +42,52 @@ export class PreferedCategoryComponent {
   preferedCategory!:string;
   userCategory!:string;
 
+  /**
+   * Constructor for PreferedCategoryComponent.
+   * @param fb FormBuilder instance for reactive forms.
+   * @param router Router instance for navigation.
+   * @param loginservice LoginService instance for user login and preference.
+   * @param _snakebar MatSnackBar instance for notifications.
+   */
   constructor(private fb: FormBuilder, private router: Router,
     private loginservice: LoginService, private _snakebar: MatSnackBar) {
-
-      this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
-      this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
-      this.userCategory = this.loggedinUser.userCategory;
+    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
+    this.preferedCategory = localStorage.getItem('preferedCategory') || '';
+    this.userCategory = this.loggedinUser.userCategory;
   }
-    /**
-   * Initializes the component.
+
+  /**
+   * Initializes the component and sets up initial state.
+   * No parameters.
    */
   ngOnInit(): void {
-    this.categorySelect = this.userCategory ? this.userCategory : this.preferedCategory;   
+    this.categorySelect = this.userCategory ? this.userCategory : this.preferedCategory;
     this.categoryForm = this.fb.group({
       catgegory: [this.categorySelect, Validators.required]
     });
-    
   }
-    /**
-   * Change the category click on radio button.
+
+  /**
+   * Handles category change event from dropdown.
+   * @param event The change event from the category dropdown.
    */
-  changeCategory(event:any):void{
+  changeCategory(event: any): void {
     let val = event.target.value;
-    this.categorySelect = val?val:this.loggedinUser.userCategory;
+    this.categorySelect = val ? val : this.loggedinUser.userCategory;
   }
-   /**
-   * Handles the form submission event.
+
+  /**
+   * Handles the form submission event for category selection.
+   * No parameters.
    */
-  categorySubmit():void{
+  categorySubmit(): void {
     this.submitted = true;
-    if(this.categoryForm.invalid){
-      return ;
-    }else{
+    if (this.categoryForm.invalid) {
+      return;
+    } else {
       let userName = this.loggedinUser.userName;
-      this.loginservice.changePrefernce(userName,this.categorySelect).subscribe({
-        next:(res)=>{
+      this.loginservice.changePrefernce(userName, this.categorySelect).subscribe({
+        next: (res) => {
           this._snakebar.open(res.message, '', {
             duration: 2000,
             panelClass: ['success-msg'],
@@ -89,23 +100,25 @@ export class PreferedCategoryComponent {
           setTimeout(() => {
             this.router.navigate(["/configure"]);
           }, 1000);
-          },
-          error:(err)=>{
-           
-              this._snakebar.open(err.message, '', {
-              duration: 2000,
-              panelClass: ['err-msg'],
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
+        },
+        error: (err) => {
+          this._snakebar.open(err.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
           })
         }
       })
     }
   }
+
   /**
-   * Navigate to configure page.
+   * Navigates to the configure page.
+   * No parameters.
    */
-  back():void{
+  back(): void {
     this.router.navigate(["/configure"]);
   }
+
 }

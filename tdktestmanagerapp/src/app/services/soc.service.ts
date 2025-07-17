@@ -29,12 +29,26 @@ export class SocService {
 
   currentUrl: any;
 
+  /**
+   * Constructor for SocService.
+   * @param http HttpClient for HTTP requests
+   * @param authService AuthService for authentication and API token
+   * @param config Application configuration injected as APP_CONFIG
+   */
   constructor(private http: HttpClient, private authService: AuthService,
     @Inject('APP_CONFIG') private config: any
   ) { }
 
+  /**
+   * Options for HTTP requests with authorization header.
+   */
   private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
 
+  /**
+   * Gets the list of SoCs by category.
+   * @param category The category to filter SoCs by.
+   * @returns Observable with the list of SoCs.
+   */
   getSoc(category: any): Observable<any> {
 
     const headers = new HttpHeaders({
@@ -43,6 +57,11 @@ export class SocService {
     return this.http.get(`${this.config.apiUrl}api/v1/soc/findallbycategory?category=${category}`, { headers });
   }
 
+  /**
+   * Creates a new SoC.
+   * @param data The SoC data to create.
+   * @returns Observable with the creation result.
+   */
   createSoc(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -52,6 +71,11 @@ export class SocService {
     return this.http.post(`${this.config.apiUrl}api/v1/soc/create`, data, { headers })
   }
 
+  /**
+   * Updates a SoC.
+   * @param data The SoC data to update.
+   * @returns Observable with the update result.
+   */
   updateSoc(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -60,6 +84,11 @@ export class SocService {
     return this.http.put(`${this.config.apiUrl}api/v1/soc/update`, data, { headers});
   }
 
+  /**
+   * Deletes a SoC by ID.
+   * @param id The ID of the SoC to delete.
+   * @returns Observable with the deletion result.
+   */
   deleteSoc(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()

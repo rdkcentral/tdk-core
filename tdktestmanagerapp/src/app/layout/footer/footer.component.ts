@@ -23,6 +23,21 @@ import { CommonModule } from '@angular/common';
 import { UsergroupService } from '../../services/usergroup.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+/** FooterComponent is responsible for displaying the footer of the application.
+* It includes functionality to toggle themes, display the application version,
+* and show the logged-in user's information.
+* * It uses the UsergroupService to fetch the application version and the MatSnackBar
+ * to display messages.
+* @remarks
+ * - The component uses Angular's dependency injection to access services.
+ * - It imports CommonModule for common directives and features.  
+ * * @example
+ * ```html
+ * <app-footer></app-footer>
+ * ```
+ * @see {@link UsergroupService} for fetching application version.
+ * @see {@link MatSnackBar} for displaying messages.
+ */
 @Component({
   selector: 'app-footer',
   standalone: true,

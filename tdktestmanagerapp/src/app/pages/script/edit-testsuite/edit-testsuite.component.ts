@@ -63,9 +63,24 @@ export class EditTestsuiteComponent {
   selectedRight = new Set<number>();
   filteredLeftList:any;
 
-  constructor(private fb: FormBuilder,private router: Router,private scriptservice:ScriptsService,
-    private _snakebar: MatSnackBar,private route: ActivatedRoute,private authservice : AuthService ) {
-    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+  /**
+   * Constructor for EditTestsuiteComponent.
+   * @param fb FormBuilder instance for creating form groups.
+   * @param router Router instance for navigation.
+   * @param scriptservice ScriptsService instance for script operations.
+   * @param _snakebar MatSnackBar instance for showing messages.
+   * @param route ActivatedRoute instance for route information.
+   * @param authservice AuthService instance for authentication.
+   */
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private scriptservice: ScriptsService,
+    private _snakebar: MatSnackBar,
+    private route: ActivatedRoute,
+    private authservice: AuthService
+  ) {
+    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
     const dataString = this.router.getCurrentNavigation();
     this.testSuiteEidtData = dataString?.extras.state?.['testSuiteData'];
     this.viewName = localStorage.getItem('viewName') || '';
@@ -74,7 +89,13 @@ export class EditTestsuiteComponent {
     this.preferedCategory = localStorage.getItem('preferedCategory') || '';
   }
 
+
+  /**
+   * Initializes the component, sets up form, loads scripts, and sets category names.
+   * @returns void
+   */
   ngOnInit(): void {
+
     this.onlyVideoCategory = localStorage.getItem('onlyVideoCategory')||'';
     this.selectedCategory = this.preferedCategory?this.preferedCategory:this.userCategory;
     if(this.onlyVideoCategory){
@@ -104,7 +125,12 @@ export class EditTestsuiteComponent {
     this.allScripts();
   }
 
+  /**
+   * Loads all scripts for the selected category and filters out already selected scripts.
+   * @returns void
+   */
   allScripts() {
+
     this.isLoadingScripts = true;
     this.scriptservice.findTestSuitebyCategory(this.selectedCategory).subscribe(res => {
       this.container1 = res.data
@@ -117,14 +143,26 @@ export class EditTestsuiteComponent {
   }
 
 
-  toggleSec(scripts:any, side: 'left' | 'right'){
+  /**
+   * Toggles selection of a script in the left or right list.
+   * @param scripts The script object to toggle.
+   * @param side The side ('left' or 'right') where the script is being toggled.
+   * @returns void
+   */
+  toggleSec(scripts: any, side: 'left' | 'right') {
+
     if(side === 'left'){
       this.selectedLeft.has(scripts.id)?this.selectedLeft.delete(scripts.id):this.selectedLeft.add(scripts.id);
     }else{
       this.selectedRight.has(scripts.id)?this.selectedRight.delete(scripts.id):this.selectedRight.add(scripts.id);
     }
   }
-  moveToRight(){
+  /**
+   * Moves selected scripts from the left list to the right list.
+   * @returns void
+   */
+  moveToRight() {
+
     
     this.container2ScriptArr.push(...this.container1.filter(scripts => this.selectedLeft.has(scripts.id)));
     this.container1 = this.container1.filter(scripts => !this.selectedLeft.has(scripts.id));
@@ -133,12 +171,22 @@ export class EditTestsuiteComponent {
     this.testSuiteEditFrom.get('container2Scripts')?.markAsTouched();
     this.testSuiteEditFrom.get('container2Scripts')?.updateValueAndValidity();
   }
-  moveToLeft(){
+  /**
+   * Moves selected scripts from the right list to the left list.
+   * @returns void
+   */
+  moveToLeft() {
+
     this.container1.push(...this.container2ScriptArr.filter(scripts => this.selectedRight.has(scripts.id)));
     this.container2ScriptArr = this.container2ScriptArr.filter(scripts => !this.selectedRight.has(scripts.id));
     this.selectedRight.clear();
   }
-  moveToUp(){
+  /**
+   * Moves selected scripts up in the right list.
+   * @returns void
+   */
+  moveToUp() {
+
     const selectedIds = Array.from(this.selectedRight);
     for (let i = 1; i < this.container2ScriptArr.length; i++) {
       if(selectedIds.includes(this.container2ScriptArr[i].id)){
@@ -147,7 +195,12 @@ export class EditTestsuiteComponent {
       
     }
   }
-  moveToDown(){
+  /**
+   * Moves selected scripts down in the right list.
+   * @returns void
+   */
+  moveToDown() {
+
     const selectedIds = Array.from(this.selectedRight);
     for (let i = this.container2ScriptArr.length -2; i >= 0; i--) {
       if(selectedIds.includes(this.container2ScriptArr[i].id)){
@@ -156,7 +209,12 @@ export class EditTestsuiteComponent {
       
     }
   }
+  /**
+   * Getter for filtered left list of scripts based on search term.
+   * @returns Filtered array of scripts.
+   */
   get filteredContainer1(): any[] {
+
     const searchTerm = this.testSuiteEditFrom.get('search')?.value || ''; 
     this.filteredLeftList = this.container1;
     if (searchTerm) {
@@ -167,7 +225,12 @@ export class EditTestsuiteComponent {
       return this.filteredLeftList;
   }
 
+  /**
+   * Toggles the sort order for the left list and sorts the scripts.
+   * @returns void
+   */
   toggleSortOrder(): void {
+
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     this.filteredLeftList.sort((a: any, b: any) => {
       if (this.sortOrder === 'asc') {
@@ -178,7 +241,12 @@ export class EditTestsuiteComponent {
     })
   }
   
+  /**
+   * Getter for sorted right list of scripts.
+   * @returns Sorted array of scripts.
+   */
   get container2(): any[] {
+
     let filteredList2 = this.container2ScriptArr;
     this.testSuiteArr = filteredList2;
     return filteredList2.sort((a, b) => {
@@ -190,13 +258,23 @@ export class EditTestsuiteComponent {
     });
   }
 
+  /**
+   * Validator to ensure at least one script is present in the right list.
+   * @returns ValidationErrors | null
+   */
   container2Validator() {
+
     return (control: AbstractControl): ValidationErrors | null => {
       return this.container2ScriptArr.length > 0 ? null : { container2Empty: true };
     };
   }
 
+  /**
+   * Toggles the sort order for the right list and sorts the scripts.
+   * @returns void
+   */
   toggleSortRightSide(): void {
+
     this.sortOrderRight = this.sortOrderRight === 'asc' ? 'desc' : 'asc';
     this.container2ScriptArr.sort((a: any, b: any) => {
       if (this.sortOrderRight === 'asc') {
@@ -206,13 +284,28 @@ export class EditTestsuiteComponent {
       }
     });
   }
-  goBack():void{
+  /**
+   * Navigates back to the script page.
+   * @returns void
+   */
+  goBack(): void {
+
     this.router.navigate(['/script']);
   }
-  reset():void{
+  /**
+   * Resets the test suite edit form.
+   * @returns void
+   */
+  reset(): void {
+
     this.testSuiteEditFrom.reset();
   }
-  testSuiteEditSubmit():void{
+  /**
+   * Handles submission for updating a test suite, gathers form data and sends to the server.
+   * @returns void
+   */
+  testSuiteEditSubmit(): void {
+
     this.testSuiteFormSubmitted = true;
     if(this.testSuiteEditFrom.invalid){
       return ;

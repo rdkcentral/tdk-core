@@ -17,10 +17,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+/* Global font family for body and all elements except material icons */
 body,
 *:not(.material-icons) {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/* Heading font family override */
 h1,
 h2,
 h3,
@@ -28,15 +32,21 @@ h4,
 h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
+
+/* Modal content max height */
 .exsit-modal-content {
   max-height: 100vh;
 }
+
+/* Flavor row layout */
 .falvor-row {
   display: flex;
   align-items: baseline;
   margin-top: 5px;
   padding-left: 0;
 }
+
+/* Borders bottom style for device create page */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -51,6 +61,8 @@ h6 {
   border-image-width: 0px 0px 4px 0px;
   margin: 0 15px;
 }
+
+/* Title style for device create page */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -58,10 +70,14 @@ h6 {
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+/* User form margin */
 .userform {
   margin-left: 25px;
   margin-right: 25px;
 }
+
+/* Create and reset button styles */
 .create-btn,
 .reset-btn {
   background-color: #00b2dc;
@@ -74,6 +90,8 @@ h6 {
   letter-spacing: 0.5px;
   cursor: pointer;
 }
+
+/* Download button style */
 .download-btn {
   background-color: #00b2dc;
   color: #fff;
@@ -87,87 +105,131 @@ h6 {
   margin-top: 8px;
   margin-right: 10px;
 }
+
+/* Reset button margin */
 .reset-btn {
   margin-right: 10px;
 }
+
+/* Thunder border style */
 .thunder {
   border: 1px solid gray;
 }
+
+/* New config file style */
 .newconfigfile {
   font-size: 0.8rem;
   margin-right: 10px;
   box-shadow: 0px 3px 6px #0000005e;
   border: 1px solid #ddd;
 }
+
+/* Config input style */
 .config-input {
   width: 300px;
   font-size: 0.8rem;
 }
+
+/* Read-only config input style */
 .config-input:read-only {
   background-color: #e9ecef;
   cursor: auto;
   font-size: 0.8rem;
 }
+
+/* Config button group layout */
 .configbtngrp {
   display: flex;
 }
+
+/* Inline form check style */
 .form-check-inline {
   display: flex !important;
 }
+
+/* Checkbox input margin */
 .form-check-input[type="checkbox"] {
   margin-top: 10px !important;
 }
+
+/* Form select and control focus style override */
 ::ng-deep.form-select:focus,
 .form-control:focus {
   border-color: gray !important;
   box-shadow: none !important;
 }
+
+/* Check thunder layout */
 .check-thunder {
   display: flex;
 }
+
+/* Thunder hints font size */
 .thunder-hints {
   font-size: 11px;
 }
+
+/* Device title font size */
 .device-title {
   font-size: 16px;
 }
+
+/* Change file name layout */
 .changefile-name {
   margin-left: 14px;
   display: inline-flex;
 }
+
+/* Delete config button style */
 .delete-config {
   margin: 10px 0px 0px 20px;
   padding: 5px 10px;
   border: 1px solid #00b2dc;
   height: 35px;
 }
+
+/* Delete config hover style */
 .delete-config:hover {
   background-color: transparent;
 }
+
+/* Delete fill color */
 .delete-fill {
   color: red;
 }
+
+/* Download icon color */
 .download-icon {
   color: #00b2dc;
 }
+
+/* Pencil icon color */
 .bi-pencil {
   color: #00b2dc;
 }
+
+/* Mandatory field alignment */
 .mandatory-field {
   text-align: right;
 }
+
+/* Streaming details style */
 .streaming-details {
   font-size: 1rem;
   text-align: center;
 }
-/* Modal CSS Start */
 
+/* Modal dialog config modal max width */
 .modal-dialog.config-modal {
   max-width: 760px;
 }
+
+/* Modal content config content height */
 .modal-content.config-content {
   height: 90vh;
 }
+
+/* Exist config editor style */
 .exist-config ngx-editor {
   height: 304px !important;
   overflow-y: auto;
@@ -176,18 +238,26 @@ h6 {
   border-radius: 5px;
   font-size: 0.8rem;
 }
+
+/* Exist modal body height */
 .existModal-body {
   height: 59%;
 }
+
+/* Toggle icon color and size */
 .toggleIcon {
   color: #00273f;
   font-size: 1.4rem;
 }
+
+/* Toggle button layout */
 .toggleBtn {
   margin-left: 40rem;
   padding: 0;
   position: fixed;
 }
+
+/* Config header style */
 .config-header {
   display: flex;
   color: #00273f;
@@ -207,28 +277,41 @@ h6 {
   border-image-width: 0px 0px 4px 0px;
   margin: 5px 20px 0px 20px;
 }
+
+/* Config title margin override */
 .config-title {
   margin-bottom: 0px !important;
 }
+
+/* Modal maximized editor style */
 .modal-maximized ngx-editor {
   height: 250px !important;
   overflow-y: auto;
   display: block;
 }
+
+/* Modal maximized config modal max width */
 .modal-maximized .config-modal {
   max-width: 97vw;
 }
+
+/* Modal maximized toggle icon margin */
 .modal-maximized button .toggleIcon {
   margin-left: 30rem;
 }
+
+/* Modal buttons alignment */
 .modal-btns {
   text-align: right;
 }
-/* Device Modal CSS Start */
+
+/* Device modal header margin */
 .newdevice-header {
   margin-top: 0px;
   padding-bottom: 0px;
 }
+
+/* Device editor style */
 .device-editor ngx-editor {
   height: 304px !important;
   overflow-y: auto;
@@ -237,48 +320,71 @@ h6 {
   border-radius: 5px;
   font-size: 0.8rem;
 }
+
+/* Upload config alignment */
 .uploadconfig {
   text-align: right;
   margin-right: 10px;
 }
 
+/* Info icon style */
 .info-icon {
   font-size: 20px;
   color: #00b2dc;
   margin-bottom: -10px;
 }
+
+/* Upload container height */
 .upload-container {
   height: 200px;
 }
+
+/* Back editor margin */
 .backEditor {
   margin-right: 10px;
 }
+
+/* Config edit button hover style */
 .config-editbtn :hover {
   background: none;
 }
+
+/* Toggle name color */
 .toogle-name {
   color: #00b2dc;
 }
+
+/* Device input, config edit button, config input style */
 .device-input,
 .config-editbtn,
 .config-input {
   height: 35px;
   margin: 10px 4px 0px 4px;
 }
+
+/* Button groups margin */
 .btns-grps {
   margin-bottom: 10px;
 }
+
+/* Thunder info margin and position */
 .thunder-info {
   margin: -18px 0 0 30px;
   position: absolute;
 }
+
+/* Thunder port info margin and position */
 .thunderport-info {
   margin: 0px 0 0 5px;
   position: absolute;
 }
+
+/* Disabled form check input background */
 .form-check-input:disabled {
   background-color: rgba(128, 128, 128, 0.897);
 }
+
+/* Device config info margin and position */
 .deviceconfig-info {
   margin: -18px 0 0 55px;
   position: absolute;

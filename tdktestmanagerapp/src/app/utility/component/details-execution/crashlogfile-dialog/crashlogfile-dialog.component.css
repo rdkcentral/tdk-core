@@ -18,6 +18,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 
+/*
+ * Styles for the download button in the crash log file dialog.
+ */
+
 .download-btn {
     background-color: #fff;
     font-size: 0.8rem;
@@ -28,56 +32,112 @@ http://www.apache.org/licenses/LICENSE-2.0
     cursor: pointer;
     margin-left: 15px;
   }
-  .download-icon {
+/*
+ * Styles for the download icon in the crash log file dialog.
+ */
+
+.download-icon {
     color: #00b2dc;
     font-weight: bold;
     font-size: 18px;
   }
-  .livelog-area {
+/*
+ * Styles for the live log area container.
+ */
+
+.livelog-area {
     width: 100%;
     border: 1px solid #0e6f8794;
   }
-  .details-table {
+/*
+ * Styles for the details table.
+ */
+
+.details-table {
     width: 100%;
   }
-  .details-sec {
+/*
+ * Styles for the details section container.
+ */
+
+.details-sec {
       padding: 0 20px;
       height: 260px;
       overflow-y: auto;
       display: block;
   }
-  .execution-para {
+/*
+ * Styles for the execution paragraph.
+ */
+
+.execution-para {
     margin-bottom: 3px;
   }
-  .para-gap {
+/*
+ * Adds left padding to paragraphs for spacing.
+ */
+
+.para-gap {
     padding-left: 15px;
   }
-  thead{
+/*
+ * Styles for the table header.
+ */
+
+thead{
     background-color: #dddddd91;
   }
-  tbody tr:nth-child(1) {
+/*
+ * Styles for the first row in the table body.
+ */
+
+tbody tr:nth-child(1) {
       background-color: rgb(209, 212, 212) !important;
     }
-  tbody tr:nth-child(even) {
+/*
+ * Styles for even rows in the table body.
+ */
+
+tbody tr:nth-child(even) {
     background-color: #0e6f8736; 
   }
-  tbody tr:nth-child(odd) {
+/*
+ * Styles for odd rows in the table body.
+ */
+
+tbody tr:nth-child(odd) {
     background-color: #dddddd91;
   }
-  .details-row {
+/*
+ * Styles for the details row in the table.
+ */
+
+.details-row {
     font-size: 0.8rem;
     padding: 2px 5px 2px 5px;
   }
-  .heading {
+/*
+ * Styles for the heading cells in the table.
+ */
+
+.heading {
     font-weight: 500;
     width: 55%;
   }
-  .delete-btn {
+/*
+ * Styles for the delete button in the table.
+ */
+
+.delete-btn {
     border: none;
     padding: 0px;
     background: none;
   }
-  .extra-icon {
+/*
+ * Styles for extra icons in the dialog.
+ */
+
+.extra-icon {
     font-size: 1.3rem;
     display: flex;
     justify-content: center;

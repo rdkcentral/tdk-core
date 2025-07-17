@@ -17,15 +17,21 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+/* Container for the main fluid layout */
 .container-fluid {
   margin-bottom: 1rem;
 }
+
+/* Header section styling */
 .header {
   background-color: #0e6f87;
   color: #fff;
   height: 60px;
   box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
 }
+
+/* Application title styling */
 .apptitle {
   color: #fff;
   font-size: 1rem !important;
@@ -33,6 +39,7 @@ http://www.apache.org/licenses/LICENSE-2.0
   margin-left: 15px;
 }
 
+/* Borders bottom style for device type list page */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -47,6 +54,8 @@ http://www.apache.org/licenses/LICENSE-2.0
   border-image-width: 0px 0px 4px 0px;
   margin: 0 15px;
 }
+
+/* Title style for device type list page */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -54,18 +63,25 @@ http://www.apache.org/licenses/LICENSE-2.0
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+/* Button group styling */
 .btns-group {
   text-align: end;
   margin-top: 5px;
 }
 
+/* Table section styling */
 .table-sec {
   padding: 0 10px;
 }
+
+/* Button group flex styling */
 .btns-grp {
   display: flex;
   margin-left: -35px;
 }
+
+/* Group list title styling */
 .groupListTitle {
   color: #00273f;
   font-size: 1rem;
@@ -74,17 +90,25 @@ http://www.apache.org/licenses/LICENSE-2.0
   border-image-slice: 1;
   border-image-width: 0px 0px 4px 0px;
 }
+
+/* Form select and control focus style override */
 ::ng-deep.form-select:focus,
 .form-control:focus {
   border-color: gray !important;
   box-shadow: none !important;
 }
+
+/* AG Grid row styling override */
 ::ng-deep .ag-theme-quartz .ag-row {
   border-bottom: 1px solid #dee2e6 !important;
 }
+
+/* AG Grid overlay no rows center override */
 ::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
   display: none !important;
 }
+
+/* Create and back button styles */
 .create-btn,
 .back-btn {
   background-color: #fff;
@@ -97,14 +121,20 @@ http://www.apache.org/licenses/LICENSE-2.0
   letter-spacing: 0.5px;
   cursor: pointer;
 }
+
+/* Icon size styling */
 .icon-size {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
+
+/* Back button margin styling */
 .back-btn {
   margin-right: 10px;
 }
+
+/* Loader row styling */
 .loader-row{
   position: absolute;
   top: 50%;

@@ -13,10 +13,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for analysis report page -->
 <div class="container-fluid report-bg">
+    <!-- Row for report header and title -->
     <div class="row borders-btm">
+        <!-- Column for flavor selection -->
         <div class="col-md-5">
+            <!-- Row for flavor dropdown -->
             <div class="row ">
+              <!-- Row for RDK flavor dropdown -->
               <div class="falvor-row">
                 <span for="falvor" class="falvor-label">RDK flavor :</span>
                     <select class="form-select rdk-dropdown" aria-label="Default select example" id="preferCategoty"
@@ -27,26 +32,34 @@ limitations under the License.
               </div>
               </div>
         </div>
+        <!-- Column for result analysis title -->
         <div class="col-md-2">
             <h1 class="title">Result Analysis</h1>
         </div>
+        <!-- Empty column for spacing -->
         <div class="col-md-5">
         </div>
     </div>
+    <!-- Row for main section and tabs -->
     <div class="row main-sec mt-1">
     
+    <!-- Container for tab group and report cards -->
     <div  [ngClass]="this.tabName === 'Combined Report'?'card-combine':'radiobox-row'">
+        <!-- Row for tab group main margin -->
         <div class="row mt-2 main-margin">
             <mat-tab-group animationDuration="0ms" mat-align-tabs="start" (selectedTabChange)="onTabClick($event)">
                 <mat-tab label="Comparsion Report">
+                    <!-- Report section for comparison report -->
                     <div class="report-section" [ngClass]="this.tabName === 'Combined Report'?'hegiht-body':'height-comp'">
                         <form [formGroup]="reportForm" (ngSubmit)="compReportSubmit()"> 
+                        <!-- Row for base execution name input -->
                         <div class="mb-3 row-align">
                             <label for="testtype" class="col-md-3 col-form-label">Base Execution Name <span
                                     style="color:red; margin-left: 0.75em;">*</span>
                                 <span class="thunderport-info"><i class="bi bi-info-circle info-icon"
                                         matTooltip="Select one execution for adding it as base execution"></i></span>
                             </label>
+                            <!-- Column for base execution name input field -->
                             <div class="col-md-5">
                                 <input type="text" class="form-control" [(ngModel)]="selectExecutionName" formControlName="baseName"
                                     placeholder="Enter base execution name">
@@ -55,15 +68,18 @@ limitations under the License.
                                         choose.</small>
                                 </div>
                             </div>
+                            <!-- Column for OR and choose button -->
                             <div class="col-md-3 text-center">
                                 <span class="ortext">OR</span><button type="button" class="create-btn" (click)="openModal()">Choose</button>
                             </div>
 </div>
+                        <!-- Row for comparison execution names input -->
                         <div class="mt-4 mb-3 row-align">
                             <label for="testtype" class="col-md-3 col-form-label">Comparison Execution Names <span
                                 style="color:red; margin-left: 0.75em;">*</span>
                                 <span class="thunderport-info"><i class="bi bi-info-circle info-icon" matTooltip ="Select 1- 10 executions for the comparison report"></i></span>
                             </label>
+                            <!-- Column for comparison execution names textarea -->
                             <div class="col-md-5">
                             <textarea
                                 formControlName="comparisonName"
@@ -80,15 +96,18 @@ limitations under the License.
                                     </small>
                                 </div>
                             </div>
+                            <!-- Column for OR and choose button for comparison -->
                             <div class="col-md-3 text-center">
                                 <span class="ortext">OR</span><button type="button" class="create-btn" (click)="comparisonModal()">Choose</button>
                             </div>
                         </div>
+                        <!-- Column for generate comparison report button -->
                         <div class="col-md-12 text-center">
                             <button type="submit" class="create-btn" [disabled]="isDownloading">
                                 {{ isDownloading ? 'Downloading...' : 'Generate Comparison Report' }}
                             </button>
                             </div>
+                            <!-- Row for loader spinner (conditional) -->
                             <div class="row loader-row" *ngIf="isDownloading">
                             <app-loader></app-loader> <!-- Replace with your loader component -->
                         </div>
@@ -96,13 +115,18 @@ limitations under the License.
                     </div>
                 </mat-tab>
                 <mat-tab label="Combined Report">
+                    <!-- Report section for combined report -->
                     <div class="report-section mat-mdc-tab-body-content" [ngClass]="this.tabName === 'Combined Report'?'hegiht-body':'height-comp'">
                         <form [formGroup]="combinedForm" (ngSubmit)="onCombinedSubmit()"> 
+                            <!-- Row for combined report form fields -->
                             <div class="row first-row">
+                                <!-- Column for from date and device type -->
                                 <div class="col">
+                                    <!-- Row for from date input -->
                                     <div class="mb-3 row-align">
                                         <label for="testtype" class="col-md-4 col-form-label">From <span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <!-- Column for from date input field -->
                                         <div class="col-md-8">
                                             <input type="date" class="form-control" formControlName="fromDate">
                                             <div *ngIf="combinedSubmitted && combinedForm.controls['fromDate']?.errors" class="text-danger">
@@ -110,9 +134,11 @@ limitations under the License.
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- Row for device type select -->
                                     <div class="mt-2 mb-3 row-align">
                                         <label for="testtype" class="col-md-4 col-form-label">Device Type <span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <!-- Column for device type select field -->
                                         <div class="col-md-8">
                                             <select class="form-select" aria-label="Default select example" id="selectDevicetype"
                                                 formControlName="deviceType" (change)="deviceChange($event)">
@@ -127,10 +153,13 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Column for to date and execution type -->
                                 <div class="col">
+                                    <!-- Row for to date input -->
                                     <div class="mb-3 row-align">
                                         <label for="testtype" class="col-md-4 col-form-label">To <span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <!-- Column for to date input field -->
                                         <div class="col-md-8">
                                             <input type="date" class="form-control" formControlName="toDate">
                                             <div *ngIf="combinedSubmitted && combinedForm.controls['toDate']?.errors" class="text-danger">
@@ -138,9 +167,11 @@ limitations under the License.
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- Row for execution type select -->
                                     <div class="mt-2 mb-3 row-align">
                                         <label for="testtype" class="col-md-4 col-form-label">Execution Type<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <!-- Column for execution type select field -->
                                         <div class="col-md-8">
                                             <select class="form-select" aria-label="Default select example" id="selectDevicetype"
                                                 formControlName="executionType" (change)="changeExecutionType($event)" >
@@ -157,9 +188,12 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Column for category, script, and testsuite -->
                                 <div class="col">
+                                    <!-- Row for category select -->
                                     <div class="mb-3 row-align">
                                         <label for="testtype" class="col-md-4 col-form-label">Category</label>
+                                        <!-- Column for category select field -->
                                         <div class="col-md-8">
                                             <select class="form-select" aria-label="Default select example" id="selectDevicetype"
                                                 formControlName="category" disable>
@@ -173,14 +207,18 @@ limitations under the License.
                                         </div>
                                         </div>
                                     </div>
+                                                            <!-- Row for script input (conditional) -->
                                                             <div class="mb-3 row-align" *ngIf="showScript">
                                                                 <label for="scriptSingle" class="col-md-4 col-form-label">Script Name</label>
+                                                                <!-- Column for script input field -->
                                                                 <div class="col-md-8">
                                                                     <input type="text" class="form-control" formControlName="scriptSingle" />
                                                                 </div>
                                                             </div>
+                                                            <!-- Row for testsuite input (conditional) -->
                                                             <div class="mb-3 row-align" *ngIf="testSuiteShow">
                                                                 <label for="testSuiteSingke" class="col-md-4 col-form-label">Test Suite Name</label>
+                                                                <!-- Column for testsuite input field -->
                                                                 <div class="col-md-8">
                                                                     <input type="text" class="form-control" formControlName="testSuiteSingke" />
                                                                 </div>
@@ -188,26 +226,33 @@ limitations under the License.
    
                                 </div>
                             </div>
+                            <!-- Column for max days exceeded error message -->
                             <div class="col-md-12 selectedScript" *ngIf="combinedSubmitted && combinedForm.errors?.['maxDaysExceeded']" class="text-danger">
                                 <small>Maximum number of days allowed is 30</small>
                             </div>
+                            <!-- Column for filter executions button -->
                             <div class="col-md-12 ">
                                 <button type="submit" class="create-btn">Filter Executions</button>
                             </div>
                    
                         </form>
+                        <!-- Error message for selection (conditional) -->
                         <div *ngIf="selectionErrorMessage" class="errmsg-report" style="color: red;">
                             {{ selectionErrorMessage }}
                         </div>
+                    <!-- Column for generate combined report button (conditional) -->
                     <div class="col-md-12 text-end reportbtn" *ngIf="showReportBtn">
                         <button type="submit" class="create-btn" (click)="generateReport()" [disabled]="isDownloading">
                             {{ isDownloading ? 'Downloading...' : 'Generate Combined Report' }}
                         </button>
                     </div>
+                    <!-- Row for loader spinner (conditional) -->
                     <div class="row loader-row" *ngIf="isDownloading">
                         <app-loader></app-loader> <!-- Replace with your loader component -->
                     </div>
+                        <!-- Table details for combined report (conditional) -->
                         <div class="tableDeatils mt-2" *ngIf="showTable">
+                            <!-- Container for ag-grid table -->
                             <div style="width: 100%; height: 330px;" [class]="themeClass">
                                 <ag-grid-angular
                                 style="width: 100%; height: 100%;"

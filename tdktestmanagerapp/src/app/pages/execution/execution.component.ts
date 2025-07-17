@@ -451,6 +451,18 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   noDataFound : string = '';
   isNoDataVisible = false;
 
+  /**
+   * Constructor for ExecutionComponent.
+   * @param authservice AuthService for authentication and user info.
+   * @param _snakebar MatSnackBar for notifications.
+   * @param loginService LoginService for logout and user events.
+   * @param resultDialog MatDialog for result dialogs.
+   * @param triggerDialog MatDialog for execution trigger dialogs.
+   * @param dialogTDK MatDialog for TDK install dialogs.
+   * @param deleteDateDialog MatDialog for delete by date dialogs.
+   * @param executionservice ExecutionService for execution-related API calls.
+   * @param clipboard Clipboard service for copying text.
+   */
   constructor(
     private authservice: AuthService,
     private _snakebar: MatSnackBar,
@@ -468,6 +480,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     this.userCategory = this.loggedinUser.userCategory;
     this.preferedCategory = localStorage.getItem('preferedCategory') || '';
   }
+
   /**
    * Initializes the component.
   */
@@ -489,6 +502,10 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       this.allExecutionScheduler(); // Refresh the schedule list
     });
   }
+  
+  /**
+   * Refreshes the execution history and restores selection after data reload.
+   */
   refreshExeHistory():void{
     this.storeSelection();
     setTimeout(() => {
@@ -498,17 +515,26 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       }, 100);
     }, 500);
   }
+
+  /**
+   * Refreshes the schedule list.
+   */
   refreshSchedule():void{
     this.allExecutionScheduler();
   }
   @HostListener('window:popstate', ['$event'])
+  
+  /**
+   * Handles browser popstate event to prevent navigation.
+   * @param event The popstate event object.
+   */
   onPopState(event:Event){
    history.pushState(null, '', location.href);
   }
 
   /**
-   * Initializes all the execution list.
-  */
+   * Initializes all the execution list based on selected filters and search.
+   */
   getAllExecutions():void{
     this.storeSelection();
     if(this.selectedCategory === 'ExecutionName' && this.searchValue != ''){
@@ -628,6 +654,10 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     }
     this.stayFocus();
   }
+
+  /**
+   * Restores focus to the appropriate search input after data reload.
+   */
   stayFocus() {
     setTimeout(() => {
       if (document.activeElement === this.deviceSearchInput?.nativeElement) {
@@ -637,22 +667,28 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       }
     }, 100);
   }
+
   /**
-   * This method is for change the page.
-  */
+   * Handles page change event for the paginator.
+   * @param event The page event object containing pageIndex and pageSize.
+   */
   onPageChange(event: any): void {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
     this.getAllExecutions();
   }
+
   /**
    * Event handler for when the grid is ready.
-   * @param params - The GridReadyEvent object containing the grid API.
+   * @param params The GridReadyEvent object containing the grid API.
    */
   onGridReady(params: GridReadyEvent):void {
     this.gridApi = params.api;
   }
 
+  /**
+   * Handles selection change in the grid and updates selected row IDs.
+   */
   onSelectionChange():void{
     this.selectedRowIds.clear();
     this.gridApi.getSelectedRows().forEach(node => {
@@ -663,12 +699,20 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     // const selectedNode = this.gridApi.getSelectedNodes()[0];
     // this.selectedRowIds = this.gridApi.getSelectedNodes().map(node => node.data.executionId);
   }
+
+  /**
+   * Stores the currently selected row IDs from the grid.
+   */
   storeSelection(){
     this.selectedRowIds.clear();
     if(this.gridApi){
       this.gridApi.getSelectedRows().forEach(row => this.selectedRowIds.add(row.executionId))
     }
   }
+
+  /**
+   * Restores the selection of rows in the grid based on stored IDs.
+   */
   reSoreSelection():void{
     if(!this.gridApi) return;
       this.gridApi.forEachNode((node:any)=>{
@@ -678,9 +722,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       })
     
   }
+
   /**
-   * This method is for change the category.
-  */ 
+   * Handles category change event and updates data accordingly.
+   * @param event The event object containing the selected value.
+   */
   onCategoryChange(event:any): void {
     let val = event.target.value;
     this.deviceStausArray = [];
@@ -716,9 +762,10 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       this.allExecutionScheduler();
     }
   }
+ 
   /**
-   * This method is for initialize the device status.
-  */
+   * Initializes the device status and updates the device status array.
+   */
   getDeviceStatus():void{
 
     const isInputFocused = document.activeElement === this.deviceSearchInput?.nativeElement;
@@ -804,9 +851,12 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     })
     this.stayFocus();
   }
+ 
   /**
-   * This method is for format the tree view of device status
-  */
+   * Formats the tree view data for device status.
+   * @param data The array of device status data.
+   * @returns The formatted tree view data.
+   */
   formatData(data: any[]): any[]  {
     return [{
       name: 'Devices',
@@ -814,15 +864,17 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       isOpen:true
     }];
   }
+
   /**
-   * This method is for refresh the device status when click on refresh button.
-  */
+   * Refreshes the device status by reloading data.
+   */
   refreshDevice():void{
     this.getDeviceStatus();
   }
+
   /**
-   * After logout destroy the subject.
-  */
+   * Subscribes to logout events and destroys device status subjects.
+   */
   listenForLogout(): void {
     this.loginService.onLogout$.pipe(takeUntil(this.deviceStatusDestroy$)).subscribe(() => {
       this.deviceStatusDestroy$.next();
@@ -830,18 +882,20 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     });
     this.destroyExecution();
   }
+
   /**
-   * After logout destroy the subject.
-  */  
+   * Subscribes to logout events and destroys execution subjects.
+   */
   destroyExecution():void{
     this.loginService.onLogout$.pipe(takeUntil(this.executionDestroy$)).subscribe(() => {
       this.executionDestroy$.next();
       this.executionDestroy$.complete();
     });
   }
+
   /**
-   * destroy the lifecycle hook.
-  */  
+   * Angular lifecycle hook for component destruction. Cleans up subscriptions and intervals.
+   */
   ngOnDestroy(): void {
     this.deviceStatusDestroy$.next();
     this.deviceStatusDestroy$.complete();
@@ -864,9 +918,10 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       clearInterval(this.historyInterval);
     }
   }
+ 
   /**
-   * Initiallize the execution scheduler
-  */
+   * Initializes the execution scheduler and loads schedule data.
+   */
   allExecutionScheduler(){
     this.showLoader=true;
     this.isNoDataVisible = false;
@@ -893,9 +948,12 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
     })
   }
+
   /**
-   * Conver the UTC time to local browser time.
-  */
+   * Converts UTC time to local browser time string.
+   * @param utcDate The UTC date string to format.
+   * @returns The formatted local date and time string.
+   */
   formatTime(utcDate  : string) {
     const utcDateTime = new Date(utcDate);
    return utcDateTime.toLocaleString('en-US', {
@@ -907,9 +965,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     hour12: true,
   });
 }
+
   /**
-   * This methos is for change thunder enable/disable .
-  */
+   * Enables or disables Thunder for a device by IP.
+   * @param deviceIP The IP address of the device.
+   */
   enableDisable(deviceIP:any):void{
     this.executionservice.toggleThunderEnabled(deviceIP).subscribe({
       next: (res) => {
@@ -933,9 +993,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       }
     })
   }
+
   /**
-   * This method is for copy the device name .
-  */    
+   * Copies the device IP to clipboard and shows a notification.
+   * @param deviceIp The device IP to copy.
+   */
   copyToClipboard(deviceIp: any): void {
     this.clipboard.copy(deviceIp);
     this._snakebar.open(`Copied: ${deviceIp}`, '', {
@@ -945,9 +1007,10 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       verticalPosition: 'top'
     })
   }
+ 
   /**
-   * Global search option method .
-  */
+   * Handles global search input changes for the grid.
+   */
   onFilterTextBoxChanged() {
     this.gridApi.setGridOption(
       'quickFilterText',
@@ -956,15 +1019,9 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   }
 
     /**
-   * Handles the change event for the filter selection.
-   * 
-   * @param event - The event object containing the selected filter value.
-   * 
-   * Logs the selected filter value to the console and updates the `selectedCategory` property.
-   * If the selected category is 'User', it fetches the list of users from the execution service
-   * and updates the `dynamicList` property with the parsed response.
-   * If the selected category is 'Device' or 'Scripts/Testsuite', it clears the `searchValue` property.
-   */
+     * Handles the change event for the filter selection.
+     * @param event The event object containing the selected filter value.
+     */
     onFilterChange(event: any): void {
       this.selectedCategory = event.target.value;
       if (this.selectedCategory === 'User') {
@@ -986,6 +1043,9 @@ export class ExecutionComponent implements OnInit, OnDestroy{
    * If the selected category is 'Scripts/Testsuite', it calls `getAllExecutionByScript`.
    * 
    * @returns {void}
+   */
+  /**
+   * Handles the search button click event and triggers search based on selected category.
    */
  onSearchClick(): void {
   if(this.selectedCategory === 'ExecutionName' || this.selectedCategory === 'Scripts/Testsuite' || this.selectedCategory === 'Device' && this.searchValue) {
@@ -1013,8 +1073,9 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   }
 
   /**
-   * This method will open the result details modal.
-  */
+   * Opens the result details modal for a given execution.
+   * @param params The parameters containing executionId and other info.
+   */
   openDetailsModal(params: any):void {
     localStorage.setItem('executionId', params.executionId);
     this.executionservice.resultDetails(params.executionId).subscribe({next:(res)=>{
@@ -1047,8 +1108,9 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   }
 
   /**
-   * This method will downloadExcel of consolidated data.
-  */  
+   * Downloads the consolidated Excel report for a given execution.
+   * @param params The parameters containing executionId and executionName.
+   */
   downloadExcel(params: any):void {
     if(params.executionId){
       this.executionservice.excelReportConsolidated(params.executionId).subscribe({
@@ -1077,6 +1139,10 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   }
 
 
+  /**
+   * Opens the execute modal for a device if it is free.
+   * @param params The parameters containing device info and status.
+   */
   openModalExecute(params: any) {
   if (params.status === 'FREE') {
     this.executionservice.getDeviceStatusByIP(params.ip).subscribe({
@@ -1125,17 +1191,18 @@ export class ExecutionComponent implements OnInit, OnDestroy{
 }
 
   /**
-   * This methos is for expand and collapse the accordian.
-  */
+   * Expands or collapses the accordion panel for a parent item.
+   * @param parent The parent object whose panel is toggled.
+   */
   togglePanel(parent: any) {
     parent.isOpen = !parent.isOpen;
     // this.panelOpenState = !this.panelOpenState;
   }
 
-  
   /**
-   * This method will open the trigger execution modal.
-  */  
+   * Opens the trigger execution modal dialog.
+   * @param normalExecutionClick The data for normal execution click.
+   */
   openDialog(normalExecutionClick:any) {
     const normalExeModal = this.triggerDialog.open(ExecuteDialogComponent, {
       width: '68%',
@@ -1153,8 +1220,9 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       }, 2000);
     });
   }
+
   /**
-   * Method for delete the execution single/ multiple.
+   * Deletes the selected execution rows after confirmation.
    */
   deleteSelectedRows() : void {
     const selectedRows = this.gridApi.getSelectedRows();
@@ -1195,9 +1263,10 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       }
     }
   }
+ 
   /**
-   * This method will open the modal for delete by date.
-  */  
+   * Opens the modal for deleting executions by date.
+   */
   deleteDateModal():void{
     const deletedateModal = this.deleteDateDialog.open( DateDialogComponent,{
       width: '50%',
@@ -1211,9 +1280,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       this.getAllExecutions();
     });
   }
+
   /**
-   * This method is for delete the schedule.
-  */ 
+   * Deletes a scheduled execution after confirmation.
+   * @param data The data object containing schedule id.
+   */
   deleteSchedule(data:any):void{
     if (confirm("Are you sure to delete ?")) {
       if(data){
@@ -1239,9 +1310,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       }
     }
   }
+
   /**
-   * This method for change the mat-tab.
-  */   
+   * Handles tab click event and switches between execution and schedule tabs.
+   * @param event The tab click event object.
+   */
   onTabClick(event: any): void {
     const label = event.tab.textLabel;
     this.tabName = label;
@@ -1254,9 +1327,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       this.scheduleRefresh = false;
     }
   }
+
   /**
-   * This method for abort the inprogress execution.
-  */   
+   * Aborts an in-progress execution.
+   * @param params The parameters containing executionId.
+   */
   onAbort(params: any):void{
     this.executionservice.abortExecution(params.executionId).subscribe({
       next:(res)=>{
@@ -1277,11 +1352,20 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       }
     })
   }
+
+  /**
+   * Filters and sorts the device status array based on search term.
+   * @param seachDevice The search term for filtering devices.
+   */
   filterAndSortDevices(seachDevice:string){
     this.performSearch(seachDevice);
     this.sortDevices();
   }
 
+  /**
+   * Handles device search input changes and updates filtered device list.
+   * @param event The input event from the search box.
+   */
   searchDevices(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchDevice = inputElement.value.toLowerCase();
@@ -1296,6 +1380,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       }
     }, 0);
   }
+
+  /**
+   * Performs search on the device status array based on the search term.
+   * @param term The search term for filtering devices.
+   */
   performSearch(term: string) :void{
     const lowerTerm = term.toLowerCase();
     const filteredChildData = this.deviceStausArray[0].childData.filter((device:any) => {
@@ -1322,15 +1411,26 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     }];
     this.sortDevices();
   }
+
+  /**
+   * Clears the device search and resets the filtered device list.
+   */
   clearSearch() :void{
     this.searchTerm = '';
     this.filteredDeviceStausArray = [...this.deviceStausArray];
     this.sortDevices();
   }
+
+  /**
+   * Toggles the sort order for device status list.
+   */
   toggleSortOrder():void{
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     this.sortDevices();
   }
+  /**
+   * Sorts the filtered device status array by status and device name.
+   */
   sortDevices() :void{
     const order = this.sortOrder;
     const statusOrder : { [key: string]: number } = {
@@ -1357,6 +1457,10 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     });
   }
 
+  /**
+   * Opens the TDK install modal dialog for a given device name.
+   * @param deviceName The name of the device for TDK install.
+   */
   installTDKModal(deviceName:string){
     const dialogModal = this.dialogTDK.open(TdkInstallComponent, {
       width: '68%',
@@ -1371,10 +1475,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     });
   }
   
-   /**
-   * This method is for stopping a scheduled execution.
+  /**
+   * Stops a scheduled execution after confirmation.
+   * @param data The data object containing schedule id.
    */
-  stopSchedule(data: any): void {
+   stopSchedule(data: any): void {
     if (confirm("Are you sure you want to stop this schedule?")) {
       if (data) {
         this.executionservice.cancelTask(data.id).subscribe({
@@ -1400,8 +1505,10 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       }
     }
   }
+
   /**
-   * This method is for starting a scheduled execution again.
+   * Starts a scheduled execution again after confirmation.
+   * @param data The data object containing schedule id.
    */
   scheduleAgain(data: any): void {
     if (confirm("Are you sure you want to start this schedule again?")) {

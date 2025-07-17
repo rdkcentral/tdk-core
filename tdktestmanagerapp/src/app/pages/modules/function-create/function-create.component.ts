@@ -35,6 +35,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './function-create.component.html',
   styleUrl: './function-create.component.css'
 })
+
+/**
+ * FunctionCreateComponent is responsible for handling the creation of new functions.
+ * It manages the form, submission, and navigation logic for the function creation page.
+ */
 export class FunctionCreateComponent {
 
   configureName!:string;
@@ -43,12 +48,21 @@ export class FunctionCreateComponent {
   testGroupArr:testGroupModel[] = [];
   dynamicModuleName!: string;
 
+  /**
+   * Constructor for FunctionCreateComponent.
+   * @param authservice AuthService instance for authentication and config values
+   * @param router Router instance for navigation
+   * @param moduleservice ModulesService instance for module operations
+   * @param _snakebar MatSnackBar instance for notifications
+   */
   constructor(private authservice: AuthService,private router: Router,
     private moduleservice: ModulesService,private _snakebar :MatSnackBar,
   ) { }
 
   /**
    * Initializes the component and sets up the initial values.
+   * No parameters.
+   * No return value.
    */
   ngOnInit(): void {
     let data = JSON.parse(localStorage.getItem('modules') || '{}');
@@ -59,8 +73,11 @@ export class FunctionCreateComponent {
       moduleName: new FormControl<string | null>({value: this.dynamicModuleName, disabled: true}, { validators: Validators.required}),
     })
   }
+  
   /**
-   * This method is Submit the create function form.
+   * Submits the create function form.
+   * No parameters.
+   * No return value.
    */
   functionSubmit():void{    
     this.functionFormSubmitted = true;
@@ -95,16 +112,20 @@ export class FunctionCreateComponent {
       });
     }
   }
-
+  
   /**
    * Navigates back to the function list page.
+   * No parameters.
+   * No return value.
    */
   goBack():void{
     this.router.navigate(["/configure/function-list"]);
   }
-
+  
   /**
    * Resets the function form to its initial state.
+   * No parameters.
+   * No return value.
    */
   reset():void{
     this.functionForm.reset();

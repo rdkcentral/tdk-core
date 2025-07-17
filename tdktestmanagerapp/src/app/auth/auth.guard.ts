@@ -16,6 +16,17 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { inject } from '@angular/core';
 
+/**
+ * Guard function to determine if a route can be activated based on authentication status.
+ *
+ * This guard uses the injected `AuthService` to check if the user is logged in.
+ * If the user is authenticated, navigation proceeds. Otherwise, the user is redirected
+ * to the root route (`"/"`) and navigation is prevented.
+ *
+ * @param route - The activated route snapshot.
+ * @param state - The router state snapshot.
+ * @returns `true` if the user is logged in; otherwise, navigates to root and returns `false`.
+ */
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router)

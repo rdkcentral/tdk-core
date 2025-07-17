@@ -26,15 +26,27 @@ export class CreateSocComponent {
   configureName!:string;
   categoryName!:string;
 
+  /**
+   * Constructor for CreateSocComponent.
+   * @param router Angular Router for navigation
+   * @param route ActivatedRoute for accessing route parameters
+   * @param service SocService for SoC operations
+   * @param _snakebar MatSnackBar for notifications
+   * @param authservice AuthService for authentication and user info
+   */
   constructor(private router: Router, private route: ActivatedRoute, public service: SocService,
     private _snakebar: MatSnackBar, private authservice: AuthService) {
-    
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
   }
+
 
   /**
    * Handles the form submission event.
    * @param name - The SOC name.
+   */
+  /**
+   * Handles the form submission event.
+   * @param name The SOC name to be created.
    */
   onFormSubmitted(name: string): void {
     let obj = {
@@ -52,9 +64,7 @@ export class CreateSocComponent {
           })
           setTimeout(() => {
             this.router.navigate(["configure/list-soc"]);
-  
           }, 1000);
-  
         },
         error: (err) => {
           this._snakebar.open(err.message, '', {
@@ -64,15 +74,14 @@ export class CreateSocComponent {
             verticalPosition: 'top'
           })
         }
-  
       })
     }
-  
   }
 
+
   /**
-   * Initializes the component.
-   */  
+   * Initializes the component and sets up category and form name.
+   */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
     if(this.configureName === 'RDKB'){
@@ -83,5 +92,6 @@ export class CreateSocComponent {
       this.commonFormName = this.route.snapshot.url[1].path === 'create-soc' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'SoC' : this.commonFormName;
     }
   }
+
 
 }

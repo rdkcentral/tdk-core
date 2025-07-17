@@ -18,10 +18,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 
+/* Global font family for body and all elements except material icons */
 body,
 *:not(.material-icons) {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/* Typography styles for headings */
 .mat-typography h1,
 .mat-typography h2,
 .mat-typography h3,
@@ -30,22 +33,30 @@ body,
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
+
+/* Flavor row styles */
 .falvor-row {
   display: flex;
   align-items: baseline;
   margin-top: 5px;
   padding-left: 0;
 }
+
+/* Flavor label styles */
 .falvor-label {
   width: 75px;
   font-size: 0.8rem;
   font-weight: 500;
 }
 
+
+/* RDK dropdown styles */
 .rdk-dropdown {
   width: 120px;
 }
 
+
+/* Bottom border gradient styles */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -61,6 +72,8 @@ body,
   margin: 0 15px;
   /* padding-bottom: 4px; */
 }
+
+/* Title styles */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -68,11 +81,15 @@ body,
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+/* RDK dropdown focus styles */
 .rdk-dropdown:focus {
   border-color: gray !important;
   box-shadow: none !important;
 }
 
+
+/* Show RDK group row styles */
 .showrdkgrouprow {
   margin-bottom: 1rem;
   display: flex;
@@ -80,20 +97,28 @@ body,
   margin-left: 0px;
 }
 
+
+/* Heading styles */
 .heading {
   font-size: 0.87rem;
   margin-top: 8px;
   margin-right: 20px;
   font-weight: 500;
 }
+
+/* Common heading styles */
 .commonheading {
   font-weight: 500;
   text-decoration: underline;
 }
+
+/* Main section container */
 .main-sec {
   margin: auto;
 }
 
+
+/* Card height styles */
 .card-height {
   height: 90px;
   display: flex;
@@ -101,6 +126,8 @@ body,
   align-items: center;
   background-color: #0e6f8794;
 }
+
+/* Card height styles for card-hgt */
 .card-hgt {
   height: 110px;
   display: flex;
@@ -109,6 +136,8 @@ body,
   box-shadow: none;
 }
 
+
+/* Category title styles */
 .cat-title {
   font-size: 1rem;
   text-decoration: underline;
@@ -117,6 +146,8 @@ body,
   font-weight: 400;
 }
 
+
+/* Circle styles */
 .circle {
   display: flex;
   height: 40px;
@@ -128,11 +159,15 @@ body,
   margin-bottom: 5px;
 }
 
+
+/* Icon styles for right and conf */
 .icon-right,
 .icon-conf {
   font-size: 1.5rem;
   color: #fff;
 }
+
+/* Card height styles for card-height-3 */
 .card-height-3 {
   display: flex;
   border-bottom: 1px solid #ddd;
@@ -140,6 +175,8 @@ body,
   align-items: center;
   cursor: pointer;
 }
+
+/* Card height hover styles for card-height-3 */
 .card-height-3:hover {
   border-image: linear-gradient(
     to right,
@@ -153,16 +190,22 @@ body,
   border-image-slice: 1;
   border-image-width: 0px 0px 4px 0px;
 }
+
+/* Arrow icon styles inside card-height-3 */
 .card-height-3 .arrow-icon {
   opacity: 0;
   transition: visibility 0s, opacity 0.5s linear;
 }
+
+/* Arrow icon hover styles inside card-height-3 */
 .card-height-3:hover .arrow-icon {
   visibility: visible;
   opacity: 1;
   transition: visibility 0s, opacity 0.5s linear;
 }
 
+
+/* Category title styles for category-title3 */
 .category-title3 {
   font-size: 0.87rem;
   text-decoration: none;
@@ -173,38 +216,57 @@ body,
   line-height: 2pc;
 }
 
+
+/* Text group styles */
 .text-group {
   margin-left: 40px;
 }
+
+/* Arrow icon styles */
 .arrow-icon {
   font-size: 2rem;
   position: absolute;
   left: 46%;
 }
+
+/* Arrow icon right styles */
 .arrow-icon-right {
   font-size: 2rem;
   position: absolute;
   right: 6%;
 }
+
+/* Arrow icon right styles inside card-height-3 */
 .card-height-3 .arrow-icon-right {
   opacity: 0;
   transition: visibility 0s, opacity 0.5s linear;
 }
+
+/* Arrow icon right hover styles inside card-height-3 */
 .card-height-3:hover .arrow-icon-right {
   visibility: visible;
   opacity: 1;
   transition: visibility 0s, opacity 0.5s linear;
 }
+
+/* RDKB certify styles */
 .rdkBcertify {
   background-color: #8080803b;
   cursor: default;
 }
+
+/* BC circle styles */
 .bc-circle {
   background-color: #8080803b;
 }
+
+/* RDKB link styles */
 .rdkBlink {
   cursor: default;
 }
+
+/* App icon styles */
 .app-icon{
   height: 30px;
 }
+

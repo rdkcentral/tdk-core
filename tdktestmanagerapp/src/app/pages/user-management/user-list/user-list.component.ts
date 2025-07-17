@@ -182,7 +182,15 @@ export class UserListComponent implements OnInit {
   selectedRowCount = 0;
   showLoader = false;
 
+  /**
+   * Constructor for UserListComponent.
+   * @param http HttpClient for HTTP requests
+   * @param router Angular Router for navigation
+   * @param usermanageservice UserManagementService for user management operations
+   * @param _snakebar MatSnackBar for notifications
+   */
   constructor(private http: HttpClient, private router: Router, private usermanageservice: UserManagementService, private _snakebar: MatSnackBar) { }
+
   
   /**
    * The method to initialize the component.

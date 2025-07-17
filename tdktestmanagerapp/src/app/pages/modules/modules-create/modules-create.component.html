@@ -13,10 +13,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for module creation page -->
 <div class="container-fluid">
+  <!-- Row for form section -->
   <div class="row mt-2">
+    <!-- Main form column -->
     <div class="col">
+      <!-- Container box for form -->
       <div class="container-box" id="container-box">
+        <!-- Form container for module creation -->
         <div class="form-container create-group">
           <h1 class="title">Create {{ displayName }} Module</h1>
           <form
@@ -24,8 +29,11 @@ limitations under the License.
             (ngSubmit)="moduleSubmit()"
             data-bs-spy="scroll"
           >
+            <!-- Row for module name input -->
             <div class="row mb-3">
+              <!-- Column for module name input -->
               <div class="col">
+                <!-- Row for module name label and input -->
                 <div class="row mb-3">
                   <div class="col-md-12">
                     <label for="moduleName" class="col-form-label"
@@ -41,6 +49,7 @@ limitations under the License.
                       formControlName="moduleName"
                       placeholder="Enter Module Name"
                     />
+                    <!-- Error message for module name -->
                     <div
                       *ngIf="
                         moduleFormSubmitted &&
@@ -55,6 +64,7 @@ limitations under the License.
                     </div>
                   </div>
                 </div>
+                <!-- Row for execution timeout input -->
                 <div class="row mb-3">
                   <div class="col-md-12">
                     <label for="executionTime" class="col-form-label"
@@ -72,6 +82,7 @@ limitations under the License.
                       inputmode="numeric"
                       oninput="this.value = this.value.replace(/\D+/g, '')"
                     />
+                    <!-- Error message for execution timeout -->
                     <div
                       *ngIf="
                         moduleFormSubmitted &&
@@ -87,10 +98,12 @@ limitations under the License.
                     </div>
                   </div>
                 </div>
+                <!-- Row for crash files input -->
                 <div class="row mb-3">
                   <label for="crashFiles" class="col-form-label"
                     >Crash Files Path</label
                   >
+                  <!-- Chip group for crash files -->
                   <div class="chip-group">
                     <input
                       type="text"
@@ -107,6 +120,7 @@ limitations under the License.
                       <i class="bi bi-plus-circle"></i>
                     </button>
                   </div>
+                  <!-- Chips for crash files -->
                   @for (item of crashFilesArr; track $index) {
                   <div
                     class="chips-container"
@@ -124,7 +138,9 @@ limitations under the License.
                   }
                 </div>
               </div>
+              <!-- Column for test group and log files -->
               <div class="col offset-1">
+                <!-- Row for test group input -->
                 <div class="row mb-3">
                   <div class="col-md-12">
                     <label for="testGroup" class="col-form-label"
@@ -144,6 +160,7 @@ limitations under the License.
                       <option value="{{ item }}">{{ item }}</option>
                       }
                     </select>
+                    <!-- Error message for test group -->
                     <div
                       *ngIf="
                         moduleFormSubmitted &&
@@ -159,6 +176,7 @@ limitations under the License.
                     </div>
                   </div>
                 </div>
+                <!-- Row for thunder enabled checkbox -->
                 <div class="row mb-3">
                   <div class="col-md-6">
                     <label for="isThunder" class="col-form-label"
@@ -180,10 +198,12 @@ limitations under the License.
                   </div>
                   <div class="col-md-6"></div>
                 </div>
+                <!-- Row for log files input -->
                 <div class="row mb-3">
                   <label for="logFiles" class="col-form-label"
                     >Log Files Path</label
                   >
+                  <!-- Chip group for log files -->
                   <div class="chip-group">
                     <input
                       type="text"
@@ -200,6 +220,7 @@ limitations under the License.
                       <i class="bi bi-plus-circle"></i>
                     </button>
                   </div>
+                  <!-- Chips for log files -->
                   @for (item of logFilesArr; track $index) {
                   <div
                     class="chips-container"
@@ -218,7 +239,9 @@ limitations under the License.
                 </div>
               </div>
             </div>
+            <!-- Row for action buttons -->
             <div class="row">
+              <!-- Container for action buttons -->
               <div class="mt-2 createbtn text-end">
                 <button
                   type="button"

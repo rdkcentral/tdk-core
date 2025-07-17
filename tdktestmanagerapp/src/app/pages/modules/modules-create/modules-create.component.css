@@ -17,14 +17,26 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+/*
+ * Container for main sections with bottom margin
+ */
 .container{
     margin-bottom: 2rem;
 }
+
+/*
+ * Card element with fixed height and scrollable content
+ */
 .card-height{
     height: 416px !important;
     overflow-y: auto;
     display: block;
 }
+
+/*
+ * Styles the title text for the page
+ */
 .title {
     font-size: 1rem;
     text-align: center;
@@ -36,17 +48,32 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin: 0 25px;
 }
 
+/*
+ * Styles the user form container with side margins
+ */
 .userform {
     margin-left: 25px;
     margin-right: 25px;
 }
+
+/*
+ * Removes focus border and shadow for form-select and form-control
+ */
 ::ng-deep.form-select:focus, .form-control:focus{
     border-color: gray !important;
     box-shadow: none !important;
 }
+
+/*
+ * Styles the form inside the container box
+ */
 .container-box form {
     margin: 10px 2rem;
 }
+
+/*
+ * Styles the create and reset buttons
+ */
 .create-btn,
 .reset-btn {
     background-color: #00B2DC;
@@ -61,19 +88,37 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin-right: 10px;
 }
 
+/*
+ * Adds right margin to reset button
+ */
 .reset-btn {
     margin-right: 10px;
 }
 
+/*
+ * Styles the crash files container
+ */
 .crash-files{
     width: 100%;
 }
+
+/*
+ * Styles the chip group for displaying chips
+ */
 .chip-group{
     display :flex;
 }
+
+/*
+ * Styles the thunder border
+ */
 .thunder {
     border: 1px solid gray;
 }
+
+/*
+ * Styles the chip button
+ */
 .chip-btn{
     background-color: #00B2DC;
     color: #fff;
@@ -83,6 +128,10 @@ http://www.apache.org/licenses/LICENSE-2.0
     letter-spacing: 0.5px;
     cursor: pointer;
 }
+
+/*
+ * Styles the chips container
+ */
 .chips-container{
     display: inline-flex;
     align-items: center;
@@ -94,11 +143,19 @@ http://www.apache.org/licenses/LICENSE-2.0
     width: auto;
     cursor: pointer;
 }
+
+/*
+ * Styles the chip text
+ */
 .chip-text{
     margin-right: 0.5rem;
     font-size: .8rem;
     color: #fff;
 }
+
+/*
+ * Styles the chip cancel button
+ */
 .chip-cancel-btn{
     background: none;
     color: #fff;
@@ -106,6 +163,10 @@ http://www.apache.org/licenses/LICENSE-2.0
     border: none;
     cursor: pointer;
 }
+
+/*
+ * Styles the check thunder line height
+ */
 .check-thunder {
     line-height: 3;
 }

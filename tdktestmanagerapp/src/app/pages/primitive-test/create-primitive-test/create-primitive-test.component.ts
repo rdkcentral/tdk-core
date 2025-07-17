@@ -154,6 +154,14 @@ export class CreatePrimitiveTestComponent {
     menuTabs: ['filterMenuTab'],
   };
 
+  /**
+   * Constructor for CreatePrimitiveTestComponent.
+   * @param formBuilder FormBuilder instance for reactive forms.
+   * @param router Router instance for navigation.
+   * @param authservice AuthService instance for authentication and config value.
+   * @param _snakebar MatSnackBar instance for notifications.
+   * @param service PrimitiveTestService instance for primitive test operations.
+   */
   constructor(private formBuilder: FormBuilder, private router: Router, private authservice: AuthService, private _snakebar: MatSnackBar,
     private service: PrimitiveTestService) {
     this.userGroupName = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
@@ -162,8 +170,10 @@ export class CreatePrimitiveTestComponent {
     }
   }
 
+
   /**
-   * Initializes the component.
+   * Initializes the component and sets up initial state.
+   * No parameters.
    */
   ngOnInit(): void {
     this.createPrimitiveTestForm = this.formBuilder.group({
@@ -172,55 +182,61 @@ export class CreatePrimitiveTestComponent {
       selectFunction: ['', Validators.required]
     });
     this.configureName = this.authservice.selectedConfigVal;
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
-    }else{
+    } else {
       this.categoryName = 'Video';
     }
 
     this.service.getlistofModules(this.configureName).subscribe(res => {
       this.moduleNames = res.data;
     })
-
   }
+
 
   /**
    * Getter for the form controls.
+   * No parameters.
    */
   get f() { return this.createPrimitiveTestForm.controls; }
 
+
   /**
-   * Method to get the selected module name
-   * @param event 
+   * Handles module selection change event.
+   * @param event The change event from the module dropdown.
    */
-  getModuleSelected(event: any) :void{
+  getModuleSelected(event: any): void {
     this.selectedValue = event.target.value;
     this.service.getlistofFunction(this.selectedValue).subscribe(res => {
       this.functionNames = res.data
     })
   }
 
+
   /**
-   * Method to get the selected function name
-   * @param event 
+   * Handles function selection change event.
+   * @param event The change event from the function dropdown.
    */
-  getFunctionSelected(event: any) :void{
+  getFunctionSelected(event: any): void {
     this.selectedFunctionValue = event.target.value;
     this.service.getParameterList(this.selectedFunctionValue).subscribe(res => {
       this.rowData = res.data;
     })
   }
 
+
   /**
-   * Method to get the grid ready
-   * @param params 
+   * Event handler for when the grid is ready.
+   * @param params The grid ready event parameters.
    */
-  onGridReady(params: GridReadyEvent<any>):void{
+  onGridReady(params: GridReadyEvent<any>): void {
     this.gridApi = params.api;
   }
 
+
   /**
-   * Method to create a primitive test
+   * Handles form submission to create a primitive test.
+   * No parameters.
    */
   createPrimitiveTest(): void {
     this.submitted = true;
@@ -252,12 +268,9 @@ export class CreatePrimitiveTestComponent {
           })
           setTimeout(() => {
             this.router.navigate(["configure/list-primitivetest"]);
-
           }, 1000);
-
         },
         error: (err) => {
-         
           const res = Object.keys(err).map(key => {
             return { key: err[key] }
           });
@@ -272,24 +285,25 @@ export class CreatePrimitiveTestComponent {
           })
         }
       })
-
     }
   }
 
+
   /**
-   * row selection event
-   * @param event 
+   * Event handler for when a row is selected.
+   * @param event The row selected event.
    */
-  onRowSelected(event: RowSelectedEvent):void{
+  onRowSelected(event: RowSelectedEvent): void {
     this.isRowSelected = event.node.isSelected();
     this.rowIndex = event.rowIndex
   }
+
 
   /**
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent):void{
+  onSelectionChanged(event: SelectionChangedEvent): void {
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
     this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
@@ -299,18 +313,23 @@ export class CreatePrimitiveTestComponent {
     }
   }
 
+
   /**
    * Resets the form.
+   * No parameters.
    */
   reset(): void {
     this.createPrimitiveTestForm.reset();
   }
 
+
   /**
-   * Navigates back to the list of box types.
+   * Navigates back to the list of primitive tests.
+   * No parameters.
    */
   goBack(): void {
     this.router.navigate(["configure/list-primitivetest"]);
   }
+
 
 }

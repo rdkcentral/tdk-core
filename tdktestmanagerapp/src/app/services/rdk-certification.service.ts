@@ -29,10 +29,21 @@ import { saveAs } from 'file-saver';
 })
 export class RdkService {
 
+  /**
+   * Constructor for RdkService.
+   * @param http HttpClient for HTTP requests
+   * @param authService AuthService for authentication and API token
+   * @param config Application configuration injected as APP_CONFIG
+   */
   constructor(private http: HttpClient, private authService: AuthService,
     @Inject('APP_CONFIG') private config: any
   ) { }
 
+  /**
+   * Uploads a config file for RDK certification.
+   * @param file The config file to upload.
+   * @returns Observable with the upload result.
+   */
   uploadConfigFile(file: File): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -42,6 +53,10 @@ export class RdkService {
     return this.http.post(`${this.config.apiUrl}api/v1/rdkcertification/create`, formData, { headers });
   }
 
+  /**
+   * Gets all RDK certifications.
+   * @returns Observable with the list of RDK certifications.
+   */
   getallRdkCertifications(): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -50,6 +65,11 @@ export class RdkService {
 
   }
 
+  /**
+   * Downloads a config file by name.
+   * @param name The name of the config file to download.
+   * @returns Observable with the config file as a blob and status.
+   */
   downloadConfig(name: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -74,6 +94,11 @@ export class RdkService {
 
   }
 
+  /**
+   * Gets the script template by primitive test name.
+   * @param name The name of the primitive test.
+   * @returns Observable with the script template as text.
+   */
   scriptTemplate(name: string) {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -81,6 +106,11 @@ export class RdkService {
     return this.http.get(`${this.config.apiUrl}api/v1/script/getScriptTemplate?primitiveTestName=${name}`, { headers, responseType: 'text' })
   }
 
+  /**
+   * Creates a new script for RDK certification.
+   * @param scriptFile The script file to create.
+   * @returns Observable with the creation result.
+   */
   createScript(scriptFile: File): Observable<any> {
     const formData = new FormData();
     formData.append('pythonFile', scriptFile);
@@ -89,6 +119,12 @@ export class RdkService {
     });
     return this.http.post(`${this.config.apiUrl}api/v1/rdkcertification/create`, formData, { headers});
   }
+
+  /**
+   * Updates a script for RDK certification.
+   * @param scriptFile The script file to update.
+   * @returns Observable with the update result.
+   */
   updateScript(scriptFile: File): Observable<any> {
     const formData = new FormData();
     formData.append('pythonFile', scriptFile);
@@ -97,6 +133,12 @@ export class RdkService {
     });
     return this.http.post(`${this.config.apiUrl}api/v1/rdkcertification/update`, formData, { headers });
   }
+
+  /**
+   * Gets the content of a config file by name.
+   * @param fileName The name of the config file.
+   * @returns Observable with the file content as a blob and status.
+   */
   getFileContent(fileName: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -112,6 +154,12 @@ export class RdkService {
     )
 
   }
+
+  /**
+   * Deletes an RDK certification by file name.
+   * @param name The name of the file to delete.
+   * @returns Observable with the deletion result.
+   */
   deleteRdkCertification(name: any): Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()

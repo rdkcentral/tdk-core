@@ -12,15 +12,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
+<!-- Main container for function list page -->
 <div class="container-fluid">
+  <!-- Row for header and controls -->
   <div class="row borders-btm">
+    <!-- Left column -->
     <div class="col"></div>
+    <!-- Center column for title -->
     <div class="col">
       <h1 class="title">
         {{ categoryName }} - {{ dynamicModuleName }} - Function List
       </h1>
     </div>
+    <!-- Right column for action buttons -->
     <div class="col">
+      <!-- Button group for navigation and creation -->
       <div class="btns-group">
         <button class="back-btn" (click)="goBack()" matTooltip="Back">
           <i class="bi bi-arrow-return-left icon-size"></i>
@@ -35,9 +42,11 @@ limitations under the License.
       </div>
     </div>
   </div>
+  <!-- Row for loader indicator -->
   <div class="row loader-row" *ngIf="showLoader">
     <app-loader></app-loader>
   </div>
+  <!-- Row for function table section -->
   <div class="row table-sec mt-2">
     <ag-grid-angular
       style="width: 100%; height: 446px"
@@ -55,6 +64,5 @@ limitations under the License.
       [context]="this"
       [gridOptions]="gridOptions"
     ></ag-grid-angular>
-
   </div>
 </div>

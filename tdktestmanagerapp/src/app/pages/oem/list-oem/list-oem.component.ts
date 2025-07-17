@@ -70,42 +70,53 @@ export class ListOemComponent {
     rowHeight: 36
   }; 
 
+  /**
+   * Constructor for ListOemComponent.
+   * @param router Router instance for navigation.
+   * @param authservice AuthService instance for authentication and config value.
+   * @param service OemService instance for OEM operations.
+   * @param _snakebar MatSnackBar instance for notifications.
+   */
   constructor(private router: Router, private authservice: AuthService,
     private service: OemService, private _snakebar: MatSnackBar
   ) { }
 
+
   /**
-   * Initializes the component.
-  */
+   * Initializes the component and sets up initial state.
+   * No parameters.
+   */
   ngOnInit(): void {
     this.showLoader = true;
     this.service.getOemByList(this.authservice.selectedConfigVal).subscribe(res => {
       this.rowData = res.data;
-      if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
+      if (this.rowData == null || this.rowData == undefined || this.rowData.length > 0) {
         this.showLoader = false;
       }
     })
     this.configureName = this.authservice.selectedConfigVal;
     this.authservice.currentRoute = this.router.url.split('?')[0];
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
-    }else{
+    } else {
       this.categoryName = 'Video';
     }
   }
+
 
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
-  onGridReady(params: GridReadyEvent<any>):void{
+  onGridReady(params: GridReadyEvent<any>): void {
     this.gridApi = params.api;
   }
+
   /**
-   * Deletes a record.
+   * Deletes an OEM record.
    * @param data The data of the record to delete.
    */
-  delete(data: any) :void{
+  delete(data: any): void {
     if (confirm("Are you sure to delete ?")) {
       this.service.deleteOem(data.oemId).subscribe({
         next: (res) => {
@@ -128,23 +139,24 @@ export class ListOemComponent {
         }
       })
     }
-
   }
+
 
   /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-  onRowSelected(event: RowSelectedEvent):void{
+  onRowSelected(event: RowSelectedEvent): void {
     this.isRowSelected = event.node.isSelected();
     this.rowIndex = event.rowIndex
   }
+
 
   /**
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent):void{
+  onSelectionChanged(event: SelectionChangedEvent): void {
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
     this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
@@ -154,31 +166,36 @@ export class ListOemComponent {
     }
   }
 
+
   /**
-   * Edits a user.
-   * @param user The user to edit.
-   * @returns The edited user.
+   * Edits an OEM record.
+   * @param user The user/OEM to edit.
    */
-  userEdit(user: any):void{
+  userEdit(user: any): void {
     localStorage.setItem('user', JSON.stringify(user))
     this.service.currentUrl = user.userGroupId;
     this.router.navigate(['configure/oem-edit']);
   }
 
+
   /**
-   * Creates a new oem.
+   * Navigates to the OEM creation page.
+   * No parameters.
    */
-  createOem():void{
+  createOem(): void {
     this.router.navigate(['/configure/create-oem']);
   }
+
   
   /**
    * Navigates back to the previous page.
+   * No parameters.
    */
-  goBack():void{
+  goBack(): void {
     this.authservice.selectedConfigVal = 'RDKV';
     this.authservice.showSelectedCategory = "Video";
     this.router.navigate(["/configure"]);
   }
+
 
 }

@@ -22,6 +22,18 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from './auth.service';
 
+/**
+ * Guard function to check if the current user's role matches any of the expected roles defined in the route data.
+ *
+ * @param route - The activated route snapshot containing route-specific data.
+ * @param state - The router state snapshot at the time of activation.
+ * @returns `true` if the user's role is included in the expected roles; otherwise, `false`.
+ *
+ * @remarks
+ * - Uses dependency injection to access `AuthService` and `Router`.
+ * - Expects the route data to contain a `role` property, which is an array of allowed roles.
+ * - Calls `authService.getPrivileges()` to get the current user's role.
+ */
 export const roleGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);

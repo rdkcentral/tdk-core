@@ -43,14 +43,23 @@ export class DialogDelete implements OnInit{
   visibleDeviceconfigFile = false;
   newFileName!: string;
 
+  /**
+   * Constructor for DialogDelete component.
+   * @param dialogRef Reference to the dialog opened.
+   * @param data Data injected into the dialog (contains stbName, boxTypeName, stbname, etc).
+   * @param service DeviceService for device operations.
+   * @param fb FormBuilder for reactive forms.
+   */
   constructor(
     public dialogRef: MatDialogRef<DialogDelete>,
     @Inject(MAT_DIALOG_DATA) public data: any ,private service:DeviceService,private fb:FormBuilder) {
       
     }
-/**
- * Initialize the component
- */
+
+  /**
+   * Angular lifecycle hook called on component initialization.
+   * Initializes the form and loads config file visibility.
+   */
   ngOnInit(): void {
     this.visibilityConfigFile();
     this.uploadConfigForm = this.fb.group({
@@ -58,15 +67,18 @@ export class DialogDelete implements OnInit{
       editorContent: [''],
     });
   }
-/**
- * This methos is for close the dialog box
- */
+
+  /**
+   * Closes the dialog box without returning a value.
+   */
   onCancelDelete(): void {
     this.dialogRef.close(false); 
   }
-/**
- * This method is for view the config file
- */
+
+  /**
+   * Loads and determines the visibility of the device config file section.
+   * Calls the DeviceService to download the config file and sets visibility flags.
+   */
   visibilityConfigFile(): void{
     let boxNameConfig = this.data.stbName;
     let boxTypeConfig = this.data.boxTypeName; 
@@ -89,10 +101,12 @@ export class DialogDelete implements OnInit{
       this.readFileContent(res.content);
     })
   }
+
   /**
- * This method is for read the content of config file
- */
-  readFileContent(file:Blob): void{
+   * Reads the content of the config file and updates the form.
+   * @param file The Blob file to read content from.
+   */
+  readFileContent(file: Blob): void{
     let boxNameConfig = this.data.stbname;
     const reader = new FileReader();
     reader.onload = ()=>{
@@ -107,11 +121,15 @@ export class DialogDelete implements OnInit{
     }
     reader.readAsText(file)
   }
-/**
- * This methos is for format the content
- */
-  formatContent(content:any){
+
+  /**
+   * Formats the content by replacing '#' with line breaks for display.
+   * @param content The content to format.
+   * @returns The formatted content as a string.
+   */
+  formatContent(content: any){
     return content.replace(/#/g, '<br># ');
   }
+
 
 }

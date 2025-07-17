@@ -81,6 +81,10 @@ export class ExecutionButtonComponent implements OnInit{
   textforedit!:string;
   showHideAbort = true;
 
+  /**
+   * ag-Grid initialization method for the cell renderer component.
+   * @param params The custom cell renderer parameters including selected row count and node IDs.
+   */
   agInit(params:customcellRenderparams): void {
     this.params = params;
     this.selectedRowCount = params.selectedRowCount();
@@ -88,8 +92,17 @@ export class ExecutionButtonComponent implements OnInit{
     this.currentNodeId = params.node.id
     
   }
+  /**
+   * Constructor for ExecutionButtonComponent.
+   * @param route ActivatedRoute for accessing route parameters.
+   */
   constructor(private route: ActivatedRoute) { }
 
+
+  /**
+   * Angular lifecycle hook called on component initialization.
+   * Sets the visibility of the abort button based on params data.
+   */
   ngOnInit(): void {
     if(this.params.data.abortNeeded === true){
       this.showHideAbort = true;
@@ -98,10 +111,19 @@ export class ExecutionButtonComponent implements OnInit{
     }
   }
   //** Condition for disable edit and delete button to own user */
+  /**
+   * Determines if the edit and delete buttons should be disabled for the current user.
+   * @returns True if the button should be disabled, false otherwise.
+   */
   isButtonDisabled(): boolean {
     return !( this.selectedRowCount === 1 && this.lastSelectedNodeId === this.currentNodeId);
   }
 
+  /**
+   * ag-Grid refresh method for the cell renderer component.
+   * @param params The custom cell renderer parameters.
+   * @returns True to indicate the component should be refreshed.
+   */
   refresh(params: customcellRenderparams): boolean {
     this.selectedRowCount = params.selectedRowCount();
     this.lastSelectedNodeId = params.lastSelectedNodeId;
@@ -109,27 +131,47 @@ export class ExecutionButtonComponent implements OnInit{
     return true;
   }
 
+  /**
+   * Handles the edit button click event.
+   * @param $event The event object from the button click.
+   */
   onEditClick($event:any) {
     if (this.params.onEditClick instanceof Function) {
       this.params.onEditClick(this.params.node.data);
     }
   }
+  /**
+   * Handles the delete button click event.
+   * @param $event The event object from the button click.
+   */
   onDeleteClick($event:any){
     if (this.params.onDeleteClick instanceof Function) {
       this.params.onDeleteClick(this.params.node.data);
     }
     
   }
+  /**
+   * Handles the view button click event.
+   * @param $event The event object from the button click.
+   */
   onViewClick($event:any){
     if (this.params.onViewClick instanceof Function) {
       this.params.onViewClick(this.params.node.data);
     }
   }
+  /**
+   * Handles the download button click event.
+   * @param $event The event object from the button click.
+   */
   onDownloadClick($event:any){
     if (this.params.onDownloadClick instanceof Function) {
       this.params.onDownloadClick(this.params.node.data);
     }
   }
+  /**
+   * Handles the abort button click event.
+   * @param $event The event object from the button click.
+   */
   onAbortClick($event:any){
     if (this.params.onAbortClick instanceof Function) {
       this.params.onAbortClick(this.params.node.data);

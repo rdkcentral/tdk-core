@@ -205,13 +205,24 @@ public columnDefs: ColDef[] = [
     showTable = false;
     showLoader = false;
 
+    /**
+     * Constructor for BaseModalComponent.
+     * @param fb FormBuilder instance for reactive forms.
+     * @param deviceTypeService Service for device type operations.
+     * @param dialogRef Reference to the dialog.
+     * @param data Data passed to the dialog.
+     * @param anlysisService Service for analysis operations.
+     */
     constructor( private fb: FormBuilder,private deviceTypeService: DevicetypeService,
       public dialogRef: MatDialogRef<BaseModalComponent>,@Inject(MAT_DIALOG_DATA) public data: any ,
       private anlysisService:AnalysisService,
     ) { 
       
-      }
-  
+    }
+
+    /**
+     * Initializes the component and sets up the filter form.
+     */
     ngOnInit(): void {
       this.selectedDfaultCategory = this.data.category;
       this.filterForm = this.fb.group({
@@ -228,6 +239,12 @@ public columnDefs: ColDef[] = [
       });
       this.getDeviceByCategory();
     }
+
+    /**
+     * Validates the date range in the filter form.
+     * @param group The form group containing date fields.
+     * @returns Validation error if the range exceeds 30 days.
+     */
     dateRangeValidator(group: AbstractControl):{[key:string]:any}| null{
       const fromDate = group.get('fromDate')?.value;
       const toDate = group.get('toDate')?.value;
@@ -238,6 +255,9 @@ public columnDefs: ColDef[] = [
       return null;
     }
 
+    /**
+     * Fetches device types by category.
+     */
     getDeviceByCategory(): void {
       this.deviceTypeService
         .getfindallbycategory(this.selectedDfaultCategory)
@@ -245,10 +265,20 @@ public columnDefs: ColDef[] = [
           this.allDeviceType = res.data
         });
     }
+
+    /**
+     * Handles device type change event.
+     * @param event The change event object.
+     */
     deviceChange(event: any): void {
       let val = event.target.value;
       this.deviceName = val;
     }
+
+    /**
+     * Handles execution type change event.
+     * @param event The change event object.
+     */
     changeExecutionType(event: any): void {
       let val = event.target.value;
       this.executionTypeName = val;
@@ -263,72 +293,89 @@ public columnDefs: ColDef[] = [
         this.testSuiteShow = false;
       }
     }
-  /**
-   * Event handler for when the grid is ready.
-   * @param params - The GridReadyEvent object containing the grid API.
-   */
-  onGridReady(params: GridReadyEvent):void {
-    this.gridApi = params.api;
-  }
-  onrowSelected():void{
-    const selectedNodes = (this.gridApi as any).getSelectedNodes();
-    if(selectedNodes.length > 0){
-      this.selectedBaseRow = selectedNodes[0].data;
-      this.baseModalName = this.selectedBaseRow.executionName
-      } else{
-      this.selectedBaseRow = null;
-    }
-  }
-  close():void{
-    this.dialogRef.close(false);
-  }
-  filterDataSubmit():void{
-    this.filterSubmitted = true;
-    if(this.filterForm.invalid){
-      return;
-    }else{
-      const locaFromDateTime = this.filterForm.get('fromDate')?.value;
-      const locaToDateTime = this.filterForm.get('toDate')?.value;
-      
-      if(locaFromDateTime){
-        const utcMoment =  moment.tz(locaFromDateTime, moment.tz.guess()).startOf('day');
-        this.fromUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
-      }
-      if(locaToDateTime){
-        const utcMoment =  moment.tz(locaToDateTime, moment.tz.guess()).endOf('day');
-        this.toUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
-      }
-      const scriptSingle = this.filterForm.get('scriptSingle')?.value;
-      const testSuiteSingke = this.filterForm.get('testSuiteSingke')?.value
 
-      let obj = {
-        "startDate": this.fromUTCTime,
-        "endDate": this.toUTCTime,
-        "executionType": this.executionTypeName,
-        "scriptTestSuite": this.executionTypeName === 'SINGLESCRIPT' ? scriptSingle : (this.executionTypeName === 'TESTSUITE' ? testSuiteSingke : ''),
-        "deviceType": this.deviceName,
-        "category": this.selectedDfaultCategory
+    /**
+     * Event handler for when the grid is ready.
+     * @param params - The GridReadyEvent object containing the grid API.
+     */
+    onGridReady(params: GridReadyEvent):void {
+      this.gridApi = params.api;
+    }
+
+    /**
+     * Handles row selection in the grid.
+     */
+    onrowSelected():void{
+      const selectedNodes = (this.gridApi as any).getSelectedNodes();
+      if(selectedNodes.length > 0){
+        this.selectedBaseRow = selectedNodes[0].data;
+        this.baseModalName = this.selectedBaseRow.executionName
+        } else{
+        this.selectedBaseRow = null;
+      }
+    }
+
+    /**
+     * Closes the modal dialog.
+     */
+    close():void{
+      this.dialogRef.close(false);
+    }
+
+    /**
+     * Submits the filter form and fetches filtered executions.
+     */
+    filterDataSubmit():void{
+      this.filterSubmitted = true;
+      if(this.filterForm.invalid){
+        return;
+      }else{
+        const locaFromDateTime = this.filterForm.get('fromDate')?.value;
+        const locaToDateTime = this.filterForm.get('toDate')?.value;
         
-      };
-      this.showLoader = true;
-      this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
-        let response = res.data;
-        if(response){
-          this.rowData = response;
-          this.showTable = true;
-          this.showLoader = false;
-        }else{
-          this.rowData = [];
-          this.showLoader = false;
-          this.showTable = true;
+        if(locaFromDateTime){
+          const utcMoment =  moment.tz(locaFromDateTime, moment.tz.guess()).startOf('day');
+          this.fromUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
         }
-      })
+        if(locaToDateTime){
+          const utcMoment =  moment.tz(locaToDateTime, moment.tz.guess()).endOf('day');
+          this.toUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
+        }
+        const scriptSingle = this.filterForm.get('scriptSingle')?.value;
+        const testSuiteSingke = this.filterForm.get('testSuiteSingke')?.value
+
+        let obj = {
+          "startDate": this.fromUTCTime,
+          "endDate": this.toUTCTime,
+          "executionType": this.executionTypeName,
+          "scriptTestSuite": this.executionTypeName === 'SINGLESCRIPT' ? scriptSingle : (this.executionTypeName === 'TESTSUITE' ? testSuiteSingke : ''),
+          "deviceType": this.deviceName,
+          "category": this.selectedDfaultCategory
+          
+        };
+        this.showLoader = true;
+        this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
+          let response = res.data;
+          if(response){
+            this.rowData = response;
+            this.showTable = true;
+            this.showLoader = false;
+          }else{
+            this.rowData = [];
+            this.showLoader = false;
+            this.showTable = true;
+          }
+        })
 
 
+      }
     }
-  }
 
-  onConfirm():void{
-    this.dialogRef.close(this.selectedBaseRow);
-  }
+    /**
+     * Confirms the selected base execution and closes the dialog.
+     */
+    onConfirm():void{
+      this.dialogRef.close(this.selectedBaseRow);
+    }
+
 }

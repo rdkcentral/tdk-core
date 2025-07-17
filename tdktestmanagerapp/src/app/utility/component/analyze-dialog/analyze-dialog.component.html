@@ -13,15 +13,47 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!--
+  Main container for the analyze dialog component.
+-->
+
 <div class="container">
+  <!--
+    Row for the main content area.
+  -->
+
   <div class="row mt-2">
+    <!--
+      Column for the main content, full width on medium and up.
+    -->
+
     <div class="col-md-12">
+
+      <!--
+        Title for the JIRA view.
+      -->
       <h1 class="view-title">{{jiraTitel}}</h1>
 
+      <!--
+        Section for ticket creation and details.
+      -->
+
       <div class="ticket-sec mt-2">
+        <!--
+          Section for creating a new JIRA ticket, visible if isCreateJira is true.
+        -->
+
         <div class="create-section" *ngIf="isCreateJira">
+          <!--
+            Row for project selection dropdown.
+          -->
+
           <div class="row">
             <label for="staticEmail" class="col-sm-6 col-form-label">Select Project ID :</label>
+            <!--
+              Column for the project selection dropdown.
+            -->
+
             <div class="col-sm-6">
               <select
               class="form-select"
@@ -37,6 +69,10 @@ limitations under the License.
             </div>
           </div>
  
+          <!--
+            Button to create a new JIRA ticket.
+          -->
+
           <button
             class="download-btn"
             matTooltip="Create"
@@ -45,16 +81,44 @@ limitations under the License.
             <i class="bi bi-plus-circle-fill download-icon"></i>
           </button>
         </div>
+        <!--
+          Tab group for ticket details and JIRA integration.
+        -->
+
         <mat-tab-group
           animationDuration="0ms"
           mat-align-tabs="start"
           (selectedTabChange)="onTabClick($event)"
         >
+          <!--
+            Tab for ticket details form.
+          -->
+
           <mat-tab label="Ticket Details">
+            <!--
+              Form for submitting ticket analysis details.
+            -->
+
             <form [formGroup]="analysisForm" (ngSubmit)="analysisSubmit()">
+              <!--
+                Main section for the ticket details form.
+              -->
+
               <div class="row main-sec mt-3">
+                <!--
+                  Spacer column for layout.
+                -->
+
                 <div class="col-md-2"></div>
+                <!--
+                  Main form column for ticket details.
+                -->
+
                 <div class="col-md-8">
+                  <!--
+                    Row for script name input.
+                  -->
+
                   <div class="row all-margin mb-4">
                     <label for="devicename" class="col-md-3 col-form-label"
                       >Script Name</label
@@ -79,6 +143,10 @@ limitations under the License.
                       </div>
                     </div>
                   </div>
+                  <!--
+                    Row for ticket details input.
+                  -->
+
                   <div class="row mb-4">
                     <label for="testtype" class="col-md-3 col-form-label"
                       >Ticket Details<span
@@ -106,6 +174,10 @@ limitations under the License.
                       </div>
                     </div>
                   </div>
+                  <!--
+                    Row for defect type selection.
+                  -->
+
                   <div class="row mb-4">
                     <label for="testtype" class="col-md-3 col-form-label"
                       >Defect Type
@@ -139,6 +211,10 @@ limitations under the License.
                       </div>
                     </div>
                   </div>
+                  <!--
+                    Row for remarks input.
+                  -->
+
                   <div class="row mb-4">
                     <label for="testtype" class="col-md-3 col-form-label"
                       >Remarks
@@ -167,7 +243,15 @@ limitations under the License.
                     </div>
                   </div>
                 </div>
+                <!--
+                  Row for the save button.
+                -->
+
                 <div class="row mt-2">
+                  <!--
+                    Column for the save button, right aligned.
+                  -->
+
                   <div class="col-md-12 text-end">
                     <button
                       class="save-btn"
@@ -178,7 +262,15 @@ limitations under the License.
                     </button>
                   </div>
                 </div>
+                <!--
+                  Row for the close button.
+                -->
+
                 <div class="row mt-2">
+                  <!--
+                    Column for the close button, right aligned.
+                  -->
+
                   <div class="col-12 d-flex justify-content-end">
                     <button class="close-btn btn btn-secondary w-auto w-100-sm mt-2 mt-md-0" type="button" (click)="onClose()">
                       Close
@@ -188,18 +280,46 @@ limitations under the License.
               </div>
             </form>
           </mat-tab>
+          <!--
+            Tab for JIRA integration grid and controls.
+          -->
+
           <mat-tab label="JIRA Integration" *ngIf="showJiraTab">
+            <!--
+              Column for filter and create button in JIRA tab.
+            -->
+
             <div class="col-md-12">
+              <!--
+                Filter by section in JIRA tab.
+              -->
+
               <div class="filterby">
+                <!--
+                  Filter dropdown placeholder.
+                -->
+
                 <div class="filter-drop-down">
 
                 </div>
+                <!--
+                  Button to create a new JIRA ticket from the JIRA tab.
+                -->
+
                 <button class="save-btn" matTooltip="Create">
                   <i class="bi bi-plus-circle-fill download-icon"></i>
                 </button>
               </div>
             </div>
+            <!--
+              Container for the AG Grid displaying JIRA tickets.
+            -->
+
             <div style="width: 100%; height: 340px" [class]="themeClass">
+              <!--
+                AG Grid Angular component for displaying JIRA tickets.
+              -->
+
               <ag-grid-angular
                 style="width: 100%; height: 100%"
                 [columnDefs]="columnSchudle"

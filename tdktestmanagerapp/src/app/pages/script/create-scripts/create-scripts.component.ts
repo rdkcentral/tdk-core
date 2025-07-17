@@ -72,15 +72,36 @@ export class CreateScriptsComponent {
   selectedCategory!: string;
 
 
-  constructor(private router: Router, private fb: FormBuilder,
-    public dialog: MatDialog, private modulesService: ModulesService, private deviceTypeService: DevicetypeService,
-    private primitiveTestService: PrimitiveTestService, private scriptservice: ScriptsService, private _snakebar: MatSnackBar,) {
+  /**
+   * Constructor for CreateScriptsComponent.
+   * @param router Router instance for navigation.
+   * @param fb FormBuilder instance for creating form groups.
+   * @param dialog MatDialog instance for dialog operations.
+   * @param modulesService ModulesService instance for module operations.
+   * @param deviceTypeService DevicetypeService instance for device type operations.
+   * @param primitiveTestService PrimitiveTestService instance for primitive test operations.
+   * @param scriptservice ScriptsService instance for script operations.
+   * @param _snakebar MatSnackBar instance for showing messages.
+   */
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    public dialog: MatDialog,
+    private modulesService: ModulesService,
+    private deviceTypeService: DevicetypeService,
+    private primitiveTestService: PrimitiveTestService,
+    private scriptservice: ScriptsService,
+    private _snakebar: MatSnackBar,
+  ) {
     this.userGroupName = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
   }
+
   /**
-   * Initialize the component and forms
+   * Initializes the component and forms, sets up device type settings, category, and loads modules and device types.
+   * @returns void
    */
   ngOnInit(): void {
+
     let category = localStorage.getItem('category') || '';
     this.selectedCategory = category ? category : 'RDKV';
     this.deviceTypeSettings = {
@@ -145,35 +166,62 @@ export class CreateScriptsComponent {
    */
   get f() { return this.firstFormGroup.controls; }
   /**
-     * This method is no space is allow.
-     */
+   * Validator to disallow leading spaces in input fields.
+   * @param control The form control to validate.
+   * @returns ValidationErrors | null
+   */
   noSpacesValidator(control: AbstractControl): ValidationErrors | null {
+
     const value = control.value ? control.value.toString() : '';
     return value.trimStart().length !== value.length ? { noLeadingSpaces: true } : null;
   }
 
+  /**
+   * Handles input event for the synopsis field, trims leading spaces.
+   * @param event The input event from the synopsis field.
+   * @returns void
+   */
   onInput(event: Event): void {
+
     const inputElement = event.target as HTMLTextAreaElement;
     const value = inputElement.value;
     if (value.startsWith(' ')) {
       this.firstFormGroup.get('synopsis')?.setValue(value.trimStart(), { emitEvent: false });
     }
   }
+  /**
+   * Handles input event for the script name field, trims leading spaces.
+   * @param event The input event from the script name field.
+   * @returns void
+   */
   onScritName(event: Event): void {
+
     const inputElement = event.target as HTMLTextAreaElement;
     const value = inputElement.value;
     if (value.startsWith(' ')) {
       this.firstFormGroup.get('scriptname')?.setValue(value.trimStart(), { emitEvent: false });
     }
   }
+  /**
+   * Handles input event for the test case ID field, trims leading spaces.
+   * @param event The input event from the test case ID field.
+   * @returns void
+   */
   onTestcaseID(event: Event): void {
+
     const inputElement = event.target as HTMLTextAreaElement;
     const value = inputElement.value;
     if (value.startsWith(' ')) {
       this.secondFormGroup.get('testcaseID')?.setValue(value.trimStart(), { emitEvent: false });
     }
   }
+  /**
+   * Handles input event for the test objective field, trims leading spaces.
+   * @param event The input event from the test objective field.
+   * @returns void
+   */
   onTestObjective(event: Event): void {
+
     const inputElement = event.target as HTMLTextAreaElement;
     const value = inputElement.value;
     if (value.startsWith(' ')) {
@@ -183,19 +231,34 @@ export class CreateScriptsComponent {
 
 
   // Getter for easy access to the steps FormArray
+  /**
+   * Getter for easy access to the steps FormArray.
+   * @returns FormArray
+   */
   get steps(): FormArray {
+
     return this.secondFormGroup.get('steps') as FormArray;
   }
 
 
   //Getter for easy access to the preconditions FormArray
+  /**
+   * Getter for easy access to the preconditions FormArray.
+   * @returns FormArray
+   */
   get preconditions(): FormArray {
+
     return this.secondFormGroup.get('preconditions') as FormArray;
   }
 
 
   // Method to add a new precondition to the FormArray
+  /**
+   * Adds a new precondition to the FormArray.
+   * @returns void
+   */
   addPrecondition(): void {
+
     this.preconditions.push(this.fb.group({
       precondition: ['', Validators.required]
     }));
@@ -203,12 +266,23 @@ export class CreateScriptsComponent {
 
 
   // Method to remove a precondition from the FormArray
+  /**
+   * Removes a precondition from the FormArray.
+   * @param index The index of the precondition to remove.
+   * @returns void
+   */
   removePrecondition(index: number): void {
+
     this.preconditions.removeAt(index);
   }
 
   // Method to add a new step to the FormArray
+  /**
+   * Adds a new step to the FormArray.
+   * @returns void
+   */
   addStep(): void {
+
     this.steps.push(this.fb.group({
       stepName: ['', Validators.required],
       stepDescription: ['', Validators.required],
@@ -217,20 +291,34 @@ export class CreateScriptsComponent {
   }
 
   // Method to remove a step from the FormArray
+  /**
+   * Removes a step from the FormArray.
+   * @param index The index of the step to remove.
+   * @returns void
+   */
   removeStep(index: number): void {
+
     this.steps.removeAt(index);
   }
 
   /**
-   * Method to get all modules
+   * Loads all modules for the selected category.
+   * @returns void
    */
   getAllModules(): void {
+
     this.modulesService.findallbyCategory(this.selectedCategory).subscribe(res => {
       this.allModules = res.data;
     })
   }
 
+  /**
+   * Handles module selection change, loads primitive tests for the selected module.
+   * @param event The change event from the module select field.
+   * @returns void
+   */
   getSelectedModule(event: any): void {
+
     this.allPrimitiveTest = [];
     let selectedValue = event.target.value;
     if (!selectedValue) {
@@ -240,9 +328,12 @@ export class CreateScriptsComponent {
     }
   }
   /**
-   * Method to get primitive test based on module select
+   * Loads primitive tests based on the selected module.
+   * @param value The selected module value.
+   * @returns void
    */
   getAllPrimitiveTest(value: any): void {
+
     this.primitiveTestService.getParameterNames(value).subscribe({
       next: (res) => {
         this.allPrimitiveTest = res.data;
@@ -263,36 +354,50 @@ export class CreateScriptsComponent {
     })
   }
   /**
-   * onChange primitive test 
+   * Handles change event for primitive test selection and loads code template.
+   * @param event The change event from the primitive test select field.
+   * @returns void
    */
   onChangePrimitive(event: any): void {
+
     let primitiveValue = event.target.value;
     this.defaultPrimitive = primitiveValue;
     this.getCode();
   }
   /**
-   * Method to get longDuration value
+   * Handles change event for long duration test checkbox.
+   * @param event The change event from the long duration checkbox.
+   * @returns void
    */
   longDuration(event: any): void {
+
     this.longDurationValue = event.target.checked;
   }
   /**
-   * Method to get skipExecution value
+   * Handles change event for skip execution checkbox.
+   * @param event The change event from the skip execution checkbox.
+   * @returns void
    */
   skipExecution(event: any): void {
+
     this.skipExecutionValue = event.target.checked;
   }
   /**
-   * Method to get priority value 
+   * Handles change event for priority selection.
+   * @param event The change event from the priority select field.
+   * @returns void
    */
   changePriority(event: any): void {
+
     const priorityValue = event.target.value;
     this.changePriorityValue = priorityValue;
   }
   /**
-   * Method to get pycode value from monaco editor 
+   * Loads python code template for the selected primitive test.
+   * @returns void
    */
   getCode(): void {
+
     let temp = this.defaultPrimitive;
     if (temp) {
       this.scriptservice.scriptTemplate(temp).subscribe(res => {
@@ -301,56 +406,83 @@ export class CreateScriptsComponent {
     }
   }
   /**
-   * Method to get all device type
+   * Loads all device types for the selected category.
+   * @returns void
    */
   getAlldeviceType(): void {
+
     this.deviceTypeService.getfindallbycategory(this.selectedCategory).subscribe(res => {
       this.allDeviceType = res.data
     })
   }
   /**
-   * Method to select device type
+   * Handles selection of a device type.
+   * @param item The selected device type item.
+   * @returns void
    */
   onItemSelect(item: any): void {
+
     if (!this.deviceNameArr.some(selectedItem => selectedItem.deviceTypeName === item.deviceTypeName)) {
       this.deviceNameArr.push(item.deviceTypeName);
     }
   }
   /**
-   * Method to deselect device type
+   * Handles deselection of a device type.
+   * @param item The deselected device type item.
+   * @returns void
    */
   onDeSelect(item: any): void {
+
     let filterDevice = this.deviceNameArr.filter(name => name != item.deviceTypeName);
     this.deviceNameArr = filterDevice;
   }
   /**
-   * Method to selectall device type
+   * Handles select all action for device types.
+   * @param items The array of all device type items.
+   * @returns void
    */
   onSelectAll(items: any[]): void {
+
     let devices = this.allDeviceType.filter(
       (item: any) => !this.deviceNameArr.find((selected) => selected.deviceTypeId === item.deviceTypeId)
     );
     this.deviceNameArr = devices.map((item: any) => item.deviceTypeName)
   }
   /**
-   * Method to deselectall device type
+   * Handles deselect all action for device types.
+   * @param item The deselected device type item.
+   * @returns void
    */
   onDeSelectAll(item: any): void {
+
     this.deviceNameArr = [];
   }
   // You can also change editor options dynamically if needed
+  /**
+   * Handles code change event in the monaco editor.
+   * @param value The new code value from the editor.
+   * @returns void
+   */
   onCodeChange(value: string): void {
+
     let val = value;
   }
 
+  /**
+   * Updates the optional label for the stepper.
+   * @returns void
+   */
   updateOptionalLabel(): void {
+
     this._matStepperIntl.optionalLabel = this.optionalLabelText;
     this._matStepperIntl.changes.next();
   }
   /**
-   * Submission for create script
+   * Handles submission for creating a script, gathers form data and sends to the server.
+   * @returns void
    */
   onSubmit(): void {
+
 
     const preconditionsArray = this.secondFormGroup.value.preconditions.map((p: any) => p.precondition);
 
@@ -396,9 +528,11 @@ export class CreateScriptsComponent {
     })
   }
   /**
-   * Navigate to script page
+   * Navigates back to the script page and removes category from local storage.
+   * @returns void
    */
   goBack(): void {
+
     localStorage.removeItem('category');
     this.router.navigate(["/script"]);
   }

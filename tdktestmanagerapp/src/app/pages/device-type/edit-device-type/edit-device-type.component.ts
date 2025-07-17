@@ -15,6 +15,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
   templateUrl: './edit-device-type.component.html',
   styleUrl: './edit-device-type.component.css'
 })
+// EditDeviceTypeComponent for updating device type
 export class EditDeviceTypeComponent {
 
   selectedItems: { item_id: number, item_text: string }[] = [];
@@ -24,12 +25,23 @@ export class EditDeviceTypeComponent {
   user: any;
   categoryName!: string;
 
+  /**
+   * This component is responsible for editing an existing device type.
+   * It initializes the form with existing data, handles form submission,
+   * and interacts with the DevicetypeService to update the device type.
+   * @param formBuilder - FormBuilder service for creating reactive forms
+   * @param router - Router service for navigation
+   * @param authservice - AuthService for authentication-related operations
+   * @param service - DevicetypeService for device type operations
+   * @param _snakebar - MatSnackBar for displaying messages   
+   */
   constructor(private formBuilder: FormBuilder, private router: Router,
     private authservice: AuthService, private service: DevicetypeService, private _snakebar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
     if (!this.user) {
       this.router.navigate(['configure/list-devicetype']);
     }
+
   }
 
   /**
@@ -52,7 +64,7 @@ export class EditDeviceTypeComponent {
    * Getter for updateDeviceTypeForm controls.
    */
   get f() { return this.updateDeviceTypeForm.controls; }
-
+  
   /**
    * Updates the box type.
    */

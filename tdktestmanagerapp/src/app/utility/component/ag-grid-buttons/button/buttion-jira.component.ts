@@ -77,6 +77,10 @@ export class ButtonJiraComponent implements OnInit{
   deleteShowHide = true;
   downloadConfigShow =  false;
 
+  /**
+   * Initializes the cell renderer with parameters.
+   * @param params The custom cell renderer parameters.
+   */
   agInit(params:customcellRenderparams): void {
     this.params = params;
     this.selectedRowCount = params.selectedRowCount();
@@ -84,16 +88,33 @@ export class ButtonJiraComponent implements OnInit{
     this.currentNodeId = params.node.id
     
   }
+
+  /**
+   * Constructor for ButtonJiraComponent.
+   * @param route ActivatedRoute for route information
+   */
   constructor(private route: ActivatedRoute) { }
 
+  /**
+   * Angular lifecycle hook for component initialization.
+   */
   ngOnInit(): void {
 
   }
-  //** Condition for disable edit and delete button to own user */
+
+  /**
+   * Condition for disabling edit and delete button for own user.
+   * @returns True if the button should be disabled, false otherwise.
+   */
   isButtonDisabled(): boolean {
     return !( this.selectedRowCount === 1 && this.lastSelectedNodeId === this.currentNodeId);
   }
 
+  /**
+   * Refreshes the cell renderer with new parameters.
+   * @param params The custom cell renderer parameters.
+   * @returns True if refresh is successful.
+   */
   refresh(params: customcellRenderparams): boolean {
     this.selectedRowCount = params.selectedRowCount();
     this.lastSelectedNodeId = params.lastSelectedNodeId;
@@ -101,6 +122,10 @@ export class ButtonJiraComponent implements OnInit{
     return true;
   }
 
+  /**
+   * Handles the edit button click event.
+   * @param $event The click event object.
+   */
   onEditClick($event:any) {
     if (this.params.onEditClick instanceof Function) {
       this.params.onEditClick(this.params.node.data);

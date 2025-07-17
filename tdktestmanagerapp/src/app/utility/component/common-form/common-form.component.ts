@@ -45,6 +45,15 @@ export class CommonFormComponent implements OnChanges{
   user:any;
   
 
+  /**
+   * Constructor for CommonFormComponent.
+   * @param fb FormBuilder for reactive forms.
+   * @param router Router for navigation.
+   * @param route ActivatedRoute for route information.
+   * @param authservice AuthService for authentication.
+   * @param usergroupService UsergroupService for user group operations.
+   */
+  
   constructor(private fb: FormBuilder,private router: Router,
     private route:ActivatedRoute, private authservice:AuthService,
     public usergroupService:UsergroupService
@@ -55,6 +64,11 @@ export class CommonFormComponent implements OnChanges{
   }
 
 
+  /**
+   * Angular lifecycle hook called when input properties change.
+   * @param changes Object of changed input properties.
+   */
+  
   ngOnChanges(changes: SimpleChanges) {
     if(this.route.snapshot.url[1].path ==='group-edit'){
       if (changes['initialValue'] && this.initialValue) {
@@ -83,6 +97,11 @@ export class CommonFormComponent implements OnChanges{
     }
 
   }
+
+  /**
+   * Handles form submission and emits the form value if valid.
+   */
+  
   onSubmit(): void {
     if (this.createUpdateForm.invalid) {
       return;
@@ -90,6 +109,11 @@ export class CommonFormComponent implements OnChanges{
       this.formSubmitted.emit(this.createUpdateForm.value.name);
     }
   }
+
+  /**
+   * Navigates back to the appropriate list or create page based on the current route.
+   */
+  
   goBack(){
     if(this.route.snapshot.url[1].path ==='group-add' || this.route.snapshot.url[1].path ==='group-edit'){
       this.router.navigate(['configure/create-group']);
@@ -107,6 +131,10 @@ export class CommonFormComponent implements OnChanges{
       this.router.navigate(['configure/list-rdkversions']);
     }
   }
+
+  /**
+   * Resets the form and emits the reset event.
+   */
   reset(){
     this.formSubmitted.emit(this.createUpdateForm.reset());
   }

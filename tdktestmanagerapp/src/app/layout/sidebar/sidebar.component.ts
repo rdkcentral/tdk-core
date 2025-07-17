@@ -38,7 +38,13 @@ export class SidebarComponent implements OnInit {
   
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
+  /**
+   * Constructor for SidebarComponent.
+   * @param router Angular Router for navigation events.
+   * @param service UsergroupService instance for user group operations.
+   */
   constructor(private router: Router, public service: UsergroupService) { }
+
   /**
    * Initializes the component.
    */
@@ -46,7 +52,7 @@ export class SidebarComponent implements OnInit {
   }
 
   /**
-   * Closes the sidenav when the user navigates to the configure page.
+   * Closes or opens the sidenav based on navigation events.
    */
   ngAfterViewInit(): void {
     this.router.events.subscribe(event => {
@@ -75,6 +81,5 @@ export class SidebarComponent implements OnInit {
       }
     });
   }
-
 
 }

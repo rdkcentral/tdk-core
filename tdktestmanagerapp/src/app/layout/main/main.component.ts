@@ -39,11 +39,18 @@ export class MainComponent {
   
   currentTheme:any;
 
+  /**
+   * ThemeService instance used to manage the application's theme.
+   */
   themeService :ThemeService = inject(ThemeService)
 
+  /**
+   * Initializes the component and subscribes to theme changes.
+   */
   ngOnInit(): void {
     this.themeService.currentTheme.subscribe(res=>{
       this.currentTheme = res;
     })
   }
+
 }

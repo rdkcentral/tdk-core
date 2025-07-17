@@ -21,10 +21,25 @@ import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
 import { provideServerRendering } from '@angular/platform-server';
 import { appConfig } from './app.config';
 
+
+/**
+ * Server-specific Angular application configuration.
+ * Provides server rendering capabilities for Angular Universal.
+ *
+ * @type {ApplicationConfig}
+ */
 const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering()
   ]
 };
 
+
+/**
+ * Merges the main application configuration with the server-specific configuration.
+ *
+ * @param appConfig The main application configuration object.
+ * @param serverConfig The server-specific configuration object.
+ * @returns The merged ApplicationConfig for server-side rendering.
+ */
 export const config = mergeApplicationConfig(appConfig, serverConfig);

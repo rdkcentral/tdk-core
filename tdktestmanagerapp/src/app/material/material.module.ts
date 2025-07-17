@@ -76,4 +76,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatExpansionModule
   ]
 })
+/**
+ * MaterialModule provides Angular Material components for use throughout the application.
+ */
 export class MaterialModule { }
+

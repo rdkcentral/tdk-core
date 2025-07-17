@@ -23,8 +23,19 @@ import { ConfigService } from './config.service'; // adjust path
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
+
+  /**
+   * Constructor for ApiService.
+   * @param http HttpClient for HTTP requests
+   * @param configService ConfigService for API configuration
+   */
   constructor(private http: HttpClient, private configService: ConfigService) {}
 
+
+  /**
+   * Fetches data from the configured API URL.
+   * @returns Observable with the API response data.
+   */
   getData() {
     const apiUrl = this.configService.apiUrl;
     return this.http.get(`${apiUrl}`);

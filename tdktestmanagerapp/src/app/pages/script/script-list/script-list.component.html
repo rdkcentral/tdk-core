@@ -13,10 +13,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Container for the entire script list page -->
 <div class="container-fluid">
+  <!-- Row for top section with dropdowns and title -->
   <div class="row borders-btm">
+    <!-- Left column for RDK flavor and view selection -->
     <div class="col-md-5">
+      <!-- Row for flavor and view dropdowns -->
       <div class="row ">
+        <!-- Row for flavor and view selectors -->
         <div class="falvor-row">
           <span for="falvor" class="falvor-label">RDK flavor :</span>
           <select class="form-select rdk-dropdown" aria-label="Default select example" id="preferCategoty"
@@ -33,10 +38,13 @@ limitations under the License.
         </div>
       </div>
     </div>
+    <!-- Center column for page title -->
     <div class="col-md-2">
       <h1 class="title">{{categoryName}} {{ viewName === 'testsuites' ? 'Test Suites' : ' Scripts' }}</h1>
     </div>
+    <!-- Right column for action buttons -->
     <div class="col-md-5">
+      <!-- Button group for script actions -->
       <div class="btns-group" *ngIf="scriptTable">
         <button type="button" class="download-btn" (click)="downloadTestCases()"
           matTooltip="Download All {{selectedCategory}} test cases(zip of excel files)"><i
@@ -49,6 +57,7 @@ limitations under the License.
           <i class="bi bi-plus-circle-fill download-icon"></i>
         </button>
       </div>
+      <!-- Button group for testsuite actions -->
       <div *ngIf="testsuitTable" [ngClass]="testsuitTable?'testsuite-btn':'btns-group'">
         <button type="button" class="download-btn" matTooltip="Download all suites xml in zip"
           (click)="downloadAllSuitesZIP()"><i class="bi bi-cloud-arrow-down-fill download-icon"></i> </button>
@@ -84,9 +93,13 @@ limitations under the License.
 
     </div>
   </div>
+  <!-- Main section row for search and tables -->
   <div class="row main-sec mt-1">
+    <!-- Container for search and table content -->
     <div class="mt-1">
+      <!-- Row for search input -->
       <div class="row">
+        <!-- Column for search input and icon -->
         <div class="col search-header">
           <span class="search">Search:
             <mat-icon class="info-icon"
@@ -97,10 +110,14 @@ limitations under the License.
           <input type="text" class="form-control seach-input" id="filter-text-box" [(ngModel)]="globalSearchTerm"
             (input)="onSearchInput()" placeholder="Search by Script name">
         </div>
+        <!-- Empty column for spacing -->
         <div class="col"></div>
       </div>
+      <!-- Row for script table -->
       <div class="row" *ngIf="scriptTable">
+        <!-- Container for the script table -->
         <div class="table-container mt-2">
+          <!-- Row for table headings -->
           <div class="row table-heading">
             <div class="col border-column">
               <span class="script-table-head">Module & Scripts </span>
@@ -126,12 +143,17 @@ limitations under the License.
             <div class="col border-column"><span class="script-table-head">Test Group</span></div>
             <div class="col"><span class="script-table-head">Action</span></div>
           </div>
+          <!-- Row for table content and loader -->
           <div class="row">
+            <!-- Loader row -->
             <div class="row loader-row" *ngIf="showLoader">
               <app-loader></app-loader>
             </div>
+            <!-- Accordion for script modules and scripts -->
             <div class="accordion" id="accordionExample">
+              <!-- Row for accordion items -->
               <div class="row accord-row">
+                <!-- Accordion item for each module -->
                 <div class="accordion-item" *ngFor="let parent of paginatedScriptData">
 
                   <h2 class="accordion-header d-flex align-items-center accord-head" (click)="togglePanel(parent)">
@@ -170,8 +192,11 @@ limitations under the License.
                       <i class="bi collapse-icon" [ngClass]="parent.expanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                     </button>
                   </h2>
+                  <!-- Accordion collapse for script details -->
                   <div [class.show]="parent.expanded" class="accordion-collapse collapse">
+                    <!-- Accordion body for ag-grid table -->
                     <div class="accordion-body">
+                      <!-- Container for ag-grid-angular -->
                       <div style="width: 95%; height: 330px; margin-top: 5px;" [class]="themeClass">
                         <ag-grid-angular style="width: 100%; height: 100%;" [columnDefs]="columnDefs"
                           [defaultColDef]="{sortable: true}" [rowData]="parent.scripts" [pagination]="true"
@@ -187,9 +212,11 @@ limitations under the License.
             </div>
           </div>
         </div>
+        <!-- Message for no scripts found -->
         <div *ngIf="paginatedScriptData.length == 0" class="noRecord">
           <span>{{noScriptFound}}</span>
         </div>
+        <!-- Paginator for scripts table -->
         <div class="script-paginator">
           <mat-paginator [length]="scriptFilteredData.length" [pageSize]="allPageSize" [pageSizeOptions]="[10, 20, 50]"
             (page)="onPageChangeScript($event)" class="script-pagination">
@@ -198,8 +225,11 @@ limitations under the License.
 
       </div>
 
+      <!-- Row for testsuite table -->
       <div class="row" *ngIf="testsuitTable">
+        <!-- Container for the testsuite table -->
         <div class="table-container mt-2">
+          <!-- Row for testsuite table headings -->
           <div class="row table-heading">
             <div class="col border-column">
               <span class="script-table-head">Test Suites</span>
@@ -225,12 +255,17 @@ limitations under the License.
             <div class="col border-column"><span class="script-table-head">Description</span></div>
             <div class="col"><span class="script-table-head">Action</span></div>
           </div>
+          <!-- Row for testsuite table content and loader -->
           <div class="row">
+            <!-- Loader row for testsuite table -->
             <div class="row loader-row" *ngIf="showLoader">
               <app-loader></app-loader>
             </div>
+            <!-- Accordion for testsuites -->
             <div class="accordion" id="accordionExample">
+              <!-- Row for testsuite accordion items -->
               <div class="row accord-row">
+                <!-- Accordion item for each testsuite -->
                 <div class="accordion-item" *ngFor="let testSuite of paginatedSuiteData">
 
                   <h2 class="accordion-header d-flex align-items-center accord-head"
@@ -278,8 +313,11 @@ limitations under the License.
                         [ngClass]="testSuite.expanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                     </button>
                   </h2>
+                  <!-- Accordion collapse for testsuite details -->
                   <div [class.show]="testSuite.expanded" class="accordion-collapse collapse">
+                    <!-- Accordion body for testsuite ag-grid table -->
                     <div class="accordion-body">
+                      <!-- Container for testsuite ag-grid-angular -->
                       <div
                         style="width: 90%; min-height: 300px; margin-top: 5px; display: flex; justify-content: center;"
                         [class]="themeClass">
@@ -294,9 +332,11 @@ limitations under the License.
               </div>
             </div>
           </div>
+          <!-- Message for no testsuites found -->
           <div *ngIf="paginatedSuiteData.length == 0" class="noRecord">
             <span>{{noScriptFound}}</span>
           </div>
+          <!-- Paginator for testsuite table -->
           <div class="script-paginator">
             <mat-paginator [length]="testSuiteFilteredData.length" [pageSize]="allPageSize"
               [pageSizeOptions]="[10, 20, 50]" (page)="onPageChange($event)" class="script-pagination">

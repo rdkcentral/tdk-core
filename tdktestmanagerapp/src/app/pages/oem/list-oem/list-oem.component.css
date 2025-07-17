@@ -17,9 +17,16 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/*
+ * Styles the main container for bottom margin.
+ */
 .container {
   margin-bottom: 1rem;
 }
+
+/*
+ * Adds a multi-color gradient border to the bottom of elements with borders-btm class.
+ */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -34,6 +41,9 @@ http://www.apache.org/licenses/LICENSE-2.0
   border-image-width: 0px 0px 4px 0px;
   margin: 0 15px;
 }
+/*
+ * Styles the title class for font size, alignment, and spacing.
+ */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -41,17 +51,29 @@ http://www.apache.org/licenses/LICENSE-2.0
   margin-top: 5px;
   margin-bottom: 10px;
 }
+/*
+ * Aligns button group to the end and adds top margin.
+ */
 .btns-group {
   text-align: end;
   margin-top: 5px;
 }
+/*
+ * Adds horizontal padding to table section.
+ */
 .table-sec {
   padding: 0 10px;
 }
+/*
+ * Styles the button group for flex display and left margin.
+ */
 .btns-grp {
   display: flex;
   margin-left: -35px;
 }
+/*
+ * Styles create and back buttons for appearance and interaction.
+ */
 .create-btn,
 .back-btn {
   background-color: #fff;
@@ -64,17 +86,29 @@ http://www.apache.org/licenses/LICENSE-2.0
   letter-spacing: 0.5px;
   cursor: pointer;
 }
+/*
+ * Sets icon color, weight, and size for icon-size class.
+ */
 .icon-size {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
+/*
+ * Adds right margin to back button.
+ */
 .back-btn {
   margin-right: 10px;
 }
+/*
+ * Hides the no-rows overlay in ag-theme-quartz grid.
+ */
 ::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
   display: none !important;
 }
+/*
+ * Positions the loader row absolutely in the center.
+ */
 .loader-row{
   position: absolute;
   top: 50%;

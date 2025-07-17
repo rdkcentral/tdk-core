@@ -28,16 +28,34 @@ import { AuthService } from '../auth/auth.service';
 })
 export class UserManagementService {
 
+  /**
+   * Constructor for UserManagementService.
+   * @param http HttpClient for HTTP requests
+   * @param authService AuthService for authentication and API token
+   * @param config Application configuration injected as APP_CONFIG
+   */
   constructor(private http: HttpClient, private authService: AuthService,
     @Inject('APP_CONFIG') private config: any
   ) { }
 
+  /**
+   * Options for HTTP requests with authorization header.
+   */
   private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
 
+  /**
+   * Gets all users.
+   * @returns Observable with the list of users.
+   */
   getAlluser(): Observable<any> {
     return this.http.get(`${this.config.apiUrl}api/v1/users/findAll`, this.options);
   }
 
+  /**
+   * Deletes a user by ID.
+   * @param id The ID of the user to delete.
+   * @returns Observable with the deletion result.
+   */
   deleteUser(id: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -45,13 +63,27 @@ export class UserManagementService {
     return this.http.delete(`${this.config.apiUrl}api/v1/users/delete?id=${id}`, { headers });
   }
 
+  /**
+   * Gets all group names.
+   * @returns Observable with the list of group names.
+   */
   getGroupName(): Observable<any> {
     return this.http.get(`${this.config.apiUrl}api/v1/usergroup/findall`, this.options);
   }
+
+  /**
+   * Gets all roles.
+   * @returns Observable with the list of roles.
+   */
   getAllRole(): Observable<any> {
     return this.http.get(`${this.config.apiUrl}api/v1/userrole/findall`, this.options);
   }
 
+  /**
+   * Creates a new user.
+   * @param data The user data to create.
+   * @returns Observable with the creation result.
+   */
   createUser(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -59,6 +91,11 @@ export class UserManagementService {
     return this.http.post(`${this.config.apiUrl}api/v1/users/create`, data, { headers })
   }
 
+  /**
+   * Updates a user.
+   * @param data The user data to update.
+   * @returns Observable with the update result.
+   */
   updateUser(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()

@@ -44,6 +44,13 @@ export class DateDialogComponent {
     maxDate: new Date(),
   };
 
+  /**
+   * Constructor for DateDialogComponent.
+   * @param executionservice Service for execution operations.
+   * @param _snakebar MatSnackBar for notifications.
+   * @param dialogRef Reference to the dialog opened.
+   */
+  
   constructor(private executionservice:ExecutionService,private _snakebar: MatSnackBar,
     public dialogRef: MatDialogRef<DateDialogComponent>,
   ){}
@@ -52,6 +59,11 @@ export class DateDialogComponent {
    *
    * @param dateRange - The dateRange change date and time action.
    */
+  /**
+   * Handles date change event and updates fromDate and toDate in UTC format.
+   * @param dateRange The selected date range array.
+   */
+  
   onDateChange(dateRange: Date[] | null): void {
     if (dateRange && dateRange.length === 2) {
       const fromUTCMoment =  moment.tz(dateRange[0], moment.tz.guess()).utc();
@@ -68,6 +80,10 @@ export class DateDialogComponent {
    * Handles the delete date from to date.
    *
    */
+  /**
+   * Handles the delete action for the selected date range.
+   */
+  
   deleteData(): void {
     if (this.selectedDate) {
       this.executionservice.datewiseDeleteExe(this.fromDate, this.toDate).subscribe({
@@ -97,6 +113,10 @@ export class DateDialogComponent {
    * Close the dialog.
    *
    */
+  /**
+   * Closes the dialog.
+   */
+  
   close():void{
     this.dialogRef.close();
   }

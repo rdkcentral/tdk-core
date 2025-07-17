@@ -13,8 +13,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Sidebar container for navigation and content -->
 <mat-drawer-container class="example-container">
+    <!-- Drawer section for sidebar navigation -->
     <mat-drawer mode="side" #sidenav>
+        <!-- Navigation list for sidebar links -->
         <mat-nav-list>
             <a mat-list-item routerLink="">LIst 1</a>
             <a mat-list-item routerLink="">LIst 1</a>
@@ -22,6 +25,7 @@ limitations under the License.
             <a mat-list-item routerLink="">LIst 1</a>
         </mat-nav-list>
     </mat-drawer>
+    <!-- Main content area for routed views -->
     <mat-drawer-content>
         <router-outlet></router-outlet>
     </mat-drawer-content>

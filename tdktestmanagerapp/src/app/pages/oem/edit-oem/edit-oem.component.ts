@@ -46,20 +46,27 @@ export class EditOemComponent implements OnInit{
   configureName!:string;
   categoryName!:string;
 
+  /**
+   * Constructor for EditOemComponent.
+   * @param route ActivatedRoute instance for route information.
+   * @param router Router instance for navigation.
+   * @param service UsergroupService instance for user group operations.
+   * @param _snakebar MatSnackBar instance for notifications.
+   * @param oemService OemService instance for OEM operations.
+   * @param authservice AuthService instance for authentication and config value.
+   */
   constructor(private route: ActivatedRoute, private router: Router,
     public service: UsergroupService, private _snakebar: MatSnackBar,
     private oemService: OemService,
     private authservice: AuthService
   ) {
     this.service.currentUrl = this.route.snapshot.url[1].path
-    
   }
 
-   /**
-   * Initializes the component.
-   * Retrieves the 'id' parameter from the route snapshot and assigns it to the 'id' property.
-   * Sets the current URL in the service.
-   * Retrieves the user data from local storage and assigns it to the 'record' property.
+
+  /**
+   * Initializes the component and sets up initial state.
+   * No parameters.
    */
   ngOnInit(): void {
     this.id = +this.route.snapshot.params['id'];
@@ -67,49 +74,49 @@ export class EditOemComponent implements OnInit{
     let data = JSON.parse(localStorage.getItem('user') || '{}');
     this.record = data;
     this.configureName = this.authservice.selectedConfigVal;
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
       this.commonFormName = this.route.snapshot.url[1].path === 'oem-edit' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'OEM' : this.commonFormName;
-    }else{
+    } else {
       this.categoryName = 'Video';
       this.commonFormName = this.route.snapshot.url[1].path === 'oem-edit' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'OEM' : this.commonFormName;
     }
   }
 
-    /**
+
+  /**
    * Handles the form submission event.
-   * @param name - The name of the box manufacturer.
+   * @param name The name of the OEM.
    */
-    onFormSubmitted(name: any): void {
-      let obj = {
-        oemId: this.record.oemId,
-        oemName: name,
-        oemCategory: this.authservice.selectedConfigVal
-      }
-      if (name != undefined && name != null) {
-        this.oemService.updateOem(obj).subscribe({
-          next: (res) => {
-            this._snakebar.open(res.message, '', {
-              duration: 3000,
-              panelClass: ['success-msg'],
-              verticalPosition: 'top'
-            })
-            setTimeout(() => {
-              this.router.navigate(["configure/list-oem"]);
-            }, 1000);
-   
-          },
-          error: (err) => {
-            this._snakebar.open(err.message, '', {
-              duration: 3000,
-              panelClass: ['err-msg'],
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
-          }
-   
-        })
-      }
+  onFormSubmitted(name: any): void {
+    let obj = {
+      oemId: this.record.oemId,
+      oemName: name,
+      oemCategory: this.authservice.selectedConfigVal
     }
+    if (name != undefined && name != null) {
+      this.oemService.updateOem(obj).subscribe({
+        next: (res) => {
+          this._snakebar.open(res.message, '', {
+            duration: 3000,
+            panelClass: ['success-msg'],
+            verticalPosition: 'top'
+          })
+          setTimeout(() => {
+            this.router.navigate(["configure/list-oem"]);
+          }, 1000);
+        },
+        error: (err) => {
+          this._snakebar.open(err.message, '', {
+            duration: 3000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      })
+    }
+  }
+
 
 }

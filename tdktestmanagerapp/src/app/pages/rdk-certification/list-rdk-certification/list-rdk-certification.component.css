@@ -17,9 +17,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/* Main container for the certification list page */
+
 .container-fluid {
   margin-bottom: 1rem;
 }
+
+/* Header section styling */
 
 .header {
   background-color: #0e6f87;
@@ -28,12 +32,16 @@ http://www.apache.org/licenses/LICENSE-2.0
   box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
 }
 
+/* Application title styling */
+
 .apptitle {
   color: #fff;
   font-size: 1rem !important;
   font-weight: 500;
   margin-left: 15px;
 }
+/* Border style for bottom of section */
+
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -48,6 +56,8 @@ http://www.apache.org/licenses/LICENSE-2.0
   border-image-width: 0px 0px 4px 0px;
   margin: 0 15px;
 }
+/* Title styling for certification list */
+
 .title {
   font-size: 1rem;
   text-align: center;
@@ -55,10 +65,14 @@ http://www.apache.org/licenses/LICENSE-2.0
   margin-top: 5px;
   margin-bottom: 10px;
 }
+/* Button group styling for actions */
+
 .btns-group {
   text-align: end;
   margin-top: 5px;
 }
+/* Group list title styling */
+
 .groupListTitle {
   color: #00273f;
   font-size: 1rem;
@@ -67,6 +81,8 @@ http://www.apache.org/licenses/LICENSE-2.0
   border-image-slice: 1;
   border-image-width: 0px 0px 4px 0px;
 }
+
+/* Create and back button styling */
 
 .create-btn,
 .back-btn {
@@ -81,6 +97,8 @@ http://www.apache.org/licenses/LICENSE-2.0
   cursor: pointer;
 }
 
+/* Download button styling */
+
 .download-btn {
   background-color: #fff;
   font-size: 0.8rem;
@@ -94,6 +112,8 @@ http://www.apache.org/licenses/LICENSE-2.0
   margin-right: 15px;
 }
 
+/* Modal button styling */
+
 .modal-btns {
   background-color: #00b2dc;
   color: #fff;
@@ -105,18 +125,26 @@ http://www.apache.org/licenses/LICENSE-2.0
   cursor: pointer;
   margin-right: 15px;
 }
+/* Table section styling */
+
 .table-sec {
   margin: auto;
 }
+/* Modal footer styling */
+
 .modal-footer {
   border-top: none;
   padding: 1rem 1.45rem 2rem 2rem;
 }
 
+/* Custom modal styling */
+
 .custom-modal {
   max-width: 800px;
   margin-top: 100px;
 }
+
+/* Modal title styling */
 
 .modaltitle {
   margin: 0 10px 0px 10px;
@@ -134,10 +162,14 @@ http://www.apache.org/licenses/LICENSE-2.0
   padding: 10px 5px 5px 5px;
 }
 
+/* Custom title styling */
+
 .custom-title {
   margin-bottom: 0;
   font-size: 1rem;
 }
+
+/* Download icon styling */
 
 .download-icon {
   color: #00b2dc;
@@ -145,22 +177,32 @@ http://www.apache.org/licenses/LICENSE-2.0
   font-size: 18px;
 }
 
+/* Icon size styling */
+
 .icon-size {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
 
+/* Back button margin adjustment */
+
 .back-btn {
   margin-right: 10px;
 }
 
+/* Button group margin adjustment for Angular content */
+
 .btns-grp[_ngcontent-ng-c3306316013] {
   margin-left: -101px !important;
 }
+/* Hide ag-grid overlay for no rows */
+
 ::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
   display: none !important;
 }
+/* Loader row positioning */
+
 .loader-row{
   position: absolute;
   top: 50%;

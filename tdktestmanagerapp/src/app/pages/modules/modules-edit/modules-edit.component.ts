@@ -28,6 +28,10 @@ import { Router } from '@angular/router';
 import { ModulesService } from '../../../services/modules.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+/**
+ * ModulesEditComponent is responsible for handling the update of existing modules.
+ * It manages the form, submission, and navigation logic for the module update page.
+ */
 @Component({
   selector: 'app-modules-edit',
   standalone: true,
@@ -49,6 +53,13 @@ export class ModulesEditComponent {
   loggedinUser: any;
   categoryName!: string;
 
+  /**
+   * Constructor for ModulesEditComponent.
+   * @param authservice AuthService instance for authentication and config values
+   * @param router Router instance for navigation
+   * @param moduleservice ModulesService instance for module operations
+   * @param _snakebar MatSnackBar instance for notifications
+   */
   constructor(private authservice: AuthService,private router: Router,
     private moduleservice: ModulesService,private _snakebar :MatSnackBar,
   ) {
@@ -56,8 +67,11 @@ export class ModulesEditComponent {
     this.moduleDetails = data;
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
    }
+
   /**
    * Initializes the component and sets up the initial values.
+   * No parameters.
+   * No return value.
    */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
@@ -80,49 +94,65 @@ export class ModulesEditComponent {
     this.crashFilesArr = this.moduleDetails.moduleCrashLogFiles;
     this.logFilesArr = this.moduleDetails.moduleLogFileNames;
   }
-
+  
+  /**
+   * Toggles the value of `thundrEnable` property.
+   * @param event The event object triggered by the checkbox.
+   * No return value.
+   */
   thundrEnable(event: any):void{
     const inputEle = event.target as HTMLInputElement;
     this.isThunder = inputEle.checked;
   }
-
-    /**
-   * Removes a crash file from the `crashFilesArr` array at the specified index.
-   * @param index - The index of the crash file to remove.
-   */
-    removeCrash(index: number):void {
-      this.crashFilesArr.splice(index, 1);
-    }
-    /**
-     * Removes a log file from the logFilesArr array at the specified index.
-     * @param index - The index of the log file to remove.
-     */
-    removeLogs(index: number):void {
-      this.logFilesArr.splice(index, 1);
-    }
-    /**
-     * Adds a crash file to the `crashFilesArr` array.
-     */
-    addCrash(): void {
-      const value = this.updateModuleForm.get('crashFiles')?.value.trim();
-      if (value) {
-        this.crashFilesArr.push(value);
-        this.updateModuleForm.get('crashFiles')?.setValue('');
-      }
-    
-    }
-    /**
-     * Adds logs to the logFilesArr array.
-     */
-    addLogs(): void {
-      const value = this.updateModuleForm.get('logFiles')?.value.trim();
-      if (value) {
-        this.logFilesArr.push(value);
-        this.updateModuleForm.get('logFiles')?.setValue('');
-      }
-    }
+  
   /**
-   * This method is Submit the Update the module form.
+   * Removes a crash file from the `crashFilesArr` array at the specified index.
+   * @param index The index of the crash file to remove.
+   * No return value.
+   */
+  removeCrash(index: number):void {
+    this.crashFilesArr.splice(index, 1);
+  }
+  
+  /**
+   * Removes a log file from the logFilesArr array at the specified index.
+   * @param index The index of the log file to remove.
+   * No return value.
+   */
+  removeLogs(index: number):void {
+    this.logFilesArr.splice(index, 1);
+  }
+  
+  /**
+   * Adds a crash file to the `crashFilesArr` array.
+   * No parameters.
+   * No return value.
+   */
+  addCrash(): void {
+    const value = this.updateModuleForm.get('crashFiles')?.value.trim();
+    if (value) {
+      this.crashFilesArr.push(value);
+      this.updateModuleForm.get('crashFiles')?.setValue('');
+    }
+  }
+  
+  /**
+   * Adds logs to the logFilesArr array.
+   * No parameters.
+   * No return value.
+   */
+  addLogs(): void {
+    const value = this.updateModuleForm.get('logFiles')?.value.trim();
+    if (value) {
+      this.logFilesArr.push(value);
+      this.updateModuleForm.get('logFiles')?.setValue('');
+    }
+  }
+  
+  /**
+   * Submits the update module form.
+   * No parameters.
+   * No return value.
    */
   moduleUpdate():void{
     this.moduleFormSubmitted = true;
@@ -163,8 +193,11 @@ export class ModulesEditComponent {
       })
     }
   }
+  
   /**
    * Navigates back to the modules list page.
+   * No parameters.
+   * No return value.
    */
   goBack():void{
     this.router.navigate(["/configure/modules-list"]);

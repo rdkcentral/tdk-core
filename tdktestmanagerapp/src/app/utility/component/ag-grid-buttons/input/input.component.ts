@@ -45,22 +45,46 @@ import { FormsModule } from '@angular/forms';
 })
 export class InputComponent implements OnInit{
 
+  /**
+   * The value bound to the input field.
+   */
   public value:any;
+
+  /**
+   * Parameters passed to the cell renderer.
+   */
   private params:any;
+
+  /**
+   * Indicates whether to show an error state for the input.
+   */
   public showError:boolean = false;
 
+  /**
+   * Initializes the cell renderer with parameters.
+   * @param params The parameters for the cell renderer.
+   */
   agInit(params:any): void {
     this.params = params;
     this.value = this.params.value;
     this.showError = !this.value;
   }
 
+  /**
+   * Refreshes the cell renderer with new parameters.
+   * @param params The parameters for the cell renderer.
+   * @returns True if refresh is successful.
+   */
   refresh(params:any):boolean{
     this.params = params
     this.value = params.value;
     this.showError = !this.value;
     return true;
   }
+  /**
+   * Handles the value change event for the input field.
+   * @param newValue The new value entered in the input field.
+   */
   onValueChange(newValue:any){
     this.value = newValue;
     this.showError = !newValue;
@@ -69,6 +93,9 @@ export class InputComponent implements OnInit{
     }
   }
 
+  /**
+   * Angular lifecycle hook for component initialization.
+   */
   ngOnInit(): void {
       
   }

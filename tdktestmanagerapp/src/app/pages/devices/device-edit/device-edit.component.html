@@ -13,26 +13,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for device edit page -->
 <div class="container-fluid">
+  <!-- Row for header and title section -->
   <div class="row borders-btm">
+    <!-- Column for left header content -->
     <div class="col">
+      <!-- Row for flavor selection -->
       <div class="row">
+        <!-- Flavor row container -->
         <div class="falvor-row">
         </div>
       </div>
     </div>
+    <!-- Column for title -->
     <div class="col">
       <h1 class="title">Update {{categoryName}} Device</h1>
     </div>
+    <!-- Column for right header content -->
     <div class="col">
     </div>
   </div>
+    <!-- Main form row -->
     <div class="row mt-1">
+        <!-- Column for form content -->
         <div class="col-md-12">
+                    <!-- Form for Video device edit -->
                     <div *ngIf="showHideCreateFormV">
                     <form [formGroup]="editDeviceVForm" (ngSubmit)="EditDeviceVSubmit()" class="userform mt-3">
+                        <!-- Row for form fields -->
                         <div class="row">
+                            <!-- Column for left form fields -->
                             <div class="col">
+                                <!-- Row for stbname field -->
                                 <div class="row mb-3">
                                     <label for="stbname" class="col-md-3 col-form-label">Stb Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -46,6 +59,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for stbip field -->
                                   <div class="row mb-3">
                                     <label for="stbip" class="col-md-3 col-form-label">Stb IP<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -56,6 +70,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for macaddr field -->
                                   <div class="row mb-3">
                                     <label for="macaddr" class="col-md-3 col-form-label">Mac Address<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -67,6 +82,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for devicetype field -->
                                   <div class="row mb-3">
                                     <label for="devicetype" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -81,6 +97,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for isThunderEnabled field -->
                                   <div class="row mb-3">
                                     <label for="isthunderEnabled" class="col-md-3 col-form-label">Is Thunder Enabled</label>
                                     <div class="col-md-8">
@@ -90,6 +107,7 @@ limitations under the License.
                                           </div>
                                     </div>
                                   </div>
+                                  <!-- Row for thunderport field (conditional) -->
                                   <div class="row mb-3" *ngIf="showPortFile"> 
                                     <label for="thunderport" class="col-md-3 col-form-label">Thunder Port<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -99,6 +117,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for device config file field -->
                                   <div class="row mb-3" > 
                                     <label for="deviceconfigfile" class="col-md-3  col-form-label">Device Config File :<mat-icon class="info-icon"
                                         matTooltip="Add a device config file to the device. If you don't have a config file, you can create a new one.">info</mat-icon></label>
@@ -120,7 +139,9 @@ limitations under the License.
                                     </div>
                                   </div>
                             </div>
+                            <!-- Column for right form fields -->
                             <div class="col">
+                              <!-- Row for OEM field -->
                               <div class="row mb-3">
                                 <label for="oem" class="col-md-3 offset-1 col-form-label">OEM</label>
                                 <div class="col-md-8">
@@ -135,6 +156,7 @@ limitations under the License.
                                     </div>
                                 </div>
                               </div>
+                                  <!-- Row for SoC field -->
                                   <div class="row mb-3">
                                     <label for="soc" class="col-md-3 offset-1 col-form-label">SoC</label>
                                     <div class="col-md-8">
@@ -150,6 +172,7 @@ limitations under the License.
                                     </div>
                                   </div>
                                  
+                                  <!-- Row for configure device ports field -->
                                   <div class="row mb-3">
                                     <label for="configuredevicePorts" class="col-md-3 offset-1 col-form-label">Configure Device Ports</label>
                                     <div class="col-md-8">
@@ -159,6 +182,7 @@ limitations under the License.
                                           </div>
                                     </div>
                                   </div>
+                                  <!-- Row for agentport field (conditional) -->
                                   <div class="row mb-3" *ngIf="showConfigPort"> 
                                     <label for="agentport" class="col-md-3 offset-1 col-form-label">Agent Port</label>
                                     <div class="col-md-8">
@@ -168,6 +192,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for agentstatusport field (conditional) -->
                                   <div class="row mb-3" *ngIf="showConfigPort"> 
                                     <label for="agentstatusport" class="col-md-3 offset-1 col-form-label">Agent Status Port</label>
                                     <div class="col-md-8">
@@ -177,6 +202,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for agentmonitorport field (conditional) -->
                                   <div class="row mb-3" *ngIf="showConfigPort"> 
                                     <label for="agentmonitorport" class="col-md-3 offset-1 col-form-label">Agent Monitor Port</label>
                                     <div class="col-md-8">
@@ -188,7 +214,9 @@ limitations under the License.
                                   </div>
                             </div>
                         </div>
+                        <!-- Row for form buttons -->
                         <div class="row">
+                            <!-- Column for form button group -->
                             <div class="mt-2 text-end">
                                 <button class="reset-btn" matTooltip="Go back" (click)="goBack()">Back</button>
                                 <button type="submit" class="create-btn" matTooltip="Update device">Update</button>
@@ -196,10 +224,14 @@ limitations under the License.
                         </div>
                     </form>
                     </div>
+                  <!-- Form for Broadband device edit -->
                   <div *ngIf="showHideCreateFormB">
                     <form [formGroup]="rdkBForm" (ngSubmit)="editDeviceBSubmit()" class="userform mt-5">
+                      <!-- Row for form fields -->
                       <div class="row">
+                          <!-- Column for left form fields -->
                           <div class="col">
+                              <!-- Row for gatewayName field -->
                               <div class="row mb-3">
                                   <label for="gatewayName" class="col-md-3 col-form-label">Gateway Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                                   <div class="col-md-8">
@@ -212,6 +244,7 @@ limitations under the License.
                                       </div>
                                   </div>
                                 </div>
+                                <!-- Row for gatewayIp field -->
                                 <div class="row mb-3">
                                   <label for="gatewayIp" class="col-md-3 col-form-label">Gateway IP<span style="color:red; margin-left: 0.75em;">*</span></label>
                                   <div class="col-md-8">
@@ -222,6 +255,7 @@ limitations under the License.
                                       </div>
                                   </div>
                                 </div>
+                                <!-- Row for macaddr field -->
                                 <div class="row mb-3">
                                   <label for="macaddr" class="col-md-3 col-form-label">Mac Address<span style="color:red; margin-left: 0.75em;">*</span></label>
                                   <div class="col-md-8">
@@ -233,6 +267,7 @@ limitations under the License.
                                       </div>
                                   </div>
                                 </div>
+                                <!-- Row for devicetype field -->
                                 <div class="row mb-3">
                                   <label for="devicetype" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
                                   <div class="col-md-8">
@@ -247,6 +282,7 @@ limitations under the License.
                                       </div>
                                   </div>
                                 </div>
+                                <!-- Row for OEM field -->
                                 <div class="row mb-3">
                                   <label for="oem" class="col-md-3 col-form-label">OEM</label>
                                   <div class="col-md-8">
@@ -262,8 +298,10 @@ limitations under the License.
                                   </div>
                                 </div>
                           </div>
+                          <!-- Column for right form fields -->
                           <div class="col">
                          
+                                <!-- Row for SoC field -->
                                 <div class="row mb-3">
                                   <label for="soc" class="col-md-3 offset-1 col-form-label">SoC</label>
                                   <div class="col-md-8">
@@ -278,6 +316,7 @@ limitations under the License.
                                       </div>
                                   </div>
                                 </div>
+                                <!-- Row for configure device ports field -->
                                 <div class="row mb-3">
                                   <label for="configuredevicePortB" class="col-md-3 offset-1 col-form-label">Configure Device Ports</label>
                                   <div class="col-md-8">
@@ -287,6 +326,7 @@ limitations under the License.
                                         </div>
                                   </div>
                                 </div>
+                                <!-- Row for agentPortb field (conditional) -->
                                 <div class="row mb-3" *ngIf="showConfigPortB"> 
                                   <label for="agentPortb" class="col-md-3 offset-1 col-form-label">Agent Port</label>
                                   <div class="col-md-8">
@@ -296,6 +336,7 @@ limitations under the License.
                                       </div>
                                   </div>
                                 </div>
+                                <!-- Row for agentStatusportB field (conditional) -->
                                 <div class="row mb-3" *ngIf="showConfigPortB"> 
                                   <label for="agentStatusportB" class="col-md-3 offset-1 col-form-label">Agent Status Port</label>
                                   <div class="col-md-8">
@@ -305,6 +346,7 @@ limitations under the License.
                                       </div>
                                   </div>
                                 </div>
+                                <!-- Row for agentMonitorportB field (conditional) -->
                                 <div class="row mb-3" *ngIf="showConfigPortB"> 
                                   <label for="agentMonitorportB" class="col-md-3 offset-1 col-form-label">Agent Monitor Port</label>
                                   <div class="col-md-8">
@@ -316,7 +358,9 @@ limitations under the License.
                                 </div>
                           </div>
                       </div>
+                      <!-- Row for form buttons -->
                       <div class="row">
+                          <!-- Column for form button group -->
                           <div class="mt-2 text-end">
                               <button class="reset-btn" matTooltip="Go back" (click)="goBack()">Back</button>
                               <button type="submit" matTooltip="Update device"class="create-btn">Update</button>
@@ -325,19 +369,29 @@ limitations under the License.
                   </form>
                   </div>
 
+        <!-- End of form content column -->
         </div>
+    <!-- End of main form row -->
     </div>
+<!-- End of main container -->
 </div>
 
- <!-- Modal Start-->
+<!-- Modal Start-->
  <ng-template #dialogTemplate>
+  <!-- Modal dialog content for existing config -->
   <mat-dialog-content class="exsit-modal-content">
+    <!-- Config modal container -->
     <div class="config-modal">
+      <!-- Config content container -->
       <div class="config-content">
+        <!-- Form for uploading config file -->
         <form [formGroup]="uploadConfigForm" (ngSubmit)="configFileUpload()">
+        <!-- Config header section -->
         <div class="config-header">
+          <!-- Input for config filename -->
           <input type="text" id="configFilename" class="form-control config-input" formControlName="editorFilename" readonly />
           
+          <!-- Button to toggle filename -->
           <button type="button" class="btn btn-outline-primary btn-sm delete-config config-editbtn"
             (click)="toggleFileNameDialog()" matTooltip="Toggle FileName" *ngIf="
                               editDeviceVForm.value.stbname &&
@@ -347,6 +401,7 @@ limitations under the License.
                             ">
             <i class="bi bi-toggles2 toogle-name"></i>
           </button>
+          <!-- Button to delete config file -->
           <div *ngIf="
                           visibleDeviceconfigFile == false &&
                           configFileName !== 'sampleDevice.config'
@@ -357,19 +412,25 @@ limitations under the License.
             </button>
           </div>
   
+          <!-- Button to download config file -->
           <button type="button" class="btn btn-outline-primary btn-sm delete-config"  matTooltip ="Download config file">
             <i class="bi bi-download download-icon"></i>
           </button>
         </div>
+        <!-- Body of config modal -->
         <div class="existModal-body">
+          <!-- Row for change file name and upload config -->
           <div class="row">
+            <!-- Column for change file name -->
             <div class="col changefile-name">
             </div>
+            <!-- Column for upload config button -->
             <div class="col uploadconfig">
               <button type="button" class="download-btn backEditor" (click)="backToExistingEditor()" matTooltip="Go back" *ngIf="backToExistEditorbtn">Back</button>
               <button type="button" class="download-btn" (click)="openExistingModal('Upload Configuration File')" matTooltip="Upload configuration file" *ngIf="showExistUploadButton">Upload Configuration File</button>
             </div>
           </div>
+            <!-- Editor container for config content -->
             <div class="editor-container mt-1 exist-config" *ngIf="existingConfigEditor">
               <ngx-editor [editor]="editor"  formControlName="editorContent"></ngx-editor>  
               <div *ngIf="existConfigSubmitted && uploadConfigForm.controls['editorContent']?.errors" class="text-danger">
@@ -377,7 +438,9 @@ limitations under the License.
             </div>  
             </div>
   
+            <!-- Container for uploading existing config file -->
             <div class="container mt-5 upload-container" *ngIf="uploadExistingConfig">
+              <!-- Row for upload config file input -->
               <div class="row mb-3"> 
                   <label for="uploadConfigFileModal" class="col-md-4  col-form-label" style="  font-size: 1em; font-family: Roboto;font-weight: 500;">Upload Configuration file<span style="color:red; margin-left: 0.75em;">*</span></label>
                       <div class="col-md-8">
@@ -389,28 +452,40 @@ limitations under the License.
               </div>
           </div>
         </div>
+        <!-- Modal button group -->
         <div class="modal-btns">
           <button type="button" class="download-btn" matTooltip="Close"(click)="closeDialog()">Close</button>
           <button type="submit" class="download-btn" matTooltip="Upload File">Upload</button>
         </div>
         </form>
       </div>
+    <!-- End of config modal container -->
     </div>
   </mat-dialog-content>
+<!-- End of modal template -->
 </ng-template>
  <!-- Modal End -->
 
- <!-- Device Modal Start-->
+<!-- Device Modal Start-->
 <ng-template #newDeviceTemplate>
+  <!-- Modal dialog content for new device config -->
   <mat-dialog-content class="exsit-modal-content">
+    <!-- Config modal container -->
     <div class="config-modal">
+      <!-- Config content container -->
       <div class="config-content">
+        <!-- Form for uploading new device config file -->
         <form [formGroup]="uploadDeviceConfigForm" (ngSubmit)="configDeviceFileUpload()">
+        <!-- Config header section for new device -->
         <div class="config-header newdevice-header">
+          <!-- Title for new device config modal -->
           <h1 class="modal-title device-title" id="staticBackdropLabel">{{uploadCreateHeading}}</h1>
         </div>
+        <!-- Body of new device config modal -->
         <div class="existModal-body">
+          <!-- Row for change file name and upload config -->
           <div class="row">
+            <!-- Column for change file name -->
             <div class="col changefile-name">
               <input type="text" id="configFilename" class="form-control config-input device-input" formControlName="editorFilename"
                 [readOnly]="!isEditingFile" />
@@ -430,12 +505,14 @@ limitations under the License.
                 <i class="bi bi-toggles2 toogle-name"></i>
               </button>
               </div>
+            <!-- Column for upload config button -->
             <div class="col uploadconfig">
               <button type="button" class="download-btn backEditor" (click)="backToEditor('Create New Device Config File')" matTooltip="Go back"*ngIf="backToEditorbtn">Back</button>
               <button type="button" class="download-btn" (click)="openUploadFile('Upload Configuration File')" matTooltip="Upload file" *ngIf="showUploadButton">Upload Configuration File</button>
             </div>
           </div>
   
+            <!-- Editor container for new device config content -->
             <div class="device-container mt-4 device-editor" *ngIf="deviceEditor">
               <ngx-editor [editor]="editor2"  formControlName="editorContent"></ngx-editor> 
               <div *ngIf="submitted && uploadDeviceConfigForm.controls['editorContent']?.errors" class="text-danger">
@@ -443,7 +520,9 @@ limitations under the License.
             </div>  
             </div>
   
+            <!-- Container for uploading new device config file -->
             <div class="container mt-5 upload-container" *ngIf="uploadConfigSec">
+              <!-- Row for upload device config file input -->
               <div class="row mb-3"> 
                   <label for="uploadDeviceConfigFileModal" class="col-md-4  col-form-label" style="  font-size: 1em; font-family: Roboto;font-weight: 500;">Upload Configuration file<span style="color:red; margin-left: 0.75em;">*</span></label>
                       <div class="col-md-8">
@@ -456,13 +535,16 @@ limitations under the License.
           </div>
   
         </div>
+        <!-- Modal button group -->
         <div class="modal-btns">
           <button type="button" class="download-btn" matTooltip="Close" (click)="closeNewDeviceDialog()">Close</button>
           <button type="submit" class="download-btn" matTooltip="Upload file">Upload</button>
         </div>
         </form>
       </div>
+    <!-- End of new device config modal container -->
     </div>
   </mat-dialog-content>
+<!-- End of new device modal template -->
 </ng-template>
  <!-- Device Modal End-->

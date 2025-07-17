@@ -24,14 +24,23 @@ export class EditSocComponent {
   configureName!:string;
   categoryName!:string;
   
+  /**
+   * Constructor for EditSocComponent.
+   * @param route ActivatedRoute for accessing route parameters
+   * @param router Angular Router for navigation
+   * @param _snakebar MatSnackBar for notifications
+   * @param service SocService for SoC operations
+   * @param authservice AuthService for authentication and user info
+   */
   constructor(private route: ActivatedRoute, private router: Router, private _snakebar: MatSnackBar,
     public service: SocService, private authservice: AuthService) {
     this.service.currentUrl = this.route.snapshot.url[1].path
   }
 
-   /**
-   * Initializes the component.
-   */ 
+
+  /**
+   * Initializes the component and sets up category and form name.
+   */
   ngOnInit(): void {
     this.id = +this.route.snapshot.params['id'];
     this.service.currentUrl = this.id;
@@ -47,9 +56,10 @@ export class EditSocComponent {
     }
   }
 
+
   /**
    * Handles the form submission.
-   * @param name - The name of the SOC.
+   * @param name The name of the SOC to update.
    */
   onFormSubmitted(name: any): void {
     let obj = {
@@ -68,7 +78,6 @@ export class EditSocComponent {
           setTimeout(() => {
             this.router.navigate(["configure/list-soc"]);
           }, 1000);
- 
         },
         error: (err) => {        
           this._snakebar.open(err.message, '', {
@@ -78,9 +87,9 @@ export class EditSocComponent {
             verticalPosition: 'top'
           })
         }
- 
       })
     }
   }
+
 
 }

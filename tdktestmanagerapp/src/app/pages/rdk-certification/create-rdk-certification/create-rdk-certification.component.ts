@@ -48,21 +48,36 @@ export class CreateRdkCertificationComponent {
   editorOptions = { theme: 'vs-dark', language: 'python' };
   submitted = false;
 
+  /**
+   * Constructor for CreateRdkCertificationComponent.
+   * @param fb FormBuilder instance for creating form groups.
+   * @param service RdkService instance for server communication.
+   * @param _snakebar MatSnackBar instance for showing messages.
+   * @param router Router instance for navigation.
+   */
   constructor(private fb: FormBuilder, private service: RdkService, private _snakebar: MatSnackBar, private router: Router) { }
+
 
   /**
    * Initializes the component and sets up the form group with validation.
-   * This method is called once the component has been initialized.
-   * It creates a form group with two controls: `fileName` and `pythonEditor`,
-   * both of which are required fields.
+   * Creates a form group with two controls: `fileName` and `pythonEditor`.
+   * Both fields are required.
+   * @returns void
    */
   ngOnInit(): void {
     this.certificationFormGroup = this.fb.group({
-      fileName: ['',Validators.required],
+      fileName: ['', Validators.required],
       pythonEditor: ['', Validators.required]
     });
   }
 
+
+  /**
+   * Handles input event for the file name field.
+   * Trims leading spaces from the input value.
+   * @param event The input event from the file name field.
+   * @returns void
+   */
   onInputName(event: Event): void {
     const inputElement = event.target as HTMLTextAreaElement;
     const value = inputElement.value;
@@ -70,21 +85,19 @@ export class CreateRdkCertificationComponent {
       this.certificationFormGroup.get('fileName')?.setValue(value.trimStart(), { emitEvent: false });
     }
   }
+
+
   /**
    * Handles the form submission for creating an RDK certification.
-   * 
-   * This method sets the `submitted` flag to true, checks if the form is valid,
-   * and if valid, it creates a Python script file from the form data and sends it
-   * to the server using the `createScript` service method. Upon successful creation,
-   * it displays a success message and navigates to the list of RDK certifications.
-   * If there's an error, it displays an error message.
-   * 
-   * @returns {void}
+   * Sets the `submitted` flag to true, checks if the form is valid,
+   * and if valid, creates a Python script file and sends it to the server.
+   * Shows success or error messages and navigates as needed.
+   * @returns void
    */
   onSubmit(): void {
     this.submitted = true;
     if (this.certificationFormGroup.invalid) {
-      return
+      return;
     } else {
       const pythonContent = this.certificationFormGroup.value.pythonEditor;
       const filename = `${this.certificationFormGroup.value.fileName}.py`;
@@ -95,7 +108,7 @@ export class CreateRdkCertificationComponent {
             duration: 2000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
-          })
+          });
           setTimeout(() => {
             this.router.navigate(["configure/list-rdk-certifications"]);
           }, 1000);
@@ -107,18 +120,21 @@ export class CreateRdkCertificationComponent {
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
             verticalPosition: 'top'
-          })
+          });
         }
-      })
+      });
     }
 
   }
 
+
   /**
    * Navigates the user back to the list of RDK certifications.
-   * This method uses the Angular Router to navigate to the "configure/list-rdk-certifications" route.
+   * Uses the Angular Router to navigate to the "configure/list-rdk-certifications" route.
+   * @returns void
    */
   goBack(): void {
     this.router.navigate(["configure/list-rdk-certifications"]);
   }
+
 }

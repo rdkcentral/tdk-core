@@ -19,6 +19,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 body,
 *:not(.material-icons) {
+  /*
+   * Base font family for the application, excluding material icons.
+   */
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 .mat-typography h1,
@@ -27,20 +30,32 @@ body,
 .mat-typography h4,
 .mat-typography h5,
 .mat-typography h6 {
+  /*
+   * Typography font family for all heading levels.
+   */
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
 
 ::ng-deep.form-select:focus,
 .form-control:focus {
+  /*
+   * Remove default focus border and shadow for form elements.
+   */
   border-color: gray !important;
   box-shadow: none !important;
 }
 .form-select,
 .form-control, .form-check-input{
+  /*
+   * Style for form select, control, and check input elements.
+   */
     border-color: gray !important;
     font-size: 0.8rem;
 }
 .borders-btm {
+  /*
+   * Gradient border for bottom border effect.
+   */
   border-image: linear-gradient(
     to right,
     rgb(0, 178, 220) 25%,
@@ -55,6 +70,9 @@ body,
   margin: 0 15px;
 }
 .title {
+  /*
+   * Title styling for section headers.
+   */
   font-size: 1rem;
   text-align: center;
   font-weight: 500;
@@ -63,6 +81,9 @@ body,
 }
 
 .close-btn, .create-btn {
+  /*
+   * Button styling for close and create actions.
+   */
     background-color: #00b2dc;
     color: #fff;
     font-size: 0.8rem;
@@ -75,16 +96,25 @@ body,
 
   }
 .close-btn{
+  /*
+   * Positioning for the close button.
+   */
     position: relative;
     bottom: 15px;
     right: 15px;
 }
 .create-btn{
+  /*
+   * Positioning for the create button.
+   */
     position: relative;
     bottom: 15px;
     right: 0px;
 }
 .form-sec{
+  /*
+   * Section styling for form container.
+   */
     margin: auto;
     height: auto;
     display: flex;
@@ -92,6 +122,9 @@ body,
 }
 
 .readonly-field[readonly] {
+  /*
+   * Styling for readonly input fields.
+   */
   background-color: #f0f0f0 !important;
   color: #212529 !important;   /* Brighter/darker text */
   cursor: not-allowed;

@@ -45,32 +45,42 @@ export class CreateOemComponent implements OnInit{
   configureName!:string;
   categoryName!:string;
 
+  /**
+   * Constructor for CreateOemComponent.
+   * @param router Router instance for navigation.
+   * @param service OemService instance for OEM operations.
+   * @param route ActivatedRoute instance for route information.
+   * @param _snakebar MatSnackBar instance for notifications.
+   * @param authservice AuthService instance for authentication and config value.
+   */
   constructor(private router: Router, public service: OemService,
     private route: ActivatedRoute, private _snakebar: MatSnackBar, private authservice: AuthService) {
-    
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
-
   }
 
+
+
     /**
-   * Initializes the component.
-   */
+     * Initializes the component and sets up initial state.
+     * No parameters.
+     */
     ngOnInit(): void {
       this.configureName = this.authservice.selectedConfigVal;
-      if(this.configureName === 'RDKB'){
+      if (this.configureName === 'RDKB') {
         this.categoryName = 'Broadband';
         this.commonFormName = this.route.snapshot.url[1].path === 'create-oem' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'OEM' : this.commonFormName;
-      }else{
+      } else {
         this.categoryName = 'Video';
         this.commonFormName = this.route.snapshot.url[1].path === 'create-oem' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'OEM' : this.commonFormName;
       }
     }
 
+
     
-   /**
+
+  /**
    * Handles the form submission event.
-   * 
-   * @param name - The name of the oem.
+   * @param name The name of the OEM.
    */
   onFormSubmitted(name: string): void {
     let obj = {
@@ -78,7 +88,7 @@ export class CreateOemComponent implements OnInit{
       "oemCategory": this.authservice.selectedConfigVal,
       "oemUserGroup": this.loggedinUser.userGroupName
     }
-    if(name !== undefined && name !== null){
+    if (name !== undefined && name !== null) {
       this.service.createOem(obj).subscribe({
         next: (res) => {
           this._snakebar.open(res.message, '', {
@@ -88,7 +98,6 @@ export class CreateOemComponent implements OnInit{
           })
           setTimeout(() => {
             this.router.navigate(["configure/list-oem"]);
-  
           }, 1000);
         },
         error: (err) => {
@@ -101,7 +110,7 @@ export class CreateOemComponent implements OnInit{
         }
       })
     }
-
   }
+
 
 }

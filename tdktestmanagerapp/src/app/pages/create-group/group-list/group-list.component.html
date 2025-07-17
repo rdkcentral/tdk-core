@@ -13,13 +13,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for user groups list page -->
 <div class="container-fluid">
+    <!-- Row for header and title -->
     <div class="row borders-btm">
+        <!-- Empty column for spacing -->
         <div class="col"></div>
+        <!-- Column for user groups list title -->
         <div class="col">
             <h1 class="title">User Groups List</h1>
         </div>
+        <!-- Column for button group -->
         <div class="col">
+            <!-- Button group for back and create group -->
             <div class="btns-group ">
                 <button class="back-btn" (click)="goBack()" matTooltip="Back"><i class="bi bi-arrow-return-left icon-size"></i></button>
                 <button class="create-btn" (click)="createGroup()" matTooltip="Create Group">
@@ -28,7 +34,9 @@ limitations under the License.
             </div>
         </div>
     </div>
+    <!-- Row for table section -->
     <div class="row table-sec mt-2">
+        <!-- Table container for ag-grid -->
         <div class="ag-table mb-3" style="display: flex; justify-content: center;">
             <ag-grid-angular style="width: 100%; height: 446px;" [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowSelection]="rowSelection"

@@ -17,6 +17,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/*
+ * Styles the header section with background color, text color, height, and shadow.
+ */
 .header {
     background-color: #0e6f87;
     color: #fff;
@@ -24,17 +27,29 @@ http://www.apache.org/licenses/LICENSE-2.0
     box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
   }
 
-  .logo-img {
+
+/*
+ * Styles the logo image width.
+ */
+.logo-img {
     width: 8%;
   }
+
   
-  .apptitle {
+/*
+ * Styles the application title for color, size, weight, and margin.
+ */
+.apptitle {
     color: #fff;
     font-size: 1.5rem !important;
     font-weight: 500;
     margin-left: 15px;
   }
-  .borders-btm {
+
+/*
+ * Adds a multi-color gradient border to the bottom of elements with borders-btm class.
+ */
+.borders-btm {
     border-image: linear-gradient(
       to right,
       rgb(0, 178, 220) 25%,
@@ -48,7 +63,11 @@ http://www.apache.org/licenses/LICENSE-2.0
     border-image-width: 0px 0px 4px 0px;
     margin: 0 15px;
   }
-  .title {
+
+/*
+ * Styles the title class for font size, alignment, and spacing.
+ */
+.title {
     font-size: 1rem;
     text-align: center;
     font-weight: 500;
@@ -56,7 +75,11 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin-bottom: 10px;
   }
 
-  .container-box form {
+
+/*
+ * Styles the form inside container-box for layout and appearance.
+ */
+.container-box form {
     background-color: #fff;
     display: flex;
     justify-content: center;
@@ -65,8 +88,12 @@ http://www.apache.org/licenses/LICENSE-2.0
     height: 90%;
     margin-top: 2px;
   }
+
   
-  .container-box button {
+/*
+ * Styles the button inside container-box for appearance and interaction.
+ */
+.container-box button {
     background-color: #00b2dc;
     color: #fff;
     font-size: 0.8rem;
@@ -77,7 +104,11 @@ http://www.apache.org/licenses/LICENSE-2.0
     letter-spacing: 0.5px;
     cursor: pointer;
   }
-  .back-btn{
+
+/*
+ * Styles the back button for appearance and spacing.
+ */
+.back-btn{
     background-color: #fff;
     color: #fff;
     border: 1px solid #00b2dc;
@@ -90,22 +121,42 @@ http://www.apache.org/licenses/LICENSE-2.0
     cursor: pointer;
     margin-right: 10px;
   }
-  .resetpwdbtn {
+
+/*
+ * Centers the reset password button.
+ */
+.resetpwdbtn {
     text-align: center;
   }
+
     
-  .position-relative {
+/*
+ * Sets position to relative for position-relative class.
+ */
+.position-relative {
     position: relative;
   }
-  .category-row{
+
+/*
+ * Styles the category row for layout and spacing.
+ */
+.category-row{
     display: flex;
     justify-content: center;
     margin-top: 50px;
   }
- .cat-dropdown{
+
+/*
+ * Styles the category dropdown for font size.
+ */
+.cat-dropdown{
   font-size: 0.8rem;
  }
- ::ng-deep.form-select:focus, .form-control:focus{
+
+/*
+ * Removes border and shadow on focus for form-select and form-control.
+ */
+::ng-deep.form-select:focus, .form-control:focus{
   border-color: gray !important;
   box-shadow: none !important;
 }

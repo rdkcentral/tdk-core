@@ -232,6 +232,16 @@ export class AnalysisComponent {
   showReportBtn = false;
   showLoader = false;
 isDownloading: boolean = false;
+  /**
+   * Constructor for AnalysisComponent
+   * @param authservice - AuthService instance
+   * @param fb - FormBuilder instance
+   * @param baseDialog - MatDialog for base modal
+   * @param comparisonDialog - MatDialog for comparison modal
+   * @param deviceTypeService - Service for device types
+   * @param anlysisService - Service for analysis
+   * @param _snakebar - MatSnackBar for notifications
+   */
   constructor(
     private authservice: AuthService,
     private fb: FormBuilder,
@@ -249,6 +259,9 @@ isDownloading: boolean = false;
     // this.selectedDfaultCategory = this.loggedinUser.userCategory;
   }
 
+  /**
+   * Angular lifecycle hook for initialization
+   */
   ngOnInit(): void {
     this.selectedDfaultCategory = this.preferedCategory
         ? this.preferedCategory
@@ -276,10 +289,19 @@ isDownloading: boolean = false;
     localStorage.setItem('viewName', 'scripts');
   }
 
+  /**
+   * Event handler for when the grid is ready.
+   * @param params - The GridReadyEvent object containing the grid API.
+   */
   onGridReady(params: GridReadyEvent):void {
     this.gridApi = params.api;
   }
 
+  /**
+   * Validator for date range, checks if the difference exceeds 30 days
+   * @param group - AbstractControl group
+   * @returns Validation error object or null
+   */
   dateRangeValidator(group: AbstractControl): { [key: string]: any } | null {
     const fromDate = group.get('fromDate')?.value;
     const toDate = group.get('toDate')?.value;
@@ -289,6 +311,9 @@ isDownloading: boolean = false;
     }
     return null;
   }
+  /**
+   * Fetches device types by selected category
+   */
   getDeviceByCategory(): void {
     this.deviceTypeService
       .getfindallbycategory(this.selectedDfaultCategory)
@@ -296,6 +321,10 @@ isDownloading: boolean = false;
         this.allDeviceType = res.data;
       });
   }
+  /**
+   * Handles category change event
+   * @param event - Change event
+   */
   categoryChange(event:any): void {
     let val = event.target.value;
     if (val === 'RDKB') {
@@ -317,13 +346,26 @@ isDownloading: boolean = false;
     }
   }
 
+  /**
+   * Handles result change event (currently empty)
+   * @param event - Change event
+   */
   resultChange(event: any): void {}
 
+
+  /**
+   * Handles device type change event
+   * @param event - Change event
+   */
   deviceChange(event: any): void {
     let val = event.target.value;
     this.deviceName = val;
   }
- changeExecutionType(event: any): void {
+  /**
+   * Handles execution type change event
+   * @param event - Change event
+   */
+  changeExecutionType(event: any): void {
     let val = event.target.value;
     this.executionTypeName = val;
 
@@ -340,6 +382,10 @@ isDownloading: boolean = false;
     this.testSuiteShow = this.executionTypeName === 'TESTSUITE';
 }
 
+  /**
+   * Handles tab click event to switch between reports
+   * @param event - Tab click event
+   */
   onTabClick(event: any): void {
     const label = event.tab.textLabel;
     if (label === 'Combined Report') {
@@ -348,7 +394,11 @@ isDownloading: boolean = false;
       this.tabName = 'Comparsion Report';
     }
   }
-  /** Custom Validator: Check if baseName exists in comparisonName */
+  /**
+   * Custom Validator: Check if baseName exists in comparisonName
+   * @param control - AbstractControl for comparisonName
+   * @returns Validation error object or null
+   */
   validateBaseNotInComparison(control: AbstractControl): ValidationErrors | null {
     const comparisonIds = this.compNamesArr?.map((item:any) => item.id) || [];
 
@@ -358,8 +408,11 @@ isDownloading: boolean = false;
     return null;
   }
 
-/** Update Form Control when the user edits the textarea manually */
-   updateComparisonFormValue(event: Event): void {
+  /**
+   * Update Form Control when the user edits the textarea manually
+   * @param event - Input event from textarea
+   */
+  updateComparisonFormValue(event: Event): void {
     const inputValue = (event.target as HTMLTextAreaElement).value;
 
     // Allow the user to type freely, including commas
@@ -375,7 +428,10 @@ isDownloading: boolean = false;
     this.reportForm.patchValue({ comparisonName: this.selectComparisonNames });
     this.reportForm.get('comparisonName')?.updateValueAndValidity();
 }
- compReportSubmit(): void {
+  /**
+   * Handles comparison report form submission and triggers report generation
+   */
+  compReportSubmit(): void {
     this.reportSubmitted = true;
 
     // Validate baseName and comparisonName fields
@@ -441,6 +497,9 @@ isDownloading: boolean = false;
         },
     });
 }
+  /**
+   * Opens the base execution modal dialog
+   */
   openModal() {
     const dialogRef = this.baseDialog.open(BaseModalComponent, {
       width: '85%',
@@ -462,6 +521,9 @@ isDownloading: boolean = false;
       }
     });
   }
+  /**
+   * Opens the comparison modal dialog
+   */
   comparisonModal() {
     const dialogRef = this.comparisonDialog.open(ComparisonModalComponent, {
       width: '85%',
@@ -487,6 +549,9 @@ isDownloading: boolean = false;
     });
   }
 
+  /**
+   * Handles combined report form submission and triggers report generation
+   */
   onCombinedSubmit(): void {
     this.combinedSubmitted = true;
     if (this.combinedForm.invalid) {
@@ -523,10 +588,16 @@ isDownloading: boolean = false;
     });
 }
 
+  /**
+   * Event handler for selection change in ag-grid
+   */
   onSelectionChanged() {
     this.selectedExecutions = this.gridApi.getSelectedRows();
     this.updateSelectedExecutionNames();
   }
+  /**
+   * Updates the selected execution names and validates selection
+   */
   updateSelectedExecutionNames() {
     this.selectionErrorMessage = '';
 
@@ -563,6 +634,9 @@ isDownloading: boolean = false;
     this.selectedExecutionNames = this.selectedExecutions.map(execution => execution.executionId);
   }
 
+  /**
+   * Generates the combined report and triggers download
+   */
   generateReport(): void {
     if (this.selectedExecutionNames) {
       this.isDownloading = true; // Set loading state to true

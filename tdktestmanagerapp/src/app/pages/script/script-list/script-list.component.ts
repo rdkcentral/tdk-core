@@ -172,13 +172,25 @@ export class ScriptListComponent {
   gridOptions = {
     rowHeight: 30
   };
-
+  /**
+   * Constructor for ScriptListComponent.
+   * @param router Router instance for navigation.
+   * @param authservice AuthService instance for authentication.
+   * @param fb FormBuilder instance for reactive forms.
+   * @param _snakebar MatSnackBar for notifications.
+   * @param dialog MatDialog instance for dialogs.
+   * @param cdRef ChangeDetectorRef for change detection.
+   * @param scriptservice ScriptsService for script operations.
+   * @param renderer Renderer2 for DOM manipulation.
+   * @param appRef ApplicationRef for application reference.
+   */
   constructor(private router: Router, private authservice: AuthService, private fb: FormBuilder,
     private _snakebar: MatSnackBar, public dialog: MatDialog, private cdRef: ChangeDetectorRef,
     private scriptservice: ScriptsService, private renderer: Renderer2, private appRef: ApplicationRef) {
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
     this.userCategory = this.loggedinUser.userCategory;
     this.preferedCategory = localStorage.getItem('preferedCategory') || '';
+
   }
   /**
    * Initializes the component. This method is called once the component has been initialized.
@@ -248,6 +260,10 @@ export class ScriptListComponent {
     })
   }
 
+  /**
+   * Sets the category name based on the provided category value.
+   * @param category The category value ('RDKB', 'RDKC', or other).
+   */
   setCategoryName(category: string) {
     if (category === 'RDKB') {
       this.categoryName = 'Broadband';
@@ -405,6 +421,7 @@ export class ScriptListComponent {
     const end = start + this.paginator.pageSize;
     this.paginatedScriptData = this.scriptFilteredData.slice(start, end);
     this.cdRef.detectChanges();
+
   }
   /**
    * Paginates the filtered test suite data based on the current page index and page size.
@@ -424,6 +441,7 @@ export class ScriptListComponent {
     const end = start + this.paginator.pageSize;
     this.paginatedSuiteData = this.testSuiteFilteredData.slice(start, end);
     this.cdRef.detectChanges();
+
   }
   /**
    * Handles the page change event from the paginator.
@@ -436,10 +454,16 @@ export class ScriptListComponent {
     if (this.viewName === 'testsuites') {
       this.paginateSuiteData();
     }
+
   }
+  /**
+   * Handles the page change event for the script table paginator.
+   * @param event The page change event object.
+   */
   onPageChangeScript(event: any): void {
     this.currentPage = event.pageIndex;
     this.scriptDataPagination();
+
   }
   /**
    * Sorts the script data based on the module name in ascending or descending order.
@@ -460,6 +484,7 @@ export class ScriptListComponent {
       }
     });
     this.scriptDataPagination();
+
   }
   /**
    * Toggles the sort order of the test suite data between ascending and descending.
@@ -476,6 +501,7 @@ export class ScriptListComponent {
       }
     });
     this.paginateSuiteData();
+
   }
   /**
   * Toggles the visibility of the filter input field.
@@ -489,6 +515,7 @@ export class ScriptListComponent {
       this.filterScript();
       this.scriptSorting();
     }
+
   }
   /**
    * Toggles the visibility of the filter input field for test suites.
@@ -502,6 +529,7 @@ export class ScriptListComponent {
       this.applyFilterSuite();
       this.toggleSortSuite();
     }
+
   }
   /**
    * Filters the script data based on the provided filter text.
@@ -524,6 +552,7 @@ export class ScriptListComponent {
     }
     this.paginator.firstPage();
     this.scriptDataPagination();
+
   }
   /**
    * Applies a filter to the test suite data based on the filter text.
@@ -546,16 +575,21 @@ export class ScriptListComponent {
     }
     this.paginator.firstPage();
     this.paginateSuiteData();
+
   }
 
-onSearchInput() {
-  if (this.debounceTimer) {
-    clearTimeout(this.debounceTimer);
+  /**
+   * Handles the input event for the global search box with debounce.
+   */
+  onSearchInput() {
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+    this.debounceTimer = setTimeout(() => {
+      this.globalSearch();
+    }, 2000); // 2 seconds debounce
+
   }
-  this.debounceTimer = setTimeout(() => {
-    this.globalSearch();
-  }, 2000); // 2 seconds debounce
-}
 
 
   /**
@@ -615,6 +649,7 @@ onSearchInput() {
         this.scriptDataPagination();
       }
     }
+
   }
   /**
    * Closes the modal  by click on button .
@@ -652,6 +687,7 @@ onSearchInput() {
         this.uploadFileError = 'Please upload a valid zip file.';
       }
     }
+
   }
   /**
    * Handles the submission of the upload script form.
@@ -701,6 +737,7 @@ onSearchInput() {
         })
       }
     }
+
   }
   /**
    * Handles the file input event for uploading a test suite XML file.
@@ -726,6 +763,7 @@ onSearchInput() {
         this.uploadFileError = 'Please upload a valid XML file.';
       }
     }
+
   }
   /**
    * Submits the test suite file.
@@ -775,6 +813,7 @@ onSearchInput() {
         })
       }
     }
+
   }
   /**
    * Navigates to the 'create-scripts' page.
@@ -782,6 +821,7 @@ onSearchInput() {
    */
   createScripts(): void {
     this.router.navigate(['script/create-scripts']);
+
   }
   /**
    * Navigates to the 'create-script-group' route.
@@ -789,6 +829,7 @@ onSearchInput() {
    */
   createScriptGroup(): void {
     this.router.navigate(['script/create-script-group']);
+
   }
   /**
    * Navigates to the script creation group page with the specified video category.
@@ -799,6 +840,7 @@ onSearchInput() {
     let onlyVideoCategory = value;
     this.authservice.videoCategoryOnly = onlyVideoCategory;
     this.router.navigate(['script/create-script-group']);
+
   }
   /**
    * Navigates to the custom test suite page.
@@ -806,6 +848,7 @@ onSearchInput() {
    */
   customTestSuite() {
     this.router.navigate(['script/custom-testsuite']);
+
   }
   /**
    * Edits a script by fetching its details using the provided edit data.
@@ -834,6 +877,7 @@ onSearchInput() {
         }
       }
     )
+
   }
   /**
    * Deletes a script after user confirmation.
@@ -870,6 +914,7 @@ onSearchInput() {
         })
       }
     }
+
   }
   /**
    * Downloads a script as a ZIP file.
@@ -893,6 +938,7 @@ onSearchInput() {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     })
+
   }
 
   /**
@@ -917,6 +963,7 @@ onSearchInput() {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     });
+
   }
 
 
@@ -944,6 +991,7 @@ onSearchInput() {
         window.URL.revokeObjectURL(url);
       });
     }
+
   }
   /**
    * Downloads a script file.
@@ -968,6 +1016,7 @@ onSearchInput() {
         window.URL.revokeObjectURL(url);
       });
     }
+
   }
   /**
    * Downloads test cases as a ZIP file.
@@ -1017,6 +1066,7 @@ onSearchInput() {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     });
+
   }
   /**
    * Downloads a test suite XML file based on the provided parameters.
@@ -1043,6 +1093,7 @@ onSearchInput() {
         window.URL.revokeObjectURL(url);
       });
     }
+
   }
   /**
    * Downloads an Excel file for the given test suite.
@@ -1064,6 +1115,7 @@ onSearchInput() {
         window.URL.revokeObjectURL(url);
       });
     }
+
   }
   /**
    * Deletes a test suite after user confirmation.
@@ -1107,6 +1159,7 @@ onSearchInput() {
         })
       }
     }
+
   }
   /**
    * Navigates to the edit test suite page with the provided test suite data.
@@ -1115,6 +1168,7 @@ onSearchInput() {
    */
   editTestSuite(testSuiteData: any) {
     this.router.navigate(['script/edit-testsuite'], { state: { testSuiteData } });
+
   }
 
   @HostListener('document:click', ['$event'])
@@ -1145,6 +1199,7 @@ onSearchInput() {
     ) {
       this.showFilterInputsuite = false;
     }
+
   }
   /**
    * Toggles the expansion state of a given parent panel and updates the component's panel open state.
@@ -1154,6 +1209,7 @@ onSearchInput() {
   togglePanel(parent: any) {
     parent.expanded = !parent.expanded;
     this.panelOpenState = !this.panelOpenState;
+
   }
   /**
    * Toggles the expanded state of a test suite and updates the suite panel state.
@@ -1163,6 +1219,7 @@ onSearchInput() {
   toggleTestSuite(suite: any) {
     suite.expanded = !suite.expanded;
     this.suitePanelOpen = !this.suitePanelOpen;
+
   }
 
 

@@ -28,17 +28,36 @@ import { Observable } from 'rxjs';
 export class UsergroupService {
   currentUrl: any;
   isEdit = false;
+
+  /**
+   * Constructor for UsergroupService.
+   * @param http HttpClient for HTTP requests
+   * @param authService AuthService for authentication and API token
+   * @param config Application configuration injected as APP_CONFIG
+   */
   constructor(private http: HttpClient, private authService: AuthService,
     @Inject('APP_CONFIG') private config: any
   ) {
   }
 
+  /**
+   * Options for HTTP requests with authorization header.
+   */
   private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
 
+  /**
+   * Gets the list of user groups.
+   * @returns Observable with the list of user groups.
+   */
   getuserGroupList(): Observable<any> {
     return this.http.get(`${this.config.apiUrl}api/v1/usergroup/findall`, this.options);
   }
 
+  /**
+   * Creates a new user group.
+   * @param data The user group name to create.
+   * @returns Observable with the creation result as text.
+   */
   createuserGroup(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -49,6 +68,11 @@ export class UsergroupService {
     return this.http.post(`${this.config.apiUrl}api/v1/usergroup/create`, params, { headers, responseType: 'text' })
   }
 
+  /**
+   * Updates a user group.
+   * @param data The user group data to update.
+   * @returns Observable with the update result as text.
+   */
   updateUserGroup(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -57,6 +81,11 @@ export class UsergroupService {
     return this.http.put(`${this.config.apiUrl}api/v1/usergroup/update`, data, { headers, responseType: 'text' })
   }
 
+  /**
+   * Deletes a user group by ID.
+   * @param id The ID of the user group to delete.
+   * @returns Observable with the deletion result as text.
+   */
   deleteUserGroup(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -64,6 +93,10 @@ export class UsergroupService {
     return this.http.delete(`${this.config.apiUrl}api/v1/usergroup/delete/${id}`, { headers, responseType: 'text' });
   }
 
+  /**
+   * Gets the application version.
+   * @returns Observable with the application version.
+   */
   appVersion(): Observable<any> {
     return this.http.get(`${this.config.apiUrl}api/v1/users/getappversion`);
   }

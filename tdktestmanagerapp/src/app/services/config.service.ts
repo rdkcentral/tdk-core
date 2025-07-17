@@ -24,8 +24,19 @@ import { HttpClient } from '@angular/common/http';
 export class ConfigService {
   private config: any;
 
+
+  /**
+   * Constructor for ConfigService.
+   * @param http HttpClient for HTTP requests
+   */
   constructor(private http: HttpClient) {}
 
+
+
+  /**
+   * Loads the configuration from the config.json file.
+   * @returns A promise that resolves when the config is loaded.
+   */
   loadConfig(): Promise<void> {
     return this.http.get('/assets/config.json')
       .toPromise()
@@ -34,6 +45,11 @@ export class ConfigService {
       });
   }
 
+
+  /**
+   * Gets the API URL from the loaded configuration.
+   * @returns The API URL as a string.
+   */
   get apiUrl(): string {
     return this.config?.apiUrl || '';
   }

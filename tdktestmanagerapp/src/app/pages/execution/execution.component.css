@@ -30,31 +30,60 @@ body,
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
+
+/*
+ * .table-container: Styles the main container for tables.
+ */
 .table-container {
   padding-left: 0;
 }
+
+
+/*
+ * .device-section: Styles for the device section container.
+ */
 .device-section {
   background-color: transparent;
   padding-left: 0px;
   padding-right: 0px;
 }
+
+
+/*
+ * .falvor-row: Styles for the flavor row layout.
+ */
 .falvor-row {
   display: flex;
   align-items: baseline;
   margin-top: 5px;
   padding-left: 0;
 }
+
+
+/*
+ * .falvor-label: Styles for the flavor label.
+ */
 .falvor-label {
   width: 75px;
   font-size: 0.8rem;
   font-weight: 500;
 }
 
+
+
+/*
+ * .rdk-dropdown: Styles for the RDK dropdown selector.
+ */
 .rdk-dropdown {
   width: 120px;
   background-color: transparent;
 }
 
+
+
+/*
+ * .borders-btm: Styles for bottom border gradient.
+ */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -69,6 +98,11 @@ body,
   border-image-width: 0px 0px 4px 0px;
   margin: auto;
 }
+
+
+/*
+ * .title: Styles for the title text.
+ */
 .title {
   font-size: 1rem !important;
   text-align: center;
@@ -76,6 +110,11 @@ body,
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+
+/*
+ * .radiobox: Styles for radio button group.
+ */
 .radiobox {
   display: flex;
   justify-content: start;
@@ -83,11 +122,17 @@ body,
   padding: 0 20px;
   font-size: 0.78rem;
 }
+
+
+/*
+ * .heading: Styles for heading text.
+ */
 .heading {
   margin-top: 8px;
   margin-bottom: 10px;
   font-weight: 500;
 }
+
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -109,79 +154,173 @@ body,
   -ms-user-select: text !important;
 }
 
+
+/*
+ * .rdkgroup: Styles for RDK group label.
+ */
 .rdkgroup {
   margin-left: 10px;
   font-weight: 500;
 }
+
+
+/*
+ * .rdkradio: Styles for RDK radio button.
+ */
 .rdkradio {
   border: 2px solid #0e6f87;
 }
+
+
+/*
+ * .form-check-inline: Styles for inline form checkboxes.
+ */
 .form-check-inline {
   margin-right: 1rem;
 }
+
+
+/*
+ * .form-check-input:checked: Styles for checked form checkboxes.
+ */
 .form-check-input:checked {
   background-color: #0e6f87;
   border-color: #0e6f87;
 }
+
+
+/*
+ * .sidebar: Styles for sidebar container.
+ */
 .sidebar {
   height: 89vh;
   box-shadow: 3px 0px 5px 0px #aaa;
   overflow: auto;
 }
+
+
+/*
+ * .category: Styles for category row.
+ */
 .category {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   margin: 0.5rem 0;
 }
+
+
+/*
+ * .cat-select: Styles for category select dropdown.
+ */
 .cat-select {
   width: 70%;
   margin-left: 10px;
 }
+
+
+/*
+ * .no-arrow::after: Hides arrow after element.
+ */
 .no-arrow::after {
   display: none;
 }
+
+
+/*
+ * .accord-row: Styles for accordion row.
+ */
 .accord-row {
   margin: 0;
   cursor: default;
 }
+
+
+/*
+ * .accord-head: Styles for accordion head.
+ */
 .accord-head {
   margin-bottom: 0;
 }
+
+
+/*
+ * .row-arrows: Styles for row arrows.
+ */
 .row-arrows {
   float: right;
 }
+
+
+/*
+ * .accordion-body: Styles for accordion body.
+ */
 .accordion-body {
   padding-top: 0;
   padding-bottom: 0;
   padding-right: 0;
 }
+
+
+/*
+ * .ul-item: Styles for unordered list items.
+ */
 .ul-item {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
   width: 99%;
 }
+
+
+/*
+ * .li-item: Styles for list items.
+ */
 .li-item {
   line-height: 1.8;
   word-wrap: break-word;
   cursor: pointer;
 }
+
+
+/*
+ * .col-sidebar: Styles for sidebar column.
+ */
 .col-sidebar {
   padding-left: 0;
 }
+
+
+/*
+ * .accor-margin: Margin for accordion section.
+ */
 .accor-margin {
   margin-top: 5px;
 }
+
+
+/*
+ * .folder-icon: Styles for folder icon.
+ */
 .folder-icon {
   color: #fdb73b;
   margin-left: 8px;
 }
+
+
+/*
+ * .execution-drop: Styles for execution dropdown section.
+ */
 .execution-drop {
   display: flex;
   justify-content: center;
   margin-top: 15px;
 }
+
+
+/*
+ * .execution-select: Styles for execution select dropdown.
+ */
 .execution-select {
   width: 85%;
   text-align: center;
@@ -192,6 +331,11 @@ body,
   font-size: 0.8rem;
   padding: 5px;
 }
+
+
+/*
+ * .clear-btn: Styles for clear button.
+ */
 .clear-btn {
   width: auto;
   text-align: center;
@@ -202,87 +346,159 @@ body,
   padding: 1px 5px 1px 5px;
   margin-left: 5px;
 }
+
+
+/*
+ * .sort-label: Styles for sort label.
+ */
 .sort-label {
   font-size: 0.7rem !important;
   font-weight: 500;
   margin-left: 5px;
 }
+
+
+/*
+ * .sort-btn: Styles for sort button.
+ */
 .sort-btn {
   border-radius: 3px;
   background-color: transparent;
   border: none;
   margin-left: 1px;
 }
+
+
+/*
+ * .dropdown-toggle::after: Styles for dropdown toggle arrow.
+ */
+/*
+ * .dropdown-toggle::after: Styles for dropdown toggle arrow.
+ */
 .dropdown-toggle::after {
   margin-left: 15%;
   vertical-align: 0.1em;
   font-size: 1.3rem;
   color: #fff;
 }
+
+
+/*
+ * ::ng-deep .mat-mdc-tab.mdc-tab: Styles for Material tab with no flex grow.
+ */
 ::ng-deep .mat-mdc-tab.mdc-tab {
   flex-grow: 0 !important;
 }
 
+
+/*
+ * ::ng-deep .mat-mdc-tab.mdc-tab--active: Styles for active Material tab.
+ */
 ::ng-deep .mat-mdc-tab.mdc-tab--active {
   font-size: 0.87rem !important;
   letter-spacing: 0px !important;
 }
+/*
+ * ::ng-deep .mdc-tab__text-label: Styles for tab text label.
+ */
 ::ng-deep .mdc-tab__text-label {
   font-size: 0.87rem !important;
   letter-spacing: 0px !important;
 }
+
+/*
+ * ::ng-deep .mdc-tab, .mat-mdc-tab-label-container, .mdc-tab__content, .mat-mdc-tab:
+ * Styles for tab containers and content height.
+ */
 ::ng-deep .mdc-tab,
 .mat-mdc-tab-label-container,
 .mdc-tab__content,
 .mat-mdc-tab {
   height: 35px !important;
 }
+/*
+ * ::ng-deep.mat-mdc-tab-labels: Styles for tab labels container.
+ */
 ::ng-deep.mat-mdc-tab-labels {
   height: 35px !important;
   letter-spacing: 0 !important;
 }
+/*
+ * ::ng-deep.mat-mdc-icon-button .mat-mdc-button-touch-target: Styles for icon button touch target size.
+ */
 ::ng-deep.mat-mdc-icon-button .mat-mdc-button-touch-target {
   height: 30px !important;
   width: 30px !important;
 }
+
+/*
+ * .dropdown-item:hover: Styles for hovered dropdown items.
+ */
 .dropdown-item:hover {
   background-color: #00b2dc;
   color: #fff;
   cursor: pointer;
 }
+/*
+ * .thunder-icon: Styles for thunder icon color.
+ */
 .thunder-icon {
   color: #00b2dc;
 }
+/*
+ * .context-btn: Styles for context button.
+ */
 .context-btn {
   padding: 4px;
   width: 20px;
   height: 20px;
   position: relative;
 }
+/*
+ * .dot-icon: Styles for dot icon.
+ */
 .dot-icon {
   font-size: 0.8rem;
   width: 20px;
   height: 20px;
   display: flex;
 }
+/*
+ * .context-item: Styles for context menu item.
+ */
 .context-item {
   min-height: 30px;
 }
+/*
+ * .context-item span: Styles for text inside context menu item.
+ */
 .context-item span {
   font-size: 0.7rem;
 }
+/*
+ * ::ng-deep .mat-contxtmenu: Styles for custom context menu positioning.
+ */
 ::ng-deep .mat-contxtmenu {
   position: absolute !important;
   top: -35px !important;
 }
+/*
+ * .show: Styles for showing dropdown or modal.
+ */
 .show {
   height: 435px;
   overflow-y: auto;
   display: block;
 }
+/*
+ * .status-group: Styles for status group container.
+ */
 .status-group {
   padding: 0;
 }
+/*
+ * .free, .busy, .hang: Styles for status indicator dots.
+ */
 .free,
 .busy,
 .hang {
@@ -292,26 +508,44 @@ body,
   display: inline-flex;
   margin-left: 8px;
 }
+/*
+ * .spinner: Styles for loading spinner.
+ */
 .spinner {
   height: 11px;
   width: 11px;
   margin-left: 7px;
 }
+/*
+ * .free: Styles for free status indicator.
+ */
 .free {
   background-color: #5bc866;
 }
+/*
+ * .busy: Styles for busy status indicator.
+ */
 .busy {
   background-color: gray;
 }
+/*
+ * .hang: Styles for hang status indicator.
+ */
 .hang {
   background-color: orange;
 }
+/*
+ * .device-name: Styles for device name display.
+ */
 .device-name {
   padding-left: 10px;
   text-decoration: none;
   width: 79%;
   display: inline-flex;
 }
+/*
+ * .loader-row: Styles for loader row positioning.
+ */
 .loader-row {
   position: absolute;
   top: 25%;
@@ -319,14 +553,23 @@ body,
   z-index: 1;
 }
 
+/*
+ * ::ng-deep .multiselect-dropdown .selected-item: Styles for selected items in multiselect dropdown.
+ */
 ::ng-deep .multiselect-dropdown .selected-item {
   max-width: 100% !important;
 }
 
 /* filterby search css start */
+/*
+ * .example-header: Styles for example header section.
+ */
 .example-header {
   width: 100%;
 }
+/*
+ * .filterby: Styles for filter by section.
+ */
 .filterby {
   display: flex;
   position: absolute;
@@ -335,6 +578,9 @@ body,
   top: 58px;
   align-items: baseline;
 }
+/*
+ * .search-bar: Styles for search bar section.
+ */
 .search-bar {
   display: flex;
   position: absolute;
@@ -343,15 +589,27 @@ body,
   top: 52px;
   align-items: end;
 }
+/*
+ * .device-search: Styles for device search input.
+ */
 .device-search {
   margin-right: 4px;
 }
+/*
+ * .search: Styles for search input.
+ */
 .search {
   margin-right: 3px;
 }
+/*
+ * .userbylabel: Styles for user by label.
+ */
 .userbylabel {
   margin-right: 0px;
 }
+/*
+ * .userby: Styles for user by section.
+ */
 .userby {
   display: flex;
   align-items: baseline;
@@ -360,26 +618,44 @@ body,
   right: 75px;
   top: 58px;
 }
+/*
+ * .user-dropdown: Styles for user dropdown.
+ */
 .user-dropdown {
   width: 150px;
   margin-left: 5px;
 }
+/*
+ * .filter-drop-down: Styles for filter dropdown.
+ */
 .filter-drop-down {
   margin-left: 5px;
 }
+/*
+ * .searchby: Styles for search by section.
+ */
 .searchby {
   display: flex;
   position: relative;
   top: 6px;
 }
+/*
+ * .seach-device: Styles for search device input.
+ */
 .seach-device {
   width: 185px;
   margin-left: 3px;
 }
+/*
+ * .search-btn: Styles for search button.
+ */
 .search-btn {
   border: 1px solid gray;
   margin-left: 5px;
 }
+/*
+ * ::ng-deep.form-select:focus, .form-control:focus: Styles for focused form controls.
+ */
 ::ng-deep.form-select:focus,
 .form-control:focus {
   border-color: gray !important;
@@ -387,6 +663,9 @@ body,
 }
 /* filterby search css end */
 
+/*
+ * .table-footer: Styles for table footer section.
+ */
 .table-footer {
   display: flex;
   justify-content: space-between;
@@ -399,13 +678,22 @@ body,
   border-top: none;
   margin-bottom: 15px;
 }
+/*
+ * ::ng-deep .mat-mdc-paginator-container: Styles for paginator container.
+ */
 ::ng-deep .mat-mdc-paginator-container {
   min-height: auto !important;
 }
+/*
+ * .delete-date: Styles for delete date icon.
+ */
 .delete-date {
   padding-left: 5px;
   cursor: pointer;
 }
+/*
+ * .refresh-btn: Styles for refresh button.
+ */
 .refresh-btn {
   background-color: transparent;
   height: 30px;
@@ -415,6 +703,9 @@ body,
   cursor: pointer;
 }
 
+/*
+ * .reload-sec: Styles for reload section.
+ */
 .reload-sec {
   display: flex;
   position: absolute;
@@ -423,6 +714,9 @@ body,
   align-items: baseline;
   left: 50%;
 }
+/*
+ * .refresh-history: Styles for refresh history button.
+ */
 .refresh-history {
   border: 1px solid #b0b0b0;
   background-color: transparent;
@@ -430,19 +724,31 @@ body,
   padding: 3px 12px;
   margin-left: 10px;
 }
+/*
+ * .history-icon: Styles for history icon.
+ */
 .history-icon {
   color: #00b2dc;
   font-weight: bold;
 }
+/*
+ * .refresh-icon: Styles for refresh icon.
+ */
 .refresh-icon {
   color: #00b2dc;
   font-weight: bold;
 }
+/*
+ * .schedule-btnsec: Styles for schedule button section.
+ */
 .schedule-btnsec{
   position: absolute;
   bottom: 10px;
 }
 
+/*
+ * ::ng-deep .multiline-tooltip: Styles for multiline tooltips.
+ */
 ::ng-deep .multiline-tooltip {
   white-space: pre-line !important;
   word-wrap: break-word !important;
@@ -450,10 +756,16 @@ body,
   --mdc-plain-tooltip-supporting-text-size: 10px;
 }
 
+/*
+ * ::ng-deep .ag-theme-quartz .ag-checkbox-wrapper .ag-checkbox-input: Styles for ag-Grid checkbox input.
+ */
 ::ng-deep .ag-theme-quartz .ag-checkbox-wrapper .ag-checkbox-input {
   transform: scale(0.5) !important;
   margin: 0 !important;
 }
+/*
+ * ::ng-deep .ag-theme-quartz .ag-cell: Styles for ag-Grid cell.
+ */
 ::ng-deep .ag-theme-quartz .ag-cell {
   white-space: normal !important;
   word-break: break-word !important;
@@ -468,6 +780,9 @@ body,
   text-transform: uppercase;
  
 }
+/*
+ * ::ng-deep .ag-theme-quartz .text-ellipsis: Styles for text ellipsis in ag-Grid.
+ */
 ::ng-deep .ag-theme-quartz .text-ellipsis {
   white-space: nowrap !important;
   overflow: hidden !important;
@@ -476,6 +791,9 @@ body,
   height: 40px !important;
   display: block !important;
 }
+/*
+ * .text-two-line: Styles for two-line text display.
+ */
 .text-two-line {
   white-space: normal !important;
   word-break: break-word !important;
@@ -483,59 +801,101 @@ body,
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
+/*
+ * ::ng-deep .ag-theme-quartz .ag-cell.text-ellipsis: Enable text selection for ellipsis cells.
+ */
 ::ng-deep .ag-theme-quartz .ag-cell.text-ellipsis {
   user-select: text !important;
   -webkit-user-select: text !important;
   -ms-user-select: text !important;
 }
+/*
+ * ::ng-deep .ag-theme-quartz .ag-cell.text-two-line: Enable text selection for two-line cells.
+ */
 ::ng-deep .ag-theme-quartz .ag-cell.text-two-line {
   user-select: text !important;
   -webkit-user-select: text !important;
   -ms-user-select: text !important;
 }
+/*
+ * ::ng-deep .ag-theme-quartz .ag-icon-filter: Styles for ag-Grid filter icon.
+ */
 ::ng-deep .ag-theme-quartz .ag-icon-filter {
   font-size: 0.7rem !important;
   width: 10px !important;
   height: 10px !important;
 }
+/*
+ * ::ng-deep .ag-theme-quartz .ag-checkbox-input-wrapper: Styles for ag-Grid checkbox input wrapper.
+ */
 ::ng-deep .ag-theme-quartz .ag-checkbox-input-wrapper {
   font-size: 0.8rem !important;
   width: 12px !important;
   height: 12px !important;
   line-height: 1 !important;
 }
+/*
+ * ::ng-deep .ag-theme-quartz .ag-ltr .ag-selection-checkbox: Styles for left-to-right selection checkbox.
+ */
 ::ng-deep .ag-theme-quartz .ag-ltr .ag-selection-checkbox {
   margin-right: 0px;
 }
+/*
+ * ::ng-deep .ag-theme-quartz .header-center .ag-header-cell-label: Center header cell label.
+ */
 ::ng-deep .ag-theme-quartz .header-center .ag-header-cell-label {
   text-align: center !important;
   justify-content: center;
 }
+/*
+ * ::ng-deep .mat-mdc-option: Styles for Material option.
+ */
 ::ng-deep .mat-mdc-option {
   font-size: 0.8rem !important;
   min-height: 30px !important;
 }
+/*
+ * ::ng-deep .mat-mdc-form-field-infix: Styles for Material form field infix.
+ */
 ::ng-deep .mat-mdc-form-field-infix {
   min-height: 35px !important;
   padding-top: 4px !important;
   padding-bottom: 4px !important;
 }
+/*
+ * ::ng-deep .mat-mdc-paginator-range-label: Styles for paginator range label.
+ */
 ::ng-deep .mat-mdc-paginator-range-label {
   font-size: 0.7rem !important;
 }
+/*
+ * .delete-icon: Styles for delete icon.
+ */
 .delete-icon {
   color: gray;
 }
+/*
+ * .delete-btn: Styles for delete button.
+ */
 .delete-btn {
   border: none;
 }
+/*
+ * .arrow-btn: Styles for arrow button.
+ */
 .arrow-btn {
   padding-left: 0;
   border: none;
 }
+/*
+ * .arrow-icon: Styles for arrow icon.
+ */
 .arrow-icon {
   color: gray;
 }
+/*
+ * .btn-border: Styles for button border.
+ */
 .btn-border {
   margin-left: 10px;
   border-radius: 5px;
@@ -543,22 +903,40 @@ body,
   border: 1px solid #b0b0b0;
   display: inline-flex;
 }
+/*
+ * .seach-input: Styles for search input field.
+ */
 .seach-input {
   width: 150px;
   margin-left: 3px;
 }
+/*
+ * ::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center: Hide overlay when no rows.
+ */
 ::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
   display: none !important;
 }
+/*
+ * ::ng-deep .status-text.scheduled-color: Styles for scheduled status text.
+ */
 ::ng-deep .status-text.scheduled-color { 
   color: #1976d2 !important;
 }
+/*
+ * ::ng-deep .status-text.cancelled-color: Styles for cancelled status text.
+ */
 ::ng-deep .status-text.cancelled-color { 
   color: #ffa000 !important;
 }
+/*
+ * ::ng-deep .status-text.completed-color: Styles for completed status text.
+ */
 ::ng-deep .status-text.completed-color { 
   color: #388e3c !important;
 }
+/*
+ * ::ng-deep .ag-theme-quartz .ag-cell.status-nowrap: Styles for status nowrap cells in ag-Grid.
+ */
 ::ng-deep .ag-theme-quartz .ag-cell.status-nowrap {
   white-space: nowrap !important;
   overflow: hidden !important;

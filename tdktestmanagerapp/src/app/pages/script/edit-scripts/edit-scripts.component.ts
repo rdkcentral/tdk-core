@@ -70,12 +70,27 @@ export class EditScriptsComponent {
   scriptDeatilsObj: any;
   RDKFlavor: any;
 
+  /**
+   * Constructor for EditScriptsComponent.
+   * @param authservice AuthService instance for authentication.
+   * @param router Router instance for navigation.
+   * @param fb FormBuilder instance for reactive forms.
+   * @param dialog MatDialog instance for dialogs.
+   * @param modulesService ModulesService for module operations.
+   * @param deviceTypeService DevicetypeService for device type operations.
+   * @param primitiveTestService PrimitiveTestService for primitive test operations.
+   * @param scriptservice ScriptsService for script operations.
+   * @param _snakebar MatSnackBar for notifications.
+   */
   constructor(private authservice: AuthService, private router: Router, private fb: FormBuilder,
     public dialog: MatDialog, private modulesService: ModulesService, private deviceTypeService: DevicetypeService,
     private primitiveTestService: PrimitiveTestService, private scriptservice: ScriptsService, private _snakebar: MatSnackBar,) {
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
 
   }
+  /**
+   * Angular lifecycle hook for component initialization.
+   */
   ngOnInit(): void {
     this.scriptDeatilsObj = JSON.parse(localStorage.getItem('scriptDetails') || '{}');
     this.deviceTypeSettings = {
@@ -103,6 +118,9 @@ export class EditScriptsComponent {
     this.loadData();
     this.setUpValidation();
   }
+  /**
+   * Initializes the form groups for the component.
+   */
   initializeForm() {
     this.firstFormGroup = this.fb.group({
       scriptname: ['', [Validators.required, this.noSpacesValidator]],
@@ -129,6 +147,9 @@ export class EditScriptsComponent {
     });
   }
 
+  /**
+   * Loads data from local storage and populates the form fields.
+   */
   loadData() {
     if (this.scriptDeatilsObj) {
       this.firstFormGroup.patchValue({
@@ -182,6 +203,9 @@ export class EditScriptsComponent {
   }
 
 
+  /**
+   * Sets up validation for the form groups and subscribes to value changes.
+   */
   setUpValidation() {
     this.firstFormGroup.valueChanges.pipe(distinctUntilChanged()).subscribe(() => {
       this.firstFormGroup.updateValueAndValidity();
@@ -196,6 +220,10 @@ export class EditScriptsComponent {
     });
   }
 
+  /**
+   * Marks all controls in a form group as touched and dirty.
+   * @param formGroup The FormGroup to mark.
+   */
   markFormFieldsTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
@@ -207,11 +235,19 @@ export class EditScriptsComponent {
 
 
   //Getter for easy access to the preconditions FormArray
+  /**
+   * Getter for easy access to the preconditions FormArray.
+   * @returns The FormArray of preconditions.
+   */
   get preconditions(): FormArray {
     return this.secondFormGroup.get('preconditions') as FormArray;
   }
 
   // Method to add a new precondition to the FormArray
+  /**
+   * Adds a new precondition to the FormArray.
+   * @param pre Optional precondition object to initialize the form group.
+   */
   addPrecondition(pre?: any): void {
     this.preconditions.push(this.fb.group({
       preConditionId: [pre?.preConditionId || ''],
@@ -220,12 +256,20 @@ export class EditScriptsComponent {
   }
 
   // Method to remove a precondition from the FormArray
+  /**
+   * Removes a precondition from the FormArray.
+   * @param index The index of the precondition to remove.
+   */
   removePrecondition(index: number): void {
     this.preconditions.removeAt(index);
   }
 
 
   // Getter for easy access to the steps FormArray
+  /**
+   * Getter for easy access to the steps FormArray.
+   * @returns The FormArray of steps.
+   */
   get steps(): FormArray {
     return this.secondFormGroup.get('steps') as FormArray;
   }
@@ -234,6 +278,10 @@ export class EditScriptsComponent {
 
 
   // Method to add a new step to the FormArray
+  /**
+   * Adds a new step to the FormArray.
+   * @param step Optional step object to initialize the form group.
+   */
   addStep(step?: any): void {
     this.steps.push(this.fb.group({
       testStepId: [step?.testStepId || ''],
@@ -245,6 +293,10 @@ export class EditScriptsComponent {
 
 
   // Method to remove a step from the FormArray
+  /**
+   * Removes a step from the FormArray.
+   * @param index The index of the step to remove.
+   */
   removeStep(index: number): void {
     this.steps.removeAt(index);
   }
@@ -252,6 +304,10 @@ export class EditScriptsComponent {
 
 
 
+  /**
+   * Navigates to the next step in the stepper if the current form group is valid.
+   * @param stepIndex The index of the current step.
+   */
   goToNext(stepIndex: number) {
     if (stepIndex === 1 && this.firstFormGroup.valid) {
       this.stepper.next();
@@ -264,10 +320,19 @@ export class EditScriptsComponent {
      * Get the controls of the register form.
      * @returns The controls of the register form.
   */
+  /**
+   * Get the controls of the first form group.
+   * @returns The controls of the first form group.
+   */
   get f() { return this.firstFormGroup.controls; }
   /**
        * This method is no space is allow.
   */
+  /**
+   * Validator to ensure no leading spaces in the input.
+   * @param control The form control to validate.
+   * @returns ValidationErrors or null.
+   */
   noSpacesValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
       return { required: true };
@@ -275,6 +340,11 @@ export class EditScriptsComponent {
     return control.value.startsWith(' ') ? { noLeadingSpaces: true } : null;
 
   }
+  /**
+   * Validator to ensure a minimum number of device types are selected.
+   * @param min The minimum number of selections required.
+   * @returns ValidatorFn for the control.
+   */
   mindeviceValidator(min: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value || control.value.length < min) {
@@ -283,6 +353,11 @@ export class EditScriptsComponent {
       return null;
     };
   }
+  /**
+   * Validator to ensure only numbers are entered.
+   * @param control The form control to validate.
+   * @returns ValidationErrors or null.
+   */
   onlyNumbersValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value ? control.value.toString().trim() : '';
     if (!value) {
@@ -290,6 +365,10 @@ export class EditScriptsComponent {
     }
     return /^[0-9]+$/.test(value) ? null : { onlyNumbers: true };
   }
+  /**
+   * Handles input event for number-only fields.
+   * @param event The input event.
+   */
   onNumberInput(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     let value = inputElement.value.replace(/\D/g, '');
@@ -297,12 +376,20 @@ export class EditScriptsComponent {
     control?.setValue(value, { emitEvent: true });
     control?.updateValueAndValidity();
   }
+  /**
+   * Handles input event for synopsis field, trimming leading spaces.
+   * @param event The input event.
+   */
   onInput(event: Event): void {
     const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement;
     const value = inputElement.value;
     const trimmedValue = value.replace(/^\s+/, '');
     this.firstFormGroup.get('synopsis')?.setValue(trimmedValue, { emitEvent: false });
   }
+  /**
+   * Handles input event for script name, trimming leading spaces.
+   * @param event The input event.
+   */
   onScritName(event: Event): void {
     const inputElement = event.target as HTMLTextAreaElement;
     const value = inputElement.value;
@@ -310,6 +397,10 @@ export class EditScriptsComponent {
       this.firstFormGroup.get('scriptname')?.setValue(value.trimStart(), { emitEvent: false });
     }
   }
+  /**
+   * Handles input event for testcase ID, trimming leading spaces.
+   * @param event The input event.
+   */
   onTestcaseID(event: Event): void {
     const inputElement = event.target as HTMLTextAreaElement;
     const value = inputElement.value;
@@ -317,6 +408,10 @@ export class EditScriptsComponent {
       this.secondFormGroup.get('testcaseID')?.setValue(value.trimStart(), { emitEvent: false });
     }
   }
+  /**
+   * Handles input event for test objective, trimming leading spaces.
+   * @param event The input event.
+   */
   onTestObjective(event: Event): void {
     const inputElement = event.target as HTMLTextAreaElement;
     const value = inputElement.value;
@@ -325,17 +420,28 @@ export class EditScriptsComponent {
     }
   }
 
+  /**
+   * Fetches all modules by category from the service.
+   */
   getAllModules(): void {
     this.modulesService.findallbyCategory(this.RDKFlavor).subscribe(res => {
       this.allModules = res.data;
     })
   }
 
+  /**
+   * Handles module change event and fetches primitive tests for the selected module.
+   * @param event The change event.
+   */
   changeModule(event: any): void {
     let moduleName = event.target.value;
     this.getAllPrimitiveTest(moduleName);
   }
 
+  /**
+   * Fetches all primitive tests for the given module value.
+   * @param value The module name or value.
+   */
   getAllPrimitiveTest(value: any): void {
     this.primitiveTestService.getParameterNames(value).subscribe({
       next: (res) => {
@@ -351,21 +457,36 @@ export class EditScriptsComponent {
       }
     })
   }
+  /**
+   * Handles change event for primitive test selection.
+   * @param event The change event.
+   */
   onChangePrimitive(event: any): void {
     let primitiveValue = event.target.value;
     this.defaultPrimitive = primitiveValue;
   }
+  /**
+   * Handles change event for priority selection.
+   * @param event The change event.
+   */
   changePriority(event: any): void {
     const priorityValue = event.target.value;
     this.changePriorityValue = priorityValue;
   }
 
+  /**
+   * Fetches all device types by category from the service.
+   */
   getAlldeviceType(): void {
     this.deviceTypeService.getfindallbycategory(this.RDKFlavor).subscribe(res => {
       this.allDeviceType = res.data
     })
   }
 
+  /**
+   * Handles item selection for device types.
+   * @param item The selected device type item.
+   */
   onItemSelect(item: any): void {
     if (!this.deviceNameArr.some(selectedItem => selectedItem.deviceTypeName === item.deviceTypeName)) {
       this.deviceNameArr.push(item.deviceTypeName);
@@ -373,12 +494,20 @@ export class EditScriptsComponent {
     this.updateDeviceTypeValidity();
   }
 
+  /**
+   * Handles item deselection for device types.
+   * @param item The deselected device type item.
+   */
   onDeSelect(item: any): void {
     let filterDevice = this.deviceNameArr.filter(name => name != item.deviceTypeName);
     this.deviceNameArr = filterDevice;
     this.updateDeviceTypeValidity();
   }
 
+  /**
+   * Handles select all event for device types.
+   * @param items The array of all device type items.
+   */
   onSelectAll(items: any[]): void {
     let devices = this.allDeviceType.filter(
       (item: any) => !this.deviceNameArr.find((selected) => selected.deviceTypeId === item.deviceTypeId)
@@ -386,12 +515,19 @@ export class EditScriptsComponent {
     this.deviceNameArr = devices.map((item: any) => item.deviceTypeName);
     this.updateDeviceTypeValidity();
   }
+  /**
+   * Handles deselect all event for device types.
+   * @param item The deselect all event or item.
+   */
   onDeSelectAll(item: any): void {
     this.deviceNameArr = [];
     this.firstFormGroup.get('devicetype')?.setValue([]);
     this.updateDeviceTypeValidity();
   }
 
+  /**
+   * Updates the validity state of the device type form control.
+   */
   updateDeviceTypeValidity() {
     const control = this.firstFormGroup.get('devicetype');
     if (!control) return;
@@ -399,12 +535,19 @@ export class EditScriptsComponent {
     control.updateValueAndValidity();
   }
   // You can also change editor options dynamically if needed
+  /**
+   * Handles code editor changes.
+   * @param value The new code value.
+   */
   onCodeChange(value: string): void {
     let val = value;
   }
   /**
    * navigate to script page
   */
+  /**
+   * Navigates back to the script page and clears related local storage items.
+   */
   back(): void {
     this.router.navigate(["/script"]);
     localStorage.removeItem('scriptCategory');
@@ -414,6 +557,9 @@ export class EditScriptsComponent {
   /**
    * Submission for customSuite update
   */
+  /**
+   * Handles submission for custom suite update.
+   */
   onSubmit(): void {
 
     const preConditionsArray = this.preconditions.value.map((p: any) => ({
@@ -473,6 +619,9 @@ export class EditScriptsComponent {
   /**
    * Navigate to script page
   */
+  /**
+   * Navigates back to the script page and clears script details from local storage.
+   */
   goBack(): void {
     localStorage.removeItem('scriptDetails');
     localStorage.removeItem('category');

@@ -17,17 +17,29 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/*
+ * Styles the main container with bottom margin
+ */
 .container{
     margin-bottom: 2rem;
 }
+/*
+ * Sets max height for modal content
+ */
 .exsit-modal-content {
     max-height: 100vh;
 }
+/*
+ * Styles the card with fixed height and scroll
+ */
 .card-height{
     height: 500px !important;
     overflow-y: auto;
     display: block;
 }
+/*
+ * Adds a multi-color border to the bottom of the element
+ */
 .borders-btm {
     border-image: linear-gradient(
       to right,
@@ -43,6 +55,9 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin: 0 15px;
     /* padding-bottom: 4px; */
   }
+/*
+ * Styles the title text
+ */
   .title {
     font-size: 1rem;
     text-align: center;
@@ -50,14 +65,23 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin-top: 5px;
     margin-bottom: 10px;
   }
+/*
+ * Styles the row with flex and center alignment
+ */
 .row{
     display: flex;
     justify-content: center;
 }
+/*
+ * Styles the user form with left and right margins
+ */
 .userform{
     margin-left: 25px;
     margin-right: 25px;
 }
+/*
+ * Styles the create and reset buttons
+ */
 .create-btn,
 .reset-btn {
     background-color: #00B2DC;
@@ -71,6 +95,9 @@ http://www.apache.org/licenses/LICENSE-2.0
     cursor: pointer;
     margin-right: 15px;
 }
+/*
+ * Styles the download button
+ */
 .download-btn{
     background-color: #00B2DC;
     color: #fff;
@@ -84,23 +111,41 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin-top: 15px;
     margin-right: 10px;
 }
+/*
+ * Adds right margin to the reset button
+ */
 .reset-btn {
     margin-right: 10px;
 }
+/*
+ * Removes border and shadow on focus for form controls
+ */
 ::ng-deep.form-select:focus, .form-control:focus{
     border-color: gray !important;
     box-shadow: none !important;
 }
+/*
+ * Sets max width for selected items in multiselect dropdown
+ */
 .multiselect-dropdown .dropdown-btn .selected-item-container .selected-item{
     max-width: 130px !important;
 }
+/*
+ * Styles the thunder class with border
+ */
 .thunder{
     border: 1px solid gray;
 }
+/*
+ * Styles the long test row
+ */
 .longtest{
     display: flex;
     align-items: end;
 }
+/*
+ * Styles the test case button
+ */
 .btn-testcase{
     border: 1px solid gray;
     font-size: 0.8rem !important;
@@ -108,29 +153,50 @@ http://www.apache.org/licenses/LICENSE-2.0
     border-radius: 4px;
     padding: 5px 10px 5px 10px;
 }
+/*
+ * Removes background color for focused cdk program
+ */
 ::ng-deep.cdk-program-focused{
     background-color: transparent !important;
 }
 /* ::ng-deep.mat-step-icon-selected{
     background-color: #00B2DC !important;
 } */
+/*
+ * Styles the step icon for mat-stepper
+ */
 ::ng-deep.mat-step-icon, .mat-step-icon-state-number {
     background-color: #00B2DC !important;
     cursor: pointer !important;
 }
+/*
+ * Styles the horizontal rule
+ */
 hr{
     margin-top: 0;
 }
+/*
+ * Styles the temporary title
+ */
 .temp-title{
     font-size: 0.8rem;
 }
+/*
+ * Styles the disabled next button
+ */
 .next-btn:disabled{
     background-color: gray;
 }
+/*
+ * Sets width for selected items in multiselect dropdown
+ */
 ::ng-deep .multiselect-dropdown span.selected-item{
     width: 100% !important;
     max-width: 100% !important;
 }
+/*
+ * Styles the demo stepper background
+ */
 .demo-stepper{
     background-color: transparent !important;
 }

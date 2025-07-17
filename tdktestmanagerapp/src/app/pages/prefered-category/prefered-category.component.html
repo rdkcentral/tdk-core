@@ -12,27 +12,39 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+  <!-- Main container for the preferred category page -->
   <div class="container-fluid">
+    <!-- Row for header and action buttons -->
     <div class="row borders-btm">
+      <!-- Left column for spacing -->
       <div class="col">
       </div>
+      <!-- Center column for title -->
       <div class="col">
         <h1 class="title">Prefered Category</h1>
       </div>
+      <!-- Right column for spacing -->
       <div class="col">
       </div>
   </div>
+    <!-- Main content row -->
     <div class="row">
+      <!-- Main column for form and content -->
       <div class="col">
+        <!-- Parent container for form section -->
         <div class="parent mt-2 mb-2">
+          <!-- Container for form box -->
           <div class="container container-box" id="container-box">
+            <!-- Form container for category selection -->
             <div class="form-container change-password">
               <!-- <h1 class="title">Prefered Category</h1> -->
   
               <form [formGroup]="categoryForm" (ngSubmit)="categorySubmit()">
+                <!-- Row for category dropdown -->
                 <div class="row mb-3 category-row">
                   <label for="catgegory" class="col-md-3 col-form-label offset-1">Select Category<span
                     style="color:red; margin-left: 0.75em;">*</span></label>
+                  <!-- Column for dropdown and validation -->
                   <div class="col-md-7">
                     <select class="form-select cat-dropdown" aria-label="Default select example" 
                      id="catgegory" formControlName="catgegory" (change)="changeCategory($event)">
@@ -45,7 +57,9 @@ limitations under the License.
                     </div>
                   </div>
                 </div>
+                <!-- Row for buttons -->
                 <div class="row" style="margin-bottom: 0.5rem;">
+                  <!-- Container for back and submit buttons -->
                   <div class="mt-2 resetpwdbtn">
                     <button class="back-btn" (click)="back()" matTooltip="Back">Back</button>
                     <button type="submit">Submit</button>

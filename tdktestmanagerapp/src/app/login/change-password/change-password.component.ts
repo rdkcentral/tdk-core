@@ -76,6 +76,13 @@ export class ChangePasswordComponent implements OnInit {
   errorMessage: any = {};
   loggedInUser: any={};
 
+  /**
+   * Constructor for ChangePasswordComponent.
+   * @param formBuilder FormBuilder instance for reactive forms.
+   * @param router Angular Router for navigation.
+   * @param loginservice LoginService instance for authentication.
+   * @param _snakebar MatSnackBar instance for notifications.
+   */
   constructor(private formBuilder: FormBuilder, private router: Router,
     private loginservice: LoginService, private _snakebar: MatSnackBar,
   ) {
@@ -83,7 +90,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   /**
-   * Initializes the component.
+   * Initializes the component and sets up the change password form.
    */
   ngOnInit(): void {
 
@@ -129,7 +136,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   /**
-   * Represents the f of the application.
+   * Returns the form controls of the change password form.
    */
   get f() { return this.changePasswordForm.controls; }
 
@@ -137,7 +144,7 @@ export class ChangePasswordComponent implements OnInit {
    * Custom validator for password match.
    * @param newPassword - The new password form control.
    * @param cnfrmPassword - The confirm password form control.
-   * @returns 
+   * @returns Validator function for matching passwords.
    */
   passwordMatchValidator(newPassword: any, cnfrmPassword: any) {
     return (formGroup: FormGroup) => {
@@ -155,8 +162,8 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   /**
-  * Method to reset the password.
-  */
+   * Resets the password using the form values and calls the login service.
+   */
   resetPassword(): void {
     this.submitted = true;
     if (this.changePasswordForm.invalid) {
@@ -192,8 +199,9 @@ export class ChangePasswordComponent implements OnInit {
       })
     }
   }
+
   /**
-   * Method to view the password.
+   * Toggles the visibility of the old password input field.
    */
   viewPassword(): void {
     this.showPasswordOnPress = !this.showPasswordOnPress;
@@ -201,10 +209,10 @@ export class ChangePasswordComponent implements OnInit {
       this.showPasswordOnPress = true;
     }
   }
-  /**
-   * Method to view the new password.
-   */
 
+  /**
+   * Toggles the visibility of the new password input field.
+   */
   viewNewPassword(): void {
     this.showNewPasswordOnPress = !this.showNewPasswordOnPress;
     if (this.showNewPasswordOnPress) {
@@ -213,7 +221,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   /**
-   * Method to view the confirm password.
+   * Toggles the visibility of the confirm password input field.
    */
   viewConfirmPassword() : void {
     this.showConfirmPasswordOnPress = !this.showConfirmPasswordOnPress;
@@ -221,8 +229,9 @@ export class ChangePasswordComponent implements OnInit {
       this.showConfirmPasswordOnPress = true;
     }
   }
+
   /**
-   * Method to reset the form.
+   * Resets the change password form.
    */
   reset(): void {
     this.changePasswordForm.reset();

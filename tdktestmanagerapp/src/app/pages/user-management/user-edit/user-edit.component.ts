@@ -41,6 +41,13 @@ export class UserEditComponent implements OnInit {
   allRoles: any
   user: any={};
 
+  /**
+   * Constructor for UserEditComponent.
+   * @param fb FormBuilder for reactive forms
+   * @param router Angular Router for navigation
+   * @param usermanageserice UserManagementService for user management operations
+   * @param _snakebar MatSnackBar for notifications
+   */
   constructor(private fb: FormBuilder, private router: Router,
     private usermanageserice: UserManagementService,
     private _snakebar: MatSnackBar) {
@@ -50,8 +57,9 @@ export class UserEditComponent implements OnInit {
     }
   }
 
+
   /**
-   * Initializes the component.
+   * Initializes the component and sets up the edit user form and subscriptions.
    */
   ngOnInit(): void {
     let emailregex: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -74,6 +82,7 @@ export class UserEditComponent implements OnInit {
     })
   }
 
+
   /**
    * Navigates back to the user management page.
    */
@@ -81,12 +90,16 @@ export class UserEditComponent implements OnInit {
     this.router.navigate(["configure/user-management"]);
   }
 
+
+
   /**
-   * Resets the form.
+   * Resets the edit user form.
    */
   reset():void {
     this.editUserForm.reset();
   }
+
+
 
   /**
    * Submits the user edit form.
@@ -130,9 +143,10 @@ export class UserEditComponent implements OnInit {
           })
         }
       });
- 
+
     }
   }
+
 
 
 }

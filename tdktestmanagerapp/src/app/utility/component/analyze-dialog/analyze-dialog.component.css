@@ -17,6 +17,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/*
+ * Main section container for the analyze dialog layout.
+ */
+
 .main-sec{
   width: 100%;
   margin: auto;
@@ -26,18 +30,34 @@ http://www.apache.org/licenses/LICENSE-2.0
   background-color: #fff;
   margin-top: 0 !important;
 }
+/*
+ * Adds top margin to elements for spacing.
+ */
+
 .all-margin{
   margin-top: 40px;
 }
+/*
+ * Styles for the view title text.
+ */
+
 .view-title{
     margin-bottom: 0;
     padding-bottom: 0;
     font-weight: 500;
 }
+/*
+ * Styles for form select and form control elements.
+ */
+
 .form-select, .form-control{
     font-size: 0.8rem;
     border: 1px solid gray;
 }
+/*
+ * Styles for the save button in the dialog.
+ */
+
 .save-btn {
   background-color: #00b2dc;
   color: #fff;
@@ -53,16 +73,28 @@ http://www.apache.org/licenses/LICENSE-2.0
   right: 110px;
   margin-bottom: 38px;
   }
-  .save-btn:disabled{
+/*
+ * Styles for the disabled state of the save button.
+ */
+
+.save-btn:disabled{
     background-color: gray;
     margin-bottom: 52px;
 }
-  .download-icon{
+/*
+ * Styles for the download icon.
+ */
+
+.download-icon{
     color: #00B2DC;
     font-weight: bold;
     font-size: 18px;
 }
-  .close-btn {
+/*
+ * Styles for the close button in the dialog.
+ */
+
+.close-btn {
     background-color: #00b2dc;
     color: #fff;
     font-size: 0.8rem;
@@ -77,28 +109,52 @@ http://www.apache.org/licenses/LICENSE-2.0
     right: 25px;
     z-index: 1;
   }
+/*
+ * Styles for the active tab label in Angular Material tabs.
+ */
+
 ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label{
   color: #06667d !important;
 }
+/*
+ * Styles for focused form select and form control elements.
+ */
+
 ::ng-deep.form-select:focus, .form-control:focus{
   border-color: gray !important;
   box-shadow: none !important;
 }
+/*
+ * Styles for the filter by section.
+ */
+
 .filterby{
   display: flex;
   justify-content: end;
   align-items: baseline;
   margin-bottom: 5px;
 }
+/*
+ * Styles for text labels in the dialog.
+ */
+
 .text-label{
   font-size: 0.8rem;
   margin-right: 10px;
 }
+/*
+ * Styles for custom modal box and AG Grid quartz theme.
+ */
+
 ::ng-deep .custom-modalbox, .ag-theme-quartz {
   --ag-header-background-color: rgb(209, 212, 212) !important;
   --ag-background-color: #fff;
   --ag-font-size: 0.78rem;
 }
+/*
+ * Styles for the download button.
+ */
+
 .download-btn {
   background-color: #fff;
   font-size: 0.8rem;
@@ -111,6 +167,10 @@ http://www.apache.org/licenses/LICENSE-2.0
   margin-left: 15px;
   box-shadow: 0px 3px 6px #0000005e;
 }
+/*
+ * Styles for the create section container.
+ */
+
 .create-section{
   text-align: end;
   position: absolute;
@@ -118,6 +178,10 @@ http://www.apache.org/licenses/LICENSE-2.0
   z-index: 10;
   display: flex;
 }
+
+/*
+ * Styles for AG Grid cells in the quartz theme.
+ */
 
 ::ng-deep .ag-theme-quartz .ag-cell {
   white-space: normal !important;
@@ -131,6 +195,10 @@ http://www.apache.org/licenses/LICENSE-2.0
   text-align: center;
   text-transform: uppercase;
 }
+/*
+ * Styles for AG Grid header cell labels in the quartz theme.
+ */
+
 ::ng-deep .ag-theme-quartz .ag-header-cell-label {
   text-align: center !important;
   justify-content: center;

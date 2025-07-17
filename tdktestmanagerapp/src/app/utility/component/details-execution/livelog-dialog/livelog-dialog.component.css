@@ -18,6 +18,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 
+/**
+ * Styles for the download button element.
+ */
+
 .download-btn {
   background-color: #fff;
   font-size: 0.8rem;
@@ -28,20 +32,36 @@ http://www.apache.org/licenses/LICENSE-2.0
   cursor: pointer;
   margin-left: 15px;
 }
+/**
+ * Styles for the download icon element.
+ */
+
 .download-icon {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
+/**
+ * Styles for the live log area container.
+ */
+
 .livelog-area{
     width: 100%;
     border: 1px solid gray;
     text-align: justify;
 }
+/**
+ * Styles for the spinner element.
+ */
+
 .spinner{
   color: #00b2dc !important;
   margin-left: 10px;
 }
+/**
+ * Styles for focused form select and form control elements (ng-deep).
+ */
+
 ::ng-deep.form-select:focus, .form-control:focus{
   border-color: gray !important;
   box-shadow: none !important;

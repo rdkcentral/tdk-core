@@ -41,11 +41,19 @@ import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
  *
  */
 export class EditRdkCertificationComponent {
+
   certificationFormGroup!: FormGroup;
   editorOptions = { theme: 'vs-dark', language: 'python' };
   submitted = false;
   user: any;
 
+  /**
+   * Constructor for EditRdkCertificationComponent.
+   * @param fb FormBuilder instance for creating form groups.
+   * @param service RdkService instance for server communication.
+   * @param _snakebar MatSnackBar instance for showing messages.
+   * @param router Router instance for navigation.
+   */
   constructor(
     private fb: FormBuilder,
     private service: RdkService,
@@ -58,14 +66,14 @@ export class EditRdkCertificationComponent {
     }
   }
 
+
+
   /**
    * Initializes the component and sets up the form group for certification.
-   *
    * - Creates a form group with `fileName` and `pythonEditor` fields.
    * - Retrieves the file content based on the `fileName` and sets the content to the `pythonEditor` field.
    * - Handles errors by displaying a snackbar with the error message.
-   *
-   * @returns {void}
+   * @returns void
    */
   ngOnInit(): void {
     this.certificationFormGroup = this.fb.group({
@@ -95,15 +103,14 @@ export class EditRdkCertificationComponent {
     });
   }
 
+
+
   /**
    * Handles the form submission for the RDK certification edit form.
-   *
-   * This method retrieves the Python script content from the form, creates a file object,
-   * and sends it to the server using the `createScript` service method. Upon successful
-   * submission, it displays a success message and navigates to the list of RDK certifications.
-   * If an error occurs, it displays an error message.
-   *
-   * @returns {void}
+   * Retrieves the Python script content from the form, creates a file object,
+   * and sends it to the server using the `updateScript` service method.
+   * Shows success or error messages and navigates as needed.
+   * @returns void
    */
   onSubmit(): void {
     this.submitted = true;
@@ -139,11 +146,14 @@ export class EditRdkCertificationComponent {
     }
   }
 
+
   /**
    * Navigates the user back to the list of RDK certifications.
-   * This method uses the Angular Router to navigate to the "configure/list-rdk-certifications" route.
+   * Uses the Angular Router to navigate to the "configure/list-rdk-certifications" route.
+   * @returns void
    */
   goBack(): void {
     this.router.navigate(['configure/list-rdk-certifications']);
   }
+
 }

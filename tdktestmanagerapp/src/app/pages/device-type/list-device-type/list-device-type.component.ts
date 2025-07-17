@@ -105,14 +105,20 @@ export class ListDeviceTypeComponent implements OnInit {
   preferedCategory!:string;
   showLoader = false;
 
+  /**
+   * Constructor for ListDeviceTypeComponent.
+   * @param router Angular Router for navigation
+   * @param authservice Service for authentication and config
+   * @param service Service for device type operations
+   * @param _snakebar Service for showing snack bar notifications
+   */
   constructor( private router: Router,
     private authservice: AuthService, private service: DevicetypeService, private _snakebar: MatSnackBar) {
       this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
      }
 
-
   /**
-   * Initializes the component.
+   * Initializes the component and loads device types.
    */
   ngOnInit(): void {
     this.showLoader = true;
@@ -139,9 +145,8 @@ export class ListDeviceTypeComponent implements OnInit {
   }
 
   /**
-   * Edit the user.
-   * @param user The user to edit.
-   * @returns The edited user.
+   * Edit the user/device type.
+   * @param user The user/device type to edit.
    */
   userEdit(user: any): void {
     localStorage.setItem('user', JSON.stringify(user))
@@ -149,8 +154,8 @@ export class ListDeviceTypeComponent implements OnInit {
   }
 
   /**
-   * Delete the data.
-   * @param data The data to delete.
+   * Delete the device type.
+   * @param data The device type data to delete.
    */
   delete(data: any) :void{
     if (data) {
@@ -182,19 +187,18 @@ export class ListDeviceTypeComponent implements OnInit {
   }
 
   /**
-   * Create a group.
+   * Navigate to create device type page.
    */  
   createDeviceType():void {
     this.router.navigate(["configure/create-devicetype"]);
   }
 
   /**
-   * Go back to the previous page.
+   * Go back to the previous page and set config values.
    */  
   goBack():void {
     this.authservice.selectedConfigVal = 'RDKV';
     this.authservice.showSelectedCategory = "Video";
     this.router.navigate(["/configure"]);
   }
-
 }

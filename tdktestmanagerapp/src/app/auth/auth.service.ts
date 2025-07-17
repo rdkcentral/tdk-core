@@ -23,15 +23,36 @@ import { NavigationEnd, Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Provides authentication-related functionality for the application, including:
+ * - Managing authentication tokens and user privileges in local storage.
+ * - Tracking navigation history (previous and current URLs).
+ * - Checking token expiration and login status.
+ * 
+ * This service is intended to be injected into Angular components and services
+ * that require authentication state or navigation tracking.
+ */
 export class AuthService {
 
   /**
    * The selected configuration value.
    */
   selectedConfigVal!: string ;
+  /**
+   * The selected category.
+   */
   selectedCategory! : string ;
+  /**
+   * The selected category for the video.
+   */
   showSelectedCategory : string = 'Video' ;
+  /**
+   * The selected video category.
+   */
   videoCategoryOnly!: string;
+  /**
+   * The selected category for the script.
+   */
   categoryChange!:string;
   /**
    * The current route.
@@ -48,6 +69,11 @@ export class AuthService {
    */
   currentUrl!: string;
 
+  /**
+   * The constructor initializes the router and sets up a listener for navigation events.
+   * It updates the previous and current URLs based on navigation events.
+   * @param router - The Angular Router instance.
+   */
   constructor(private router: Router) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {

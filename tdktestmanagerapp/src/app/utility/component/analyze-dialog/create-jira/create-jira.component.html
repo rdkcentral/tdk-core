@@ -13,7 +13,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for the Create Jira dialog -->
 <div class="container-fluid">
+    <!-- Header row with title -->
     <div class="row borders-btm">
         <div class="col"></div>
         <div class="col">
@@ -22,11 +24,16 @@ limitations under the License.
         <div class="col">
         </div>
     </div>
+    <!-- Main form row -->
     <div class="row">
+        <!-- Form column -->
         <div class="col-md-12">
+            <!-- Jira creation form -->
             <form [formGroup]="jiraCreateForm" (ngSubmit)="onJiraSubmit()" class="jiraCreateForm mt-3">
+                        <!-- Form section: left column -->
                         <div class="row form-sec">
                             <div class="col">
+                                <!-- Project Name selection -->
                                 <div class="row mb-3">
                                     <label for="prjname" class="col-md-4 col-form-label">Project Name :<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
@@ -45,6 +52,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- TDK Version display -->
                                 <div class="row mb-3" *ngIf="showTDKVersion">
                                     <label for="version" class="col-md-4 col-form-label">TDK Version :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -53,6 +61,7 @@ limitations under the License.
                                             >
                                     </div>
                                 </div>
+                                <!-- Issue Summary input -->
                                 <div class="row mb-3">
                                     <label for="summary" class="col-md-4 col-form-label">Issue Summary :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -66,6 +75,7 @@ limitations under the License.
                                     </div>
                                 </div>
                            
+                                <!-- Issue Description input -->
                                 <div class="row mb-3">
                                     <label for="desc" class="col-md-4 col-form-label">Issue Description :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -78,6 +88,7 @@ limitations under the License.
                                     </div>
                                 </div>
 
+                                <!-- Hardware Configuration selection -->
                                 <div class="row mb-3" *ngIf="showHardware">
                                     <label for="hardware" class="col-md-4 col-form-label">Hardware Configuration :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -97,6 +108,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Components Impacted selection -->
                                 <div class="row mb-3" *ngIf="showCompImpacted">
                                     <label for="impacted" class="col-md-4 col-form-label">Components Impacted :<span style="color:red; margin-left: 0.75em;">*</span>
                                     </label>
@@ -118,6 +130,7 @@ limitations under the License.
                                     </div>
                                 </div>
 
+                                <!-- Steps to reproduce input -->
                                 <div class="row mb-3" *ngIf="showReproduce">
                                     <label for="reproduce" class="col-md-4 col-form-label">Steps to reproduce :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -131,6 +144,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Fixed in version selection -->
                                 <div class="row mb-3" *ngIf="showFixVersion">
                                     <label for="fixversion" class="col-md-4 col-form-label">Fixed in version :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -150,6 +164,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Attach execution logs checkbox -->
                                 <div class="row mb-3">
                                     <label for="exelogs" class="col-md-4 col-form-label">Click to attach execution logs :</label>
                                     <div class="col-md-8">
@@ -157,6 +172,7 @@ limitations under the License.
                                         formControlName="exelogs">
                                     </div>
                                 </div>
+                                <!-- Attach device logs checkbox -->
                                 <div class="row mb-3">
                                     <label for="devlogs" class="col-md-4 col-form-label">Click to attach device logs :</label>
                                     <div class="col-md-8">
@@ -166,8 +182,10 @@ limitations under the License.
                                 </div>
                             </div>
 
+                            <!-- Form section: right column -->
                             <div class="col">
 
+                                <!-- Issue Type selection -->
                                 <div class="row mb-3">
                                     <label for="issuetype" class="col-md-4 col-form-label">Issue Type :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -182,6 +200,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Priority selection -->
                                 <div class="row mb-3" >
                                     <label for="priority" class="col-md-4 col-form-label">Priority :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -202,6 +221,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Regression selection -->
                                 <div class="row mb-3" >
                                     <label for="regression" class="col-md-4 col-form-label">Regression :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -221,6 +241,7 @@ limitations under the License.
                                     </div>
                                 </div>
 
+                                <!-- RDK Version selection -->
                                 <div class="row mb-3" *ngIf="showRDKVersion">
                                     <label for="rdkversion" class="col-md-4 col-form-label">RDK Version :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -241,6 +262,7 @@ limitations under the License.
                                     </div>
                                 </div>
                                 
+                                <!-- Label selection -->
                                 <div class="row mb-3">
                                     <label for="label" class="col-md-4 col-form-label">Label :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -259,6 +281,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Release Version selection -->
                                 <div class="row mb-3" *ngIf="showReleaseVersion">
                                     <label for="releaseversion" class="col-md-4 col-form-label">Release Version :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -279,6 +302,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Environment for test/Test setup input -->
                                 <div class="row mb-3" *ngIf="showEveSetup">
                                     <label for="setup" class="col-md-4 col-form-label">Environment for test/Test setup :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -292,6 +316,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Third Party Dependency selection -->
                                 <div class="row mb-3" *ngIf="showdependency">
                                     <label for="dependency" class="col-md-4 col-form-label">Third Party Dependency :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -309,6 +334,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Severities selection -->
                                 <div class="row mb-3" *ngIf="showSeverites">
                                     <label for="severities" class="col-md-4 col-form-label">Severities :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -328,6 +354,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Impacted Platforms selection -->
                                 <div class="row mb-3" *ngIf="showPlatform">
                                     <label for="platforms" class="col-md-4 col-form-label">Impacted Platforms :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -347,6 +374,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Reproducibility input -->
                                 <div class="row mb-3" *ngIf="showReproducibitity">
                                     <label for="reproducibitity" class="col-md-4 col-form-label">Reproducibility(%) :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -362,6 +390,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- User input -->
                                 <div class="row mb-3">
                                     <label for="user" class="col-md-4 col-form-label">User :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -377,6 +406,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Password input -->
                                 <div class="row mb-3">
                                     <label for="password" class="col-md-4 col-form-label">Password :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -395,6 +425,7 @@ limitations under the License.
 
                             </div>
                        
+                    <!-- Action buttons row -->
                     <div class="row">
                     <div class="mt-2 text-end">
                         <button type="button" class="close-btn" (click)="close()">Close</button>

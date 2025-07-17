@@ -13,13 +13,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for the user management page -->
 <div class="container-fluid">
+    <!-- Row for the page title and action buttons -->
     <div class="row borders-btm">
+        <!-- Empty column for spacing -->
         <div class="col"></div>
+        <!-- Column for the page title -->
         <div class="col">
             <h1 class="title">User Management</h1>
         </div>
+        <!-- Column for the action buttons -->
         <div class="col">
+            <!-- Button group for back and create actions -->
             <div class="btns-group ">
                 <button class="back-btn" (click)="goBack()" matTooltip="Back"><i class="bi bi-arrow-return-left icon-size"></i></button>
                 <button class="create-btn" (click)="createUser()" matTooltip="Create User">
@@ -39,10 +45,13 @@ limitations under the License.
             </div>
         </div>
     </div> -->
+    <!-- Loader row shown when loading -->
     <div class="row loader-row" *ngIf="showLoader">
         <app-loader></app-loader>
     </div> 
+    <!-- Row for the ag-grid table section -->
     <div class="row table-sec mt-2">
+        <!-- Container for the ag-grid table -->
         <div class="ag-table mb-3">
             <ag-grid-angular style="width: 100%; height: 446px;" [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowSelection]="rowSelection"

@@ -105,17 +105,26 @@ export class ListPrimitiveTestComponent {
     rowHeight: 36
   };
   
+  /**
+   * Constructor for ListPrimitiveTestComponent.
+   * @param router Router instance for navigation.
+   * @param authservice AuthService instance for authentication and config value.
+   * @param _snakebar MatSnackBar instance for notifications.
+   * @param service PrimitiveTestService instance for primitive test operations.
+   */
   constructor(private router: Router, private authservice: AuthService, private _snakebar: MatSnackBar, private service: PrimitiveTestService
   ) { }
 
+
   /**
-   * Initializes the component.
-  */
+   * Initializes the component and sets up initial state.
+   * No parameters.
+   */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
-    }else{
+    } else {
       this.categoryName = 'Video';
     }
     this.authservice.currentRoute = this.router.url.split('?')[0];
@@ -124,35 +133,36 @@ export class ListPrimitiveTestComponent {
       this.moduleNames = res.data
       this.selectedValue = this.moduleNames[0];
       this.getParameterDetails(this.selectedValue);
-      if(this.moduleNames.length>0){
+      if (this.moduleNames.length > 0) {
         this.showLoader = false;
       }
     })
-   
   }
 
+
   /**
-   * Method to get the selected value.
-   * @param event 
+   * Handles module selection change event.
+   * @param event The change event from the module dropdown.
    */
-  getSelectedValue(event: any):void{
+  getSelectedValue(event: any): void {
     this.selectedValue = event.target.value;
     this.getParameterDetails(this.selectedValue);
   }
+
 
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
-  onGridReady(params: GridReadyEvent<any>) :void{
+  onGridReady(params: GridReadyEvent<any>): void {
     this.gridApi = params.api;
-
   }
+
   /**
-   * Deletes a record.
+   * Deletes a primitive test record.
    * @param data The data of the record to delete.
    */
-  delete(data: any):void{
+  delete(data: any): void {
     if (confirm("Are you sure to delete ?")) {
       this.service.deletePrimitiveTest(data.primitiveTestId).subscribe({
         next: (res) => {
@@ -175,23 +185,24 @@ export class ListPrimitiveTestComponent {
         }
       })
     }
-
   }
+
 
   /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-  onRowSelected(event: RowSelectedEvent):void{
+  onRowSelected(event: RowSelectedEvent): void {
     this.isRowSelected = event.node.isSelected();
     this.rowIndex = event.rowIndex
   }
+
 
   /**
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent) :void{
+  onSelectionChanged(event: SelectionChangedEvent): void {
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
     this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
@@ -201,31 +212,34 @@ export class ListPrimitiveTestComponent {
     }
   }
 
+
   /**
-   * Edits a user.
-   * @param user The user to edit.
-   * @returns The edited user.
+   * Edits a primitive test record.
+   * @param user The primitive test to edit.
    */
-  userEdit(user: any):void{
+  userEdit(user: any): void {
     localStorage.setItem('user', JSON.stringify(user))
     this.service.getParameterListUpdate(user.primitiveTestId).subscribe(res => {
       this.service.allPassedData.next(res.data);
     })
-
     this.router.navigate(['configure/edit-primitivetest']);
   }
 
+
   /**
    * Navigates to the create primitive test page.
+   * No parameters.
    */
-  createPrimitiveTest():void{
+  createPrimitiveTest(): void {
     this.router.navigate(['/configure/create-primitivetest']);
   }
 
+
   /**
-   * Method to get the Primitive test details.
+   * Fetches primitive test details for the selected module.
+   * @param selectedValue The selected module name.
    */
- getParameterDetails(selectedValue:any):void{
+  getParameterDetails(selectedValue: any): void {
     this.rowData = [];
     this.service.getParameterNames(selectedValue).subscribe({
       next: (res) => {
@@ -237,13 +251,16 @@ export class ListPrimitiveTestComponent {
     });
   }
 
+
   /**
    * Navigates back to the previous page.
+   * No parameters.
    */
-  goBack() :void{
+  goBack(): void {
     this.authservice.selectedConfigVal = 'RDKV';
     this.authservice.showSelectedCategory = "Video";
     this.router.navigate(["/configure"]);
   }
+
 
 }

@@ -17,10 +17,16 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/*
+ * Applies the default font family to the body and all elements except .material-icons.
+ */
 body,
 *:not(.material-icons) {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+/*
+ * Sets the font family for all heading elements inside .mat-typography.
+ */
 .mat-typography h1,
 .mat-typography h2,
 .mat-typography h3,
@@ -29,9 +35,15 @@ body,
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
+/*
+ * Styles the container-fluid class for bottom margin.
+ */
 .container-fluid {
   margin-bottom: 0.5rem;
 }
+/*
+ * Adds a multi-color gradient border to the bottom of elements with borders-btm class.
+ */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -46,6 +58,9 @@ body,
   border-image-width: 0px 0px 4px 0px;
   margin: 0 15px;
 }
+/*
+ * Styles the title class for font size, alignment, and spacing.
+ */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -53,17 +68,29 @@ body,
   margin-top: 5px;
   margin-bottom: 10px;
 }
+/*
+ * Aligns button group to the end and adds top margin.
+ */
 .btns-group {
   text-align: end;
   margin-top: 5px;
 }
+/*
+ * Adds horizontal padding to table section.
+ */
 .table-sec {
   padding: 0 25px;
 }
+/*
+ * Styles the button group for flex display and left margin.
+ */
 .btns-grp {
   display: flex;
   margin-left: -22px;
 }
+/*
+ * Styles create and back buttons for appearance and interaction.
+ */
 .create-btn,
 .back-btn {
   background-color: #fff;
@@ -76,17 +103,29 @@ body,
   letter-spacing: 0.5px;
   cursor: pointer;
 }
+/*
+ * Sets icon color, weight, and size for icon-size class.
+ */
 .icon-size {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
+/*
+ * Adds right margin to back button.
+ */
 .back-btn {
   margin-right: 10px;
 }
+/*
+ * Hides the no-rows overlay in ag-theme-quartz grid.
+ */
 ::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
   display: none !important;
 }
+/*
+ * Positions the loader row absolutely in the center.
+ */
 .loader-row{
   position: absolute;
   top: 50%;

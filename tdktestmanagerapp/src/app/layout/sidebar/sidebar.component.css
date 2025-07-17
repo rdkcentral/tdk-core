@@ -17,12 +17,21 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+/*
+ * Host element styling for sidebar layout.
+ */
 :host {
     min-height: 87vh;
     display: flex;
     flex-direction: column;
 }
 
+
+
+/*
+ * Styles for the drawer container and drawer in the sidebar.
+ */
 mat-drawer-container {
     flex: 1 1 auto;
     position: relative;

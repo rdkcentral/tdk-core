@@ -36,18 +36,37 @@ export class LogfileDialogComponent {
   logFileNames: any;
   executionResultId: any;
 
+  /**
+   * Constructor for LogfileDialogComponent.
+   * @param dialogRef Reference to the dialog opened.
+   * @param data Data injected into the dialog (contains logFileNames and executionId).
+   * @param dialog Reference to MatDialog service.
+   * @param executionservice Service to fetch and download execution logs.
+   */
   constructor(
     public dialogRef: MatDialogRef<LogfileDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public dialog: MatDialog, private executionservice: ExecutionService,
      ) {
   }
 
+
+
+  /**
+   * Angular lifecycle hook called on component initialization.
+   * Initializes the logFileNames property from injected data.
+   */
   ngOnInit(): void {
     this.logFileNames = this.data.logFileNames;
   }
 
-  downloadLogFile(logFile:any){
-    this.executionservice.downloadLogFile(this.data.executionId,logFile).subscribe(blob => {
+
+
+  /**
+   * Downloads the specified log file for the current execution.
+   * @param logFile The name of the log file to download.
+   */
+  downloadLogFile(logFile: any) {
+    this.executionservice.downloadLogFile(this.data.executionId, logFile).subscribe(blob => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -59,9 +78,16 @@ export class LogfileDialogComponent {
     });
   }
 
+
+
+  /**
+   * Handles the close action for the dialog.
+   * Closes the dialog without returning a value.
+   */
   onClose(): void {
     this.dialogRef.close(false);
   }
+
 
   
 

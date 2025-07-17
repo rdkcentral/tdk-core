@@ -115,6 +115,19 @@ export class DeviceEditComponent {
   newFileName!: string;
   findboxType: any[] = [];
 
+  /**
+   * Constructor for DeviceEditComponent.
+   * @param fb - FormBuilder for reactive forms
+   * @param router - Angular Router for navigation
+   * @param _snakebar - MatSnackBar for notifications
+   * @param oemService - OemService for OEM operations
+   * @param authservice - AuthService for authentication
+   * @param service - DeviceService for device operations
+   * @param socService - SocService for SOC operations
+   * @param devicetypeService - DevicetypeService for device type operations
+   * @param renderer - Renderer2 for DOM manipulation
+   * @param dialog - MatDialog for dialogs
+   */
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -147,6 +160,7 @@ export class DeviceEditComponent {
    * Retrieves data from API endpoints.
    */
   ngOnInit(): void {
+
     this.configureName = this.authservice.selectedConfigVal;
     this.selectedDeviceCategory = this.configureName;
     if (this.configureName === 'RDKB') {
@@ -391,13 +405,16 @@ export class DeviceEditComponent {
    * @param params - The grid ready event parameters.
    */
   onGridReady(params: any) {
+
     this.gridApi = params.api;
   }
 
   /**
    * Retrieves all box types based on the selected device category.
+   * No parameters.
    */
   getAlldeviceType() {
+
     this.devicetypeService
       .getfindallbycategory(this.selectedDeviceCategory)
       .subscribe((res) => {
@@ -417,8 +434,10 @@ export class DeviceEditComponent {
 
   /**
    * Retrieves all box manufactures based on the selected device category.
+   * No parameters.
    */
   getAllOem() {
+
     this.oemService
       .getOemByList(this.selectedDeviceCategory)
       .subscribe((res) => {
@@ -428,29 +447,33 @@ export class DeviceEditComponent {
 
   /**
    * Retrieves all SOC vendors based on the selected device category.
+   * No parameters.
    */
   getAllsoc() {
+
     this.socService.getSoc(this.selectedDeviceCategory).subscribe((res) => {
       this.allsoc = res.data;
     });
   }
+  
   /**
    * Handles the change event of the box type dropdown.
    * @param event - The event object containing the target element.
    */
   devicetypeChange(event: any) {
+
     this.visibleDeviceconfigFile = false;
     let value = event.target.value;
     this.deviceTypeValue = value;
     this.visibilityConfigFile();
   }
+  
   /**
-   * Handles the change event when the checkbox is checked or unchecked.
+   * Handles the change event when the Thunder checkbox is checked or unchecked.
    * @param event - The event object containing information about the checkbox change.
    */
-
-  
   isChecked(event: any) {
+
     this.isThunderchecked = this.editDeviceVForm.get('isThunder')?.value;
     if (event.target.checked) {
       this.isThunderchecked = true;
@@ -465,13 +488,13 @@ export class DeviceEditComponent {
     }
     this.visibilityConfigFile();
   }
+ 
   /**
-   * Updates the state of the component based on the value of `val`.
-   * If `val` is true, it shows the port file and sets the Thunder checkbox to true.
-   * If `val` is false, it hides the port file and sets the Thunder checkbox to false.
-   * @param val - The value to check.
+   * Updates the state of the component based on the value of Thunder checkbox.
+   * @param val - Boolean value for Thunder checkbox.
    */
   isEditChecked(val: boolean) {
+
     if (val === true) {
       this.showPortFile = true;
       this.isThunderchecked = true;
@@ -480,21 +503,39 @@ export class DeviceEditComponent {
       this.isThunderchecked = false;
     }
   }
+
+  /**
+   * Handles the change event for device ports checkbox.
+   * @param event - The event object containing information about the checkbox change.
+   */
   isCheckedConfig(event: any) {
+
     if (event.target.checked) {
       this.showConfigPort = true;
     } else {
       this.showConfigPort = false;
     }
   }
+
+  /**
+   * Updates the state of the component based on the value of device ports checkbox.
+   * @param val - Boolean value for device ports checkbox.
+   */
   isCheckedConfigPort(val: boolean): void {
+
     if (val === true) {
       this.showConfigPort = true;
     } else {
       this.showConfigPort = false;
     }
   }
+
+  /**
+   * Handles the change event for device ports B checkbox.
+   * @param event - The event object containing information about the checkbox change.
+   */
   isCheckedConfigB(event: any) {
+
     if (event.target.checked) {
       this.showConfigPortB = true;
     } else {
@@ -503,9 +544,11 @@ export class DeviceEditComponent {
   }
 
   /**
-   * This methos is change the value of deviceName inputfield
+   * Handles value change for deviceName input field.
+   * @param event - Input event
    */
   valuechange(event: any): void {
+
     this.visibilityConfigFile();
     this.stbNameChange = event.target.value;
     if (this.isThunderchecked) {
@@ -518,10 +561,13 @@ export class DeviceEditComponent {
       }
     }
   }
+ 
   /**
-   * The method to check thunder enable or disable.
+   * Checks Thunder validity based on stbName and deviceType.
+   * No parameters.
    */
   checkIsThunderValidity(): void {
+
     const stbName = this.stbNameChange;
     const boxType = this.deviceTypeValue;
     if (stbName && boxType) {
@@ -533,10 +579,13 @@ export class DeviceEditComponent {
       this.isThunderchecked = false;
     }
   }
+ 
   /**
-   * Show the Config file or device.config file beased on deviceName and devicetype
+   * Shows the config file or device.config file based on deviceName and devicetype.
+   * No parameters.
    */
   visibilityConfigFile(): void {
+
     let boxNameConfig = this.editDeviceVForm.value.stbname;
     let boxTypeConfig = this.editDeviceVForm.value.devicetype;
     let thunderStatus = this.editDeviceVForm.value.isThunder;
@@ -576,10 +625,13 @@ export class DeviceEditComponent {
         });
       });
   }
+
   /**
-   * Reading the configfile
+   * Reads the config file content.
+   * @param file - Blob file to read
    */
   readFileContent(file: Blob): void {
+
     let boxNameConfig = this.editDeviceVForm.value.stbname;
     const reader = new FileReader();
     reader.onload = () => {
@@ -599,9 +651,11 @@ export class DeviceEditComponent {
   }
 
   /**
-   * Reading the device configfile
+   * Reads the device config file content.
+   * @param file - Blob file to read
    */
   readDeviceFileContent(file: Blob): void {
+
     const reader = new FileReader();
     reader.onload = () => {
       let htmlContent = reader.result;
@@ -615,21 +669,24 @@ export class DeviceEditComponent {
     };
     reader.readAsText(file);
   }
+ 
   /**
-   * Lifecycle hook that is called when the component is destroyed.
-   * It is used to perform any necessary cleanup logic before the component is removed from the DOM.
+   * Angular lifecycle hook - called when component is destroyed.
+   * No parameters.
    */
   ngOnDestroy(): void {
+
     this.editor.destroy();
     this.editor2.destroy();
   }
+
   /**
    * Formats the content by replacing all occurrences of '#' with '<br># '.
-   *
-   * @param content - The content to be formatted.
-   * @returns The formatted content.
+   * @param content - The content to be formatted
+   * @returns The formatted content
    */
   formatContent(content: any) {
+
     return `<p>${content
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
@@ -638,18 +695,24 @@ export class DeviceEditComponent {
       .replace(/\n/g, '<br>')}
     </p>`;
   }
+ 
   /**
    * Navigates back to the devices page and removes the 'streamData' item from localStorage.
+   * No parameters.
    */
   goBack() {
+
     localStorage.removeItem('streamData');
     localStorage.removeItem('deviceCategory');
     this.router.navigate(['/devices']);
   }
+  
   /**
    * Downloads a device file.
+   * No parameters.
    */
   downloadFile() {
+
     if (this.user.deviceName) {
       this.service.downloadDevice(this.user.deviceName).subscribe((blob) => {
         const url = window.URL.createObjectURL(blob);
@@ -663,10 +726,13 @@ export class DeviceEditComponent {
       });
     }
   }
+
   /**
-   * The submit method is update device for categort RDKV
+   * Submits the form to update device for category RDKV.
+   * No parameters.
    */
   EditDeviceVSubmit() {
+
     console.log("Test"+this.editDeviceVForm.value.thunderport);
     this.editDeviceVFormSubmitted = true;
     if (this.editDeviceVForm.invalid) {
@@ -714,10 +780,13 @@ export class DeviceEditComponent {
       });
     }
   }
+
   /**
-   * The submit method is update device for categort RDKB
+   * Submits the form to update device for category RDKB.
+   * No parameters.
    */
   editDeviceBSubmit() {
+
     this.rdkbFormSubmitted = true;
   
     if (this.rdkBForm.invalid) {
@@ -762,9 +831,11 @@ export class DeviceEditComponent {
   }
 
   /**
-   * Edit icon will show/hide in editor modal
+   * Toggles the edit icon in editor modal.
+   * No parameters.
    */
   toggleIsEdit(): void {
+
     this.isEditingFile = !this.isEditingFile;
     if (this.isEditingFile) {
       this.uploadConfigForm.get('editorFilename')?.enable();
@@ -782,7 +853,12 @@ export class DeviceEditComponent {
     }
   }
 
+  /**
+   * Toggles the file name in the upload config form dialog.
+   * No parameters.
+   */
   toggleFileNameDialog(): void {
+
     const boxNameConfig = this.editDeviceVForm.value.stbname;
     const deviceTypeConfig = this.editDeviceVForm.value.devicetype;
     const currentName = this.uploadConfigForm.get('editorFilename')?.value;
@@ -797,7 +873,12 @@ export class DeviceEditComponent {
     });
   }
 
+  /**
+   * Toggles the file name in the upload device config form.
+   * No parameters.
+   */
   toggleFileName(): void {
+
     const boxNameConfig = this.editDeviceVForm.value.stbname;
     const deviceTypeConfig = this.editDeviceVForm.value.devicetype;
     const currentName =
@@ -813,12 +894,23 @@ export class DeviceEditComponent {
     });
   }
 
+  /**
+   * Replaces HTML tags in content with newlines.
+   * @param content - Content string to process
+   * @returns Processed content string
+   */
   replaceTags(content: string): string {
+
     const replacepara = content.replace(/<\/?p>/g, '\n');
     const replacebreakes = replacepara.replace(/<br\s*\/?>/g, '\n');
     return replacebreakes.trim();
   }
+  /**
+   * Uploads the config file from editor modal.
+   * No parameters.
+   */
   configFileUpload(): void {
+
     this.existConfigSubmitted = true;
     if (this.uploadConfigForm.invalid) {
       return;
@@ -863,7 +955,13 @@ export class DeviceEditComponent {
   }
 
   // Helper function for upload and response handling
+  /**
+   * Helper function for upload and response handling.
+   * @param file - File to upload
+   * @param modalType - Type of modal ('dialog' or 'newDevice')
+   */
   private uploadConfigFileAndHandleResponse(file: File ,modalType: 'dialog' | 'newDevice'): void {
+
     const isThunder = this.editDeviceVForm.get('isThunder')?.value;
     this.service.uploadConfigFile(file, isThunder).subscribe({
       next: (res) => {
@@ -901,11 +999,13 @@ export class DeviceEditComponent {
       },
     });
   }
+
   /**
    * Opens the upload file section and sets the necessary flags and values.
-   * @param value - The value to set the uploadCreateHeading property to.
+   * @param value - Heading value for upload section
    */
   openUploadFile(value: string): void {
+
       this.submitted = false;
   this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.setValidators([Validators.required]);
   this.uploadDeviceConfigForm.get('editorContent')?.clearValidators();
@@ -917,12 +1017,13 @@ export class DeviceEditComponent {
     this.showUploadButton = false;
     this.uploadCreateHeading = value;
   }
+ 
   /**
    * Navigates back to the device editor and updates the component's state.
-   *
-   * @param value - The value to set for the `uploadCreateHeading` property.
+   * @param value - Heading value for editor section
    */
   backToEditor(value: string): void {
+
      this.submitted = false;
   this.uploadDeviceConfigForm.get('editorContent')?.setValidators([Validators.required]);
   this.uploadDeviceConfigForm.get('uploadDeviceConfigFileModal')?.clearValidators();
@@ -936,11 +1037,13 @@ export class DeviceEditComponent {
     this.showUploadButton = true;
     this.uploadCreateHeading = value;
   }
+ 
   /**
    * Opens the existing modal with the specified value.
-   * @param val - The value to be passed to the modal.
+   * @param val - Value to be passed to modal
    */
   openExistingModal(val: string): void {
+
     this.existConfigSubmitted = false;
    this.uploadConfigForm.get('uploadConfigFileModal')?.setValidators([Validators.required]);
   this.uploadConfigForm.get('editorContent')?.clearValidators();
@@ -955,7 +1058,12 @@ export class DeviceEditComponent {
   /**
    * Navigates back to the existing config editor.
    */
+  /**
+   * Navigates back to the existing config editor.
+   * No parameters.
+   */
   backToExistingEditor(): void {
+
     this.existConfigSubmitted = false;
     this.uploadConfigForm.get('editorContent')?.setValidators([Validators.required]);
     this.uploadConfigForm.get('uploadConfigFileModal')?.clearValidators();
@@ -967,7 +1075,13 @@ export class DeviceEditComponent {
     this.backToExistEditorbtn = false;
     this.uploadExistConfigHeading = '';
   }
+
+  /**
+   * Handles change event for existing config file input.
+   * @param event - Input event
+   */
   onExistConfigChange(event: Event): void {
+
     let fileInput = event.target as HTMLInputElement;
     if (fileInput && fileInput.files) {
       const file = fileInput.files[0];
@@ -979,7 +1093,12 @@ export class DeviceEditComponent {
     }
   }
 
+  /**
+   * Uploads the content of the existing config file.
+   * @param file - File to upload
+   */
   uploadExistConfigContent(file: File): void {
+
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {
       const content = e.target?.result as string;
@@ -998,11 +1117,13 @@ export class DeviceEditComponent {
     };
     reader.readAsText(file);
   }
+ 
   /**
    * Deletes a device configuration file.
-   * @param configFileName - The name of the configuration file to delete.
+   * @param configFileName - Name of the configuration file to delete
    */
   deleteDeviceConfigFile(configFileName: any) {
+
     if (configFileName) {
       if (confirm('Are you sure to delete ?')) {
         this.service
@@ -1033,10 +1154,13 @@ export class DeviceEditComponent {
       }
     }
   }
+ 
   /**
-   * The method is upload the configfile of fileupload
+   * Handles change event for modal file input.
+   * @param event - Input event
    */
   onModalFileChange(event: Event): void {
+
     let fileInput = event.target as HTMLInputElement;
     if (fileInput && fileInput.files && fileInput.files.length > 0) {
       const file = fileInput.files[0];
@@ -1050,7 +1174,12 @@ export class DeviceEditComponent {
     }
   }
 
+  /**
+   * Uploads and reads the content of the file for device config.
+   * @param file - File to upload and read
+   */
   uploadReadFileContent(file: File): void {
+
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {
       const content = e.target?.result as string;
@@ -1069,13 +1198,13 @@ export class DeviceEditComponent {
     };
     reader.readAsText(file);
   }
+
   /**
-   * The method is upload the default device configfile of editor modal
-   */
-  /**
-   * The method is upload the default device configfile of editor modal
+   * Uploads the default device config file from editor modal.
+   * No parameters.
    */
   configDeviceFileUpload(): void {
+
     console.log('configDeviceFileUpload called');
     this.submitted = true;
     if (this.uploadDeviceConfigForm.invalid) {
@@ -1122,10 +1251,13 @@ export class DeviceEditComponent {
     const contentFile = new File([contentBlob], editorFilename);
     this.uploadConfigFileAndHandleResponse(contentFile,'newDevice');
   }
+
   /**
-   * The method is open the existing device config modal onclick button
+   * Opens the existing device config modal on button click.
+   * @param fileName - Name of the file to open
    */
   existDeviceDialog(fileName: any): void {
+
     this.showExistUploadButton = true;
     this.existingConfigEditor = true;
     this.uploadExistingConfig = false;
@@ -1151,16 +1283,22 @@ export class DeviceEditComponent {
       });
     }
   }
+ 
   /**
-   * The method is close the exeisting device config modal
+   * Closes the existing device config modal.
+   * No parameters.
    */
   closeDialog(): void {
+
     this.dialogRef.close();
   }
+ 
   /**
-   * The method is open the device config modal onclick button
+   * Opens the device config modal on button click.
+   * No parameters.
    */
   openNewDeviceDialog(): void {
+
     this.showUploadButton = true;
     this.deviceEditor = true;
     this.uploadConfigSec = false;
@@ -1202,10 +1340,13 @@ export class DeviceEditComponent {
         }
       });
   }
+
   /**
-   * The method is close the device config modal
+   * Closes the device config modal.
+   * No parameters.
    */
   closeNewDeviceDialog(): void {
+
     this.newDeviceDialogRef.close();
   }
 }

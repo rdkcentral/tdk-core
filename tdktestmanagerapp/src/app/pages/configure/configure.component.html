@@ -13,9 +13,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div class="container-fluid">
+<!-- Main container for configure page -->
     <div class="row borders-btm">
+    <!-- Row for header and title -->
         <div class="col-md-5">
+        <!-- Column for flavor selection -->
             <div class="row ">
+            <!-- Row for flavor dropdown -->
               <div class="falvor-row">
                 <span for="falvor" class="falvor-label">RDK flavor :</span>
                     <select class="form-select rdk-dropdown" aria-label="Default select example" id="preferCategoty"
@@ -27,15 +31,21 @@ limitations under the License.
               </div>
         </div>
         <div class="col-md-2">
+        <!-- Column for configure title -->
             <h1 class="title">Configure</h1>
         </div>
         <div class="col-md-5">
+        <!-- Empty column for spacing -->
         </div>
       </div>
     <div class="row mt-3">
+    <!-- Row for main configuration sections -->
         <div class="row showrdkgrouprow" *ngIf="rdkvVisible">
+        <!-- Row for RDKV configuration options (conditional) -->
             <div class="row">
+            <!-- Row for RDKV configuration cards -->
                 <div class="col">
+                <!-- Column for device type, OEM, SoC -->
                     <div class="card-height-3" routerLink="/configure/list-devicetype">
                         <span class="circle"><i class="bi bi-hdd-fill icon-conf"></i></span>
                         <div class="text-group">
@@ -70,6 +80,7 @@ limitations under the License.
 
                 </div>
                 <div class="col">
+                <!-- Column for primitive test, modules, certification -->
                     <div class="card-height-3" routerLink="/configure/list-primitivetest">
                         <span class="circle"><i class="bi bi-align-top icon-right"></i></span>
                         <div class="text-group">
@@ -103,6 +114,7 @@ limitations under the License.
                 </div>
             </div>
             <div class="row mt-4" *ngIf="privileges == 'admin'">
+            <!-- Row for common configuration section (admin only) -->
                 <div class="text-start ">
                     <h3 class="heading commonheading">Common Configuration</h3>
                 </div>
@@ -146,8 +158,11 @@ limitations under the License.
             </div>
         </div>
         <div class="row showrdkgrouprow" *ngIf="rdkbVisible">
+        <!-- Row for RDKB configuration options (conditional) -->
             <div class="row">
+            <!-- Row for RDKB configuration cards -->
                 <div class="col">
+                <!-- Column for device type, OEM, SoC -->
                     <div class="card-height-3" routerLink="/configure/list-devicetype">
                         <span class="circle"><i class="bi bi-hdd-fill icon-conf"></i></span>
                         <div class="text-group">
@@ -216,6 +231,7 @@ limitations under the License.
                 </div>
             </div>
             <div class="row mt-4" *ngIf="privileges == 'admin'">
+            <!-- Row for common configuration section (admin only) -->
                 <div class="text-start ">
                     <h3 class="heading commonheading">Common Configuration</h3>
                 </div>

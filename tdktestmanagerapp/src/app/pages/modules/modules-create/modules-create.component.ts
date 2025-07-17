@@ -45,15 +45,24 @@ export class ModulesCreateComponent {
   loggedinUser: any;
   displayName!: string;
 
+  /**
+   * Constructor for ModulesCreateComponent.
+   * @param authservice AuthService instance for authentication.
+   * @param router Router instance for navigation.
+   * @param moduleservice ModulesService for module operations.
+   * @param _snakebar MatSnackBar for notifications.
+   */
   constructor(private authservice: AuthService,private router: Router,
     private moduleservice: ModulesService,private _snakebar :MatSnackBar,
   ) {
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
     
-   }
+  }
+
 
   /**
    * Initializes the component and sets up the initial values.
+   * No parameters.
    */
   ngOnInit(): void {
     this.categoryName = this.authservice.selectedConfigVal;
@@ -78,9 +87,11 @@ export class ModulesCreateComponent {
       crashFilesPath: new FormControl<string | null>(''),
       logFilesPath: new FormControl<string | null>('')
     })
+
   }
   /**
-   * This method is Submit the create module form.
+   * Submits the create module form.
+   * No parameters.
    */
   moduleSubmit():void{
     this.moduleFormSubmitted = true;
@@ -118,46 +129,54 @@ export class ModulesCreateComponent {
             }
           })
     }
+
   }
   /**
    * Navigates back to the modules list page.
+   * No parameters.
    */
   goBack():void{
     this.router.navigate(["/configure/modules-list"]);
+
   }
 
   /**
    * Resets the createModuleForm to its initial state.
+   * No parameters.
    */
   reset():void{
     this.createModuleForm.reset();
+
   }
 
   /**
-   * Toggles the value of `thundrEnable` property.
-   * @param event - The event object triggered by the checkbox.
+   * Toggles the value of `isThunder` property.
+   * @param event The event object triggered by the checkbox.
    */
   thundrEnable(event: any):void{
     const inputEle = event.target as HTMLInputElement;
     this.isThunder = inputEle.checked;
-    
+
   }
   /**
    * Removes a crash file from the `crashFilesArr` array at the specified index.
-   * @param index - The index of the crash file to remove.
+   * @param index The index of the crash file to remove.
    */
   removeCrash(index: number):void {
     this.crashFilesArr.splice(index, 1);
+
   }
   /**
    * Removes a log file from the logFilesArr array at the specified index.
-   * @param index - The index of the log file to remove.
+   * @param index The index of the log file to remove.
    */
   removeLogs(index: number):void {
     this.logFilesArr.splice(index, 1);
+
   }
   /**
    * Adds a crash file to the `crashFilesArr` array.
+   * No parameters.
    */
   addCrash(): void {
     const value = this.createModuleForm.get('crashFilesPath')?.value.trim();
@@ -165,15 +184,23 @@ export class ModulesCreateComponent {
       this.crashFilesArr.push(value);
       this.createModuleForm.get('crashFilesPath')?.setValue('');
     }
+
   }
+  /**
+   * Modifies a crash file entry in the crashFilesArr array.
+   * @param item The crash file path to set.
+   * @param index The index of the crash file to modify.
+   */
   modifyCrash(item: any, index: number){
     if(item != ""){
       this.createModuleForm.get('crashFilesPath')?.setValue(item);
       this.removeCrash(index);
     }
+
   }
   /**
-   * Adds logs to the logFilesArr array.
+   * Adds a log file to the logFilesArr array.
+   * No parameters.
    */
   addLogs(): void {
     const value = this.createModuleForm.get('logFilesPath')?.value.trim();
@@ -182,15 +209,19 @@ export class ModulesCreateComponent {
       this.createModuleForm.get('logFilesPath')?.setValue('');
       
     }
+
   }
   /**
-   * remove logs to the logFilesArr array.
-   */  
+   * Modifies a log file entry in the logFilesArr array.
+   * @param item The log file path to set.
+   * @param index The index of the log file to modify.
+   */
   modifyLogs(item: any, index: number):void{
     if(item != ""){
       this.createModuleForm.get('logFilesPath')?.setValue(item);
       this.removeLogs(index);
     }
+
   }
 
 }

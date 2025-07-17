@@ -113,35 +113,50 @@ export class ParameterListComponent {
   categoryName: any;
   showLoader = false;
 
-  constructor(private router: Router, private authservice: AuthService, 
-    private _snakebar: MatSnackBar,private moduleservice: ModulesService,
-    public dialog:MatDialog
-  ) { }
   /**
-   * Initializes the component.
-  */
+   * Constructor for ParameterListComponent.
+   * @param router Router instance for navigation.
+   * @param authservice AuthService instance for authentication and config value.
+   * @param _snakebar MatSnackBar instance for notifications.
+   * @param moduleservice ModulesService instance for module operations.
+   * @param dialog MatDialog instance for dialogs.
+   */
+  constructor(private router: Router, private authservice: AuthService,
+    private _snakebar: MatSnackBar, private moduleservice: ModulesService,
+    public dialog: MatDialog
+  ) { }
+
+  /**
+   * Initializes the component and sets up initial state.
+   * No parameters.
+   */
   ngOnInit(): void {
     let functiondata = JSON.parse(localStorage.getItem('function') || '{}');
     this.dynamicModuleName = functiondata.moduleName;
     this.dynamicFunctionName = functiondata.functionName;
     this.configureName = this.authservice.selectedConfigVal;
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
-    }else{
+    } else {
       this.categoryName = 'Video';
     }
     this.parameterByFunction();
   }
-  parameterByFunction():void{
+
+  /**
+   * Fetches parameters by function and updates rowData.
+   * No parameters.
+   */
+  parameterByFunction(): void {
     this.showLoader = true;
     this.moduleservice.findAllByFunction(this.dynamicFunctionName).subscribe({
-      next:(data)=>{
+      next: (data) => {
         this.rowData = data.data;
-        if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
-        this.showLoader = false;
+        if (this.rowData == null || this.rowData == undefined || this.rowData.length > 0) {
+          this.showLoader = false;
         }
       },
-      error:(err)=>{
+      error: (err) => {
         this.showLoader = false;
         this._snakebar.open(err, '', {
           duration: 2000,
@@ -150,64 +165,69 @@ export class ParameterListComponent {
           verticalPosition: 'top'
         })
       }
-
     })
   }
+
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
-  onGridReady(params: GridReadyEvent<any>):void{
+  onGridReady(params: GridReadyEvent<any>): void {
     this.gridApi = params.api;
   }
+
     /**
-   * Event handler for when a row is selected.
-   * @param event The row selected event.
-   */
-    onRowSelected(event: RowSelectedEvent):void{
+     * Event handler for when a row is selected.
+     * @param event The row selected event.
+     */
+    onRowSelected(event: RowSelectedEvent): void {
       this.isRowSelected = event.node.isSelected();
       this.rowIndex = event.rowIndex
     }
+
   
   /**
-     * Event handler for when the selection is changed.
-     * @param event The selection changed event.
-  */
-  onSelectionChanged(event: SelectionChangedEvent):void{
-      this.selectedRowCount = event.api.getSelectedNodes().length;
-      const selectedNodes = event.api.getSelectedNodes();
-      this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
-      this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
-      if (this.gridApi) {
-        this.gridApi.refreshCells({ force: true })
-      }
+   * Event handler for when the selection is changed.
+   * @param event The selection changed event.
+   */
+  onSelectionChanged(event: SelectionChangedEvent): void {
+    this.selectedRowCount = event.api.getSelectedNodes().length;
+    const selectedNodes = event.api.getSelectedNodes();
+    this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
+    this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
+    if (this.gridApi) {
+      this.gridApi.refreshCells({ force: true })
     }
+  }
+
 
   /**
-   * Creates a new box manufacturer.
+   * Navigates to the parameter creation page.
+   * No parameters.
    */
-  createParameterName() :void{
+  createParameterName(): void {
     this.router.navigate(['/configure/parmeter-create']);
   }
+
   
   /**
-   * Edits a user.
-   * @param user The user to edit.
-   * @returns The edited user.
+   * Edits a parameter.
+   * @param parameter The parameter to edit.
    */
-  userEdit(parameter: any):void{
-      localStorage.setItem('parameters', JSON.stringify(parameter));
-      this.router.navigate(['configure/parameter-edit']);
+  userEdit(parameter: any): void {
+    localStorage.setItem('parameters', JSON.stringify(parameter));
+    this.router.navigate(['configure/parameter-edit']);
   }
+
   /**
-   * Deletes a record.
+   * Deletes a parameter record.
    * @param data The data of the record to delete.
    */
-  delete(data: any):void{
+  delete(data: any): void {
     if (confirm("Are you sure to delete ?")) {
-      if(data){
+      if (data) {
         this.moduleservice.deleteParameter(data.id).subscribe({
-          next:(res)=>{
+          next: (res) => {
             this.rowData = this.rowData.filter((row: any) => row.id !== data.id);
             this.rowData = [...this.rowData];
             this._snakebar.open(res.message, '', {
@@ -215,14 +235,14 @@ export class ParameterListComponent {
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
               verticalPosition: 'top'
-              })
+            })
           },
-          error:(err)=>{
+          error: (err) => {
             this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
             })
           }
         })
@@ -230,11 +250,14 @@ export class ParameterListComponent {
     }
   }
 
+
   /**
    * Navigates back to the previous page.
+   * No parameters.
    */
-  goBack():void{
+  goBack(): void {
     this.router.navigate(["/configure/function-list"]);
   }
+
 
 }

@@ -17,9 +17,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/* Container for the main section of the SoC list page */
 .container {
   margin-bottom: 1rem;
 }
+
+/* Bottom border with gradient for section separation */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -34,19 +37,27 @@ http://www.apache.org/licenses/LICENSE-2.0
   border-image-width: 0px 0px 4px 0px;
   margin: 0 10px;
 }
+
+/* Title styling for the SoC list section */
 .title {
   font-size: 1rem;
   text-align: center;
   margin-bottom: 10px;
   font-weight: 500;
 }
+
+/* Section for the table content */
 .table-sec {
   padding: 0 10px;
 }
+
+/* Button group container */
 .btns-grp {
   display: flex;
   margin-left: -35px;
 }
+
+/* Styles for create and back buttons */
 .create-btn,
 .back-btn {
   background-color: #fff;
@@ -60,17 +71,25 @@ http://www.apache.org/licenses/LICENSE-2.0
   cursor: pointer;
   margin-right: 150px;
 }
+
+/* Icon size and color for action icons */
 .icon-size {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
+
+/* Margin adjustment for the back button */
 .back-btn {
   margin-right: 10px;
 }
+
+/* Hide ag-grid overlay when there are no rows */
 ::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
   display: none !important;
 }
+
+/* Loader row positioning for loading state */
 .loader-row{
   position: absolute;
   top: 50%;

@@ -13,28 +13,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for device creation page -->
 <div class="container-fluid">
+  <!-- Row for header and form sections -->
   <div class="row borders-btm">
+    <!-- Column for left section -->
     <div class="col">
+      <!-- Row for flavor row -->
       <div class="row">
+        <!-- Flavor row (empty) -->
         <div class="falvor-row">
         </div>
       </div>
     </div>
+    <!-- Column for title -->
     <div class="col">
       <h1 class="title">Create {{categoryName}} Device</h1>
     </div>
+    <!-- Column for right section (empty) -->
     <div class="col">
     </div>
   </div>
+    <!-- Row for main form area -->
     <div class="row mt-1">
+        <!-- Column for form content -->
         <div class="col-md-12">
+                  <!-- Section for Create Form V -->
                   <div *ngIf="showHideCreateFormV">
                     <form [formGroup]="deviceForm" (ngSubmit)="deviceVSubmit()" class="userform mt-3">
+                        <!-- Row for form fields (V) -->
                         <div class="row">
+                            <!-- Column for left form fields (V) -->
                             <div class="col">
+                                <!-- Row for device name input -->
                                 <div class="row mb-3">
                                     <label for="devicename" class="col-md-3 col-form-label">Stb Name<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <!-- Column for device name input field -->
                                     <div class="col-md-8">
                                       <input type="text" class="form-control" id="devicename" formControlName="devicename" autocomplete="off" placeholder="Enter device name" 
                                       [(ngModel)]="stbNameChange" (keyup)="valuechange($event)" maxlength="20">
@@ -46,8 +60,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for device IP input -->
                                   <div class="row mb-3">
                                     <label for="deviceip" class="col-md-3 col-form-label">Stb IP<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <!-- Column for device IP input field -->
                                     <div class="col-md-8">
                                       <input type="text" class="form-control" id="deviceip" formControlName="deviceip" autocomplete="off" placeholder="Enter device ip">
                                         <div *ngIf="deviceFormSubmitted && deviceForm.controls['deviceip']?.errors" class="text-danger">
@@ -56,8 +72,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for MAC address input -->
                                   <div class="row mb-3">
                                     <label for="macaddr" class="col-md-3 col-form-label">Mac Address<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <!-- Column for MAC address input field -->
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="macaddr" formControlName="macaddr"
                                         autocomplete="off" placeholder="Enter mac address">
@@ -67,8 +85,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for device type select -->
                                   <div class="row mb-3">
                                     <label for="devicetype" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <!-- Column for device type select field -->
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="devicetype" (change)="devicetypeChange($event)" >
                                             <option value="" default>Select</option>
@@ -82,8 +102,10 @@ limitations under the License.
                                     </div>
                                   </div>
                                  
+                                  <!-- Row for Thunder enabled checkbox -->
                                   <div class="row mb-3">
                                     <span  class="col-md-3 col-form-label">Is Thunder Enabled <span class="thunder-info"></span></span>
+                                    <!-- Column for Thunder enabled checkbox -->
                                     <div class="col-md-8 check-thunder">
                                         <div class="form-check form-check-inline form-check-reverse">
                                             <input class="form-check-input thunder" type="checkbox" id="isthunderEnabled" formControlName="isThunder"
@@ -93,10 +115,12 @@ limitations under the License.
                                           </span>
                                     </div>
                                   </div>
+                                  <!-- Row for Thunder port input (conditional) -->
                                   <div class="row mb-3" *ngIf="showPortFile"> 
                                     <span class="col-md-3 col-form-label">Thunder Port<span style="color:red; margin-left: 0.75em;">*</span>
                                     <span class="thunderport-info"><i class="bi bi-info-circle" matTooltip ="Thunder Port"></i></span>
                                   </span>
+                                    <!-- Column for Thunder port input field -->
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="thunderport" formControlName="thunderport" autocomplete="off" placeholder="Ex: 8080">
                                         <div *ngIf="deviceFormSubmitted && deviceForm.controls['thunderport']?.errors" class="text-danger">
@@ -104,11 +128,13 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for device config file section -->
                                   <div class="row mb-3"> 
                                     <span for="deviceconfigfile" class="col-md-3  col-form-label">Device Config File :<mat-icon class="info-icon"
                                         matTooltip="Add a device config file to the device. If you don't have a config file, you can create a new one.">info</mat-icon>
                                       <!-- <span class="deviceconfig-info"><i class="bi bi-info-circle" matTooltip ="Device Config File"></i></span> -->
                                     </span>
+                                    <!-- Column for device config file buttons -->
                                     <div class="col-md-8">
                                       <div class="configbtngrp" *ngIf="stbNameChange">
                                         <button type="button" class="btn btn-outline-secondary newconfigfile" (click)="existDeviceDialog(configFileName)">
@@ -127,9 +153,12 @@ limitations under the License.
                                     </div>
                                   </div>
                             </div>
+                            <!-- Column for right form fields (V) -->
                             <div class="col">
+                              <!-- Row for OEM select -->
                               <div class="row mb-3">
                                 <label for="oem" class="col-md-3 offset-1 col-form-label">OEM</label>
+                                <!-- Column for OEM select field -->
                                 <div class="col-md-8">
                                     <select class="form-select" aria-label="Default select example"  id="oem" formControlName="oem">
                                         <option value="" default>Select</option>
@@ -142,8 +171,10 @@ limitations under the License.
                                     </div>
                                 </div>
                               </div>
+                                  <!-- Row for SoC select -->
                                   <div class="row mb-3">
                                     <label for="soc" class="col-md-3 offset-1 col-form-label">SoC</label>
+                                    <!-- Column for SoC select field -->
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example"  id="soc" formControlName="soc">
                                             <option value="" default>Select</option>
@@ -156,8 +187,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for configure device ports checkbox -->
                                   <div class="row mb-3">
                                     <label for="configuredevicePorts" class="col-md-3 offset-1 col-form-label">Configure Device Ports</label>
+                                    <!-- Column for configure device ports checkbox -->
                                     <div class="col-md-8">
                                         <div class="form-check form-check-inline form-check-reverse">
                                             <input class="form-check-input thunder" type="checkbox" id="configuredevicePorts"  formControlName="configuredevicePorts"
@@ -165,8 +198,10 @@ limitations under the License.
                                           </div>
                                     </div>
                                   </div>
+                                  <!-- Row for agent port input (conditional) -->
                                   <div class="row mb-3" *ngIf="showConfigPort"> 
                                     <label for="agentport" class="col-md-3 offset-1 col-form-label">Agent Port</label>
+                                    <!-- Column for agent port input field -->
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="agentport" formControlName="agentport" autocomplete="off" [(ngModel)]="agentport">
                                         <div *ngIf="deviceFormSubmitted && deviceForm.controls['agentport']?.errors" class="text-danger">
@@ -174,8 +209,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for agent status port input (conditional) -->
                                   <div class="row mb-3" *ngIf="showConfigPort"> 
                                     <label for="agentstatusport" class="col-md-3 offset-1 col-form-label">Agent Status Port</label>
+                                    <!-- Column for agent status port input field -->
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="agentstatusport" formControlName="agentstatusport" autocomplete="off" [(ngModel)]="agentStatusPort">
                                         <div *ngIf="deviceFormSubmitted && deviceForm.controls['agentstatusport']?.errors" class="text-danger">
@@ -183,8 +220,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for agent monitor port input (conditional) -->
                                   <div class="row mb-3" *ngIf="showConfigPort"> 
                                     <label for="agentmonitorport" class="col-md-3 offset-1 col-form-label">Agent Monitor Port</label>
+                                    <!-- Column for agent monitor port input field -->
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="agentmonitorport" formControlName="agentmonitorport" autocomplete="off" [(ngModel)]="agentMonitoPort">
                                         <div *ngIf="deviceFormSubmitted && deviceForm.controls['agentmonitorport']?.errors" class="text-danger">
@@ -194,7 +233,9 @@ limitations under the License.
                                   </div>
                             </div>
                         </div>
+                        <!-- Row for form action buttons (V) -->
                         <div class="row">
+                            <!-- Container for form action buttons (V) -->
                             <div class="mt-1 mb-3 text-end">
                                 <button class="reset-btn" (click)="goBack()" matTooltip="Back">Back</button>
                                 <button class="reset-btn" (click)="reset()" matTooltip="Reset the values">Reset</button>
@@ -203,12 +244,17 @@ limitations under the License.
                         </div>
                     </form>
                   </div>
+                    <!-- Section for Create Form B -->
                     <div *ngIf="showHideCreateFormB">
                       <form [formGroup]="rdkBForm" (ngSubmit)="deviceBSubmit()" class="userform mt-5">
+                        <!-- Row for form fields (B) -->
                         <div class="row">
+                            <!-- Column for left form fields (B) -->
                             <div class="col">
+                                <!-- Row for gateway name input -->
                                 <div class="row mb-3">
                                     <label for="gatewayName" class="col-md-3 col-form-label">Gateway Name<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <!-- Column for gateway name input field -->
                                     <div class="col-md-8">
                                       <input type="text" class="form-control" id="gatewayName" formControlName="gatewayName" autocomplete="off" placeholder="Enter gateway name" maxlength="20">
                                         <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['gatewayName']?.errors" class="text-danger">
@@ -219,8 +265,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for gateway IP input -->
                                   <div class="row mb-3">
                                     <label for="gatewayIp" class="col-md-3 col-form-label">Gateway IP<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <!-- Column for gateway IP input field -->
                                     <div class="col-md-8">
                                       <input type="text" class="form-control" id="gatewayIp" formControlName="gatewayIp" autocomplete="off" placeholder="Enter gateway ip">
                                         <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['gatewayIp']?.errors" class="text-danger">
@@ -229,8 +277,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for MAC address input -->
                                   <div class="row mb-3">
                                     <label for="macaddr" class="col-md-3 col-form-label">Mac Address<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <!-- Column for MAC address input field -->
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="macaddr" formControlName="macaddr"
                                         autocomplete="off" placeholder="Enter mac address">
@@ -240,8 +290,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for device type select -->
                                   <div class="row mb-3">
                                     <label for="devicetype" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <!-- Column for device type select field -->
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="devicetype" (change)="devicetypeChange($event)">
                                             <option value="" default>Select</option>
@@ -254,8 +306,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for OEM select -->
                                   <div class="row mb-3">
                                     <label for="oem" class="col-md-3 col-form-label">OEM</label>
+                                    <!-- Column for OEM select field -->
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example"  id="oem" formControlName="oem">
                                             <option value="" default>Select</option>
@@ -269,10 +323,13 @@ limitations under the License.
                                     </div>
                                   </div>
                             </div>
+                            <!-- Column for right form fields (B) -->
                             <div class="col">
                            
+                                  <!-- Row for SoC select -->
                                   <div class="row mb-3">
                                     <label for="soc" class="col-md-3 offset-1 col-form-label">SoC</label>
+                                    <!-- Column for SoC select field -->
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example"  id="soc" formControlName="soc">
                                             <option value="" default>Select</option>
@@ -285,8 +342,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for configure device ports checkbox -->
                                   <div class="row mb-3">
                                     <label for="configuredevicePortB" class="col-md-3 offset-1 col-form-label">Configure Device Ports</label>
+                                    <!-- Column for configure device ports checkbox -->
                                     <div class="col-md-8">
                                         <div class="form-check form-check-inline form-check-reverse">
                                             <input class="form-check-input thunder" type="checkbox" id="configuredevicePortB" 
@@ -294,8 +353,10 @@ limitations under the License.
                                           </div>
                                     </div>
                                   </div>
+                                  <!-- Row for agent port input (conditional) -->
                                   <div class="row mb-3" *ngIf="showConfigPortB"> 
                                     <label for="agentPortb" class="col-md-3 offset-1 col-form-label">Agent Port</label>
+                                    <!-- Column for agent port input field -->
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="agentPortb" formControlName="agentPortb" autocomplete="off" [(ngModel)]="agentport">
                                         <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['agentPortb']?.errors" class="text-danger">
@@ -303,8 +364,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for agent status port input (conditional) -->
                                   <div class="row mb-3" *ngIf="showConfigPortB"> 
                                     <label for="agentStatusportB" class="col-md-3 offset-1 col-form-label">Agent Status Port</label>
+                                    <!-- Column for agent status port input field -->
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="agentStatusportB" formControlName="agentStatusportB" autocomplete="off" [(ngModel)]="agentStatusPort">
                                         <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['agentStatusportB']?.errors" class="text-danger">
@@ -312,8 +375,10 @@ limitations under the License.
                                         </div>
                                     </div>
                                   </div>
+                                  <!-- Row for agent monitor port input (conditional) -->
                                   <div class="row mb-3" *ngIf="showConfigPortB"> 
                                     <label for="agentMonitorportB" class="col-md-3 offset-1 col-form-label">Agent Monitor Port</label>
+                                    <!-- Column for agent monitor port input field -->
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="agentMonitorportB" formControlName="agentMonitorportB" autocomplete="off" [(ngModel)]="agentMonitoPort">
                                         <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['agentMonitorportB']?.errors" class="text-danger">
@@ -323,7 +388,9 @@ limitations under the License.
                                   </div>
                             </div>
                         </div>
+                        <!-- Row for form action buttons (B) -->
                         <div class="row">
+                            <!-- Container for form action buttons (B) -->
                             <div class="mt-2 text-end">
                                 <button class="reset-btn" matTooltip="Go back" (click)="goBack() ">Back</button>
                                 <button class="reset-btn" matTooltip="Reset the values"(click)="resetFormB()">Reset</button>

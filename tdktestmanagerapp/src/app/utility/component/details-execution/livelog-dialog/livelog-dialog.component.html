@@ -13,26 +13,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Container for the live log dialog -->
 <div class="container">
+    <!-- Row for main content spacing -->
     <div class="row mt-2">
+        <!-- Main column for live log details -->
         <div class="col-md-12">
             <h1 class="view-title">Live Log Details</h1>
+            <!-- Row for live log header and controls -->
             <div class="row">
+                <!-- Section for live log refresh and loader -->
                 <div>
                     <span>Click here to view Live logs</span>
                     <button type="button" class="download-btn">
                         <i class="bi bi-arrow-clockwise download-icon" (click)="refreshLiveLogs()"></i>
                     </button>
+                    <!-- Loader spinner shown when loading -->
                     <div *ngIf="loader" class="spinner-border spinner-border-sm text-warning spinner" role="status">
                         <span class="visually-hidden">Loading...</span>
                       </div>
                 </div>
+                <!-- Section for displaying live log text area -->
                 <div class="text-area mt-3">
                     <textarea rows="14" class="livelog-area" readonly #logArea>{{ logs }}</textarea>
                 </div>
             </div>
 
+            <!-- Row for close button -->
             <div class="row">
+                <!-- Section for close button alignment -->
                 <div class="mt-2 text-end mb-2">
                 <button class="view-btn close" (click)="onClose()" *ngIf="!data.cancel">
                     Close

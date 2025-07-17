@@ -17,6 +17,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+// Component for creating a new device type
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
@@ -35,6 +37,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
   styleUrl: './create-device-type.component.css'
 })
 
+// Class for CreateDeviceTypeComponent
 export class CreateDeviceTypeComponent implements OnInit {
 
   [x: string]: any;
@@ -45,6 +48,7 @@ export class CreateDeviceTypeComponent implements OnInit {
   userGroupName: any;
   categoryName!: string;
 
+  // Constructor for CreateDeviceTypeComponent
   constructor(private formBuilder: FormBuilder, private router: Router,
     private service: DevicetypeService, private authservice: AuthService, private _snakebar: MatSnackBar) {
     this.userGroupName = JSON.parse(localStorage.getItem('loggedinUser') || '{}');

@@ -34,6 +34,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './parameter-create.component.html',
   styleUrl: './parameter-create.component.css'
 })
+/**
+ * ParameterCreateComponent is responsible for handling the creation of new parameters.
+ * It manages the form, submission, and navigation logic for the parameter creation page.
+ */
 export class ParameterCreateComponent {
 
   configureName!:string;
@@ -43,12 +47,21 @@ export class ParameterCreateComponent {
   dynamicModuleName!:string;
   dynamicFunctionName!:string;
 
+  /**
+   * Constructor for ParameterCreateComponent.
+   * @param authservice AuthService instance for authentication and config values
+   * @param router Router instance for navigation
+   * @param moduleservice ModulesService instance for module operations
+   * @param _snakebar MatSnackBar instance for notifications
+   */
   constructor(private authservice: AuthService,private router: Router,
     private moduleservice: ModulesService,private _snakebar :MatSnackBar,
   ) { }
 
   /**
    * Initializes the component and sets up the initial state.
+   * No parameters.
+   * No return value.
    */
   ngOnInit(): void {
     let functiondata = JSON.parse(localStorage.getItem('function') || '{}');
@@ -68,9 +81,11 @@ export class ParameterCreateComponent {
       
     })
   }
-
+  
   /**
    * Handles the form submission for creating a parameter.
+   * No parameters.
+   * No return value.
    */
   parameterFormSubmit():void{
     this.paraFormSubmitted = true;
@@ -106,16 +121,20 @@ export class ParameterCreateComponent {
       })
     }
   }
-
+  
   /**
    * Navigates back to the parameter list page.
+   * No parameters.
+   * No return value.
    */
   goBack():void{
     this.router.navigate(["/configure/parameter-list"]);
   }
-
+  
   /**
    * Resets the parameter form to its initial state.
+   * No parameters.
+   * No return value.
    */
   reset():void{
     this.parameterForm.reset();

@@ -158,6 +158,14 @@ export class EditPrimitiveTestComponent {
     menuTabs: ['filterMenuTab'],
   };
 
+  /**
+   * Constructor for EditPrimitiveTestComponent.
+   * @param formBuilder FormBuilder instance for reactive forms.
+   * @param router Router instance for navigation.
+   * @param authservice AuthService instance for authentication and config value.
+   * @param _snakebar MatSnackBar instance for notifications.
+   * @param service PrimitiveTestService instance for primitive test operations.
+   */
   constructor(private formBuilder: FormBuilder, private router: Router, private authservice: AuthService, private _snakebar: MatSnackBar,
     private service: PrimitiveTestService) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -167,11 +175,12 @@ export class EditPrimitiveTestComponent {
     }
   }
 
+
   /**
-   * Initializes the component.
+   * Initializes the component and sets up initial state.
+   * No parameters.
    */
   ngOnInit(): void {
-
     this.service.allPassedData.subscribe(res => {
       this.editPrimitiveTestForm = this.formBuilder.group({
         testName: [{ value: this.user.primitiveTestName, disabled: true }, [Validators.required, Validators.minLength(4)]],
@@ -182,18 +191,19 @@ export class EditPrimitiveTestComponent {
       this.rowData = res.primitiveTestParameters;
     })
     this.configureName = this.authservice.selectedConfigVal;
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
-    }else{
+    } else {
       this.categoryName = 'Video';
     }
   }
 
+
   /**
-   * Method to update the primitive test.
-   * @returns 
+   * Handles form submission to update the primitive test.
+   * No parameters.
    */
-  editPrimitiveTest():void{
+  editPrimitiveTest(): void {
     this.submitted = true;
     if (this.editPrimitiveTestForm.invalid) {
       return
@@ -220,11 +230,9 @@ export class EditPrimitiveTestComponent {
           })
           setTimeout(() => {
             this.router.navigate(["configure/list-primitivetest"]);
-
           }, 1000);
-
         },
-        error: (err) => {          
+        error: (err) => {
           const res = Object.keys(err).map(key => {
             return { key: err[key] }
           });
@@ -239,37 +247,41 @@ export class EditPrimitiveTestComponent {
           })
         }
       })
-
     }
   }
 
-  /**
-  * Getter for the form controls.
-  */
-  get f() { return this.editPrimitiveTestForm.controls; }
 
   /**
-   * Method to get the grid ready.
-   * @param params 
+   * Getter for the form controls.
+   * No parameters.
    */
-  onGridReady(params: GridReadyEvent<any>):void{
+  get f() { return this.editPrimitiveTestForm.controls; }
+
+
+  /**
+   * Event handler for when the grid is ready.
+   * @param params The grid ready event parameters.
+   */
+  onGridReady(params: GridReadyEvent<any>): void {
     this.gridApi = params.api;
   }
+
 
   /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-  onRowSelected(event: RowSelectedEvent):void{
+  onRowSelected(event: RowSelectedEvent): void {
     this.isRowSelected = event.node.isSelected();
     this.rowIndex = event.rowIndex
   }
+
 
   /**
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent):void{
+  onSelectionChanged(event: SelectionChangedEvent): void {
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
     this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
@@ -278,11 +290,14 @@ export class EditPrimitiveTestComponent {
       this.gridApi.refreshCells({ force: true })
     }
   }
+
   /**
-   * Navigates back to the list of box types.
+   * Navigates back to the list of primitive tests.
+   * No parameters.
    */
   goBack(): void {
     this.router.navigate(["configure/list-primitivetest"]);
   }
+
 
 }

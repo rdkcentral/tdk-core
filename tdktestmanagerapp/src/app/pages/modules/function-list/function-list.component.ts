@@ -41,6 +41,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MaterialModule } from '../../../material/material.module';
 import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
+/**
+ * FunctionListComponent is responsible for displaying and managing the list of functions.
+ * It handles table rendering, navigation, and CRUD operations for functions.
+ */
 @Component({
   selector: 'app-function-list',
   standalone: true,
@@ -98,13 +102,23 @@ export class FunctionListComponent {
   categoryName: any;
   showLoader = false;
 
+  /**
+   * Constructor for FunctionListComponent.
+   * @param router Router instance for navigation
+   * @param authservice AuthService instance for authentication and config values
+   * @param _snakebar MatSnackBar instance for notifications
+   * @param moduleservice ModulesService instance for module operations
+   * @param dialog MatDialog instance for dialogs
+   */
   constructor(private router: Router, private authservice: AuthService, 
     private _snakebar: MatSnackBar,private moduleservice:ModulesService, public dialog:MatDialog,
   ) { }
 
   /**
    * Initializes the component.
-  */
+   * No parameters.
+   * No return value.
+   */
   ngOnInit(): void {
     let data = JSON.parse(localStorage.getItem('modules') || '{}');
     this.dynamicModuleName = data.moduleName;
@@ -116,9 +130,12 @@ export class FunctionListComponent {
     }
     this.functionListByModule();
   }
+  
   /**
-   * Function to get the list of function by module name.
-  */
+   * Gets the list of functions by module name.
+   * No parameters.
+   * No return value.
+   */
   functionListByModule():void{
     this.showLoader = true;
     this.moduleservice.functionList(this.dynamicModuleName).subscribe( res=>{
@@ -128,6 +145,7 @@ export class FunctionListComponent {
       }
     })
   }
+  
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
@@ -135,48 +153,53 @@ export class FunctionListComponent {
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
   }
-    /**
+  
+  /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-    onRowSelected(event: RowSelectedEvent):void{
-      this.isRowSelected = event.node.isSelected();
-      this.rowIndex = event.rowIndex
-    }
+  onRowSelected(event: RowSelectedEvent):void{
+    this.isRowSelected = event.node.isSelected();
+    this.rowIndex = event.rowIndex
+  }
   
   /**
-     * Event handler for when the selection is changed.
-     * @param event The selection changed event.
-  */
+   * Event handler for when the selection is changed.
+   * @param event The selection changed event.
+   */
   onSelectionChanged(event: SelectionChangedEvent) :void{
-      this.selectedRowCount = event.api.getSelectedNodes().length;
-      const selectedNodes = event.api.getSelectedNodes();
-      this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
-      this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
-      if (this.gridApi) {
-        this.gridApi.refreshCells({ force: true })
-      }
+    this.selectedRowCount = event.api.getSelectedNodes().length;
+    const selectedNodes = event.api.getSelectedNodes();
+    this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
+    this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
+    if (this.gridApi) {
+      this.gridApi.refreshCells({ force: true })
     }
-
+  }
+  
   /**
-   * Creates a new box manufacturer.
+   * Navigates to the create function page.
+   * No parameters.
+   * No return value.
    */
   goTocreateFunctionPage() :void{
     this.router.navigate(['/configure/function-create']);
   }
   
-    /**
-   * Edits a user.
-   * @param user The user to edit.
-   * @returns The edited user.
+  /**
+   * Edits a function.
+   * @param functions The function object to edit.
+   * No return value.
    */
   userEdit(functions: any):void{
-      localStorage.setItem('functions', JSON.stringify(functions));
-      this.router.navigate(['configure/function-edit']);
+    localStorage.setItem('functions', JSON.stringify(functions));
+    this.router.navigate(['configure/function-edit']);
   }
+  
   /**
-   * Deletes a record.
+   * Deletes a function record.
    * @param data The data of the record to delete.
+   * No return value.
    */
   delete(data: any):void{
     if (confirm("Are you sure to delete ?")) {
@@ -205,15 +228,21 @@ export class FunctionListComponent {
       }
     }
   }
+  
   /**
    * Navigates to parameter list page.
+   * @param data The function data to pass to the parameter list.
+   * No return value.
    */
   createParameter(data:any):void{
     localStorage.setItem('function', JSON.stringify(data));
     this.router.navigate(['/configure/parameter-list']);
   }
+  
   /**
    * Navigates back to the previous page.
+   * No parameters.
+   * No return value.
    */
   goBack() :void{
     this.router.navigate(["/configure/modules-list"]);

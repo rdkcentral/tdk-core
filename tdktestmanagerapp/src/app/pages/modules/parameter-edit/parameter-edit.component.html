@@ -13,29 +13,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for parameter update page -->
 <div class="container-fluid">
+  <!-- Row for header and controls -->
   <div class="row borders-btm">
+    <!-- Left column -->
     <div class="col"></div>
+    <!-- Center column for title -->
     <div class="col">
       <h1 class="title">Update Parameter</h1>
     </div>
+    <!-- Right column -->
     <div class="col"></div>
   </div>
+  <!-- Row for form section -->
   <div class="row">
+    <!-- Main form column -->
     <div class="col">
+      <!-- Container box for form -->
       <div class="container-box" id="container-box">
+        <!-- Form container for parameter update -->
         <div class="form-container create-group">
           <form
             [formGroup]="updateParameterForm"
             (ngSubmit)="updateParaFormSubmit()"
             data-bs-spy="scroll"
           >
+            <!-- Row for parameter name input -->
             <div class="row mb-4">
               <label for="paraName" class="col-md-3 col-form-label offset-1"
                 >Parameter Name<span style="color: red; margin-left: 0.75em"
                   >*</span
                 ></label
               >
+              <!-- Column for parameter name input -->
               <div class="col-md-7">
                 <input
                   type="text"
@@ -44,6 +55,7 @@ limitations under the License.
                   formControlName="parameterName"
                   placeholder="Enter Parameter Name"
                 />
+                <!-- Error message for parameter name -->
                 <div
                   *ngIf="
                     paraFormSubmitted &&
@@ -58,6 +70,7 @@ limitations under the License.
                 </div>
               </div>
             </div>
+            <!-- Row for parameter type input -->
             <div class="row mb-4">
               <label
                 for="parameterType"
@@ -67,6 +80,7 @@ limitations under the License.
                 ></label
               >
 
+              <!-- Column for parameter type input -->
               <div class="col-md-7">
                 <select
                   class="form-select"
@@ -79,6 +93,7 @@ limitations under the License.
                   <option value="{{ item }}">{{ item }}</option>
                   }
                 </select>
+                <!-- Error message for parameter type -->
                 <div
                   *ngIf="
                     paraFormSubmitted &&
@@ -94,12 +109,14 @@ limitations under the License.
                 </div>
               </div>
             </div>
+            <!-- Row for range value input -->
             <div class="row mb-4">
               <label for="rangeVal" class="col-md-3 col-form-label offset-1"
                 >Range Value<span style="color: red; margin-left: 0.75em"
                   >*</span
                 ></label
               >
+              <!-- Column for range value input -->
               <div class="col-md-7">
                 <input
                   type="text"
@@ -108,6 +125,7 @@ limitations under the License.
                   formControlName="rangeVal"
                   placeholder="Enter range value"
                 />
+                <!-- Error message for range value -->
                 <div
                   *ngIf="
                     paraFormSubmitted &&
@@ -122,6 +140,7 @@ limitations under the License.
                 </div>
               </div>
             </div>
+            <!-- Row for module input -->
             <div class="row mb-4">
               <label for="module" class="col-md-3 col-form-label offset-1"
                 >Module<span style="color: red; margin-left: 0.75em"
@@ -129,6 +148,7 @@ limitations under the License.
                 ></label
               >
 
+              <!-- Column for module input -->
               <div class="col-md-7">
                 <input
                   type="text"
@@ -138,6 +158,7 @@ limitations under the License.
                   placeholder="Enter Function Name"
                   readonly
                 />
+                <!-- Error message for module input -->
                 <div
                   *ngIf="
                     paraFormSubmitted &&
@@ -152,6 +173,7 @@ limitations under the License.
                 </div>
               </div>
             </div>
+            <!-- Row for function input -->
             <div class="row mb-4">
               <label for="function" class="col-md-3 col-form-label offset-1"
                 >Function<span style="color: red; margin-left: 0.75em"
@@ -159,6 +181,7 @@ limitations under the License.
                 ></label
               >
 
+              <!-- Column for function input -->
               <div class="col-md-7">
                 <input
                   type="text"
@@ -168,6 +191,7 @@ limitations under the License.
                   placeholder="Enter Function Name"
                   readonly
                 />
+                <!-- Error message for function input -->
                 <div
                   *ngIf="
                     paraFormSubmitted &&
@@ -182,7 +206,9 @@ limitations under the License.
                 </div>
               </div>
             </div>
+            <!-- Row for action buttons -->
             <div class="row">
+              <!-- Container for action buttons -->
               <div class="mt-2 createbtn">
                 <button
                   type="button"

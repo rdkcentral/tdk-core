@@ -17,10 +17,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+/*
+ * Applies Roboto font to all elements except material icons
+ */
 body,
 *:not(.material-icons) {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/*
+ * Sets Roboto font for all heading elements inside .mat-typography
+ */
 .mat-typography h1,
 .mat-typography h2,
 .mat-typography h3,
@@ -29,9 +37,17 @@ body,
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
+
+/*
+ * Container for the main page with bottom margin
+ */
 .container-fluid {
   margin-bottom: 0.5rem;
 }
+
+/*
+ * Adds a multi-color gradient border to the bottom of elements
+ */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -46,6 +62,10 @@ body,
   border-image-width: 0px 0px 4px 0px;
   margin: 0 15px;
 }
+
+/*
+ * Styles the title text for the page
+ */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -53,17 +73,33 @@ body,
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+/*
+ * Styles the button group container
+ */
 .btns-group {
   text-align: end;
   margin-top: 5px;
 }
+
+/*
+ * Styles the table section with side padding
+ */
 .table-sec {
   padding: 0 25px;
 }
+
+/*
+ * Styles the button group for actions
+ */
 .btns-grp {
   display: flex;
   margin-left: -22px;
 }
+
+/*
+ * Styles the create and back buttons
+ */
 .create-btn,
 .back-btn {
   background-color: #fff;
@@ -76,17 +112,33 @@ body,
   letter-spacing: 0.5px;
   cursor: pointer;
 }
+
+/*
+ * Styles the icon size for action icons
+ */
 .icon-size {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
+
+/*
+ * Adds right margin to back button
+ */
 .back-btn {
   margin-right: 10px;
 }
+
+/*
+ * Hides the ag-grid overlay when there are no rows
+ */
 ::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
   display: none !important;
 }
+
+/*
+ * Styles the loader row for loading state
+ */
 .loader-row{
   position: absolute;
   top: 50%;

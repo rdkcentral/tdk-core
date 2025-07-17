@@ -47,20 +47,34 @@ export class CreateScriptGroupComponent {
   dragStartIndexRight: number | null = null;
   dragEndIndexRight: number | null = null;
 
+  /**
+   * Handles mouse down event for right script list drag selection.
+   * @param index The index of the script.
+   * @param event The mouse event.
+   */
   onRightScriptMouseDown(index: number, event: MouseEvent): void {
     if (event.button !== 0) return; // Only left mouse button
     this.dragSelectingRight = true;
     this.dragStartIndexRight = index;
     this.dragEndIndexRight = index;
     event.preventDefault();
+
   }
 
+  /**
+   * Handles mouse enter event for right script list drag selection.
+   * @param index The index of the script.
+   */
   onRightScriptMouseEnter(index: number): void {
     if (this.dragSelectingRight && this.dragStartIndexRight !== null) {
       this.dragEndIndexRight = index;
     }
+
   }
 
+  /**
+   * Handles mouse up event for right script list drag selection.
+   */
   onRightScriptMouseUp(): void {
     if (this.dragSelectingRight && this.dragStartIndexRight !== null && this.dragEndIndexRight !== null) {
       const start = Math.min(this.dragStartIndexRight, this.dragEndIndexRight);
@@ -80,8 +94,14 @@ export class CreateScriptGroupComponent {
     this.dragSelectingRight = false;
     this.dragStartIndexRight = null;
     this.dragEndIndexRight = null;
+
   }
   // Handles both single and drag select on mouseup
+  /**
+   * Handles mouse up event for left script list, supporting both drag and single select.
+   * @param index The index of the script.
+   * @param script The script object.
+   */
   handleMouseUp(index: number, script: any): void {
     if (this.dragSelecting) {
       this.onLeftScriptMouseUp();
@@ -97,8 +117,14 @@ export class CreateScriptGroupComponent {
     this.dragSelecting = false;
     this.dragStartIndex = null;
     this.dragEndIndex = null;
+
   }
   // Combined single and drag select handler for left-side script list
+  /**
+   * Handles single select for left script list.
+   * @param index The index of the script.
+   * @param script The script object.
+   */
   selectSingleScript(index: number, script: any): void {
     // Only select if not drag-selecting
     if (!this.dragSelecting) {
@@ -108,8 +134,14 @@ export class CreateScriptGroupComponent {
         this.selectedLeft.add(script.id);
       }
     }
+
   }
   // Single select handler for left-side script list
+  /**
+   * Handles single select on mouseup for left script list.
+   * @param index The index of the script.
+   * @param script The script object.
+   */
   onSingleSelect(index: number, script: any): void {
     // Always allow single select on mouseup
     if (this.dragSelecting) {
@@ -121,6 +153,7 @@ export class CreateScriptGroupComponent {
     } else {
       this.selectedLeft.add(script.id);
     }
+
   }
 
   testSuiteFormSubmitted = false;
@@ -150,44 +183,68 @@ export class CreateScriptGroupComponent {
   dragStartIndex: number | null = null;
   dragEndIndex: number | null = null;
 
+  /**
+   * Handles mouse down event for left script list drag selection.
+   * @param index The index of the script.
+   * @param event The mouse event.
+   */
   onLeftScriptMouseDown(index: number, event: MouseEvent): void {
     if (event.button !== 0) return; // Only left mouse button
     this.dragSelecting = true;
     this.dragStartIndex = index;
     this.dragEndIndex = index;
     event.preventDefault();
+
   }
 
+  /**
+   * Handles mouse enter event for left script list drag selection.
+   * @param index The index of the script.
+   */
   onLeftScriptMouseEnter(index: number): void {
     if (this.dragSelecting && this.dragStartIndex !== null) {
       this.dragEndIndex = index;
     }
+
   }
 
- onLeftScriptMouseUp(): void {
-  if (this.dragSelecting && this.dragStartIndex !== null && this.dragEndIndex !== null) {
-    const start = Math.min(this.dragStartIndex, this.dragEndIndex);
-    const end = Math.max(this.dragStartIndex, this.dragEndIndex);
-    const list = this.filteredContainer1;
-    for (let i = start; i <= end; i++) {
-      const script = list[i];
-      if (script) {
-        if (this.selectedLeft.has(script.id)) {
-          this.selectedLeft.delete(script.id);
-        } else {
-          this.selectedLeft.add(script.id);
+  /**
+   * Handles mouse up event for left script list drag selection.
+   */
+  onLeftScriptMouseUp(): void {
+    if (this.dragSelecting && this.dragStartIndex !== null && this.dragEndIndex !== null) {
+      const start = Math.min(this.dragStartIndex, this.dragEndIndex);
+      const end = Math.max(this.dragStartIndex, this.dragEndIndex);
+      const list = this.filteredContainer1;
+      for (let i = start; i <= end; i++) {
+        const script = list[i];
+        if (script) {
+          if (this.selectedLeft.has(script.id)) {
+            this.selectedLeft.delete(script.id);
+          } else {
+            this.selectedLeft.add(script.id);
+          }
         }
       }
     }
-  }
-  this.dragSelecting = false;
-  this.dragStartIndex = null;
-  this.dragEndIndex = null;
-}
+    this.dragSelecting = false;
+    this.dragStartIndex = null;
+    this.dragEndIndex = null;
 
+  }
+
+  /**
+   * Constructor for CreateScriptGroupComponent.
+   * @param authservice AuthService instance for authentication.
+   * @param fb FormBuilder instance for reactive forms.
+   * @param router Router instance for navigation.
+   * @param scriptservice ScriptsService for script operations.
+   * @param _snakebar MatSnackBar for notifications.
+   */
   constructor(private authservice : AuthService,private fb: FormBuilder,private router: Router,private scriptservice:ScriptsService,
     private _snakebar: MatSnackBar ) {
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+
   }
   /**
    * Initialize the component

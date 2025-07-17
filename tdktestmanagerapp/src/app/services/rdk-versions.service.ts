@@ -30,11 +30,26 @@ export class RdkVersionsService {
 
     currentUrl: any;
 
+    /**
+     * Constructor for RdkVersionsService.
+     * @param http HttpClient for HTTP requests
+     * @param authService AuthService for authentication and API token
+     * @param config Application configuration injected as APP_CONFIG
+     */
     constructor(private http: HttpClient, private authService: AuthService,
       @Inject('APP_CONFIG') private config: any
     ) { }
+
+    /**
+     * Options for HTTP requests with authorization header.
+     */
     private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
 
+    /**
+     * Creates a new RDK version.
+     * @param data The RDK version data to create.
+     * @returns Observable with the creation result as text.
+     */
     createRdkVersion(data: any): Observable<any> {
         const headers = new HttpHeaders({
           'Content-Type': 'application/json',
@@ -44,14 +59,24 @@ export class RdkVersionsService {
         return this.http.post(`${this.config.apiUrl}api/v1/rdkversion/create`, data, { headers, responseType: 'text' })
       }
 
-      getRdkVersionByList(category: any): Observable<any> {
+    /**
+     * Gets the list of RDK versions by category.
+     * @param category The category to filter RDK versions by.
+     * @returns Observable with the list of RDK versions as text.
+     */
+    getRdkVersionByList(category: any): Observable<any> {
         const headers = new HttpHeaders({
           'Authorization': this.authService.getApiToken()
         });
         return this.http.get(`${this.config.apiUrl}api/v1/rdkversion/findallbycategory?category=${category}`, { headers, responseType: 'text' });
       }
 
-      updateRdkVersion(data: any): Observable<any> {
+    /**
+     * Updates an RDK version.
+     * @param data The RDK version data to update.
+     * @returns Observable with the update result as text.
+     */
+    updateRdkVersion(data: any): Observable<any> {
         const headers = new HttpHeaders({
           'Content-Type': 'application/json',
           'Authorization': this.authService.getApiToken()
@@ -59,7 +84,12 @@ export class RdkVersionsService {
         return this.http.put(`${this.config.apiUrl}api/v1/rdkversion/update`, data, { headers,  responseType: 'text'})
       }
 
-      deleteRdkVersion(id: any): Observable<any>{
+    /**
+     * Deletes an RDK version by ID.
+     * @param id The ID of the RDK version to delete.
+     * @returns Observable with the deletion result as text.
+     */
+    deleteRdkVersion(id: any): Observable<any>{
         const headers = new HttpHeaders({
           'Authorization': this.authService.getApiToken()
         });

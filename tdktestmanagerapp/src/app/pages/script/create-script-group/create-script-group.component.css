@@ -17,10 +17,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/* Sets font family and size for body and all elements except .material-icons */
 body, *:not(.material-icons) {
     font-family: Roboto, "Helvetica Neue", sans-serif;
     font-size: 0.78rem;
 }
+
+/* Typography styles for headings inside .mat-typography */
+
 .mat-typography h1, 
 .mat-typography h2, 
 .mat-typography h3, 
@@ -29,6 +33,9 @@ body, *:not(.material-icons) {
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
+
+
+/* Adds a multi-color border to the bottom of elements */
 
 .borders-btm {
     border-image: linear-gradient(
@@ -44,14 +51,20 @@ body, *:not(.material-icons) {
     border-image-width: 0px 0px 4px 0px;
     margin: 0 15px;
     /* padding-bottom: 4px; */
-  }
-  .title {
+}
+
+/* Styles for the main title */
+
+.title {
     font-size: 1rem;
     text-align: center;
     font-weight: 500;
     margin-top: 5px;
     margin-bottom: 10px;
-  }
+}
+
+/* Styles for create and reset buttons */
+
 .create-btn,
 .reset-btn {
     background-color: #00B2DC;
@@ -64,9 +77,15 @@ body, *:not(.material-icons) {
     letter-spacing: 0.5px;
     cursor: pointer;
 }
+
+/* Margin for reset button */
+
 .reset-btn{
     margin-right: 12px;
 }
+
+/* Styles for form row layout */
+
 .form-row {
     display: flex;
     margin-right: 0;
@@ -74,15 +93,24 @@ body, *:not(.material-icons) {
     justify-content: start;
     align-items: center;
 }
+
+/* Styles for name label in form */
+
 .col-form-label.name-lable {
     margin-left: 0 !important;
     width: auto;
     padding-right: 8px;
 }
+
+/* Styles for input description in col-md-10 */
+
 .col-md-10 .input-desc {
     width: 100%;
     margin-left: 0;
 }
+
+/* Styles for the left name list box */
+
 .name-list {
     height: 280px;
     width: 570px;
@@ -91,6 +119,9 @@ body, *:not(.material-icons) {
     background-color: transparent;
     overflow-y: auto;
 }
+
+/* Styles for the right name list box */
+
 .ritename-list{
     height: 280px;
     width: 545px;
@@ -99,23 +130,38 @@ body, *:not(.material-icons) {
     background-color: transparent;
     overflow-y: auto; 
 }
-  .list-box ul{
+
+/* Styles for unordered list in list-box */
+
+.list-box ul{
     list-style: none;
     padding-left: 0;
-  }
-  .list-box ul li {
+}
+
+/* Styles for list items in list-box */
+
+.list-box ul li {
     padding: 0px 5px;
     margin-bottom: 5px;
     border: 1px solid #0000003b;
     font-size: 0.7rem;
 }
+
+/* Styles for the left section container */
+
 .left-sec{
     position: relative;
 }
+
+/* Styles for the right section container */
+
 .right-sec{
     position: relative;
     margin-left: 15px;
 }
+
+/* Styles for move buttons between lists */
+
 .move-btns {
     display: flex;
     flex-direction: column;
@@ -127,6 +173,9 @@ body, *:not(.material-icons) {
     transform: translateY(-50%);
     gap: 10px;
 }
+
+/* Styles for move buttons on the right */
+
 .move-ritebtns {
     display: flex;
     flex-direction: column;
@@ -138,74 +187,125 @@ body, *:not(.material-icons) {
     transform: translateY(-50%);
     gap: 10px;
 }
+
+/* Styles for move arrow icons */
+
 .icon-move {
     font-size: 1.3rem;
     color: #fff; /* white arrow for active */
 }
+
+/* Styles for active arrow buttons */
+
 .arrow-btn {
     background: #1976d2 !important; /* blue background for active */
     border: 2px solid #1976d2;
     border-radius: 6px;
     color: #fff;
 }
+
+/* Styles for disabled arrow buttons */
+
 .arrow-btn:disabled {
     background: #b0b0b0 !important; /* light gray for disabled */
     border-color: #ccc;
     color: #fff !important;
 }
+
+/* Styles for disabled arrow icon */
+
 .arrow-btn:disabled .icon-move {
     color: #f7f0f0 !important; /* light gray arrow for disabled */
 }
+
+/* Styles for disabled arrow icon (duplicate, but kept for doc) */
+
 .arrow-btn:disabled .icon-move {
     color: #fff !important; /* light gray for disabled */
 }
+
+/* Removes border for arrow buttons */
+
 .arrow-btn{
     border: none !important;
 }
+
+/* Styles for no data message */
+
 .nodata{
     display: flex;
     justify-content: center;
     margin-top: 20%;
 }
+
+/* Styles for search row */
+
 .searchrow{
     float: left;
     margin-bottom: 5px;
     margin-right: 8px;
 }
+
+/* Styles for search script input */
+
 .searchscript{
     width: 220px;
 }
+
+/* Styles for sort and search section */
+
 .sort-search{
     text-align: start;
 }
+
+/* Styles for sort button */
+
 .sort-button{
     margin: 3px 10px 0 0;
     background-color: #fff;
     border: 1px solid gray;
     border-radius: 4px;
 }
+
+/* Styles for sort icon */
+
 .sort-icon{
     font-size: 1.4rem;
 }
+
+/* Styles for selected list item */
+
 .selected {
     background-color: #007bff;
     color: white;
 }
+
+/* Styles for info icon */
+
 .info-icon{
     font-size: 25px;
     color: #00B2DC;
     position: absolute;
     margin: 4px 0px 0px 0px;
 }
+
+/* Styles for script error message */
+
 .script-err{
     color: #dc3545;
     font-size: 0.8rem;
 }
+
+/* Styles for focused form select and form control */
+
 ::ng-deep.form-select:focus, .form-control:focus{
     border-color: gray !important;
     box-shadow: none !important;
 }
+
 /* Arrow button styling */
+/* Arrow button styling */
+
 .arrow-btn {
     border: 2px solid #1976d2;
     border-radius: 6px;
@@ -216,25 +316,37 @@ body, *:not(.material-icons) {
     box-shadow: 0 1px 2px rgba(0,0,0,0.08);
     cursor: pointer;
 }
+
+/* Styles for disabled arrow button */
+
 .arrow-btn:disabled {
     border-color: #ccc;
     background: #f5f5f5;
     color: #aaa;
     cursor: not-allowed;
 }
+
+/* Styles for thick arrow icon */
+
 .thick-arrow {
     font-size: 1.5em;
     font-weight: bold;
     stroke-width: 2.5px;
 }
+
 /* Ensure input and textarea for Name/Description are same width */
+/* Styles for input and textarea for Name/Description */
+
 .input-desc {
     width: 100%;
     min-width: 220px;
     max-width: 100%;
     box-sizing: border-box;
 }
+
 /* --- Alignment fix for Name/Description label/input --- */
+/* Alignment fix for Name/Description label/input in row */
+
 .row.mb-1 > .col-md-2,
 .row.mb-1 > .col-md-10 {
   display: flex;
@@ -243,16 +355,25 @@ body, *:not(.material-icons) {
   padding-bottom: 0 !important;
 }
 
+
+/* Alignment fix for Name/Description label in row */
+
 .row.mb-1 > .col-md-2 {
   justify-content: flex-end;
   padding-right: 8px;
   min-width: 90px;
 }
 
+
+/* Alignment fix for Name/Description input in row */
+
 .row.mb-1 > .col-md-10 {
   flex: 1;
   min-width: 0;
 }
+
+
+/* Removes bottom margin for input-desc */
 
 .input-desc {
   margin-bottom: 0 !important;

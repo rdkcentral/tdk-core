@@ -17,10 +17,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+/*
+ * Applies Roboto font to body and all elements except .material-icons
+ */
 body,
 *:not(.material-icons) {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/*
+ * Typography styles for headings inside .mat-typography
+ */
 .mat-typography h1,
 .mat-typography h2,
 .mat-typography h3,
@@ -30,36 +38,65 @@ body,
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
 
+/*
+ * Main section container
+ */
 .main-sec{
     margin: auto;
 }
 
+/*
+ * Focus styles for form-select and form-control
+ */
 ::ng-deep.form-select:focus,
 .form-control:focus {
   border-color: gray !important;
   box-shadow: none !important;
 }
+
+/*
+ * Row border style for ag-theme-quartz
+ */
 ::ng-deep .ag-theme-quartz .ag-row {
   border-bottom: 1px solid #dee2e6 !important;
 }
+
+/*
+ * Hide overlay for no rows in ag-theme-quartz
+ */
 ::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
   display: none !important;
 }
+
+/*
+ * Flavor row layout
+ */
 .falvor-row{
   display: flex;
   align-items: baseline;
   margin-top: 5px;
   padding-left: 0;
 }
+
+/*
+ * Flavor label styling
+ */
 .falvor-label{
   width: 75px;
   font-size: 0.8rem;
   font-weight: 500;
 }
+
+/*
+ * Dropdown width for rdk-dropdown
+ */
 .rdk-dropdown{
   width: 120px;
 }
 
+/*
+ * Bottom border gradient for borders-btm
+ */
 .borders-btm {
   border-image: linear-gradient(
     to right,
@@ -74,6 +111,10 @@ body,
   border-image-width: 0px 0px 4px 0px;
   margin: 0 15px;
 }
+
+/*
+ * Title styling
+ */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -81,14 +122,25 @@ body,
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+/*
+ * Button group alignment
+ */
 .btns-group{
   text-align: end;
   margin-top: 5px;
 }
 
+/*
+ * Search row layout
+ */
 .seach-row{
   margin: auto;
 }
+
+/*
+ * Header styling for example-header
+ */
 .example-header {
   margin-bottom: 1px;
   display: flex;
@@ -96,9 +148,17 @@ body,
   align-items: baseline;
   padding-left: 15px;
 }
+
+/*
+ * Search input width
+ */
 .seach-input {
   width: 45%;
 }
+
+/*
+ * Download button styling
+ */
 .download-btn {
   background-color: #fff;
   font-size: 0.8rem;
@@ -111,6 +171,10 @@ body,
   margin-left: 15px;
   box-shadow: 0px 3px 6px #0000005e;
 }
+
+/*
+ * Modal button styling
+ */
 .modal-btns {
   background-color: #00b2dc;
   color: #fff;
@@ -122,31 +186,53 @@ body,
   cursor: pointer;
   margin-right: 15px;
 }
+
+/*
+ * Download icon styling
+ */
 .download-icon {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
 
+/*
+ * Search bar styling
+ */
 .search {
   font-size: 0.8rem;
   display: flex;
   margin-right: 5px;
 }
+
+/*
+ * Info icon styling
+ */
 .info-icon {
   font-size: 20px;
   color: #00b2dc;
   margin-left: 8px;
 }
 
+/*
+ * Modal footer styling
+ */
 .modal-footer {
   border-top: none;
   padding: 1rem 1.45rem 2rem 2rem;
 }
+
+/*
+ * Custom modal width and margin
+ */
 .custom-modal {
   max-width: 800px;
   margin-top: 100px;
 }
+
+/*
+ * Modal title styling
+ */
 .modaltitle {
   margin: 0 10px 0px 10px;
   border-image: linear-gradient(
@@ -162,12 +248,19 @@ body,
   border-image-width: 0px 0px 4px 0px;
   padding: 10px 5px 5px 5px;
 }
+
+/*
+ * Custom title styling
+ */
 .custom-title {
   margin-bottom: 0;
   font-size: 1rem;
   color: #06667d;
 }
 
+/*
+ * Create and back button styling
+ */
 .create-btn,
 .back-btn {
   background-color: #fff;
@@ -180,18 +273,34 @@ body,
   cursor: pointer;
   margin-right: 140px;
 }
+
+/*
+ * Icon size styling
+ */
 .icon-size {
   color: #00b2dc;
   font-weight: bold;
   font-size: 18px;
 }
+
+/*
+ * Back button margin
+ */
 .back-btn {
   margin-right: 10px;
 }
+
+/*
+ * Error upload text styling
+ */
 .errorupload {
   color: #dc3545;
   font-size: 0.8rem;
 }
+
+/*
+ * Loader row positioning
+ */
 .loader-row{
   position: absolute;
   top: 50%;

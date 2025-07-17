@@ -44,6 +44,15 @@ export class UserAddComponent implements OnInit {
   errormessage!: string;
   loggedInUser:any;
 
+
+  /**
+   * Constructor for UserAddComponent.
+   * @param http HttpClient for HTTP requests
+   * @param fb FormBuilder for reactive forms
+   * @param router Angular Router for navigation
+   * @param usermanageserice UserManagementService for user management operations
+   * @param _snakebar MatSnackBar for notifications
+   */
   constructor(private http: HttpClient, private fb: FormBuilder, private router: Router,
     private usermanageserice: UserManagementService,
     private _snakebar: MatSnackBar
@@ -52,9 +61,10 @@ export class UserAddComponent implements OnInit {
   }
 
 
-   /**
-     * Initialize the component
-     */
+
+  /**
+   * Initialize the component and set up the user form and subscriptions.
+   */
   ngOnInit(): void {
    /**
      * Regular expression for email validation.
@@ -117,19 +127,33 @@ export class UserAddComponent implements OnInit {
     });
   }
   
+
+  /**
+   * Getter for the displayname form control.
+   * @returns The AbstractControl for displayname.
+   */
   get displayname(): AbstractControl {
     return this.userForm.get('displayname')!;
   }
 
+
+
+  /**
+   * Validator to check for leading spaces in a form control value.
+   * @param control The AbstractControl to validate.
+   * @returns ValidationErrors or null.
+   */
   noLeadingSpacesValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value || '';
     return value.startsWith(' ') ? { noLeadingSpaces: true } : null;
   }
 
-    /**
+
+
+  /**
    * Custom validator for password match.
-   * @param newPassword - The new password input field name.
-   * @param confirmPasswordValue - The confirm password input field name.
+   * @param newpassword The new password input field name.
+   * @param confirmpassword The confirm password input field name.
    * @returns A validator function.
    */
   passwordMatchValidator(newpassword: any, confirmpassword: any) {
@@ -147,6 +171,8 @@ export class UserAddComponent implements OnInit {
     }
   }
 
+
+
   /**
    * Navigates back to the user management page.
    */
@@ -154,13 +180,17 @@ export class UserAddComponent implements OnInit {
     this.router.navigate(["configure/user-management"]);
   }
 
+
+
   /**
    * Resets the user form.
    */
   reset():void {
     this.userForm.reset();
   }
+
   
+
   /**
    * Handles the user form submission.
    */
@@ -203,5 +233,6 @@ export class UserAddComponent implements OnInit {
       })
     }
   }
+
 
 }

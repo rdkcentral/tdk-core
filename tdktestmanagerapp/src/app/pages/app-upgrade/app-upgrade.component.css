@@ -17,9 +17,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/* Container for fluid layout */
 .container-fluid{
     margin-bottom: 0.5rem;
 }
+
+/* Bottom border gradient styles */
 .borders-btm {
     border-image: linear-gradient(
       to right,
@@ -34,25 +37,35 @@ http://www.apache.org/licenses/LICENSE-2.0
     border-image-width: 0px 0px 4px 0px;
     margin: 0 15px;
   }
-  .title {
+
+/* Title styles */
+.title {
     font-size: 1rem;
     text-align: center;
     font-weight: 500;
     margin-top: 5px;
     margin-bottom: 10px;
   }
-  .btns-group {
+
+/* Button group styles */
+.btns-group {
     text-align: end;
     margin-top: 5px;
   }
+
+/* Table section styles */
 .table-sec{
     padding: 0 25px;
 }
+
+/* Button group absolute positioning */
 .btn-grp{
     position: absolute;
     top: 5px;
     right: -90px;
 }
+
+/* Create and back button styles */
 .create-btn,
 .back-btn {
     background-color: #fff;
@@ -65,15 +78,21 @@ http://www.apache.org/licenses/LICENSE-2.0
     letter-spacing: 0.5px;
     cursor: pointer;
 }
+
+/* Icon size styles */
 .icon-size{
     color: #00B2DC;
     font-weight: bold;
     font-size: 18px;
 }
+
+/* Back button margin styles */
 .back-btn {
     margin-right: 10px;
 }
 
+
+/* Deploy button styles */
 .deploy-btn {
     background-color: #00B2DC;
     color: #fff;
@@ -86,6 +105,8 @@ http://www.apache.org/licenses/LICENSE-2.0
     cursor: pointer;
 }
 
+
+/* BK button margin styles */
 .bk-btn {
     margin-right: 10px;
 }

@@ -17,22 +17,30 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/* Global font settings for body and all elements except material icons */
+
 body, *:not(.material-icons) {
     font-family: Roboto, "Helvetica Neue", sans-serif;
     font-size: 0.78rem;
   }
-  .mat-typography h1, 
-  .mat-typography h2, 
-  .mat-typography h3, 
-  .mat-typography h4, 
-  .mat-typography h5, 
-  .mat-typography h6 {
+/* Typography settings for headings inside .mat-typography */
+
+.mat-typography h1, 
+.mat-typography h2, 
+.mat-typography h3, 
+.mat-typography h4, 
+.mat-typography h5, 
+.mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
   }
+
+/* Modal content max height styling */
 
 .exsit-modal-content {
     max-height: 100vh;
 }
+
+/* Border style for bottom of section */
 
 .borders-btm {
     border-image: linear-gradient(
@@ -49,21 +57,29 @@ body, *:not(.material-icons) {
     margin: 0 15px;
     /* padding-bottom: 4px; */
   }
-  .title {
+/* Title styling for create scripts page */
+
+.title {
     font-size: 1rem;
     text-align: center;
     font-weight: 500;
     margin-top: 5px;
     margin-bottom: 10px;
   }
+/* Row layout styling */
+
 .row{
     display: flex;
     justify-content: center;
 }
+/* User form margin styling */
+
 .userform{
     margin-left: 25px;
     margin-right: 25px;
 }
+/* Create and reset button styling */
+
 .create-btn,
 .reset-btn {
     background-color: #00B2DC;
@@ -77,6 +93,8 @@ body, *:not(.material-icons) {
     cursor: pointer;
     margin-right: 15px;
 }
+/* Download button styling */
+
 .download-btn{
     background-color: #00B2DC;
     color: #fff;
@@ -90,20 +108,30 @@ body, *:not(.material-icons) {
     margin-top: 15px;
     margin-right: 10px;
 }
+/* Margin adjustment for reset button */
+
 .reset-btn {
     margin-right: 10px;
 }
 
+/* Multiselect dropdown selected item styling */
+
 .multiselect-dropdown .dropdown-btn .selected-item-container .selected-item{
     max-width: 130px !important;
 }
+/* Thunder border styling */
+
 .thunder{
     border: 1px solid gray;
 }
+/* Long test row alignment styling */
+
 .longtest{
     display: flex;
     align-items: end;
 }
+/* Test case button styling */
+
 .btn-testcase{
     border: 1px solid gray;
     font-size: 0.8rem !important;
@@ -111,32 +139,50 @@ body, *:not(.material-icons) {
     border-radius: 4px;
     padding: 5px 10px 5px 10px;
 }
+/* Remove background color for focused cdk program */
+
 ::ng-deep.cdk-program-focused{
     background-color: transparent !important;
 }
+/* Stepper icon selected state styling */
+
 ::ng-deep.mat-step-icon-selected {
     background-color: #00B2DC !important;
 }
+/* Stepper icon edit state styling */
+
 ::ng-deep.mat-step-icon-state-edit{
     background-color: #00B2DC !important;
 }
+/* Horizontal rule margin styling */
+
 hr{
     margin-top: 0;
 }
+/* Temporary title styling */
+
 .temp-title{
     font-size: 0.8rem;
 }
+/* Disabled next button styling */
+
 .next-btn:disabled{
     background-color: gray;
 }
+/* Multiselect dropdown selected item width styling */
+
 ::ng-deep .multiselect-dropdown span.selected-item{
     width: 100% !important;
     max-width: 100% !important;
 }
+/* Focus styling for form select and form control */
+
 ::ng-deep.form-select:focus, .form-control:focus{
     border-color: gray !important;
     box-shadow: none !important;
 }
+/* Demo stepper background styling */
+
 .demo-stepper{
     background-color: transparent !important;
 }

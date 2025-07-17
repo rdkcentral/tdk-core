@@ -203,6 +203,14 @@ public columnDefs: ColDef[] = [
     showTable = false;
     showLoader = false;
 
+    /**
+     * Constructor for ComparisonModalComponent
+     * @param fb - FormBuilder instance
+     * @param dialogRef - Reference to the dialog
+     * @param data - Injected dialog data
+     * @param deviceTypeService - Service for device types
+     * @param anlysisService - Service for analysis
+     */
     constructor(private fb: FormBuilder,
       public dialogRef: MatDialogRef<ComparisonModalComponent>,
       @Inject(MAT_DIALOG_DATA) public data:any,
@@ -211,7 +219,10 @@ public columnDefs: ColDef[] = [
     ) { 
 
       }
- ngOnInit(): void {
+    /**
+     * Angular lifecycle hook for initialization
+     */
+    ngOnInit(): void {
   this.selectedDfaultCategory = this.data.category;
       this.filterForm = this.fb.group({
         fromDate:['', Validators.required],
@@ -227,6 +238,11 @@ public columnDefs: ColDef[] = [
       });
       this.getDeviceByCategory();
     }
+    /**
+     * Validator for date range, checks if the difference exceeds 30 days
+     * @param group - AbstractControl group
+     * @returns Validation error object or null
+     */
     dateRangeValidator(group: AbstractControl):{[key:string]:any}| null{
       const fromDate = group.get('fromDate')?.value;
       const toDate = group.get('toDate')?.value;
@@ -237,6 +253,9 @@ public columnDefs: ColDef[] = [
       return null;
     }
 
+    /**
+     * Fetches device types by selected category
+     */
     getDeviceByCategory(): void {
       this.deviceTypeService
         .getfindallbycategory(this.selectedDfaultCategory)
@@ -244,10 +263,18 @@ public columnDefs: ColDef[] = [
           this.allDeviceType = res.data;
         });
     }
+    /**
+     * Handles device type change event
+     * @param event - Change event
+     */
     deviceChange(event: any): void {
       let val = event.target.value;
       this.deviceName = val;
     }
+    /**
+     * Handles execution type change event
+     * @param event - Change event
+     */
     changeExecutionType(event: any): void {
       let val = event.target.value;
       this.executionTypeName = val;
@@ -262,95 +289,111 @@ public columnDefs: ColDef[] = [
         this.testSuiteShow = false;
       }
     }
-  /**
-   * Event handler for when the grid is ready.
-   * @param params - The GridReadyEvent object containing the grid API.
-   */
-  onGridReady(params: GridReadyEvent):void {
-    this.gridApi = params.api;
-    if(this.data.selectedScript){
-      const selectedNames = this.data.selectedScript.split(', ');
-      this.gridApi.forEachNode((node:any)=>{
-        if(selectedNames.includes(node.data.executionName)){
-          node.setSelected(true);
-        }
-      })
+
+    /**
+     * Event handler for when the grid is ready.
+     * @param params - The GridReadyEvent object containing the grid API.
+     */
+    onGridReady(params: GridReadyEvent):void {
+      this.gridApi = params.api;
+      if(this.data.selectedScript){
+        const selectedNames = this.data.selectedScript.split(', ');
+        this.gridApi.forEachNode((node:any)=>{
+          if(selectedNames.includes(node.data.executionName)){
+            node.setSelected(true);
+          }
+        })
+      }
     }
-  }
-  onrowSelected():void{
-    const selectedNodes = (this.gridApi as any).getSelectedNodes();
-    if(selectedNodes.length > 0){
-      this.selectedRowName = selectedNodes[0].data.executionName;
+
+    /**
+     * Event handler for row selection in the grid
+     */
+    onrowSelected():void{
+      const selectedNodes = (this.gridApi as any).getSelectedNodes();
+      if(selectedNodes.length > 0){
+        this.selectedRowName = selectedNodes[0].data.executionName;
       } else{
-      this.selectedRowName = null;
+        this.selectedRowName = null;
+      }
     }
-  }
-  close():void{
-    this.dialogRef.close(false);
-  }
-  filterDataSubmit():void{
-    this.filterSubmitted = true;
-    if(this.filterForm.invalid){
-      return;
-    }else{
-      const locaFromDateTime = this.filterForm.get('fromDate')?.value;
-      const locaToDateTime = this.filterForm.get('toDate')?.value;
-      if(locaFromDateTime){
-        const utcMoment =  moment.tz(locaFromDateTime, moment.tz.guess()).startOf('day');
-        this.fromUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
-      }
-      if(locaToDateTime){
-        const utcMoment =  moment.tz(locaToDateTime, moment.tz.guess()).endOf('day');
-        this.toUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
-      }
+
+    /**
+     * Closes the modal dialog
+     */
+    close():void{
+      this.dialogRef.close(false);
+    }
+
+    /**
+     * Handles filter form submission and fetches filtered data
+     */
+    filterDataSubmit():void{
+      this.filterSubmitted = true;
+      if(this.filterForm.invalid){
+        return;
+      }else{
+        const locaFromDateTime = this.filterForm.get('fromDate')?.value;
+        const locaToDateTime = this.filterForm.get('toDate')?.value;
+        if(locaFromDateTime){
+          const utcMoment =  moment.tz(locaFromDateTime, moment.tz.guess()).startOf('day');
+          this.fromUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
+        }
+        if(locaToDateTime){
+          const utcMoment =  moment.tz(locaToDateTime, moment.tz.guess()).endOf('day');
+          this.toUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
+        }
 
         // Get values from the form
-      const scriptSingle = this.filterForm.get('scriptSingle')?.value;
-      const testSuiteSingke = this.filterForm.get('testSuiteSingke')?.value;
+        const scriptSingle = this.filterForm.get('scriptSingle')?.value;
+        const testSuiteSingke = this.filterForm.get('testSuiteSingke')?.value;
 
-
-      // Set scriptTestSuite based on execution type
-      let scriptTestSuite = '';
-      if (this.executionTypeName === 'SINGLESCRIPT') {
-        scriptTestSuite = scriptSingle;
-      } else if (this.executionTypeName === 'TESTSUITE') {
-        scriptTestSuite = testSuiteSingke;
-      }
-
-
-      let obj = {
-        "startDate": this.fromUTCTime,
-        "endDate": this.toUTCTime,
-        "executionType": this.executionTypeName,
-        "scriptTestSuite": scriptTestSuite,
-        "deviceType": this.deviceName,
-        "category": this.selectedDfaultCategory
-        
-      };
-      this.showLoader = true;
-      this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
-        let response = res.data;
-        if(response){
-          this.rowData = response;
-          this.showTable = true;
-          this.showLoader = false;
-        }else{
-          this.rowData = [];
-          this.showLoader = false;
-          this.showTable = true;
+        // Set scriptTestSuite based on execution type
+        let scriptTestSuite = '';
+        if (this.executionTypeName === 'SINGLESCRIPT') {
+          scriptTestSuite = scriptSingle;
+        } else if (this.executionTypeName === 'TESTSUITE') {
+          scriptTestSuite = testSuiteSingke;
         }
-      })
-    }
-  }
 
-  onConfirm():void{
-    const selectRows = this.gridApi.getSelectedRows();
-    const selectedNames = selectRows.map((row:any)=>row.executionName);
-    const selectExecutionId = selectRows.map((row:any)=>row.executionId);
-    if(selectedNames.length > 0){
-      this.dialogRef.close(selectRows);
+        let obj = {
+          "startDate": this.fromUTCTime,
+          "endDate": this.toUTCTime,
+          "executionType": this.executionTypeName,
+          "scriptTestSuite": scriptTestSuite,
+          "deviceType": this.deviceName,
+          "category": this.selectedDfaultCategory
+        };
+        this.showLoader = true;
+        this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
+          let response = res.data;
+          if(response){
+            this.rowData = response;
+            this.showTable = true;
+            this.showLoader = false;
+          }else{
+            this.rowData = [];
+            this.showLoader = false;
+            this.showTable = true;
+          }
+        })
+      }
     }
-  }
+
+
+    /**
+     * Confirms the selected executions and closes the dialog
+     */
+    onConfirm():void{
+      const selectRows = this.gridApi.getSelectedRows();
+      const selectedNames = selectRows.map((row:any)=>row.executionName);
+      const selectExecutionId = selectRows.map((row:any)=>row.executionId);
+      if(selectedNames.length > 0){
+        this.dialogRef.close(selectRows);
+      }
+    }
+
+
 
 
 }

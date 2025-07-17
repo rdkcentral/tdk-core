@@ -52,7 +52,9 @@ export class HeaderComponent implements OnInit {
   }
 
   /**
-   * Initializes the component.
+   * Angular lifecycle hook. Initializes user, theme, and sets up theme subscription.
+   * This method retrieves the logged-in user from the login service,
+   * applies the current theme based on the user's preference,
    */
   ngOnInit(): void {
     this.loggedInUser = this.loginService.getAuthenticatedUser();
@@ -83,8 +85,10 @@ export class HeaderComponent implements OnInit {
       this.isChecked = false;
     }
   }
+
   /**
-   * This method is add class and remove class based on theme selection.
+   * Applies the selected theme to the document body.
+   * @param theme - The theme to apply ('DARK' or 'LIGHT').
    */
   applyTheme(theme: string): void {
     if (theme === 'DARK') {
@@ -95,9 +99,10 @@ export class HeaderComponent implements OnInit {
       document.body.classList.remove('dark');
     }
   }
+
   /**
-   * This method is toggle themecolor from light to dark and vice-versa.
-   */  
+   * Toggles the theme between light and dark modes.
+   */
   toggleTheme(): void {
     const newTheme = this.currentTheme === 'LIGHT' ? 'DARK' : 'LIGHT';
     this.themeService.themeUpdateService(this.userloggedIn.userID, newTheme);
@@ -119,18 +124,23 @@ export class HeaderComponent implements OnInit {
   }
 
   /**
-   * Navigates to a specific page.
+   * Navigates to the configure page and sets config value.
    */
   navigateToPage() {
     this.service.selectedConfigVal = 'RDKV';
   }
+
   /**
-   * Navigates to a script page.
+   * Navigates to the script page and resets script category.
    */
   navigateToScript(){
     this.service.selectedCategory = 'RDKV';
     localStorage.removeItem('scriptCategory');
   }
+  /**
+   * Navigates to the specified route, forcing reload if already on that route.
+   * @param route - The route to navigate to.
+   */
   navigateTo(route: string) {
     if (this.router.url === `/${route}`) {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -140,4 +150,5 @@ export class HeaderComponent implements OnInit {
       this.router.navigate([route]);
     }
   }
+
 }

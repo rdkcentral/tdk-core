@@ -13,11 +13,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!--
+  Main container for the crash log file dialog component.
+-->
+
 <div class="container">
+    <!--
+      Row for the main content area.
+    -->
+
     <div class="row mt-2">
+      <!--
+        Column for the main content, full width on medium and up.
+      -->
+
       <div class="col-md-12">
         <h1 class="view-title">Crash Log Files Details</h1>
+        <!--
+          Row for the details section and table.
+        -->
+
         <div class="row">
+          <!--
+            Details section containing the log files table.
+          -->
+
           <div class="details-sec">
             <table class="details-table">
                 <thead>
@@ -40,7 +60,15 @@ limitations under the License.
             </table>
           </div>
         </div>
+        <!--
+          Row for the close button section.
+        -->
+
         <div class="row">
+          <!--
+            Container for the close button, right aligned.
+          -->
+
           <div class="mt-2 text-end mb-2">
             <button class="view-btn close" (click)="onClose()" *ngIf="!data.cancel">
               Close

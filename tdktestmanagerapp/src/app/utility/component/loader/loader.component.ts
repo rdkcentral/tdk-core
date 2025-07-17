@@ -26,6 +26,10 @@ import { Component } from '@angular/core';
   templateUrl: './loader.component.html',
   styleUrl: './loader.component.css'
 })
+/**
+ * LoaderComponent displays a loading animation.
+ * Used to indicate loading states in the application.
+ */
 export class LoaderComponent {
 
 }

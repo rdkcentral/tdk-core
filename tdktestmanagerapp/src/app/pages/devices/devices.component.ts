@@ -108,6 +108,16 @@ export class DevicesComponent {
     rowHeight: 36,
   };
 
+  /**
+   * Constructor for DevicesComponent.
+   * @param router - Angular Router for navigation
+   * @param service - DeviceService for device operations
+   * @param fb - FormBuilder for reactive forms
+   * @param authservice - AuthService for authentication
+   * @param _snakebar - MatSnackBar for notifications
+   * @param dialog - MatDialog for dialogs
+   * @param renderer - Renderer2 for DOM manipulation
+   */
   constructor(private router: Router, private service:DeviceService, private fb:FormBuilder,
     private authservice: AuthService,
     private _snakebar :MatSnackBar, public dialog:MatDialog,private renderer: Renderer2){
@@ -115,9 +125,10 @@ export class DevicesComponent {
       this.userCategory = this.loggedinUser.userCategory;
       this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
   }
-  
+
   /**
-   * Closes the modal  by click on button .
+   * Closes the modal by click on button.
+   * No parameters.
    */
   close(){
     (this.staticBackdrop?.nativeElement as HTMLElement).style.display = 'none';
@@ -127,6 +138,7 @@ export class DevicesComponent {
 
   /**
    * Initializes the component and performs necessary setup tasks.
+   * No parameters.
    */
   ngOnInit(): void {
     this.selectedDeviceCategory = this.userCategory;
@@ -154,6 +166,7 @@ export class DevicesComponent {
 
   /**
    * Finds all devices by category.
+   * No parameters.
    */
   findallbyCategory(){
     this.showLoader = true;
@@ -168,7 +181,7 @@ export class DevicesComponent {
         if(this.rowData == null || this.rowData == undefined||this.rowData.length == 0){
           this.rowData = []
         }
-       
+
       },
       error: (err) => {
         this.showLoader = false;
@@ -210,6 +223,7 @@ export class DevicesComponent {
 
   /**
    * Event handler for when the filter text box value changes.
+   * No parameters.
    */
   onFilterTextBoxChanged() {
     this.gridApi.setGridOption(
@@ -263,6 +277,7 @@ export class DevicesComponent {
 
   /**
    * Navigates to the device creation page.
+   * No parameters.
    */
   createDevice(){
     this.router.navigate(['/devices/device-create']);
@@ -288,6 +303,10 @@ export class DevicesComponent {
 
   }
 
+  /**
+   * Resets the upload form and related state variables.
+   * No parameters.
+   */
   resetUploadForm(){
     this.uploadXMLForm.reset();
     this.uploadXml = null;
@@ -297,6 +316,7 @@ export class DevicesComponent {
 
   /**
    * Handles the submission of the uploadXMLForm.
+   * No parameters.
    */
   uploadXMLSubmit(){
     this.uploadFormSubmitted = true;
@@ -332,8 +352,10 @@ export class DevicesComponent {
       }
      }
   }
- /**
-   * Download all device details as zip format based on device category selection
+
+  /**
+   * Download all device details as zip format based on device category selection.
+   * No parameters.
    */
   downloadAllDevice(){
     if(this.rowData.length > 0){
@@ -347,8 +369,10 @@ export class DevicesComponent {
       })
     }
   }
-   /**
-   * Download device details as xml format based on device name
+
+  /**
+   * Download device details as xml format based on device name.
+   * @param params - The parameters containing device name.
    */
   downloadXML(params:any):void{
     if(params.deviceName){
@@ -364,6 +388,5 @@ export class DevicesComponent {
       });
     }
   }
-
 
 }

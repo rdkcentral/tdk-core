@@ -17,10 +17,16 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/*
+ * Applies the default font family and size to the body and all elements except material icons
+ */
 body, *:not(.material-icons) {
     font-family: Roboto, "Helvetica Neue", sans-serif;
     font-size: 0.78rem;
 }
+/*
+ * Sets the font family for all heading elements inside .mat-typography
+ */
 .mat-typography h1, 
 .mat-typography h2, 
 .mat-typography h3, 
@@ -29,10 +35,16 @@ body, *:not(.material-icons) {
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
+/*
+ * Styles the main container with bottom margin
+ */
 .container{
     margin-bottom: 2rem;
 }
 
+/*
+ * Adds a multi-color border to the bottom of the element
+ */
 .borders-btm {
     border-image: linear-gradient(
       to right,
@@ -48,6 +60,9 @@ body, *:not(.material-icons) {
     margin: 0 15px;
     /* padding-bottom: 4px; */
   }
+/*
+ * Styles the title text
+ */
   .title {
     font-size: 1rem;
     text-align: center;
@@ -55,6 +70,9 @@ body, *:not(.material-icons) {
     margin-top: 5px;
     margin-bottom: 10px;
   }
+/*
+ * Styles the create and reset buttons
+ */
 .create-btn,
 .reset-btn {
     background-color: #00B2DC;
@@ -67,18 +85,30 @@ body, *:not(.material-icons) {
     letter-spacing: 0.5px;
     cursor: pointer;
 }
+/*
+ * Adds right margin to the reset button
+ */
 .reset-btn{
     margin-right: 12px;
 }
+/*
+ * Adds left margin to the name label
+ */
  .name-lable{
     margin-left: 25px;
  }
+/*
+ * Styles the form row with flex and margins
+ */
 .form-row{
     display: flex;
     margin-right: 15px;
     margin-top: 10px;
     justify-content: end;
 }
+/*
+ * Styles the name list box with height, width, and scroll
+ */
 .name-list {
     height: 280px;
     width: 570px;
@@ -87,6 +117,9 @@ body, *:not(.material-icons) {
     background-color: transparent;
     overflow-y: auto;
 }
+/*
+ * Styles the right name list box with height, width, and scroll
+ */
 .ritename-list{
     height: 280px;
     width: 545px;
@@ -95,79 +128,133 @@ body, *:not(.material-icons) {
     background-color: transparent;
     overflow-y: auto; 
 }
+/*
+ * Removes default list style and padding for list-box
+ */
   .list-box ul{
     list-style: none;
     padding-left: 0;
   }
+/*
+ * Styles each list item in the list-box
+ */
   .list-box ul li {
     padding: 0px 5px;
     margin-bottom: 5px;
     border: 1px solid #0000003b;
     font-size: 0.7rem;
 }
+/*
+ * Styles the left section with relative positioning
+ */
 .left-sec{
     position: relative;
 }
+/*
+ * Styles the right section with relative positioning and left margin
+ */
 .right-sec{
     position: relative;
     margin-left: 15px;
 }
+/*
+ * Styles the move buttons with absolute positioning
+ */
 .move-btns{
     position: absolute;
     top: 0;
     left: 94%;
 }
+/*
+ * Styles the right move buttons with absolute positioning
+ */
 .move-ritebtns{
     position: absolute;
     top: 0;
     left: 88%;
 }
+/*
+ * Styles the move icon
+ */
 .icon-move{
     font-size: 1.3rem;
     color: #00B2DC;
 }
+/*
+ * Styles the arrow button with no border
+ */
 .arrow-btn{
     border: none !important;
 }
+/*
+ * Styles the no data message
+ */
 .nodata{
     display: flex;
     justify-content: center;
     margin-top: 20%;
 }
+/*
+ * Styles the search row with float and margin
+ */
 .searchrow{
     float: left;
     margin-bottom: 5px;
     margin-right: 8px;
 }
+/*
+ * Styles the search script input width
+ */
 .searchscript{
     width: 220px;
 }
+/*
+ * Styles the sort search alignment
+ */
 .sort-search{
     text-align: start;
 }
+/*
+ * Styles the sort button
+ */
 .sort-button{
     margin: 3px 10px 0 0;
     background-color: #fff;
     border: 1px solid gray;
     border-radius: 4px;
 }
+/*
+ * Styles the sort icon
+ */
 .sort-icon{
     font-size: 1.4rem;
 }
+/*
+ * Styles the selected item
+ */
 .selected {
     background-color: #007bff;
     color: white;
 }
+/*
+ * Styles the info icon
+ */
 .info-icon{
     font-size: 25px;
     color: #00B2DC;
     position: absolute;
     margin: 4px 0px 0px 0px;
 }
+/*
+ * Styles the script error message
+ */
 .script-err{
     color: #dc3545;
     font-size: 0.8rem;
 }
+/*
+ * Removes border and shadow on focus for form controls
+ */
 ::ng-deep.form-select:focus, .form-control:focus{
     border-color: gray !important;
     box-shadow: none !important;

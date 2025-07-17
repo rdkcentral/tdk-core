@@ -31,17 +31,32 @@ export class ThemeService {
   private currentThemeSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this.getInitialTheme());
   public currentTheme: Observable<string> = this.currentThemeSubject.asObservable();
 
+  /**
+   * Constructor for ThemeService.
+   * @param http HttpClient for HTTP requests
+   * @param authService AuthService for authentication and API token
+   * @param config Application configuration injected as APP_CONFIG
+   */
   constructor(private http: HttpClient,private authService: AuthService,
     @Inject('APP_CONFIG') private config: any
   ) {
     this.userloggedIn = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
    }
 
+  /**
+   * Gets the initial theme from local storage or defaults to 'LIGHT'.
+   * @returns The initial theme string.
+   */
   getInitialTheme(): string {
       const savedTheme = localStorage.getItem('theme');
       return savedTheme ? savedTheme : 'LIGHT'; 
   }
 
+  /**
+   * Updates the theme for a user and notifies subscribers.
+   * @param userId The user ID to update the theme for.
+   * @param theme The theme to set.
+   */
   themeUpdateService(userId:any, theme:any): void{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -53,7 +68,11 @@ export class ThemeService {
      this.currentThemeSubject.next(theme);
   }
 
-
+  /**
+   * Gets the theme for a user.
+   * @param userId The user ID to get the theme for.
+   * @returns Observable with the theme.
+   */
   getTheme(userId:any): Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -69,12 +88,20 @@ export class ThemeService {
     // });
   }
 
+  /**
+   * Sets the theme and applies it.
+   * @param theme The theme to set.
+   */
   setTheme(theme: string): void {
     localStorage.setItem('theme', theme);
     this.currentThemeSubject.next(theme);
     this.applyTheme(theme); 
   }
   
+  /**
+   * Applies the theme to the document body.
+   * @param theme The theme to apply.
+   */
   applyTheme(theme: string): void {
     if (theme === 'DARK') {
       document.body.classList.add('dark');

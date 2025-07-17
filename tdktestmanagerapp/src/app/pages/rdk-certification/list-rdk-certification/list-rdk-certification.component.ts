@@ -116,8 +116,18 @@ export class ListRdkCertificationComponent {
     menuTabs: ['filterMenuTab'],
   };
 
+  /**
+   * Constructor for ListRdkCertificationComponent.
+   * @param http HttpClient instance for HTTP requests.
+   * @param router Router instance for navigation.
+   * @param renderer Renderer2 for DOM manipulation.
+   * @param authservice AuthService instance for authentication.
+   * @param service RdkService for RDK certification operations.
+   * @param _snakebar MatSnackBar for notifications.
+   */
   constructor(private http: HttpClient, private router: Router, private renderer: Renderer2,
     private authservice: AuthService, private service: RdkService, private _snakebar: MatSnackBar) { }
+
 
   /**
    * Initializes the component by fetching all RDK certifications and setting up the form.
@@ -142,6 +152,9 @@ export class ListRdkCertificationComponent {
     this.getAllCerificate();
   }
 
+  /**
+   * Fetches all RDK certifications and updates the row data.
+   */
   getAllCerificate():void{
     this.showLoader = true;
     this.service.getallRdkCertifications().subscribe(res => {
@@ -154,6 +167,7 @@ export class ListRdkCertificationComponent {
         this.showLoader = false;
       }
     })
+
   }
   /**
    * Event handler for when the grid is ready.
@@ -200,25 +214,33 @@ onFileChange(event: any): void {
 }
 
 
+  /**
+   * Resets the upload configuration form and clears the file input element.
+   */
   resetUploadForm(): void {
-  this.uploadConfigurationForm.reset();
-  this.uploadFormSubmitted = false;
-  // Clear the file input element
-  const fileInput = document.getElementById('uploadfile') as HTMLInputElement;
-  if (fileInput) {
-    fileInput.value = '';
+    this.uploadConfigurationForm.reset();
+    this.uploadFormSubmitted = false;
+    // Clear the file input element
+    const fileInput = document.getElementById('uploadfile') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+
   }
-}
 
 
   /**
    * Closes the certificate modal by setting its display style to 'none'.
    * Also removes the 'overflow' and 'padding-right' styles from the document body.
    */
+  /**
+   * Closes the certificate modal and removes body styles.
+   */
   close(): void {
     (this.certificateModal?.nativeElement as HTMLElement).style.display = 'none';
     this.renderer.removeStyle(document.body, 'overflow');
     this.renderer.removeStyle(document.body, 'padding-right');
+
   }
 
   /**
@@ -317,6 +339,10 @@ onFileChange(event: any): void {
     this.router.navigate(["/configure"]);
   }
 
+  /**
+   * Deletes an RDK certification after user confirmation.
+   * @param data The data object containing the certification name to delete.
+   */
   delete(data: any):void{
     if (confirm("Are you sure to delete ?")) {
       this.service.deleteRdkCertification(data.name).subscribe({

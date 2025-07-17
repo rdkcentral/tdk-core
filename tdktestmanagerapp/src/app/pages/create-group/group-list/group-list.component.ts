@@ -93,9 +93,16 @@ export class GroupListComponent implements OnInit {
     rowHeight: 36
   };
 
+  /**
+   * Constructor for GroupListComponent
+   * @param router - Router instance
+   * @param service - UsergroupService instance
+   * @param _snakebar - MatSnackBar for notifications
+   */
   constructor(private router: Router, private service: UsergroupService,
     private _snakebar: MatSnackBar
   ) { }
+
 
   /**
    * Initializes the component.
@@ -105,6 +112,7 @@ export class GroupListComponent implements OnInit {
     this.service.getuserGroupList().subscribe((data) => (this.rowData = data));
   }
 
+
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
@@ -112,6 +120,7 @@ export class GroupListComponent implements OnInit {
   onGridReady(params: GridReadyEvent<any>):void {
     this.gridApi = params.api;
   }
+
 
   /**
    * Deletes a user group.
@@ -144,6 +153,7 @@ export class GroupListComponent implements OnInit {
     }
   }
 
+
   /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
@@ -152,6 +162,7 @@ export class GroupListComponent implements OnInit {
     this.isRowSelected = event.node.isSelected();
     this.rowIndex = event.rowIndex
   }
+
 
   /**
    * Event handler for when the selection is changed.
@@ -167,6 +178,7 @@ export class GroupListComponent implements OnInit {
     }
   }
 
+
   /**
    * Edits a user.
    * @param user The user to edit.
@@ -178,12 +190,14 @@ export class GroupListComponent implements OnInit {
     this.router.navigate(['configure/group-edit/', user.userGroupId]);
   }
 
+
   /**
    * Navigates to the create group page.
    */  
   createGroup() :void{
     this.router.navigate(["configure/group-add"]);
   }
+
   
   /**
    * Navigates back to the previous page.
@@ -191,5 +205,6 @@ export class GroupListComponent implements OnInit {
   goBack() :void{
     this.router.navigate(["/configure"]);
   }
+
 
 }

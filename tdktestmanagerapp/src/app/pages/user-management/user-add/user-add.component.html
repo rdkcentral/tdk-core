@@ -13,20 +13,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Main container for the user add page -->
 <div class="container-fluid">
+    <!-- Row for the page title and border -->
     <div class="row borders-btm">
+        <!-- Empty column for spacing -->
         <div class="col"></div>
+        <!-- Column for the page title -->
         <div class="col">
             <h1 class="title">Create User</h1>
         </div>
+        <!-- Empty column for spacing -->
         <div class="col">
         </div>
     </div>
+    <!-- Row for the user form -->
     <div class="row">
+        <!-- Column for the user form -->
         <div class="col-md-12">
                     <form [formGroup]="userForm" (ngSubmit)="onuserSubmit()" class="userform mt-3">
+                        <!-- Row for form fields -->
                         <div class="row">
+                            <!-- Column for left-side form fields -->
                             <div class="col">
+                                <!-- Row for username input -->
                                 <div class="row mb-3">
                                     <label for="username" class="col-md-3 col-form-label">User Name<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
@@ -42,6 +52,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Row for user email input -->
                                 <div class="row mb-3">
                                     <label for="useremail" class="col-md-3 col-form-label">Email<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
@@ -57,6 +68,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Row for display name input -->
                                 <div class="row mb-3">
                                     <label for="displayname" class="col-md-3 col-form-label">Display Name<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
@@ -71,6 +83,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Row for category select -->
                                 <div class="row mb-3">
                                     <label for="categoryname" class="col-md-3 col-form-label">Category<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
@@ -109,8 +122,10 @@ limitations under the License.
                                     </div>
                                 </div> -->
                             </div>
+                            <!-- Column for right-side form fields -->
                             <div class="col">
 
+                                <!-- Row for role select -->
                                 <div class="row mb-3">
                                     <label for="rolename" class="col-md-3 offset-1 col-form-label">Role<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
@@ -129,6 +144,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Row for password input -->
                                 <div class="row mb-3">
                                     <label for="userpassword" class="col-md-3 offset-1 col-form-label">Password<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
@@ -146,6 +162,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Row for retype password input -->
                                 <div class="row mb-3">
                                     <label for="retypepassword" class="col-md-3 offset-1 col-form-label">Retype
                                         Password<span style="color:red; margin-left: 0.75em;">*</span></label>
@@ -165,7 +182,9 @@ limitations under the License.
                                 </div>
                             </div>
                         </div>
+                        <!-- Row for form action buttons -->
                         <div class="row">
+                            <!-- Column for form action buttons -->
                             <div class="mt-2 text-end">
                                 <button class="reset-btn" (click)="goBack()">Back</button>
                                 <button class="reset-btn" (click)="reset()">Reset</button>

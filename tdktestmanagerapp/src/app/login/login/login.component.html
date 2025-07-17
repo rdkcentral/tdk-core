@@ -14,6 +14,7 @@ limitations under the License.
 -->
 
 <nav class="navbar navbar-expand-lg header">
+  <!-- Container for navigation bar content -->
   <div class="container-fluid">
     <a class="navbar-brand"></a>
     <img src="assets/logo/TDKLogoFinal.png" alt="TDK_logo" class="logo-img img-fluid" />
@@ -21,22 +22,32 @@ limitations under the License.
       aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    <!-- Collapsible navigation content -->
     <div class="collapse navbar-collapse" id="navbarText">
     </div>
   </div>
 </nav>
 
+<!-- Main container for login and registration forms -->
 <div class="container-fluid">
+  <!-- Row for form content -->
   <div class="row">
+    <!-- Column for form wrapper -->
     <div class="col">
+      <!-- Parent container for form -->
       <div class="parent">
+        <!-- Container for form box and toggle panels -->
         <div class="container container-box" [ngClass]="isSigninVisible?'active':''" id="container-box">
+          <!-- Form container for user registration -->
           <div class="form-container sign-up" *ngIf="registerVisible && currentForm === 'register'">
             <h1 class="title">Register User</h1>
             @if (showHideRegForm) {
+            <!-- Registration form -->
             <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="registerform">
+              <!-- Row for username input -->
               <div class="row mb-1">
                 <label for="regusername" class="col-md-4 col-form-label">User Name<span style="color:red; margin-left: 0.75em;">*</span></label>
+                <!-- Column for username input field -->
                 <div class="col-md-8">
                   <input type="text" class="form-control" id="regusername" formControlName="regusername"
                     placeholder="Enter user name">
@@ -51,8 +62,10 @@ limitations under the License.
                   </div>
                 </div>
               </div>
+              <!-- Row for password input -->
               <div class="row mb-1">
                 <label for="regpassword" class="col-md-4 col-form-label">Password<span style="color:red; margin-left: 0.75em;">*</span></label>
+                <!-- Column for password input field -->
                 <div class="col-md-8 eye-align">
                   <input type="password" id="regpassword" class="form-control" [type]="showViewPasswordOnPress ? 'password' : 'text'" formControlName="regpassword"
                     placeholder="Enter password">
@@ -66,8 +79,10 @@ limitations under the License.
                   </div>
                 </div>
               </div>
+              <!-- Row for retype password input -->
               <div class="row mb-1">
                 <label for="retypepassword" class="col-md-4 col-form-label">Retype Password<span style="color:red; margin-left: 0.75em;">*</span></label>
+                <!-- Column for retype password input field -->
                 <div class="col-md-8 eye-align">
                   <input type="password" id="retypepassword" class="form-control" [type]="showConfirmPasswordOnPress ? 'password' : 'text'" formControlName="retypepassword"
                     placeholder="Enter retype password">
@@ -82,8 +97,10 @@ limitations under the License.
                   </div>
                 </div>
               </div>
+              <!-- Row for email input -->
               <div class="row mb-1">
                 <label for="regemail" class="col-md-4 col-form-label">Email</label>
+                <!-- Column for email input field -->
                 <div class="col-md-8">
                   <input type="text" id="regemail" class="form-control" formControlName="regemail"
                     placeholder="Enter email">
@@ -97,8 +114,10 @@ limitations under the License.
                   </div>
                 </div>
               </div>
+              <!-- Row for display name input -->
               <div class="row mb-1">
                 <label for="displayname" class="col-md-4 col-form-label">Display Name<span style="color:red; margin-left: 0.75em;">*</span></label>
+                <!-- Column for display name input field -->
                 <div class="col-md-8">
                   <input type="text" class="form-control" id="displayname" formControlName="displayname"
                     placeholder="Enter display name">
@@ -108,8 +127,10 @@ limitations under the License.
                   </div>
                 </div>
               </div>
+              <!-- Row for prefered category select -->
               <div class="row mb-1">
                 <label for="preferCategoty" class="col-md-4 col-form-label">Prefered Category<span style="color:red; margin-left: 0.75em;">*</span></label>
+                <!-- Column for prefered category select field -->
                 <div class="col-md-8">
                   <select class="form-select" aria-label="Default select example" id="preferCategoty"
                     formControlName="preferCategoty" (change)="changeCategory($event)">
@@ -122,7 +143,9 @@ limitations under the License.
                   </div>
                 </div>
               </div>
+              <!-- Row for register button -->
               <div class="row mt-1">
+                <!-- Column for register button -->
                 <div class="text-end">
                   <button type="submit" class="registerme-btn">Register Me</button>
                 </div>
@@ -131,6 +154,7 @@ limitations under the License.
             }
 
             @if (showHideRegSucess) {
+            <!-- Registration success message container -->
             <div class="text-success text-center regsuccess">
               <span class="successicon"><i class="bi bi-check2-circle"></i></span>
               <h5 class="messagetitle">{{registerSuccess}}</h5><span class="subtitle">Please click on Sign In to
@@ -138,12 +162,16 @@ limitations under the License.
             </div>
             }
           </div>
+          <!-- Form container for user sign-in -->
           <div class="form-container sign-in" *ngIf="signinVisible && currentForm === 'signin'">
 
             <h1 class="title">Sign In</h1>
+            <!-- Sign-in form -->
             <form [formGroup]="signinForm" (ngSubmit)="onSubmit()" class="signinform">
+              <!-- Row for username input -->
               <div class="row mb-4">
                 <label for="username" class="col-md-4 col-form-label">User Name</label>
+                <!-- Column for username input field -->
                 <div class="col-md-8">
                   <input type="text" class="form-control" id="username" formControlName="username" name="username"
                     autocomplete="off" placeholder="Enter User Name">
@@ -154,8 +182,10 @@ limitations under the License.
                   </div>
                 </div>
               </div>
+              <!-- Row for password input -->
               <div class="row mb-4">
                 <label for="password" class="col-md-4 col-form-label">Password</label>
+                <!-- Column for password input field -->
                 <div class="col-md-8">
                   <input type="password" class="form-control" id="password" [type]="showPasswordOnPress ? 'password' : 'text'" formControlName="password"
                     placeholder="Enter Password">
@@ -174,7 +204,9 @@ limitations under the License.
                 <small>{{errorMessage}}</small>
               </div>
               }
+              <!-- Row for sign-in button -->
               <div class="row mt-4">
+                <!-- Container for sign-in button -->
                 <div class="signinbtn">
                   <button type="submit">Sign In</button>
                   <!-- Commented for now .Need to implement forgot password later -->
@@ -186,9 +218,12 @@ limitations under the License.
               </div>
             </form>
           </div>
+          <!-- Form container for LDAP sign-in -->
           <div class="form-container sign-in" *ngIf="ldapScreenVisible">
             <h1 class="title">Sign In</h1>
+            <!-- Login option radio buttons -->
             <div class="logingOption text-center">
+              <!-- Button group for sign-in options -->
               <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                 <input type="radio" class="btn-check" name="btnradio" id="usersignin" (change)="isldapChecked($event)">
                 <label class="btn btn-outline-primary logingOptionlbl" for="usersignin">User Sign In</label>
@@ -197,9 +232,12 @@ limitations under the License.
                 <label class="btn btn-outline-primary logingOptionlbl" for="ldapsignin">LDAP Sign In</label>
               </div>
             </div>
+            <!-- LDAP sign-in form -->
             <form [formGroup]="ldapForm" (ngSubmit)="onLdapSubmit()">
+              <!-- Row for LDAP username input -->
               <div class="row mb-4">
                 <label for="username" class="col-md-4 col-form-label">User Name</label>
+                <!-- Column for LDAP username input field -->
                 <div class="col-md-8">
                   <input type="text" class="form-control" id="username" formControlName="username"
                     placeholder="Enter User Name">
@@ -208,8 +246,10 @@ limitations under the License.
                   </div>
                 </div>
               </div>
+              <!-- Row for LDAP password input -->
               <div class="row mb-4">
                 <label for="password" class="col-md-4 col-form-label">Password</label>
+                <!-- Column for LDAP password input field -->
                 <div class="col-md-8">
                   <input type="password" class="form-control" id="password" formControlName="password"
                     placeholder="Enter Password">
@@ -218,20 +258,26 @@ limitations under the License.
                   </div>
                 </div>
               </div>
+              <!-- Row for LDAP sign-in button -->
               <div class="row">
+                <!-- Container for LDAP sign-in button -->
                 <div class="mt-2 signinbtn">
                   <button type="submit">Sign In</button>
                 </div>
               </div>
             </form>
           </div>
+          <!-- Container for toggle panels -->
           <div class="toggle-container">
+            <!-- Toggle panel wrapper -->
             <div class="toggle">
+              <!-- Left toggle panel for sign-in -->
               <div class="toggle-panel toggle-left">
                 <!-- <h1>Welcome Back!</h1> -->
                 <p>Enter your user details to sign in</p>
                 <button class="signin" id="login" (click)="toogleForm('signin')">Sign In</button>
               </div>
+              <!-- Right toggle panel for registration -->
               <div class="toggle-panel toggle-right">
                 <p>Register with your details</p>
                 <button class="signup" id="register" (click)="toogleForm('register')">Register</button>

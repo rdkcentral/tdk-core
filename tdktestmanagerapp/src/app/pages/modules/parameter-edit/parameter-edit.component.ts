@@ -44,15 +44,26 @@ export class ParameterEditComponent {
   dynamicFunctionName!:string;
   parameterData:any;
 
-  constructor(private authservice: AuthService,private router: Router,
-    private moduleservice: ModulesService,private _snakebar :MatSnackBar,
-  ) { 
+
+  /**
+   * Constructor for ParameterEditComponent.
+   * @param authservice AuthService instance for authentication and config value.
+   * @param router Router instance for navigation.
+   * @param moduleservice ModulesService instance for module operations.
+   * @param _snakebar MatSnackBar instance for notifications.
+   */
+  constructor(private authservice: AuthService, private router: Router,
+    private moduleservice: ModulesService, private _snakebar: MatSnackBar,
+  ) {
     this.parameterData = JSON.parse(localStorage.getItem('parameters') || '{}');
   }
 
+
+
     /**
-   * Initializes the component and sets up the initial state.
-   */
+     * Initializes the component and sets up the initial state.
+     * No parameters.
+     */
     ngOnInit(): void {
       let functiondata = JSON.parse(localStorage.getItem('function') || '{}');
       this.dynamicModuleName = functiondata.moduleName;
@@ -60,45 +71,48 @@ export class ParameterEditComponent {
       this.configureName = this.authservice.selectedConfigVal;
       this.updateParameterForm = new FormGroup({
         parameterName: new FormControl<string | null>(this.parameterData.parameterName, { validators: Validators.required }),
-        module: new FormControl<string | null>({value: this.dynamicModuleName, disabled: true}, { validators: Validators.required }),
-        function: new FormControl<string | null>({value: this.dynamicFunctionName, disabled: true}, { validators: Validators.required }),
+        module: new FormControl<string | null>({ value: this.dynamicModuleName, disabled: true }, { validators: Validators.required }),
+        function: new FormControl<string | null>({ value: this.dynamicFunctionName, disabled: true }, { validators: Validators.required }),
         parameterType: new FormControl<string | null>(this.parameterData.parameterDataType, { validators: Validators.required }),
         rangeVal: new FormControl<string | null>(this.parameterData.parameterRangeVal, { validators: Validators.required })
       })
-  
+
       this.moduleservice.getListOfParameterEnums().subscribe((data) => {
         this.parameterType = data.data
       })
     }
-  /**
-   * Handles the form submission for update parameter.
-   */
-    updateParaFormSubmit():void{
+
+
+    /**
+     * Handles the form submission for updating a parameter.
+     * No parameters.
+     */
+    updateParaFormSubmit(): void {
       this.paraFormSubmitted = true;
-      if(this.updateParameterForm.invalid){
+      if (this.updateParameterForm.invalid) {
         return;
       }
       let data = {
-        id:this.parameterData.id,
-        parameterName :this.updateParameterForm.value.parameterName,
-        parameterDataType :this.updateParameterForm.value.parameterType,
-        parameterRangeVal :this.updateParameterForm.value.rangeVal,
+        id: this.parameterData.id,
+        parameterName: this.updateParameterForm.value.parameterName,
+        parameterDataType: this.updateParameterForm.value.parameterType,
+        parameterRangeVal: this.updateParameterForm.value.rangeVal,
         function: this.dynamicFunctionName
       }
       this.moduleservice.updateParameter(data).subscribe({
-        next:(res)=>{
+        next: (res) => {
           this._snakebar.open(res.message, '', {
-          duration: 3000,
-          panelClass: ['success-msg'],
-          verticalPosition: 'top'
+            duration: 3000,
+            panelClass: ['success-msg'],
+            verticalPosition: 'top'
           })
           setTimeout(() => {
             this.updateParameterForm.reset();
             this.router.navigate(["/configure/parameter-list"]);
           }, 1000);
         },
-        error:(err)=>{          
-            this._snakebar.open(err.message, '', {
+        error: (err) => {
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -107,10 +121,13 @@ export class ParameterEditComponent {
         }
       })
     }
+
   /**
    * Navigates back to the parameter list page.
+   * No parameters.
    */
-  goBack():void{
+  goBack(): void {
     this.router.navigate(["/configure/parameter-list"]);
   }
+
 }

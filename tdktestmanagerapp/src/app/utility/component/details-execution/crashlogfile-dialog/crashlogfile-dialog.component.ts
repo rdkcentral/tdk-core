@@ -36,20 +36,31 @@ export class CrashlogfileDialogComponent {
   logFileNames: any;
   executionResultId: any;
   
+    /**
+     * Constructor for CrashlogfileDialogComponent.
+     * @param dialogRef Reference to the dialog opened.
+     * @param data Data injected into the dialog.
+     * @param dialog MatDialog for opening dialogs.
+     * @param executionservice Service for execution operations.
+     */
+    
     constructor(
       public dialogRef: MatDialogRef<CrashlogfileDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any, public dialog: MatDialog, private executionservice: ExecutionService,
        ) {
     }
-   /**
-   * This method is for initialize teh component.
-   */   
+    /**
+     * Angular lifecycle hook called on component initialization.
+     */
+    
     ngOnInit(): void {
       this.logFileNames = JSON.parse(this.data.logFileNames);
     }
-   /**
-   * This method is for download the carsh log files .
-   */   
+    /**
+     * Downloads the crash log file for the given log file name.
+     * @param logFile The name of the log file to download.
+     */
+    
     downloadCrashLogFile(logFile:any){
       this.executionservice.downloadCrashLogFile(this.data.executionId,logFile).subscribe(blob => {
         const url = window.URL.createObjectURL(blob);
@@ -62,9 +73,10 @@ export class CrashlogfileDialogComponent {
         window.URL.revokeObjectURL(url);
       });
     }
-   /**
-   * This method is for close the modal.
-   */   
+    /**
+     * Closes the dialog.
+     */
+    
     onClose(): void {
       this.dialogRef.close(false);
     }

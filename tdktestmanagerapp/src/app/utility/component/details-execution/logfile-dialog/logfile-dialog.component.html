@@ -13,11 +13,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- Container for the log file dialog -->
 <div class="container">
+  <!-- Row for main content spacing -->
   <div class="row mt-2">
+    <!-- Main column for log file details -->
     <div class="col-md-12">
       <h1 class="view-title">Log Files Details</h1>
+      <!-- Row for log file details section -->
       <div class="row">
+        <!-- Section for displaying log file details table -->
         <div class="details-sec">
           <table class="details-table">
               <thead>
@@ -40,7 +45,9 @@ limitations under the License.
           </table>
         </div>
       </div>
+      <!-- Row for close button -->
       <div class="row">
+        <!-- Section for close button alignment -->
         <div class="mt-2 text-end mb-2">
           <button class="view-btn close" (click)="onClose()" *ngIf="!data.cancel">
             Close

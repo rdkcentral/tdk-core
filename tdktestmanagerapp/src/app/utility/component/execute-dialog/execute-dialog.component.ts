@@ -116,6 +116,16 @@ export class ExecuteDialogComponent {
   repeatTypeBoolean = false;
   preferedCategory!:string;
 
+  /**
+   * Constructor for ExecuteDialogComponent.
+   * @param dialogRef Reference to the dialog opened.
+   * @param deviceStatusData Data injected for device status execution.
+   * @param executionClickData Data injected for normal execution click.
+   * @param fb FormBuilder for reactive forms.
+   * @param executionservice Service for execution operations.
+   * @param authservice Service for authentication operations.
+   * @param _snakebar Service for showing snack bar notifications.
+   */
   constructor(
     public dialogRef: MatDialogRef<ExecuteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public deviceStatusData: any,
@@ -132,6 +142,7 @@ export class ExecuteDialogComponent {
     this.userCategory = this.loggedinUser.userCategory;
     this.preferedCategory = localStorage.getItem('preferedCategory') || '';
   }
+
   /**
    * Initializes the component. Sets up form controls and settings based on the selected category and click data.
    * 
@@ -275,6 +286,10 @@ export class ExecuteDialogComponent {
     this.executeForm.addControl('endtime', this.fb.control(new Date()));
   }
 
+  /**
+   * Toggles the visibility of additional log options field.
+   * @param event The event object from the toggle action.
+   */
   toggleAdditinalField(event:any){
     if(event.checked === true){
       this.showToggleField = true;
@@ -282,6 +297,10 @@ export class ExecuteDialogComponent {
       this.showToggleField = false;
     }
   }
+  /**
+   * Handles value change for the additional execution name input.
+   * @param event The event object from the input change.
+   */
   valueChange(event:any):void{
     let val = event.target.value;
     this.additionalExeName = val;    
@@ -583,6 +602,10 @@ export class ExecuteDialogComponent {
     this.getExecutionName();
   }
 
+  /**
+   * Handles the selection of repeat type (full or individual).
+   * @param event The event object from the radio button change.
+   */
   fullOrIndividual(event:any):void{
     let val = event.target.value;
     if(val === 'full'){
@@ -772,7 +795,12 @@ export class ExecuteDialogComponent {
       }, 1500);
     }
 
-     onWeekDayChange(day: string, event: any): void {
+  /**
+   * Handles the change event for selecting weekdays in recurrence schedule.
+   * @param day The day of the week being toggled.
+   * @param event The event object from the checkbox change.
+   */
+  onWeekDayChange(day: string, event: any): void {
     if (event.target.checked) {
       if (!this.selectedWeekDays.includes(day)) {
         this.selectedWeekDays.push(day);

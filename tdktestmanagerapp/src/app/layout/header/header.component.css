@@ -17,29 +17,42 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/* Global font family for header and all elements except material icons */
 body, *:not(.material-icons) {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+/* Main header title area */
 .main-heading{
     height: 50px;
 }
+/* Divider for header layout spacing */
+
 .divider {
     flex: 1 1 auto;
 }
 
+
+/* Logo image styling */
 .logo-img {
+
     width: 10%;
     margin-top: 8px;
 }
 
+
+/* Application title text styling */
 .apptitle {
     font-size: 1.2rem !important;
     font-weight: 500;
     margin-left: 15px;
+
 }
+/* User button area styling */
 .user-btn{
+
     padding-left: 0;
 }
+/* Display name styling for user info */
 .displayname {
     font-size: 0.8rem;
     font-weight: 500;
@@ -48,59 +61,84 @@ body, *:not(.material-icons) {
     padding: 0 0 0 15px;
     display: flex;
     justify-content: center;
+
     align-items: center;
     height: 30px;
 }
+
+/* Theme button area styling */
 .theme-btn{
     padding-right: 0;
 }
+
+/* Theme icon styling */
 
 .themeicon {
     font-size: 1rem;
     display: flex;
     justify-content: center;
+
     align-items: center;
 }
+
+/* Display menu area styling */
 
 .displaymenu {
     width: 100%;
     margin: 0 12%;
 }
+
+/* Custom switch handle size for theme toggle */
 ::ng-deep .mat-mdc-slide-toggle .mdc-switch__handle:has(.mdc-switch__icons) {
     width: 18px !important;
     height: 18px !important;
 }
+/* Custom switch track size for theme toggle */
 ::ng-deep .mdc-switch__track {
+
     height: 12px !important;
     width: 90% !important;
 }
 
+
+/* Menu list styling for navigation */
 .menulist {
     display: flex;
+
     justify-content: space-around;
     font-size: 0.75rem;
     letter-spacing: 0.06rem;
     font-weight: 600;
 }
 
+
+/* Navigation item hover effect */
 li.nav-item :hover {
+
     font-weight: 600;
     text-shadow: 1px 1px 1px #fff;
 }
+
+/* Header container styling */
 .header {
    height: 30px;
 }
+/* Navigation link styling */
 .nav-link{
     padding: 0px 0px 0px 0px;
+
     width: 100px;
     text-align: center;
 }
+/* Logout menu item styling */
 .menuitem-logout{
     min-height: 40px;
 }
+/* Logout text styling */
 .logout-text{
     font-size: 0.8rem;
 }
+/* Logout icon styling */
 .logout-icon{
     font-size: 1.1rem;
     display: flex;

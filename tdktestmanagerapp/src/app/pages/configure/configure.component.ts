@@ -40,11 +40,17 @@ export class ConfigureComponent implements OnInit {
   selectedCategory!:string;
   preferedCategory!:string;
 
+  /**
+   * Constructor for ConfigureComponent
+   * @param router - Router instance
+   * @param service - AuthService instance
+   */
   constructor(private router: Router, private service: AuthService) { 
     this.loggedInUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
     this.defaultCategory = this.loggedInUser.userCategory;
     this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
   }
+
 
   /**
    * Initializes the component.
@@ -63,9 +69,10 @@ export class ConfigureComponent implements OnInit {
      //Resets the view for scripts when moving to other tabs
     localStorage.setItem('viewName', 'scripts');
   }
+
   /**
    * Handles the radiobutton of category change event.
-   * @param val - The value of the radiobutton.
+   * @param event - The change event from the radiobutton.
    */
   categoryChange(event:any){
     let val = event.target.value;
@@ -83,6 +90,7 @@ export class ConfigureComponent implements OnInit {
       localStorage.setItem('preferedCategory', 'RDKV')
     }
   }
+
 
   /**
    * Navigates to the specified route based on the provided value.
@@ -126,6 +134,7 @@ export class ConfigureComponent implements OnInit {
       this.router.navigate(['configure/list-primitivetest']);
     }
   }
+
 
 
 }

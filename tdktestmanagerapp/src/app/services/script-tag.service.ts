@@ -30,11 +30,26 @@ export class ScriptTagService {
 
   currentUrl: any;
 
+  /**
+   * Constructor for ScriptTagService.
+   * @param http HttpClient for HTTP requests
+   * @param authService AuthService for authentication and API token
+   * @param config Application configuration injected as APP_CONFIG
+   */
   constructor(private http: HttpClient, private authService: AuthService,
     @Inject('APP_CONFIG') private config: any
   ) { }
+
+  /**
+   * Options for HTTP requests with authorization header.
+   */
   private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
 
+  /**
+   * Creates a new script tag.
+   * @param data The script tag data to create.
+   * @returns Observable with the creation result as text.
+   */
   createScriptTag(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -44,6 +59,11 @@ export class ScriptTagService {
     return this.http.post(`${this.config.apiUrl}api/v1/scripttag/create`, data, { headers, responseType: 'text' })
   }
 
+  /**
+   * Gets the list of script tags by category.
+   * @param category The category to filter script tags by.
+   * @returns Observable with the list of script tags as text.
+   */
   getScriptTagByList(category: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -51,6 +71,11 @@ export class ScriptTagService {
     return this.http.get(`${this.config.apiUrl}api/v1/scripttag/findallbycategory?category=${category}`, { headers, responseType: 'text' });
   }
 
+  /**
+   * Updates a script tag.
+   * @param data The script tag data to update.
+   * @returns Observable with the update result as text.
+   */
   updateScriptTag(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -60,6 +85,11 @@ export class ScriptTagService {
 
   }
 
+  /**
+   * Deletes a script tag by ID.
+   * @param id The ID of the script tag to delete.
+   * @returns Observable with the deletion result as text.
+   */
   deleteScriptTag(id: any): Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -67,6 +97,4 @@ export class ScriptTagService {
     return this.http.delete(`${this.config.apiUrl}api/v1/scripttag/delete/${id}`, { headers, responseType: 'text' });
 
   }
-  
-
 }

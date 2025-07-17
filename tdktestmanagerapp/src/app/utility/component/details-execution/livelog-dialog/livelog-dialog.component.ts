@@ -42,12 +42,27 @@ export class LivelogDialogComponent {
   liveLogInterval: any;
   private destroy$ = new Subject<void>();
 
+  /**
+   * Constructor for LivelogDialogComponent.
+   * @param dialogRef Reference to the dialog opened.
+   * @param data Data injected into the dialog (contains logs and executionId).
+   * @param dialog Reference to MatDialog service.
+   * @param executionservice Service to fetch execution logs.
+   * @param liveLogDialog Reference to MatDialog for live log dialog.
+   * @param _snakebar Service for showing snack bar notifications.
+   */
   constructor(
     public dialogRef: MatDialogRef<LivelogDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public dialog: MatDialog, private executionservice: ExecutionService,
     public liveLogDialog: MatDialog, private _snakebar: MatSnackBar) {
   }
 
+
+
+  /**
+   * Angular lifecycle hook called on component initialization.
+   * Initializes logs and sets up auto-refresh interval.
+   */
   ngOnInit(): void {
     this.logs = this.data.logs;
     this.refreshLiveLogs(); // Initial fetch
@@ -56,11 +71,22 @@ export class LivelogDialogComponent {
     }, 60000); // 30 seconds
   }
 
+
+
+  /**
+   * Scrolls the log area textarea to the bottom.
+   */
   scrollToBottom() {
     const logArea = this.logArea.nativeElement;
     logArea.scrollTop = logArea.scrollHeight;
   }
 
+
+
+  /**
+   * Fetches the latest live logs and updates the logs property.
+   * Shows a loader while fetching.
+   */
   refreshLiveLogs() {
     this.loader = true;
     this.executionservice.getLiveLogs(this.data.executionId).subscribe(
@@ -72,6 +98,11 @@ export class LivelogDialogComponent {
       });
   }
 
+
+
+  /**
+   * Automatically refreshes the live logs and scrolls to the bottom after update.
+   */
   autoRefreshLiveLogs() {
     this.loader = true;
     this.executionservice.getLiveLogs(this.data.executionId).subscribe(
@@ -87,6 +118,12 @@ export class LivelogDialogComponent {
   }
 
 
+
+
+  /**
+   * Angular lifecycle hook called when the component is destroyed.
+   * Clears intervals and completes subscriptions.
+   */
   ngOnDestroy(): void {
     if (this.liveLogInterval) {
       clearInterval(this.liveLogInterval);
@@ -95,8 +132,14 @@ export class LivelogDialogComponent {
     this.destroy$.complete(); // Complete the destroy$ subject
   }
 
+
+  /**
+   * Handles the close action for the dialog.
+   * Notifies all subscriptions to complete and closes the dialog.
+   */
   onClose(): void {
     this.destroy$.next(); // Notify all subscriptions to complete
     this.dialogRef.close(false);
   }
+
 }
