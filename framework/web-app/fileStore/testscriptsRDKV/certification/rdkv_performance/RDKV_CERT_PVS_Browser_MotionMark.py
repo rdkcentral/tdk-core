@@ -162,7 +162,7 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     print("URL(",new_url,") is set successfully")
                     time.sleep(10)
-                    params = '{"keys":[{"keyCode": 9,"modifiers": [],"delay":1.0},{"keyCode": 9,"modifiers": [],"delay":1.0},{"keyCode": 13,"modifiers": [],"delay":1.0}]}'
+                    params = '{"keys":[{"keyCode": 9,"modifiers": [],"delay":1.0,"callsign":"WebKitBrowser","client":"WebKitBrowser"},{"keyCode": 9,"modifiers": [],"delay":1.0,"callsign":"WebKitBrowser","client":"WebKitBrowser"},{"keyCode": 13,"modifiers": [],"delay":1.0,"callsign":"WebKitBrowser","client":"WebKitBrowser"}]}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
                     tdkTestObj.addParameter("value",params)

@@ -211,7 +211,7 @@ if expectedResult in result.upper():
                     print("URL(",new_url,") is set successfully")
                     time.sleep(10)
                     #Press enter to start the test
-                    params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
+                    params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0,"callsign":"WebKitBrowser","client":"WebKitBrowser"}]}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
                     tdkTestObj.addParameter("value",params)
@@ -254,9 +254,12 @@ if expectedResult in result.upper():
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
                                 print("\n Failed to get the threshold value from config file")
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE")
+                            print("\n Failed to get the browser score")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print("\n Failed to get the browser score")
+                        print("\n Failed to start the test for browser score")
                 else:
                     print("\n Failed to load the URL",new_url)
                     tdkTestObj.setResultStatus("FAILURE")
