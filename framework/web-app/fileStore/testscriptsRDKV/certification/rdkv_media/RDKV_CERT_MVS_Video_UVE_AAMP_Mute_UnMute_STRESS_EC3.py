@@ -52,6 +52,8 @@
     <!-- -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RPI-Client</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -61,7 +63,7 @@
     <test_case_id>RDKV_Media_Validation_238</test_case_id>
     <test_objective>Test Script to launch a lightning UVE AAMP player application via Webkit instance to play avideo stream with ec3 audio and perform mute, unmute operations repeatedly for given number of times             </test_objective>
     <test_type>Positive</test_type>
-    <test_setup>Accelerator,RDKTV</test_setup>
+    <test_setup>Accelerator,RPI,RDKTV</test_setup>
     <pre_requisite>1. Wpeframework process should be up and running in the device.
 2.Lightning UVE AAMP Player app should be hosted</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>

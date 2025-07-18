@@ -52,6 +52,8 @@
     <!-- -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RPI-Client</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -61,7 +63,7 @@
     <test_case_id>RDKV_Media_Validation_165</test_case_id>
     <test_objective>Test Script to launch a lightning Video player application via Webkit instance and perform video seek forward operation of ec3 codec stream repeatedly for given number of times in provided interval</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RDKTV,Accelerator</test_setup>
+    <test_setup>RDKTV,RPI,Accelerator</test_setup>
     <pre_requisite>1. Wpeframework process should be up and running in the device.
 2.Lightning Player app should be hosted</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>

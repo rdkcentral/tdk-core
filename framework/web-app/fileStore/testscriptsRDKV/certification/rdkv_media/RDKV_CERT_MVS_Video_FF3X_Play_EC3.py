@@ -48,6 +48,8 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
+    <box_type>RPI-Client</box_type>
+    <!--  -->
     <box_type>RDKTV</box_type>
     <!-- -->
     <box_type>Video_Accelerator</box_type>
@@ -61,7 +63,7 @@
     <test_case_id>RDKV_Media_Validation_181</test_case_id>
     <test_objective>Test Script to launch a lightning Video player application via Webkit instance and perform video fast forward operation in 3x speed for few seconds, continue video play of ec3 content and close the player</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RDKTV,Accelerator</test_setup>
+    <test_setup>RDKTV,Accelerator,RPI</test_setup>
     <pre_requisite>1. Wpeframework process should be up and running in the device.
 2.Lightning Player app should be hosted</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
