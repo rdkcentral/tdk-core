@@ -4011,9 +4011,9 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "networkmanager_check_supported_security_modes":
-            info["supported_security_modes"] = result.get("security_modes")
+            info["security"] = result.get("security")
             success = str(result.get("success")).lower() == "true"
-            status = checkNonEmptyResultData(result.get("security_modes"))
+            status = checkNonEmptyResultData(result.get("security"))
             if "FALSE" not in status and success:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
