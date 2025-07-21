@@ -591,7 +591,6 @@ def make_requests(method):
 def rdkservice_synchronous_request(method):
     try:
         jobs = []
-        gevent.monkey.patch_all()
         failed_requests = []
         for element in method:
             job = gevent.spawn(make_requests, element)
