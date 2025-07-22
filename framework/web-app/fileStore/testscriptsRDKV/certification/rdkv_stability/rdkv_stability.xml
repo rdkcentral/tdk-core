@@ -101,6 +101,14 @@
           <parameter name="method" value=""/>
         </parameters>
       </primitiveTest>
+      <primitiveTest name="rdkservice_memcrApps_executeLifeCycle" id=" " version="1">
+        <function>rdkservice_memcrApps_executeLifeCycle</function>
+        <parameters>
+          <parameter name="operations" value=""/>
+          <parameter name="plugin" value=""/>
+          <parameter name="validation_details" value=""/>
+        </parameters>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>
