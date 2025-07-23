@@ -22,7 +22,10 @@ limitations under the License.
     </div>
     <!-- Center column with the page title -->
     <div class="col">
-        <h1 class="title"><h1 class="title">Create Custom TestSuite</h1></h1>
+        <h1 class="title"><h1 class="title">Create 
+          <span class="title" *ngIf="selectedCategory === 'RDKV'">Video</span>
+          <span class="title" *ngIf="selectedCategory === 'RDKB'">Broadband</span>
+          Custom TestSuite</h1></h1>
     </div>
     <!-- Right column (empty for spacing) -->
     <div class="col">
@@ -35,7 +38,7 @@ limitations under the License.
         <!-- Container for category selection and radio buttons -->
         <div class="first-container">
           <!-- Row for category radio buttons -->
-          <div class="radiobox">
+          <div class="radiobox"  *ngIf="selectedCategory !== 'RDKB'">
             <h3 class="heading">Select Category :</h3>
             <!-- Group of radio buttons for category selection -->
             <div class="rdkgroup">
@@ -116,7 +119,7 @@ limitations under the License.
                     DeviceType<span style="color:red; margin-left: 0.75em;">*</span>
                 </label>
                 <!-- Column for device type select and validation -->
-                <div class="col-md-8">
+                <div class="col-md-8" style="margin-top: 4px;">
                   <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="deviceType" (change)="devicetypeChange($event)">
                     <option value="" default>Select</option>
                     @for (item of allDeviceType; track $index) {

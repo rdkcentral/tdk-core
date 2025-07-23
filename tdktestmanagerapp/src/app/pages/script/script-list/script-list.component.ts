@@ -847,7 +847,7 @@ export class ScriptListComponent {
    * This method uses the Angular Router to navigate to the 'script/custom-testsuite' route.
    */
   customTestSuite() {
-    this.router.navigate(['script/custom-testsuite']);
+    this.router.navigate(['script/custom-testsuite'], { state: { category: this.selectedCategory } });
 
   }
   /**

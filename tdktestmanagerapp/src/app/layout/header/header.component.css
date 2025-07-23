@@ -34,9 +34,23 @@ body, *:not(.material-icons) {
 
 /* Logo image styling */
 .logo-img {
-
-    width: 10%;
+    width: auto;
+    max-width: 7%;
+    min-width: 80px; /* Prevent logo from becoming too small */
+    height: auto;
     margin-top: 8px;
+    object-fit: contain; /* Ensures the image maintains its aspect ratio */
+}
+
+
+
+/* For 4K and above resolutions */
+@media (min-width: 2560px) {
+    .logo-img {
+        max-width: 120px; /* Larger fixed width for 4K+ screens */
+    }
+    
+   
 }
 
 

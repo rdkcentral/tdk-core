@@ -1035,3 +1035,76 @@ body,
 ::ng-deep .ag-theme-quartz-copyable .ag-cell.ag-cell-selectable div {
   color: inherit !important;
 }
+
+/* Make layout fully responsive with no white space on any screen size */
+.bg-container {
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Use flex for main row instead of Bootstrap grid */
+.bg-container > .row {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  max-width: 100%;
+}
+
+/* Make sidebar responsive with min and max width */
+.col-sidebar {
+  flex: 0 0 auto;
+  width: 16%;
+  min-width: 180px;
+  max-width: 240px; 
+  padding: 0;
+}
+
+/* Main content area takes remaining width */
+.col-md-10 {
+  flex: 1;
+  width: auto;
+  padding: 0 10px;
+}
+
+/* Ensure tables fill their containers */
+.table-container {
+  width: 100%;
+  padding: 0;
+  max-width: 100%;
+}
+
+/* Make ag-Grid tables use full width */
+ag-grid-angular {
+  width: 100% !important;
+}
+
+/* Adjust for small screens */
+@media (max-width: 768px) {
+  .bg-container > .row {
+    flex-direction: column;
+  }
+  
+  .col-sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* Make sure everything stretches fully on large screens */
+@media (min-width: 1400px) {
+  .container,
+  .container-fluid,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl,
+  .container-xxl {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .col-md-10 {
+    padding: 0 15px;
+  }
+}

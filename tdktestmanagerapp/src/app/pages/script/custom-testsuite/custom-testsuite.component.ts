@@ -47,6 +47,7 @@ export class CustomTestsuiteComponent {
   allDeviceType:any;
   selectedVideoCategory : string = 'RDKV';
   loggedinUser:any;
+  selectedCategory: string = '';
 
   /**
    * Constructor for CustomTestsuiteComponent.
@@ -66,6 +67,8 @@ export class CustomTestsuiteComponent {
     private _snakebar: MatSnackBar
   ) {
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
+    const nav = this.router.getCurrentNavigation();
+  this.selectedCategory = nav?.extras?.state?.['category'] || '';
   }
 
   /**
@@ -227,7 +230,7 @@ export class CustomTestsuiteComponent {
         description:this.customFormGroup.value.description,
         deviceType:this.customFormGroup.value.deviceType,
         modules: this.customFormGroup.value.modules,
-        category: this.selectedVideoCategory,
+        category:this.selectedCategory,
         userGroup: this.loggedinUser.userGroupName,
         longDurationScripts: this.customFormGroup.value.longdurationtest,
       }

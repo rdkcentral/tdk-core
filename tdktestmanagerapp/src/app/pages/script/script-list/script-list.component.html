@@ -69,21 +69,28 @@ limitations under the License.
         <button type="button" class="download-btn" matTooltip="Update Test Suite"><i
             class="bi bi-arrow-repeat download-icon"></i> </button> -->
 
-        <button *ngIf="testsuitTable && categoryName !== 'Video'" class="download-btn" (click)="createScriptGroup()"
+        <button *ngIf="testsuitTable && categoryName !== 'Video'" class="download-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
           matTooltip="Create {{selectedCategory}} Suite">
           <i class="bi bi-plus-circle-fill download-icon"></i>
         </button>
+         <ul class="dropdown-menu">
+           <li><a class="dropdown-item" (click)="createScriptGroup()">TestSuite</a></li>
+           <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" (click)="customTestSuite()">Custom TestSuite</a></li>
+        </ul>
         <button *ngIf="testsuitTable && categoryName === 'Video'" type="button" class="download-btn dropdown-toggle"
           data-bs-toggle="dropdown" aria-expanded="false" matTooltip="Create {{selectedCategory}} Suite">
 
           <i class="bi bi-plus-circle-fill download-icon"></i>
         </button>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" (click)="createScriptVideo('RDKV_RDKSERVICE')">Video-Thunder</a></li>
+          <li><a class="dropdown-item" (click)="createScriptVideo('RDKV_RDKSERVICE')">Thunder TestSuite</a></li>
           <li>
             <hr class="dropdown-divider">
           </li>
-          <li><a class="dropdown-item" (click)="createScriptVideo('RDKV')">Video</a></li>
+          <li><a class="dropdown-item" (click)="createScriptVideo('RDKV')">TestSuite</a></li>
           <li>
             <hr class="dropdown-divider">
           </li>
