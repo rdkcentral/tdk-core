@@ -686,4 +686,176 @@
                         </subtestStep>
                 </testStep>
         </testCase>
+
+        <!-- Test case 29 -->
+        <testCase testCaseId="US_29" testCaseName="UserSettings_Audio_Description_With_Empty_String" desc="Verify setAudioDescription with enabled set to an empty string to ensure the API handles empty values appropriately">
+                <testCaseInfo testCaseType="direct" />
+                <testStep testStepId="1" name="Get_Audio_Description" method="UserSettings_getAudioDescription">
+                <resultGeneration useMethodTag="usersettings_get_enabled_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_Audio_Description_Empty_String" method="UserSettings_Negative_setAudioDescription">
+                <params>
+                        <param tag="enabled" value=""/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_Audio_Description" method="UserSettings_getAudioDescription">
+                        <resultGeneration useMethodTag="usersettings_get_enabled_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 30 -->
+        <testCase testCaseId="US_30" testCaseName="UserSettings_Audio_Description_With_Specialchars" desc="Verify setAudioDescription with enabled set to a special character to ensure the API rejects special character input">
+                <testCaseInfo testCaseType="direct" />
+                <testStep testStepId="1" name="Get_Audio_Description" method="UserSettings_getAudioDescription">
+                <resultGeneration useMethodTag="usersettings_get_enabled_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_Audio_Description_Specialchars" method="UserSettings_Negative_setAudioDescription">
+                <params>
+                        <param tag="enabled" value="@#$%^*()"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_Audio_Description" method="UserSettings_getAudioDescription">
+                        <resultGeneration useMethodTag="usersettings_get_enabled_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 31 -->
+        <testCase testCaseId="US_31" testCaseName="UserSettings_Audio_Description_With_NumericValue" desc="Verify setAudioDescription with enabled set to a numeric value to ensure the API rejects non-boolean input">
+                <testCaseInfo testCaseType="direct" />
+                <testStep testStepId="1" name="Get_Audio_Description" method="UserSettings_getAudioDescription">
+                <resultGeneration useMethodTag="usersettings_get_enabled_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_Audio_Description_NumericValue" method="UserSettings_Numeric_setAudioDescription">
+                <params>
+                        <param tag="enabled" value="1234"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_Audio_Description" method="UserSettings_getAudioDescription">
+                        <resultGeneration useMethodTag="usersettings_get_enabled_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 32 -->
+        <testCase testCaseId="US_32" testCaseName="UserSettings_Audio_Description_Without_Params" desc="Verify the setAudioDescription API behavior when the enabled parameter is omitted, to ensure it handles the scenario correctly">
+                <testCaseInfo testCaseType="direct" />
+                <testStep testStepId="1" name="Get_Audio_Description" method="UserSettings_getAudioDescription">
+                <resultGeneration useMethodTag="usersettings_get_enabled_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_Audio_Description_Without_Params" method="UserSettings_Negative_setAudioDescription"/>
+                <testStep testStepId="3" name="Get_Audio_Description" method="UserSettings_getAudioDescription">
+                        <resultGeneration useMethodTag="usersettings_get_enabled_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 33 -->
+        <testCase testCaseId="US_33" testCaseName="UserSettings_Caption_With_Empty_String" desc="Verify setCaptions with enabled set to an empty string to ensure the API handles empty values appropriately">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_Caption" method="UserSettings_getCaptions">
+                <resultGeneration useMethodTag="usersettings_get_enabled_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_Caption_Empty_String" method="UserSettings_Negative_setCaptions">
+                <params>
+                        <param tag="enabled" value=""/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_Caption" method="UserSettings_getCaptions">
+                	<resultGeneration useMethodTag="usersettings_get_enabled_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 34 -->
+        <testCase testCaseId="US_34" testCaseName="UserSettings_Caption_With_Specialchars" desc="Verify setCaptions with enabled set to a special character to ensure the API rejects special character input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_Caption" method="UserSettings_getCaptions">
+                <resultGeneration useMethodTag="usersettings_get_enabled_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_Caption_Specialchars" method="UserSettings_Negative_setCaptions">
+                <params>
+                        <param tag="enabled" value="@#$%^*()"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_Caption" method="UserSettings_getCaptions">
+                        <resultGeneration useMethodTag="usersettings_get_enabled_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 35 -->
+        <testCase testCaseId="US_35" testCaseName="UserSettings_Caption_With_NumericValue" desc="Verify setCaptions with enabled set to a numeric value to ensure the API rejects non-boolean input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_Caption" method="UserSettings_getCaptions">
+                <resultGeneration useMethodTag="usersettings_get_enabled_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_Caption_NumericValue" method="UserSettings_Numeric_setCaptions">
+                <params>
+                        <param tag="enabled" value="1234"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_Caption" method="UserSettings_getCaptions">
+                        <resultGeneration useMethodTag="usersettings_get_enabled_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 36 -->
+        <testCase testCaseId="US_36" testCaseName="UserSettings_Caption_Without_Params" desc="Verify the setCaptions API behavior when the enabled parameter is omitted, to ensure it handles the scenario correctly">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_Caption" method="UserSettings_getCaptions">
+                <resultGeneration useMethodTag="usersettings_get_enabled_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+		<testStep testStepId="2" name="Set_Caption_Without_Params" method="UserSettings_Negative_setCaptions"/>
+                <testStep testStepId="3" name="Get_Caption" method="UserSettings_getCaptions">
+                        <resultGeneration useMethodTag="usersettings_get_enabled_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 37 -->
+        <testCase testCaseId="US_37" testCaseName="UserSettings_PinControl_With_Empty_String" desc="Verify setPinControl with pinControl set to an empty string to ensure the API handles empty values appropriately">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PinControl" method="UserSettings_getPinControl">
+                <resultGeneration useMethodTag="usersettings_get_pinControl_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PinControl_Empty_String" method="UserSettings_Negative_setPinControl">
+                <params>
+                        <param tag="pinControl" value=""/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_PinControl" method="UserSettings_getPinControl">
+                	<resultGeneration useMethodTag="usersettings_get_pinControl_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 38 -->
+        <testCase testCaseId="US_38" testCaseName="UserSettings_PinControl_With_Specialchars" desc="Verify setPinControl with pinControl set to a special character to ensure the API rejects special character input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PinControl" method="UserSettings_getPinControl">
+                <resultGeneration useMethodTag="usersettings_get_pinControl_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PinControl_Specialchars" method="UserSettings_Negative_setPinControl">
+                <params>
+                        <param tag="pinControl" value="@#$%^*()"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_PinControl" method="UserSettings_getPinControl">
+                        <resultGeneration useMethodTag="usersettings_get_pinControl_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
 </testPlugin>

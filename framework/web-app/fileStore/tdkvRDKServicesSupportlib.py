@@ -4186,17 +4186,29 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "usersettings_get_enabled_status":
             info["enabled"] = result
-            if str(result).strip() in expectedValues:
-                info["Test_Step_Status"] = "SUCCESS"
+            if arg and arg[0] == "negative":
+                if str(result).strip().lower() in expectedValues[0].lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                if str(result).strip() in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "usersettings_get_pinControl_status":
             info["pinControl"] = result
-            if str(result).strip() in expectedValues:
-                info["Test_Step_Status"] = "SUCCESS"
+            if arg and arg[0] == "negative":
+                if str(result).strip().lower() in expectedValues[0].lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                if str(result).strip() in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "usersettings_get_liveWatershed_status":
             info["liveWatershed"] = result

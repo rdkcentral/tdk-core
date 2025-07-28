@@ -2933,6 +2933,31 @@
                 <param tag="presentationLanguage" type="string"/>
             </params>
         </method>
+	<method name="UserSettings_Negative_setAudioDescription" api="setAudioDescription" type="method" desc="Setting Audio Description">
+            <params>
+                <param tag="enabled" type="string"/>
+            </params>
+        </method>
+	<method name="UserSettings_Numeric_setAudioDescription" api="setAudioDescription" type="method" desc="Setting Audio Description">
+            <params>
+                <param tag="enabled" type="int"/>
+            </params>
+        </method>
+	<method name="UserSettings_Negative_setCaptions" api="setCaptions" type="method" desc="Setting Captions">
+            <params>
+                <param tag="enabled" type="string"/>
+            </params>
+        </method>
+	<method name="UserSettings_Numeric_setCaptions" api="setCaptions" type="method" desc="Setting Captions">
+            <params>
+                <param tag="enabled" type="int"/>
+            </params>
+        </method>
+	<method name="UserSettings_Negative_setPinControl" api="setPinControl" type="method" desc="Setting PinControl">
+            <params>
+                <param tag="pinControl" type="string"/>
+            </params>
+        </method>
 
 	<!-- Event Definitions -->
         <event name="Event_On_AudioDescriptionChanged" eventName="onAudioDescriptionChanged" eventId="client.events.1" type="event" desc="Triggered when the audio description changes"/>
