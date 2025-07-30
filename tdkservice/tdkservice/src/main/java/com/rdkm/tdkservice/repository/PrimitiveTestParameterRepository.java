@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,5 +43,16 @@ public interface PrimitiveTestParameterRepository extends JpaRepository<Primitiv
 	 * @return List<PrimitiveTestParameter>
 	 */
 	List<PrimitiveTestParameter> findByPrimitiveTest(PrimitiveTest primitivetTest);
+	
+	
+	/**
+	 * This method is used to get the primitive test parameter by created date or
+	 * updated at.
+	 * 
+	 * @param createdDate
+	 * @param updatedAt
+	 * @return List<PrimitiveTestParameter>
+	 */
+	List<PrimitiveTestParameter> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
 
 }

@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 package com.rdkm.tdkservice.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,4 +67,14 @@ public interface TestSuiteRepository extends JpaRepository<TestSuite, UUID> {
 	 * @return list of {@link com.rdkm.tdkservice.model.TestSuite}
 	 */
 	List<TestSuite> findAllByCategoryIn(List<Category> asList);
+
+	/**
+	 * Find all test suites created or updated after the specified dates.
+	 *
+	 * @param createdDate - the date to compare against for creation
+	 * @param updatedAt   - the date to compare against for updates
+	 * @return list of {@link com.rdkm.tdkservice.model.TestSuite}
+	 */
+	List<TestSuite> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
+
 }

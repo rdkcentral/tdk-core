@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,5 +68,14 @@ public interface SocRepository extends JpaRepository<Soc, UUID> {
 	 * @return
 	 */
 	List<Soc> findByCategory(Category category);
+
+	/**
+	 * This method is used to get the soc by created date or updated at.
+	 * 
+	 * @param createdDate
+	 * @param updatedAt
+	 * @return List<Soc>
+	 */
+	List<Soc> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
 
 }

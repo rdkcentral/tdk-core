@@ -20,11 +20,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 package com.rdkm.tdkservice.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.rdkm.tdkservice.enums.Category;
@@ -99,5 +101,35 @@ public interface ScriptRepository extends JpaRepository<Script, UUID> {
 	 * @return List - the list of scripts
 	 */
 	List<Script> findAllByCategory(String name);
+
+	/**
+	 * This method is used to find scripts that were created or updated after the
+	 * specified timestamps.
+	 * 
+	 * @param createdDate the timestamp after which scripts were created
+	 * @param updatedAt   the timestamp after which scripts were updated
+	 * @return a list of scripts that match the criteria
+	 */
+	List<Script> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
+
+	/**
+	 * This method is used to find scripts whose pre-conditions were created or
+	 * updated after the specified timestamp.
+	 * 
+	 * @param since the timestamp after which pre-conditions were created or updated
+	 * @return a list of scripts that match the criteria
+	 */
+	@Query("SELECT DISTINCT p.script FROM PreCondition p WHERE p.createdDate > :since OR p.updatedAt > :since")
+	List<Script> findScriptsWithPreConditionChangedSince(@Param("since") Instant since);
+
+	/**
+	 * This method is used to find scripts whose test steps were created or updated
+	 * after the specified timestamp.
+	 * 
+	 * @param since the timestamp after which test steps were created or updated
+	 * @return a list of scripts that match the criteria
+	 */
+	@Query("SELECT s FROM Script s JOIN s.testSteps ts WHERE ts.createdDate > :since OR ts.updatedAt > :since")
+	List<Script> findScriptsWithTestStepChangedSince(@Param("since") Instant since);
 
 }

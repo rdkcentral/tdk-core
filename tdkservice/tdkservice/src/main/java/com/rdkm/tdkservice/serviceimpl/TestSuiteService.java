@@ -23,6 +23,7 @@ package com.rdkm.tdkservice.serviceimpl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -188,6 +189,14 @@ public class TestSuiteService implements ITestSuiteService {
 			Category category = commonService.validateCategory(testSuiteDTO.getCategory());
 			testSuite.setCategory(category);
 		}
+
+		// Explicitly set the updatedAt timestamp and save the entity to ensure
+		// the updated time is persisted immediately, especially when changes
+		// are made to the script list (Script TestSuite table)only that may not trigger
+		// automatic
+		// JPA updates in the testsuite table.
+		testSuite.setUpdatedAt(Instant.now());
+		testSuiteRepository.save(testSuite);
 
 		try {
 			if (testSuiteDTO.getScripts() != null) {

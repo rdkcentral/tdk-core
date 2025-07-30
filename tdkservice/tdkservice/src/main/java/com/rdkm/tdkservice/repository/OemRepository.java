@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,5 +67,15 @@ public interface OemRepository extends JpaRepository<Oem, UUID> {
 	 * @return a list of oems objects containing the oem's information
 	 */
 	List<Oem> findByCategory(Category category);
+
+	/**
+	 * This method is used to find oem that were created or updated after the
+	 * specified timestamps.
+	 * 
+	 * @param createdDate the timestamp after which oem were created
+	 * @param updatedAt   the timestamp after which oem were updated
+	 * @return a list of oem that match the criteria
+	 */
+	List<Oem> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
 
 }

@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,5 +83,14 @@ public interface ParameterRepository extends JpaRepository<Parameter, UUID> {
 	 * @return
 	 */
 	Parameter findByNameAndFunction(String name, Function function);
+	
+	/**
+	 * This method is used to find parameters that were created or updated after the specified timestamps.
+	 * @param createdDate the timestamp after which parameters were created
+	 * @param updatedAt the timestamp after which parameters were updated
+	 * @return a list of parameters that match the criteria
+	 */
+	List<Parameter> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
+
 
 }

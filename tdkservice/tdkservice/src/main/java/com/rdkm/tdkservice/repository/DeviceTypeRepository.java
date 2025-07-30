@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,5 +75,14 @@ public interface DeviceTypeRepository extends JpaRepository<DeviceType, UUID> {
 	 * @return a list of deviceType objects containing the device type's information
 	 */
 	List<DeviceType> findByType(DeviceTypeCategory type);
+
+	/**
+	 * This method is used to get the device type by created date or updated at.
+	 *
+	 * @param createdDate
+	 * @param updatedAt
+	 * @return List<DeviceType>
+	 */
+	List<DeviceType> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
 
 }

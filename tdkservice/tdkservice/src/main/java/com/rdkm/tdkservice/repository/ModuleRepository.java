@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -69,5 +70,14 @@ public interface ModuleRepository extends JpaRepository<Module, UUID> {
 	 * @return a list of all modules
 	 */
 	List<Module> findAll();
+	
+	/**
+	 * This method is used to find modules that were created or updated after the specified timestamps.
+	 * @param createdDate the timestamp after which modules were created
+	 * @param updatedAt the timestamp after which modules were updated
+	 * @return a list of modules that match the criteria
+	 */
+	List<Module> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
+
 
 }

@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,4 +75,13 @@ public interface FunctionRepository extends JpaRepository<Function, UUID> {
 	 * @return a list of functions in the specified module
 	 */
 	List<Function> findAllByModule(Module module);
+	
+	/**
+	 * This method is used to find functions that were created or updated after the specified timestamps.
+	 * @param createdDate the timestamp after which functions were created
+	 * @param updatedAt the timestamp after which functions were updated
+	 * @return a list of functions that match the criteria
+	 */
+	List<Function> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
+
 }
