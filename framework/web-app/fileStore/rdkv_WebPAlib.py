@@ -117,7 +117,6 @@ def webpa_obtainCredentials():
     global sshMethod
     #Get each configuration from device config file
     for configKey in configKeyList:
-        get_device_config_value(libObj.realpath,configKey)
         configValues[configKey] = get_device_config_value(libObj.realpath,configKey)
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
             print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
@@ -262,7 +261,7 @@ def webpa_get(paramName,WEBPA_URL,AUTH_TOKEN):
             credentials = deviceIP + ',' + user_name + ',' + password
             WEBPA_URL = WEBPA_URL.strip()
             AUTH_TOKEN = AUTH_TOKEN.strip()
-            command = "curl -X GET '"+WEBPA_URL+"/mac:"+deviceMAC+"/config?names="+paramName+"'"+" -H 'authorization:"+AUTH_TOKEN+"'"
+            command = "curl -X GET '"+WEBPA_URL+"/api/v2/device/mac:"+deviceMAC+"/config?names="+paramName+"'"+" -H 'authorization:"+AUTH_TOKEN+"'"
             print("\nExecuting Command : %s" %command)
             #execute in DUT function
             result=execute_CmndInDUT (sshMethod, credentials, command)
@@ -316,7 +315,7 @@ def webpa_set(paramName,testValue,WEBPA_URL,AUTH_TOKEN,dataType):
             credentials = deviceIP + ',' + user_name + ',' + password
             WEBPA_URL = WEBPA_URL.strip()
             AUTH_TOKEN = AUTH_TOKEN.strip()
-            command = "curl -X PATCH "+WEBPA_URL+"/mac:"+deviceMAC+"/config -d '{"+'"parameters":[{"dataType":' + str(dataType) + ', "name":"'+paramName+'",  "value": "'+testValue+'"}]}'+"' -H 'authorization:"+AUTH_TOKEN+"'"
+            command = "curl -X PATCH "+WEBPA_URL+"/api/v2/device/mac:"+deviceMAC+"/config -d '{"+'"parameters":[{"dataType":' + str(dataType) + ', "name":"'+paramName+'",  "value": "'+testValue+'"}]}'+"' -H 'authorization:"+AUTH_TOKEN+"'"
             print("Executing Command : %s\n" %command)
             #execute in DUT function
             result=execute_CmndInDUT (sshMethod, credentials, command)
@@ -354,7 +353,7 @@ def webpa_validate_set(paramName, testValue, WEBPA_URL, AUTH_TOKEN):
             credentials = deviceIP + ',' + user_name + ',' + password
             WEBPA_URL = WEBPA_URL.strip()
             AUTH_TOKEN = AUTH_TOKEN.strip()
-            command = f"curl -X GET '{WEBPA_URL}/mac:{deviceMAC}/config?names={paramName}' -H 'authorization:{AUTH_TOKEN}'"
+            command = f"curl -X GET '{WEBPA_URL}/api/v2/device/mac:{deviceMAC}/config?names={paramName}' -H 'authorization:{AUTH_TOKEN}'"
             print(f"\nExecuting Command: {command}")
             result = execute_CmndInDUT(sshMethod, credentials, command)
             result = str(result).split("\n")[1]

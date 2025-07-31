@@ -60,17 +60,17 @@
   <test_cases>
     <test_case_id>rdkvWebPA_07</test_case_id>
     <test_objective>Test to ensure Thunder security can be toggled via WebPA server</test_objective>
-    <test_type></test_type>
-    <test_setup></test_setup>
-    <pre_requisite></pre_requisite>
+    <test_type>Positive</test_type>
+    <test_setup>Video Accelerator, RPI</test_setup>
+    <pre_requisite>WEBPA_URL and Authoraization Key should be configured in the device config file</pre_requisite>
     <api_or_interface_used></api_or_interface_used>
     <input_parameters></input_parameters>
     <automation_approch></automation_approch>
-    <expected_output></expected_output>
-    <priority></priority>
+    <expected_output>RFC parameter via webpa server should ensure the Thunder security is enabled or not</expected_output>
+    <priority>High</priority>
     <test_stub_interface></test_stub_interface>
-    <test_script></test_script>
-    <skipped></skipped>
+    <test_script>RDKV_WebPA_ThunderSecurity_Enable</test_script>
+    <skipped>No</skipped>
     <release_version>M138</release_version>
     <remarks></remarks>
   </test_cases>
@@ -98,7 +98,7 @@ if "SUCCESS" in result.upper():
 
     # Define the parameter and value to test
     paramName = "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.ThunderSecurity.Enable"
-     testValue = "1"
+    testValue = "1"
 
     print("\n")
     tdkTestObj = obj.createTestStep('webpa_deviceconfig_value')
