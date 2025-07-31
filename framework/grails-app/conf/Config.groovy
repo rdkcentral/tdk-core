@@ -180,5 +180,5 @@ grails.mail.default.to=emailConfig?.get('default_to')
 
 // Add the TDK version property
         tdk {
-            version = "TDK-138"
+            version = "TDK-139"
         }
