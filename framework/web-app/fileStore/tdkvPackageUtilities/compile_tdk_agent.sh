@@ -37,8 +37,8 @@ SRC_DEEPSLEEP_HAL="https://github.com/rdkcentral/rdk-halif-deepsleep_manager.git
 SRC_DS_HAL="https://github.com/rdkcentral/rdk-halif-device_settings.git"
 SRC_HDMICEC_HAL="https://github.com/rdkcentral/rdk-halif-hdmi_cec.git"
 SRC_BLUETOOTH_HAL="https://code.rdkcentral.com/r/rdk/components/generic/bluetooth"
-SRC_IARMMGRS="https://code.rdkcentral.com/r/rdk/components/generic/iarmmgrs"
-#SRC_IARMMGRS="git@github.com:rdk-e/iarmmgrs.git"
+#SRC_IARMMGRS="https://code.rdkcentral.com/r/rdk/components/generic/iarmmgrs"
+SRC_IARMMGRS="https://github.com/rdkcentral/iarmmgrs.git"
 SRC_WESTEROS="https://code.rdkcentral.com/r/components/opensource/westeros"
 SRC_EGL="https://github.com/KhronosGroup/EGL-Registry.git"
 SRC_RMF_AUDIO_CAPTURE="https://github.com/rdkcentral/rdk-halif-rmf_audio_capture.git"
@@ -46,19 +46,18 @@ SRC_STORAGE_MGR="https://code.rdkcentral.com/r/rdk/components/generic/storageman
 #SRC_STORAGE_MGR="git@github.com:rdk-e/storagemanager.git"
 SRC_NETSRVMGR="https://code.rdkcentral.com/r/rdk/components/generic/netsrvmgr"
 #SRC_NETSRVMGR="git@github.com:rdk-e/netsrvmgr.git"
-SRC_HDMICEC="https://code.rdkcentral.com/r/rdk/components/generic/hdmicec"
-#SRC_HDMICEC="git@github.com:rdk-e/hdmicec.git"
-SRC_IARMBUS="https://code.rdkcentral.com/r/rdk/components/generic/iarmbus"
-#SRC_IARMBUS="git@github.com:rdk-e/iarmbus.git"
+SRC_HDMICEC="https://github.com/rdkcentral/hdmicec.git"
+SRC_IARMBUS="https://github.com/rdkcentral/iarmbus.git"
 SRC_XKBCOMMON="http://xkbcommon.org/download/libxkbcommon-0.5.0.tar.xz"
-SRC_DS="https://code.rdkcentral.com/r/rdk/components/generic/devicesettings"
+SRC_DS="https://github.com/rdkcentral/devicesettings"
 SRC_CJSON="https://github.com/DaveGamble/cJSON.git"
 SRC_UTIL_LINUX="https://github.com/util-linux/util-linux.git"
 SRC_RDKFWUPDATER="https://github.com/rdkcentral/rdkfwupdater.git"
 SRC_COMMONUTILITIES="https://github.com/rdkcentral/common_utilities.git"
-SRC_LIBSYSWRAPPER="https://github.com/rdk-e/libSyscallWrapper.git"
-SRC_MIDDLEWARE_SUPPORT="https://github.com/rdk-e/meta-middleware-generic-support.git"
+SRC_LIBSYSWRAPPER="https://github.com/rdkcentral/libSyscallWrapper.git"
+SRC_MIDDLEWARE_SUPPORT="https://github.com/rdkcentral/meta-middleware-generic-support.git"
 SRC_RDKLOGGER="https://github.com/rdkcentral/rdk_logger.git"
+SRC_AAMP="https://github.com/rdkcentral/aamp.git"
 
 #Platformwise repositories
 SRC_RPI="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
@@ -84,9 +83,6 @@ SYSROOT=${ROOT_DIR}/sysroots
 SKIP_PLATFORM="FALSE"
 SKIP_PACKAGES="TRUE"
 
-config=configure.txt
-. $config
-
 platform_arg=false
 for arg in "$@"
 do
@@ -111,6 +107,10 @@ else
     SKIP_PLATFORM="TRUE"
     PLATFORM=""
 fi
+
+
+config=configure.txt
+. $config
 
 for arg in "$@"; do
     if [ "$arg" == "--fncs-package" ]; then
@@ -228,6 +228,32 @@ get_component_versions()
     if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
 	 git checkout $MIDDLEWARE_VERSION >> $LOG_FILE 2>&1
     fi
+
+    iarmbus_srcrev=`grep iarmbus conf/include/generic-srcrev.inc | cut -d "=" -f 2`
+    iarmbus_srcrev=${iarmbus_srcrev//\"/}
+    iarmbus_srcrev=${iarmbus_srcrev// /}
+    echo "iarmbus_srcrev = $iarmbus_srcrev"
+
+    hdmicec_srcrev=`grep hdmicec conf/include/generic-srcrev.inc | grep -v hdmicecheader | cut -d "=" -f 2`
+    hdmicec_srcrev=${hdmicec_srcrev//\"/}
+    hdmicec_srcrev=${hdmicec_srcrev// /}
+    echo "hdmicec_srcrev = $hdmicec_srcrev"
+
+    iarmmgrs_srcrev=`grep iarmmgrs conf/include/generic-srcrev.inc | cut -d "=" -f 2 | head -n1`
+    iarmmgrs_srcrev=${iarmmgrs_srcrev//\"/}
+    iarmmgrs_srcrev=${iarmmgrs_srcrev// /}
+    echo "iarmmgrs_srcrev = $iarmmgrs_srcrev"
+
+    aamp_srcrev=`grep aamp conf/include/generic-srcrev.inc | cut -d "=" -f 2`
+    aamp_srcrev=${aamp_srcrev//\"/}
+    aamp_srcrev=${aamp_srcrev// /}
+    echo "aamp_srcrev = $aamp_srcrev"
+
+    device_settings_srcrev=`grep devicesettings conf/include/generic-srcrev.inc | cut -d "=" -f 2`
+    device_settings_srcrev=${device_settings_srcrev//\"/}
+    device_settings_srcrev=${device_settings_srcrev// /}
+    echo "device_settings_srcrev = $device_settings_srcrev"
+
     common_utilities_srcrev=`grep commonutilities conf/include/generic-srcrev.inc | cut -d "=" -f 2`
     common_utilities_srcrev=${common_utilities_srcrev//\"/}
     common_utilities_srcrev=${common_utilities_srcrev// /}
@@ -655,6 +681,9 @@ clone_and_move()
     echo -e "Installing $COMPONENT header files in sysroot"
     if [[ ! -z $header_file_custom_path ]];then
         echo -e "Fetching from $header_file_custom_path"
+	if [ "$header_file_custom_path" == "current_dir" ];then
+            header_file_custom_path=""
+        fi
         cp ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/$header_file_custom_path/*.h ${SYSROOT}/usr/include
     elif [[ ! -z $custom_destination_path ]];then
         echo -e "Installing $COMPONENT headers in ${SYSROOT}/usr/include/$custom_destination_path"
@@ -703,13 +732,19 @@ compile_skeleton_libraries()
 {
     echo -e "Compiling TDK Libraries\n"
     COMPILE_SKELETON=false
-    COMPILE_DUMMY_LIBS="WiFiHal PowerMgrHal DeepSleepHal DSHal IARMBus HdmiCec Bluetooth MfrHal WesterosHal Essos AAMP AudioCaptureMgr Graphics "
-    COMPILE_DUMMY_LIBS="$COMPILE_DUMMY_LIBS common_utilities rdklogger DeviceSettings IARMBus libsyswrapper NetSrvMgr"
+    COMPILE_DUMMY_LIBS="WiFiHal PowerMgrHal DeepSleepHal DSHal IARMBus HdmiCec Bluetooth MfrHal WesterosHal Essos AudioCaptureMgr Graphics AAMP"
+    COMPILE_DUMMY_LIBS="$COMPILE_DUMMY_LIBS common_utilities rdklogger DeviceSettings IARMBus libsyswrapper NetSrvMgr "
     if [[ $FNCS_PACKAGE == "TRUE" ]];then
-	COMPILE_DUMMY_LIBS=" Graphics "
+	COMPILE_DUMMY_LIBS="Graphics Essos DSHal"
     fi
-    clone_and_move "https://code.rdkcentral.com/r/rdk/components/generic/iarmbus" $SRC_IARMBUS_HEADER_REVISION "iarmbus" "core/include"
-    clone_and_move "https://code.rdkcentral.com/r/rdk/components/generic/iarmbus" $SRC_IARMBUS_HEADER_REVISION "iarmbus" "core"
+    got_versions=false
+    if ! $got_versions;then
+         echo -e "Getting versions"
+         get_component_versions
+         got_versions=true
+    fi
+    clone_and_move $SRC_IARMBUS $iarmbus_srcrev "iarmbus" "core/include"
+    clone_and_move $SRC_IARMBUS $iarmbus_srcrev "iarmbus" "core"
     COMPILE_SKELETON=true
     for COMPONENT in $COMPILE_DUMMY_LIBS; do
         if [[ $COMPONENT == "WiFiHal" ]];then
@@ -722,11 +757,13 @@ compile_skeleton_libraries()
                  cd ${TDK_SOURCE_DIR}/RDK_Source
                  echo -e "\nInstalling iarmmgrs_source"
                  git clone $SRC_IARMMGRS 
-                 if [[ $SRC_IARMMGRS_HEADER_REVISION != "DEFAULT" ]];then
-                     cd iarmmgrs; git checkout $SRC_IARMMGRS_HEADER_REVISION >> $LOG_FILE 2>&1; cd ..
+		 if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
+	             cd iarmmgrs;
+                     git checkout $iarmmgrs_srcrev >> $LOG_FILE 2>&1
+		     cd ..
                  fi
+
                  mv iarmmgrs iarmmgrs_source
-		 cp ${TDK_SOURCE_DIR}/RDK_Source/iarmmgrs_source/ir/include/irMgr.h $SYSROOT/usr/include
 		 cp ${TDK_SOURCE_DIR}/RDK_Source/iarmmgrs_source/hal/include/pwrMgr.h $SYSROOT/usr/include
 		 cp ${TDK_SOURCE_DIR}/RDK_Source/iarmmgrs_source/mfr/include/mfr_temperature.h $SYSROOT/usr/include
 		 cp ${TDK_SOURCE_DIR}/RDK_Source/iarmmgrs_source/power/pwrlogger.h $SYSROOT/usr/include
@@ -745,14 +782,9 @@ compile_skeleton_libraries()
             done
             cd ${TDK_SOURCE_DIR}/RDK_Source
             echo -e "\nInstalling therm_mon.h in RDK_Source"
-            git clone $SRC_IARMMGRS >> $LOG_FILE 2>&1
-	    if [[ $SRC_IARMMGRS_HEADER_REVISION != "DEFAULT" ]];then
-	       cd iarmmgrs; git checkout $SRC_IARMMGRS_HEADER_REVISION >> $LOG_FILE 2>&1; cd ..
-	    fi
-
-	    cp iarmmgrs/hal/include/therm_mon.h $SYSROOT/usr/include
-            cp iarmmgrs/hal/include/therm_mon.h ${TDK_SOURCE_DIR}/PowerMgrHal
-            rm -rf ${TDK_SOURCE_DIR}/RDK_Source/iarmmgrs
+	    cp iarmmgrs_source/hal/include/therm_mon.h $SYSROOT/usr/include
+            cp iarmmgrs_source/hal/include/therm_mon.h ${TDK_SOURCE_DIR}/PowerMgrHal
+            rm -rf ${TDK_SOURCE_DIR}/RDK_Source/iarmmgrs_source
             clone_and_move $SRC_POWERMGR_HAL $SRC_POWERMGR_HAL_HEADER_REVISION $COMPONENT "PWRMGR_HAL_LIB_VERSION"
         fi
         if [[ $COMPONENT == "DeepSleepHal" ]];then
@@ -787,9 +819,6 @@ compile_skeleton_libraries()
                  rm "$file"
             done
             clone_and_move $SRC_HDMICEC_HAL $SRC_HDMICEC_HAL_HEADER_REVISION $COMPONENT "CEC_HAL_LIB_VERSION"
-	    rm -rf hdmicec
-	    git clone $SRC_HDMICEC >> $LOG_FILE 2>&1
-	    sudo cp hdmicec/ccec/drivers/include/ccec/drivers/iarmbus/CecIARMBusMgr.h $SYSROOT/usr/include/
         fi
         if [[ $COMPONENT == "Bluetooth" ]];then
             clone_and_move $SRC_BLUETOOTH_HAL $SRC_BLUETOOTH_HAL_HEADER_REVISION $COMPONENT "BLE_HAL_LIB_VERSION"
@@ -797,7 +826,7 @@ compile_skeleton_libraries()
         if [[ $COMPONENT == "MfrHal" ]];then
             clone_and_move $SRC_IARMMGRS $SRC_IARMMGRS_HAL_HEADER_REVISION $COMPONENT "MFR_HAL_LIB_VERSION" "mfr/include/"
         fi
-        if [[ $COMPONENT == "Essos" ]];then
+        if [[ $COMPONENT == "Graphics" ]];then
             #Installing EGL headers for Essos Compilation
             cd ${TDK_SOURCE_DIR}/RDK_Source
             git clone $SRC_EGL >> $LOG_FILE 2>&1
@@ -807,6 +836,8 @@ compile_skeleton_libraries()
             sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/api/EGL/*.h $SYSROOT/usr/include/EGL/
             sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/api/KHR/khrplatform.h $SYSROOT/usr/include/KHR/
             rm -rf ${TDK_SOURCE_DIR}/RDK_Source/$repo_name
+	fi
+	if [[ $COMPONENT == "Essos" ]];then
             clone_and_move $SRC_WESTEROS $SRC_WESTEROS_HAL_HEADER_REVISION $COMPONENT "ESSOS_LIB_VERSION" "essos/"
         fi
         if [[ $COMPONENT == "WesterosHal" ]];then
@@ -840,10 +871,6 @@ compile_skeleton_libraries()
 	    cp src/services/wifi/include/*.h  $SYSROOT/usr/include/
 	fi
         if [[ $COMPONENT == "Graphics" ]];then
-	    cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
-	    make  >> $LOG_FILE 2>&1
-	    #find and delete GLESv2 wayland-egl EGL 
-            sudo mv *.so* $SYSROOT/usr/lib/
 	    if [ ! -d "${TDK_SOURCE_DIR}/RDK_Source/westeros_source" ];then
                 cd ${TDK_SOURCE_DIR}/RDK_Source/
 		git clone $SRC_WESTEROS westeros_source >> $LOG_FILE 2>&1
@@ -856,9 +883,15 @@ compile_skeleton_libraries()
             fi
 	    if [[ $PLATFORM == "BROADCOM" ]];then
 		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/GLES2 $SYSROOT/usr/include/
+		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/*.h $SYSROOT/usr/include/
 	    else
 	        sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/GLES2 $SYSROOT/usr/include/
+		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/*.h $SYSROOT/usr/include/
 	    fi
+	    cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
+            make  >> $LOG_FILE 2>&1
+            #find and delete GLESv2 wayland-egl EGL
+            sudo mv *.so* $SYSROOT/usr/lib/
 	    cd ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/simpleshell/protocol
 	    wayland-scanner client-header < simpleshell.xml > simpleshell-client-protocol.h
 	    wayland-scanner server-header < simpleshell.xml > simpleshell-server-protocol.h
@@ -878,8 +911,13 @@ compile_skeleton_libraries()
 	fi
         if [[ $COMPONENT == "AAMP" ]];then 
 	    cd ${TDK_SOURCE_DIR}/RDK_Source
-	    git clone $SRC_META_RDK_VIDEO >> $LOG_FILE 2>&1
-	    fetch_aamp "aamp" "AAMP_RELEASE_TAG_NAME"
+	    git clone $SRC_AAMP
+	    mv aamp aamp_source
+	    cd aamp_source
+            if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
+                git checkout $aamp_srcrev
+            fi
+            cd ..
 	    sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/Aamp*.h $SYSROOT/usr/include/
 	    sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/main_aamp.h $SYSROOT/usr/include/
 	    sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/Accessibility.hpp $SYSROOT/usr/include/
@@ -906,10 +944,9 @@ compile_skeleton_libraries()
 	    git clone $SRC_DS
             mv devicesettings devicesettings_source
 	    cd devicesettings_source
-	    if [[ $SRC_DS_HEADER_REVISION != "DEFAULT" ]];then
-                echo "Checking out $HEADER_REVISION for $repo_name"
-                git checkout $HEADER_REVISION >> $LOG_FILE 2>&1
-            fi 
+	    if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
+                git checkout $device_settings_srcrev
+            fi
 	    cd ..
 	    sudo cp devicesettings_source/ds/include/*.hpp $SYSROOT/usr/include/
 	    sudo cp devicesettings_source/ds/*.hpp $SYSROOT/usr/include/
@@ -917,9 +954,6 @@ compile_skeleton_libraries()
             make DS_LIB_VERSION=${DS_LIB_VERSION} >> $LOG_FILE 2>&1
 	    sudo mv *.so* $SYSROOT/usr/lib/
 	fi
-	if [[ $COMPONENT == "libsyswrapper" ]] || [[ $COMPONENT == "common_utilties" ]];then
-	    get_component_versions
-        fi	    
 	if [[ $COMPONENT == "libsyswrapper" ]];then
 	    cd ${TDK_SOURCE_DIR}/RDK_Source
 	    git clone $SRC_LIBSYSWRAPPER libsyswrapper_source
@@ -977,7 +1011,6 @@ compile_tdkv()
     echo -e "Configuring TDK with toolchain \n"
     echo -e "TDK_SOURCE_DIR : $TDK_SOURCE_DIR"
     cd ${TDK_SOURCE_DIR}
-    cp ${ROOT_DIR}/configure.ac .
     sed -i '/^PKG_CHECK_MODULES/d' configure.ac
     sudo autoreconf -i >> $LOG_FILE 2>&1
     if [[ $PLATFORM == "RPI" ]];then
@@ -1065,41 +1098,40 @@ pack_tdkv()
     mkdir -p TDK_Package/usr/lib
     mkdir -p TDK_Package/usr/bin
     if [ -f "icrypto_bins.tar.gz" ];then
-        echo -e "iCrypto test binaries found"
-        cp icrypto_bins.tar.gz TDK_Package/usr/bin
-        cd TDK_Package/usr/bin
-        tar -xvf icrypto_bins.tar.gz >> $LOG_FILE 2>&1
-        rm icrypto_bins.tar.gz
-        cd $ROOT_DIR
+	echo -e "iCrypto test binaries found"
+	cp icrypto_bins.tar.gz TDK_Package/usr/bin
+	cd TDK_Package/usr/bin
+	tar -xvf icrypto_bins.tar.gz >> $LOG_FILE 2>&1
+	rm icrypto_bins.tar.gz
+	cd $ROOT_DIR
     fi
     if ls waymetric_* 1>/dev/null 2>&1;then
-	    echo -e "Waymetric binary is found"
-	    if [[ $PLATFORM == "AMLOGIC" ]];then
-		    cp waymetric_aml TDK_Package/usr/bin
-		    cd TDK_Package/usr/bin
-		    mv waymetric_aml waymetric 
-		    chmod +x waymetric
-		    echo -e "Waymetric binary is copied"
-		    cd $ROOT_DIR
-	    fi
-	    if [[ $PLATFORM == "BROADCOM" ]];then
+            echo -e "Waymetric binary is found"
+            if [[ $PLATFORM == "AMLOGIC" ]];then
+                    cp waymetric_aml TDK_Package/usr/bin
+                    cd TDK_Package/usr/bin
+                    mv waymetric_aml waymetric
+                    chmod +x waymetric
+                    echo -e "Waymetric binary is copied"
+                    cd $ROOT_DIR
+            fi
+            if [[ $PLATFORM == "BROADCOM" ]];then
                     cp waymetric_bcm TDK_Package/usr/bin
                     cd TDK_Package/usr/bin
                     mv waymetric_bcm waymetric
-		    chmod +x waymetric
-		    echo -e "Waymetric binary is copied"
+                    chmod +x waymetric
+                    echo -e "Waymetric binary is copied"
                     cd $ROOT_DIR
             fi
-	    if [[ $PLATFORM == "REALTEK" ]];then
+            if [[ $PLATFORM == "REALTEK" ]];then
                     cp waymetric_rtk TDK_Package/usr/bin
                     cd TDK_Package/usr/bin
                     mv waymetric_rtk waymetric
-		    chmod +x waymetric
-		    echo -e "Waymetric binary is copied"
+                    chmod +x waymetric
+                    echo -e "Waymetric binary is copied"
                     cd $ROOT_DIR
             fi
     fi
-	    
     if [[ $FNCS_PACKAGE != "TRUE" ]];then
         mkdir -p TDK_Package/var/TDK/scripts
         mkdir -p TDK_Package/var/TDK/opensourcecomptest
@@ -1146,7 +1178,8 @@ pack_tdkv()
     else
 	mkdir -p ../TDK_Package/opt/TDK/
 	rm -rf ../TDK_Package/var/TDK/
-	cp MediaPipelineTests_stub/tdk_mediapipelinetests* ../TDK_Package/usr/bin/
+	cp MediaPipelineTests_stub/tdk_mediapipelinetests ../TDK_Package/usr/bin/
+	cp MediaPipelineTests_stub/tdk_mediapipelinetests_trickplay ../TDK_Package/usr/bin/
 	cp FireboltCompliance_Validation/graphics_validation/Essos_TDKTestApp ../TDK_Package/usr/bin
         cp FireboltCompliance_Validation/graphics_validation/.libs/Westeros_TDKTestApp ../TDK_Package/usr/bin
 	cp FireboltCompliance_Validation/scripts/RunGraphicsTDKTest.sh ../TDK_Package/opt/TDK
@@ -1202,14 +1235,18 @@ pack_tdkv()
         #Create symlink for all the shared libraries
         cd ${ROOT_DIR}/TDK_Package/usr/lib
         for file in lib*stub*;do 
-            ln -s "$file" "${file%.0.0}";
+	    if [ ! -f "${file%.0.0}" ];then
+                ln -s "$file" "${file%.0.0}";
+	    fi
         done
         cd ../../
 
         #Create link for binary files
         for file in usr/bin/* ; do 
     	    filename=$(basename $file); 
-    	    ln -s /$file var/TDK/$filename; 
+	    if [ ! -f "var/TDK/$filename" ];then
+		ln -s /$file var/TDK/$filename; 
+            fi
         done
 	cd ../
     else
@@ -1217,10 +1254,8 @@ pack_tdkv()
     fi
 
     system_date=$(date)
-    #formatted_date=$(echo "$system_date" | awk '{ printf "%02d%02d%04d\n", $3, (index("JanFebMarAprMayJunJulAugSepOctNovDec", $2)+2)/3, $6 }')
     formatted_date=$(echo "$system_date" | awk '{ printf "%02d%02d%04d_%02d%02d%02d\n", $3, (index("JanFebMarAprMayJunJulAugSepOctNovDec", $2)+2)/3, $6, substr($4,1,2), substr($4,4,2), substr($4,7,2) }')
 
-        
     if [ -z $PLATFORM ];then
         if [[ $FNCS_PACKAGE == "TRUE" ]];then
 	     PACKAGE_NAME="Generic_TDK_Package_FNCS_${IMAGE_TYPE}_${formatted_date}.tar.gz"
@@ -1310,7 +1345,6 @@ exit_cleanup()
     else
 	echo -e "\e[1;42m TDK HAS BEEN COMPILED AND PACKED SUCCESSFULLY \e[0m \n" 2>&1 | tee -a $LOG_FILE
 	echo -e "Please check of \e[1;31m$PACKAGE_NAME\e[0m in the folder\n" 2>&1 | tee -a $LOG_FILE
-	
 	echo -e "Please check \e[1;31m$LOG_FILE \e[0mfor more information \n"
     fi
     cleanup
