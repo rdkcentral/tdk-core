@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_WebPA_Telemetry_MTLS_Enable</name>
+  <name>RDKV_WebPA_MigrationStatus</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Test to ensuring mutual TLS telemetry enabled or not using WebPA server</synopsis>
+  <synopsis>Test to verify the Migration Status using WebPA server</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -58,20 +58,20 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>rdkvWebPA_06</test_case_id>
-    <test_objective>Test to ensuring mutual TLS telemetry enabled or not using WebPA server</test_objective>
+    <test_case_id>rdkvWebPA_11</test_case_id>
+    <test_objective>Test to verify the Migration Status using WebPA server</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video Accelerator, RPI</test_setup>
     <pre_requisite>WEBPA_URL and Authoraization Key should be configured in the device config file</pre_requisite>
     <api_or_interface_used></api_or_interface_used>
     <input_parameters></input_parameters>
     <automation_approch></automation_approch>
-    <expected_output>RFC parameter should return TLS Telemetry feature is enabled or not</expected_output>
+    <expected_output>RFC parameter via Webpa server should return and set the Migration status</expected_output>
     <priority>High</priority>
     <test_stub_interface></test_stub_interface>
-    <test_script>RDKV_WebPA_Telemetry_MTLS_Enable</test_script>
+    <test_script>RDKV_WebPA_MigrationStatus</test_script>
     <skipped>No</skipped>
-    <release_version>M138</release_version>
+    <release_version>M139</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -85,7 +85,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_WebPAlib","1",standAlone=True)
 # Configure test case
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_WebPA_Telemetry_MTLS_Enable')
+obj.configureTestCase(ip,port,'RDKV_WebPA_MigrationStatus')
 
 # Get the result of connection with test component
 result = obj.getLoadModuleResult()
@@ -97,7 +97,7 @@ expectedResult = "SUCCESS"
 if "SUCCESS" in result.upper():
 
     # Define the parameter and value to test
-    paramName = "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.MTLS.Enable"
+    paramName = "Device.DeviceInfo.Migration.MigrationStatus"
     testValue = "1"
 
     print("\n")

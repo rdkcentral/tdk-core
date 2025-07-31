@@ -59,18 +59,18 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>rdkvWebPA_02</test_case_id>
-    <test_objective></test_objective>
-    <test_type></test_type>
-    <test_setup></test_setup>
-    <pre_requisite></pre_requisite>
+    <test_objective>Test to validate the BTRGamePad is enabled or not</test_objective>
+    <test_type>Positive</test_type>
+    <test_setup>Video Accelerator, RPI</test_setup>
+    <pre_requisite>WEBPA_URL and Authoraization Key should be configured in the device config file</pre_requisite>
     <api_or_interface_used></api_or_interface_used>
     <input_parameters></input_parameters>
     <automation_approch></automation_approch>
-    <expected_output></expected_output>
-    <priority></priority>
+    <expected_output>RFC parameter should return BTRGamePad is enabled or not</expected_output>
+    <priority>High</priority>
     <test_stub_interface></test_stub_interface>
-    <test_script></test_script>
-    <skipped></skipped>
+    <test_script>RDKV_WebPA_BTRGamePad_Enable</test_script>
+    <skipped>No</skipped>
     <release_version>M138</release_version>
     <remarks></remarks>
   </test_cases>

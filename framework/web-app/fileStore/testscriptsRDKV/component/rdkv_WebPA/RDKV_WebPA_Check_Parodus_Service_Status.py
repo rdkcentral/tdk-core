@@ -60,17 +60,17 @@
   <test_cases>
     <test_case_id>rdkvWebPA_10</test_case_id>
     <test_objective>To verify whether the Parodus Service is currently running</test_objective>
-    <test_type></test_type>
-    <test_setup></test_setup>
-    <pre_requisite></pre_requisite>
+    <test_type>Positive</test_type>
+    <test_setup>Video Accelerator, RPI</test_setup>
+    <pre_requisite>WEBPA_URL and Authoraization Key should be configured in the device config file</pre_requisite>
     <api_or_interface_used></api_or_interface_used>
     <input_parameters></input_parameters>
     <automation_approch></automation_approch>
-    <expected_output></expected_output>
-    <priority></priority>
+    <expected_output>Parodus service should be in active state</expected_output>
+    <priority>High</priority>
     <test_stub_interface></test_stub_interface>
-    <test_script></test_script>
-    <skipped></skipped>
+    <test_script>RDKV_WebPA_Check_Parodus_Service_Status</test_script>
+    <skipped>No</skipped>
     <release_version>M138</release_version>
     <remarks></remarks>
   </test_cases>
