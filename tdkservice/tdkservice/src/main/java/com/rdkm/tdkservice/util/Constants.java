@@ -579,5 +579,21 @@ public class Constants {
 	public static final String TDK = "TDK";
 	//Rdk version
 	public static final String RDK_VERSIONS = "rdkVersions";
+	// Upgrade file location key in tm.config
+	public static final String UPGRADE_FILE_LOCATION = "upgrade.fileLocation";	
+	// Default backup location if not specified
+	public static final String DEFAULT_BACKUP_LOCATION = "/mnt/backup";	
+	// Webapps directory name
+	public static final String WEBAPPS_DIR = "webapps";
+	// TDK service war name
+	public static final String TDKSERVICE_WAR = "tdkservice.war";	
+	// TDK service directory name
+	public static final String TDKSERVICE_DIR = "tdkservice";	
+	// Backup prefix for backup directory
+	public static final String BACKUP_PREFIX = "backup_";
+	//deployment log path
+	public static final String DEPLOYMENT_LOG_PATH="/mnt/backup/deploymentLogs/";
+	//app upgrage shell script file
+	public static final String APP_UPGRADE_WAR_FILE ="app_upgrade_deploy_new_war.sh";
 
 }

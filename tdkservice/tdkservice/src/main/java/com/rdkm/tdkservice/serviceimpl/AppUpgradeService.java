@@ -21,16 +21,37 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.serviceimpl;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.rdkm.tdkservice.config.AppConfig;
+import com.rdkm.tdkservice.dto.AppUpgradeResponseDTO;
+import com.rdkm.tdkservice.dto.DeploymentLogsDTO;
+import com.rdkm.tdkservice.dto.WarUploadResponseDTO;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.Function;
 import com.rdkm.tdkservice.model.Module;
@@ -54,14 +75,19 @@ import com.rdkm.tdkservice.repository.PrimitiveTestRepository;
 import com.rdkm.tdkservice.repository.ScriptRepository;
 import com.rdkm.tdkservice.repository.SocRepository;
 import com.rdkm.tdkservice.repository.TestSuiteRepository;
+import com.rdkm.tdkservice.service.IAppUpgradeService;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
+import com.rdkm.tdkservice.service.utilservices.ScriptExecutorService;
+import com.rdkm.tdkservice.util.Constants;
 
 /**
- * Service for implementing the methods related to
- * app upgrade and data migration
+ * Service for implementing the methods related to app upgrade and data
+ * migration
  */
 @Service
-public class AppUpgradeService {
+public class AppUpgradeService implements IAppUpgradeService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(AppUpgradeService.class);
 	/**
 	 * DeviceTypeRepository bean for accessing device type data.
 	 */
@@ -95,6 +121,12 @@ public class AppUpgradeService {
 	@Autowired
 	private TestSuiteRepository testSuiteRepository;
 
+	@Autowired
+	private CommonService commonService;
+
+	@Autowired
+	private ScriptExecutorService scriptExecutorService;
+
 	DateTimeFormatter SQL_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
 			.withZone(ZoneId.of("UTC"));
 
@@ -102,15 +134,12 @@ public class AppUpgradeService {
 	 * Generates and writes change-only SQL statements for all supported entities
 	 * (DeviceType, Oem, Soc, Module, Function, Parameter, PrimitiveTest,
 	 * PrimitiveTestParameter, Script, PreCondition, TestStep, ScriptDeviceType,
-	 * TestSuite)
-	 * to the specified file.
+	 * TestSuite) to the specified file.
 	 *
 	 * For each entity, only records created or updated since the given timestamp
-	 * ('since')
-	 * are included. For entities with child/mapping tables (e.g., TestSuite and
-	 * ScriptTestSuite),
-	 * the method deletes all existing mappings for changed parents and re-inserts
-	 * the current mappings.
+	 * ('since') are included. For entities with child/mapping tables (e.g.,
+	 * TestSuite and ScriptTestSuite), the method deletes all existing mappings for
+	 * changed parents and re-inserts the current mappings.
 	 *
 	 * This method is typically used for migration or release scenarios where only
 	 * (changes since a specific time) needs to be exported.
@@ -410,18 +439,14 @@ public class AppUpgradeService {
 	 * Writes change-only SQL statements for Script entities to the specified file.
 	 *
 	 * For each Script, only records created or updated since the given timestamp
-	 * ('since')
-	 * are included. For new scripts, an INSERT statement is generated. For updated
-	 * scripts,
-	 * an UPDATE statement is generated.
+	 * ('since') are included. For new scripts, an INSERT statement is generated.
+	 * For updated scripts, an UPDATE statement is generated.
 	 *
 	 * All relevant fields are included in the SQL, including created_date and
-	 * updated_at,
-	 * formatted as 'yyyy-MM-dd HH:mm:ss.SSSSSS' in UTC.
+	 * updated_at, formatted as 'yyyy-MM-dd HH:mm:ss.SSSSSS' in UTC.
 	 *
 	 * This method is typically used for migration or upgrade scenarios where only
-	 * the delta
-	 * (changes since a specific time) needs to be exported.
+	 * the delta (changes since a specific time) needs to be exported.
 	 *
 	 * @param writer the BufferedWriter to write SQL statements to
 	 * @param since  the Instant timestamp; only entities changed after this time
@@ -580,14 +605,12 @@ public class AppUpgradeService {
 
 	/**
 	 * Writes change-only SQL statements for TestSuite entities and their
-	 * ScriptTestSuite mappings to the specified file.
-	 * Logic : For each TestSuite, only records created or updated since the given
-	 * timestamp ('since') are included.
-	 * For new TestSuites, an INSERT statement is generated. For updated TestSuites
-	 * an UPDATE statement is generated. In addition, all existing ScriptTestSuite
-	 * mappings for the TestSuite are deleted,
-	 * and the current mappings are re-inserted for changed TestSuites both created
-	 * and updated.
+	 * ScriptTestSuite mappings to the specified file. Logic : For each TestSuite,
+	 * only records created or updated since the given timestamp ('since') are
+	 * included. For new TestSuites, an INSERT statement is generated. For updated
+	 * TestSuites an UPDATE statement is generated. In addition, all existing
+	 * ScriptTestSuite mappings for the TestSuite are deleted, and the current
+	 * mappings are re-inserted for changed TestSuites both created and updated.
 	 */
 	private void writeTestSuiteSql(BufferedWriter writer, Instant since) throws IOException {
 		List<TestSuite> testSuites = testSuiteRepository.findByCreatedDateAfterOrUpdatedAtAfter(since, since);
@@ -601,14 +624,12 @@ public class AppUpgradeService {
 			if (ts.getCreatedDate().isAfter(since)) {
 				writer.write(String.format(
 						"INSERT INTO test_suite (id, name, description, category, user_group_id, created_date, updated_at) VALUES (%s, '%s', '%s', '%s', %s, '%s', '%s');\n",
-						id, name, description, category, userGroupId,
-						SQL_DATE_FORMAT.format(ts.getCreatedDate()),
+						id, name, description, category, userGroupId, SQL_DATE_FORMAT.format(ts.getCreatedDate()),
 						SQL_DATE_FORMAT.format(ts.getUpdatedAt())));
 			} else if (ts.getUpdatedAt().isAfter(since)) {
 				writer.write(String.format(
 						"UPDATE test_suite SET name = '%s', description = '%s', category = '%s', user_group_id = %s, updated_at = '%s' WHERE id = %s;\n",
-						name, description, category, userGroupId,
-						SQL_DATE_FORMAT.format(ts.getUpdatedAt()), id));
+						name, description, category, userGroupId, SQL_DATE_FORMAT.format(ts.getUpdatedAt()), id));
 			}
 
 			// Always delete and re-insert ScriptTestSuite mappings for changed TestSuite
@@ -620,10 +641,192 @@ public class AppUpgradeService {
 				String stsId = String.format("'%s'", sts.getId().toString());
 				writer.write(String.format(
 						"INSERT INTO script_test_suite (id, script_id, test_suite_id, script_order, created_date, updated_at) VALUES (%s, %s, %s, %d, '%s', '%s');\n",
-						stsId, scriptId, id, scriptOrder,
-						SQL_DATE_FORMAT.format(sts.getCreatedDate()),
+						stsId, scriptId, id, scriptOrder, SQL_DATE_FORMAT.format(sts.getCreatedDate()),
 						SQL_DATE_FORMAT.format(sts.getUpdatedAt())));
 			}
+		}
+	}
+
+	/**
+	 * Uploads a WAR file for application upgrade
+	 * 
+	 * @param uploadFile the WAR file to be uploaded
+	 * @return Response containing upload status and details
+	 */
+	@Override
+	public WarUploadResponseDTO uploadWar(MultipartFile uploadFile) {
+		LOGGER.info("Inside Service layer. Going to Upload the backend war file.");
+		String fileName = uploadFile.getOriginalFilename();
+		this.validateWarFile(fileName);
+
+		try {
+			// Read the upgrade file location from tm.config
+			String tmConfigFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ Constants.TM_CONFIG_FILE;
+			String baseUpgradeLocation = commonService.getConfigProperty(new File(tmConfigFilePath),
+					Constants.UPGRADE_FILE_LOCATION);
+			if (baseUpgradeLocation == null || baseUpgradeLocation.isEmpty()) {
+				LOGGER.error("Unable to read upgrade.fileLocation from tm.config");
+				throw new TDKServiceException("Unable to read upgrade file location from config");
+			} // Create directory with timestamp
+			String timestampDirName = "NewRelease_" + new SimpleDateFormat("yy_MM_dd_HH_mm_ss").format(new Date());
+			String targetDir = baseUpgradeLocation + Constants.FILE_PATH_SEPERATOR + timestampDirName;
+
+			// Create directory if it doesn't exist
+			Path dirPath = Paths.get(targetDir);
+			Files.createDirectories(dirPath);
+
+			// Rename to tdkservice.war if it's a .war file and not already named
+			// tdkservice.war
+			String targetFileName = fileName;
+			if (fileName != null && fileName.toLowerCase().endsWith(".war")
+					&& !fileName.equalsIgnoreCase("tdkservice.war")) {
+				targetFileName = "tdkservice.war";
+				LOGGER.info("Renaming war file from {} to {}", fileName, targetFileName);
+			}
+
+			// Copy the file to the target directory with the new name
+			Path targetPath = Paths.get(targetDir, targetFileName);
+			Files.copy(uploadFile.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+			LOGGER.info("File uploaded successfully to {}", targetPath);
+
+			// Create and return the response
+			WarUploadResponseDTO response = new WarUploadResponseDTO();
+			response.setSatusCode(200);
+			response.setFileLocation(targetPath.getParent().toString());
+			return response;
+
+		} catch (Exception e) {
+			LOGGER.error("Error while uploading war file", e);
+			throw new TDKServiceException("Error while uploading War file: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Validates the uploaded WAR file name
+	 * 
+	 * @param uploadFile the name of the uploaded file
+	 * @throws UserInputException if the file name is invalid
+	 */
+	private void validateWarFile(String uploadFile) {
+		if (uploadFile == null || uploadFile.isEmpty()) {
+			LOGGER.error("Invalid file name");
+			throw new UserInputException("File name cannot be empty");
+		}
+		if (!uploadFile.toLowerCase().endsWith(".war")) {
+			LOGGER.error("Invalid file type. Only .war files are allowed");
+			throw new UserInputException("Only .war files are allowed");
+		}
+	}
+
+	/**
+	 * Upgrades the application using the uploaded WAR file
+	 * 
+	 * @param uploadLocation Path of the uploaded WAR file
+	 * @param backupLocation Optional backup location, if null default location will
+	 *                       be used
+	 * @return Response containing status and backup location
+	 */
+	@Override
+	public AppUpgradeResponseDTO upgradeApplication(String uploadLocation, String backupLocation) {
+		LOGGER.info("Inside Service layer. Going to upgrade the application");
+		LOGGER.info("Upload location: {}, Backup location: {}", uploadLocation, backupLocation);
+
+		if (uploadLocation == null || uploadLocation.isEmpty()) {
+			LOGGER.error("Upload location cannot be empty");
+			throw new UserInputException("Upload location cannot be empty");
+		}
+
+		// Validate upload location file exists
+		File uploadFile = new File(uploadLocation);
+		if (!uploadFile.exists()) {
+			LOGGER.error("Upload file does not exist at: {}", uploadLocation);
+			throw new UserInputException("Upload file does not exist");
+		}
+
+		try {
+			// Read the current app version for backup folder name
+			String tmConfigFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ Constants.TM_CONFIG_FILE;
+			String currentVersion = commonService.getConfigProperty(new File(tmConfigFilePath), Constants.APP_VERSION);
+			// If backup location is not provided, use default
+			if (backupLocation == null || backupLocation.isEmpty()) {
+				backupLocation = Constants.DEFAULT_BACKUP_LOCATION;
+				LOGGER.info("Using default backup location: {}", backupLocation);
+			}
+
+			// Create backup directory with timestamp
+			String timestamp = new SimpleDateFormat("yy_MM_dd_HH_mm_ss").format(new Date());
+			String backupDirName = Constants.BACKUP_PREFIX + currentVersion + "_" + timestamp;
+			String backupDir = backupLocation + Constants.FILE_PATH_SEPERATOR + backupDirName;
+
+			String appUpgradeShellScriptFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ "appDeploymentScripts" + Constants.FILE_PATH_SEPERATOR + Constants.APP_UPGRADE_WAR_FILE;
+			File appUpgradeShellScriptFile = new File(appUpgradeShellScriptFilePath);
+			String appUpgradeFilePath = appUpgradeShellScriptFile.getParent();
+			String appUpgradeFileName = appUpgradeShellScriptFile.getName();
+
+			StringBuilder commandBuilder = new StringBuilder();
+			commandBuilder.append("cd ").append(appUpgradeFilePath).append(" && chmod 777 ./")
+					.append(Constants.APP_UPGRADE_WAR_FILE).append(" && nohup ./").append(appUpgradeFileName)
+					.append(" ").append(backupDir).append(" ").append(uploadLocation).append(" > /dev/null 2>&1 &");
+
+			String[] command = { "sh", "-c", commandBuilder.toString() };
+
+			LOGGER.info("ShellScript execute command: " + Arrays.toString(command));
+
+			new Thread(() -> {
+				scriptExecutorService.executeScript(command, 120);
+			}).start();
+
+			// Prepare and return the response
+			AppUpgradeResponseDTO response = new AppUpgradeResponseDTO();
+			response.setStatusCode(200);
+			response.setBackupLocation(backupDir);
+			response.setMessage("Application upgrade process initiated successfully. Backup created at " + backupDir);
+			return response;
+
+		} catch (Exception e) {
+			LOGGER.error("Error during application upgrade", e);
+			throw new TDKServiceException("Error during application upgrade: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Fetches the latest deployment logs from the backup folder
+	 * 
+	 * @param backupLocation Optional backup location, if null default location will
+	 *                       be used
+	 * @return Response containing log content and details
+	 */
+	@Override
+	public DeploymentLogsDTO getLatestDeploymentLogs() {
+		LOGGER.info("Inside Service layer. Going to fetch the latest deployment logs");
+		String deploymentLogLocation = Constants.DEPLOYMENT_LOG_PATH;
+
+		try (Stream<Path> files = Files.list(Paths.get(deploymentLogLocation))) {
+			Optional<Path> lastFilePath = files.filter(Files::isRegularFile)
+					.max(Comparator.comparingLong(p -> p.toFile().lastModified()));
+
+			if (lastFilePath.isPresent()) {
+				Path logFile = lastFilePath.get();
+				String logContent = Files.readString(logFile, StandardCharsets.UTF_8);
+
+				DeploymentLogsDTO response = new DeploymentLogsDTO();
+				response.setStatusCode(200);
+				response.setLogFilePath(logFile.getFileName().toString());
+				response.setLogContent(logContent);
+				return response;
+			} else {
+				DeploymentLogsDTO response = new DeploymentLogsDTO();
+				response.setStatusCode(404);
+				response.setLogContent("No deployment log files found.");
+				return response;
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error fetching deployment logs", e);
+			throw new TDKServiceException("Error fetching deployment logs: " + e.getMessage());
 		}
 	}
 
