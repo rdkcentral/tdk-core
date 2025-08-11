@@ -125,20 +125,29 @@ limitations under the License.
                     TestSuite/s<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <!-- Column for script multiselect -->
                 <div class="col-md-8" *ngIf="scriptVisible">
-                    <ng-multiselect-dropdown #multiSelectScript appFocus id="script" [placeholder]="'Select an option'"
-                        [settings]="scriptSettings" [data]="scriptTestsuiteOptions" formControlName="scriptTestsuite"
-                        (onSelect)="onScriptSelect($event)" (onDeSelect)="onScriptDeSelect($event)"
-                        (onSelectAll)="onScriptSelectAll($event)" (onDeSelectAll)="onScriptDeSelectAll($event)">
-                    </ng-multiselect-dropdown>
+                    <div class="multiselect-container" (click)="onScriptDropdownClick()">
+                        <ng-multiselect-dropdown #multiSelectScript appFocus id="script" [placeholder]="'Select an option'"
+                            [settings]="scriptSettings" [data]="scriptTestsuiteOptions" formControlName="scriptTestsuite"
+                            (onSelect)="onScriptSelect($event)" (onDeSelect)="onScriptDeSelect($event)"
+                            (onSelectAll)="onScriptSelectAll($event)" (onDeSelectAll)="onScriptDeSelectAll($event)">
+                        </ng-multiselect-dropdown>
+                        <div class="dropdown-loader" *ngIf="scriptLoading">
+                            <app-loader></app-loader>
+                        </div>
+                    </div>
                 </div>
                 <!-- Column for testsuite multiselect -->
                 <div class="col-md-8" *ngIf="testsuiteVisible">
-                    <ng-multiselect-dropdown #multiSelectTestSuite appFocus id="script"
-                        [placeholder]="'Select an option'" [settings]="testSuiteSettings"
-                        [data]="scriptTestsuiteOptions" formControlName="scriptTestsuite"
-                        (onSelect)="testSuiteSelect($event)" (onDeSelect)="testSuiteDeSelect($event)"
-                        (onSelectAll)="testSuiteSelectAll($event)" (onDeSelectAll)="testSuiteDeSelectAll($event)">
-                    </ng-multiselect-dropdown>
+                    <div class="multiselect-container" (click)="onTestSuiteDropdownClick()">
+                        <ng-multiselect-dropdown #multiSelectTestSuite appFocus id="script" [placeholder]="'Select an option'"
+                            [settings]="testSuiteSettings" [data]="scriptTestsuiteOptions" formControlName="scriptTestsuite"
+                            (onSelect)="testSuiteSelect($event)" (onDeSelect)="testSuiteDeSelect($event)"
+                            (onSelectAll)="testSuiteSelectAll($event)" (onDeSelectAll)="testSuiteDeSelectAll($event)">
+                        </ng-multiselect-dropdown>
+                        <div class="dropdown-loader" *ngIf="testSuiteLoading">
+                            <app-loader></app-loader>
+                        </div>
+                    </div>
                 </div>
                 <!-- Error message for script selection -->
                 <div *ngIf="FormSubmitted && executeForm.controls['script']?.errors" class="text-danger">

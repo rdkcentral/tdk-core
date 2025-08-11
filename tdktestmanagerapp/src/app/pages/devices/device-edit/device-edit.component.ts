@@ -25,17 +25,18 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceService } from '../../../services/device.service';
 import { InputComponent } from '../../../utility/component/ag-grid-buttons/input/input.component';
-import {  Editor, NgxEditorModule } from 'ngx-editor';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { OemService } from '../../../services/oem.service';
 import { DevicetypeService } from '../../../services/devicetype.service';
 import { SocService } from '../../../services/soc.service';
 import { AuthService } from '../../../auth/auth.service';
+import saveAs from 'file-saver';
+import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 
 @Component({
   selector: 'app-device-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgxEditorModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MonacoEditorModule, MaterialModule],
   templateUrl: './device-edit.component.html',
   styleUrl: './device-edit.component.css',
 })
@@ -82,8 +83,6 @@ export class DeviceEditComponent {
   categoryName!: string;
   visibleDeviceconfigFile = false;
   configFileName!: string;
-  editor!: Editor;
-  editor2!: Editor;
   uploadConfigForm!: FormGroup;
   uploadDeviceConfigForm!: FormGroup;
   filesList: any[] = [];
@@ -114,6 +113,16 @@ export class DeviceEditComponent {
   selectedDeviceType: any;
   newFileName!: string;
   findboxType: any[] = [];
+  editorOptions = { 
+    theme: 'vs-light', 
+    language: 'ini',
+    automaticLayout: true, // Add this line
+    scrollBeyondLastLine: false, // Add this line
+    minimap: { enabled: false } // Add this line for better experience in dialogs
+  };
+  editorInitialized = false;
+  monacoEditorInstance: any;
+  dialogOpened = false;
 
   /**
    * Constructor for DeviceEditComponent.
@@ -268,8 +277,6 @@ export class DeviceEditComponent {
     this.isEditChecked(this.user.thunderEnabled);
     this.isCheckedConfigPort(this.user.devicePortsConfigured);
     this.visibilityConfigFile();
-    this.editor = new Editor();
-    this.editor2 = new Editor();
     this.uploadConfigForm = this.fb.group({
       editorFilename: ['', { disabled: true }],
       editorContent: ['', [Validators.required]],
@@ -398,6 +405,47 @@ export class DeviceEditComponent {
     this.uploadConfigForm.get('uploadConfigFileModal')?.clearValidators();
     this.uploadConfigForm.get('editorContent')?.updateValueAndValidity();
     this.uploadConfigForm.get('uploadConfigFileModal')?.updateValueAndValidity();
+  }
+
+
+  /**
+   * Initializes the Monaco editor instance when the editor is ready.
+   * 
+   * This method sets the `monacoEditorInstance` property, marks the editor as initialized,
+   * and schedules a layout and focus operation after a short delay to ensure the editor
+   * is properly rendered and focused.
+   *
+   * @param editor - The Monaco editor instance provided by the editor's initialization event.
+   */
+  onEditorInit(editor: any) {
+    this.monacoEditorInstance = editor;
+    this.editorInitialized = true;
+    
+    // Give editor time to render and then layout
+    setTimeout(() => {
+      if (this.monacoEditorInstance) {
+        this.monacoEditorInstance.layout();
+        this.monacoEditorInstance.focus();
+      }
+    }, 100);
+  }
+
+  /**
+   * Resizes the Monaco editor instance by triggering its layout method.
+   * This is typically called after UI changes, such as dialog animations,
+   * to ensure the editor displays correctly. The resize is delayed by 300ms
+   * to allow animations to complete before recalculating the layout.
+   *
+   * @remarks
+   * This method checks if the Monaco editor instance exists before attempting to resize.
+   */
+  resizeEditor() {
+    if (this.monacoEditorInstance) {
+      // Force resize after dialog animation completes
+      setTimeout(() => {
+        this.monacoEditorInstance.layout();
+      }, 300);
+    }
   }
 
   /**
@@ -635,8 +683,8 @@ export class DeviceEditComponent {
     let boxNameConfig = this.editDeviceVForm.value.stbname;
     const reader = new FileReader();
     reader.onload = () => {
-      let htmlContent = reader.result;
-      this.configData = this.formatContent(htmlContent);
+    let content = reader.result as string;
+    this.configData = content;
       if (this.configData) {
         this.uploadConfigForm.patchValue({
           editorFilename:
@@ -658,8 +706,8 @@ export class DeviceEditComponent {
 
     const reader = new FileReader();
     reader.onload = () => {
-      let htmlContent = reader.result;
-      this.configData = this.formatContent(htmlContent);
+      let content = reader.result as string;
+      this.configData = content;
       if (this.configData) {
         this.uploadDeviceConfigForm.patchValue({
           editorFilename: this.stbNameChange + '.config',
@@ -675,9 +723,6 @@ export class DeviceEditComponent {
    * No parameters.
    */
   ngOnDestroy(): void {
-
-    this.editor.destroy();
-    this.editor2.destroy();
   }
 
   /**
@@ -686,14 +731,14 @@ export class DeviceEditComponent {
    * @returns The formatted content
    */
   formatContent(content: any) {
-
-    return `<p>${content
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/####/g, '#####')
-      .replace(/=======/g, '=======')
-      .replace(/\n/g, '<br>')}
-    </p>`;
+   if (!content) return '';
+  // Ensure content is a string and handle line endings
+   const textContent = content.toString(); 
+  // If content is already plain text, just return it
+   if (!textContent.includes('<')) {
+    return textContent;
+   }
+  
   }
  
   /**
@@ -893,18 +938,6 @@ export class DeviceEditComponent {
       editorFilename: newName,
     });
   }
-
-  /**
-   * Replaces HTML tags in content with newlines.
-   * @param content - Content string to process
-   * @returns Processed content string
-   */
-  replaceTags(content: string): string {
-
-    const replacepara = content.replace(/<\/?p>/g, '\n');
-    const replacebreakes = replacepara.replace(/<br\s*\/?>/g, '\n');
-    return replacebreakes.trim();
-  }
   /**
    * Uploads the config file from editor modal.
    * No parameters.
@@ -931,7 +964,7 @@ export class DeviceEditComponent {
         const reader = new FileReader();
         reader.onload = (e: ProgressEvent<FileReader>) => {
           const content = e.target?.result as string;
-          const editorContent = this.replaceTags(content);
+          const editorContent = content;
           const contentBlob = new Blob([editorContent], { type: 'text/plain' });
           const contentFile = new File([contentBlob], editorFilename);
           this.uploadConfigFileAndHandleResponse(contentFile,'dialog');
@@ -948,7 +981,7 @@ export class DeviceEditComponent {
     // If uploading from the editor (no file input)
     const editorFilename = this.uploadConfigForm.get('editorFilename')!.value;
     const content = this.uploadConfigForm.get('editorContent')!.value;
-    const editorContent = this.replaceTags(content);
+    const editorContent = content;
     const contentBlob = new Blob([editorContent], { type: 'text/plain' });
     const contentFile = new File([contentBlob], editorFilename);
     this.uploadConfigFileAndHandleResponse(contentFile,'dialog');
@@ -1228,7 +1261,7 @@ export class DeviceEditComponent {
           const reader = new FileReader();
           reader.onload = (e: ProgressEvent<FileReader>) => {
           const content = e.target?.result as string;
-          const editorContent = this.replaceTags(content);
+          const editorContent = content;
           const contentBlob = new Blob([editorContent], { type: 'text/plain' });
           const contentFile = new File([contentBlob], editorFilename);
           this.uploadConfigFileAndHandleResponse(contentFile,'newDevice');
@@ -1246,7 +1279,7 @@ export class DeviceEditComponent {
     const editorFilename =
     this.uploadDeviceConfigForm.get('editorFilename')!.value;
     const content = this.uploadDeviceConfigForm.get('editorContent')!.value;
-    const editorContent = this.replaceTags(content);
+    const editorContent = content;
     const contentBlob = new Blob([editorContent], { type: 'text/plain' });
     const contentFile = new File([contentBlob], editorFilename);
     this.uploadConfigFileAndHandleResponse(contentFile,'newDevice');
@@ -1273,14 +1306,24 @@ export class DeviceEditComponent {
       this.uploadConfigSec = false;
       this.backToEditorbtn = false;
       this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
-        width: '90vw',
+         width: '100vw',
         height: '90vh',
+        panelClass: 'full-width-dialog',
       });
+
+      // Add this to resize editor after dialog opens
+      this.dialogOpened = true;
+      setTimeout(() => this.resizeEditor(), 300);
     } else {
       this.dialogRef = this.dialog.open(this.dialogTemplate, {
-        width: '90vw',
+       width: '100vw',
         height: '90vh',
+        panelClass: 'full-width-dialog',
       });
+
+       // Add this to resize editor after dialog opens
+      this.dialogOpened = true;
+      setTimeout(() => this.resizeEditor(), 300);
     }
   }
  
@@ -1316,15 +1359,20 @@ export class DeviceEditComponent {
         if (res.content instanceof Blob) {
           const reader = new FileReader();
           reader.onload = () => {
-            content = this.formatContent(reader.result as string);
+            content = reader.result as string;
             this.uploadDeviceConfigForm.patchValue({
               editorFilename: deviceName + '.config',
               editorContent: content,
             });
             this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
-              width: '90vw',
+             width: '100vw',
               height: '90vh',
+              panelClass: 'full-width-dialog',
             });
+
+            // Add this to resize editor after dialog opens
+            this.dialogOpened = true;
+            setTimeout(() => this.resizeEditor(), 300);
           };
           reader.readAsText(res.content);
         } else if (typeof res.content === 'string') {
@@ -1334,10 +1382,49 @@ export class DeviceEditComponent {
             editorContent: content,
           });
           this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
-            width: '90vw',
+            width: '100vw',
             height: '90vh',
+            panelClass: 'full-width-dialog',
           });
+          // Add this to resize editor after dialog opens
+            this.dialogOpened = true;
+            setTimeout(() => this.resizeEditor(), 300);
         }
+      });
+  }
+
+
+   /**
+   * Downloads the configuration file.
+   * No parameters.
+   */
+  downloadConfigFile(configFileName: any) {
+    const cleanFileName = configFileName.endsWith('.config')
+      ? configFileName.substring(0, configFileName.length - 7)
+      : configFileName;
+    this.service
+      .downloadDeviceConfigFile(
+        cleanFileName,
+        this.deviceTypeValue,
+        this.isThunderchecked
+      )
+      .subscribe({
+        next: (res) => {
+          const filename = res.filename;
+          const blob = new Blob([res.content], {
+            type: res.content.type || 'application/json',
+          });
+          saveAs(blob, filename);
+        },
+        error: (err) => {
+          let errmsg = err.error;
+          this._snakebar.open(errmsg, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+          });
+        },
       });
   }
 

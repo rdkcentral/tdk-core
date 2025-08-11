@@ -447,7 +447,8 @@ limitations under the License.
             </div>
           </div>
             <div class="editor-container mt-4 exist-config" *ngIf="existingConfigEditor">
-              <ngx-editor [editor]="editor"  formControlName="editorContent"></ngx-editor>  
+              <ngx-monaco-editor [options]="editorOptions" formControlName="editorContent" (onInit)="onEditorInit($event)">
+              </ngx-monaco-editor>
               <div *ngIf="existConfigSubmitted && uploadConfigForm.controls['editorContent']?.errors" class="text-danger">
                 <small *ngIf="uploadConfigForm.controls['editorContent']?.errors?.['required']">Please add some content</small>
             </div>  
@@ -467,7 +468,7 @@ limitations under the License.
         </div>
         <div class="modal-btns">
           <button type="button" class="download-btn" (click)="closeDialog()" matTooltip="Close">Close</button>
-          <button type="submit" class="download-btn" matTooltip="Upload file">Upload</button>
+          <button type="submit" class="download-btn" matTooltip="Update Config File">Update</button>
         </div>
         </form>
       </div>
@@ -512,7 +513,8 @@ limitations under the License.
           </div>
   
             <div class="device-container mt-4 device-editor" *ngIf="deviceEditor">
-              <ngx-editor [editor]="editor2"  formControlName="editorContent"></ngx-editor> 
+              <ngx-monaco-editor [options]="editorOptions" formControlName="editorContent" (onInit)="onEditorInit($event)">
+              </ngx-monaco-editor>
               <div *ngIf="submitted && uploadDeviceConfigForm.controls['editorContent']?.errors" class="text-danger">
                 <small *ngIf="uploadDeviceConfigForm.controls['editorContent']?.errors?.['required']">Please add some content</small>
             </div>  

@@ -25,18 +25,18 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceService } from '../../../services/device.service';
 import { InputComponent } from '../../../utility/component/ag-grid-buttons/input/input.component';
-import { Editor, NgxEditorModule } from 'ngx-editor';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
 import { OemService } from '../../../services/oem.service';
 import { DevicetypeService } from '../../../services/devicetype.service';
 import { SocService } from '../../../services/soc.service';
 import { AuthService } from '../../../auth/auth.service';
+import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 
 @Component({
   selector: 'app-device-create',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,MaterialModule,NgxEditorModule, FormsModule],
+  imports: [CommonModule,ReactiveFormsModule,MaterialModule,MonacoEditorModule, FormsModule],
   templateUrl: './device-create.component.html',
   styleUrl: './device-create.component.css',
 })
@@ -76,8 +76,6 @@ export class DeviceCreateComponent implements OnInit {
   selectedDeviceCategory!: string;
   categoryName: string = 'Video';
   checkOcapId: any;
-  editor!: Editor;
-  editor2!: Editor;
   uploadConfigForm!: FormGroup;
   uploadDeviceConfigForm!: FormGroup;
   uploadFormSubmitted = false;
@@ -113,6 +111,16 @@ export class DeviceCreateComponent implements OnInit {
   newDeviceDialogRef!: MatDialogRef<any>;
   isThunderPresent = false;
   preferedCategory!: string;
+  editorOptions = { 
+    theme: 'vs-light', 
+    language: 'ini',
+    automaticLayout: true, // Add this line
+    scrollBeyondLastLine: false, // Add this line
+    minimap: { enabled: false } // Add this line for better experience in dialogs
+  };
+  editorInitialized = false;
+  monacoEditorInstance: any;
+  dialogOpened = false;
 
 
   /**
@@ -219,8 +227,6 @@ export class DeviceCreateComponent implements OnInit {
     this.getAlldeviceType();
     this.getAllOem();
     this.getAllsoc();
-    this.editor = new Editor();
-    this.editor2 = new Editor();
     this.uploadConfigForm = this.fb.group({
       editorFilename: ['', { disabled: true }],
       editorContent: ['', [Validators.required]],
@@ -310,6 +316,47 @@ export class DeviceCreateComponent implements OnInit {
       this.uploadConfigForm.get('uploadFileModal')?.updateValueAndValidity();
 
   }
+
+  /**
+   * Initializes the Monaco editor instance when the editor is ready.
+   * 
+   * This method sets the `monacoEditorInstance` property, marks the editor as initialized,
+   * and schedules a layout and focus operation after a short delay to ensure the editor
+   * is properly rendered and ready for user interaction.
+   *
+   * @param editor - The Monaco editor instance that has been initialized.
+   */
+  onEditorInit(editor: any) {
+    this.monacoEditorInstance = editor;
+    this.editorInitialized = true;
+    
+    // Give editor time to render and then layout
+    setTimeout(() => {
+      if (this.monacoEditorInstance) {
+        this.monacoEditorInstance.layout();
+        this.monacoEditorInstance.focus();
+      }
+    }, 100);
+  }
+
+  /**
+   * Resizes the Monaco editor instance by triggering its layout method.
+   * This is typically called after UI changes (such as dialog animations)
+   * to ensure the editor is properly rendered within its container.
+   * The resize is delayed by 300ms to allow animations to complete.
+   *
+   * @remarks
+   * This method checks if the Monaco editor instance exists before attempting to resize.
+   */
+   resizeEditor() {
+    if (this.monacoEditorInstance) {
+      // Force resize after dialog animation completes
+      setTimeout(() => {
+        this.monacoEditorInstance.layout();
+      }, 300);
+    }
+  }
+
 
   /**
    * Event handler for when the grid is ready.
@@ -478,8 +525,8 @@ export class DeviceCreateComponent implements OnInit {
     let boxNameConfig = this.deviceForm.value.devicename;
     const reader = new FileReader();
     reader.onload = () => {
-      let htmlContent = reader.result
-      this.configData = this.formatContent(htmlContent);
+      let content = reader.result as string;
+      this.configData = content;
       if (this.configData) {
         this.uploadConfigForm.patchValue({
             editorFilename: this.configFileName ===`${boxNameConfig}.config`?this.configFileName:this.newFileName,
@@ -501,8 +548,8 @@ export class DeviceCreateComponent implements OnInit {
 
     const reader = new FileReader();
     reader.onload = () => {
-      let htmlContent = reader.result
-      this.configData = this.formatContent(htmlContent);
+      let content = reader.result as string;
+      this.configData = content;
       if (this.configData) {
         this.uploadDeviceConfigForm.patchValue({
           editorFilename: this.stbNameChange + '.config',
@@ -525,14 +572,13 @@ export class DeviceCreateComponent implements OnInit {
    * @returns The formatted content
    */
   formatContent(content: any) {
-
-    return `<p>${content.replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/####/g, '#####')
-      .replace(/=======/g, '=======')
-      .replace(/\n/g, '<br>')
-    }
-    </p>`;
+  if (!content) return '';
+  // Ensure content is a string and handle line endings
+  const textContent = content.toString(); 
+  // If content is already plain text, just return it
+    if (!textContent.includes('<')) {
+    return textContent;
+    } 
   }
 
   /**
@@ -572,9 +618,6 @@ export class DeviceCreateComponent implements OnInit {
    * No parameters.
    */
   ngOnDestroy(): void {
-
-    this.editor.destroy();
-    this.editor2.destroy();
   }
   /**
    * Go back to the previous page.
@@ -839,7 +882,7 @@ export class DeviceCreateComponent implements OnInit {
         const reader = new FileReader();
         reader.onload = (e: ProgressEvent<FileReader>) => {
           const content = e.target?.result as string;
-          const editorContent = this.replaceTags(content);
+          const editorContent = content;
           const contentBlob = new Blob([editorContent], { type: 'text/plain' });
           const contentFile = new File([contentBlob], editorFilename);
           this.uploadConfigFileAndHandleResponse(contentFile,'dialog');
@@ -856,7 +899,7 @@ export class DeviceCreateComponent implements OnInit {
     // If uploading from the editor (no file input)
     const editorFilename = this.uploadConfigForm.get('editorFilename')!.value;
     const content = this.uploadConfigForm.get('editorContent')!.value;
-    const editorContent = this.replaceTags(content);
+    const editorContent = content;
     const contentBlob = new Blob([editorContent], { type: 'text/plain' });
     const contentFile = new File([contentBlob], editorFilename);
     this.uploadConfigFileAndHandleResponse(contentFile,'dialog');
@@ -910,17 +953,6 @@ export class DeviceCreateComponent implements OnInit {
   }
 
   /**
-   * Replaces HTML tags in content with newlines.
-   * @param content - Content string to process
-   * @returns Processed content string
-   */
-  replaceTags(content: string): string {
-
-    const replacepara = content.replace(/<\/?p>/g, '\n');
-    const replacebreakes = replacepara.replace(/<br\s*\/?>/g, '\n');
-    return replacebreakes.trim();
-  }
-  /**
    * The method is upload the default device configfile of editor modal
    */
   /**
@@ -951,7 +983,7 @@ export class DeviceCreateComponent implements OnInit {
         const reader = new FileReader();
         reader.onload = (e: ProgressEvent<FileReader>) => {
           const content = e.target?.result as string;
-          const editorContent = this.replaceTags(content);
+          const editorContent = content;
           const contentBlob = new Blob([editorContent], { type: 'text/plain' });
           const contentFile = new File([contentBlob], editorFilename);
           this.uploadConfigFileAndHandleResponse(contentFile,'newDevice');
@@ -969,7 +1001,7 @@ export class DeviceCreateComponent implements OnInit {
     const editorFilename =
     this.uploadDeviceConfigForm.get('editorFilename')!.value;
     const content = this.uploadDeviceConfigForm.get('editorContent')!.value;
-    const editorContent = this.replaceTags(content);
+    const editorContent = content;
     const contentBlob = new Blob([editorContent], { type: 'text/plain' });
     const contentFile = new File([contentBlob], editorFilename);
     this.uploadConfigFileAndHandleResponse(contentFile,'newDevice');
@@ -1174,15 +1206,23 @@ export class DeviceCreateComponent implements OnInit {
       this.backToEditorbtn = false;
     
       this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
-        width: '90vw',
+        width: '100vw',
         height: '90vh',
+        panelClass: 'full-width-dialog',
       });
+      // Add this to resize editor after dialog opens
+      this.dialogOpened = true;
+      setTimeout(() => this.resizeEditor(), 300);
     } else {
       
       this.dialogRef = this.dialog.open(this.dialogTemplate, {
-        width: '90vw',
+        width: '100vw',
         height: '90vh',
+        panelClass: 'full-width-dialog',
       });
+      // Add this to resize editor after dialog opens
+      this.dialogOpened = true;
+      setTimeout(() => this.resizeEditor(), 300);
     }
   }
   /**
@@ -1236,10 +1276,13 @@ export class DeviceCreateComponent implements OnInit {
               this.newDeviceDialogRef = this.dialog.open(
                 this.newDeviceTemplate,
                 {
-                  width: '90vw',
+                  width: '100vw',
                   height: '90vh',
-                }
-              );
+                   panelClass: 'full-width-dialog',
+               });
+                 // Add this to resize editor after dialog opens
+                 this.dialogOpened = true;
+                 setTimeout(() => this.resizeEditor(), 300);
             };
             reader.readAsText(res.content);
           } else if (typeof res.content === 'string') {
@@ -1254,9 +1297,13 @@ export class DeviceCreateComponent implements OnInit {
             this.backToEditorbtn = false;
             this.showUploadButton = true;
             this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
-              width: '90vw',
+               width: '100vw',
               height: '90vh',
+              panelClass: 'full-width-dialog',
             });
+             // Add this to resize editor after dialog opens
+            this.dialogOpened = true;
+            setTimeout(() => this.resizeEditor(), 300);
           }
         },
         error: (err) => {
