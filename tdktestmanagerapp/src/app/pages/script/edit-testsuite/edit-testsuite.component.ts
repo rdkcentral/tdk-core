@@ -132,7 +132,7 @@ export class EditTestsuiteComponent {
   allScripts() {
 
     this.isLoadingScripts = true;
-    this.scriptservice.findTestSuitebyCategory(this.selectedCategory).subscribe(res => {
+    this.scriptservice.findTestSuitebyCategory(this.testSuiteEidtData.category).subscribe(res => {
       this.container1 = res.data
       const idsToRemove = new Set(this.container2ScriptArr.map((obj) => obj.id));
       this.container1 = this.container1.filter((obj) => !idsToRemove.has(obj.id));

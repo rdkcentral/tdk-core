@@ -115,6 +115,10 @@ export class ExecuteDialogComponent {
   additionalExeName!: string;
   repeatTypeBoolean = false;
   preferedCategory!:string;
+  scriptLoading = false; 
+  testSuiteLoading = false;
+  scriptsLoaded = false;
+  testSuitesLoaded = false;
 
   /**
    * Constructor for ExecuteDialogComponent.
@@ -158,6 +162,8 @@ export class ExecuteDialogComponent {
     let executionClick = this.executionClickData.normalExecutionClick;
     this.categoryName = this.preferedCategory?this.preferedCategory:this.userCategory;
     this.repeatTypeBoolean = false;
+    this.scriptsLoaded = false;
+    this.testSuitesLoaded = false;
     if (this.categoryName === 'RDKB' || this.categoryName === 'RDKC') {
       this.isThunderEnable = false;
       }
@@ -214,8 +220,6 @@ export class ExecuteDialogComponent {
       this.isThunderEnable = this.deviceStatusData.params.thunderEnabled;
       this.deviceNameArr.push(this.deviceStatusData.params.deviceName);
       this.getDeviceByCategory(this.categoryName,this.isThunderEnable);
-      this.getScriptByCategory(this.categoryName,this.isThunderEnable);
-      this.getTestSuiteByCategory(this.categoryName,this.isThunderEnable);
       this.getExecutionName();
     }
     if(executionClick){
@@ -331,13 +335,13 @@ export class ExecuteDialogComponent {
       this.testsuiteVisible = false;
       this.scriptVisible = true;
       this.executeForm.controls['scriptTestsuite'].setValue([]);
-      this.getScriptByCategory(this.categoryName,this.isThunderEnable);
+      this.scriptsLoaded = false;
       
     } else if (type === 'testsuite') {
       this.testsuiteVisible = true;
       this.scriptVisible = false;
       this.executeForm.controls['scriptTestsuite'].setValue([]);
-      this.getTestSuiteByCategory(this.categoryName,this.isThunderEnable);
+      this.testSuitesLoaded = false;
     }
   }
   /**
@@ -429,6 +433,38 @@ export class ExecuteDialogComponent {
       this.deviceList = res.data;
     })
   }
+
+
+    /**
+     * Handles the click event for the script dropdown.
+     * 
+     * If the scripts have not been loaded yet, this method triggers loading of scripts
+     * by category and thunder enablement status.
+     *
+     * @remarks
+     * This method is typically called when the user interacts with the script dropdown UI element.
+     */
+    onScriptDropdownClick(): void {
+    if (!this.scriptsLoaded) {
+      this.getScriptByCategory(this.categoryName, this.isThunderEnable);
+    }
+    }
+
+
+  /**
+   * Handles the click event for the test suite dropdown.
+   * 
+   * If the test suites have not been loaded yet, this method triggers the loading
+   * of test suites by category, optionally considering whether the "Thunder" feature is enabled.
+   *
+   * @remarks
+   * This method is typically bound to the dropdown's click event in the template.
+   */
+  onTestSuiteDropdownClick(): void {
+    if (!this.testSuitesLoaded) {
+      this.getTestSuiteByCategory(this.categoryName, this.isThunderEnable);
+    }
+  }
   /**
    * Handles the selection of an item. If the item's device name is not already in the `deviceNameArr` array,
    * it adds the device name to the array. Then, it calls the `getExecutionName` method.
@@ -480,17 +516,31 @@ export class ExecuteDialogComponent {
   onDeSelectAll(item:any):void{
     this.deviceNameArr=[];
   }
-  /**
+   /**
    * Fetches the script by category and updates the script test suite options.
    *
    * @param {string} category - The category of the script to fetch.
    * @param {boolean} isThunderEnable - A flag indicating whether Thunder is enabled.
    * @returns {void}
    */  
-  getScriptByCategory(category:string,isThunderEnable:boolean):void{
-    this.executionservice.getscriptByCategory(category,isThunderEnable).subscribe(res=>{
-      this.scriptTestsuiteOptions = res.data
-    })
+   getScriptByCategory(category:string, isThunderEnable:boolean):void {
+   this.scriptLoading = true;
+   this.executionservice.getscriptByCategory(category, isThunderEnable).subscribe({
+    next: (res) => {
+      this.scriptTestsuiteOptions = res.data || []; // Use empty array if no data
+      this.scriptLoading = false;
+      this.scriptsLoaded = true;
+    },
+    error: (error) => {
+      this.scriptLoading = false;
+      this.scriptTestsuiteOptions = []; // Reset to empty array on error
+      this._snakebar.open('Failed to load scripts', '', {
+        duration: 2000,
+        panelClass: ['err-msg'],
+        verticalPosition: 'top',
+      });
+    }
+   });
   }
   /**
    * Handles the selection of a script item. If the selected script is not already in the 
@@ -541,10 +591,20 @@ export class ExecuteDialogComponent {
    * @param isThunderEnable - A boolean indicating whether Thunder is enabled.
    * @returns void
    */  
-  getTestSuiteByCategory(category:any,isThunderEnable:boolean):void{
-    this.executionservice.gettestSuiteByCategory(category,isThunderEnable).subscribe(res=>{
-      this.scriptTestsuiteOptions = res.data      
-    })
+  getTestSuiteByCategory(category:string, isThunderEnable:boolean):void {
+  this.testSuiteLoading = true;
+  this.executionservice.gettestSuiteByCategory(category, isThunderEnable).subscribe(res => {
+    this.scriptTestsuiteOptions = res.data || []; // Use empty array if no data
+    this.testSuiteLoading = false;
+    this.testSuitesLoaded = true;
+   }, error => {
+    this.testSuiteLoading = false;
+    this._snakebar.open('Failed to load test suites', '', {
+      duration: 2000,
+      panelClass: ['err-msg'],
+      verticalPosition: 'top',
+    });
+   });
   }
   /**
    * Adds the given item to the testSuiteNameArr array if it does not already exist in the array.
