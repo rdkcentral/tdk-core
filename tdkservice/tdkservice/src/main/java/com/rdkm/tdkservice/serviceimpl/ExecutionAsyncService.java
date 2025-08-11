@@ -307,6 +307,7 @@ public class ExecutionAsyncService {
 				repeatCount = 1;
 			}
 
+			boolean pauseExecution = false;
 			for (int repeatIndex = 0; repeatIndex < repeatCount; repeatIndex++) {
 				String currentExecutionName = executionName;
 
@@ -317,6 +318,7 @@ public class ExecutionAsyncService {
 					// Append _R<i> for subsequent executions, starting from _R1
 					currentExecutionName = executionName + "_R" + repeatIndex;
 				}
+				LOGGER.info("Starting  multiscript execution: {}", currentExecutionName);
 
 				List<Script> applicableScripts = new ArrayList<>();
 				List<Script> invalidScripts = new ArrayList<>();
@@ -395,6 +397,7 @@ public class ExecutionAsyncService {
 
 				for (ExecutionResult execRes : executableResultList) {
 					if (this.isExecutionAborted(executionId)) {
+						LOGGER.info("Execution aborted for device: {}", device.getName());
 						for (ExecutionResult execResults : executableResultList) {
 							if (execResults.getResult() == ExecutionResultStatus.INPROGRESS
 									|| execResults.getResult() == ExecutionResultStatus.PENDING) {
@@ -431,6 +434,17 @@ public class ExecutionAsyncService {
 					executionCompleted.setExecutionTime(executionTime);
 					executionRepository.save(executionCompleted);
 
+					// After the execution is completed, check the device status
+					DeviceStatus currentStatus = deviceStatusService.fetchDeviceStatus(device);
+					LOGGER.info("Current device status after script execution: {}", currentStatus);
+					if (currentStatus == DeviceStatus.NOT_FOUND || currentStatus == DeviceStatus.HANG) {
+						LOGGER.warn("Device status is not found or hang for device: {}", device.getName());
+						// If the device is not found or hang, pause the execution
+						// and update the execution status to paused
+						pauseExecution = true;
+						break;
+					}
+
 				}
 
 				Execution finalExecution = executionRepository.findById(executionId).orElse(null);
@@ -445,6 +459,13 @@ public class ExecutionAsyncService {
 				double executionTime = this.computeTimeDifference(executionStartTime, executionEndTime);
 				finalExecution.setExecutionTime(executionTime);
 				executionRepository.save(finalExecution);
+
+				if (pauseExecution) {
+					LOGGER.info("Device status is not found or hang, pausing execution for device: {}",
+							device.getName());
+					this.setExecutiontoPausedState(execution);
+					break;
+				}
 				Execution finalExecutionStatus = this.setFinalStatusOfExecution(finalExecution);
 				this.callCiRequest(finalExecutionStatus, callBackUrl, imageVersion);
 
@@ -472,9 +493,13 @@ public class ExecutionAsyncService {
 			deviceStatusService.fetchAndUpdateDeviceStatus(device);
 			LOGGER.error("Error in executing scripts: {} on device: {}", device.getName());
 			throw new TDKServiceException("Error in executing scripts: " + " on device: " + device.getName());
+		} finally {
+			LOGGER.info("Execution completed in device: {}  for the execution: {}, updating the status",
+					device.getName(), executionName);
+
+			// Unlock the device with the current status
+			deviceStatusService.fetchAndUpdateDeviceStatus(device);
 		}
-		// Unlock the device with the current status
-		deviceStatusService.fetchAndUpdateDeviceStatus(device);
 
 	}
 
@@ -723,6 +748,7 @@ public class ExecutionAsyncService {
 		executionResult.setExecutionRemarks(remarksString.toString());
 		executionResult.setResult(ExecutionResultStatus.INPROGRESS);
 		executionResult.setStatus(ExecutionStatus.INPROGRESS);
+		executionResult.setDateOfExecution(Instant.now());
 		executionResultRepository.save(executionResult);
 		ExecutionResultStatus finalExecutionResultStatus = ExecutionResultStatus.FAILURE;
 		try {
@@ -813,6 +839,18 @@ public class ExecutionAsyncService {
 					ExecutionResult finalExecutionResult = executionResultRepository.findById(executionResult.getId())
 							.get();
 					finalExecutionResultStatus = finalExecutionResult.getResult();
+
+					// When the result status was not parallely set from the
+					// python framework but the execution was completed, due to someissue
+					// in the python framework. In that case the result status is not set to SUCCESS
+					// FAILURE ,In that case, the result status is set to FAILURE
+					if (finalExecutionResultStatus == ExecutionResultStatus.INPROGRESS) {
+						finalExecutionResultStatus = ExecutionResultStatus.FAILURE;
+						executionResult.setExecutionRemarks(
+								remarksString
+										+ "Script execution completed with status FAILURE, because the script execution got finished.But no status was set from the python framework or script"
+										+ finalExecutionResultStatus);
+					}
 					executionResult.setResult(finalExecutionResultStatus);
 					executionResultRepository.save(executionResult);
 
@@ -823,6 +861,7 @@ public class ExecutionAsyncService {
 					if ((executiontime >= waittime) && (waittime != 0)) {
 						LOGGER.info("The script execution is interrupted due to timeout");
 						executionResult.setResult(ExecutionResultStatus.TIMEOUT);
+						executionResultRepository.save(executionResult);
 						if (!device.isThunderEnabled()) {
 							LOGGER.info(
 									"The device is TDK enabled, the TDK agent needs to be reset, other wise the device status will be in busy state");
@@ -1306,7 +1345,7 @@ public class ExecutionAsyncService {
 			deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
 
 			// Execute the scripts that were in progress or pending before the restart
-			this.executeThePendingExecutionResultsOnRestart(execution, executionResults);
+			this.executeTheListOfExecutionResults(execution, executionResults);
 
 		} catch (Exception e) {
 			LOGGER.error("Error occurred while restarting multi script execution: {}", execution.getName(), e);
@@ -1341,6 +1380,15 @@ public class ExecutionAsyncService {
 			ExecutionResult executionResult = this.processExecutionResultForSingleScriptRestart(execution);
 
 			Script script = scriptRepository.findByName(executionResult.getScript());
+
+			DeviceStatus deviceStatus = deviceStatusService.fetchDeviceStatus(device);
+			if (deviceStatus != DeviceStatus.FREE) {
+				LOGGER.warn("Device {} is not available for re-run of execution: {}", device.getName(),
+						execution.getName());
+				abortPendingAndInProgressResultsWhileRestart(execution);
+				return;
+
+			}
 
 			// Set the device status to IN_USE state if not already set
 			deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
@@ -1385,7 +1433,7 @@ public class ExecutionAsyncService {
 		if (deviceStatus != DeviceStatus.FREE) {
 			LOGGER.warn("Device {} is not available for re-run of execution: {}", device.getName(),
 					execution.getName());
-			abortPendingAndInProgressResultsWhileRestart(execution);
+			pausePendingAndInProgressResultsWhileRestart(execution);
 			return false;
 		}
 
@@ -1471,17 +1519,37 @@ public class ExecutionAsyncService {
 	}
 
 	/**
+	 * This method is used to execute the execution results for the given
+	 * execution and execution results. Primarily used for restarting paused
+	 * executions.
+	 * 
+	 * @param execution        the execution object that was paused
+	 * @param executionResults the list of execution results to be executed
+	 */
+	@Async
+	public void executeThePausedExecutions(Execution execution,
+			List<ExecutionResult> executionResults) {
+
+		execution.setExecutionStatus(ExecutionProgressStatus.INPROGRESS);
+		execution.setResult(ExecutionOverallResultStatus.INPROGRESS);
+		Execution executionSaved = executionRepository.save(execution);
+		this.executeTheListOfExecutionResults(executionSaved, executionResults);
+		LOGGER.info("Execution restarted for execution: {}", execution.getName());
+
+	}
+
+	/**
 	 * This method executes the pending execution results for the given execution.
 	 * 
 	 * @param execution
 	 * @param executionResults
 	 */
-	public void executeThePendingExecutionResultsOnRestart(Execution execution,
+	public void executeTheListOfExecutionResults(Execution execution,
 			List<ExecutionResult> executionResults) {
 		UUID executionId = execution.getId();
 		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 		Device device = deviceRepository.findByName(executionDevice.getDevice());
-
+		boolean pauseExecution = false;
 		int executedScript = 0;
 		try {
 			for (ExecutionResult execRes : executionResults) {
@@ -1528,6 +1596,15 @@ public class ExecutionAsyncService {
 				executionCompleted.setExecutedScriptCount(executionCompleted.getExecutedScriptCount() + executedScript);
 				executionRepository.save(executionCompleted);
 
+				DeviceStatus currentStatus = deviceStatusService.fetchDeviceStatus(device);
+				if (currentStatus == DeviceStatus.NOT_FOUND || currentStatus == DeviceStatus.HANG) {
+					pauseExecution = true;
+					LOGGER.warn("Device {} is not available for execution, pausing execution: {}", device.getName(),
+							execution.getName());
+					this.setExecutiontoPausedState(execution);
+					break;
+				}
+
 			}
 
 			Execution finalExecution = executionRepository.findById(executionId).orElse(null);
@@ -1552,7 +1629,10 @@ public class ExecutionAsyncService {
 			finalExecution.setExecutionTime(executionTime);
 
 			executionRepository.save(finalExecution);
-			this.setFinalStatusOfExecution(finalExecution);
+			if (!pauseExecution) {
+				LOGGER.info("All Script executions completed for device : {}", executionDevice.getDevice());
+				this.setFinalStatusOfExecution(finalExecution);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// Unlock the device with the current status
@@ -1592,6 +1672,72 @@ public class ExecutionAsyncService {
 		// Update the Execution status to ABORTED
 		execution.setExecutionStatus(ExecutionProgressStatus.ABORTED);
 		execution.setResult(ExecutionOverallResultStatus.ABORTED);
+
+		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+		Device device = deviceRepository.findByName(executionDevice.getDevice());
+		// Unlock the device with the current status
+		deviceStatusService.fetchAndUpdateDeviceStatus(device);
+
+		// Save the updated Execution
+		executionRepository.save(execution);
+	}
+
+	/**
+	 * This method sets the execution status to PAUSED for the given Execution
+	 * object.
+	 * It updates the execution status to PAUSED and sets the result to PAUSED.
+	 * It also iterates through the list of ExecutionResults associated with the
+	 * Execution object and updates their status to PAUSED if they are currently
+	 * INPROGRESS or PENDING.
+	 */
+	private void setExecutiontoPausedState(Execution execution) {
+		LOGGER.info("Setting execution to PAUSED state for execution: {}", execution.getName());
+		Execution finalExecution = executionRepository.findById(execution.getId()).orElse(null);
+
+		finalExecution.setExecutionStatus(ExecutionProgressStatus.PAUSED);
+		finalExecution.setResult(ExecutionOverallResultStatus.PAUSED);
+
+		List<ExecutionResult> executionResults = finalExecution.getExecutionResults();
+		for (ExecutionResult executionResult : executionResults) {
+			if (executionResult.getResult() == ExecutionResultStatus.INPROGRESS
+					|| executionResult.getResult() == ExecutionResultStatus.PENDING) {
+				executionResult.setResult(ExecutionResultStatus.PAUSED);
+				executionResult.setStatus(ExecutionStatus.PAUSED);
+				executionResult.setExecutionRemarks("Execution paused due to device unavailability");
+				executionResultRepository.save(executionResult);
+			}
+		}
+		executionRepository.save(finalExecution);
+	}
+
+	/**
+	 * Marks all PENDING and INPROGRESS ExecutionResults of the given Execution as
+	 * ABORTED while trying to restart because the device is not available for
+	 * execution.
+	 *
+	 * @param execution the Execution object whose results need to be updated
+	 */
+	private void pausePendingAndInProgressResultsWhileRestart(Execution execution) {
+		// Retrieve all ExecutionResults associated with the given Execution
+		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
+
+		for (ExecutionResult result : executionResults) {
+			// Check if the status is PENDING or INPROGRESS
+			if (result.getResult() == ExecutionResultStatus.PENDING
+					|| result.getResult() == ExecutionResultStatus.INPROGRESS) {
+				// Update the status to PAUSED
+				result.setStatus(ExecutionStatus.PAUSED);
+				result.setResult(ExecutionResultStatus.PAUSED);
+				result.setExecutionRemarks(
+						"Execution aborted due to app restart and during the start up, the device is not available for execution.");
+
+				// Save the updated ExecutionResult
+				executionResultRepository.save(result);
+			}
+		}
+		// Update the Execution status to ABORTED
+		execution.setExecutionStatus(ExecutionProgressStatus.PAUSED);
+		execution.setResult(ExecutionOverallResultStatus.PAUSED);
 
 		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 		Device device = deviceRepository.findByName(executionDevice.getDevice());

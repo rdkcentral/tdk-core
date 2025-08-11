@@ -242,8 +242,8 @@ export class ExecutionComponent implements OnInit, OnDestroy{
           case 'ABORTED':
             iconHtml = `<span style="color:#FFB237; font-size:0.66rem; font-weight:500;" title="Aborted">ABORTED</span>`;
             break;
-          case 'PAUSE':
-            iconHtml = `<span style="color:gray; font-size:0.66rem; font-weight:500;" title="Paused">PAUSE</span>`;
+          case 'PAUSED':
+            iconHtml = `<span style="color:gray; font-size:0.66rem; font-weight:500;" title="Paused">PAUSED</span>`;
             break;
           default:
             return;

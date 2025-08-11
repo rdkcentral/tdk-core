@@ -92,17 +92,17 @@ public class CommonService {
 		LOGGER.info("Inside getFolderBasedOnModuleType method with testGroup: {}", testGroup);
 		String folderName = "";
 		switch (testGroup) {
-		case COMPONENT:
-			folderName = "component";
-			break;
-		case CERTIFICATION:
-			folderName = "certification";
-			break;
-		case E2E:
-			folderName = "integration";
-			break;
-		default:
-			LOGGER.error("Invalid test type: " + testGroup.getName());
+			case COMPONENT:
+				folderName = "component";
+				break;
+			case CERTIFICATION:
+				folderName = "certification";
+				break;
+			case E2E:
+				folderName = "integration";
+				break;
+			default:
+				LOGGER.error("Invalid test type: " + testGroup.getName());
 		}
 		return folderName;
 
@@ -117,20 +117,20 @@ public class CommonService {
 	public String getFolderBasedOnCategory(Category category) {
 		String folderName = "";
 		switch (category) {
-		case RDKV:
-			folderName = Constants.RDKV_FOLDER_NAME;
-			break;
-		case RDKV_RDKSERVICE:
-			folderName = Constants.RDKV_FOLDER_NAME;
-			break;
-		case RDKB:
-			folderName = Constants.RDKB_FOLDER_NAME;
-			break;
-		case RDKC:
-			folderName = Constants.RDKC_FOLDER_NAME;
-			break;
-		default:
-			LOGGER.error("Invalid category: " + category.getName());
+			case RDKV:
+				folderName = Constants.RDKV_FOLDER_NAME;
+				break;
+			case RDKV_RDKSERVICE:
+				folderName = Constants.RDKV_FOLDER_NAME;
+				break;
+			case RDKB:
+				folderName = Constants.RDKB_FOLDER_NAME;
+				break;
+			case RDKC:
+				folderName = Constants.RDKC_FOLDER_NAME;
+				break;
+			default:
+				LOGGER.error("Invalid category: " + category.getName());
 		}
 		return folderName;
 	}
@@ -142,7 +142,7 @@ public class CommonService {
 	 * @return category enum - RDKV, RDKB, RDKC
 	 */
 	public Category validateCategory(String category) {
-		LOGGER.info("Validating category: " + category);
+		LOGGER.debug("Validating category: " + category);
 
 		// if the category is
 		Category categoryEnum = null;
@@ -438,6 +438,7 @@ public class CommonService {
 			cell.setCellStyle(borderStyle);
 		}
 	}
+
 	/**
 	 * Get the list of deviceTypes as list of Stringbased on the deviceTypes name
 	 * 
@@ -541,7 +542,7 @@ public class CommonService {
 	 * @return - base log path
 	 */
 	public String getBaseLogPath() {
-		LOGGER.info("Getting base log path");
+		LOGGER.debug("Getting base log path");
 		String defaultLogBasePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.LOGS;
 		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE;
 		String logsPath = getConfigProperty(new File(configFilePath), Constants.LOGS_PATH_KEY_CONFIG_FILE);

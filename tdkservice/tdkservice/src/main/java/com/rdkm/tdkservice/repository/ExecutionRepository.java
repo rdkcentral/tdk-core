@@ -192,4 +192,24 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 			Instant toDate, List<ExecutionOverallResultStatus> results, ExecutionType executionType,
 			String scripttestSuiteName, Pageable pageable);
 
+	/**
+	 * Finds executions with the specified status that were created after the given
+	 * date.
+	 * 
+	 * @param status      the execution status to filter by
+	 * @param createdDate the date to compare against
+	 * @return a list of matching executions
+	 */
+	List<Execution> findByExecutionStatusAndCreatedDateAfter(ExecutionProgressStatus status, Instant createdDate);
+
+	/**
+	 * Finds executions with the specified status that were created before the given
+	 * date.
+	 * 
+	 * @param status      the execution status to filter by
+	 * @param createdDate the date to compare against
+	 * @return a list of matching executions
+	 */
+	List<Execution> findByExecutionStatusAndCreatedDateBefore(ExecutionProgressStatus status, Instant createdDate);
+
 }

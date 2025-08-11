@@ -76,10 +76,16 @@ public class ScriptExecutorService {
 			executorService.execute(dataReaderTask);
 			executorService.execute(errorReaderTask);
 
+			boolean finished;
 			if (waittime == 0) {
-				process.waitFor();
+				process.waitFor(); // just wait until finished
+				finished = true;
 			} else {
-				process.waitFor(waittime, TimeUnit.SECONDS);
+				finished = process.waitFor(waittime, TimeUnit.SECONDS);
+				if (!finished) {
+					process.destroyForcibly();
+					LOGGER.debug("Process killed due to timeout.");
+				}
 			}
 
 			String outputData;
@@ -141,10 +147,13 @@ public class ScriptExecutorService {
 			executorService.execute(dataReaderTask);
 			executorService.execute(errorReaderTask);
 
+			boolean finished;
 			if (waitTime > 0) {
-				process.waitFor(waitTime, TimeUnit.MINUTES);
-			} else {
-				process.waitFor();
+				finished = process.waitFor(waitTime, TimeUnit.MINUTES);
+				if (!finished) {
+					process.destroyForcibly();
+					LOGGER.debug("Process killed due to timeout.");
+				}
 			}
 
 			dataReaderTask.get();

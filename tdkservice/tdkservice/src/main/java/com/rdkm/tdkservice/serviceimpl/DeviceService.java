@@ -771,7 +771,7 @@ public class DeviceService implements IDeviceService {
 	 * @return List of device status response DTOs
 	 */
 	public List<DeviceStatusResponseDTO> getAllDeviceStatus(String category) {
-		LOGGER.info("Fetching device statuses for category: " + category);
+		LOGGER.debug("Fetching device statuses for category: " + category);
 		List<DeviceStatusResponseDTO> deviceStatusResponseDTOs = new ArrayList<>();
 		try {
 			List<Device> devices = deviceRepository.findByCategory(Category.getCategory(category));

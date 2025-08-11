@@ -57,7 +57,6 @@ public class DeviceStatusService {
 	@Autowired
 	private DeviceConfigService deviceConfigService;
 
-
 	/**
 	 * This method updates the status for all devices at a fixed rate. It fetches
 	 * the list of all devices from the repository, attempts to update their status,
@@ -161,7 +160,8 @@ public class DeviceStatusService {
 					pythonScriptPath,
 					device.getIp(),
 					device.getThunderPort(),
-					deviceConfigService.getDeviceConfigFileName(device.getName(), device.getDeviceType().getName(), device.isThunderEnabled()),// Fetches the config file name
+					deviceConfigService.getDeviceConfigFileName(device.getName(), device.getDeviceType().getName(),
+							device.isThunderEnabled()), // Fetches the config file name
 					device.getMacId() != null ? device.getMacId() : null // Adds MAC ID or null
 			};
 
@@ -192,7 +192,7 @@ public class DeviceStatusService {
 
 		DeviceStatus deviceStatus = getDeviceStatusFromOutput(deviceStatusOutput);
 		LOGGER.debug("Device status fetched for device: " + device.getName() + " is: " + deviceStatus.toString());
-	    return deviceStatus;
+		return deviceStatus;
 	}
 
 	/**
@@ -228,24 +228,24 @@ public class DeviceStatusService {
 			return DeviceStatus.NOT_FOUND;
 		}
 		switch (deviceStatusOutput.trim()) {
-		case Constants.BUSY:
-			deviceStatus = DeviceStatus.BUSY;
-			break;
-		case Constants.FREE:
-			deviceStatus = DeviceStatus.FREE;
-			break;
-		case Constants.NOT_FOUND:
-			deviceStatus = DeviceStatus.NOT_FOUND;
-			break;
-		case Constants.HANG:
-			deviceStatus = DeviceStatus.HANG;
-			break;
-		case Constants.TDK_DISABLED:
-			deviceStatus = DeviceStatus.TDK_DISABLED;
-			break;
-		default:
-			deviceStatus = DeviceStatus.NOT_FOUND;
-			break;
+			case Constants.BUSY:
+				deviceStatus = DeviceStatus.BUSY;
+				break;
+			case Constants.FREE:
+				deviceStatus = DeviceStatus.FREE;
+				break;
+			case Constants.NOT_FOUND:
+				deviceStatus = DeviceStatus.NOT_FOUND;
+				break;
+			case Constants.HANG:
+				deviceStatus = DeviceStatus.HANG;
+				break;
+			case Constants.TDK_DISABLED:
+				deviceStatus = DeviceStatus.TDK_DISABLED;
+				break;
+			default:
+				deviceStatus = DeviceStatus.NOT_FOUND;
+				break;
 		}
 		LOGGER.debug("Device status mapped to: " + deviceStatus);
 		return deviceStatus;
@@ -288,6 +288,7 @@ public class DeviceStatusService {
 	 * @return boolean - true if the status was fetched and updated successfully
 	 */
 	public boolean fetchAndUpdateDeviceStatus(Device device) {
+		LOGGER.debug("Fetching and updating status for device: " + device.getName());
 		try {
 			// Fetch the device status
 			DeviceStatus deviceStatus = fetchDeviceStatus(device);

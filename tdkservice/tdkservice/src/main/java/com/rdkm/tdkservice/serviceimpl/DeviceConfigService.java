@@ -102,7 +102,7 @@ public class DeviceConfigService implements IDeviceConfigService {
 	 * @throws IOException - if an I/O error occurs
 	 */
 	private Resource addHeader(Resource resource) throws IOException {
-		
+
 		// Read the file content as a String
 		String fileContent = new String(Files.readAllBytes(resource.getFile().toPath()));
 		if (fileContent.contains(Constants.HEADER_FINDER)) {
@@ -256,14 +256,17 @@ public class DeviceConfigService implements IDeviceConfigService {
 		}
 	}
 
-	/** This method retrieves the configuration file name for a given device based on its name, type, or Thunder-enabled status. If neither the device name nor type is provided, it returns a default configuration file name.
-	 * @param deviceName
+	/**
+	 * This method retrieves the configuration file name for a given device based on
+	 * its name, type, or Thunder-enabled status. If neither the device name nor
+	 * type is provided, it returns a default configuration file name.
+	 * 
 	 * @param deviceType
 	 * @param isThunderEnabled
 	 * @return String - the name of the device configuration file
 	 */
 	public String getDeviceConfigFileName(String deviceName, String deviceType, boolean isThunderEnabled) {
-		LOGGER.info("Fetching device config file name for deviceName: {}, deviceType: {}", deviceName, deviceType);
+		LOGGER.debug("Fetching device config file name for deviceName: {}, deviceType: {}", deviceName, deviceType);
 
 		// Check if deviceName is provided
 		if (!Utils.isEmpty(deviceName)) {

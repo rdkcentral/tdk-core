@@ -232,10 +232,10 @@ public class ExecutionController {
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "createdDate") String sortBy,
 			@RequestParam(defaultValue = "desc") String sortDir) {
-		LOGGER.info("Fetching executions for category: " + category);
+		LOGGER.debug("Fetching executions for category: " + category);
 		ExecutionListResponseDTO result = executionService.getExecutionsByCategory(category, page, size, sortBy,
 				sortDir);
-		LOGGER.info("Executions fetched successfully");
+		LOGGER.debug("Executions fetched successfully");
 		return result != null ? ResponseUtils.getSuccessDataResponse("Executions fetched successfully", result)
 				: ResponseUtils.getSuccessDataResponse("No execution avaiable for category :" + category, null);
 	}

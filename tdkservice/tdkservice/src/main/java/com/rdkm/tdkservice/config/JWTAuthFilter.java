@@ -65,13 +65,13 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 			final String jwtToken;
 			final String userName;
 			if (authHeader == null || authHeader.isBlank()) {
-				LOGGER.info("Auth header" + authHeader);
+				LOGGER.debug("Auth header" + authHeader);
 				filterChain.doFilter(request, response);
 				return;
 			}
 
 			jwtToken = authHeader.substring(7);
-			LOGGER.info("JWT token" + authHeader);
+			LOGGER.debug("JWT token" + authHeader);
 			userName = jwtUtils.extractUsername(jwtToken);
 			if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -82,7 +82,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 					UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails,
 							null, userDetails.getAuthorities());
 					LOGGER.debug("Token is valid ");
-					LOGGER.info(" User authorities are" + userDetails.getAuthorities());
+					LOGGER.debug(" User authorities are" + userDetails.getAuthorities());
 					token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					securityContext.setAuthentication(token);
 					SecurityContextHolder.setContext(securityContext);

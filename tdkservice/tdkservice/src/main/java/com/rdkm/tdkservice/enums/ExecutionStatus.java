@@ -25,6 +25,6 @@ package com.rdkm.tdkservice.enums;
  */
 public enum ExecutionStatus {
 
-	INPROGRESS, COMPLETED
+	INPROGRESS, COMPLETED, PAUSED
 
 }

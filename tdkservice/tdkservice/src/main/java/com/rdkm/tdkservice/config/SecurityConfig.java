@@ -77,7 +77,7 @@ public class SecurityConfig {
 									"/api/v1/rdkcertification/**", "/api/execution/**", "/primitiveTest/**",
 									"/execution/**", "/deviceGroup/**", "/api/v1/users/**",
 									"/api/v1/executionScheduler/**", "/api/v1/analysis/**", "/api/v1/packagemanager/**",
-									 "/api/v1/app-upgrade/**","/actuator/**")
+									"/api/v1/app-upgrade/**", "/actuator/**", "/fileStore/**")
 							.permitAll().requestMatchers("/api/v1/users/**").hasAuthority("admin")
 							.requestMatchers(SWAGGER_UI).permitAll().anyRequest().authenticated())
 					.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

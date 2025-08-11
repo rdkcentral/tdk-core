@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +48,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -970,7 +972,7 @@ public class ExecutionService implements IExecutionService {
 	@Override
 	public ExecutionListResponseDTO getExecutionsByCategory(String categoryName, int page, int size, String sortBy,
 			String sortDir) {
-		LOGGER.info("Fetching executions by category: {} for size{} and page number{} ", categoryName, size, page);
+		LOGGER.debug("Fetching executions by category: {} for size{} and page number{} ", categoryName, size, page);
 		Category category = commonService.validateCategory(categoryName);
 		Pageable pageable = getPageable(page, size, sortBy, sortDir);
 		Page<Execution> pageExecutions = executionRepository.findByCategory(category, pageable);
@@ -1204,6 +1206,8 @@ public class ExecutionService implements IExecutionService {
 			return ExecutionProgressStatus.INPROGRESS.toString();
 		} else if (execution.getExecutionStatus() == ExecutionProgressStatus.ABORTED) {
 			return ExecutionProgressStatus.ABORTED.toString();
+		} else if (execution.getExecutionStatus() == ExecutionProgressStatus.PAUSED) {
+			return ExecutionProgressStatus.PAUSED.toString();
 		} else if (execution.getExecutionStatus() == ExecutionProgressStatus.COMPLETED) {
 			if (execution.getResult() == ExecutionOverallResultStatus.SUCCESS) {
 				return ExecutionOverallResultStatus.SUCCESS.toString();
@@ -1876,7 +1880,7 @@ public class ExecutionService implements IExecutionService {
 		response.setDeviceName(executionDevice.getDevice());
 		response.setDeviceIP(executionDevice.getDeviceIp());
 		response.setDeviceMac(executionDevice.getDeviceMac());
-		if (null !=device) {
+		if (null != device) {
 			response.setDeviceThunderEnabled(device.isThunderEnabled());
 		}
 		String deviceDetails = fileTransferService.getDeviceDetailsFromVersionFile(id.toString());
@@ -2106,36 +2110,36 @@ public class ExecutionService implements IExecutionService {
 	private void setExecutionSummaryCount(ExecutionSummaryResponseDTO executionSummaryResponseDTO,
 			ExecutionResultStatus status) {
 		switch (status) {
-		case SUCCESS:
-			executionSummaryResponseDTO.setSuccess(executionSummaryResponseDTO.getSuccess() + 1);
-			executionSummaryResponseDTO.setExecuted(executionSummaryResponseDTO.getExecuted() + 1);
-			break;
-		case FAILURE:
-			executionSummaryResponseDTO.setFailure(executionSummaryResponseDTO.getFailure() + 1);
-			executionSummaryResponseDTO.setExecuted(executionSummaryResponseDTO.getExecuted() + 1);
-			break;
-		case INPROGRESS:
-			executionSummaryResponseDTO.setInProgressCount(executionSummaryResponseDTO.getInProgressCount() + 1);
-			break;
-		case PENDING:
-			executionSummaryResponseDTO.setPending(executionSummaryResponseDTO.getPending() + 1);
-			break;
-		case NA:
-			executionSummaryResponseDTO.setNa(executionSummaryResponseDTO.getNa() + 1);
-			break;
-		case TIMEOUT:
-			executionSummaryResponseDTO.setTimeout(executionSummaryResponseDTO.getTimeout() + 1);
-			break;
-		case SKIPPED:
-			executionSummaryResponseDTO.setSkipped(executionSummaryResponseDTO.getSkipped() + 1);
-			break;
-		case ABORTED:
-			executionSummaryResponseDTO.setAborted(executionSummaryResponseDTO.getAborted() + 1);
-			break;
+			case SUCCESS:
+				executionSummaryResponseDTO.setSuccess(executionSummaryResponseDTO.getSuccess() + 1);
+				executionSummaryResponseDTO.setExecuted(executionSummaryResponseDTO.getExecuted() + 1);
+				break;
+			case FAILURE:
+				executionSummaryResponseDTO.setFailure(executionSummaryResponseDTO.getFailure() + 1);
+				executionSummaryResponseDTO.setExecuted(executionSummaryResponseDTO.getExecuted() + 1);
+				break;
+			case INPROGRESS:
+				executionSummaryResponseDTO.setInProgressCount(executionSummaryResponseDTO.getInProgressCount() + 1);
+				break;
+			case PENDING:
+				executionSummaryResponseDTO.setPending(executionSummaryResponseDTO.getPending() + 1);
+				break;
+			case NA:
+				executionSummaryResponseDTO.setNa(executionSummaryResponseDTO.getNa() + 1);
+				break;
+			case TIMEOUT:
+				executionSummaryResponseDTO.setTimeout(executionSummaryResponseDTO.getTimeout() + 1);
+				break;
+			case SKIPPED:
+				executionSummaryResponseDTO.setSkipped(executionSummaryResponseDTO.getSkipped() + 1);
+				break;
+			case ABORTED:
+				executionSummaryResponseDTO.setAborted(executionSummaryResponseDTO.getAborted() + 1);
+				break;
 
-		default:
-			// Do nothing
-			break;
+			default:
+				// Do nothing
+				break;
 		}
 
 	}
@@ -2494,6 +2498,114 @@ public class ExecutionService implements IExecutionService {
 			}
 		}
 		LOGGER.info("Re-running of stopped executions completed");
+	}
+
+	/**
+	 * Scheduled task to check and process paused executions.
+	 * This method runs every 5 minutes (after an initial delay of 5 seconds) and
+	 * performs the following:
+	 * This helps ensure that paused executions are either resumed or properly
+	 * aborted based on their age and device status.
+	 */
+	@Scheduled(initialDelay = 5000, fixedDelay = 300000)
+	public void checkForPausedExecutionsAndResume() {
+		LOGGER.info("Scheduled task to check for paused executions started");
+
+		// Checks for paused executions in the last 5 days and resumes them
+		// if the associated device is up.
+		LOGGER.info("Checking for paused executions in last 5 days");
+		Instant fiveDaysAgo = Instant.now().minusSeconds(5 * 24 * 60 * 60);
+		List<Execution> pausedExecutionsRecent = executionRepository.findByExecutionStatusAndCreatedDateAfter(
+				ExecutionProgressStatus.PAUSED, fiveDaysAgo);
+		if (!pausedExecutionsRecent.isEmpty()) {
+			handlePausedExecutions(pausedExecutionsRecent);
+		}
+
+		// Checks for paused executions older than 5 days and aborts them
+		// if the associated execution results are still in progress or pending.
+		LOGGER.info("Checking for paused executions before 5 days");
+		List<Execution> pausedExecutionsOld = executionRepository.findByExecutionStatusAndCreatedDateBefore(
+				ExecutionProgressStatus.PAUSED, fiveDaysAgo);
+		if (!pausedExecutionsOld.isEmpty()) {
+			handleOldPausedExecutions(pausedExecutionsOld);
+		}
+	}
+
+	/*
+	 * This method handles paused executions that are older than 5 days.
+	 * It checks the associated execution results and aborts them if they are still
+	 * in progress or pending.
+	 */
+	private void handleOldPausedExecutions(List<Execution> pausedExecutionsOld) {
+		LOGGER.info("Going to handle old paused executions which are aged more than 5 days");
+		for (Execution execution : pausedExecutionsOld) {
+			LOGGER.warn("Paused execution older than 5 days: {} created at {}", execution.getName(),
+					execution.getCreatedDate());
+
+			List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
+			if (executionResults.isEmpty()) {
+				LOGGER.warn("No execution results found for paused execution: {}", execution.getName());
+				continue;
+			}
+			for (ExecutionResult execResults : executionResults) {
+				if (execResults.getResult() == ExecutionResultStatus.INPROGRESS
+						|| execResults.getResult() == ExecutionResultStatus.PENDING) {
+					execResults.setResult(ExecutionResultStatus.ABORTED);
+					execResults.setExecutionRemarks(
+							"Execution is auto aborted, as it was paused for more than 5 days and device didn't come up during this period");
+					executionResultRepository.save(execResults);
+				}
+			}
+			execution.setExecutionStatus(ExecutionProgressStatus.ABORTED);
+			execution.setResult(ExecutionOverallResultStatus.ABORTED);
+			executionRepository.save(execution);
+			LOGGER.info("Execution aborted for execution name: {}", execution.getName());
+		}
+	}
+
+	/*
+	 * This method handles paused executions that are less than 5 days.
+	 * It checks the associated execution results and restarts them if they are
+	 * still
+	 * in progress or pending and the device is up.
+	 */
+	private void handlePausedExecutions(List<Execution> pausedExecutions) {
+
+		for (Execution execution : pausedExecutions) {
+			LOGGER.info("Found paused execution: {}", execution.getName());
+			// Check if the device associated with this execution is up
+			ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+			if (executionDevice != null) {
+				String deviceName = executionDevice.getDevice();
+				Device device = deviceRepository.findByName(deviceName);
+				boolean isDeviceUp = false;
+				// Get all execution results with status PAUSED
+
+				try {
+					DeviceStatus deviceStatus = deviceStatusService.fetchDeviceStatus(device);
+					isDeviceUp = (deviceStatus == DeviceStatus.FREE);
+				} catch (Exception e) {
+					LOGGER.error("Error fetching device status for device: {}", deviceName, e);
+				}
+				if (isDeviceUp) {
+					List<ExecutionResult> pausedResults = executionResultRepository.findByExecution(execution)
+							.stream()
+							.filter(r -> r.getStatus() == ExecutionStatus.PAUSED)
+							.sorted(Comparator.comparing(ExecutionResult::getCreatedDate))
+							.collect(Collectors.toList());
+
+					LOGGER.info("Device {} is UP for paused execution {}", deviceName, execution.getName());
+					deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
+					executionAsyncService.executeThePausedExecutions(execution, pausedResults);
+				} else {
+					LOGGER.warn("Device {} is DOWN for paused execution {}", deviceName, execution.getName());
+					// Logic to handle device down scenario
+				}
+			} else {
+				LOGGER.warn("No device associated with paused execution: {}", execution.getName());
+			}
+		}
+
 	}
 
 }

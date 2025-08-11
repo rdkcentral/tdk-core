@@ -399,10 +399,10 @@ public class DeviceController {
 	@ApiResponse(responseCode = "404", description = "No devices found for the category")
 	@GetMapping("/getalldevicestatus")
 	public ResponseEntity<?> getAllDeviceStatus(@RequestParam String category) {
-		LOGGER.info("Received request to fetch status for all devices in category: " + category);
+		LOGGER.debug("Received request to fetch status for all devices in category: " + category);
 		List<DeviceStatusResponseDTO> deviceStatusList = deviceService.getAllDeviceStatus(category);
 		if (deviceStatusList != null && !deviceStatusList.isEmpty()) {
-			LOGGER.info("Fetched status for all devices in category: " + category);
+			LOGGER.debug("Fetched status for all devices in category: " + category);
 			return ResponseEntity.status(HttpStatus.OK).body(deviceStatusList);
 		} else {
 			LOGGER.error("No devices found in the category  " + category);
