@@ -25,16 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -52,15 +43,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.poi.common.usermodel.HyperlinkType;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Hyperlink;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1044,24 +1027,23 @@ public class ExportExcelService implements IExportExcelService {
 	private void createCombinedModuleSheet(List<Map<String, Object>> moduleScripts, Workbook workbook) {
 		int rowNum = 0;
 
-		// Extract and map the module name from the first result
 		if (moduleScripts.isEmpty()) {
 			LOGGER.warn("No scripts available for module sheet population.");
 			return;
 		}
+
 		String dynamicModuleName = (String) moduleScripts.get(0).get("moduleName");
 		if (dynamicModuleName == null || dynamicModuleName.isEmpty()) {
 			LOGGER.error("Module name is missing or null in the script data.");
 			return;
 		}
 
-		// Fetch or create the module sheet
 		Sheet moduleSheet = workbook.getSheet(dynamicModuleName);
 		if (moduleSheet == null) {
 			moduleSheet = workbook.createSheet(dynamicModuleName);
 		}
 
-		// Add a "Back to Summary" link at the top (if not already added)
+		// "Back to Summary" link
 		if (moduleSheet.getRow(0) == null) {
 			Row backRow = moduleSheet.createRow(rowNum++);
 			Cell backCell = backRow.createCell(0);
@@ -1069,24 +1051,73 @@ public class ExportExcelService implements IExportExcelService {
 			addHyperlinkToCell(backCell, "'Summary'!A1", workbook);
 		}
 
-		// Create headers for the module sheet (if not already created)
+		// Headers
 		if (moduleSheet.getRow(1) == null) {
 			String[] headers = { "Sl.No", "Script Name", "Executed", "Status", "Executed On", "Log Data" };
 			createAndStyleHeaders(moduleSheet, rowNum++, headers, 0);
 		}
 
-		// Populate the module sheet with data
+		// Wrap text style for log data
+		CellStyle wrapStyle = workbook.createCellStyle();
+		wrapStyle.setWrapText(true);
+		wrapStyle.setVerticalAlignment(VerticalAlignment.TOP);
+
 		int slNo = 1;
 		for (Map<String, Object> result : moduleScripts) {
 			Row row = moduleSheet.createRow(rowNum++);
-			Object[] rowData = { slNo++, result.get("scriptName"), result.get("executed"), result.get("status"),
-					result.get("executedOn"), result.get("logData") };
-			populateRowData(row, rowData);
+
+			Object executedOnObj = result.get("executedOn");
+			String executedOnDate = "";
+			if (executedOnObj != null) {
+				if (executedOnObj instanceof java.util.Date) {
+					executedOnDate = new java.text.SimpleDateFormat("yyyy-MM-dd").format((java.util.Date) executedOnObj);
+				} else {
+					String executedOnStr = executedOnObj.toString();
+					if (executedOnStr.length() >= 10 && executedOnStr.charAt(4) == '-' && executedOnStr.charAt(7) == '-') {
+						executedOnDate = executedOnStr.substring(0, 10);
+					} else {
+						executedOnDate = executedOnStr;
+					}
+				}
+			}
+
+			String logData = result.get("logData") != null
+					? result.get("logData").toString()
+					: "";
+
+			Object[] rowData = {
+					slNo++,
+					result.get("scriptName"),
+					result.get("executed"),
+					result.get("status"),
+					executedOnDate
+			};
+
+			// Fill non-log cells
+			for (int i = 0; i < rowData.length; i++) {
+				Cell cell = row.createCell(i);
+				if (rowData[i] != null) {
+					if (rowData[i] instanceof Number) {
+						cell.setCellValue(((Number) rowData[i]).doubleValue());
+					} else {
+						cell.setCellValue(rowData[i].toString());
+					}
+				}
+			}
+
+			// Fill logData cell with wrap style (multi-line support)
+			Cell logCell = row.createCell(5);
+			logCell.setCellValue(logData);
+			logCell.setCellStyle(wrapStyle);
 		}
 
-		// Adjust column widths
-		autoSizeColumns(moduleSheet, 0, 5);
+		// Auto-size other columns but set fixed width for log data
+		for (int col = 0; col <= 4; col++) {
+			moduleSheet.autoSizeColumn(col);
+		}
+		moduleSheet.setColumnWidth(5, 10000); // fixed width for Log Data column
 	}
+
 
 	/**
 	 * Creates and styles the header row for a given sheet.
@@ -1356,7 +1387,8 @@ public class ExportExcelService implements IExportExcelService {
 			return rowNum;
 		}
 
-		// Consolidate data into lists to maintain all details
+		// Use a set to avoid duplicate devices (by name + IP)
+		Set<String> uniqueDeviceKeys = new HashSet<>();
 		List<String> devices = new ArrayList<>();
 		List<String> deviceIPs = new ArrayList<>();
 		List<Double> executionTimes = new ArrayList<>();
@@ -1366,10 +1398,16 @@ public class ExportExcelService implements IExportExcelService {
 		int totalNaCount = 0;
 
 		for (Map<String, Object> device : deviceDetails) {
-			devices.add((String) device.get("device"));
-			deviceIPs.add((String) device.get("deviceIp"));
-			executionTimes.add((Double) device.get("executionTime"));
-			images.add((String) device.get("deviceImage"));
+			String deviceName = (String) device.get("device");
+			String deviceIp = (String) device.get("deviceIp");
+			String deviceKey = deviceName + "|" + deviceIp;
+
+			if (uniqueDeviceKeys.add(deviceKey)) {
+				devices.add(deviceName);
+				deviceIPs.add(deviceIp);
+				executionTimes.add((Double) device.get("executionTime"));
+				images.add((String) device.get("deviceImage"));
+			}
 
 			// Accumulate totals for overall percentage calculation
 			totalExecutionCount += (int) device.get("totalExecutionCount");
@@ -1382,8 +1420,7 @@ public class ExportExcelService implements IExportExcelService {
 		String[] values = { devices.toString(), deviceIPs.toString(), executionTimes.toString(), images.toString() };
 
 		for (int i = 0; i < headers.length; i++) {
-			LOGGER.debug("Writing header '{}' and value '{}' to the sheet at row number: {}", headers[i], values[i],
-					rowNum);
+			LOGGER.debug("Writing header '{}' and value '{}' to the sheet at row number: {}", headers[i], values[i], rowNum);
 
 			Row row = sheet.createRow(rowNum++);
 			Cell headerCell = row.createCell(4); // Header in Column F
@@ -2585,7 +2622,7 @@ public class ExportExcelService implements IExportExcelService {
 
 				row.createCell(3).setCellValue(failedScript.getResult().toString());
 				row.createCell(4).setCellValue(failedScript.getDateOfExecution().toString());
-				row.createCell(5).setCellValue(executionService.getExecutionLogs(failedScript.getId().toString()));
+				row.createCell(5).setCellValue(safeExcelValue(executionService.getExecutionLogs(failedScript.getId().toString())));
 				ExecutionResultAnalysis analysis = executionResultAnalysisRepository
 						.findByExecutionResult(failedScript);
 				if (analysis != null) {
@@ -2749,4 +2786,18 @@ public class ExportExcelService implements IExportExcelService {
 			throw new TDKServiceException("Failed to generate comparison report");
 		}
 	}
+
+	/**
+	 * Safely formats a string value for Excel output, ensuring it does not exceed
+	 * @param input
+	 * @return
+	 */
+	private String safeExcelValue(String input) {
+		if (input == null || input.isEmpty()) return "N/A";
+		if (input.length() > 32000) {
+			return input.substring(0, 32000) + "\n...TRUNCATED: view full log in system...";
+		}
+		return input;
+	}
+
 }
