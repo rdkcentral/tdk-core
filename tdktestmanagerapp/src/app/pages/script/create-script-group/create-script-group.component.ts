@@ -414,9 +414,26 @@ export class CreateScriptGroupComponent {
    */  
   testSuiteSubmit():void{
     this.testSuiteFormSubmitted = true;
-    if(this.testSuiteFrom.invalid){
-      return ;
-    }else{
+    if (this.testSuiteFrom.invalid) {
+      // Show a popup/snackbar for missing required fields
+      let msg = '';
+      if (this.testSuiteFrom.controls['testSuiteName'].errors?.['required']) {
+        msg = 'Please provide name.';
+      } else if (this.testSuiteFrom.controls['description'].errors?.['required']) {
+        msg = 'Please provide description.';
+      } else if (this.testSuiteFrom.controls['container2Scripts'].errors?.['container2Empty']) {
+        msg = 'Add at least one script.';
+      } else {
+        msg = 'Please fill all required fields.';
+      }
+      this._snakebar.open(msg, '', {
+        duration: 2000,
+        panelClass: ['err-msg'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top'
+      });
+      return;
+    } else {
       let obj = {
         name:this.testSuiteFrom.value.testSuiteName,
         description: this.testSuiteFrom.value.description,

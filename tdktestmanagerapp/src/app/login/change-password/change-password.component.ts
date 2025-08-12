@@ -167,24 +167,26 @@ export class ChangePasswordComponent implements OnInit {
   resetPassword(): void {
     this.submitted = true;
     if (this.changePasswordForm.invalid) {
-      return
+      return;
     } else {
       let obj = {
         userName: this.loggedInUser.userName,
         oldPassword: this.changePasswordForm.value.oldpassword,
         newPassword: this.changePasswordForm.value.newpassword
-      }
+      };
       this.loginservice.restPassword(obj).subscribe({
         next: (res) => {
           this._snakebar.open(res.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
-          })
+          });
           setTimeout(() => {
-            this.router.navigate(["/"]);
+            // Clear all session and local storage to log out user
+            sessionStorage.clear();
+            localStorage.clear();
+            this.router.navigate(["/login"]);
           }, 1000);
-
         },
         error: (err) => {
           let errMsgDisplay = err.message;
@@ -193,10 +195,9 @@ export class ChangePasswordComponent implements OnInit {
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
             verticalPosition: 'top'
-          })
+          });
         }
-
-      })
+      });
     }
   }
 
