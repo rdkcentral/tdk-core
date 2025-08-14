@@ -805,6 +805,8 @@ public class ExecutionAsyncService {
 
 			output = scriptExecutorService.executeTestScript(commands, waittime, executionLogfile);
 
+			fileTransferService.moveAndRenameScriptGeneratedFiles(execution, executionResult, executionDevice);
+
 			double currentTimeMillisAfterExecution = System.currentTimeMillis();
 
 			// Finding the execution time and converts to minutes
@@ -1207,7 +1209,8 @@ public class ExecutionAsyncService {
 				+ commonService.getTMUrlFromConfigFileForTestExecution() + Constants.SINGLE_QUOTES
 				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + AppConfig.getRealPath()
 				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES
-				+ commonService.getBaseLogPath() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
+				+ commonService.getBaseLogPath() + Constants.FILE_PATH_SEPERATOR + Constants.SINGLE_QUOTES
+				+ Constants.COMMA_SEPERATOR
 				+ Constants.SINGLE_QUOTES + execution.getId() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
 				+ Constants.SINGLE_QUOTES + executionDevice.getId() + Constants.SINGLE_QUOTES
 				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + executionResult.getId()

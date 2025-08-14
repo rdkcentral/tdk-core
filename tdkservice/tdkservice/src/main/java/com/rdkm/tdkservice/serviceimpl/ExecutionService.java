@@ -23,8 +23,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,8 +50,8 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -2606,6 +2608,55 @@ public class ExecutionService implements IExecutionService {
 			}
 		}
 
+	}
+
+	/**
+	 * Creates a file and writes the provided test data into it.
+	 * This is predominaltly used for Media validation scripts
+	 * 
+	 * @param execId    Execution ID
+	 * @param execDevId Execution Device ID
+	 * @param resultId  Result ID
+	 * @param test      Test data to write
+	 * @return JSONObject with status and remarks
+	 */
+	@Override
+	public JSONObject createFileAndWrite(String execId, String execDevId, String resultId, String test) {
+		JSONObject result = new JSONObject();
+		try {
+			if (execId != null && execDevId != null && resultId != null) {
+				try {
+					String realPathForLogs = commonService.getBaseLogPath();
+					String fileName = realPathForLogs + "/" + execId + "/" + execId + "_" + execDevId + "_" + resultId
+							+ "_mvs_applog.txt";
+					File file = new File(fileName);
+					if (!file.getParentFile().exists()) {
+						file.getParentFile().mkdirs();
+					}
+					if (!file.exists()) {
+						file.createNewFile();
+						Files.write(file.toPath(), (System.lineSeparator() + test).getBytes(),
+								StandardOpenOption.APPEND);
+						result.put("Status", "SUCCESS");
+						result.put("Remarks", "Created file Name: " + fileName);
+					} else {
+						Files.write(file.toPath(), (System.lineSeparator() + test).getBytes(),
+								StandardOpenOption.APPEND);
+						result.put("Status", "SUCCESS");
+						result.put("Remarks", "Updated Existing file: " + fileName);
+					}
+				} catch (Exception e) {
+					result.put("Status", "FAILURE");
+					result.put("Remarks", "Unable to create file: " + e.getMessage());
+				}
+			} else {
+				result.put("Status", "FAILURE");
+				result.put("Remarks", "Unable to create a file execId and resultId empty");
+			}
+		} catch (JSONException je) {
+			LOGGER.error("Error creating JSON object for file creation result", je);
+		}
+		return result;
 	}
 
 }

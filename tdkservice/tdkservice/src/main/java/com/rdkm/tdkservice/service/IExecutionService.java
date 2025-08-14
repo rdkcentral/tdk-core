@@ -308,4 +308,16 @@ public interface IExecutionService {
 	 */
 	List<ExecutionDetailsForHtmlReportDTO> getExecutionDetailsForHtmlReport(UUID executionId);
 
+	/**
+	 * Creates a file and writes the provided test data into it.
+	 * This is predominaltly used for Media validation scripts
+	 * 
+	 * @param execId    Execution ID
+	 * @param execDevId Execution Device ID
+	 * @param resultId  Result ID
+	 * @param test      Test data to write
+	 * @return JSONObject with status and remarks
+	 */
+	JSONObject createFileAndWrite(String execId, String execDevId, String resultId, String test);
+
 }

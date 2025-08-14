@@ -63,6 +63,7 @@ import com.rdkm.tdkservice.config.AppConfig;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.Device;
 import com.rdkm.tdkservice.model.Execution;
+import com.rdkm.tdkservice.model.ExecutionDevice;
 import com.rdkm.tdkservice.model.ExecutionResult;
 import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.repository.DeviceRepositroy;
@@ -1375,6 +1376,70 @@ public class FileTransferService implements IFileService {
 		}
 		return contentBuilder.toString();
 
+	}
+
+	/**
+	 * Moves and renames script-generated files based on the execution ID,
+	 * execution device ID, and execution result ID.
+	 * The path hardocded in the python scripts are
+	 * is baseLogPath + "executionId + "_" + executionDeviceId + "_" +
+	 * executionResultId + "_"+
+	 * <filename>.<fileExtension>, we need to copy this from this location to the
+	 * log location
+	 * for that particular script that is where the agent logs and device logs are
+	 * stored.
+	 * 
+	 * @param ExecutionResult executionResult - The execution result object
+	 *                        containing
+	 *
+	 */
+	public void moveAndRenameScriptGeneratedFiles(Execution execution, ExecutionResult executionResult,
+			ExecutionDevice executionDevice) {
+		LOGGER.info("Going to move the script specific Files");
+		String baseLogFilePath = commonService.getBaseLogPath();
+
+		String executionId = execution.getId().toString();
+		String executionDeviceId = executionDevice.getId().toString();
+		String executionResultId = executionResult.getId().toString();
+		LOGGER.info(
+				"Moving and renaming script-generated files for executionId: {}, executionDeviceId: {}, executionResultId: {}",
+				executionId, executionDeviceId, executionResultId);
+		// Build the prefix to match files
+
+		String prefix = executionId + "_" + executionDeviceId + "_" + executionResultId;
+		// Build the target directory
+		String deviceLogsPath = baseLogFilePath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD
+				+ Constants.UNDERSCORE + executionId + Constants.FILE_PATH_SEPERATOR + Constants.RESULT
+				+ Constants.UNDERSCORE + executionResultId + Constants.FILE_PATH_SEPERATOR + Constants.DEVICE_LOGS
+				+ Constants.FILE_PATH_SEPERATOR;
+
+		LOGGER.info("Going to move the files to devicelogs folder: {}", deviceLogsPath);
+
+		File baseDir = new File(baseLogFilePath);
+		File targetDir = new File(deviceLogsPath);
+
+		if (!targetDir.exists()) {
+			targetDir.mkdirs();
+		}
+
+		File[] filesToMove = baseDir.listFiles((dir, name) -> name.startsWith(prefix));
+		LOGGER.info("Files to move: {}", Arrays.toString(filesToMove));
+
+		if (filesToMove == null || filesToMove.length == 0) {
+			LOGGER.warn("No files found to move with prefix: {}", prefix);
+			return;
+		}
+		if (filesToMove != null) {
+			for (File file : filesToMove) {
+				String[] parts = file.getName().split("_");
+				if (parts.length > 1) {
+					int indexOFfilename = parts.length - 1;
+					String newFileName = parts[indexOFfilename];
+					File targetFile = new File(targetDir, newFileName);
+					file.renameTo(targetFile);
+				}
+			}
+		}
 	}
 
 }

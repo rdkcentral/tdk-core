@@ -1303,4 +1303,30 @@ public class ExecutionController {
 		return ResponseEntity.status(HttpStatus.OK).headers(headers).body(excelData.readAllBytes());
 	}
 
+	/**
+	 * Creates a file and writes the provided test data into it.
+	 * This is predominaltly used for Media validation scripts
+	 * 
+	 * @param execId    Execution ID
+	 * @param execDevId Execution Device ID
+	 * @param resultId  Result ID
+	 * @param test      Test data to write
+	 * @return JSONObject with status and remarks
+	 */
+	@Operation(summary = "Create File and Write for the lighting app logs part of media validation scripted")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "File created and written successfully")
+	})
+	@GetMapping("/createFileAndWrite")
+	public ResponseEntity<?> createFileAndWrite(
+			@RequestParam String execId,
+			@RequestParam String execDevId,
+			@RequestParam String resultId,
+			@RequestParam String test) {
+		LOGGER.info("Creating file and writing test data for execId: {}, execDevId: {}, resultId: {}", execId,
+				execDevId, resultId);
+		JSONObject result = executionService.createFileAndWrite(execId, execDevId, resultId, test);
+		return ResponseEntity.ok(result.toString());
+
+	}
+
 }
