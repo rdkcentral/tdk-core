@@ -20,7 +20,7 @@
 import { Lightning, VideoPlayer } from '@lightningjs/sdk'
 import { logMsg, logDASHEventMsg } from './MediaUtility.js'
 import Hls from 'hls.js'
-import 'dashjs/dist/dash.all.min'
+import dashjs from 'dashjs/dist/modern/umd/dash.all.min.js'
 
 export default class VideoPlayerAdvanced extends Lightning.Component {
 
