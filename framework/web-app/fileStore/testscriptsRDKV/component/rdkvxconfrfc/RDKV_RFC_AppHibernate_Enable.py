@@ -80,8 +80,19 @@
 9: Disable and enable the maintenance manager plugin
 10: Check if the Xconf RFC settings are applied on the device
 11: Revert the RFC parameter to its original value
-12. Deleting  a feature and its corresponding rule in the Xconf server</automation_approch>
-    <expected_output>All the steps should execute successfully</expected_output>
+12: Deleting  a feature and its corresponding rule in the Xconf server</automation_approch>
+    <expected_output>1: Xconf URL must be accessible and return HTTP 200 OK
+2: MaintenanceManager plugin must be enabled successfully
+3: partnerId3.dat file must exist and must contain the string 'community'
+4: partners_defaults.json file must exist and must include the Xconf domain URL
+5: AppHibernate.Enable RFC parameter value should be checked and noted before making changes
+6: Feature name must be created in the Xconf server
+7: Feature and corresponding rule must be created in the Xconf server
+8: All settings in the Xconf server must be verified for correctness
+9: MaintenanceManager plugin should be disabled and re-enabled to confirm functionality
+10: Confirm that the value set for the AppHibernate.Enable RFC parameter on the Xconf server is correctly applied and reflected in the device
+11: AppHibernate.Enable RFC parameter value must be reverted to its original state
+12: Feature and its corresponding rule must be deleted from the Xconf server</expected_output>
     <priority>Medium</priority>
     <test_stub_interface></test_stub_interface>
     <test_script>RDKV_RFC_AppHibernate_Enable</test_script>

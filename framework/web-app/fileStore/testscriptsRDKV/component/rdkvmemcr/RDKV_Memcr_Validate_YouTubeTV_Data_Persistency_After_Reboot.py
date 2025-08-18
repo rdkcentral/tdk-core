@@ -64,9 +64,20 @@
     <test_setup>Video_Accelerator and RPI</test_setup>
     <pre_requisite>MEMCR_APPHIBERNATE_PARAMETER and MEMCR_COMPRESSED_APP_IMAGE_FILEPATH needs to be configured in the device configuration file</pre_requisite>
     <api_or_interface_used>org.rdk.RDKShell.1.getClients,org.rdk.RDKShell.1.getState,org.rdk.RDKShell.1.restore,org.rdk.RDKShell.1.launch,org.rdk.RDKShell.1.generateKey,org.rdk.System.1.reboot</api_or_interface_used>
-    <input_parameters>1. MEMCR_APPHIBERNATE_PARAMETER 2. MEMCR_COMPRESSED_APP_IMAGE_FILEPATH</input_parameters>
-    <automation_approch>1. Retrieve the AppHibernate RFC parameter from the device configuration 2. Check the status of the Memcr service 3. Check the status of the youtubetv app: if it is hibernated, restore it; if it is suspended, launch it; if it is already running, take no action 4. If it is not running at all, proceed to launch the app 5. Check if the cobalt app enters a hibernated state by using the Home keycode(36), without relying on the suspend API 6. After the reboot, check that the app is no longer in the hibernated state and that it does not persist</automation_approch>
-    <expected_output>All the steps should execute successfully</expected_output>
+    <input_parameters>1. MEMCR_APPHIBERNATE_PARAMETER
+2. MEMCR_COMPRESSED_APP_IMAGE_FILEPATH</input_parameters>
+    <automation_approch>1. Retrieve the AppHibernate RFC parameter from the device configuration
+2. Check the status of the Memcr service
+3. Check the status of the youtubetv app: if it is hibernated, restore it; if it is suspended, launch it; if it is already running, take no action
+4. If it is not running at all, proceed to launch the app
+5. Check if the cobalt app enters a hibernated state by using the Home keycode(36), without relying on the suspend API
+6. After the reboot, check that the app is no longer in the hibernated state and that it does not persist</automation_approch>
+    <expected_output>1. The AppHibernate RFC parameter should be retrieved from the device configuration file
+2. The Memcr service should be in an active state and the AppHibernate RFC parameter should be set to enabled
+3. If the YouTube TV app is hibernated, it should be restored; if suspended, it should be launched; if already running, no action should be taken
+4. If the YouTube TV app is not running, it should be launched
+5. The YouTube TV app should successfully enter the hibernated state when the Home keycode (36) is used
+6. After a reboot, the YouTube TV app should not remain in the hibernated state, and the corresponding .img file should no longer be present</expected_output>
     <priority>Medium</priority>
     <test_stub_interface>Nil</test_stub_interface>
     <test_script>RDKV_Memcr_Validate_YouTubeTV_Data_Persistency_After_Reboot</test_script>

@@ -69,8 +69,10 @@
     <pre_requisite>MEMCR_APPHIBERNATE_PARAMETER needs to be configured in the device configuration file</pre_requisite>
     <api_or_interface_used>Nil</api_or_interface_used>
     <input_parameters>MEMCR_APPHIBERNATE_PARAMETER</input_parameters>
-    <automation_approch>1. Retrieve the AppHibernate RFC parameter from the device configuration 2. Check the status of the Memcr service</automation_approch>
-    <expected_output>All the steps should execute successfully</expected_output>
+    <automation_approch>1. Retrieve the AppHibernate RFC parameter from the device configuration
+2. Check the status of the Memcr service</automation_approch>
+    <expected_output>1. The AppHibernate RFC parameter should retrieve from the device configuration file
+2. The Memcr service should be in an active state</expected_output>
     <priority>Medium</priority>
     <test_stub_interface>Nil</test_stub_interface>
     <test_script>RDKV_Memcr_Check_Service_Status</test_script>
