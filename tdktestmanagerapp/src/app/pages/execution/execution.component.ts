@@ -1119,7 +1119,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `ConsolidatedReport_${params.executionName}.xlsx`;
+          a.download = `ExecutionResult_${params.executionName}.xlsx`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);

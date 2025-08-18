@@ -879,7 +879,7 @@ public class ExecutionController {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_DISPOSITION,
-				"attachment; filename=ConsolidatedReport_" + execution.getName() + ".xlsx");
+				"attachment; filename=ExecutionResult_" + execution.getName() + ".xlsx");
 		headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		return ResponseEntity.ok().headers(headers).body(excelData);
 

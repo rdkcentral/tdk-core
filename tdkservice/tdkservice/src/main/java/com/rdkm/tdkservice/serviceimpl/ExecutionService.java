@@ -1550,10 +1550,23 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error(" Device not available for execution");
 			throw new UserInputException("The device not available for execution");
 		}
+		List<ExecutionResult> executionResult = execution.getExecutionResults();
+		List<String> scriptNames = executionResult.stream().map(ExecutionResult::getScript).toList();
+		List<Script> scriptList = this.getValidScriptList(scriptNames, null);
+		boolean isDeviceScriptCategoryInValid = false;
+		for (Script script : scriptList) {
+			if (!commonService.vaidateScriptDeviceCategory(device, script)) {
+				isDeviceScriptCategoryInValid = true;
+				break;
+			} else {
+				continue;
+			}
+		}
+		if (isDeviceScriptCategoryInValid) {
+			LOGGER.error("Device and Script combination is invalid and belongs to different category");
+			throw new UserInputException("Device and Script combination is invalid and belongs to different category");
+		}
 		try {
-			List<ExecutionResult> executionResult = execution.getExecutionResults();
-			List<String> scriptNames = executionResult.stream().map(ExecutionResult::getScript).toList();
-
 			List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
 					.collect(Collectors.toList());
 			String execName = getNextRepeatExecutionName(execution.getName(), executionNames);
@@ -1640,14 +1653,27 @@ public class ExecutionService implements IExecutionService {
 			User userName = userRepository.findByUsername(user);
 			triggerUser = userName.getUsername();
 		}
+		List<String> failedScripts = failedResults.stream().map(ExecutionResult::getScript).toList();
+		List<Script> scripts = getValidScriptList(failedScripts, new StringBuilder());
+		boolean isDeviceScriptCategoryInValid = false;
+		for (Script script : scripts) {
+			if (!commonService.vaidateScriptDeviceCategory(device, script)) {
+				isDeviceScriptCategoryInValid = true;
+				break;
+			} else {
+				continue;
+			}
+		}
+		if (isDeviceScriptCategoryInValid) {
+			LOGGER.error("Device and Script combination is invalid and belongs to different category");
+			throw new UserInputException("Device and Script combination is invalid and belongs to different category");
+		}
 		try {
-			List<String> failedScripts = failedResults.stream().map(ExecutionResult::getScript).toList();
-			List<Script> scripts = getValidScriptList(failedScripts, new StringBuilder());
 			List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
 					.collect(Collectors.toList());
 			String execName = getNextRerunExecutionName(execution.getName(), executionNames);
 			executionAsyncService.prepareAndExecuteMultiScript(device, scripts, triggerUser, execName,
-					execution.getCategory().name(), execution.getTestType(), 1, false, execution.isDeviceLogsNeeded(),
+					execution.getCategory().name(), execution.getScripttestSuiteName(), 1, false, execution.isDeviceLogsNeeded(),
 					execution.isDiagnosticLogsNeeded(), execution.isDiagnosticLogsNeeded(), false,
 					execution.getTestType(), null, null);
 			LOGGER.info("Successfully re-run failed scripts for execution with id: {}", execId);

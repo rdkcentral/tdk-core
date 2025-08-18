@@ -464,9 +464,13 @@ limitations under the License.
                           </div>
                   </div>
               </div>
+              <div class="modal-btns">
+                <button type="button" class="download-btn" (click)="closeDialog()" matTooltip="Close">Close</button>
+                <button type="submit" class="download-btn" matTooltip="Upload Config File">Upload</button>
+              </div>
           </div>
         </div>
-        <div class="modal-btns">
+        <div class="modal-btns" *ngIf="!uploadExistingConfig">
           <button type="button" class="download-btn" (click)="closeDialog()" matTooltip="Close">Close</button>
           <button type="submit" class="download-btn" matTooltip="Update Config File">Update</button>
         </div>
@@ -530,10 +534,14 @@ limitations under the License.
                           </div>
                   </div>
               </div>
+               <div class="modal-btns">
+                <button type="button" class="download-btn" (click)="closeNewDeviceDialog()" matTooltip="Close">Close</button>
+                <button type="submit" class="download-btn" matTooltip="Upload Config File">Upload</button>
+              </div>
           </div>
   
         </div>
-        <div class="modal-btns">
+        <div class="modal-btns" *ngIf="!uploadConfigSec">
           <button type="button" class="download-btn" matTooltip="Close" (click)="closeNewDeviceDialog()">Close</button>
           <button type="submit" class="download-btn" matTooltip="Upload the config file">Upload</button>
         </div>

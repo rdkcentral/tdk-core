@@ -171,7 +171,7 @@ public class ExportExcelService implements IExportExcelService {
 		// Call addDeviceDetails with the percentage
 		addDeviceDetails(summarySheet, execution, rowNum, overallSuccessPercentage);
 
-		rowNum += 6; // 5 rows for device details + 1 blank row for spacing
+		rowNum += 8; // 5 rows for device details + 1 blank row for spacing
 
 		ExecutionDetailsForExcelDTO excelDTO = new ExecutionDetailsForExcelDTO();
 		List<ExecutionResult> execResultWithoutPluginData = new ArrayList<>();
@@ -183,7 +183,7 @@ public class ExportExcelService implements IExportExcelService {
 			List<ExecutionResult> execResults = entry.getValue();
 			Module module = moduleRepository.findByName(moduleName);
 
-			if (module.getCategory().getName().equalsIgnoreCase(Category.RDKV_RDKSERVICE.name())) {
+			if (module.getName().equalsIgnoreCase("rdkservices")) {
 				List<String> logDatas = new ArrayList<>();
 				Map<ExecutionResult, String> execResultLogMap = new LinkedHashMap<>();
 				for (ExecutionResult executionResult : execResults) {
@@ -222,7 +222,7 @@ public class ExportExcelService implements IExportExcelService {
 			for (Map.Entry<String, List<Map<String, Object>>> entrys : modulesGrouped.entrySet()) {
 				String modName = entrys.getKey();
 				Module moduleObj = moduleRepository.findByName(modName);
-				if (!moduleObj.getCategory().getName().equalsIgnoreCase(Category.RDKV_RDKSERVICE.name())) {
+				if (!moduleObj.getName().equalsIgnoreCase("rdkservices")) {
 					List<Map<String, Object>> moduleScripts = entrys.getValue();
 					createModuleSheet(moduleScripts, workbook, modName);
 				}
@@ -350,8 +350,19 @@ public class ExportExcelService implements IExportExcelService {
 			rowNum = addExecutionSummary(sheet, rowNum, execution);
 
 			// Auto resize columns for summary sheet
-			for (int i = 4; i <= 11; i++) { // Adjust columns E to L
+			for (int i = 0; i <= 7; i++) { // Adjust columns E to L
 				sheet.autoSizeColumn(i);
+			}
+
+			// Set minimum width for columns that might need it
+			if (sheet.getColumnWidth(1) < 256 * 20) { // Module name column
+				sheet.setColumnWidth(1, 256 * 20);
+			}
+
+			// Ensure numeric columns have consistent width
+			int numericColWidth = 256 * 20;
+			for (int i = 2; i <= 7; i++) {
+				sheet.setColumnWidth(i, numericColWidth);
 			}
 
 		} catch (Exception e) {
@@ -409,8 +420,9 @@ public class ExportExcelService implements IExportExcelService {
 
 			}
 
-			sheet.autoSizeColumn(3);
-			sheet.autoSizeColumn(4);
+			// Set column widths for device details
+			sheet.setColumnWidth(3, 256 * 20); // Header column
+			sheet.setColumnWidth(4, 256 * 35);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -441,10 +453,6 @@ public class ExportExcelService implements IExportExcelService {
 				cell.setCellStyle(headerStyle); // Apply bold style
 			}
 
-			// Auto resize columns for table headers (E to L)
-			for (int i = 0; i <= 7; i++) {
-				sheet.autoSizeColumn(i);
-			}
 			createAndStyleArialHeaders(sheet, rowNum, headers, 0);
 		} catch (Exception e) {
 			LOGGER.error("Error adding table headers: " + e.getMessage());
@@ -473,7 +481,7 @@ public class ExportExcelService implements IExportExcelService {
 			for (String moduleName : moduleNames) {
 
 				Module moduleObj = moduleRepository.findByName(moduleName);
-				if (!moduleObj.getCategory().getName().equalsIgnoreCase(Category.RDKV_RDKSERVICE.name())) {
+				if (!moduleObj.getName().equalsIgnoreCase("rdkservices")) {
 					Row row = sheet.createRow(rowNum++);
 
 					// Populate Sl No
@@ -536,11 +544,6 @@ public class ExportExcelService implements IExportExcelService {
 					summaryData.add(rowData);
 				}
 			}
-			// Auto resize columns
-			for (int i = 4; i <= 11; i++) {
-				sheet.autoSizeColumn(i);
-			}
-
 			// Add total row after all modules
 			addTotalRowForConsolidatedReport(sheet, rowNum++, summaryData);
 
@@ -620,10 +623,23 @@ public class ExportExcelService implements IExportExcelService {
 
 		}
 
-		// Adjust column widths
-		for (int i = 0; i < headers.length; i++) {
-			moduleSheet.autoSizeColumn(i);
+		moduleSheet.autoSizeColumn(1);
+
+		moduleSheet.setColumnWidth(0, 256 * 8); // Sl.No column - minimum width
+
+		if (moduleSheet.getColumnWidth(1) < 256 * 30) {
+			moduleSheet.setColumnWidth(1, 256 * 30); // Minimum width for script name
 		}
+
+		// Set width for other columns
+		moduleSheet.setColumnWidth(2, 256 * 10); // Executed column
+		moduleSheet.setColumnWidth(3, 256 * 15); // Status column
+		moduleSheet.setColumnWidth(4, 256 * 30); // Executed On column
+		moduleSheet.setColumnWidth(5, 256 * 70); // Log Data column
+		moduleSheet.setColumnWidth(6, 256 * 12); // Jira ID column
+		moduleSheet.setColumnWidth(7, 256 * 15); // Issue Type column
+		moduleSheet.setColumnWidth(8, 256 * 25); // Remarks column
+
 	}
 
 	/**
@@ -755,17 +771,17 @@ public class ExportExcelService implements IExportExcelService {
 				if (analysis != null) {
 
 					resultData.put("jiraId",
-							analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "N/A");
+							analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "");
 					resultData.put("issueType",
 							analysis.getAnalysisDefectType().toString() != null
 									? analysis.getAnalysisDefectType().toString()
-									: "N/A");
+									: "");
 					resultData.put("remarks",
-							analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
+							analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "");
 				} else {
-					resultData.put("jiraId", "N/A");
-					resultData.put("issueType", "N/A");
-					resultData.put("remarks", "N/A");
+					resultData.put("jiraId", "");
+					resultData.put("issueType", "");
+					resultData.put("remarks", "");
 
 				}
 				resultDataList.add(resultData);
@@ -1070,10 +1086,12 @@ public class ExportExcelService implements IExportExcelService {
 			String executedOnDate = "";
 			if (executedOnObj != null) {
 				if (executedOnObj instanceof java.util.Date) {
-					executedOnDate = new java.text.SimpleDateFormat("yyyy-MM-dd").format((java.util.Date) executedOnObj);
+					executedOnDate = new java.text.SimpleDateFormat("yyyy-MM-dd")
+							.format((java.util.Date) executedOnObj);
 				} else {
 					String executedOnStr = executedOnObj.toString();
-					if (executedOnStr.length() >= 10 && executedOnStr.charAt(4) == '-' && executedOnStr.charAt(7) == '-') {
+					if (executedOnStr.length() >= 10 && executedOnStr.charAt(4) == '-'
+							&& executedOnStr.charAt(7) == '-') {
 						executedOnDate = executedOnStr.substring(0, 10);
 					} else {
 						executedOnDate = executedOnStr;
@@ -1081,17 +1099,10 @@ public class ExportExcelService implements IExportExcelService {
 				}
 			}
 
-			String logData = result.get("logData") != null
-					? result.get("logData").toString()
-					: "";
+			String logData = result.get("logData") != null ? result.get("logData").toString() : "";
 
-			Object[] rowData = {
-					slNo++,
-					result.get("scriptName"),
-					result.get("executed"),
-					result.get("status"),
-					executedOnDate
-			};
+			Object[] rowData = { slNo++, result.get("scriptName"), result.get("executed"), result.get("status"),
+					executedOnDate };
 
 			// Fill non-log cells
 			for (int i = 0; i < rowData.length; i++) {
@@ -1117,7 +1128,6 @@ public class ExportExcelService implements IExportExcelService {
 		}
 		moduleSheet.setColumnWidth(5, 10000); // fixed width for Log Data column
 	}
-
 
 	/**
 	 * Creates and styles the header row for a given sheet.
@@ -1420,7 +1430,8 @@ public class ExportExcelService implements IExportExcelService {
 		String[] values = { devices.toString(), deviceIPs.toString(), executionTimes.toString(), images.toString() };
 
 		for (int i = 0; i < headers.length; i++) {
-			LOGGER.debug("Writing header '{}' and value '{}' to the sheet at row number: {}", headers[i], values[i], rowNum);
+			LOGGER.debug("Writing header '{}' and value '{}' to the sheet at row number: {}", headers[i], values[i],
+					rowNum);
 
 			Row row = sheet.createRow(rowNum++);
 			Cell headerCell = row.createCell(4); // Header in Column F
@@ -1434,7 +1445,8 @@ public class ExportExcelService implements IExportExcelService {
 		// Calculate overall success rate
 		int overallSuccessRate = 0;
 		if ((totalExecutionCount - totalNaCount) != 0) {
-			overallSuccessRate = (int) Math.round(((double) totalSuccessCount * 100) / (totalExecutionCount - totalNaCount));
+			overallSuccessRate = (int) Math
+					.round(((double) totalSuccessCount * 100) / (totalExecutionCount - totalNaCount));
 		}
 
 		// Add overall success rate to the sheet
@@ -2318,17 +2330,17 @@ public class ExportExcelService implements IExportExcelService {
 						row.createCell(5)
 								.setCellValue(analysis.getAnalysisTicketID() != null
 										? analysis.getAnalysisTicketID().toString()
-										: "N/A");
+										: "");
 						row.createCell(6)
 								.setCellValue(analysis.getAnalysisDefectType().toString() != null
 										? analysis.getAnalysisDefectType().toString()
-										: "N/A");
+										: "");
 						row.createCell(7).setCellValue(
-								analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
+								analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "");
 					} else {
-						row.createCell(5).setCellValue("N/A");
-						row.createCell(6).setCellValue("N/A");
-						row.createCell(7).setCellValue("N/A");
+						row.createCell(5).setCellValue("");
+						row.createCell(6).setCellValue("");
+						row.createCell(7).setCellValue("");
 					}
 
 					for (int i = 0; i < preReqHeaders.length; i++) {
@@ -2352,24 +2364,24 @@ public class ExportExcelService implements IExportExcelService {
 				Row row = sheet.createRow(rowNum++);
 				row.createCell(0).setCellValue(testCaseNum++);
 				row.createCell(1).setCellValue(testCaseMatcher.group(1).trim());
-				row.createCell(2).setCellValue(testCaseMatcher.group(4).trim());
+				row.createCell(2).setCellValue(testCaseMatcher.group(5).trim());
 				row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if
 																		// available
 				row.createCell(4).setCellValue(testCaseMatcher.group(0).trim());
 				if (analysis != null) {
 					row.createCell(5).setCellValue(
-							analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "N/A");
+							analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "");
 					row.createCell(6)
 							.setCellValue(analysis.getAnalysisDefectType().toString() != null
 									? analysis.getAnalysisDefectType().toString()
-									: "N/A");
+									: "");
 					row.createCell(7).setCellValue(
-							analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
+							analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "");
 				} else {
 
-					row.createCell(5).setCellValue("N/A");
-					row.createCell(6).setCellValue("N/A");
-					row.createCell(7).setCellValue("N/A");
+					row.createCell(5).setCellValue("");
+					row.createCell(6).setCellValue("");
+					row.createCell(7).setCellValue("");
 
 				}
 				for (int i = 0; i < testCaseHeaders.length; i++) {
@@ -2377,64 +2389,85 @@ public class ExportExcelService implements IExportExcelService {
 				}
 			}
 
+			Pattern entirePostReqSectionPattern = Pattern
+					.compile("#---------------------------- Plugin Post-requisite ----------------------------#\\r?\\n"
+							+ "(.*?)" + "Plugin Post-requisite Status\\s*:\\s*\\w+\\r?\\n", Pattern.DOTALL);
 			// Parse post-requisites and populate rows (if any)
 			Pattern postReqPattern = Pattern.compile(
 					"Post Requisite : (.*?)\\n.*?#--------- \\[Post-requisite Status\\] : (.*?) ----------#",
 					Pattern.DOTALL);
-			Matcher postReqMatcher = postReqPattern.matcher(logData);
-			boolean postReqHeaderCreated = false;
-			int postReqNum = 1;
-			while (postReqMatcher.find()) {
-				if (!postReqHeaderCreated) {
-					// Create header row for post-requisites
-					String[] postReqHeaders = { "Sl.No", "Post-Requisite Name", "Status", "Executed On", "Log Data",
-							"Jira ID", "Issue Type", "Remarks" };
-					createAndStyleArialHeaders(sheet, rowNum++, postReqHeaders, 0);
-					postReqHeaderCreated = true;
-				}
+			Matcher postReqMatcher = entirePostReqSectionPattern.matcher(logData);
+			if (postReqMatcher.find()) {
+				String entirePostReqSection = postReqMatcher.group(1);
 
-				Row row = sheet.createRow(rowNum++);
-				row.createCell(0).setCellValue(postReqNum++);
-				row.createCell(1).setCellValue(postReqMatcher.group(1).trim());
-				row.createCell(2).setCellValue(postReqMatcher.group(2).trim());
-				row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if
-																		// available
-				row.createCell(4).setCellValue(postReqMatcher.group(0).trim());
-				if (analysis != null) {
-					row.createCell(5).setCellValue(
-							analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "N/A");
-					row.createCell(6)
-							.setCellValue(analysis.getAnalysisDefectType().toString() != null
-									? analysis.getAnalysisDefectType().toString()
-									: "N/A");
-					row.createCell(7).setCellValue(
-							analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
-				} else {
+				// Now find all individual pre-requisite blocks within that section
+				Matcher individualPostReqMatcher = postReqPattern.matcher(entirePostReqSection);
 
-					row.createCell(5).setCellValue("N/A");
-					row.createCell(6).setCellValue("N/A");
-					row.createCell(7).setCellValue("N/A");
+				boolean postReqHeaderCreated = false;
+				int postReqNum = 1;
+				while (individualPostReqMatcher.find()) {
+					if (!postReqHeaderCreated) {
+						// Create header row for post-requisites
+						String[] postReqHeaders = { "Sl.No", "Post-Requisite Name", "Status", "Executed On", "Log Data",
+								"Jira ID", "Issue Type", "Remarks" };
+						createAndStyleArialHeaders(sheet, rowNum++, postReqHeaders, 0);
+						postReqHeaderCreated = true;
+					}
 
+					Row row = sheet.createRow(rowNum++);
+					row.createCell(0).setCellValue(postReqNum++);
+					row.createCell(1).setCellValue(individualPostReqMatcher.group(1).trim());
+					row.createCell(2).setCellValue(individualPostReqMatcher.group(2).trim());
+					row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if
+																			// available
+					row.createCell(4).setCellValue(individualPostReqMatcher.group(0).trim());
+					if (analysis != null) {
+						row.createCell(5)
+								.setCellValue(analysis.getAnalysisTicketID() != null
+										? analysis.getAnalysisTicketID().toString()
+										: "");
+						row.createCell(6)
+								.setCellValue(analysis.getAnalysisDefectType().toString() != null
+										? analysis.getAnalysisDefectType().toString()
+										: "");
+						row.createCell(7).setCellValue(
+								analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "");
+					} else {
+
+						row.createCell(5).setCellValue("");
+						row.createCell(6).setCellValue("");
+						row.createCell(7).setCellValue("");
+
+					}
+					for (int i = 0; i < testCaseHeaders.length; i++) {
+						row.getCell(i).setCellStyle(createArialStyle(workBook.getSheetAt(0).getWorkbook()));
+					}
 				}
-				for (int i = 0; i < testCaseHeaders.length; i++) {
-					row.getCell(i).setCellStyle(createArialStyle(workBook.getSheetAt(0).getWorkbook()));
-				}
+				File tmConfigFile = new File(
+						AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE);
+				String logLink = commonService.getConfigProperty(tmConfigFile, Constants.TM_URL)
+						+ "/execution/getExecutionLogs?executionResultID=" + executionResult.getId();
+				Row logLinkRow = sheet.createRow(rowNum + 2);
+				Cell logLinkCell = logLinkRow.createCell(0);
+				logLinkCell.setCellValue("LogLink");
+				CreationHelper createHelper = workBook.getCreationHelper();
+				Hyperlink hyperlink = createHelper.createHyperlink(HyperlinkType.URL);
+				hyperlink.setAddress(logLink);
+				Cell logLinkCellValue = logLinkRow.createCell(1);
+				logLinkCellValue.setCellValue(logLink);
+				logLinkCellValue.setHyperlink(hyperlink);
+				logLinkCellValue.setCellStyle(linkStyle);
+				autoSizeColumns(sheet, 0, 4);
+
+				sheet.setColumnWidth(0, 256 * 7);
+				sheet.setColumnWidth(1, 256 * 55);
+				sheet.setColumnWidth(2, 256 * 12);
+				sheet.setColumnWidth(3, 256 * 40);
+				sheet.setColumnWidth(4, 256 * 70);
+				sheet.setColumnWidth(5, 256 * 12);
+				sheet.setColumnWidth(6, 256 * 15);
+				sheet.setColumnWidth(7, 256 * 30);
 			}
-			File tmConfigFile = new File(
-					AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE);
-			String logLink = commonService.getConfigProperty(tmConfigFile, Constants.TM_URL)
-					+ "/execution/getExecutionLogs?executionResultID=" + executionResult.getId();
-			Row logLinkRow = sheet.createRow(rowNum + 2);
-			Cell logLinkCell = logLinkRow.createCell(0);
-			logLinkCell.setCellValue("LogLink");
-			CreationHelper createHelper = workBook.getCreationHelper();
-			Hyperlink hyperlink = createHelper.createHyperlink(HyperlinkType.URL);
-			hyperlink.setAddress(logLink);
-			Cell logLinkCellValue = logLinkRow.createCell(1);
-			logLinkCellValue.setCellValue(logLink);
-			logLinkCellValue.setHyperlink(hyperlink);
-			logLinkCellValue.setCellStyle(linkStyle);
-			autoSizeColumns(sheet, 0, 4);
 		}
 	}
 
@@ -2460,7 +2493,7 @@ public class ExportExcelService implements IExportExcelService {
 		headStyleForRdkServiceModule.setFont(headFontForRdkServiceModule);
 		headCellForRdkServiceModule.setCellStyle(headStyleForRdkServiceModule);
 
-		Cell warningMessage = rowForRdkserviceModule.createCell(4);
+		Cell warningMessage = rowForRdkserviceModule.createCell(5);
 		warningMessage.setCellValue(
 				"Below RDKServices scripts  did not run \n. Without logs, plugin-based data could not be rendered,\n so module-wise data was added");
 		CellStyle warningMessageStyle = sheet.getWorkbook().createCellStyle();
@@ -2622,7 +2655,8 @@ public class ExportExcelService implements IExportExcelService {
 
 				row.createCell(3).setCellValue(failedScript.getResult().toString());
 				row.createCell(4).setCellValue(failedScript.getDateOfExecution().toString());
-				row.createCell(5).setCellValue(safeExcelValue(executionService.getExecutionLogs(failedScript.getId().toString())));
+				row.createCell(5).setCellValue(
+						safeExcelValue(executionService.getExecutionLogs(failedScript.getId().toString())));
 				ExecutionResultAnalysis analysis = executionResultAnalysisRepository
 						.findByExecutionResult(failedScript);
 				if (analysis != null) {
@@ -2630,18 +2664,45 @@ public class ExportExcelService implements IExportExcelService {
 					row.createCell(7).setCellValue(analysis.getAnalysisDefectType().toString());
 					row.createCell(8).setCellValue(analysis.getAnalysisRemark());
 				} else {
-					row.createCell(6).setCellValue("N/A");
-					row.createCell(7).setCellValue("N/A");
-					row.createCell(8).setCellValue("N/A");
+					row.createCell(6).setCellValue("");
+					row.createCell(7).setCellValue("");
+					row.createCell(8).setCellValue("");
 				}
 				for (int i = 0; i < headersModules.length; i++) {
 					row.getCell(i).setCellStyle(createArialStyle(sheet.getWorkbook()));
 				}
 			}
-			autoSizeColumns(moduleSheet, 0, 8);
+			// Auto-size the script name column based on content
+			moduleSheet.autoSizeColumn(1);
+
+			// Set minimum width for column headers and other columns
+			// Width is in units of 1/256th of a character width
+			moduleSheet.setColumnWidth(0, 256 * 8); // Sl.No column - minimum width
+
+			// Ensure script name column has adequate width after auto-sizing
+			if (moduleSheet.getColumnWidth(1) < 256 * 30) {
+				moduleSheet.setColumnWidth(1, 256 * 30); // Minimum width for script name
+			}
+
+			// Set width for other columns
+			moduleSheet.setColumnWidth(2, 256 * 10);
+			moduleSheet.setColumnWidth(3, 256 * 15); 
+			moduleSheet.setColumnWidth(4, 256 * 25); 
+			moduleSheet.setColumnWidth(5, 256 * 70);
+			moduleSheet.setColumnWidth(6, 256 * 12); 
+			moduleSheet.setColumnWidth(7, 256 * 15);
+			moduleSheet.setColumnWidth(8, 256 * 25);
 		}
 
-		autoSizeColumns(sheet, 0, 7);
+		sheet.setColumnWidth(0, 256 * 7); 
+		sheet.setColumnWidth(1, 256 * 20); 
+		sheet.setColumnWidth(2, 256 * 20);
+		sheet.setColumnWidth(3, 256 * 20); 
+		sheet.setColumnWidth(4, 256 * 20); 
+		sheet.setColumnWidth(5, 256 * 20);
+		sheet.setColumnWidth(6, 256 * 20); 
+		sheet.setColumnWidth(7, 256 * 20); 
+
 
 	}
 
@@ -2742,19 +2803,31 @@ public class ExportExcelService implements IExportExcelService {
 		for (int i = 0; i < 8; i++) {
 			rowTotal.getCell(i).setCellStyle(createArialStyle(sheet.getWorkbook()));
 		}
-		//
+		
+		sheet.setColumnWidth(0, 256 * 7); 
+		sheet.setColumnWidth(1, 256 * 20); 
+		sheet.setColumnWidth(2, 256 * 20); 
+		sheet.setColumnWidth(3, 256 * 20); 
+		sheet.setColumnWidth(4, 256 * 20); 
+		sheet.setColumnWidth(5, 256 * 20); 
+		sheet.setColumnWidth(6, 256 * 20);
+		sheet.setColumnWidth(7, 256 * 20); 
 		return rowCount;
 	}
 
-	/** * Generates a comparison Excel report for the specified base execution and a list of execution names.
+	/**
+	 * * Generates a comparison Excel report for the specified base execution and a
+	 * list of execution names.
 	 *
-	 * @param baseExecName     The name of the base execution to compare against.
-	 * @param executionNames   A list of execution names to compare with the base execution.
+	 * @param baseExecName   The name of the base execution to compare against.
+	 * @param executionNames A list of execution names to compare with the base
+	 *                       execution.
 	 * @return A ByteArrayInputStream containing the generated Excel report.
 	 */
 	@Override
 	public ByteArrayInputStream generateComparisonExcelReportByNames(String baseExecName, List<String> executionNames) {
-		LOGGER.info("Fetching execution IDs for base execution name: {} and execution names: {}", baseExecName, executionNames);
+		LOGGER.info("Fetching execution IDs for base execution name: {} and execution names: {}", baseExecName,
+				executionNames);
 
 		// Retrieve the base execution ID using the name
 		Execution baseExecution = executionRepository.findByName(baseExecName);
@@ -2789,11 +2862,13 @@ public class ExportExcelService implements IExportExcelService {
 
 	/**
 	 * Safely formats a string value for Excel output, ensuring it does not exceed
+	 * 
 	 * @param input
 	 * @return
 	 */
 	private String safeExcelValue(String input) {
-		if (input == null || input.isEmpty()) return "N/A";
+		if (input == null || input.isEmpty())
+			return "N/A";
 		if (input.length() > 32000) {
 			return input.substring(0, 32000) + "\n...TRUNCATED: view full log in system...";
 		}

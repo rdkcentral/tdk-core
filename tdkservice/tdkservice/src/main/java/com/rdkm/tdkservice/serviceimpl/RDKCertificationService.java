@@ -173,7 +173,15 @@ public class RDKCertificationService implements IRDKCertificationService {
 		LOGGER.info("Inside downloadConfigFile method with configFileName: {}", fileName);
 		String configFileLocation = AppConfig.getRealPath() + Constants.BASE_FILESTORE_DIR
 				+ Constants.FILE_PATH_SEPERATOR;
-		Path path = Paths.get(configFileLocation).resolve(fileName + Constants.PYTHON_FILE_EXTENSION);
+		Path path = null;
+		Path pythonFilepath = Paths.get(configFileLocation).resolve(fileName + Constants.PYTHON_FILE_EXTENSION);
+		Path configFilePath = Paths.get(configFileLocation).resolve(fileName + Constants.CONFIG_FILE_EXTENSION);
+
+		if (Files.exists(pythonFilepath)) {
+			path = pythonFilepath;
+		} else if (Files.exists(configFilePath)) {
+			path = configFilePath;
+		}
 		if (!Files.exists(path)) {
 			LOGGER.error("Python config file not found: {}", fileName);
 			throw new ResourceNotFoundException("Python Config file", fileName);
@@ -234,13 +242,24 @@ public class RDKCertificationService implements IRDKCertificationService {
 		LOGGER.info("Inside getConfigFileContent method with fileName: {}", fileName);
 		String fileContent = "";
 		try {
-			String filePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + fileName
+			String pyFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + fileName
 					+ Constants.PYTHON_FILE_EXTENSION;
-			File file = new File(filePath);
-			if (file.exists()) {
-				fileContent = new String(Files.readAllBytes(file.toPath()));
+			File pyFile = new File(pyFilePath);
+
+			// Try with Config extension if Python file doesn't exist
+			String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + fileName + ".config";
+			File configFile = new File(configFilePath);
+
+			// Check which file exists and read its content
+			if (pyFile.exists()) {
+				fileContent = new String(Files.readAllBytes(pyFile.toPath()));
+				LOGGER.info("Reading content from Python file: {}", pyFilePath);
+			} else if (configFile.exists()) {
+				fileContent = new String(Files.readAllBytes(configFile.toPath()));
+				LOGGER.info("Reading content from Config file: {}", configFilePath);
 			} else {
-				throw new UserInputException("The configuration file with name " + fileName + " not found");
+				throw new UserInputException("The configuration file with name " + fileName
+						+ " not found with either .py or .config extension");
 			}
 		} catch (Exception e) {
 			LOGGER.error("Error in getting config file content: " + e.getMessage());
@@ -259,15 +278,21 @@ public class RDKCertificationService implements IRDKCertificationService {
 	public boolean deleteConfigFile(String fileName) {
 		LOGGER.info("Inside deleteConfigFile method with fileName: {}", fileName);
 		try {
-			String filePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + fileName
-					+ Constants.PYTHON_FILE_EXTENSION;
 			Path testVariableConfig = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
 					+ Constants.RDK_CERTIFICATION_FILE_LIST);
 			deleteFromTestVariableFile(fileName, testVariableConfig.toString());
+			String pythonFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + fileName
+					+ Constants.PYTHON_FILE_EXTENSION;
+			File pythonFile = new File(pythonFilePath);
 
-			File file = new File(filePath);
-			if (file.exists()) {
-				file.delete();
+			String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + fileName + Constants.CONFIG_FILE_EXTENSION;
+			File configFile = new File(configFilePath);
+			if (pythonFile.exists()) {
+				pythonFile.delete();
+				LOGGER.info("Config file deleted successfully");
+				return true;
+			} else if (configFile.exists()) {
+				configFile.delete();
 				LOGGER.info("Config file deleted successfully");
 				return true;
 			} else {
@@ -330,14 +355,34 @@ public class RDKCertificationService implements IRDKCertificationService {
 			Path testVariableConfig = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
 					+ Constants.RDK_CERTIFICATION_FILE_LIST);
 
-			Path uploadPath = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR);
-			if (!isFileNameExists(
-					file.getOriginalFilename().replace(Constants.PYTHON_FILE_EXTENSION, Constants.EMPTY_STRING),
-					testVariableConfig.toString())) {
+			String baseFileName = file.getOriginalFilename().replace(Constants.PYTHON_FILE_EXTENSION,
+					Constants.EMPTY_STRING);
+			// Check if file exists in the config list
+			if (!isFileNameExists(baseFileName, testVariableConfig.toString())) {
 				throw new ResourceNotFoundException("Config file", file.getOriginalFilename());
 			}
 
-			Path filePath = uploadPath.resolve(fileWithHeader.getOriginalFilename());
+			// Determine the existing extension (.py or .config)
+			String extension = Constants.PYTHON_FILE_EXTENSION; // Default extension
+
+			// Check if file with .py extension exists
+			File pyFile = new File(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + baseFileName
+					+ Constants.PYTHON_FILE_EXTENSION);
+			// Check if file with .config extension exists
+			File configFile = new File(
+					AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + baseFileName + ".config");
+
+			if (configFile.exists()) {
+				extension = ".config";
+				LOGGER.info("Found existing file with .config extension, will use this extension");
+			} else if (pyFile.exists()) {
+				LOGGER.info("Found existing file with .py extension, will use this extension");
+			} else {
+				LOGGER.info("No existing file found, using default .py extension");
+			}
+			// Save with the determined extension
+			Path uploadPath = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR);
+			Path filePath = uploadPath.resolve(baseFileName + extension);
 			Files.copy(fileWithHeader.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 			LOGGER.info("File uploaded successfully: {}", fileWithHeader.getOriginalFilename());
 			return true;
