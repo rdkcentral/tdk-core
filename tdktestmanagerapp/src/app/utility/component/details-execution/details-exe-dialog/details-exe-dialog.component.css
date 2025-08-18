@@ -64,13 +64,26 @@ h1.view-title {
  * .module-table: Styles the module summary table.
  */
 .module-table {
+  table-layout: fixed; /* Prevents automatic resizing that can cause overlap */
   width: 100%;
-  table-layout: fixed;
+  border-collapse: collapse;
 }
-.module-table thead, .module-table tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
+.module-table th, 
+.module-table td {
+  padding: 6px 8px;
+  text-align: center; /* Adjust as needed */
+  word-wrap: break-word; /* Allows long text to wrap */
+}
+
+.module-table th:first-child, 
+.module-table td:first-child {
+  width: 200px; /* Adjust this width to fit Module Name */
+  text-align: left; /* Keep names left aligned */
+  white-space: normal; /* Allow wrapping instead of single line */
+}
+
+.method-head th {
+  background-color: #f0f0f0; /* Just for visibility */
 }
 
 /*

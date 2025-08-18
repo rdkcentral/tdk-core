@@ -735,7 +735,14 @@ public class TestSuiteService implements ITestSuiteService {
 	public ByteArrayInputStream downloadAllTestSuiteAsXML(String category) {
 		LOGGER.info("Downloading all test suites as XML for the category: " + category);
 		Category categoryObj = commonService.validateCategory(category);
-		List<TestSuite> testSuiteObj = testSuiteRepository.findAllByCategory(categoryObj);
+		List<TestSuite> testSuiteObj;
+		if (Category.RDKV.equals(categoryObj)) {
+			testSuiteObj = testSuiteRepository.findAllByCategoryIn(
+					Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE)
+			);
+		} else {
+			testSuiteObj = testSuiteRepository.findAllByCategory(categoryObj);
+		}
 		if (testSuiteObj == null || testSuiteObj.isEmpty()) {
 			LOGGER.error("No test suites found for the category: " + category);
 			throw new ResourceNotFoundException(Constants.TEST_SUITE, category);
@@ -744,16 +751,19 @@ public class TestSuiteService implements ITestSuiteService {
 		ZipOutputStream zipOut = new ZipOutputStream(out);
 
 		for (TestSuite testSuite : testSuiteObj) {
-			ByteArrayInputStream testSuiteXML = downloadTestSuiteAsXML(testSuite.getName());
 			try {
+				ByteArrayInputStream testSuiteXML = downloadTestSuiteAsXML(testSuite.getName());
 				ZipEntry zipEntry = new ZipEntry(testSuite.getName() + ".xml");
 				zipOut.putNextEntry(zipEntry);
 				byte[] bytes = testSuiteXML.readAllBytes();
 				zipOut.write(bytes, 0, bytes.length);
 				zipOut.closeEntry();
+			} catch (ResourceNotFoundException e) {
+				LOGGER.error("Test suite not found: " + testSuite.getName() + ". Skipping.");
+				// Continue with next test suite
 			} catch (Exception e) {
-				LOGGER.error("Error while creating zip file for all test suites");
-				throw new TDKServiceException("Error while creating zip file for all test suites");
+				LOGGER.error("Error while creating zip file for test suite: " + testSuite.getName(), e);
+				// Continue with next test suite
 			}
 		}
 

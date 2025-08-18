@@ -1222,7 +1222,14 @@ public class ScriptService implements IScriptService {
 		// Validate the category
 		Category categoryValue = commonService.validateCategory(category);
 		// Get all the modules based on the category
-		List<Module> modules = moduleRepository.findAllByCategory(categoryValue);
+		List<Module> modules;
+		if (Category.RDKV.equals(categoryValue)) {
+			modules = moduleRepository.findAllByCategoryIn(
+					Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE)
+			);
+		} else {
+			modules = moduleRepository.findAllByCategory(categoryValue);
+		}
 		if (modules.isEmpty() || modules == null) {
 			LOGGER.error("No modules found for the category: " + category);
 			throw new ResourceNotFoundException("Modules for", category);

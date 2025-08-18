@@ -53,7 +53,6 @@ public class SocCreateDTO {
 	/**
 	 * Represents the user group of the Soc. This field is optional and can be null.
 	 */
-	@NotBlank(message = "Usergroup is required")
 	private String socUserGroup;
 
 }

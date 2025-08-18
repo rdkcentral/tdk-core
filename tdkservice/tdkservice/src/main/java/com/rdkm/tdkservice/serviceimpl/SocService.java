@@ -78,8 +78,6 @@ public class SocService implements ISocService {
 		Soc soc = new Soc();
 		soc.setName(socDTO.getSocName());
 		soc.setCategory(Category.getCategory(socDTO.getSocCategory()));
-		UserGroup userGroup = userGroupRepository.findByName(socDTO.getSocUserGroup());
-		soc.setUserGroup(userGroup);
 		try {
 			soc = socRepository.save(soc);
 		} catch (Exception e) {

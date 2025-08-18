@@ -17,9 +17,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-
+import { catchError, Observable, throwError } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Injectable({
   providedIn: 'root'
 })
@@ -32,7 +34,7 @@ import { NavigationEnd, Router } from '@angular/router';
  * This service is intended to be injected into Angular components and services
  * that require authentication state or navigation tracking.
  */
-export class AuthService {
+export class AuthService implements HttpInterceptor{
 
   /**
    * The selected configuration value.
@@ -74,14 +76,29 @@ export class AuthService {
    * It updates the previous and current URLs based on navigation events.
    * @param router - The Angular Router instance.
    */
-  constructor(private router: Router) {
-    router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.previousUrl = this.currentUrl;
-        this.currentUrl = event.url;
-      };
-    });
+  constructor(private router: Router, private _snackBar: MatSnackBar) {
+  router.events.subscribe(event => {
+    if (event instanceof NavigationEnd) {
+      this.previousUrl = this.currentUrl;
+      this.currentUrl = event.url;
+      // Clear the logoutReloaded flag on navigation to login
+      if (sessionStorage.getItem('logoutReloaded') && event.url === '/login') {
+        sessionStorage.removeItem('logoutReloaded');
+      }
+    }
+  });
+  // Also clear the flag on app start if already on login page
+  if (sessionStorage.getItem('logoutReloaded') && window.location.pathname === '/login') {
+    sessionStorage.removeItem('logoutReloaded');
   }
+
+  // Automatically log out if token expires (check every 10 seconds)
+  setInterval(() => {
+    if (this.getToken() && this.isTokenExpired()) {
+      this.logout();
+    }
+  }, 10000);
+}
 
   /**
    * Stores the token in the local storage.
@@ -129,23 +146,47 @@ export class AuthService {
    * Checks if the token is expired.
    * @returns True if the token is expired, false otherwise.
    */
-  isTokenExpired(): any {
-    const token = this.getToken()
-    if (!token) return true;
-    const decodedToken = JSON.parse(atob(token.split('.')[1]))
-    const expirationDate = new Date(decodedToken.exp * 1000)
-    if (expirationDate >= new Date()) {
-      return true
-    } else {
-      return false;
-    }
-  }
+  isTokenExpired(): boolean {
+  const token = this.getToken(); // getToken() should return the JWT string
+  if (!token) return true;
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  const now = Math.floor(Date.now() / 1000);
+  return payload.exp < now;
+}
 
   /**
    * Checks if the user is logged in.
    * @returns True if the user is logged in, false otherwise.
    */
-  isLoggednIn() {
-    return this.getToken() !== null && this.isTokenExpired();
+ isLoggednIn() {
+  return this.getToken() !== null && !this.isTokenExpired();
+}
+logout(): void {
+  // Show session expired notification
+  this._snackBar.open('Session expired, please login again.', '', {
+    duration: 3000,
+    panelClass: ['err-msg'],  // or create a CSS class like 'warn-msg'
+    horizontalPosition: 'end',
+    verticalPosition: 'top'
+  });
+
+  // Clear session storage
+  localStorage.removeItem('loggedinUser');
+  localStorage.removeItem('token');
+  localStorage.removeItem('privileges');
+
+  // Navigate to login page
+  this.router.navigate(['/login']);
+}
+intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(req).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 403) {
+          // Token expired → logout immediately
+          this.logout();
+        }
+        return throwError(() => error);
+      })
+    );
   }
 }

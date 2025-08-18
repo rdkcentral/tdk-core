@@ -49,16 +49,17 @@ limitations under the License.
         <span style="color: red; margin-left: 0.75em">*</span>
       </label>
       <select
-        class="form-select"
-        aria-label="Default select example"
-        id="selectBoxtype"
-        name="selectBoxtype"
-        (change)="getSelectedValue($event)"
-      >
-        <option *ngFor="let item of moduleNames" [value]="item">
-          {{ item }}
-        </option>
-      </select>
+      class="form-select"
+      aria-label="Default select example"
+      id="selectBoxtype"
+      name="selectBoxtype"
+      [(ngModel)]="selectedValue"
+      (change)="getSelectedValue($event)"
+    >
+      <option *ngFor="let item of moduleNames" [value]="item">
+        {{ item }}
+      </option>
+    </select>
     </div>
   </div>
   <!-- Loader row shown when showLoader is true -->

@@ -121,23 +121,29 @@ export class ListPrimitiveTestComponent {
    * No parameters.
    */
   ngOnInit(): void {
-    this.configureName = this.authservice.selectedConfigVal;
-    if (this.configureName === 'RDKB') {
-      this.categoryName = 'Broadband';
-    } else {
-      this.categoryName = 'Video';
-    }
-    this.authservice.currentRoute = this.router.url.split('?')[0];
-    this.showLoader = true;
-    this.service.getlistofModules(this.configureName).subscribe(res => {
-      this.moduleNames = res.data
-      this.selectedValue = this.moduleNames[0];
-      this.getParameterDetails(this.selectedValue);
-      if (this.moduleNames.length > 0) {
-        this.showLoader = false;
-      }
-    })
+  this.configureName = this.authservice.selectedConfigVal;
+  if (this.configureName === 'RDKB') {
+    this.categoryName = 'Broadband';
+  } else {
+    this.categoryName = 'Video';
   }
+  this.authservice.currentRoute = this.router.url.split('?')[0];
+  this.showLoader = true;
+  this.service.getlistofModules(this.configureName).subscribe(res => {
+    this.moduleNames = res.data.sort(); // Sort ascending
+    // Restore selected module if available
+    const storedModule = localStorage.getItem('selectedModule');
+    if (storedModule && this.moduleNames.includes(storedModule)) {
+      this.selectedValue = storedModule;
+    } else {
+      this.selectedValue = this.moduleNames[0];
+    }
+    this.getParameterDetails(this.selectedValue);
+    if (this.moduleNames.length > 0) {
+      this.showLoader = false;
+    }
+  })
+}
 
 
   /**
@@ -219,6 +225,7 @@ export class ListPrimitiveTestComponent {
    */
   userEdit(user: any): void {
     localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem('selectedModule', this.selectedValue || '');
     this.service.getParameterListUpdate(user.primitiveTestId).subscribe(res => {
       this.service.allPassedData.next(res.data);
     })
@@ -257,10 +264,11 @@ export class ListPrimitiveTestComponent {
    * No parameters.
    */
   goBack(): void {
-    this.authservice.selectedConfigVal = 'RDKV';
-    this.authservice.showSelectedCategory = "Video";
-    this.router.navigate(["/configure"]);
-  }
+  localStorage.removeItem('selectedModule');
+  this.authservice.selectedConfigVal = 'RDKV';
+  this.authservice.showSelectedCategory = "Video";
+  this.router.navigate(["/configure"]);
+}
 
 
 }

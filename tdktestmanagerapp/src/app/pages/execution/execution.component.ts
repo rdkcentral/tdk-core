@@ -292,30 +292,46 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     },
     {
   headerName: 'Execution/Start Time',
-  field: 'executionStartTime', // Ensure this matches the correct field in your rowData
-  filter: 'agTextColumnFilter',
-  flex: 1.5, // Flex value to allow the header to take up available space
-  width: 180, // Fixed width for the header
-  minWidth: 180, // Minimum width for the header
+  field: 'executionStartTime',
+  filter: 'agDateColumnFilter',
+  flex: 1.5,
+  width: 180,
+  minWidth: 180,
   sortable: true,
   resizable: true,
   headerClass: 'header-center',
-  wrapHeaderText: true, // Enable wrapping for the header text
-  autoHeaderHeight: true, // Automatically adjust header height
-  cellStyle: { 'white-space': 'normal', 'text-align': 'center' }, // Allow multi-line text
+  wrapHeaderText: true,
+  autoHeaderHeight: true,
+  cellStyle: { 'white-space': 'normal', 'text-align': 'center' },
+
+  // This is used for sorting/filtering, not display
+  valueGetter: (params: any) => {
+    const value = params.data.cronStartTime || params.data.executionTime;
+    return value ? new Date(value) : null; // Make sure it's a Date object for correct sorting
+  },
+
+  // This is used only for display
   cellRenderer: (params: any) => {
     const value = params.data.cronStartTime || params.data.executionTime;
     if (value) {
-      const formattedValue = this.formatTime(value); // Format the date and time
-      const [date, time] = formattedValue.split(', '); // Split into date and time
+      const formattedValue = this.formatTime(value);
+      const [date, time] = formattedValue.split(', ');
       return `<div style="white-space: normal; text-align: center;">
                 <span>${date}</span><br>
                 <span>${time}</span>
               </div>`;
     }
-    return ''; // Return empty if no value exists
+    return '';
+  },
+
+  // Optional: explicitly set a comparator if you want control
+  comparator: (valueA: Date, valueB: Date) => {
+    if (!valueA) return -1;
+    if (!valueB) return 1;
+    return valueA.getTime() - valueB.getTime();
   }
-},
+}
+,
     {
       headerName: 'End Time',
       field: 'executionEndTime',
@@ -731,6 +747,12 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     let val = event.target.value;
     this.deviceStausArray = [];
     this.rowData = [];
+    this.selectedCategory = '';
+    this.searchValue = '';
+    this.selectedOption = '';
+    if (this.tableSearchInput) {
+  this.tableSearchInput.nativeElement.value = '';
+}
     if (val === 'RDKB') {
       this.categoryName = 'Broadband';
       this.selectedDfaultCategory = 'RDKB';
