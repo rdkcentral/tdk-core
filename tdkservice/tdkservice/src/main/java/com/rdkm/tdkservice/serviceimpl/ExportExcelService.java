@@ -82,6 +82,7 @@ import com.rdkm.tdkservice.service.IFileService;
 import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Service
 public class ExportExcelService implements IExportExcelService {
@@ -611,7 +612,19 @@ public class ExportExcelService implements IExportExcelService {
 			row.createCell(2).setCellValue(result.get("executed").toString());
 			row.createCell(3).setCellValue(result.get("status").toString());
 			row.createCell(4).setCellValue(result.get("executedOn").toString());
-			row.createCell(5).setCellValue((String) result.get("logData"));
+			// Assuming executionResultRepository is available and executionResultIds is a List<String>
+			List<String> ids = (List<String>) result.get("executionResultIds");
+			ExecutionResult executionResult = null;
+			if (ids != null && !ids.isEmpty()) {
+				UUID execId = UUID.fromString(ids.get(0));
+				executionResult = executionResultRepository.findById(execId).orElse(null);
+			}
+			result.put("executionResult", executionResult);
+
+// Now call safeExcelValue as before
+			row.createCell(5).setCellValue(
+					safeExcelValue((String) result.get("logData"), executionResult)
+			);
 			row.createCell(6).setCellValue(result.get("jiraId").toString());
 			row.createCell(7).setCellValue(result.get("issueType").toString());
 			row.createCell(8).setCellValue(result.get("remarks").toString());
@@ -2656,7 +2669,8 @@ public class ExportExcelService implements IExportExcelService {
 				row.createCell(3).setCellValue(failedScript.getResult().toString());
 				row.createCell(4).setCellValue(failedScript.getDateOfExecution().toString());
 				row.createCell(5).setCellValue(
-						safeExcelValue(executionService.getExecutionLogs(failedScript.getId().toString())));
+						safeExcelValue(executionService.getExecutionLogs(failedScript.getId().toString()), failedScript)
+				);
 				ExecutionResultAnalysis analysis = executionResultAnalysisRepository
 						.findByExecutionResult(failedScript);
 				if (analysis != null) {
@@ -2862,15 +2876,22 @@ public class ExportExcelService implements IExportExcelService {
 
 	/**
 	 * Safely formats a string value for Excel output, ensuring it does not exceed
-	 * 
 	 * @param input
 	 * @return
 	 */
-	private String safeExcelValue(String input) {
-		if (input == null || input.isEmpty())
-			return "N/A";
+	private String safeExcelValue(String input, ExecutionResult executionResult) {
+		if (input == null || input.isEmpty()) return "N/A";
 		if (input.length() > 32000) {
-			return input.substring(0, 32000) + "\n...TRUNCATED: view full log in system...";
+			String logUrl = "N/A";
+			if (executionResult != null) {
+				String serverUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+				logUrl = serverUrl + "/execution/getExecutionLogs?executionResultID=" + executionResult.getId();
+				LOGGER.info("Log data exceeds Excel cell limit, truncating to 32000 characters and providing a link to view full log. Length: {}, ExecutionResultID: {}, URL: {}", input.length(), executionResult.getId(), logUrl);
+				System.out.println("ExecutionResultID: " + executionResult.getId() + ", LogUrl: " + logUrl);
+			} else {
+				LOGGER.warn("ExecutionResult is null, cannot generate log URL.");
+			}
+			return input.substring(0, 32000) + "\n...TRUNCATED: view full log at: " + logUrl;
 		}
 		return input;
 	}
