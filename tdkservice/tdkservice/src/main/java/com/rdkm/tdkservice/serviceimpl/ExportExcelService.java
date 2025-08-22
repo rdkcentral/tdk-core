@@ -2356,15 +2356,15 @@ public class ExportExcelService implements IExportExcelService {
 			createAndStyleArialHeaders(sheet, rowNum++, testCaseHeaders, 0);
 			// Parse test cases and populate rows
 			Pattern testCasePattern = Pattern.compile(
-					"#==============================================================================#\\nTEST CASE NAME\\s*:\\s*(.*?)\\n.*?TEST CASE ID\\s*:\\s*(.*?)\\n.*?DESCRIPTION\\s*:\\s*(.*?)\\n.*?TEST STEP STATUS\\s*:\\s*(.*?)\\n.*?##--------- \\[TEST EXECUTION STATUS\\]\\s*:\\s*(.*?)\\s*----------##",
-					Pattern.DOTALL);
+				    "#==============================================================================#\\nTEST CASE NAME\\s*:\\s*(.*?)\\n.*?TEST CASE ID\\s*:\\s*(.*?)\\n.*?DESCRIPTION\\s*:\\s*(.*?)\\n.*?##--------- \\[TEST EXECUTION STATUS\\]\\s*:\\s*(.*?)\\s*----------##",
+				    Pattern.DOTALL);
 			Matcher testCaseMatcher = testCasePattern.matcher(logData);
 			int testCaseNum = 1;
 			while (testCaseMatcher.find()) {
 				Row row = sheet.createRow(rowNum++);
 				row.createCell(0).setCellValue(testCaseNum++);
 				row.createCell(1).setCellValue(testCaseMatcher.group(1).trim());
-				row.createCell(2).setCellValue(testCaseMatcher.group(5).trim());
+				row.createCell(2).setCellValue(testCaseMatcher.group(4).trim());
 				row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if
 																		// available
 				row.createCell(4).setCellValue(testCaseMatcher.group(0).trim());
