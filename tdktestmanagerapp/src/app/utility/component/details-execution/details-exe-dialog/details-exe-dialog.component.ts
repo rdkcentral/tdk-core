@@ -803,7 +803,7 @@ export class DetailsExeDialogComponent {
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `ConsolidatedReport_${this.data.deviceName}_${this.data.executionId}.xlsx`;
+          a.download = `ExecutionResults_${this.data.deviceName}_${this.data.executionId}.xlsx`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
