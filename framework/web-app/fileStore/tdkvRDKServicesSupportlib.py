@@ -4172,10 +4172,16 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         # UserSettings Response result parser steps
         elif tag == "usersettings_get_status":
             info[arg[0]] = result
-            if str(result).strip() in expectedValues:
-                info["Test_Step_Status"] = "SUCCESS"
+            if len(arg) > 1 and arg[1] == "negative":
+                if str(result).strip().lower() in expectedValues[0].lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                if str(result).strip() in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "usersettings_get_api_info":
             info[arg[0]] = result
@@ -4212,17 +4218,29 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "usersettings_get_liveWatershed_status":
             info["liveWatershed"] = result
-            if str(result).strip() in expectedValues:
-                info["Test_Step_Status"] = "SUCCESS"
+            if arg and arg[0] == "negative":
+                if str(result).strip().lower() in expectedValues[0].lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                if str(result).strip() in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "usersettings_get_playbackWatershed_status":
             info["playbackWatershed"] = result
-            if str(result).strip() in expectedValues:
-                info["Test_Step_Status"] = "SUCCESS"
+            if arg and arg[0] == "negative":
+                if str(result).strip().lower() in expectedValues[0].lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                if str(result).strip() in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "usersettings_get_contentpin_status":
             info["contentPin"] = result

@@ -858,4 +858,344 @@
                         <resultGeneration useMethodTag="usersettings_get_pinControl_status" expectedValues="false" arguments="negative"/>
                 </testStep>
         </testCase>
+
+        <!-- Test case 39 -->
+        <testCase testCaseId="US_39" testCaseName="UserSettings_PinControl_With_NumericValue" desc="Verify setPinControl with pinControl set to a numeric value to ensure the API rejects non-boolean input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PinControl" method="UserSettings_getPinControl">
+                <resultGeneration useMethodTag="usersettings_get_pinControl_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PinControl_NumericValue" method="UserSettings_Numeric_setPinControl">
+                <params>
+                        <param tag="pinControl" value="1234"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_PinControl" method="UserSettings_getPinControl">
+                        <resultGeneration useMethodTag="usersettings_get_pinControl_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 40 -->
+        <testCase testCaseId="US_40" testCaseName="UserSettings_PinControl_Without_Params" desc="Verify setPinControl API behavior when the pinControl parameter is omitted, to ensure it handles the scenario correctly">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PinControl" method="UserSettings_getPinControl">
+                <resultGeneration useMethodTag="usersettings_get_pinControl_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PinControl_Without_Params" method="UserSettings_Negative_setPinControl"/>
+                <testStep testStepId="3" name="Get_PinControl" method="UserSettings_getPinControl">
+                        <resultGeneration useMethodTag="usersettings_get_pinControl_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 41 -->
+        <testCase testCaseId="US_41" testCaseName="UserSettings_LiveWatershed_With_Empty_String" desc="Verify setLiveWatershed with liveWatershed set to an empty string to ensure the API handles empty values appropriately">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_LiveWatershed" method="UserSettings_getLiveWatershed">
+                <resultGeneration useMethodTag="usersettings_get_liveWatershed_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_LiveWatershed_Empty_String" method="UserSettings_Negative_setLiveWatershed">
+                <params>
+                        <param tag="liveWatershed" value=""/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_LiveWatershed" method="UserSettings_getLiveWatershed">
+                        <resultGeneration useMethodTag="usersettings_get_liveWatershed_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 42 -->
+        <testCase testCaseId="US_42" testCaseName="UserSettings_LiveWatershed_With_Specialchars" desc="Verify setLiveWatershed with liveWatershed set to a special character to ensure the API rejects special character input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_LiveWatershed" method="UserSettings_getLiveWatershed">
+                <resultGeneration useMethodTag="usersettings_get_liveWatershed_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_LiveWatershed_Specialchars" method="UserSettings_Negative_setLiveWatershed">
+                <params>
+                        <param tag="liveWatershed" value="@#$%^*()"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_LiveWatershed" method="UserSettings_getLiveWatershed">
+                        <resultGeneration useMethodTag="usersettings_get_liveWatershed_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 43 -->
+        <testCase testCaseId="US_43" testCaseName="UserSettings_LiveWatershed_With_NumericValue" desc="Verify setLiveWatershed with liveWatershed set to a numeric value to ensure the API rejects non-boolean input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_LiveWatershed" method="UserSettings_getLiveWatershed">
+                <resultGeneration useMethodTag="usersettings_get_liveWatershed_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_LiveWatershed_NumericValue" method="UserSettings_Numeric_setLiveWatershed">
+                <params>
+                        <param tag="liveWatershed" value="1234"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_LiveWatershed" method="UserSettings_getLiveWatershed">
+                        <resultGeneration useMethodTag="usersettings_get_liveWatershed_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 44 -->
+        <testCase testCaseId="US_44" testCaseName="UserSettings_LiveWatershed_Without_Params" desc="Verify setLiveWatershed API behavior when the liveWatershed parameter is omitted, to ensure it handles the scenario correctly">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_LiveWatershed" method="UserSettings_getLiveWatershed">
+                <resultGeneration useMethodTag="usersettings_get_liveWatershed_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_LiveWatershed_Without_Params" method="UserSettings_Negative_setLiveWatershed"/>
+                <testStep testStepId="3" name="Get_LiveWatershed" method="UserSettings_getLiveWatershed">
+                        <resultGeneration useMethodTag="usersettings_get_liveWatershed_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 45 -->
+        <testCase testCaseId="US_45" testCaseName="UserSettings_PlaybackWatershed_With_Empty_String" desc="Verify setPlaybackWatershed with playbackWatershed set to an empty string to ensure the API handles empty values appropriately">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PlaybackWatershed" method="UserSettings_getPlaybackWatershed">
+                <resultGeneration useMethodTag="usersettings_get_playbackWatershed_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PlaybackWatershed_Empty_String" method="UserSettings_Negative_setPlaybackWatershed">
+                <params>
+                        <param tag="playbackWatershed" value=""/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_PlaybackWatershed" method="UserSettings_getPlaybackWatershed">
+                        <resultGeneration useMethodTag="usersettings_get_playbackWatershed_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 46 -->
+        <testCase testCaseId="US_46" testCaseName="UserSettings_PlaybackWatershed_With_Specialchars" desc="Verify setPlaybackWatershed with playbackWatershed set to a special character to ensure the API rejects special character input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PlaybackWatershed" method="UserSettings_getPlaybackWatershed">
+                <resultGeneration useMethodTag="usersettings_get_playbackWatershed_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PlaybackWatershed_Specialchars" method="UserSettings_Negative_setPlaybackWatershed">
+                <params>
+                        <param tag="playbackWatershed" value="@#$%^*()"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_PlaybackWatershed" method="UserSettings_getPlaybackWatershed">
+                        <resultGeneration useMethodTag="usersettings_get_playbackWatershed_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 47 -->
+        <testCase testCaseId="US_47" testCaseName="UserSettings_PlaybackWatershed_With_NumericValue" desc="Verify setPlaybackWatershed with playbackWatershed set to a numeric value to ensure the API rejects non-boolean input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PlaybackWatershed" method="UserSettings_getPlaybackWatershed">
+                <resultGeneration useMethodTag="usersettings_get_playbackWatershed_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PlaybackWatershed_NumericValue" method="UserSettings_Numeric_setPlaybackWatershed">
+                <params>
+                        <param tag="playbackWatershed" value="1234"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_PlaybackWatershed" method="UserSettings_getPlaybackWatershed">
+                        <resultGeneration useMethodTag="usersettings_get_playbackWatershed_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 48 -->
+        <testCase testCaseId="US_48" testCaseName="UserSettings_PlaybackWatershed_Without_Params" desc="Verify setPlaybackWatershed API behavior when the playbackWatershed parameter is omitted, to ensure it handles the scenario correctly">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PlaybackWatershed" method="UserSettings_getPlaybackWatershed">
+                <resultGeneration useMethodTag="usersettings_get_playbackWatershed_status">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PlaybackWatershed_Without_Params" method="UserSettings_Negative_setPlaybackWatershed"/>
+                <testStep testStepId="3" name="Get_PlaybackWatershed" method="UserSettings_getPlaybackWatershed">
+                        <resultGeneration useMethodTag="usersettings_get_playbackWatershed_status" expectedValues="false" arguments="negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 49 -->
+        <testCase testCaseId="US_49" testCaseName="UserSettings_BlockNotRatedContent_With_Empty_String" desc="Verify setBlockNotRatedContent with blockNotRatedContent set to an empty string to ensure the API handles empty values appropriately">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_BlockNotRatedContent" method="UserSettings_getBlockNotRatedContent">
+                <resultGeneration useMethodTag="usersettings_get_status" arguments="blockNotRatedContent">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_BlockNotRatedContent_Empty_String" method="UserSettings_Negative_setBlockNotRatedContent">
+                <params>
+                        <param tag="blockNotRatedContent" value=""/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_BlockNotRatedContent" method="UserSettings_getBlockNotRatedContent">
+                        <resultGeneration useMethodTag="usersettings_get_status" expectedValues="false" arguments="blockNotRatedContent,negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 50 -->
+        <testCase testCaseId="US_50" testCaseName="UserSettings_BlockNotRatedContent_With_Specialchars" desc="Verify setBlockNotRatedContent with blockNotRatedContent set to a special character to ensure the API rejects special character input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_BlockNotRatedContent" method="UserSettings_getBlockNotRatedContent">
+                <resultGeneration useMethodTag="usersettings_get_status" arguments="blockNotRatedContent">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_BlockNotRatedContent_Specialchars" method="UserSettings_Negative_setBlockNotRatedContent">
+                <params>
+                        <param tag="blockNotRatedContent" value="@#$%^*()"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_BlockNotRatedContent" method="UserSettings_getBlockNotRatedContent">
+                        <resultGeneration useMethodTag="usersettings_get_status" expectedValues="false" arguments="blockNotRatedContent,negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 51 -->
+        <testCase testCaseId="US_51" testCaseName="UserSettings_BlockNotRatedContent_With_NumericValue" desc="Verify setBlockNotRatedContent with blockNotRatedContent set to a numeric value to ensure the API rejects non-boolean input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_BlockNotRatedContent" method="UserSettings_getBlockNotRatedContent">
+                <resultGeneration useMethodTag="usersettings_get_status" arguments="blockNotRatedContent">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_BlockNotRatedContent_NumericValue" method="UserSettings_Numeric_setBlockNotRatedContent">
+                <params>
+                        <param tag="blockNotRatedContent" value="1234"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_BlockNotRatedContent" method="UserSettings_getBlockNotRatedContent">
+                        <resultGeneration useMethodTag="usersettings_get_status" expectedValues="false" arguments="blockNotRatedContent,negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 52 -->
+        <testCase testCaseId="US_52" testCaseName="UserSettings_BlockNotRatedContent_Without_Params" desc="Verify setBlockNotRatedContent API behavior when the blockNotRatedContent parameter is omitted, to ensure it handles the scenario correctly">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_BlockNotRatedContent" method="UserSettings_getBlockNotRatedContent">
+                <resultGeneration useMethodTag="usersettings_get_status" arguments="blockNotRatedContent">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_BlockNotRatedContent_Specialchars" method="UserSettings_Negative_setBlockNotRatedContent"/>
+                <testStep testStepId="3" name="Get_BlockNotRatedContent" method="UserSettings_getBlockNotRatedContent">
+                        <resultGeneration useMethodTag="usersettings_get_status" expectedValues="false" arguments="blockNotRatedContent,negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 53 -->
+        <testCase testCaseId="US_53" testCaseName="UserSettings_PinOnPurchase_With_Empty_String" desc="Verify setPinOnPurchase with pinOnPurchase set to an empty string to ensure the API handles empty values appropriately">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PinOnPurchase" method="UserSettings_getPinOnPurchase">
+                <resultGeneration useMethodTag="usersettings_get_status" arguments="pinOnPurchase">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PinOnPurchase_Empty_String" method="UserSettings_Negative_setPinOnPurchase">
+                <params>
+                        <param tag="pinOnPurchase" value=""/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_PinOnPurchase" method="UserSettings_getPinOnPurchase">
+                        <resultGeneration useMethodTag="usersettings_get_status" expectedValues="false" arguments="pinOnPurchase,negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 54 -->
+        <testCase testCaseId="US_54" testCaseName="UserSettings_PinOnPurchase_With_Specialchars" desc="Verify setPinOnPurchase with pinOnPurchase set to a special character to ensure the API rejects special character input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PinOnPurchase" method="UserSettings_getPinOnPurchase">
+                <resultGeneration useMethodTag="usersettings_get_status" arguments="pinOnPurchase">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PinOnPurchase_Specialchars" method="UserSettings_Negative_setPinOnPurchase">
+                <params>
+                        <param tag="pinOnPurchase" value="@#$%^*()"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_PinOnPurchase" method="UserSettings_getPinOnPurchase">
+                        <resultGeneration useMethodTag="usersettings_get_status" expectedValues="false" arguments="pinOnPurchase,negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 55 -->
+        <testCase testCaseId="US_55" testCaseName="UserSettings_PinOnPurchase_With_NumericValue" desc="Verify setPinOnPurchase with pinOnPurchase set to a numeric value to ensure the API rejects non-boolean input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PinOnPurchase" method="UserSettings_getPinOnPurchase">
+                <resultGeneration useMethodTag="usersettings_get_status" arguments="pinOnPurchase">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PinOnPurchase_NumericValue" method="UserSettings_Numeric_setPinOnPurchase">
+                <params>
+                        <param tag="pinOnPurchase" value="1234"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_PinOnPurchase" method="UserSettings_getPinOnPurchase">
+                        <resultGeneration useMethodTag="usersettings_get_status" expectedValues="false" arguments="pinOnPurchase,negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 56 -->
+        <testCase testCaseId="US_56" testCaseName="UserSettings_PinOnPurchase_Without_Params" desc="Verify setPinOnPurchase API behavior when the pinOnPurchase parameter is omitted, to ensure it handles the scenario correctly">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_PinOnPurchase" method="UserSettings_getPinOnPurchase">
+                <resultGeneration useMethodTag="usersettings_get_status" arguments="pinOnPurchase">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_PinOnPurchase_Without_Params" method="UserSettings_Negative_setPinOnPurchase"/>
+                <testStep testStepId="3" name="Get_PinOnPurchase" method="UserSettings_getPinOnPurchase">
+                        <resultGeneration useMethodTag="usersettings_get_status" expectedValues="false" arguments="pinOnPurchase,negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 57 -->
+        <testCase testCaseId="US_57" testCaseName="UserSettings_HighContrast_With_Empty_String" desc="Verify setHighContrast with enabled set to an empty string to ensure the API handles empty values appropriately">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_HighContrast" method="UserSettings_getHighContrast">
+                <resultGeneration useMethodTag="usersettings_get_status" arguments="enabled">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_HighContrast_Empty_String" method="UserSettings_Negative_setHighContrast">
+                <params>
+                        <param tag="enabled" value=""/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_HighContrast" method="UserSettings_getHighContrast">
+                        <resultGeneration useMethodTag="usersettings_get_status" expectedValues="false" arguments="enabled,negative"/>
+                </testStep>
+        </testCase>
+
+        <!-- Test case 58 -->
+        <testCase testCaseId="US_58" testCaseName="UserSettings_HighContrast_With_Specialchars" desc="Verify setHighContrast with enabled set to a special character to ensure the API rejects special character input">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_HighContrast" method="UserSettings_getHighContrast">
+                <resultGeneration useMethodTag="usersettings_get_status" arguments="enabled">
+                        <expectedValues useDefault="true"/>
+                </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Set_HighContrast_Specialchars" method="UserSettings_Negative_setHighContrast">
+                <params>
+                        <param tag="enabled" value="@#$%^*()"/>
+                </params>
+                </testStep>
+                <testStep testStepId="3" name="Get_HighContrast" method="UserSettings_getHighContrast">
+                        <resultGeneration useMethodTag="usersettings_get_status" expectedValues="false" arguments="enabled,negative"/>
+                </testStep>
+        </testCase>
 </testPlugin>

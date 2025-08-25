@@ -2958,8 +2958,58 @@
                 <param tag="pinControl" type="string"/>
             </params>
         </method>
+        <method name="UserSettings_Numeric_setPinControl" api="setPinControl" type="method" desc="Setting PinControl">
+            <params>
+                <param tag="pinControl" type="int"/>
+            </params>
+        </method>
+	<method name="UserSettings_Negative_setLiveWatershed" api="setLiveWatershed" type="method" desc="Setting LiveWatershed">
+            <params>
+                <param tag="liveWatershed" type="string"/>
+            </params>
+        </method>
+        <method name="UserSettings_Numeric_setLiveWatershed" api="setLiveWatershed" type="method" desc="Setting LiveWatershed">
+            <params>
+                <param tag="liveWatershed" type="int"/>
+            </params>
+        </method>
+        <method name="UserSettings_Negative_setPlaybackWatershed" api="setPlaybackWatershed" type="method" desc="Setting PlaybackWatershed">
+            <params>
+                <param tag="playbackWatershed" type="string"/>
+            </params>
+        </method>
+        <method name="UserSettings_Numeric_setPlaybackWatershed" api="setPlaybackWatershed" type="method" desc="Setting PlaybackWatershed">
+            <params>
+                <param tag="playbackWatershed" type="int"/>
+            </params>
+        </method>
+        <method name="UserSettings_Negative_setBlockNotRatedContent" api="setBlockNotRatedContent" type="method" desc="Setting BlockNotRatedContent">
+            <params>
+                <param tag="blockNotRatedContent" type="string"/>
+            </params>
+        </method>
+        <method name="UserSettings_Numeric_setBlockNotRatedContent" api="setBlockNotRatedContent" type="method" desc="Setting BlockNotRatedContent">
+            <params>
+                <param tag="blockNotRatedContent" type="int"/>
+            </params>
+        </method>
+        <method name="UserSettings_Negative_setPinOnPurchase" api="setPinOnPurchase" type="method" desc="Setting setPinOnPurchase">
+            <params>
+                <param tag="pinOnPurchase" type="string"/>
+            </params>
+        </method>
+        <method name="UserSettings_Numeric_setPinOnPurchase" api="setPinOnPurchase" type="method" desc="Setting setPinOnPurchase">
+            <params>
+                <param tag="pinOnPurchase" type="int"/>
+            </params>
+        </method>
+        <method name="UserSettings_Negative_setHighContrast" api="setHighContrast" type="method" desc="Sets highContrast whether the app should display with high contrast or not">
+            <params>
+                <param tag="enabled" type="string"/>
+            </params>
+        </method>
 
-	<!-- Event Definitions -->
+        <!-- Event Definitions -->
         <event name="Event_On_AudioDescriptionChanged" eventName="onAudioDescriptionChanged" eventId="client.events.1" type="event" desc="Triggered when the audio description changes"/>
         <event name="Event_On_CaptionsChanged" eventName="onCaptionsChanged" eventId="client.events.1" type="event" desc="Triggered when the captions changes"/>
         <event name="Event_On_PinControlChanged" eventName="onPinControlChanged" eventId="client.events.1" type="event" desc="Triggered when the pincontrol changes"/>
