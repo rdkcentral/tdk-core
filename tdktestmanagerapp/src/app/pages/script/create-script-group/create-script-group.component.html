@@ -36,11 +36,11 @@ limitations under the License.
                     <!-- Row for form fields and script selection -->
                     <div class="row form-row mt 2">
                         <!-- Left column for suite name input -->
-                        <div class="col-md-6">
+                        <div class="col-md-6 no-side-padding" >
                             <!-- Row for suite name label and input -->
                             <div class="row mb-1">
                                 <!-- Column for suite name label -->
-                                <div class="col-md-2">
+                                <div class="col-md-2 no-side-padding">
                                     <label for="suitename" class="col-form-label name-lable">Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                                 </div>
                                 <!-- Column for suite name input and error -->
@@ -53,11 +53,11 @@ limitations under the License.
                             </div>
                         </div>
                         <!-- Right column for description input -->
-                        <div class="col-md-6">
+                        <div class="col-md-6 no-side-padding">
                             <!-- Row for description label and input -->
                             <div class="row mb-1">
                                 <!-- Column for description label -->
-                                <div class="col-md-2">
+                                <div class="col-md-2 no-side-padding">
                                     <label for="desc" class="col-form-label">Description<span style="color:red; margin-left: 0.75em;">*</span></label>
                                 </div>
                                 <!-- Column for description input and error -->
@@ -114,8 +114,7 @@ limitations under the License.
                                         <span class="drag-nodata">No data found...</span>
                                     </div>
                                     <!-- Loader for left script list -->
-                                    <div *ngIf="isLoadingScripts" class="nodata d-flex justify-content-center align-items-center"
-                                        style="min-height: 100px;">
+                                    <div *ngIf="isLoadingScripts" class="loader-container">
                                         <app-loader></app-loader>
                                     </div>
                                     <!-- List box for left scripts -->
@@ -132,6 +131,7 @@ limitations under the License.
                                             </li>
                                         </ul>
                                     </div>
+                                </div>
                                     <!-- Move buttons for left list -->
                                     <div class="move-btns">
                                         <button type="button"
@@ -151,9 +151,9 @@ limitations under the License.
                                             <i class="bi bi-arrow-left icon-move thick-arrow"></i>
                                         </button>
                                     </div>
-                                </div>
+                             </div>
 
-                            </div>
+                           
                             
                             <!-- Column for right script list -->
                             <div class="col right-sec">
@@ -172,6 +172,7 @@ limitations under the License.
                                             </li>
                                         </ul>
                                     </div>
+                                </div>
                                     <!-- Move buttons for right list -->
                                     <div class="move-ritebtns">
                                         <button type="button"
@@ -191,7 +192,7 @@ limitations under the License.
                                             <i class="bi bi-arrow-down icon-move thick-arrow"></i>
                                         </button>
                                     </div>
-                                </div>
+                                
                                 <!-- Error message for empty right list -->
                                 <div *ngIf="(testSuiteFrom.get('container2Scripts')?.hasError('container2Empty') && (testSuiteFrom.get('container2Scripts')?.touched || testSuiteFormSubmitted))">
                                     <small class="script-err">Add at least one script.</small>

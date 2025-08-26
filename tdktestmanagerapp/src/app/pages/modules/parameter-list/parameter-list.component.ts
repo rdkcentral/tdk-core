@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component ,HostListener} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
@@ -44,13 +44,19 @@ import { LoaderComponent } from '../../../utility/component/loader/loader.compon
 @Component({
   selector: 'app-parameter-list',
   standalone: true,
-  imports: [ MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule,
-    LoaderComponent],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    ReactiveFormsModule,
+    AgGridAngular,
+    HttpClientModule,
+    LoaderComponent,
+  ],
   templateUrl: './parameter-list.component.html',
-  styleUrl: './parameter-list.component.css'
+  styleUrl: './parameter-list.component.css',
 })
 export class ParameterListComponent {
-  public themeClass: string = "ag-theme-quartz";
+  public themeClass: string = 'ag-theme-quartz';
   public paginationPageSize = 10;
   public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
@@ -61,22 +67,19 @@ export class ParameterListComponent {
       field: 'parameterName',
       filter: 'agTextColumnFilter',
       sort: 'asc',
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Parameter Type',
       field: 'parameterDataType',
       filter: 'agTextColumnFilter',
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Range Value',
       field: 'parameterRangeVal',
       filter: 'agTextColumnFilter',
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Action',
@@ -89,15 +92,15 @@ export class ParameterListComponent {
         onDeleteClick: this.delete.bind(this),
         selectedRowCount: () => this.selectedRowCount,
         lastSelectedNodeId: this.lastSelectedNodeId,
-      })
-    }
+      }),
+    },
   ];
   public defaultColDef: ColDef = {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
   gridOptions = {
-    rowHeight: 36
+    rowHeight: 36,
   };
   configureName!: string;
   selectedConfig!: string | null;
@@ -108,8 +111,8 @@ export class ParameterListComponent {
   isCheckboxSelected: boolean = false;
   rowIndex!: number | null;
   selectedRowCount = 0;
-  dynamicModuleName!:string;
-  dynamicFunctionName!:string;
+  dynamicModuleName!: string;
+  dynamicFunctionName!: string;
   categoryName: any;
   showLoader = false;
 
@@ -121,10 +124,13 @@ export class ParameterListComponent {
    * @param moduleservice ModulesService instance for module operations.
    * @param dialog MatDialog instance for dialogs.
    */
-  constructor(private router: Router, private authservice: AuthService,
-    private _snakebar: MatSnackBar, private moduleservice: ModulesService,
+  constructor(
+    private router: Router,
+    private authservice: AuthService,
+    private _snakebar: MatSnackBar,
+    private moduleservice: ModulesService,
     public dialog: MatDialog
-  ) { }
+  ) {}
 
   /**
    * Initializes the component and sets up initial state.
@@ -141,6 +147,45 @@ export class ParameterListComponent {
       this.categoryName = 'Video';
     }
     this.parameterByFunction();
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Listens for window resize events to adjust the grid
+   */
+  @HostListener('window:resize')
+  onResize() {
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Adjusts pagination size based on screen dimensions
+   */
+  private adjustPaginationToScreenSize() {
+    const height = window.innerHeight;
+
+    if (height > 1200) {
+      this.paginationPageSize = 25;
+    } else if (height > 900) {
+      this.paginationPageSize = 20;
+    } else if (height > 700) {
+      this.paginationPageSize = 15;
+    } else {
+      this.paginationPageSize = 10;
+    }
+
+    // Update the pagination size selector options based on the current pagination size
+    this.paginationPageSizeSelector = [
+      this.paginationPageSize,
+      this.paginationPageSize * 2,
+      this.paginationPageSize * 5,
+    ];
+
+    // Apply changes to grid if it's already initialized
+    if (this.gridApi) {
+      // Use the correct method to update pagination page size
+      this.gridApi.setGridOption('paginationPageSize', this.paginationPageSize);
+    }
   }
 
   /**
@@ -152,7 +197,11 @@ export class ParameterListComponent {
     this.moduleservice.findAllByFunction(this.dynamicFunctionName).subscribe({
       next: (data) => {
         this.rowData = data.data;
-        if (this.rowData == null || this.rowData == undefined || this.rowData.length > 0) {
+        if (
+          this.rowData == null ||
+          this.rowData == undefined ||
+          this.rowData.length > 0
+        ) {
           this.showLoader = false;
         }
       },
@@ -162,10 +211,10 @@ export class ParameterListComponent {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
-          verticalPosition: 'top'
-        })
-      }
-    })
+          verticalPosition: 'top',
+        });
+      },
+    });
   }
 
   /**
@@ -174,18 +223,18 @@ export class ParameterListComponent {
    */
   onGridReady(params: GridReadyEvent<any>): void {
     this.gridApi = params.api;
+    this.adjustPaginationToScreenSize();
   }
 
-    /**
-     * Event handler for when a row is selected.
-     * @param event The row selected event.
-     */
-    onRowSelected(event: RowSelectedEvent): void {
-      this.isRowSelected = event.node.isSelected();
-      this.rowIndex = event.rowIndex
-    }
+  /**
+   * Event handler for when a row is selected.
+   * @param event The row selected event.
+   */
+  onRowSelected(event: RowSelectedEvent): void {
+    this.isRowSelected = event.node.isSelected();
+    this.rowIndex = event.rowIndex;
+  }
 
-  
   /**
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
@@ -193,13 +242,15 @@ export class ParameterListComponent {
   onSelectionChanged(event: SelectionChangedEvent): void {
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
-    this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
+    this.lastSelectedNodeId =
+      selectedNodes.length > 0
+        ? selectedNodes[selectedNodes.length - 1].id
+        : '';
     this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
     if (this.gridApi) {
-      this.gridApi.refreshCells({ force: true })
+      this.gridApi.refreshCells({ force: true });
     }
   }
-
 
   /**
    * Navigates to the parameter creation page.
@@ -209,7 +260,6 @@ export class ParameterListComponent {
     this.router.navigate(['/configure/parmeter-create']);
   }
 
-  
   /**
    * Edits a parameter.
    * @param parameter The parameter to edit.
@@ -224,40 +274,39 @@ export class ParameterListComponent {
    * @param data The data of the record to delete.
    */
   delete(data: any): void {
-    if (confirm("Are you sure to delete ?")) {
+    if (confirm('Are you sure to delete ?')) {
       if (data) {
         this.moduleservice.deleteParameter(data.id).subscribe({
           next: (res) => {
-            this.rowData = this.rowData.filter((row: any) => row.id !== data.id);
+            this.rowData = this.rowData.filter(
+              (row: any) => row.id !== data.id
+            );
             this.rowData = [...this.rowData];
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
+              verticalPosition: 'top',
+            });
           },
           error: (err) => {
             this._snakebar.open(err.message, '', {
               duration: 2000,
               panelClass: ['err-msg'],
               horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
-          }
-        })
+              verticalPosition: 'top',
+            });
+          },
+        });
       }
     }
   }
-
 
   /**
    * Navigates back to the previous page.
    * No parameters.
    */
   goBack(): void {
-    this.router.navigate(["/configure/function-list"]);
+    this.router.navigate(['/configure/function-list']);
   }
-
-
 }

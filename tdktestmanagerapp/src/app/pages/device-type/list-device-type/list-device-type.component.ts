@@ -17,7 +17,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -40,16 +40,21 @@ import { LoaderComponent } from '../../../utility/component/loader/loader.compon
 @Component({
   selector: 'app-list-device-type',
   standalone: true,
-  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular,LoaderComponent],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    ReactiveFormsModule,
+    AgGridAngular,
+    LoaderComponent,
+  ],
   templateUrl: './list-device-type.component.html',
-  styleUrl: './list-device-type.component.css'
+  styleUrl: './list-device-type.component.css',
 })
 export class ListDeviceTypeComponent implements OnInit {
-
   public rowSelection: 'single' | 'multiple' = 'single';
   lastSelectedNodeId: string | undefined;
   rowData: any = [];
-  public themeClass: string = "ag-theme-quartz";
+  public themeClass: string = 'ag-theme-quartz';
   public paginationPageSize = 10;
   public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
@@ -70,16 +75,14 @@ export class ListDeviceTypeComponent implements OnInit {
       field: 'deviceTypeName',
       filter: 'agTextColumnFilter',
       flex: 1,
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Type',
       field: 'deviceType',
       filter: 'agTextColumnFilter',
       flex: 1,
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Action',
@@ -91,8 +94,8 @@ export class ListDeviceTypeComponent implements OnInit {
         onDeleteClick: this.delete.bind(this),
         selectedRowCount: () => this.selectedRowCount,
         lastSelectedNodeId: this.lastSelectedNodeId,
-      })
-    }
+      }),
+    },
   ];
   public defaultColDef: ColDef = {
     flex: 1,
@@ -102,7 +105,7 @@ export class ListDeviceTypeComponent implements OnInit {
     rowHeight: 36,
   };
   configureName!: string;
-  preferedCategory!:string;
+  preferedCategory!: string;
   showLoader = false;
 
   /**
@@ -112,27 +115,76 @@ export class ListDeviceTypeComponent implements OnInit {
    * @param service Service for device type operations
    * @param _snakebar Service for showing snack bar notifications
    */
-  constructor( private router: Router,
-    private authservice: AuthService, private service: DevicetypeService, private _snakebar: MatSnackBar) {
-      this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
-     }
+  constructor(
+    private router: Router,
+    private authservice: AuthService,
+    private service: DevicetypeService,
+    private _snakebar: MatSnackBar
+  ) {
+    this.preferedCategory = localStorage.getItem('preferedCategory') || '';
+  }
 
   /**
    * Initializes the component and loads device types.
    */
   ngOnInit(): void {
     this.showLoader = true;
-    this.service.getfindallbycategory(this.authservice.selectedConfigVal).subscribe(res => {
-      this.rowData = res.data      
-      if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
-        this.showLoader = false;
-      }
-    })
+    this.service
+      .getfindallbycategory(this.authservice.selectedConfigVal)
+      .subscribe((res) => {
+        this.rowData = res.data;
+        if (
+          this.rowData == null ||
+          this.rowData == undefined ||
+          this.rowData.length > 0
+        ) {
+          this.showLoader = false;
+        }
+      });
     this.configureName = this.authservice.selectedConfigVal;
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
-    }else{
+    } else {
       this.categoryName = 'Video';
+    }
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Listens for window resize events to adjust the grid
+   */
+  @HostListener('window:resize')
+  onResize() {
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Adjusts pagination size based on screen dimensions
+   */
+  private adjustPaginationToScreenSize() {
+    const height = window.innerHeight;
+
+    if (height > 1200) {
+      this.paginationPageSize = 25;
+    } else if (height > 900) {
+      this.paginationPageSize = 20;
+    } else if (height > 700) {
+      this.paginationPageSize = 15;
+    } else {
+      this.paginationPageSize = 10;
+    }
+
+    // Update the pagination size selector options based on the current pagination size
+    this.paginationPageSizeSelector = [
+      this.paginationPageSize,
+      this.paginationPageSize * 2,
+      this.paginationPageSize * 5,
+    ];
+
+    // Apply changes to grid if it's already initialized
+    if (this.gridApi) {
+      // Use the correct method to update pagination page size
+      this.gridApi.setGridOption('paginationPageSize', this.paginationPageSize);
     }
   }
 
@@ -142,6 +194,7 @@ export class ListDeviceTypeComponent implements OnInit {
    */
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
+    this.adjustPaginationToScreenSize();
   }
 
   /**
@@ -149,7 +202,7 @@ export class ListDeviceTypeComponent implements OnInit {
    * @param user The user/device type to edit.
    */
   userEdit(user: any): void {
-    localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem('user', JSON.stringify(user));
     this.router.navigate(['configure/edit-devicetype']);
   }
 
@@ -157,48 +210,48 @@ export class ListDeviceTypeComponent implements OnInit {
    * Delete the device type.
    * @param data The device type data to delete.
    */
-  delete(data: any) :void{
+  delete(data: any): void {
     if (data) {
-      if (confirm("Are you sure to delete ?")) {
+      if (confirm('Are you sure to delete ?')) {
         this.service.deleteDeviceType(data.deviceTypeId).subscribe({
           next: (res) => {
-            this.rowData = this.rowData.filter((row: any) => row.deviceTypeId !== data.deviceTypeId);
+            this.rowData = this.rowData.filter(
+              (row: any) => row.deviceTypeId !== data.deviceTypeId
+            );
             this.rowData = [...this.rowData];
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
+              verticalPosition: 'top',
+            });
           },
           error: (err) => {
             this._snakebar.open(err.message, '', {
               duration: 2000,
               panelClass: ['err-msg'],
               horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
-          }
-        })
-
+              verticalPosition: 'top',
+            });
+          },
+        });
       }
     }
-
   }
 
   /**
    * Navigate to create device type page.
-   */  
-  createDeviceType():void {
-    this.router.navigate(["configure/create-devicetype"]);
+   */
+  createDeviceType(): void {
+    this.router.navigate(['configure/create-devicetype']);
   }
 
   /**
    * Go back to the previous page and set config values.
-   */  
-  goBack():void {
+   */
+  goBack(): void {
     this.authservice.selectedConfigVal = 'RDKV';
-    this.authservice.showSelectedCategory = "Video";
-    this.router.navigate(["/configure"]);
+    this.authservice.showSelectedCategory = 'Video';
+    this.router.navigate(['/configure']);
   }
 }

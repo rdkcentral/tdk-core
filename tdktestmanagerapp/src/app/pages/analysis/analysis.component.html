@@ -253,7 +253,7 @@ limitations under the License.
                         <!-- Table details for combined report (conditional) -->
                         <div class="tableDeatils mt-2" *ngIf="showTable">
                             <!-- Container for ag-grid table -->
-                            <div style="width: 100%; height: 330px;" [class]="themeClass">
+                            <div class="grid-container" [class]="themeClass">
                                 <ag-grid-angular
                                 style="width: 100%; height: 100%;"
                                 [rowData]="rowData"

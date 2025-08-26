@@ -52,7 +52,6 @@ http://www.apache.org/licenses/LICENSE-2.0
   display: flex;
   justify-content: center;
   flex-direction: column;
-  padding: 30px 18%;
   height: 90%;
 }
 
@@ -70,4 +69,28 @@ http://www.apache.org/licenses/LICENSE-2.0
   letter-spacing: 0.5px;
   cursor: pointer;
   margin-right: 15px;
+}
+
+/* Add this new class for the editor container */
+.editor-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+   height: 60vh;
+}
+
+/* Ensure monaco editor takes full width */
+::ng-deep .monaco-editor {
+  width: 100% !important;
+}
+
+/* Adjust parent container */
+.form-container.create-group {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Ensure container-box allows full width */
+.container.container-box {
+  max-width: 95%;
 }

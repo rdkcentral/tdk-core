@@ -17,7 +17,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,HostListener} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -43,16 +43,22 @@ import { LoaderComponent } from '../../../utility/component/loader/loader.compon
 @Component({
   selector: 'app-list-soc',
   standalone: true,
-  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule,LoaderComponent],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    ReactiveFormsModule,
+    AgGridAngular,
+    HttpClientModule,
+    LoaderComponent,
+  ],
   templateUrl: './list-soc.component.html',
-  styleUrl: './list-soc.component.css'
+  styleUrl: './list-soc.component.css',
 })
 export class ListSocComponent {
-
   public rowSelection: 'single' | 'multiple' = 'single';
   lastSelectedNodeId: string | undefined;
   rowData: any = [];
-  public themeClass: string = "ag-theme-quartz";
+  public themeClass: string = 'ag-theme-quartz';
   public paginationPageSize = 10;
   public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
@@ -63,7 +69,7 @@ export class ListSocComponent {
   public gridApi!: GridApi;
   rowIndex!: number | null;
   selectedRowCount = 0;
-  showUpdateButton = false; 
+  showUpdateButton = false;
   categoryName!: string;
   showLoader = false;
   public columnDefs: ColDef[] = [
@@ -72,8 +78,7 @@ export class ListSocComponent {
       field: 'socName',
       filter: 'agTextColumnFilter',
       flex: 1,
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Action',
@@ -85,15 +90,15 @@ export class ListSocComponent {
         onDeleteClick: this.delete.bind(this),
         selectedRowCount: () => this.selectedRowCount,
         lastSelectedNodeId: this.lastSelectedNodeId,
-      })
-    }
+      }),
+    },
   ];
   public defaultColDef: ColDef = {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
   gridOptions = {
-    rowHeight: 36
+    rowHeight: 36,
   };
 
   /**
@@ -103,87 +108,138 @@ export class ListSocComponent {
    * @param authservice AuthService for authentication and user info
    * @param _snakebar MatSnackBar for notifications
    */
-  constructor(private router: Router, private service: SocService,
-    private authservice: AuthService, private _snakebar: MatSnackBar) { }
-
+  constructor(
+    private router: Router,
+    private service: SocService,
+    private authservice: AuthService,
+    private _snakebar: MatSnackBar
+  ) {}
 
   /**
    * Initializes the component.
    */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
-    }else{
+    } else {
       this.categoryName = 'Video';
     }
     this.authservice.currentRoute = this.router.url.split('?')[0];
     this.showLoader = true;
-    this.service.getSoc(this.authservice.selectedConfigVal).subscribe(res => {
+    this.service.getSoc(this.authservice.selectedConfigVal).subscribe((res) => {
       this.rowData = res.data;
-      if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
+      if (
+        this.rowData == null ||
+        this.rowData == undefined ||
+        this.rowData.length > 0
+      ) {
         this.showLoader = false;
       }
-    })
+    });
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Listens for window resize events to adjust the grid
+   */
+  @HostListener('window:resize')
+  onResize() {
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Adjusts pagination size based on screen dimensions
+   */
+  private adjustPaginationToScreenSize() {
+    const height = window.innerHeight;
+
+    if (height > 1200) {
+      this.paginationPageSize = 25;
+    } else if (height > 900) {
+      this.paginationPageSize = 20;
+    } else if (height > 700) {
+      this.paginationPageSize = 15;
+    } else {
+      this.paginationPageSize = 10;
+    }
+
+    // Update the pagination size selector options based on the current pagination size
+    this.paginationPageSizeSelector = [
+      this.paginationPageSize,
+      this.paginationPageSize * 2,
+      this.paginationPageSize * 5,
+    ];
+
+    // Apply changes to grid if it's already initialized
+    if (this.gridApi) {
+      // Use the correct method to update pagination page size
+      this.gridApi.setGridOption('paginationPageSize', this.paginationPageSize);
+    }
   }
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
-  onGridReady(params: GridReadyEvent<any>) :void{
+  onGridReady(params: GridReadyEvent<any>): void {
     this.gridApi = params.api;
+    this.adjustPaginationToScreenSize();
   }
 
   /**
    * Deletes a SOC.
    * @param data The data of the SOC to delete.
-   */  
-  delete(data: any):void {
-    if (confirm("Are you sure to delete ?")) {
+   */
+  delete(data: any): void {
+    if (confirm('Are you sure to delete ?')) {
       this.service.deleteSoc(data.socId).subscribe({
         next: (res) => {
-          this.rowData = this.rowData.filter((row: any) => row.socId !== data.socId);
+          this.rowData = this.rowData.filter(
+            (row: any) => row.socId !== data.socId
+          );
           this.rowData = [...this.rowData];
           this._snakebar.open(res.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
+            verticalPosition: 'top',
+          });
         },
         error: (err) => {
           this._snakebar.open(err.message, '', {
             duration: 3000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
-        }
-      })
+            verticalPosition: 'top',
+          });
+        },
+      });
     }
-
   }
 
   /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
-   */  
-  onRowSelected(event: RowSelectedEvent) :void{
+   */
+  onRowSelected(event: RowSelectedEvent): void {
     this.isRowSelected = event.node.isSelected();
-    this.rowIndex = event.rowIndex
+    this.rowIndex = event.rowIndex;
   }
 
   /**
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent):void {
+  onSelectionChanged(event: SelectionChangedEvent): void {
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
-    this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
+    this.lastSelectedNodeId =
+      selectedNodes.length > 0
+        ? selectedNodes[selectedNodes.length - 1].id
+        : '';
     this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
     if (this.gridApi) {
-      this.gridApi.refreshCells({ force: true })
+      this.gridApi.refreshCells({ force: true });
     }
   }
 
@@ -192,24 +248,23 @@ export class ListSocComponent {
    * @param user The user to edit.
    */
   userEdit(user: any): void {
-    localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem('user', JSON.stringify(user));
     this.router.navigate(['configure/edit-soc']);
   }
 
   /**
    * Creates a SOC.
    */
-  createSoc() :void{
-    this.router.navigate(["configure/create-soc"]);
+  createSoc(): void {
+    this.router.navigate(['configure/create-soc']);
   }
 
   /**
    * Navigates back to the previous page.
-   */  
-  goBack() :void{
+   */
+  goBack(): void {
     this.authservice.selectedConfigVal = 'RDKV';
-    this.authservice.showSelectedCategory = "Video";
-    this.router.navigate(["/configure"]);
+    this.authservice.showSelectedCategory = 'Video';
+    this.router.navigate(['/configure']);
   }
-
 }

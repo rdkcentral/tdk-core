@@ -173,13 +173,13 @@ limitations under the License.
                 <!-- TABS CONTAINER -->
                 <mat-tab-group animationDuration="0ms" mat-align-tabs="start" (selectedTabChange)="onTabClick($event)">
                     <mat-tab label="Execution History" class="tab-label">
-                        <div style="width: 100%; height: 390px;" [class]="themeClass">
+                        <div class="dynamic-table-container" [class]="themeClass">
                           <div class="row loader-row" *ngIf="showLoader">
                             <app-loader></app-loader>
                           </div>
                           <ag-grid-angular
                             #historyTable
-                            style="width: 100%; height: 100%;"
+                            style="width: 100%;"
                             [rowData]="rowData"
                             [columnDefs]="columnDefs"
                             [defaultColDef]="defaultColDef"
@@ -223,7 +223,7 @@ limitations under the License.
                         </div>
                     </mat-tab>
                     <mat-tab label="Execution Schedules" class="tab-label">
-                        <div style="width: 100%; height: 412px;" [class]="themeClass">
+                        <div class="dynamic-table-container" [class]="themeClass">
                           <div class="row loader-row" *ngIf="showLoader">
                             <app-loader></app-loader>
                           </div>
@@ -231,7 +231,7 @@ limitations under the License.
                            <span>{{noDataFound}}</span>
                           </div>
                             <ag-grid-angular
-                                style="width: 100%; height: 412px;"
+                                style="width: 100%;"
                                 [columnDefs]="columnSchudle"
                                 [defaultColDef]="{sortable: true}"
                                 [rowData]="rowDataSchudle"

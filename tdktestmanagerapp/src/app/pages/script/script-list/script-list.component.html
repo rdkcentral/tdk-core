@@ -151,13 +151,13 @@ limitations under the License.
             <div class="col"><span class="script-table-head">Action</span></div>
           </div>
           <!-- Row for table content and loader -->
-          <div class="row">
+          <div class="accordion-content-area">
             <!-- Loader row -->
             <div class="row loader-row" *ngIf="showLoader">
               <app-loader></app-loader>
             </div>
             <!-- Accordion for script modules and scripts -->
-            <div class="accordion" id="accordionExample">
+            <div class="accordion" id="accordionExample" [class.loading]="showLoader">
               <!-- Row for accordion items -->
               <div class="row accord-row">
                 <!-- Accordion item for each module -->
@@ -204,7 +204,7 @@ limitations under the License.
                     <!-- Accordion body for ag-grid table -->
                     <div class="accordion-body">
                       <!-- Container for ag-grid-angular -->
-                      <div style="width: 95%; height: 330px; margin-top: 5px;" [class]="themeClass">
+                      <div class="dynamic-table-container" [class]="themeClass">
                         <ag-grid-angular style="width: 100%; height: 100%;" [columnDefs]="columnDefs"
                           [defaultColDef]="{sortable: true}" [rowData]="parent.scripts" [pagination]="true"
                           [animateRows]="true" [context]="this" [gridOptions]="gridOptions"
@@ -217,21 +217,22 @@ limitations under the License.
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          
+        
         <!-- Message for no scripts found -->
-        <div *ngIf="paginatedScriptData.length == 0" class="noRecord">
+        <div *ngIf="paginatedScriptData.length == 0  && !showLoader" class="noRecord">
           <span>{{noScriptFound}}</span>
+        </div>
         </div>
         <!-- Paginator for scripts table -->
         <div class="script-paginator">
-          <mat-paginator [length]="scriptFilteredData.length" [pageSize]="allPageSize" [pageSizeOptions]="[10, 20, 50]"
+          <mat-paginator [length]="scriptFilteredData.length" [pageSize]="allPageSize" [pageSizeOptions]="[10, 15, 20, 50]"
             (page)="onPageChangeScript($event)" class="script-pagination">
           </mat-paginator>
         </div>
 
       </div>
-
+      </div>
       <!-- Row for testsuite table -->
       <div class="row" *ngIf="testsuitTable">
         <!-- Container for the testsuite table -->
@@ -263,13 +264,13 @@ limitations under the License.
             <div class="col"><span class="script-table-head">Action</span></div>
           </div>
           <!-- Row for testsuite table content and loader -->
-          <div class="row">
+          <div class="accordion-content-area">
             <!-- Loader row for testsuite table -->
             <div class="row loader-row" *ngIf="showLoader">
               <app-loader></app-loader>
             </div>
             <!-- Accordion for testsuites -->
-            <div class="accordion" id="accordionExample">
+            <div class="accordion" id="accordionExample"  [class.loading]="showLoader">
               <!-- Row for testsuite accordion items -->
               <div class="row accord-row">
                 <!-- Accordion item for each testsuite -->
@@ -325,8 +326,7 @@ limitations under the License.
                     <!-- Accordion body for testsuite ag-grid table -->
                     <div class="accordion-body">
                       <!-- Container for testsuite ag-grid-angular -->
-                      <div
-                        style="width: 90%; min-height: 300px; margin-top: 5px; display: flex; justify-content: center;"
+                      <div class="dynamic-table-container"
                         [class]="themeClass">
                         <ag-grid-angular style="width: 80%; height: 100%;" [columnDefs]="testSutiteColumn"
                           [defaultColDef]="{sortable: true}" [rowData]="testSuite.scripts" [pagination]="true"
@@ -338,15 +338,15 @@ limitations under the License.
                 </div>
               </div>
             </div>
-          </div>
-          <!-- Message for no testsuites found -->
+            <!-- Message for no testsuites found -->
           <div *ngIf="paginatedSuiteData.length == 0" class="noRecord">
             <span>{{noScriptFound}}</span>
           </div>
+          </div>   
           <!-- Paginator for testsuite table -->
           <div class="script-paginator">
             <mat-paginator [length]="testSuiteFilteredData.length" [pageSize]="allPageSize"
-              [pageSizeOptions]="[10, 20, 50]" (page)="onPageChange($event)" class="script-pagination">
+              [pageSizeOptions]="[10, 15, 20, 50]" (page)="onPageChange($event)" class="script-pagination">
             </mat-paginator>
           </div>
         </div>

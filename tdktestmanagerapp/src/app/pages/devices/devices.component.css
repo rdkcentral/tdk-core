@@ -306,3 +306,11 @@ body,
   top: 50%;
   z-index: 1;
 }
+
+.grid-container {
+  width: 100%;
+  height: calc(100vh - 200px); /* Adjust based on viewport height */
+  min-height: 300px;
+  margin-top: 5px;
+  margin-bottom: 12px;
+}

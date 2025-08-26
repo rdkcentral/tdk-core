@@ -42,8 +42,8 @@ limitations under the License.
     <!-- Row for table section -->
     <div class="row table-sec mt-2">
         <!-- Container for ag-grid table -->
-        <div class="ag-table mb-3" style="display: flex; justify-content: center;">
-            <ag-grid-angular style="width: 100%; height: 446px;" [columnDefs]="columnDefs"
+        <div class="grid-container" [class]="themeClass">
+            <ag-grid-angular style="width: 100%; height: 100%;" [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowData]="rowData"
                 [class]="themeClass" [pagination]="true" [paginationPageSize]="paginationPageSize"
                 [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"

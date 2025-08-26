@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component ,HostListener} from '@angular/core';
 import { OemService } from '../../../services/oem.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -15,16 +15,22 @@ import { LoaderComponent } from '../../../utility/component/loader/loader.compon
 @Component({
   selector: 'app-list-oem',
   standalone: true,
-  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule,LoaderComponent],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    ReactiveFormsModule,
+    AgGridAngular,
+    HttpClientModule,
+    LoaderComponent,
+  ],
   templateUrl: './list-oem.component.html',
-  styleUrl: './list-oem.component.css'
+  styleUrl: './list-oem.component.css',
 })
 export class ListOemComponent {
-
   selectedConfig!: string | null;
   lastSelectedNodeId: string | undefined;
   rowData: any = [];
-  public themeClass: string = "ag-theme-quartz";
+  public themeClass: string = 'ag-theme-quartz';
   public paginationPageSize = 10;
   public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
@@ -45,8 +51,7 @@ export class ListOemComponent {
       filter: 'agTextColumnFilter',
       flex: 1,
       sort: 'asc',
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Action',
@@ -59,16 +64,16 @@ export class ListOemComponent {
         onDeleteClick: this.delete.bind(this),
         selectedRowCount: () => this.selectedRowCount,
         lastSelectedNodeId: this.lastSelectedNodeId,
-      })
-    }
+      }),
+    },
   ];
   public defaultColDef: ColDef = {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
   gridOptions = {
-    rowHeight: 36
-  }; 
+    rowHeight: 36,
+  };
 
   /**
    * Constructor for ListOemComponent.
@@ -77,10 +82,12 @@ export class ListOemComponent {
    * @param service OemService instance for OEM operations.
    * @param _snakebar MatSnackBar instance for notifications.
    */
-  constructor(private router: Router, private authservice: AuthService,
-    private service: OemService, private _snakebar: MatSnackBar
-  ) { }
-
+  constructor(
+    private router: Router,
+    private authservice: AuthService,
+    private service: OemService,
+    private _snakebar: MatSnackBar
+  ) {}
 
   /**
    * Initializes the component and sets up initial state.
@@ -88,12 +95,18 @@ export class ListOemComponent {
    */
   ngOnInit(): void {
     this.showLoader = true;
-    this.service.getOemByList(this.authservice.selectedConfigVal).subscribe(res => {
-      this.rowData = res.data;
-      if (this.rowData == null || this.rowData == undefined || this.rowData.length > 0) {
-        this.showLoader = false;
-      }
-    })
+    this.service
+      .getOemByList(this.authservice.selectedConfigVal)
+      .subscribe((res) => {
+        this.rowData = res.data;
+        if (
+          this.rowData == null ||
+          this.rowData == undefined ||
+          this.rowData.length > 0
+        ) {
+          this.showLoader = false;
+        }
+      });
     this.configureName = this.authservice.selectedConfigVal;
     this.authservice.currentRoute = this.router.url.split('?')[0];
     if (this.configureName === 'RDKB') {
@@ -101,8 +114,46 @@ export class ListOemComponent {
     } else {
       this.categoryName = 'Video';
     }
+    this.adjustPaginationToScreenSize();
   }
 
+  /**
+   * Listens for window resize events to adjust the grid
+   */
+  @HostListener('window:resize')
+  onResize() {
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Adjusts pagination size based on screen dimensions
+   */
+  private adjustPaginationToScreenSize() {
+    const height = window.innerHeight;
+
+    if (height > 1200) {
+      this.paginationPageSize = 25;
+    } else if (height > 900) {
+      this.paginationPageSize = 20;
+    } else if (height > 700) {
+      this.paginationPageSize = 15;
+    } else {
+      this.paginationPageSize = 10;
+    }
+
+    // Update the pagination size selector options based on the current pagination size
+    this.paginationPageSizeSelector = [
+      this.paginationPageSize,
+      this.paginationPageSize * 2,
+      this.paginationPageSize * 5,
+    ];
+
+    // Apply changes to grid if it's already initialized
+    if (this.gridApi) {
+      // Use the correct method to update pagination page size
+      this.gridApi.setGridOption('paginationPageSize', this.paginationPageSize);
+    }
+  }
 
   /**
    * Event handler for when the grid is ready.
@@ -110,6 +161,7 @@ export class ListOemComponent {
    */
   onGridReady(params: GridReadyEvent<any>): void {
     this.gridApi = params.api;
+    this.adjustPaginationToScreenSize();
   }
 
   /**
@@ -117,30 +169,31 @@ export class ListOemComponent {
    * @param data The data of the record to delete.
    */
   delete(data: any): void {
-    if (confirm("Are you sure to delete ?")) {
+    if (confirm('Are you sure to delete ?')) {
       this.service.deleteOem(data.oemId).subscribe({
         next: (res) => {
-          this.rowData = this.rowData.filter((row: any) => row.oemId !== data.oemId);
+          this.rowData = this.rowData.filter(
+            (row: any) => row.oemId !== data.oemId
+          );
           this.rowData = [...this.rowData];
           this._snakebar.open(res.message, '', {
             duration: 1000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
+            verticalPosition: 'top',
+          });
         },
         error: (err) => {
           this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
-        }
-      })
+            verticalPosition: 'top',
+          });
+        },
+      });
     }
   }
-
 
   /**
    * Event handler for when a row is selected.
@@ -148,9 +201,8 @@ export class ListOemComponent {
    */
   onRowSelected(event: RowSelectedEvent): void {
     this.isRowSelected = event.node.isSelected();
-    this.rowIndex = event.rowIndex
+    this.rowIndex = event.rowIndex;
   }
-
 
   /**
    * Event handler for when the selection is changed.
@@ -159,24 +211,25 @@ export class ListOemComponent {
   onSelectionChanged(event: SelectionChangedEvent): void {
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
-    this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
+    this.lastSelectedNodeId =
+      selectedNodes.length > 0
+        ? selectedNodes[selectedNodes.length - 1].id
+        : '';
     this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
     if (this.gridApi) {
-      this.gridApi.refreshCells({ force: true })
+      this.gridApi.refreshCells({ force: true });
     }
   }
-
 
   /**
    * Edits an OEM record.
    * @param user The user/OEM to edit.
    */
   userEdit(user: any): void {
-    localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem('user', JSON.stringify(user));
     this.service.currentUrl = user.userGroupId;
     this.router.navigate(['configure/oem-edit']);
   }
-
 
   /**
    * Navigates to the OEM creation page.
@@ -186,16 +239,13 @@ export class ListOemComponent {
     this.router.navigate(['/configure/create-oem']);
   }
 
-  
   /**
    * Navigates back to the previous page.
    * No parameters.
    */
   goBack(): void {
     this.authservice.selectedConfigVal = 'RDKV';
-    this.authservice.showSelectedCategory = "Video";
-    this.router.navigate(["/configure"]);
+    this.authservice.showSelectedCategory = 'Video';
+    this.router.navigate(['/configure']);
   }
-
-
 }

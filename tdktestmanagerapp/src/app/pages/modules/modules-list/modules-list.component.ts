@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild ,HostListener} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
@@ -47,22 +47,27 @@ import { LoaderComponent } from '../../../utility/component/loader/loader.compon
 @Component({
   selector: 'app-modules-list',
   standalone: true,
-  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, LoaderComponent],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    ReactiveFormsModule,
+    AgGridAngular,
+    LoaderComponent,
+  ],
   templateUrl: './modules-list.component.html',
-  styleUrl: './modules-list.component.css'
+  styleUrl: './modules-list.component.css',
 })
 export class ModulesListComponent {
-
-  @ViewChild('moduleListModal', {static: false}) moduleListModal?:ElementRef;
-  public themeClass: string = "ag-theme-quartz";
+  @ViewChild('moduleListModal', { static: false }) moduleListModal?: ElementRef;
+  public themeClass: string = 'ag-theme-quartz';
   public paginationPageSize = 10;
   public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
   public gridApi!: GridApi;
-  selectedDeviceCategory : string = 'RDKV';
-  uploadXMLForm!:FormGroup;
+  selectedDeviceCategory: string = 'RDKV';
+  uploadXMLForm!: FormGroup;
   uploadFormSubmitted = false;
-  uploadFileName! :File | null;
+  uploadFileName!: File | null;
   configureName!: string;
   selectedConfig!: string | null;
   lastSelectedNodeId: string | undefined;
@@ -80,22 +85,19 @@ export class ModulesListComponent {
       field: 'moduleName',
       filter: 'agTextColumnFilter',
       sort: 'asc',
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Test Group',
       field: 'testGroup',
       filter: 'agTextColumnFilter',
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Execution TimeOut',
       field: 'executionTime',
       filter: 'agTextColumnFilter',
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Action',
@@ -106,25 +108,25 @@ export class ModulesListComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
-        onFunctionClick:this.createFunction.bind(this),
-        onModuleXMLClick :this.downloadModuleXML.bind(this),
+        onFunctionClick: this.createFunction.bind(this),
+        onModuleXMLClick: this.downloadModuleXML.bind(this),
         selectedRowCount: () => this.selectedRowCount,
         lastSelectedNodeId: this.lastSelectedNodeId,
-      })
-    }
+      }),
+    },
   ];
   public defaultColDef: ColDef = {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
   gridOptions = {
-    rowHeight: 36
+    rowHeight: 36,
   };
-  loggedInUser:any;
-  defaultCategory!:string;
-  preferedCategory!:string;
+  loggedInUser: any;
+  defaultCategory!: string;
+  preferedCategory!: string;
   showLoader = false;
-  
+
   /**
    * Constructor for ModulesListComponent.
    * @param router Router instance for navigation
@@ -135,13 +137,21 @@ export class ModulesListComponent {
    * @param moduleservice ModulesService instance for module operations
    * @param renderer Renderer2 instance for DOM manipulation
    */
-  constructor(private router: Router, private authservice: AuthService, private fb:FormBuilder,
-    private _snakebar: MatSnackBar, public dialog:MatDialog, private moduleservice:ModulesService,private renderer: Renderer2
+  constructor(
+    private router: Router,
+    private authservice: AuthService,
+    private fb: FormBuilder,
+    private _snakebar: MatSnackBar,
+    public dialog: MatDialog,
+    private moduleservice: ModulesService,
+    private renderer: Renderer2
   ) {
-    this.loggedInUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+    this.loggedInUser = JSON.parse(
+      localStorage.getItem('loggedinUser') || '{}'
+    );
     this.defaultCategory = this.loggedInUser.userCategory;
-    this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
-   }
+    this.preferedCategory = localStorage.getItem('preferedCategory') || '';
+  }
 
   /**
    * Initializes the component and sets up the initial values.
@@ -150,142 +160,192 @@ export class ModulesListComponent {
    */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
-    }else{
+    } else {
       this.categoryName = 'Video';
     }
-    this.findallbyCategory(); 
+    this.findallbyCategory();
     this.uploadXMLForm = this.fb.group({
-      uploadXml: [null, Validators.required]
-    })   
+      uploadXml: [null, Validators.required],
+    });
+    this.adjustPaginationToScreenSize();
   }
- 
+
+  /**
+   * Listens for window resize events to adjust the grid
+   */
+  @HostListener('window:resize')
+  onResize() {
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Adjusts pagination size based on screen dimensions
+   */
+  private adjustPaginationToScreenSize() {
+    const height = window.innerHeight;
+
+    if (height > 1200) {
+      this.paginationPageSize = 25;
+    } else if (height > 900) {
+      this.paginationPageSize = 20;
+    } else if (height > 700) {
+      this.paginationPageSize = 15;
+    } else {
+      this.paginationPageSize = 10;
+    }
+
+    // Update the pagination size selector options based on the current pagination size
+    this.paginationPageSizeSelector = [
+      this.paginationPageSize,
+      this.paginationPageSize * 2,
+      this.paginationPageSize * 5,
+    ];
+
+    // Apply changes to grid if it's already initialized
+    if (this.gridApi) {
+      // Use the correct method to update pagination page size
+      this.gridApi.setGridOption('paginationPageSize', this.paginationPageSize);
+    }
+  }
   /**
    * Finds all modules by category.
    * No parameters.
    * No return value.
    */
- findallbyCategory():void{
-  this.showLoader = true;
-  this.moduleservice.findallbyCategory(this.configureName).subscribe(res => {
-    this.rowData = res.data;
-    if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ||this.rowData.length == 0  ) {
-      this.showLoader = false;
-    }
-  })
-}
-  
+  findallbyCategory(): void {
+    this.showLoader = true;
+    this.moduleservice
+      .findallbyCategory(this.configureName)
+      .subscribe((res) => {
+        this.rowData = res.data;
+        if (
+          this.rowData == null ||
+          this.rowData == undefined ||
+          this.rowData.length > 0 ||
+          this.rowData.length == 0
+        ) {
+          this.showLoader = false;
+        }
+      });
+  }
+
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
-  onGridReady(params: GridReadyEvent<any>):void{
+  onGridReady(params: GridReadyEvent<any>): void {
     this.gridApi = params.api;
+    this.adjustPaginationToScreenSize();
   }
-  
+
   /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-  onRowSelected(event: RowSelectedEvent) :void{
+  onRowSelected(event: RowSelectedEvent): void {
     this.isRowSelected = event.node.isSelected();
-    this.rowIndex = event.rowIndex
+    this.rowIndex = event.rowIndex;
   }
-  
+
   /**
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent):void{
+  onSelectionChanged(event: SelectionChangedEvent): void {
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
-    this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
+    this.lastSelectedNodeId =
+      selectedNodes.length > 0
+        ? selectedNodes[selectedNodes.length - 1].id
+        : '';
     this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
     if (this.gridApi) {
-      this.gridApi.refreshCells({ force: true })
+      this.gridApi.refreshCells({ force: true });
     }
   }
-  
+
   /**
    * Navigates to the create module page.
    * No parameters.
    * No return value.
    */
-  createModule():void{
+  createModule(): void {
     this.router.navigate(['/configure/modules-create']);
   }
-  
+
   /**
    * Edits a module.
    * @param modules The module object to edit.
    * No return value.
    */
-  userEdit(modules: any):void{
-    localStorage.setItem('modules', JSON.stringify(modules))
+  userEdit(modules: any): void {
+    localStorage.setItem('modules', JSON.stringify(modules));
     this.router.navigate(['configure/modules-edit']);
   }
-  
+
   /**
    * Deletes a module record.
    * @param data The data of the record to delete.
    * No return value.
    */
-  delete(data: any) :void{
-    if (confirm("Are you sure to delete ?")) {
-      if(data){
+  delete(data: any): void {
+    if (confirm('Are you sure to delete ?')) {
+      if (data) {
         this.moduleservice.deleteModule(data.id).subscribe({
-          next:(res)=>{
-            this.rowData = this.rowData.filter((row: any) => row.id !== data.id);
+          next: (res) => {
+            this.rowData = this.rowData.filter(
+              (row: any) => row.id !== data.id
+            );
             this.rowData = [...this.rowData];
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
+              verticalPosition: 'top',
+            });
           },
-          error:(err)=>{
-            this._snakebar.open(err.message , '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-            })
-          }
-        })
+          error: (err) => {
+            this._snakebar.open(err.message, '', {
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            });
+          },
+        });
       }
     }
-
   }
-  
+
   /**
    * Downloads all modules as XML files based on the selected device category.
    * No parameters.
    * No return value.
    */
-  dowloadAllModule():void{
-    if(this.rowData.length > 0){
+  dowloadAllModule(): void {
+    if (this.rowData.length > 0) {
       this.moduleservice.downloadModuleByCategory(this.selectedDeviceCategory);
-    }else{
+    } else {
       this._snakebar.open('No data available for download', '', {
         duration: 2000,
         panelClass: ['err-msg'],
         horizontalPosition: 'end',
-        verticalPosition: 'top'
-      })
+        verticalPosition: 'top',
+      });
     }
   }
-   
+
   /**
    * Handles the file change event when a file is selected for upload.
    * @param event The file change event object.
    * No return value.
    */
-   onFileChange(event:any):void{
+  onFileChange(event: any): void {
     this.uploadFileName = event.target.files[0].name;
     const file: File = event.target.files[0];
-    if(file){
+    if (file) {
       if (file.type === 'text/xml') {
         this.uploadXMLForm.patchValue({ file: file });
         this.uploadFileName = file;
@@ -296,74 +356,75 @@ export class ModulesListComponent {
       }
     }
   }
-  
+
   /**
    * Submits the XML upload form.
    * No parameters.
    * No return value.
    */
-  uploadXMLSubmit():void{
+  uploadXMLSubmit(): void {
     this.uploadFormSubmitted = true;
-    if(this.uploadXMLForm.invalid){
-      return
-     }else{
-      if(this.uploadFileName){
+    if (this.uploadXMLForm.invalid) {
+      return;
+    } else {
+      if (this.uploadFileName) {
         this.uploadFileError = null;
         this.moduleservice.uploadXMLFile(this.uploadFileName).subscribe({
-          next:(res)=>{
+          next: (res) => {
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
-              this.close();
-              this.ngOnInit();
+              verticalPosition: 'top',
+            });
+            this.close();
+            this.ngOnInit();
           },
-          error:(err)=>{
-          
+          error: (err) => {
             this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-            })
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            });
             this.ngOnInit();
             this.close();
             this.uploadXMLForm.reset();
-          }
-        })
+          },
+        });
       }
-     }
+    }
   }
-  
+
   /**
    * Downloads a module as an XML file based on module name.
    * @param params The parameters containing the module name.
    * No return value.
    */
-  downloadModuleXML(params:any):void{
-    if(params.moduleName){
-      this.moduleservice.downloadXMLModule(params.moduleName).subscribe(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${params.moduleName}.xml`; 
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      });
+  downloadModuleXML(params: any): void {
+    if (params.moduleName) {
+      this.moduleservice
+        .downloadXMLModule(params.moduleName)
+        .subscribe((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${params.moduleName}.xml`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        });
     }
   }
-  
+
   /**
    * Creates a function and stores the user data in the local storage.
    * Navigates to the '/configure/function-list' route.
    * @param data The data to be stored in the local storage.
    * No return value.
    */
-  createFunction(data:any):void{
+  createFunction(data: any): void {
     localStorage.setItem('modules', JSON.stringify(data));
     this.router.navigate(['/configure/function-list']);
   }
@@ -373,31 +434,30 @@ export class ModulesListComponent {
    * @param data The data to be stored in the local storage.
    * No return value.
    */
-  createParameter(data:any):void{
+  createParameter(data: any): void {
     localStorage.setItem('user', JSON.stringify(data));
     this.router.navigate(['/configure/parameter-list']);
   }
-  
+
   /**
    * Closes the modal by clicking on the button.
    * No parameters.
    * No return value.
    */
-  close():void{
+  close(): void {
     (this.moduleListModal?.nativeElement as HTMLElement).style.display = 'none';
     this.renderer.removeStyle(document.body, 'overflow');
     this.renderer.removeStyle(document.body, 'padding-right');
   }
-  
+
   /**
    * Navigates back to the previous page.
    * No parameters.
    * No return value.
    */
-  goBack() :void{
+  goBack(): void {
     this.authservice.selectedConfigVal = 'RDKV';
-    this.authservice.showSelectedCategory = "Video";
-    this.router.navigate(["/configure"]);
+    this.authservice.showSelectedCategory = 'Video';
+    this.router.navigate(['/configure']);
   }
-
 }

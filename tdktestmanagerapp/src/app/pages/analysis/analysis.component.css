@@ -41,7 +41,8 @@ body,
 
 /* Card combine section */
 .card-combine {
-  height: 640px;
+  height: auto;
+  max-height: 800px;
 }
 
 /* Radio box styles */
@@ -237,9 +238,7 @@ body,
 ::ng-deep .height-comp {
   height: 375px !important;
 }
-::ng-deep .hegiht-body {
-  height: 515px !important;
-}
+
 /* Report section styles */
 .report-section {
   margin: 15px 5px 5px 15px;
@@ -320,4 +319,13 @@ body,
   top: 50%;
   z-index: 1;
   right: 50%;
+}
+
+/* Grid container styles */
+.grid-container {
+  width: 100%;
+  height: calc(100vh - 200px); /* Adjust based on viewport height */
+  min-height: 300px;
+  margin-top: 5px;
+  margin-bottom: 12px;
 }

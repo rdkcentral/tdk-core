@@ -273,22 +273,26 @@ body,
  * Close button positioning for modal.
  */
   .close-btn{
-    position: absolute;
-    display: inline-block;
-    bottom: 25px;
-    right: 12px;
+    position: relative;
+    margin-left: 10px;
   }
 
 /*
  * Confirm button positioning for modal.
  */
   .confirm-btn{
-    position: absolute;
-    display: inline-block;
-    bottom: 25px;
-    right: 105px;
+    position: relative;
+    margin-left: 10px;
   }
 
+
+/* Add clearfix utility class */
+.clearfix {
+  clear: both;
+  height: 15px;
+  width: 100%;
+  display: block;
+}
 /*
  * Loader row positioning for modal.
  */
@@ -298,3 +302,13 @@ body,
     z-index: 1;
     right: 50%;
   }
+
+  /* Grid container styles */
+    .grid-container {
+      width: 100%;
+      height: calc(100vh - 200px);
+      /* Adjust based on viewport height */
+      min-height: 300px;
+      margin-top: 5px;
+      margin-bottom: 12px;
+    }

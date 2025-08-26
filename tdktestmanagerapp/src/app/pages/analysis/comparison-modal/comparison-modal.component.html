@@ -14,7 +14,7 @@ limitations under the License.
 -->
 
 <!-- Main container for comparison modal content -->
-<div class="container">
+<div class="container-fluid">
     <!-- Row for radio box and form -->
     <div class="radiobox-row mt-1">
         <!-- Column for title -->
@@ -28,7 +28,7 @@ limitations under the License.
                 <!-- Row for filter form fields -->
                 <div class="row">
                     <!-- Column for from date and device type -->
-                    <div class="col">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
                         <!-- Row for from date input -->
                         <div class="mb-3 row-align">
                             <label for="testtype" class="col-md-4 col-form-label">From <span
@@ -61,7 +61,7 @@ limitations under the License.
                         </div>
                     </div>
                     <!-- Column for to date and execution type -->
-                    <div class="col">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
                         <!-- Row for to date input -->
                         <div class="mb-3 row-align">
                             <label for="testtype" class="col-md-4 col-form-label">To <span
@@ -95,7 +95,7 @@ limitations under the License.
                         </div>
                     </div>
                     <!-- Column for category, script, and testsuite -->
-                    <div class="col">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
                         <!-- Row for category select -->
                         <div class="mb-3 row-align">
                             <label for="testtype" class="col-md-4 col-form-label">Category<span
@@ -128,7 +128,7 @@ limitations under the License.
                         </div>
                     </div>
                     <!-- Column for filter executions button -->
-                    <div class="col-md-12 text-end">
+                    <div class="col-12 text-end mt-3">
                         <button type="submit" class="create-btn">Filter Executions</button>
                     </div>
                 </div>
@@ -141,9 +141,9 @@ limitations under the License.
         <!-- Table details for comparison executions (conditional) -->
         <div class="tableDeatils mt-2" *ngIf="showTable">
             <!-- Container for ag-grid table -->
-            <div style="width: 100%; height: 280px;" [class]="themeClass">
+            <div class="grid-container" [class]="themeClass">
                 <ag-grid-angular
-                style="width: 100%; height: 100%;"
+                style="width: 100%; height: 80%;"
                 [rowData]="rowData"
                 [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef"
@@ -162,7 +162,7 @@ limitations under the License.
             <app-loader></app-loader>
         </div>
         <!-- Column for confirm and close buttons -->
-        <div class="col-md-12 text-end">
+        <div class="col-md-12 text-end mt-4 mb-3">
             <button *ngIf="showTable" type="button" class="create-btn confirmC-btn" (click)="onConfirm()">Confirm</button>
             <button type="button" class="create-btn close-btn" (click)="close()" >Close</button>
         </div>

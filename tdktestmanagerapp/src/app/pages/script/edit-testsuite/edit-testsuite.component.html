@@ -43,7 +43,7 @@ limitations under the License.
                         <!-- Row for name input field -->
                         <div class="row mb-1">
                             <!-- Column for name label -->
-                            <div class="col-md-2">
+                            <div class="col-md-2 no-side-padding">
                                 <label for="suitename" class="col-form-label name-lable">Name<span
                                         style="color:red; margin-left: 0.75em;">*</span></label>
                             </div>
@@ -66,14 +66,14 @@ limitations under the License.
                         <!-- Row for description input field -->
                         <div class="row mb-1">
                             <!-- Column for description label -->
-                            <div class="col-md-2">
+                            <div class="col-md-2 no-side-padding">
                                 <label for="desc" class="col-form-label">Description<span
                                         style="color:red; margin-left: 0.75em;">*</span></label>
                             </div>
                             <!-- Column for description input and validation -->
                             <div class="col-md-10">
-                                <textarea rows="5" class="form-control" id="desc" formControlName="description"
-                                    autocomplete="off" placeholder="Enter description"></textarea>
+                                <input type="text" class="form-control" id="desc" formControlName="description"
+                                    autocomplete="off" placeholder="Enter description">
                                 <!-- <input type="text" class="form-control" id="suitename" formControlName="testSuiteName" autocomplete="off" placeholder="Enter testsuite name"> -->
                                 <div *ngIf="testSuiteFormSubmitted && testSuiteEditFrom.controls['testSuiteName']?.errors"
                                     class="text-danger">
@@ -124,8 +124,7 @@ limitations under the License.
                                     <span class="drag-nodata">No data found...</span>
                                 </div>
                                 <!-- Loader for scripts loading -->
-                                <div *ngIf="isLoadingScripts" class="nodata d-flex justify-content-center align-items-center"
-                                    style="min-height: 100px;">
+                                <div *ngIf="isLoadingScripts" class="loader-container">
                                     <app-loader></app-loader>
                                 </div>
 
@@ -139,17 +138,23 @@ limitations under the License.
                                         </li>
                                     </ul>
                                 </div>
+                            </div>
                                 <!-- Buttons to move scripts to right/left -->
                                 <div class="move-btns">
-                                    <button type="button" (click)="moveToRight()" class="sort-button arrow-btn">
-                                        <i class="bi bi-box-arrow-right icon-move"></i>
+                                    <button type="button" (click)="moveToRight()" class="sort-button arrow-btn" 
+                                           [disabled]="selectedLeft.size === 0"
+                                            [matTooltip]="selectedLeft.size === 0 ? 'Select script/s from left to move' : 'Move selected script/s to Right'"
+                                        >
+                                        <i class="bi bi-arrow-right icon-move thick-arrow"></i>
                                     </button>
-                                    <button type="button" (click)="moveToLeft()" class="sort-button arrow-btn">
-                                        <i class="bi bi-box-arrow-left icon-move"></i>
+                                    <button type="button" (click)="moveToLeft()" class="sort-button arrow-btn"  [disabled]="selectedRight.size === 0"
+                                            [matTooltip]="selectedRight.size === 0 ? 'Select script/s from the right to move' : 'Move selected script/s to Left'"
+                                       >
+                                        <i class="bi bi-arrow-left icon-move thick-arrow"></i>
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                       
                         <!-- Right column for selected scripts list -->
                         <div class="col right-sec">
                             <!-- List box for selected scripts -->
@@ -164,16 +169,22 @@ limitations under the License.
                                         </li>
                                     </ul>
                                 </div>
+                            </div>
                                 <!-- Buttons to move scripts up/down -->
                                 <div class="move-ritebtns">
-                                    <button type="button" (click)="moveToUp()" class="sort-button arrow-btn">
-                                        <i class="bi bi-box-arrow-up icon-move"></i>
+                                   <button type="button" (click)="moveToUp()" class="sort-button arrow-btn" 
+                                     [disabled]="selectedRight.size === 0"
+                                            [matTooltip]="selectedRight.size === 0 ? 'Select the script and move it upwards' : 'Move selected script/s up'"
+                                       >
+                                        <i class="bi bi-arrow-up icon-move thick-arrow"></i>
                                     </button>
-                                    <button type="button" (click)="moveToDown()" class="sort-button arrow-btn">
-                                        <i class="bi bi-box-arrow-down icon-move"></i>
+                                    <button type="button" (click)="moveToDown()" class="sort-button arrow-btn"  [disabled]="selectedRight.size === 0"
+                                            [matTooltip]="selectedRight.size === 0 ? 'Select the script and move downwards' : 'Move selected script/s down'"
+                                       >
+                                        <i class="bi bi-arrow-down icon-move thick-arrow"></i>
                                     </button>
                                 </div>
-                            </div>
+                           
 
                             <!-- Error message for empty selected scripts -->
                             <div

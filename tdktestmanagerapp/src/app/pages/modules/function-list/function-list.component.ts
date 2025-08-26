@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component ,HostListener} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
@@ -48,12 +48,19 @@ import { LoaderComponent } from '../../../utility/component/loader/loader.compon
 @Component({
   selector: 'app-function-list',
   standalone: true,
-  imports: [ MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule,LoaderComponent],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    ReactiveFormsModule,
+    AgGridAngular,
+    HttpClientModule,
+    LoaderComponent,
+  ],
   templateUrl: './function-list.component.html',
-  styleUrl: './function-list.component.css'
+  styleUrl: './function-list.component.css',
 })
 export class FunctionListComponent {
-  public themeClass: string = "ag-theme-quartz";
+  public themeClass: string = 'ag-theme-quartz';
   public paginationPageSize = 10;
   public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
@@ -64,8 +71,7 @@ export class FunctionListComponent {
       field: 'functionName',
       filter: 'agTextColumnFilter',
       sort: 'asc',
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Action',
@@ -76,18 +82,18 @@ export class FunctionListComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
-        onParameterClick:this.createParameter.bind(this),
+        onParameterClick: this.createParameter.bind(this),
         selectedRowCount: () => this.selectedRowCount,
         lastSelectedNodeId: this.lastSelectedNodeId,
-      })
-    }
+      }),
+    },
   ];
   public defaultColDef: ColDef = {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
   gridOptions = {
-    rowHeight: 36
+    rowHeight: 36,
   };
   configureName!: string;
   selectedConfig!: string | null;
@@ -98,7 +104,7 @@ export class FunctionListComponent {
   isCheckboxSelected: boolean = false;
   rowIndex!: number | null;
   selectedRowCount = 0;
-  dynamicModuleName!:string;
+  dynamicModuleName!: string;
   categoryName: any;
   showLoader = false;
 
@@ -110,9 +116,13 @@ export class FunctionListComponent {
    * @param moduleservice ModulesService instance for module operations
    * @param dialog MatDialog instance for dialogs
    */
-  constructor(private router: Router, private authservice: AuthService, 
-    private _snakebar: MatSnackBar,private moduleservice:ModulesService, public dialog:MatDialog,
-  ) { }
+  constructor(
+    private router: Router,
+    private authservice: AuthService,
+    private _snakebar: MatSnackBar,
+    private moduleservice: ModulesService,
+    public dialog: MatDialog
+  ) {}
 
   /**
    * Initializes the component.
@@ -123,129 +133,175 @@ export class FunctionListComponent {
     let data = JSON.parse(localStorage.getItem('modules') || '{}');
     this.dynamicModuleName = data.moduleName;
     this.configureName = this.authservice.selectedConfigVal;
-    if(this.configureName === 'RDKB'){
+    if (this.configureName === 'RDKB') {
       this.categoryName = 'Broadband';
-    }else{
+    } else {
       this.categoryName = 'Video';
     }
     this.functionListByModule();
+    this.adjustPaginationToScreenSize();
   }
-  
+
+  /**
+   * Listens for window resize events to adjust the grid
+   */
+  @HostListener('window:resize')
+  onResize() {
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Adjusts pagination size based on screen dimensions
+   */
+  private adjustPaginationToScreenSize() {
+    const height = window.innerHeight;
+
+    if (height > 1200) {
+      this.paginationPageSize = 25;
+    } else if (height > 900) {
+      this.paginationPageSize = 20;
+    } else if (height > 700) {
+      this.paginationPageSize = 15;
+    } else {
+      this.paginationPageSize = 10;
+    }
+
+    // Update the pagination size selector options based on the current pagination size
+    this.paginationPageSizeSelector = [
+      this.paginationPageSize,
+      this.paginationPageSize * 2,
+      this.paginationPageSize * 5,
+    ];
+
+    // Apply changes to grid if it's already initialized
+    if (this.gridApi) {
+      // Use the correct method to update pagination page size
+      this.gridApi.setGridOption('paginationPageSize', this.paginationPageSize);
+    }
+  }
   /**
    * Gets the list of functions by module name.
    * No parameters.
    * No return value.
    */
-  functionListByModule():void{
+  functionListByModule(): void {
     this.showLoader = true;
-    this.moduleservice.functionList(this.dynamicModuleName).subscribe( res=>{
-     this.rowData = res.data;
-      if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
+    this.moduleservice.functionList(this.dynamicModuleName).subscribe((res) => {
+      this.rowData = res.data;
+      if (
+        this.rowData == null ||
+        this.rowData == undefined ||
+        this.rowData.length > 0
+      ) {
         this.showLoader = false;
       }
-    })
+    });
   }
-  
+
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
+    this.adjustPaginationToScreenSize();
   }
-  
+
   /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-  onRowSelected(event: RowSelectedEvent):void{
+  onRowSelected(event: RowSelectedEvent): void {
     this.isRowSelected = event.node.isSelected();
-    this.rowIndex = event.rowIndex
+    this.rowIndex = event.rowIndex;
   }
-  
+
   /**
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent) :void{
+  onSelectionChanged(event: SelectionChangedEvent): void {
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
-    this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
+    this.lastSelectedNodeId =
+      selectedNodes.length > 0
+        ? selectedNodes[selectedNodes.length - 1].id
+        : '';
     this.selectedRow = this.isRowSelected ? selectedNodes[0].data : null;
     if (this.gridApi) {
-      this.gridApi.refreshCells({ force: true })
+      this.gridApi.refreshCells({ force: true });
     }
   }
-  
+
   /**
    * Navigates to the create function page.
    * No parameters.
    * No return value.
    */
-  goTocreateFunctionPage() :void{
+  goTocreateFunctionPage(): void {
     this.router.navigate(['/configure/function-create']);
   }
-  
+
   /**
    * Edits a function.
    * @param functions The function object to edit.
    * No return value.
    */
-  userEdit(functions: any):void{
+  userEdit(functions: any): void {
     localStorage.setItem('functions', JSON.stringify(functions));
     this.router.navigate(['configure/function-edit']);
   }
-  
+
   /**
    * Deletes a function record.
    * @param data The data of the record to delete.
    * No return value.
    */
-  delete(data: any):void{
-    if (confirm("Are you sure to delete ?")) {
-      if(data){
+  delete(data: any): void {
+    if (confirm('Are you sure to delete ?')) {
+      if (data) {
         this.moduleservice.deleteFunction(data.id).subscribe({
-          next:(res)=>{
-            this.rowData = this.rowData.filter((row: any) => row.id !== data.id);
+          next: (res) => {
+            this.rowData = this.rowData.filter(
+              (row: any) => row.id !== data.id
+            );
             this.rowData = [...this.rowData];
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
-            
+              verticalPosition: 'top',
+            });
           },
-          error:(err)=>{
+          error: (err) => {
             this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-            })
-          }
-        })
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            });
+          },
+        });
       }
     }
   }
-  
+
   /**
    * Navigates to parameter list page.
    * @param data The function data to pass to the parameter list.
    * No return value.
    */
-  createParameter(data:any):void{
+  createParameter(data: any): void {
     localStorage.setItem('function', JSON.stringify(data));
     this.router.navigate(['/configure/parameter-list']);
   }
-  
+
   /**
    * Navigates back to the previous page.
    * No parameters.
    * No return value.
    */
-  goBack() :void{
-    this.router.navigate(["/configure/modules-list"]);
+  goBack(): void {
+    this.router.navigate(['/configure/modules-list']);
   }
-
 }

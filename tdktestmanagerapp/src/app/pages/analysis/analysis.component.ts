@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component , HostListener} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -51,7 +51,14 @@ import { LoaderComponent } from '../../utility/component/loader/loader.component
 @Component({
   selector: 'app-analysis',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule,AgGridAngular,LoaderComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    AgGridAngular,
+    LoaderComponent,
+  ],
   templateUrl: './analysis.component.html',
   styleUrl: './analysis.component.css',
 })
@@ -69,7 +76,7 @@ export class AnalysisComponent {
   combinedForm!: FormGroup;
   selectExecutionName!: string;
   finalBaseName!: string;
-  compNamesArr:any;
+  compNamesArr: any;
   selectComparisonNames: string = '';
   baseCombinedName!: string;
   CombinedExecutions: string = '';
@@ -115,7 +122,7 @@ export class AnalysisComponent {
       headerCheckboxSelection: false,
       checkboxSelection: true,
       headerCheckboxSelectionFilteredOnly: false,
-      width:40,
+      width: 40,
       resizable: false,
     },
     {
@@ -143,17 +150,17 @@ export class AnalysisComponent {
       field: 'scriptTestSuite',
       filter: 'agTextColumnFilter',
       sortable: true,
-      flex:2,
+      flex: 2,
       tooltipField: 'scriptTestSuite',
       resizable: false,
-      cellRenderer:(params:any)=>{
+      cellRenderer: (params: any) => {
         const text = params.value || '';
-        if(text.length > 30){
-          return `${text.slice(0,30)}...`;
+        if (text.length > 30) {
+          return `${text.slice(0, 30)}...`;
         }
         return text;
       },
-      cellClass: (params:any)=>{
+      cellClass: (params: any) => {
         return params.value.length > 30 ? 'text-ellipsis' : 'text-two-line';
       },
     },
@@ -163,11 +170,11 @@ export class AnalysisComponent {
       filter: 'agTextColumnFilter',
       sortable: true,
       tooltipField: 'device',
-      width:150,
+      width: 150,
       cellClass: 'selectable',
-      cellStyle:{'white-space': 'normal',' word-break': 'break-word'},
-      wrapText:true,
-      resizable: false
+      cellStyle: { 'white-space': 'normal', ' word-break': 'break-word' },
+      wrapText: true,
+      resizable: false,
     },
     {
       headerName: 'Date Of Execution',
@@ -176,25 +183,25 @@ export class AnalysisComponent {
       filterParams: this.filterParams,
       sortable: true,
       cellClass: 'selectable',
-      width:190,
+      width: 190,
       resizable: false,
-      cellRenderer:(data:any)=>{
-        return data.value ? (new Date(data.value)).toLocaleString() : ''; 
-      }
+      cellRenderer: (data: any) => {
+        return data.value ? new Date(data.value).toLocaleString() : '';
+      },
     },
     {
       headerName: 'Result',
       field: 'status',
       filter: 'agTextColumnFilter',
-      cellStyle: { textAlign: "center" },
+      cellStyle: { textAlign: 'center' },
       sortable: true,
       resizable: false,
-     flex:1,
+      flex: 1,
       cellClass: 'selectable',
-      cellRenderer:(params:any)=>{
+      cellRenderer: (params: any) => {
         const status = params.value;
         let iconHtml = '';
-        switch(status){
+        switch (status) {
           case 'SUCCESS':
             iconHtml = `<span style="color:#5BC866; font-size:0.66rem; font-weight:500;" title="Success">SUCCESS</span>`;
             break;
@@ -214,12 +221,11 @@ export class AnalysisComponent {
             return;
         }
         return iconHtml;
-      }
+      },
     },
- 
   ];
-  defaultColDef ={
-    sortable:true,
+  defaultColDef = {
+    sortable: true,
     headerClass: 'header-center',
   };
   selectedRowName: string | null = null;
@@ -231,7 +237,7 @@ export class AnalysisComponent {
   selectionErrorMessage: string = '';
   showReportBtn = false;
   showLoader = false;
-isDownloading: boolean = false;
+  isDownloading: boolean = false;
   /**
    * Constructor for AnalysisComponent
    * @param authservice - AuthService instance
@@ -248,8 +254,8 @@ isDownloading: boolean = false;
     public baseDialog: MatDialog,
     public comparisonDialog: MatDialog,
     private deviceTypeService: DevicetypeService,
-    private anlysisService:AnalysisService,
-    private _snakebar: MatSnackBar,
+    private anlysisService: AnalysisService,
+    private _snakebar: MatSnackBar
   ) {
     this.loggedinUser = JSON.parse(
       localStorage.getItem('loggedinUser') || '{}'
@@ -264,37 +270,77 @@ isDownloading: boolean = false;
    */
   ngOnInit(): void {
     this.selectedDfaultCategory = this.preferedCategory
-        ? this.preferedCategory
-        : this.userCategory;
+      ? this.preferedCategory
+      : this.userCategory;
 
     this.reportForm = this.fb.group({
-        baseName: ['', Validators.required],
-        comparisonName: ['', [Validators.required, this.validateBaseNotInComparison.bind(this)]],
+      baseName: ['', Validators.required],
+      comparisonName: [
+        '',
+        [Validators.required, this.validateBaseNotInComparison.bind(this)],
+      ],
     });
     this.combinedForm = this.fb.group(
-        {
-            fromDate: ['', Validators.required],
-            toDate: ['', Validators.required],
-            deviceType: ['', Validators.required],
-            executionType: ['', Validators.required],
-            category: [{ value: this.selectedDfaultCategory, disabled: true }],
-            scriptSingle: [''], // No validators
-            testSuiteSingke: [''], // No validators
-        },
-        {
-            validators: this.dateRangeValidator,
-        }
+      {
+        fromDate: ['', Validators.required],
+        toDate: ['', Validators.required],
+        deviceType: ['', Validators.required],
+        executionType: ['', Validators.required],
+        category: [{ value: this.selectedDfaultCategory, disabled: true }],
+        scriptSingle: [''], // No validators
+        testSuiteSingke: [''], // No validators
+      },
+      {
+        validators: this.dateRangeValidator,
+      }
     );
     this.getDeviceByCategory();
+    this.adjustPaginationToScreenSize();
     localStorage.setItem('viewName', 'scripts');
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Adjusts pagination size based on screen dimensions
+   */
+  private adjustPaginationToScreenSize() {
+    const height = window.innerHeight;
+
+    if (height > 1200) {
+      this.pageSize = 25;
+    } else if (height > 900) {
+      this.pageSize = 20;
+    } else if (height > 700) {
+      this.pageSize = 15;
+    } else {
+      this.pageSize = 10;
+    }
+
+    // Update the pagination size selector options based on the current pagination size
+    this.pageSizeSelector = [
+      this.pageSize,
+      this.pageSize * 2,
+      this.pageSize * 5,
+    ];
+
+    // Apply changes to grid if it's already initialized
+    if (this.gridApi) {
+      // Use the correct method to update pagination page size
+      this.gridApi.setGridOption('paginationPageSize', this.pageSize);
+    }
   }
 
   /**
    * Event handler for when the grid is ready.
    * @param params - The GridReadyEvent object containing the grid API.
    */
-  onGridReady(params: GridReadyEvent):void {
+  onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
+    this.adjustPaginationToScreenSize();
   }
 
   /**
@@ -325,7 +371,7 @@ isDownloading: boolean = false;
    * Handles category change event
    * @param event - Change event
    */
-  categoryChange(event:any): void {
+  categoryChange(event: any): void {
     let val = event.target.value;
     if (val === 'RDKB') {
       this.categoryName = 'Broadband';
@@ -351,7 +397,6 @@ isDownloading: boolean = false;
    * @param event - Change event
    */
   resultChange(event: any): void {}
-
 
   /**
    * Handles device type change event
@@ -380,7 +425,7 @@ isDownloading: boolean = false;
     // Update visibility flags
     this.showScript = this.executionTypeName === 'SINGLESCRIPT';
     this.testSuiteShow = this.executionTypeName === 'TESTSUITE';
-}
+  }
 
   /**
    * Handles tab click event to switch between reports
@@ -399,8 +444,10 @@ isDownloading: boolean = false;
    * @param control - AbstractControl for comparisonName
    * @returns Validation error object or null
    */
-  validateBaseNotInComparison(control: AbstractControl): ValidationErrors | null {
-    const comparisonIds = this.compNamesArr?.map((item:any) => item.id) || [];
+  validateBaseNotInComparison(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const comparisonIds = this.compNamesArr?.map((item: any) => item.id) || [];
 
     if (this.finalBaseName && comparisonIds.includes(this.finalBaseName)) {
       return { baseFoundInComparison: true };
@@ -419,15 +466,18 @@ isDownloading: boolean = false;
     this.selectComparisonNames = inputValue;
 
     // Split the input value by commas, trim spaces, and filter out empty values
-    const newNames = inputValue.split(',').map(name => name.trim()).filter(name => name);
+    const newNames = inputValue
+      .split(',')
+      .map((name) => name.trim())
+      .filter((name) => name);
 
     // Update the comparison names array
-    this.compNamesArr = newNames.map(name => ({ id: null, name })); // Map names to objects with id as null
+    this.compNamesArr = newNames.map((name) => ({ id: null, name })); // Map names to objects with id as null
 
     // Update the form control value
     this.reportForm.patchValue({ comparisonName: this.selectComparisonNames });
     this.reportForm.get('comparisonName')?.updateValueAndValidity();
-}
+  }
   /**
    * Handles comparison report form submission and triggers report generation
    */
@@ -436,67 +486,81 @@ isDownloading: boolean = false;
 
     // Validate baseName and comparisonName fields
     if (!this.reportForm.get('baseName')?.value) {
-        this._snakebar.open('Base Execution Name is required.', '', {
-            duration: 3000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-        });
-        return;
+      this._snakebar.open('Base Execution Name is required.', '', {
+        duration: 3000,
+        panelClass: ['err-msg'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+      });
+      return;
     }
 
     if (!this.reportForm.get('comparisonName')?.value) {
-        this._snakebar.open('Comparison Execution Names are required.', '', {
-            duration: 3000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-        });
-        return;
+      this._snakebar.open('Comparison Execution Names are required.', '', {
+        duration: 3000,
+        panelClass: ['err-msg'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+      });
+      return;
     }
 
     // Ensure compNamesArr is not empty
     if (!this.compNamesArr || this.compNamesArr.length === 0) {
-        this._snakebar.open('Please provide valid Comparison Execution Names.', '', {
-            duration: 3000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-        });
-        return;
+      this._snakebar.open(
+        'Please provide valid Comparison Execution Names.',
+        '',
+        {
+          duration: 3000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+        }
+      );
+      return;
     }
 
     const baseExecutionName = this.reportForm.get('baseName')?.value; // Base execution name
-    const comparisonExecutions = this.compNamesArr.map((item: any) => item.name); // Use names only
+    const comparisonExecutions = this.compNamesArr.map(
+      (item: any) => item.name
+    ); // Use names only
 
     this.isDownloading = true; // Set loading state to true
 
     // Use names for both baseExecution and comparisonExecutions
-    this.anlysisService.comparisonExcelByNames(baseExecutionName, comparisonExecutions).subscribe({
+    this.anlysisService
+      .comparisonExcelByNames(baseExecutionName, comparisonExecutions)
+      .subscribe({
         next: (blob) => {
-            const xmlBlob = new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const url = window.URL.createObjectURL(xmlBlob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${baseExecutionName}_comparison_report.xlsx`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-            this.isDownloading = false; // Set loading state to false
+          const xmlBlob = new Blob([blob], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+          const url = window.URL.createObjectURL(xmlBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${baseExecutionName}_comparison_report.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          this.isDownloading = false; // Set loading state to false
         },
         error: (err) => {
-            console.error('Error generating report:', err);
-            this._snakebar.open('Failed to generate report. Please try again.', '', {
-                duration: 3000,
-                panelClass: ['err-msg'],
-                horizontalPosition: 'end',
-                verticalPosition: 'top'
-            });
-            this.isDownloading = false; // Set loading state to false
+          console.error('Error generating report:', err);
+          this._snakebar.open(
+            'Failed to generate report. Please try again.',
+            '',
+            {
+              duration: 3000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            }
+          );
+          this.isDownloading = false; // Set loading state to false
         },
-    });
-}
+      });
+  }
   /**
    * Opens the base execution modal dialog
    */
@@ -507,16 +571,16 @@ isDownloading: boolean = false;
       maxWidth: '100vw',
       panelClass: 'report-basemodal',
       data: {
-        tabname:this.tabName,
-        category:this.selectedDfaultCategory
-      }
+        tabname: this.tabName,
+        category: this.selectedDfaultCategory,
+      },
     });
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         this.finalBaseName = res.executionId;
         this.selectExecutionName = res.executionName;
         this.reportForm.patchValue({
-          baseName: this.selectExecutionName
+          baseName: this.selectExecutionName,
         });
       }
     });
@@ -530,19 +594,22 @@ isDownloading: boolean = false;
       height: '97vh',
       maxWidth: '100vw',
       panelClass: 'report-modalbox',
-      data:  {
-        tabname:this.tabName,
-        category:this.selectedDfaultCategory
-      }
+      data: {
+        tabname: this.tabName,
+        category: this.selectedDfaultCategory,
+      },
     });
     dialogRef.afterClosed().subscribe((res: any[]) => {
       if (res) {
-        const selectedNames = res.map((row:any)=>row.executionName);
-        const selectExecutionId = res.map((row:any)=>row.executionId);
-        this.compNamesArr = selectExecutionId.map((id, index) => ({ id, name: selectedNames[index] }));
+        const selectedNames = res.map((row: any) => row.executionName);
+        const selectExecutionId = res.map((row: any) => row.executionId);
+        this.compNamesArr = selectExecutionId.map((id, index) => ({
+          id,
+          name: selectedNames[index],
+        }));
         this.selectComparisonNames = selectedNames.join(', ');
         this.reportForm.patchValue({
-          comparisonName: this.selectComparisonNames
+          comparisonName: this.selectComparisonNames,
         });
         this.reportForm.get('comparisonName')?.updateValueAndValidity();
       }
@@ -555,38 +622,45 @@ isDownloading: boolean = false;
   onCombinedSubmit(): void {
     this.combinedSubmitted = true;
     if (this.combinedForm.invalid) {
-        return;
+      return;
     }
 
     const locaFromDateTime = this.combinedForm.get('fromDate')?.value;
     const locaToDateTime = this.combinedForm.get('toDate')?.value;
 
     if (locaFromDateTime) {
-        const utcMoment = moment.tz(locaFromDateTime, moment.tz.guess()).startOf('day');
-        this.combinedFromUTC = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
-      }
-      if (locaToDateTime) {
-        const utcMoment = moment.tz(locaToDateTime, moment.tz.guess()).endOf('day');
-        this.combinedToUTC = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
+      const utcMoment = moment
+        .tz(locaFromDateTime, moment.tz.guess())
+        .startOf('day');
+      this.combinedFromUTC = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
+    }
+    if (locaToDateTime) {
+      const utcMoment = moment
+        .tz(locaToDateTime, moment.tz.guess())
+        .endOf('day');
+      this.combinedToUTC = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
     }
 
     const obj = {
-        startDate: this.combinedFromUTC,
-        endDate: this.combinedToUTC,
-        executionType: this.executionTypeName,
-        scriptTestSuite: this.executionTypeName === 'SINGLESCRIPT' ? this.combinedForm.get('scriptSingle')?.value : '',
-        deviceType: this.deviceName,
-        category: this.selectedDfaultCategory,
+      startDate: this.combinedFromUTC,
+      endDate: this.combinedToUTC,
+      executionType: this.executionTypeName,
+      scriptTestSuite:
+        this.executionTypeName === 'SINGLESCRIPT'
+          ? this.combinedForm.get('scriptSingle')?.value
+          : '',
+      deviceType: this.deviceName,
+      category: this.selectedDfaultCategory,
     };
 
     this.showLoader = true;
     this.anlysisService.getcombinedByFilter(obj).subscribe((res) => {
-        const response = res.data;
-        this.rowData = response || [];
-        this.showTable = true;
-        this.showLoader = false;
+      const response = res.data;
+      this.rowData = response || [];
+      this.showTable = true;
+      this.showLoader = false;
     });
-}
+  }
 
   /**
    * Event handler for selection change in ag-grid
@@ -603,35 +677,46 @@ isDownloading: boolean = false;
 
     // Check if the base execution ID is in the selected executions
     const baseExecutionId = this.finalBaseName;
-    const selectedExecutionIds = this.selectedExecutions.map(execution => execution.executionId);
+    const selectedExecutionIds = this.selectedExecutions.map(
+      (execution) => execution.executionId
+    );
 
     if (baseExecutionId && selectedExecutionIds.includes(baseExecutionId)) {
-        this.selectionErrorMessage = 'Base Execution ID cannot be selected in the Execution IDs list.';
-        this._snakebar.open(this.selectionErrorMessage, '', {
-            duration: 3000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-        });
+      this.selectionErrorMessage =
+        'Base Execution ID cannot be selected in the Execution IDs list.';
+      this._snakebar.open(this.selectionErrorMessage, '', {
+        duration: 3000,
+        panelClass: ['err-msg'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+      });
 
-        // Remove the base execution ID from the selection
-        this.selectedExecutions = this.selectedExecutions.filter(execution => execution.executionId !== baseExecutionId);
-        this.gridApi.deselectAll();
-        this.selectedExecutions.forEach(execution => {
-            this.gridApi.getRowNode(execution.executionId)?.setSelected(true);
-        });
+      // Remove the base execution ID from the selection
+      this.selectedExecutions = this.selectedExecutions.filter(
+        (execution) => execution.executionId !== baseExecutionId
+      );
+      this.gridApi.deselectAll();
+      this.selectedExecutions.forEach((execution) => {
+        this.gridApi.getRowNode(execution.executionId)?.setSelected(true);
+      });
     }
 
     // Validate the number of selected executions
-    if (this.selectedExecutions.length < 2 || this.selectedExecutions.length > 10) {
-        this.selectionErrorMessage = 'Number of executions selected must be between 2 and 10.';
-        this.showReportBtn = false;
-        this.selectedExecutionNames = [];
-        return;
+    if (
+      this.selectedExecutions.length < 2 ||
+      this.selectedExecutions.length > 10
+    ) {
+      this.selectionErrorMessage =
+        'Number of executions selected must be between 2 and 10.';
+      this.showReportBtn = false;
+      this.selectedExecutionNames = [];
+      return;
     }
 
     this.showReportBtn = true;
-    this.selectedExecutionNames = this.selectedExecutions.map(execution => execution.executionId);
+    this.selectedExecutionNames = this.selectedExecutions.map(
+      (execution) => execution.executionId
+    );
   }
 
   /**
@@ -640,31 +725,32 @@ isDownloading: boolean = false;
   generateReport(): void {
     if (this.selectedExecutionNames) {
       this.isDownloading = true; // Set loading state to true
-      this.anlysisService.combinnedReportGenerate(this.selectedExecutionNames).subscribe({
-        next: (blob) => {
-          const xmlBlob = new Blob([blob], { type: 'application/xml' });
-          const url = window.URL.createObjectURL(xmlBlob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `CombinedResultExecution.xlsx`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-          this.isDownloading = false; // Set loading state to false
-        },
-        error: (err) => {
-          const errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-          });
-          this.isDownloading = false; // Set loading state to false
-        },
-      });
+      this.anlysisService
+        .combinnedReportGenerate(this.selectedExecutionNames)
+        .subscribe({
+          next: (blob) => {
+            const xmlBlob = new Blob([blob], { type: 'application/xml' });
+            const url = window.URL.createObjectURL(xmlBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CombinedResultExecution.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            this.isDownloading = false; // Set loading state to false
+          },
+          error: (err) => {
+            const errmsg = JSON.parse(err.error);
+            this._snakebar.open(errmsg, '', {
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            });
+            this.isDownloading = false; // Set loading state to false
+          },
+        });
     }
-
   }
 }

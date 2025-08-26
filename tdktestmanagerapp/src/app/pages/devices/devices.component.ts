@@ -19,7 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef,Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef,Renderer2, ViewChild, HostListener} from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef,GridApi,GridReadyEvent,IMultiFilterParams } from 'ag-grid-community';
 import '../../../../node_modules/ag-grid-community/styles/ag-grid.css';
@@ -37,32 +37,39 @@ import { LoaderComponent } from '../../utility/component/loader/loader.component
 @Component({
   selector: 'app-devices',
   standalone: true,
-  imports: [CommonModule,AgGridAngular,FormsModule, ReactiveFormsModule, MaterialModule,LoaderComponent],
+  imports: [
+    CommonModule,
+    AgGridAngular,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    LoaderComponent,
+  ],
   templateUrl: './devices.component.html',
-  styleUrl: './devices.component.css'
+  styleUrl: './devices.component.css',
 })
 export class DevicesComponent {
-
-  @ViewChild('staticBackdrop', {static: false}) staticBackdrop?:ElementRef;
+  @ViewChild('staticBackdrop', { static: false }) staticBackdrop?: ElementRef;
   rowData: any = [];
-  public themeClass: string = "ag-theme-quartz";
+  public themeClass: string = 'ag-theme-quartz';
   public paginationPageSize = 10;
   public paginationPageSizeSelector: number[] | boolean = [10, 20, 50];
   configureName!: string;
   selectedRowCount = 0;
-  selectedDeviceCategory : string = 'RDKV';
-  uploadXMLForm!:FormGroup;
+  selectedDeviceCategory: string = 'RDKV';
+  uploadXMLForm!: FormGroup;
   uploadFormSubmitted = false;
-  uploadFileName! :File | null ;
+  uploadFileName!: File | null;
   categoryName!: string | null;
   uploadFileError: string | null = null;
-  loggedinUser:any;
-  preferedCategory!:string;
-  userCategory!:string;
+  loggedinUser: any;
+  preferedCategory!: string;
+  userCategory!: string;
   showLoader = false;
-  uploadXml! :File | null ;
+  uploadXml!: File | null;
 
-  public gridApi!: GridApi;  public columnDefs: ColDef[] = [
+  public gridApi!: GridApi;
+  public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
       field: 'deviceName',
@@ -75,16 +82,14 @@ export class DevicesComponent {
       field: 'deviceIp',
       filter: 'agTextColumnFilter',
       flex: 1,
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Device Type',
       field: 'deviceTypeName',
       filter: 'agTextColumnFilter',
       flex: 1,
-      filterParams: {
-      } as IMultiFilterParams,
+      filterParams: {} as IMultiFilterParams,
     },
     {
       headerName: 'Action',
@@ -95,10 +100,10 @@ export class DevicesComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
-        onDownloadClick:this.downloadXML.bind(this),
+        onDownloadClick: this.downloadXML.bind(this),
         selectedRowCount: () => this.selectedRowCount,
-      })
-    }
+      }),
+    },
   ];
   public defaultColDef: ColDef = {
     flex: 1,
@@ -118,19 +123,27 @@ export class DevicesComponent {
    * @param dialog - MatDialog for dialogs
    * @param renderer - Renderer2 for DOM manipulation
    */
-  constructor(private router: Router, private service:DeviceService, private fb:FormBuilder,
+  constructor(
+    private router: Router,
+    private service: DeviceService,
+    private fb: FormBuilder,
     private authservice: AuthService,
-    private _snakebar :MatSnackBar, public dialog:MatDialog,private renderer: Renderer2){
-      this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
-      this.userCategory = this.loggedinUser.userCategory;
-      this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
+    private _snakebar: MatSnackBar,
+    public dialog: MatDialog,
+    private renderer: Renderer2
+  ) {
+    this.loggedinUser = JSON.parse(
+      localStorage.getItem('loggedinUser') || '{}'
+    );
+    this.userCategory = this.loggedinUser.userCategory;
+    this.preferedCategory = localStorage.getItem('preferedCategory') || '';
   }
 
   /**
    * Closes the modal by click on button.
    * No parameters.
    */
-  close(){
+  close() {
     (this.staticBackdrop?.nativeElement as HTMLElement).style.display = 'none';
     this.renderer.removeStyle(document.body, 'overflow');
     this.renderer.removeStyle(document.body, 'padding-right');
@@ -142,75 +155,124 @@ export class DevicesComponent {
    */
   ngOnInit(): void {
     this.selectedDeviceCategory = this.userCategory;
-    this.authservice.selectedConfigVal = this.preferedCategory?this.preferedCategory:this.userCategory;
-    const deviceCategory = this.preferedCategory?this.preferedCategory:this.userCategory;
-    if(deviceCategory === 'RDKB'){
+    this.authservice.selectedConfigVal = this.preferedCategory
+      ? this.preferedCategory
+      : this.userCategory;
+    const deviceCategory = this.preferedCategory
+      ? this.preferedCategory
+      : this.userCategory;
+    if (deviceCategory === 'RDKB') {
       this.categoryName = 'Broadband';
-    }else{
+    } else {
       this.categoryName = 'Video';
     }
-    if(deviceCategory === null){
+    if (deviceCategory === null) {
       this.configureName = this.selectedDeviceCategory;
       this.findallbyCategory();
     }
-    if(deviceCategory){
+    if (deviceCategory) {
       this.selectedDeviceCategory = deviceCategory;
       this.findallbyCategory();
     }
     this.uploadXMLForm = this.fb.group({
-      uploadXml: [null, Validators.required]
-    })
+      uploadXml: [null, Validators.required],
+    });
     //Resets the view for scripts when moving to other tabs
     localStorage.setItem('viewName', 'scripts');
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Listens for window resize events to adjust the grid
+   */
+  @HostListener('window:resize')
+  onResize() {
+    this.adjustPaginationToScreenSize();
+  }
+
+  /**
+   * Adjusts pagination size based on screen dimensions
+   */
+  private adjustPaginationToScreenSize() {
+    const height = window.innerHeight;
+
+    if (height > 1200) {
+      this.paginationPageSize = 25;
+    } else if (height > 900) {
+      this.paginationPageSize = 20;
+    } else if (height > 700) {
+      this.paginationPageSize = 15;
+    } else {
+      this.paginationPageSize = 10;
+    }
+
+    // Update the pagination size selector options based on the current pagination size
+    this.paginationPageSizeSelector = [
+      this.paginationPageSize,
+      this.paginationPageSize * 2,
+      this.paginationPageSize * 5,
+    ];
+
+    // Apply changes to grid if it's already initialized
+    if (this.gridApi) {
+      // Use the correct method to update pagination page size
+      this.gridApi.setGridOption('paginationPageSize', this.paginationPageSize);
+    }
   }
 
   /**
    * Finds all devices by category.
    * No parameters.
    */
-  findallbyCategory(){
+  findallbyCategory() {
     this.showLoader = true;
     this.service.findallbyCategory(this.selectedDeviceCategory).subscribe({
       next: (res) => {
-        this.rowData = []
+        this.rowData = [];
         let data = res.data;
         this.rowData = data;
-        if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ||this.rowData.length == 0  ) {
+        if (
+          this.rowData == null ||
+          this.rowData == undefined ||
+          this.rowData.length > 0 ||
+          this.rowData.length == 0
+        ) {
           this.showLoader = false;
         }
-        if(this.rowData == null || this.rowData == undefined||this.rowData.length == 0){
-          this.rowData = []
+        if (
+          this.rowData == null ||
+          this.rowData == undefined ||
+          this.rowData.length == 0
+        ) {
+          this.rowData = [];
         }
-
       },
       error: (err) => {
         this.showLoader = false;
-      }
-    })
+      },
+    });
   }
   /**
    * Handles the event when a device category is checked.
    * @param event - The event object containing the checked value.
    */
-  categoryChange(event:any){
+  categoryChange(event: any) {
     let val = event.target.value;
-    if(val === 'RDKB'){
+    if (val === 'RDKB') {
       this.categoryName = 'Broadband';
       this.selectedDeviceCategory = 'RDKB';
       this.authservice.selectedConfigVal = 'RDKB';
-      this.authservice.showSelectedCategory = "Broadband";
+      this.authservice.showSelectedCategory = 'Broadband';
       localStorage.setItem('preferedCategory', 'RDKB');
       this.findallbyCategory();
-    }
-    else{
+    } else {
       this.selectedDeviceCategory = 'RDKV';
       this.categoryName = 'Video';
       this.authservice.selectedConfigVal = 'RDKV';
-      this.authservice.showSelectedCategory = "Video";
+      this.authservice.showSelectedCategory = 'Video';
       localStorage.setItem('preferedCategory', 'RDKV');
       this.findallbyCategory();
     }
-
   }
 
   /**
@@ -219,6 +281,7 @@ export class DevicesComponent {
    */
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
+    this.adjustPaginationToScreenSize();
   }
 
   /**
@@ -227,8 +290,8 @@ export class DevicesComponent {
    */
   onFilterTextBoxChanged() {
     this.gridApi.setGridOption(
-      "quickFilterText",
-      (document.getElementById("filter-text-box") as HTMLInputElement).value,
+      'quickFilterText',
+      (document.getElementById('filter-text-box') as HTMLInputElement).value
     );
   }
 
@@ -239,7 +302,7 @@ export class DevicesComponent {
    */
   userEdit(user: any): void {
     localStorage.setItem('user', JSON.stringify(user));
-    this.router.navigate(['/devices/device-edit'])
+    this.router.navigate(['/devices/device-edit']);
   }
 
   /**
@@ -247,30 +310,32 @@ export class DevicesComponent {
    * @param data - The data of the device to be deleted.
    */
   delete(data: any) {
-    if (confirm("Are you sure to delete ?")) {
-      if(data){
+    if (confirm('Are you sure to delete ?')) {
+      if (data) {
         this.service.deleteDevice(data.id).subscribe({
-          next:(res)=>{
+          next: (res) => {
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
-              verticalPosition: 'top'
-              })
-              const rowToRemove = this.rowData.find((row:any) => row.id === data.id);
-              if (rowToRemove) {
-                this.gridApi.applyTransaction({ remove: [rowToRemove] });
-              }
+              verticalPosition: 'top',
+            });
+            const rowToRemove = this.rowData.find(
+              (row: any) => row.id === data.id
+            );
+            if (rowToRemove) {
+              this.gridApi.applyTransaction({ remove: [rowToRemove] });
+            }
           },
-          error:(err)=>{
+          error: (err) => {
             this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-            })
-          }
-        })
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            });
+          },
+        });
       }
     }
   }
@@ -279,7 +344,7 @@ export class DevicesComponent {
    * Navigates to the device creation page.
    * No parameters.
    */
-  createDevice(){
+  createDevice() {
     this.router.navigate(['/devices/device-create']);
   }
 
@@ -287,10 +352,10 @@ export class DevicesComponent {
    * Handles the file change event when a file is selected for upload.
    * @param event - The file change event object.
    */
-  onFileChange(event:any){
+  onFileChange(event: any) {
     this.uploadFileName = event.target.files[0].name;
     const file: File = event.target.files[0];
-    if(file){
+    if (file) {
       if (file.type === 'text/xml') {
         this.uploadXMLForm.patchValue({ file: file });
         this.uploadFileName = file;
@@ -300,17 +365,16 @@ export class DevicesComponent {
         this.uploadFileError = 'Please upload a valid XML file.';
       }
     }
-
   }
 
   /**
    * Resets the upload form and related state variables.
    * No parameters.
    */
-  resetUploadForm(){
+  resetUploadForm() {
     this.uploadXMLForm.reset();
     this.uploadXml = null;
-    this.uploadFileError = "";
+    this.uploadFileError = '';
     this.uploadFormSubmitted = false;
   }
 
@@ -318,55 +382,55 @@ export class DevicesComponent {
    * Handles the submission of the uploadXMLForm.
    * No parameters.
    */
-  uploadXMLSubmit(){
+  uploadXMLSubmit() {
     this.uploadFormSubmitted = true;
-    if(this.uploadXMLForm.invalid || this.uploadFileError != null){
+    if (this.uploadXMLForm.invalid || this.uploadFileError != null) {
       return;
-     }else{
-      if(this.uploadFileName){
+    } else {
+      if (this.uploadFileName) {
         this.uploadFileError = null;
         this.service.uploadXMLFile(this.uploadFileName).subscribe({
-          next:(res)=>{
+          next: (res) => {
             this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
-             this.resetUploadForm();
-              this.close();
-              this.ngOnInit();
+              verticalPosition: 'top',
+            });
+            this.resetUploadForm();
+            this.close();
+            this.ngOnInit();
           },
-          error:(err)=>{           
+          error: (err) => {
             this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-            })
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            });
             this.ngOnInit();
             this.close();
             this.resetUploadForm();
-          }
-        })
+          },
+        });
       }
-     }
+    }
   }
 
   /**
    * Download all device details as zip format based on device category selection.
    * No parameters.
    */
-  downloadAllDevice(){
-    if(this.rowData.length > 0){
+  downloadAllDevice() {
+    if (this.rowData.length > 0) {
       this.service.downloadDeviceByCategory(this.selectedDeviceCategory);
-    }else{
+    } else {
       this._snakebar.open('No data available for download', '', {
         duration: 2000,
         panelClass: ['err-msg'],
         horizontalPosition: 'end',
-        verticalPosition: 'top'
-      })
+        verticalPosition: 'top',
+      });
     }
   }
 
@@ -374,13 +438,13 @@ export class DevicesComponent {
    * Download device details as xml format based on device name.
    * @param params - The parameters containing device name.
    */
-  downloadXML(params:any):void{
-    if(params.deviceName){
-      this.service.downloadDevice(params.deviceName).subscribe(blob => {
+  downloadXML(params: any): void {
+    if (params.deviceName) {
+      this.service.downloadDevice(params.deviceName).subscribe((blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${params.deviceName}.xml`; 
+        a.download = `${params.deviceName}.xml`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -388,5 +452,4 @@ export class DevicesComponent {
       });
     }
   }
-
 }
