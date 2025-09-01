@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.rdkm.tdkservice.enums.Category;
@@ -101,5 +102,5 @@ public class Module extends BaseEntity {
 	 * The functions associated with the module.
 	 */
 	@OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Function> functions;
+	private Set<Function> functions = new HashSet<>();
 }

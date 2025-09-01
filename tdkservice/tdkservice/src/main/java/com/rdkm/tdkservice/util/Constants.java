@@ -169,6 +169,36 @@ public class Constants {
 	// xml module tag
 	public static final String XML_MODULE_TAG = "module";
 
+	// xml module name
+	public static final String XML_MODULE_NAME = "moduleName";
+
+	// xml module id
+	public static final String XML_MODULE_ID = "moduleId";
+
+	// Identifier
+	public static final String ID = "id";
+
+	// xml primitive test id
+	public static final String XML_PRIMITIVE_TEST_ID = "primitiveTestId";
+
+	// xml primitive test name
+	public static final String XML_PRIMITIVE_TEST_NAME = "primitiveTestName";
+
+	// xml primitivetestparameter
+	public static final String XML_PRIMITIVE_TEST_PARAMETER = "primitiveTestParameter";
+
+	// xml value
+	public static final String XML_PARAMETER_VALUE = "value";
+
+	// xml value primitive tests
+	public static final String XML_PRIMITIVE_TESTS = "primitivetests";
+
+	// xml value primitive test
+	public static final String XML_PRIMITIVE_TEST = "primitivetest";
+
+	// xml primitive test parameters
+	public static final String XML_PRIMITIVE_TEST_PARAMETERS = "primitivetestparameters";
+
 	// xml module element
 	public static final String XML_MODULE_ELEMENT = "moduleName";
 
@@ -577,23 +607,23 @@ public class Constants {
 	public static final String VTS = "VTS";
 	// TDK package
 	public static final String TDK = "TDK";
-	//Rdk version
+	// Rdk version
 	public static final String RDK_VERSIONS = "rdkVersions";
 	// Upgrade file location key in tm.config
-	public static final String UPGRADE_FILE_LOCATION = "upgrade.fileLocation";	
+	public static final String UPGRADE_FILE_LOCATION = "upgrade.fileLocation";
 	// Default backup location if not specified
-	public static final String DEFAULT_BACKUP_LOCATION = "/mnt/backup";	
+	public static final String DEFAULT_BACKUP_LOCATION = "/mnt/backup";
 	// Webapps directory name
 	public static final String WEBAPPS_DIR = "webapps";
 	// TDK service war name
-	public static final String TDKSERVICE_WAR = "tdkservice.war";	
+	public static final String TDKSERVICE_WAR = "tdkservice.war";
 	// TDK service directory name
-	public static final String TDKSERVICE_DIR = "tdkservice";	
+	public static final String TDKSERVICE_DIR = "tdkservice";
 	// Backup prefix for backup directory
 	public static final String BACKUP_PREFIX = "backup_";
-	//deployment log path
-	public static final String DEPLOYMENT_LOG_PATH="/mnt/backup/deploymentLogs/";
-	//app upgrage shell script file
-	public static final String APP_UPGRADE_WAR_FILE ="app_upgrade_deploy_new_war.sh";
+	// deployment log path
+	public static final String DEPLOYMENT_LOG_PATH = "/mnt/backup/deploymentLogs/";
+	// app upgrage shell script file
+	public static final String APP_UPGRADE_WAR_FILE = "app_upgrade_deploy_new_war.sh";
 
 }

@@ -31,7 +31,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -68,6 +74,7 @@ import com.rdkm.tdkservice.dto.ScriptModuleDTO;
 import com.rdkm.tdkservice.dto.TestStepCreateDTO;
 import com.rdkm.tdkservice.dto.TestStepDTO;
 import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
+import com.rdkm.tdkservice.dto.TestSuiteDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.MandatoryFieldException;
@@ -149,13 +156,29 @@ public class ScriptService implements IScriptService {
 	TestSuiteService testSuiteService;
 
 	/**
-	 * Save the script file and the script details. The script file will be saved in
+	 * Save the script file and the script details freshly from UI or from API call.
+	 * The script file will be saved in
 	 * the location based on the module and category. The script details will be
 	 * saved in the database.
-	 * 
 	 */
 	@Override
 	public boolean saveScript(MultipartFile scriptFile, ScriptCreateDTO scriptCreateDTO) {
+		return this.saveNewScript(scriptFile, scriptCreateDTO, null);
+	}
+
+	/**
+	 * Save the script file and the script details freshly from UI or from API call.
+	 * The script file will be saved in
+	 * the location based on the module and category. The script details will be
+	 * saved in the database.
+	 * 
+	 * @param scriptFile      - the script file to be saved
+	 * @param scriptCreateDTO - the script creation DTO
+	 * @param ID              - the ID of the script (optional), needed only for XML
+	 *                        based file transfer
+	 * @return true if the script was saved successfully, false otherwise
+	 */
+	private boolean saveNewScript(MultipartFile scriptFile, ScriptCreateDTO scriptCreateDTO, String ID) {
 		LOGGER.info("Saving script file: " + scriptFile.getOriginalFilename() + " for scriptdetails: "
 				+ scriptCreateDTO.toString());
 		// Check if the script already exists with the same name or not in the database
@@ -163,6 +186,9 @@ public class ScriptService implements IScriptService {
 
 		// Convert DTO to Entity, this is a custom method
 		Script script = MapperUtils.convertToScriptEntity(scriptCreateDTO);
+		if (ID != null) {
+			script.setId(UUID.fromString(ID));
+		}
 
 		// Get the primitive test based on the primitive test name
 		PrimitiveTest primitiveTest = primitiveTestRepository.findByName(scriptCreateDTO.getPrimitiveTestName());
@@ -266,9 +292,8 @@ public class ScriptService implements IScriptService {
 		Script script = scriptRepository.findById(scriptUpdateDTO.getId()).orElseThrow(
 				() -> new ResourceNotFoundException(Constants.SCRIPT_ID, scriptUpdateDTO.getId().toString()));
 
-		// Updating the script entity with the updated script details
-		script = MapperUtils.updateScript(script, scriptUpdateDTO);
-
+		// Check if the script name is being updated and if it already exists in the
+		// database
 		if (!Utils.isEmpty(scriptUpdateDTO.getName())) {
 			Script newScript = scriptRepository.findByName(scriptUpdateDTO.getName());
 			if (newScript != null && scriptUpdateDTO.getName().equalsIgnoreCase(script.getName())) {
@@ -282,6 +307,38 @@ public class ScriptService implements IScriptService {
 				}
 			}
 		}
+
+		return this.updateTheGivenScriptAndFile(scriptFile, scriptUpdateDTO, script);
+
+	}
+
+	/**
+	 * Updates the given script and its file. For the update functionality
+	 * via XML, the script object will be passed here. For update via UI or Rest
+	 * API, the
+	 * script id will be used to identify the script to be updated.
+	 *
+	 * @param scriptFile      - the script file to be updated
+	 * @param scriptUpdateDTO - the script update DTO
+	 * @param script          - the script entity to be updated
+	 * @return true if the script was updated successfully, false otherwise
+	 */
+	private boolean updateScriptFromXML(MultipartFile scriptFile, ScriptDTO scriptUpdateDTO, Script script) {
+		return this.updateTheGivenScriptAndFile(scriptFile, scriptUpdateDTO, script);
+	}
+
+	/**
+	 * Updates the given script and its file. The logic for updating the script
+	 * is common to the source of the update (XML, UI, REST API).
+	 *
+	 * @param scriptFile      - the script file to be updated
+	 * @param scriptUpdateDTO - the script update DTO
+	 * @param script          - the script entity to be updated
+	 * @return true if the script was updated successfully, false otherwise
+	 */
+	private boolean updateTheGivenScriptAndFile(MultipartFile scriptFile, ScriptDTO scriptUpdateDTO, Script script) {
+		// Updating the script entity with the updated script details
+		script = MapperUtils.updateScript(script, scriptUpdateDTO);
 
 		// Update the primitive test in the script entity
 		if (scriptUpdateDTO.getPreConditions() != null && !scriptUpdateDTO.getPreConditions().isEmpty()) {
@@ -318,103 +375,43 @@ public class ScriptService implements IScriptService {
 	}
 
 	/**
-	 * This method is used to update the test steps in the script.
+	 * Updates the test steps in the script. Clears existing test steps and adds new
+	 * ones.
 	 * 
-	 * @param script       - the script
-	 * @param testStepDTOs - the list of test step DTOs
+	 * @param script       the script to be updated
+	 * @param testStepDTOs the list of test step DTOs containing the updated details
 	 */
 	private void updateTestSteps(Script script, List<TestStepDTO> testStepDTOs) {
+		// Remove all existing test steps
+		script.getTestSteps().clear();
 
-		// Get the list of existing test steps for the script
-		List<TestStep> existingTestSteps = script.getTestSteps();
-
-		// Extract the IDs of the test steps from the update request
-		List<UUID> updatedTestStepIds = testStepDTOs.stream().map(TestStepDTO::getTestStepId).filter(id -> id != null)
-				.collect(Collectors.toList());
-
-		List<TestStep> testStepsToBeRemoved = new ArrayList<>();
-
-		// Iterates through the list of existing test steps and identifies the test
-		// steps that need to be removed. A test step is marked for removal if its ID is
-		// not
-		// present in the list of updated test step IDs.
-		for (TestStep existingTestStep : existingTestSteps) {
-			if (!updatedTestStepIds.contains(existingTestStep.getId())) {
-				testStepsToBeRemoved.add(existingTestStep);
-			}
-		}
-
-		if (!testStepsToBeRemoved.isEmpty()) {
-			script.getTestSteps().removeAll(testStepsToBeRemoved);
-			LOGGER.info("Test steps to be removed: " + testStepsToBeRemoved.size());
-		} else {
-			LOGGER.info("No test steps to be removed");
-		}
-
+		// Add new test steps from DTOs
 		for (TestStepDTO testStepDTO : testStepDTOs) {
-			if (testStepDTO.getTestStepId() != null) {
-				// Update existing test step logic
-				TestStep testStep = testStepRepository.findById(testStepDTO.getTestStepId()).orElseThrow(
-						() -> new ResourceNotFoundException("TestStep", testStepDTO.getTestStepId().toString()));
-				testStep.setStepName(testStepDTO.getStepName());
-				testStep.setStepDescription(testStepDTO.getStepDescription());
-				testStep.setExpectedResult(testStepDTO.getExpectedResult());
-				testStepRepository.save(testStep);
-			} else {
-				// Add new test step logic
-				TestStep newTestStep = new TestStep();
-				newTestStep.setStepName(testStepDTO.getStepName());
-				newTestStep.setStepDescription(testStepDTO.getStepDescription());
-				newTestStep.setExpectedResult(testStepDTO.getExpectedResult());
-				newTestStep.setScript(script);
-				script.getTestSteps().add(newTestStep);
-			}
+			TestStep testStep = new TestStep();
+			testStep.setStepName(testStepDTO.getStepName());
+			testStep.setStepDescription(testStepDTO.getStepDescription());
+			testStep.setExpectedResult(testStepDTO.getExpectedResult());
+			testStep.setScript(script);
+			script.getTestSteps().add(testStep);
 		}
 	}
 
 	/**
-	 * This method is used to update the preconditions in the script.
+	 * Updates the preconditions in the script. *
 	 * 
 	 * @param script           - the script
 	 * @param preConditionDTOs - the list of precondition DTOs
 	 */
 	private void updatePreConditions(Script script, List<PreConditionDTO> preConditionDTOs) {
-		// Get the list of existing preconditions for the script
-		List<PreCondition> existingPreConditions = script.getPreConditions();
+		// Remove all existing preconditions
+		script.getPreConditions().clear();
 
-		// Extract the IDs of the preconditions from the update request
-		List<UUID> updatedPreConditionIds = preConditionDTOs.stream().map(PreConditionDTO::getPreConditionId)
-				.filter(id -> id != null).collect(Collectors.toList());
-
-		List<PreCondition> preConditionsToBeRemoved = new ArrayList<>();
-
-		// Delete preconditions that are not in the update request
-		for (PreCondition existingPreCondition : existingPreConditions) {
-			if (!updatedPreConditionIds.contains(existingPreCondition.getId())) {
-				preConditionsToBeRemoved.add(existingPreCondition);
-			}
-		}
-
-		if (!preConditionsToBeRemoved.isEmpty()) {
-			LOGGER.info("Preconditions to be removed: " + preConditionsToBeRemoved.size());
-			script.getPreConditions().removeAll(preConditionsToBeRemoved);
-		} else {
-			LOGGER.info("No preconditions removed");
-		}
-
-		List<PreConditionDTO> dto = preConditionDTOs;
-		for (PreConditionDTO preCondition : dto) {
-			if (!(preCondition.getPreConditionId() == null)) {
-				PreCondition preConditionObj = preConditionRepository.findById(preCondition.getPreConditionId())
-						.orElse(null);
-				preConditionObj.setPreConditionDescription(preCondition.getPreConditionDetails());
-
-			} else {
-				PreCondition preConditionObj = new PreCondition();
-				preConditionObj.setPreConditionDescription(preCondition.getPreConditionDetails());
-				preConditionObj.setScript(script);
-				script.getPreConditions().add(preConditionObj);
-			}
+		// Add new preconditions from DTOs
+		for (PreConditionDTO preConditionDTO : preConditionDTOs) {
+			PreCondition preCondition = new PreCondition();
+			preCondition.setPreConditionDescription(preConditionDTO.getPreConditionDetails());
+			preCondition.setScript(script);
+			script.getPreConditions().add(preCondition);
 		}
 	}
 
@@ -449,16 +446,16 @@ public class ScriptService implements IScriptService {
 	 */
 	@Override
 	public List<ScriptListDTO> findAllScriptsByCategory(String categoryName) {
-		LOGGER.info("Getting all scripts based on the category: " + categoryName);
+		LOGGER.debug("Getting all scripts based on the category: " + categoryName);
 		Category category = commonService.validateCategory(categoryName);
 		List<Script> scripts = scriptRepository.findAllByCategory(category);
 		List<ScriptListDTO> scriptListDTO = new ArrayList<>();
 		for (Script script : scripts) {
 			ScriptListDTO scriptDTO = MapperUtils.convertToScriptListDTO(script);
 			scriptListDTO.add(scriptDTO);
-			LOGGER.info("Script: " + script.getName() + " added to the list");
+			LOGGER.debug("Script: " + script.getName() + " added to the list");
 		}
-		LOGGER.info("Returning all scripts based on the category: " + categoryName);
+		LOGGER.debug("Returning all scripts based on the category: " + categoryName);
 		return scriptListDTO;
 
 	}
@@ -471,7 +468,7 @@ public class ScriptService implements IScriptService {
 	 */
 	@Override
 	public List<ScriptListDTO> findAllScriptsByModule(String moduleName) {
-		LOGGER.info("Getting all scripts based on the module: " + moduleName);
+		LOGGER.debug("Getting all scripts based on the module: " + moduleName);
 		Module module = moduleRepository.findByName(moduleName);
 		if (module == null) {
 			LOGGER.error("Module not found with the name: " + moduleName);
@@ -483,7 +480,7 @@ public class ScriptService implements IScriptService {
 		for (Script script : scripts) {
 			ScriptListDTO scriptDTO = MapperUtils.convertToScriptListDTO(script);
 			scriptListDTO.add(scriptDTO);
-			LOGGER.info("Script: " + script.getName() + " added to the list");
+			LOGGER.debug("Script: " + script.getName() + " added to the list");
 		}
 
 		return scriptListDTO;
@@ -786,13 +783,8 @@ public class ScriptService implements IScriptService {
 	public byte[] generateScriptZip(String scriptName) {
 		String xmlContent;
 		File getPythonScriptFile;
-		try {
-			xmlContent = generateTestCaseXml(scriptName);
-			getPythonScriptFile = getPythonFile(scriptName);
-		} catch (ResourceNotFoundException e) {
-			LOGGER.error("Test script not found: " + e.getMessage());
-			throw e;
-		}
+		xmlContent = generateTestCaseXml(scriptName);
+		getPythonScriptFile = getPythonFile(scriptName);
 
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
@@ -852,8 +844,8 @@ public class ScriptService implements IScriptService {
 
 	public String generateTestCaseXml(String scriptName) {
 
-		Script testCase = scriptRepository.findByName(scriptName);
-		if (testCase == null) {
+		Script script = scriptRepository.findByName(scriptName);
+		if (script == null) {
 			LOGGER.error("Test script not found with the name: " + scriptName);
 			throw new ResourceNotFoundException(Constants.SCRIPT_NAME, scriptName);
 		}
@@ -865,46 +857,46 @@ public class ScriptService implements IScriptService {
 			var rootElement = doc.createElement(Constants.XML);
 			doc.appendChild(rootElement);
 
-			createElement(doc, rootElement, "name", testCase.getName());
+			createElement(doc, rootElement, "name", script.getName());
+			createElement(doc, rootElement, "script_id", script.getId().toString());
 
-			createElement(doc, rootElement, "primitive_test_name", testCase.getPrimitiveTest().getName());
+			createElement(doc, rootElement, "primitive_test_name", script.getPrimitiveTest().getName());
+			createElement(doc, rootElement, "script_location", script.getScriptLocation());
+			createElement(doc, rootElement, "module", script.getModule().getName());
+			createElement(doc, rootElement, "synopsis", script.getSynopsis());
 
-			createElement(doc, rootElement, "synopsis", testCase.getSynopsis());
-
-			String executionTime = String.valueOf(testCase.getExecutionTimeOut());
+			String executionTime = String.valueOf(script.getExecutionTimeOut());
 			if (executionTime != null && !executionTime.isEmpty()) {
 				createElement(doc, rootElement, "execution_time", executionTime);
 			}
-			String longDuration = String.valueOf(testCase.isLongDuration());
+			String longDuration = String.valueOf(script.isLongDuration());
 			if (longDuration != null && !longDuration.isEmpty()) {
 				createElement(doc, rootElement, "long_duration", longDuration);
 			}
-			String skip = String.valueOf(testCase.isSkipExecution());
+			String skip = String.valueOf(script.isSkipExecution());
 			if (skip != null && !skip.isEmpty()) {
 				createElement(doc, rootElement, "skip", skip);
 			}
-			if (testCase.isSkipExecution()) {
-				createElement(doc, rootElement, "skip_remarks", testCase.getSkipRemarks());
-			}
-			createElement(doc, rootElement, "test_case_id", testCase.getTestId());
-			createElement(doc, rootElement, "test_objective", testCase.getObjective());
+
+			createElement(doc, rootElement, "test_case_id", script.getTestId());
+			createElement(doc, rootElement, "test_objective", script.getObjective());
 
 			// Create <box_types> element and add <box_type> child elements
 			Element deviceTypesElement = doc.createElement("device_types");
 			rootElement.appendChild(deviceTypesElement);
 
 			// Loop through the list of box types and create <box_type> elements
-			for (DeviceType deviceType : testCase.getDeviceTypes()) {
+			for (DeviceType deviceType : script.getDeviceTypes()) {
 				createElement(doc, deviceTypesElement, "device_type", deviceType.getName());
 			}
 			Element preConditionElement = doc.createElement("pre_conditions");
 			rootElement.appendChild(preConditionElement);
-			for (PreCondition preCondition : testCase.getPreConditions()) {
+			for (PreCondition preCondition : script.getPreConditions()) {
 				createElement(doc, rootElement, "pre_condition", preCondition.getPreConditionDescription());
 			}
 			Element testStepElements = doc.createElement("test_steps");
 			rootElement.appendChild(testStepElements);
-			for (TestStep testStep : testCase.getTestSteps()) {
+			for (TestStep testStep : script.getTestSteps()) {
 				Element testStepElement = doc.createElement("test_step");
 				testStepElements.appendChild(testStepElement);
 				createElement(doc, testStepElement, "step_name", testStep.getStepName());
@@ -912,8 +904,8 @@ public class ScriptService implements IScriptService {
 				createElement(doc, testStepElement, "expected_result", testStep.getExpectedResult());
 			}
 
-			createElement(doc, rootElement, "priority", testCase.getPriority());
-			createElement(doc, rootElement, "release_version", testCase.getReleaseVersion());
+			createElement(doc, rootElement, "priority", script.getPriority());
+			createElement(doc, rootElement, "release_version", script.getReleaseVersion());
 
 			// Convert the document to a String
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -985,6 +977,7 @@ public class ScriptService implements IScriptService {
 
 			// Reset entries to process the files now that we know both exist
 			entries = zip.entries();
+			String scriptId = null;
 			// Process the Python and XML files
 			while (entries.hasMoreElements()) {
 				ZipEntry entry = entries.nextElement();
@@ -992,24 +985,45 @@ public class ScriptService implements IScriptService {
 				if (entry.getName().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
 					try (InputStream pyInputStream = zip.getInputStream(entry)) {
 						// Convert Python file to MultipartFile
-						pythonFile = convertScriptFileToMultipartFile(pyInputStream, entry.getName().split("/")[1]);
+
+						String[] parts = entry.getName().split("/");
+						String fileName = parts[parts.length - 1];
+						System.out.println("File Name is" + fileName);
+						pythonFile = convertScriptFileToMultipartFile(pyInputStream, fileName);
+
 					}
 				}
 				// Handle XML file
 				else if (entry.getName().endsWith(Constants.XML_FILE_EXTENSION)) {
 					try (InputStream xmlInputStream = zip.getInputStream(entry)) {
 						// Convert XML file to ScriptCreateDTO
-						scriptCreateDTO = convertXmlToScriptCreateDTO(xmlInputStream);
+						byte[] xmlBytes = xmlInputStream.readAllBytes();
+						scriptId = extractScriptIDFromXml(new ByteArrayInputStream(xmlBytes));
+						scriptCreateDTO = convertXmlToScriptCreateDTO(new ByteArrayInputStream(xmlBytes));
+
 					}
 				}
 			}
 
 			// Validate that both files were processed
 			if (pythonFile != null && scriptCreateDTO != null) {
-				boolean savedScript = saveScript(pythonFile, scriptCreateDTO);
+
+				String scriptName = scriptCreateDTO.getName();
+				Script script = scriptRepository.findByName(scriptName);
+				boolean saveOrUpdateScript = false;
+				if (script == null) {
+					LOGGER.error("Script going to be save as new: " + scriptName);
+					saveOrUpdateScript = saveNewScript(pythonFile, scriptCreateDTO, scriptId);
+				} else {
+					LOGGER.error("Script going to be updated: " + scriptName);
+					ScriptDTO scriptDTO = MapperUtils.convertToScriptDTOForXMLUpdate(scriptCreateDTO, script);
+					saveOrUpdateScript = updateScriptFromXML(pythonFile, scriptDTO, script);
+				}
+				// boolean savedScript = saveScript(pythonFile, scriptCreateDTO);
+
 				tempZipFile.delete();
 				LOGGER.info("Script XML saved successfully");
-				return savedScript;
+				return saveOrUpdateScript;
 			} else {
 				LOGGER.error(
 						"Error processing the zip file, either the XML or Python file was not processed correctly.");
@@ -1017,6 +1031,32 @@ public class ScriptService implements IScriptService {
 			}
 		}
 
+	}
+
+	/**
+	 * Extracts the Script ID from the XML input stream.
+	 * 
+	 * @param xmlInputStream the XML input stream
+	 * @return the Script ID
+	 */
+	public String extractScriptIDFromXml(InputStream xmlInputStream) {
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = builder.parse(xmlInputStream);
+			document.getDocumentElement().normalize();
+
+			NodeList idNodes = document.getElementsByTagName("script_id");
+			if (idNodes.getLength() > 0) {
+				return idNodes.item(0).getTextContent();
+			} else {
+				throw new IllegalArgumentException("Script ID not found in XML.");
+			}
+		} catch (Exception e) {
+			// Log the error and rethrow as a runtime exception or handle as needed
+			LOGGER.error("Error extracting Script ID from XML: {}", e.getMessage());
+			throw new UserInputException("Failed to extract Script ID from XML.");
+		}
 	}
 
 	/**
@@ -1091,8 +1131,7 @@ public class ScriptService implements IScriptService {
 			}
 		} catch (Exception e) {
 			LOGGER.error("Error parsing XML and saving to database: " + e.getMessage());
-			throw new UserInputException(e.getMessage());
-
+			throw new UserInputException("Error parsing XML and saving to database: " + e.getMessage());
 		}
 		return testCase;
 
@@ -1225,8 +1264,7 @@ public class ScriptService implements IScriptService {
 		List<Module> modules;
 		if (Category.RDKV.equals(categoryValue)) {
 			modules = moduleRepository.findAllByCategoryIn(
-					Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE)
-			);
+					Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
 		} else {
 			modules = moduleRepository.findAllByCategory(categoryValue);
 		}
@@ -1262,10 +1300,10 @@ public class ScriptService implements IScriptService {
 	}
 
 	/*
-	 * This method is used to create default test suite for existing module .return
-	 * - void
-	 * 
+	 * This method is used to create default test suite for existing module
+	 * and also to update the test suite if it already exists with the new scripts
 	 */
+	@Override
 	public void defaultTestSuiteCreationForExistingModule() {
 		String[] categories = { "RDKV", "RDKB", "RDKC" };
 
@@ -1283,6 +1321,16 @@ public class ScriptService implements IScriptService {
 					TestSuite testSuite = testSuiteRepository.findByName(testSuiteCerateDTO.getName());
 					if (testSuite == null) {
 						testSuiteService.createTestSuite(testSuiteCerateDTO);
+					} else {
+						TestSuiteDTO testSuiteDTO = new TestSuiteDTO();
+						testSuiteDTO.setId(testSuite.getId());
+						testSuiteDTO.setName(scriptModuleDTO.getModuleName());
+						testSuiteDTO.setDescription(testSuite.getDescription());
+						testSuiteDTO.setCategory(category);
+						testSuiteDTO.setScripts(scriptModuleDTO.getScripts());
+						testSuiteService.updateTestSuite(testSuiteDTO);
+						LOGGER.info("Test suite already exists for the module, So updating: "
+								+ scriptModuleDTO.getModuleName());
 					}
 
 				}

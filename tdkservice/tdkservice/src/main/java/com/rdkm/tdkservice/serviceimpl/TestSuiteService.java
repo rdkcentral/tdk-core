@@ -179,6 +179,31 @@ public class TestSuiteService implements ITestSuiteService {
 				}
 			}
 		}
+
+		return this.updateTheGivenTestSuite(testSuiteDTO, testSuite);
+	}
+
+	/**
+	 * Updates a test suite from an XML input stream.
+	 * 
+	 * @param testSuiteDTO the test suite DTO
+	 * @return true if the update was successful, false otherwise
+	 */
+	public boolean updateTestSuiteFromXML(TestSuiteDTO testSuiteDTO) {
+		// Extract the Test Suite ID from the XML input stream
+		TestSuite testSuite = testSuiteRepository.findByName(testSuiteDTO.getName());
+		return this.updateTheGivenTestSuite(testSuiteDTO, testSuite);
+	}
+
+	/**
+	 * Updates the given test suite.
+	 * 
+	 * @param testSuiteDTO the test suite DTO
+	 * @param testSuite    the test suite
+	 * @return true if the update was successful, false otherwise
+	 */
+	public boolean updateTheGivenTestSuite(TestSuiteDTO testSuiteDTO, TestSuite testSuite) {
+
 		if (!(Utils.isEmpty(testSuiteDTO.getDescription()))
 				&& !(testSuiteDTO.getDescription().equals(testSuite.getDescription()))) {
 			testSuite.setDescription(testSuiteDTO.getDescription());
@@ -211,6 +236,7 @@ public class TestSuiteService implements ITestSuiteService {
 		}
 
 		return true;
+
 	}
 
 	/**
@@ -532,13 +558,11 @@ public class TestSuiteService implements ITestSuiteService {
 	 * @return - true if the test suite is uploaded successfully, false otherwise
 	 */
 	@Override
-	public boolean uploadTestSuiteAsXML(MultipartFile scriptFile) {
+	public boolean uploadTestSuiteAsXML(MultipartFile testSuiteXMLFile) {
 		// Validate the uploaded file
-		validateFile(scriptFile);
-		this.checkIfTestSuiteExists(
-				scriptFile.getOriginalFilename().replace(Constants.XML_EXTENSION, Constants.EMPTY_STRING));
+		validateFile(testSuiteXMLFile);
 		try {
-			InputStream xmlInputStream = scriptFile.getInputStream();
+			InputStream xmlInputStream = testSuiteXMLFile.getInputStream();
 			// Parse XML
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -554,32 +578,47 @@ public class TestSuiteService implements ITestSuiteService {
 			NodeList description = document.getElementsByTagName("description");
 			String desc = description.item(0).getTextContent();
 
+			List<ScriptListDTO> scriptListDTO = new ArrayList<>();
+
 			// Extract scripts
 			NodeList scriptNodes = document.getElementsByTagName("script_name");
-
-			// Create or update TestSuite
-			TestSuite testSuite = new TestSuite();
-			testSuite
-					.setName(scriptFile.getOriginalFilename().replace(Constants.XML_EXTENSION, Constants.EMPTY_STRING));
-			Category testSuiteCategory = commonService.validateCategory(category);
-			testSuite.setCategory(testSuiteCategory);
-			testSuite.setDescription(desc);
-			testSuiteRepository.save(testSuite);
 			for (int i = 0; i < scriptNodes.getLength(); i++) {
 				String scriptName = scriptNodes.item(i).getTextContent();
 
 				// Check if script already exists in the database
 				Script existingScript = scriptRepository.findByName(scriptName);
 				if (existingScript != null) {
-					// Create new script if it does not exist
-					ScriptTestSuite newScript = new ScriptTestSuite();
-					newScript.setScriptOrder(i);
-					newScript.setTestSuite(testSuite);
-					newScript.setScript(existingScript);
-					scriptTestSuiteRepository.save(newScript);
+					ScriptListDTO scriptDTO = MapperUtils.convertToScriptListDTO(existingScript);
+					scriptListDTO.add(scriptDTO);
 				}
 			}
-			return true;
+
+			String testSuiteName = testSuiteXMLFile.getOriginalFilename().replace(Constants.XML_EXTENSION,
+					Constants.EMPTY_STRING);
+
+			TestSuite testSuite = testSuiteRepository.findByName(testSuiteName);
+			if (testSuite == null) {
+
+				TestSuiteCreateDTO testSuiteCreateDTO = new TestSuiteCreateDTO();
+				testSuiteCreateDTO.setName(testSuiteName);
+				testSuiteCreateDTO.setDescription(desc);
+				testSuiteCreateDTO.setCategory(category);
+				testSuiteCreateDTO.setScripts(scriptListDTO);
+				this.createTestSuite(testSuiteCreateDTO);
+				return true;
+			} else {
+				TestSuiteDTO testSuiteDTO = new TestSuiteDTO();
+				testSuiteDTO.setId(testSuite.getId());
+				testSuiteDTO.setName(testSuiteName);
+				testSuiteDTO.setDescription(desc);
+				testSuiteDTO.setCategory(category);
+				testSuiteDTO.setScripts(scriptListDTO);
+
+				this.updateTheGivenTestSuite(testSuiteDTO, testSuite);
+				return true;
+
+			}
+
 		} catch (Exception e) {
 			LOGGER.error("Error while uploading script names in test suite", e);
 			throw new TDKServiceException("Error while uploading script names in script");
@@ -738,8 +777,7 @@ public class TestSuiteService implements ITestSuiteService {
 		List<TestSuite> testSuiteObj;
 		if (Category.RDKV.equals(categoryObj)) {
 			testSuiteObj = testSuiteRepository.findAllByCategoryIn(
-					Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE)
-			);
+					Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
 		} else {
 			testSuiteObj = testSuiteRepository.findAllByCategory(categoryObj);
 		}

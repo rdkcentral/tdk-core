@@ -419,7 +419,7 @@ public class ScriptController {
 					"No scripts found for category: " + category + "and isThunderEnabled: " + isThunderEnabled, null);
 		}
 	}
-	
+
 	/**
 	 * This method is used to download the markdown file for a given script name.
 	 *
@@ -467,6 +467,20 @@ public class ScriptController {
 
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + scriptId + ".md")
 				.contentType(MediaType.parseMediaType("text/markdown")).body((new InputStreamResource(mdFile)));
+	}
+
+	/**
+	 * API to trigger default test suite creation for all existing modules.
+	 * Useful for data recovery or system initialization scenarios.
+	 */
+	@Operation(summary = "Create/Update Default Test Suites for All Modules", description = "Creates or updates default test suites for all modules in all categories.")
+	@ApiResponse(responseCode = "200", description = "Default test suites created/updated successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@PostMapping("/createOrUpdateDefaultTestSuites")
+	public ResponseEntity<Response> createOrUpdateDefaultTestSuites() {
+		LOGGER.info("Received request to create/update default test suites");
+		scriptService.defaultTestSuiteCreationForExistingModule();
+		return ResponseUtils.getSuccessResponse("Default test suites created/updated successfully");
 	}
 
 }

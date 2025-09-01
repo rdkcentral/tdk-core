@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.rdkm.tdkservice.enums.Category;
@@ -68,6 +69,5 @@ public class Function extends BaseEntity {
 	 * The parameters associated with the function.
 	 */
 	@OneToMany(mappedBy = "function", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Parameter> parameters;
-
+	private Set<Parameter> parameters = new HashSet<>();
 }

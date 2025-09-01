@@ -166,6 +166,9 @@ public class AppUpgradeService implements IAppUpgradeService {
 			writeTestStepSql(writer, since);
 			writeScriptDeviceTypeSql(writer, since);
 			writeTestSuiteSql(writer, since);
+		} catch (IOException e) {
+			LOGGER.error("Error writing app upgrade SQL to file", e);
+			throw new TDKServiceException("Failed to write app upgrade SQL: " + e.getMessage());
 		}
 	}
 
@@ -614,6 +617,14 @@ public class AppUpgradeService implements IAppUpgradeService {
 	 */
 	private void writeTestSuiteSql(BufferedWriter writer, Instant since) throws IOException {
 		List<TestSuite> testSuites = testSuiteRepository.findByCreatedDateAfterOrUpdatedAtAfter(since, since);
+		// Remove all TestSuites whose name matches any existing Module name
+		List<String> moduleNames = moduleRepository.findAll().stream()
+				.map(m -> m.getName())
+				.filter(java.util.Objects::nonNull)
+				.toList();
+		testSuites = testSuites.stream()
+				.filter(ts -> ts.getName() == null || !moduleNames.contains(ts.getName()))
+				.toList();
 		for (TestSuite ts : testSuites) {
 			String id = String.format("'%s'", ts.getId().toString());
 			String name = ts.getName() != null ? ts.getName().replace("'", "''") : "";

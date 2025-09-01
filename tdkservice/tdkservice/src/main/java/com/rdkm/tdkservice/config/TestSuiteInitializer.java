@@ -34,7 +34,7 @@ public class TestSuiteInitializer {
 	// Runs only once when the application is fully started
 	@EventListener(ApplicationReadyEvent.class)
 	public void onApplicationStartup() {
-		scriptService.defaultTestSuiteCreationForExistingModule();
+		// scriptService.defaultTestSuiteCreationForExistingModule();
 	}
 
 }

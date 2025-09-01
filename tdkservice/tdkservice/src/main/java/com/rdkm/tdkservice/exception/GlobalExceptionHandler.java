@@ -116,7 +116,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(NoResourceFoundException.class)
 	public ResponseEntity<Response> handleResourceNotExists(NoResourceFoundException ex) {
-		Response error = new Response("API endpoint not found", 123);
+		Response error = new Response("API endpoint not found", 404);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 	}
 
@@ -132,7 +132,8 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<Object> handleGlobalException(Exception ex, WebRequest request) {
 		logger.info("Internal server error that is not handled: " + ex.getMessage());
 		ex.printStackTrace();
-		Response errorResponse = new Response("Something went wrong, Please report to administrator", HttpStatus.INTERNAL_SERVER_ERROR.value());
+		Response errorResponse = new Response("Something went wrong, Please report to administrator",
+				HttpStatus.INTERNAL_SERVER_ERROR.value());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 	}
 

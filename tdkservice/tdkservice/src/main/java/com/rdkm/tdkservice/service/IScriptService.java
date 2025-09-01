@@ -119,7 +119,7 @@ public interface IScriptService {
 	 * 
 	 * @param file - the file
 	 * @return - true if the file is uploaded successfully, false otherwise
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 
 	boolean uploadZipFile(MultipartFile file) throws IOException;
@@ -163,7 +163,7 @@ public interface IScriptService {
 	 * @return - the module - the module entity
 	 */
 	Module getModuleByScriptName(String scriptName);
-	
+
 	/**
 	 * This method is used to get the script details by script name.
 	 * 
@@ -179,4 +179,11 @@ public interface IScriptService {
 	 * @return - the md file
 	 */
 	ByteArrayInputStream createMarkdownFilebyScriptId(UUID scriptId);
+
+	/**
+	 * This method is used to create the default test suite(test suite that
+	 * has all the scripts of the module with module name) for existing modules
+	 * it will include all the scripts added to the module
+	 */
+	void defaultTestSuiteCreationForExistingModule();
 }

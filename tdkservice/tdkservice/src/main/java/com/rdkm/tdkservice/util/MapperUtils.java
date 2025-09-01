@@ -22,6 +22,7 @@ package com.rdkm.tdkservice.util;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.rdkm.tdkservice.dto.*;
 import com.rdkm.tdkservice.enums.*;
@@ -488,7 +489,6 @@ public class MapperUtils {
 		script.setPriority(scriptCreateDTO.getPriority());
 		script.setReleaseVersion(scriptCreateDTO.getReleaseVersion());
 
-		
 		return script;
 	}
 
@@ -496,7 +496,9 @@ public class MapperUtils {
 	 * Support method to script update operation
 	 * 
 	 * @param scriptUpdateDTO ScriptDTO
+	 * 
 	 * @param script Script
+	 * 
 	 * @return script Script
 	 */
 	public static Script updateScript(Script script, ScriptDTO scriptUpdateDTO) {
@@ -542,12 +544,65 @@ public class MapperUtils {
 	 * @return scriptListDTO ScriptListDTO
 	 */
 	public static ScriptListDTO convertToScriptListDTO(Script script) {
-		LOGGER.info("Converting the script entity to script list DTO");
+		LOGGER.debug("Converting the script entity to script list DTO");
 		ScriptListDTO scriptListDTO = new ScriptListDTO();
 		scriptListDTO.setId(script.getId());
 		scriptListDTO.setName(script.getName());
-		LOGGER.info("Converted the script entity to script list DTO:" + scriptListDTO.toString());
+		LOGGER.debug("Converted the script entity to script list DTO:" + scriptListDTO.toString());
 		return scriptListDTO;
+	}
+
+	/**
+	 * Converts a ScriptCreateDTO and Script entity to a ScriptDTO for XML update.
+	 * 
+	 * @param createDTO the ScriptCreateDTO
+	 * @param script    the Script entity
+	 * @return the ScriptDTO representation of the script entity
+	 */
+	public static ScriptDTO convertToScriptDTOForXMLUpdate(ScriptCreateDTO createDTO, Script script) {
+		ScriptDTO dto = new ScriptDTO();
+
+		dto.setName(createDTO.getName());
+		dto.setSynopsis(createDTO.getSynopsis());
+		dto.setExecutionTimeOut(createDTO.getExecutionTimeOut());
+		dto.setLongDuration(createDTO.isLongDuration());
+		dto.setPrimitiveTestName(createDTO.getPrimitiveTestName());
+		dto.setDeviceTypes(createDTO.getDeviceTypes());
+		dto.setSkipExecution(createDTO.isSkipExecution());
+		dto.setSkipRemarks(createDTO.getSkipRemarks());
+		dto.setTestId(createDTO.getTestId());
+		dto.setObjective(createDTO.getObjective());
+		dto.setPriority(createDTO.getPriority());
+		dto.setReleaseVersion(createDTO.getReleaseVersion());
+
+		// Convert preConditions (List<String> to List<PreConditionDTO>)
+		if (createDTO.getPreConditions() != null) {
+			List<PreConditionDTO> preConditionDTOs = createDTO.getPreConditions().stream()
+					.map(detail -> {
+						PreConditionDTO preConditionDTO = new PreConditionDTO();
+						preConditionDTO.setPreConditionDetails(detail);
+						return preConditionDTO;
+					})
+					.collect(Collectors.toList());
+			dto.setPreConditions(preConditionDTOs);
+		}
+
+		// Convert testSteps (List<TestStepCreateDTO> to List<TestStepDTO>)
+		if (createDTO.getTestSteps() != null) {
+			List<TestStepDTO> testStepDTOs = createDTO.getTestSteps().stream()
+					.map(ts -> {
+						TestStepDTO testStepDTO = new TestStepDTO();
+						testStepDTO.setStepDescription(ts.getStepDescription());
+						testStepDTO.setStepName(ts.getStepName());
+						testStepDTO.setExpectedResult(ts.getExpectedResult());
+						// Add other fields if needed
+						return testStepDTO;
+					})
+					.collect(Collectors.toList());
+			dto.setTestSteps(testStepDTOs);
+		}
+
+		return dto;
 	}
 
 	/**
