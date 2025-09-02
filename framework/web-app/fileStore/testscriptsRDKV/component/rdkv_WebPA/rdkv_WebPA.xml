@@ -54,6 +54,13 @@
         <function>webpa_parodusstatuscheck</function>
         <parameters/>
       </primitiveTest>
+      <primitiveTest name="integer_check" id=" " version="1">
+        <function>integer_check</function>
+        <parameters>
+          <parameter name="threshold_value" value=""/>
+          <parameter name="value" value=""/>
+        </parameters>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>
