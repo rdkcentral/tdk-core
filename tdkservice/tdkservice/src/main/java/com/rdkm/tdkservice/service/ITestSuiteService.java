@@ -135,4 +135,11 @@ public interface ITestSuiteService {
 	 */
 	public List<TestSuiteDetailsResponse> getListofTestSuiteNamesByCategory(String category, boolean isThunderEnabled);
 
+	/**
+	 * This method is used to get the list of all test suites with details.
+	 * 
+	 * @return List<TestSuiteDetailsResponse> - List of test suites with details
+	 */
+	List<TestSuiteDetailsResponse> getTestSuiteList();
+
 }

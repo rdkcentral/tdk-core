@@ -51,6 +51,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.rdkm.tdkservice.dto.ResultDTO;
+import com.rdkm.tdkservice.dto.ExecutionByDateDTO;
 import com.rdkm.tdkservice.dto.ExecutionDetailsForHtmlReportDTO;
 import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionListDTO;
@@ -63,6 +65,7 @@ import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.Execution;
 import com.rdkm.tdkservice.response.DataResponse;
 import com.rdkm.tdkservice.response.Response;
@@ -462,9 +465,15 @@ public class ExecutionController {
 	@ApiResponse(responseCode = "200", description = "Execution aborted successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to abort the execution")
 	@PostMapping("/abortExecution")
-	public ResponseEntity<Response> abortExecution(@RequestParam UUID execId) {
+	public ResponseEntity<Response> abortExecution(@RequestParam(required = false) UUID execId,
+			@RequestParam(required = false) String execName) {
 		LOGGER.info("Abort execution called");
-		boolean isAborted = executionService.abortExecution(execId);
+		// Validate that at least one parameter is provided
+		if (execId == null && (execName == null || execName.trim().isEmpty())) {
+			LOGGER.error("Either execId or execName must be provided to abort execution.");
+			throw new UserInputException("Either execId or execName must be provided.");
+		}
+		boolean isAborted = executionService.abortExecution(execId, execName);
 		if (isAborted) {
 			LOGGER.info("Execution aborted successfully");
 			return ResponseUtils.getSuccessResponse(
@@ -534,9 +543,14 @@ public class ExecutionController {
 	@ApiResponse(responseCode = "200", description = "Execution details fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to get Execution details")
 	@GetMapping("/getExecutionDetails")
-	public ResponseEntity<DataResponse> getExecutionDetails(@RequestParam UUID id) {
-		LOGGER.info("Fetching execution details for ID: {}", id);
-		ExecutionDetailsResponseDTO response = executionService.getExecutionDetails(id);
+	public ResponseEntity<DataResponse> getExecutionDetails(@RequestParam(required = false) UUID id,
+			@RequestParam(required = false) String execName) {
+		LOGGER.info("Fetching execution details for ID: {} or Name: {}", id, execName);
+		if (id == null && (execName == null || execName.trim().isEmpty())) {
+			LOGGER.error("Either id or execName must be provided to fetch execution details.");
+			throw new UserInputException("Either id or execName must be provided.");
+		}
+		ExecutionDetailsResponseDTO response = executionService.getExecutionDetails(id, execName);
 		if (null != response) {
 			LOGGER.info("Execution details fetched successfully for ID: {}", id);
 			return ResponseUtils.getSuccessDataResponse("Execution details fetched successfully for ID " + id,
@@ -849,10 +863,15 @@ public class ExecutionController {
 	@ApiResponse(responseCode = "200", description = "Module wise summary fetched successfully")
 	@ApiResponse(responseCode = "404", description = "Execution data with this condition is not found")
 	@GetMapping("/getModulewiseExecutionSummary")
-	public ResponseEntity<DataResponse> getModulewiseExecutionSummary(@RequestParam UUID executionId) {
-		LOGGER.info("Get module wise summary called for the executionId {}", executionId.toString());
+	public ResponseEntity<DataResponse> getModulewiseExecutionSummary(@RequestParam(required = false) UUID executionId,
+			@RequestParam(required = false) String execName) {
+		LOGGER.info("Get module wise summary called for the executionId: {} or Name: {}", executionId, execName);
+		if (executionId == null && (execName == null || execName.trim().isEmpty())) {
+			LOGGER.error("Either executionId or execName must be provided to fetch module wise execution summary.");
+			throw new UserInputException("Either executionId or execName must be provided.");
+		}
 		Map<String, ExecutionSummaryResponseDTO> executionSummaryMap = executionService
-				.getModulewiseExecutionSummary(executionId);
+				.getModulewiseExecutionSummary(executionId, execName);
 		return executionSummaryMap != null
 				? ResponseUtils.getSuccessDataResponse("Module wise summary fetched successfully", executionSummaryMap)
 				: ResponseUtils.getNotFoundDataResponse("Module wise summary not available for this execution", null);
@@ -1304,8 +1323,8 @@ public class ExecutionController {
 	}
 
 	/**
-	 * Creates a file and writes the provided test data into it.
-	 * This is predominaltly used for Media validation scripts
+	 * Creates a file and writes the provided test data into it. This is
+	 * predominaltly used for Media validation scripts
 	 * 
 	 * @param execId    Execution ID
 	 * @param execDevId Execution Device ID
@@ -1314,19 +1333,147 @@ public class ExecutionController {
 	 * @return JSONObject with status and remarks
 	 */
 	@Operation(summary = "Create File and Write for the lighting app logs part of media validation scripted")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "File created and written successfully")
-	})
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "File created and written successfully") })
 	@GetMapping("/createFileAndWrite")
-	public ResponseEntity<?> createFileAndWrite(
-			@RequestParam String execId,
-			@RequestParam String execDevId,
-			@RequestParam String resultId,
-			@RequestParam String test) {
+	public ResponseEntity<?> createFileAndWrite(@RequestParam String execId, @RequestParam String execDevId,
+			@RequestParam String resultId, @RequestParam String test) {
 		LOGGER.info("Creating file and writing test data for execId: {}, execDevId: {}, resultId: {}", execId,
 				execDevId, resultId);
 		JSONObject result = executionService.createFileAndWrite(execId, execDevId, resultId, test);
 		return ResponseEntity.ok(result.toString());
 
+	}
+
+	/**
+	 * Retrieves the execution ID for a specific execution name.
+	 *
+	 * @param executionName the name of the execution for which to retrieve the ID
+	 * @return a ResponseEntity containing the execution ID
+	 */
+	@Operation(summary = "Get the execution ID by execution name")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution ID retrieved successfully"),
+			@ApiResponse(responseCode = "404", description = "Execution not found"),
+			@ApiResponse(responseCode = "500", description = "Failed to get execution ID") })
+	@GetMapping("/getExecutionId")
+	public ResponseEntity<DataResponse> getExecutionId(@RequestParam String executionName) {
+		LOGGER.info("Getting execution ID for execution name: {}", executionName);
+		try {
+			UUID executionId = executionService.getExecutionId(executionName);
+			if (executionId != null) {
+				LOGGER.info("Execution ID retrieved successfully for execution name: {}", executionName);
+				return ResponseUtils.getSuccessDataResponse("Execution ID retrieved successfully", executionId);
+			} else {
+				LOGGER.error("Execution not found with name: {}", executionName);
+				return ResponseUtils.getNotFoundDataResponse("Execution not found with name: " + executionName, null);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to get execution ID for execution name: {}: {}", executionName, e.getMessage());
+			throw new TDKServiceException("Failed to get execution ID for execution");
+		}
+	}
+
+	/**
+	 * Endpoint to fetch execution result in JSON format by execution name.
+	 * 
+	 * @param executionName
+	 * @return ResponseEntity containing the execution result in JSON format
+	 */
+	@GetMapping("/getExecutionResultJson")
+	@Operation(summary = "Get execution result in JSON format by execution name")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Execution result JSON fetched successfully"),
+			@ApiResponse(responseCode = "404", description = "No execution result JSON available for this execution"),
+			@ApiResponse(responseCode = "500", description = "Failed to get execution result JSON") })
+	public ResponseEntity<DataResponse> getExecutionResultJson(@RequestParam String executionName) {
+		LOGGER.info("Get execution result  json called for execution name: {}", executionName);
+		ResultDTO response = executionService.getExecutionResultInJson(executionName);
+		if (response == null) {
+			LOGGER.error("No execution result json available for this execution");
+			return ResponseUtils.getNotFoundDataResponse("No execution result json available for this execution", null);
+		} else {
+			LOGGER.info("Execution result json fetched successfully");
+			return ResponseUtils.getSuccessDataResponse("Execution result json fetched successfully", response);
+		}
+	}
+
+	/**
+	 * Endpoint to fetch device details by execution name.
+	 *
+	 * @param executionName the name of the execution for which to fetch device
+	 *                      details
+	 * @return ResponseEntity containing the device details if found, or a 404
+	 *         status with an error message if no device details are available for
+	 *         the given execution name
+	 */
+	@GetMapping("/getDeviceDetailsByExecutionName")
+	@Operation(summary = "Get device details by execution name")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Device details fetched successfully"),
+			@ApiResponse(responseCode = "404", description = "No device details available for this execution name"),
+			@ApiResponse(responseCode = "500", description = "Failed to get device details") })
+	public ResponseEntity<DataResponse> getDeviceDetailsByExecutionName(@RequestParam String executionName) {
+		LOGGER.info("Get device details by execution name called");
+		String response = executionService.getDeviceDetailsByExecutionName(executionName);
+		if (response == null) {
+			LOGGER.error("No device details available for this execution name");
+			return ResponseUtils.getNotFoundDataResponse("No device details available for this execution name", null);
+		} else {
+			LOGGER.info("Device details fetched successfully");
+			return ResponseUtils.getSuccessDataResponse("Device details fetched successfully", response);
+		}
+	}
+
+	/**
+	 * Endpoint to fetch execution names by date.
+	 *
+	 * @param date the date for which to fetch execution names
+	 * @return ResponseEntity containing the list of execution names if found, or a
+	 *         404 status with an error message if no executions are available for
+	 *         the given date
+	 */
+	@Operation(summary = "Get execution names by date")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution names fetched successfully"),
+			@ApiResponse(responseCode = "404", description = "No execution available for this date"),
+			@ApiResponse(responseCode = "500", description = "Failed to get execution names") })
+	@GetMapping("/getExecutionByDate")
+	public ResponseEntity<DataResponse> getExecutionByDate(@RequestParam String date) {
+		LOGGER.info("Get execution by date called");
+		List<ExecutionByDateDTO> response = executionService.getExecutionByDate(date);
+		if (response == null || response.isEmpty()) {
+			LOGGER.error("No execution available for this date");
+			return ResponseUtils.getNotFoundDataResponse("No execution available for this date", null);
+		} else {
+			LOGGER.info("Execution names fetched successfully");
+			return ResponseUtils.getSuccessDataResponse("Execution names fetched successfully", response);
+		}
+	}
+
+	/**
+	 * Retrieves the execution timeout for a specific script.
+	 *
+	 * @param scriptName the name of the script for which to retrieve the timeout
+	 * @return a ResponseEntity containing the execution timeout in seconds
+	 */
+	@Operation(summary = "Get the execution timeout for a script")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Execution timeout retrieved successfully"),
+			@ApiResponse(responseCode = "404", description = "Script not found"),
+			@ApiResponse(responseCode = "500", description = "Failed to get execution timeout") })
+	@GetMapping("/getScriptExecutionTimeout")
+	public ResponseEntity<DataResponse> getScriptExecutionTimeout(@RequestParam String scriptName) {
+		LOGGER.info("Getting execution timeout for script name: {}", scriptName);
+		try {
+			Integer timeout = executionService.getScriptExecutionTimeout(scriptName);
+			if (timeout != null) {
+				LOGGER.info("Execution timeout retrieved successfully for script name: {}", scriptName);
+				return ResponseUtils.getSuccessDataResponse("Execution timeout retrieved successfully", timeout);
+			} else {
+				LOGGER.error("Script not found with name: {}", scriptName);
+				return ResponseUtils.getNotFoundDataResponse("Script not found with name: " + scriptName, null);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to get execution timeout for script name: {}: {}", scriptName, e.getMessage());
+			throw new TDKServiceException("Failed to get execution timeout for script");
+		}
 	}
 
 }

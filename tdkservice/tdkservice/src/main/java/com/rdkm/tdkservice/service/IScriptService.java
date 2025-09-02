@@ -181,9 +181,25 @@ public interface IScriptService {
 	ByteArrayInputStream createMarkdownFilebyScriptId(UUID scriptId);
 
 	/**
-	 * This method is used to create the default test suite(test suite that
-	 * has all the scripts of the module with module name) for existing modules
-	 * it will include all the scripts added to the module
+	 * This method is used to create the default test suite(test suite that has all
+	 * the scripts of the module with module name) for existing modules it will
+	 * include all the scripts added to the module
 	 */
 	void defaultTestSuiteCreationForExistingModule();
+
+	/**
+	 * This method is used to get the list of scripts based on the script group.
+	 *
+	 * @param scriptGroup - the script group name
+	 * @return - the list of scripts based on the script group
+	 */
+	List<ScriptListDTO> findAllScriptsByTestSuite(String scriptGroup);
+
+	/**
+	 * This method is used to get the module execution time.
+	 *
+	 * @param moduleName - the module name
+	 * @return - the module execution time in seconds
+	 */
+	Integer getModuleScriptTimeout(String moduleName);
 }

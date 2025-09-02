@@ -19,21 +19,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.time.Instant;
+
 import lombok.Data;
 
-/**
- * Data Transfer Object for CI Test Information.
- */
 @Data
-public class CITestInfoDTO {
+public class ExecutionByDateDTO {
 
-	/**
-	 * The name of the test case.
+	/*
+	 * Represent the execution name
 	 */
-	public String testCaseName;
-
-	/**
-	 * The status of the test case.
+	private String executionName;
+	
+	/*
+	 * Represent the execution date
 	 */
-	public String testCaseStatus;
+	private Instant executionDate;
+	
+	/*
+	 * Represent the execution status
+	 */
+	private String executionStatus;
 }

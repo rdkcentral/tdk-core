@@ -40,12 +40,12 @@ import org.springframework.stereotype.Service;
 
 import com.jayway.jsonpath.internal.Utils;
 import com.rdkm.tdkservice.config.AppConfig;
-import com.rdkm.tdkservice.dto.CIComponentLevelDTO;
-import com.rdkm.tdkservice.dto.CIDeviceDTO;
-import com.rdkm.tdkservice.dto.CIRequestDTO;
-import com.rdkm.tdkservice.dto.CIResultDTO;
-import com.rdkm.tdkservice.dto.CIScriptDetailsDTO;
-import com.rdkm.tdkservice.dto.CITestInfoDTO;
+import com.rdkm.tdkservice.dto.ComponentLevelDTO;
+import com.rdkm.tdkservice.dto.DeviceDetailsDTO;
+import com.rdkm.tdkservice.dto.ResultDTO;
+import com.rdkm.tdkservice.dto.DetailedResultDTO;
+import com.rdkm.tdkservice.dto.ScriptDetailsDTO;
+import com.rdkm.tdkservice.dto.TestInfoDTO;
 import com.rdkm.tdkservice.enums.DeviceStatus;
 import com.rdkm.tdkservice.enums.ExecutionOverallResultStatus;
 import com.rdkm.tdkservice.enums.ExecutionProgressStatus;
@@ -236,7 +236,7 @@ public class ExecutionAsyncService {
 			return;
 		}
 
-		CIRequestDTO request = getCIRequestForRDKPortal(finalExecutionStatus.getId().toString(), imageVersion);
+		ResultDTO request = getResultJson(finalExecutionStatus.getId().toString(), imageVersion, "CI");
 		LOGGER.info("CI Jsonobject: {}", request);
 
 		if (callBackUrl == null || callBackUrl.isEmpty()) {
@@ -528,40 +528,48 @@ public class ExecutionAsyncService {
 	}
 
 	/**
-	 * Generates a CIRequestDTO for the RDK Portal based on the provided execution
-	 * ID.
+	 * Generates a resultDTO for the RDK Portal based on the provided execution ID.
 	 *
 	 * @param executionId the ID of the execution to retrieve the CI request for
-	 * @return a CIRequestDTO containing details about the execution, including
-	 *         device and component level details
+	 * @return a resultDTO containing details about the execution, including device
+	 *         and component level details
 	 *
 	 */
-	private CIRequestDTO getCIRequestForRDKPortal(String executionId, String imageVersion) {
+	public ResultDTO getResultJson(String executionId, String imageVersion, String testType) {
 		LOGGER.info("Getting CI request for RDK Portal");
 		Execution execution = executionRepository.findById(UUID.fromString(executionId)).orElse(null);
 		String baseUrl = appConfig.getBaseURL() + "/execution/getExecutionLogs?executionResultID=";
-		CIRequestDTO ciRequestDTO = new CIRequestDTO();
-		ciRequestDTO.setService(Constants.TDK_PORTAL_SERVICE);
-		ciRequestDTO.setStarted_at(getEpochTime(execution.getCreatedDate()));
-		ciRequestDTO.setStarted_by("RDKPortal/Jenkins");
-		ciRequestDTO.setStatus(execution.getResult().name());
-		ciRequestDTO.setDuration(getExecutionDurationInEpoch(execution.getExecutionTime()));
+		ResultDTO resultDTO = new ResultDTO();
+		resultDTO.setService(Constants.TDK_PORTAL_SERVICE);
+		resultDTO.setStarted_at(getEpochTime(execution.getCreatedDate()));
+		if (testType.equals("CI")) {
+			resultDTO.setStarted_by("RDKPortal/Jenkins");
+		}
+		resultDTO.setStatus(execution.getResult().name());
+		resultDTO.setDuration(getExecutionDurationInEpoch(execution.getExecutionTime()));
 
-		ArrayList<CIResultDTO> ciRequestDTOList = new ArrayList<>();
-		CIResultDTO ciResultDTO = new CIResultDTO();
-		ciResultDTO.setExecutionName(execution.getName());
+		ArrayList<DetailedResultDTO> resultDTOList = new ArrayList<>();
+		DetailedResultDTO detailedResultDTO = new DetailedResultDTO();
+		detailedResultDTO.setExecutionName(execution.getName());
+		detailedResultDTO.setExecutionStatus(execution.getExecutionStatus().name());
+		detailedResultDTO.setScriptOrTestSuite(execution.getScripttestSuiteName());
 
-		ArrayList<CIDeviceDTO> cIDeviceDTOList = new ArrayList<>();
+		ArrayList<DeviceDetailsDTO> deviceDTOList = new ArrayList<>();
 		ArrayList<Object> systemInfoList = new ArrayList<>();
 		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 		if (executionDevice != null) {
-			CIDeviceDTO ciDeviceDTO = new CIDeviceDTO();
-			ciDeviceDTO.setDevice(getDeviceNameFromConfigFile(imageVersion));
+			DeviceDetailsDTO deviceDetailsDTO = new DeviceDetailsDTO();
+			if (testType.equals("CI")) {
+				deviceDetailsDTO.setDevice(getDeviceNameFromConfigFile(imageVersion));
+				deviceDetailsDTO.setImageName(imageVersion);
+			} else {
+				deviceDetailsDTO.setDevice(executionDevice.getDevice());
+				deviceDetailsDTO.setImageName(executionDevice.getBuildName());
+			}
 			Device device = deviceRepository.findByName(executionDevice.getDevice());
-			ciDeviceDTO.setDeviceType(device.getDeviceType().getName());
-			ciDeviceDTO.setImageName(imageVersion);
+			deviceDetailsDTO.setDeviceType(device.getDeviceType().getName());
 
-			ArrayList<CIComponentLevelDTO> componentLevelDTOList = new ArrayList<>();
+			ArrayList<ComponentLevelDTO> componentLevelDTOList = new ArrayList<>();
 			List<ExecutionResult> executionResults = execution.getExecutionResults();
 
 			Map<String, List<ExecutionResult>> moduleScriptMap = new HashMap<>();
@@ -574,53 +582,53 @@ public class ExecutionAsyncService {
 				String moduleName = entry.getKey();
 				List<ExecutionResult> scriptResults = entry.getValue();
 
-				CIComponentLevelDTO ciComponentLevelDTO = new CIComponentLevelDTO();
-				ciComponentLevelDTO.setModuleName(moduleName);
+				ComponentLevelDTO componentLevelDTO = new ComponentLevelDTO();
+				componentLevelDTO.setModuleName(moduleName);
 				boolean moduleStatus = true;
-				ArrayList<CIScriptDetailsDTO> ciScriptDetailsDTOList = new ArrayList<>();
+				ArrayList<ScriptDetailsDTO> scriptDetailsDTOList = new ArrayList<>();
 				for (ExecutionResult result : scriptResults) {
-					CIScriptDetailsDTO ciScriptDetailsDTO = new CIScriptDetailsDTO();
-					ciScriptDetailsDTO.setScriptName(result.getScript());
-					ciScriptDetailsDTO.setScriptStatus(result.getResult().name());
-					ciScriptDetailsDTO.setLogUrl(baseUrl + result.getId().toString());
+					ScriptDetailsDTO scriptDetailsDTO = new ScriptDetailsDTO();
+					scriptDetailsDTO.setScriptName(result.getScript());
+					scriptDetailsDTO.setScriptStatus(result.getResult().name());
+					scriptDetailsDTO.setLogUrl(baseUrl + result.getId().toString());
 					if (result.getResult().name().equals(ExecutionResultStatus.FAILURE.name())) {
 						moduleStatus = false;
 					}
 
-					ArrayList<CITestInfoDTO> ciTestInfoDTOList = new ArrayList<>();
+					ArrayList<TestInfoDTO> ciTestInfoDTOList = new ArrayList<>();
 					if (moduleName.equals("rdkservices")) {
 						List<ExecutionMethodResult> executionMethodResults = executionMethodResultRepository
 								.findByExecutionResult(result);
 						for (ExecutionMethodResult methodResult : executionMethodResults) {
-							CITestInfoDTO ciTestInfoDTO = new CITestInfoDTO();
+							TestInfoDTO ciTestInfoDTO = new TestInfoDTO();
 							ciTestInfoDTO.setTestCaseName(methodResult.getFunctionName());
 							ciTestInfoDTO.setTestCaseStatus(methodResult.getActualResult().name());
 							ciTestInfoDTOList.add(ciTestInfoDTO);
 						}
 					}
-					ciScriptDetailsDTO.setTestInfo(ciTestInfoDTOList.isEmpty() ? new ArrayList<>() : ciTestInfoDTOList);
+					scriptDetailsDTO.setTestInfo(ciTestInfoDTOList.isEmpty() ? new ArrayList<>() : ciTestInfoDTOList);
 
-					ciScriptDetailsDTOList.add(ciScriptDetailsDTO);
+					scriptDetailsDTOList.add(scriptDetailsDTO);
 				}
 
 				if (moduleStatus) {
-					ciComponentLevelDTO.setModuleStatus(ExecutionResultStatus.SUCCESS.name());
+					componentLevelDTO.setModuleStatus(ExecutionResultStatus.SUCCESS.name());
 				} else {
-					ciComponentLevelDTO.setModuleStatus(ExecutionResultStatus.FAILURE.name());
+					componentLevelDTO.setModuleStatus(ExecutionResultStatus.FAILURE.name());
 				}
-				ciComponentLevelDTO.setScriptDetails(ciScriptDetailsDTOList);
-				componentLevelDTOList.add(ciComponentLevelDTO);
+				componentLevelDTO.setScriptDetails(scriptDetailsDTOList);
+				componentLevelDTOList.add(componentLevelDTO);
 			}
-			ciDeviceDTO.setComponentLevelDetails(componentLevelDTOList);
-			ciDeviceDTO.setSystemLevelDetails(systemInfoList);
-			cIDeviceDTOList.add(ciDeviceDTO);
+			deviceDetailsDTO.setComponentLevelDetails(componentLevelDTOList);
+			deviceDetailsDTO.setSystemLevelDetails(systemInfoList);
+			deviceDTOList.add(deviceDetailsDTO);
 		}
 
-		ciResultDTO.setDeviceDetails(cIDeviceDTOList.isEmpty() ? new ArrayList<>() : cIDeviceDTOList);
-		ciRequestDTOList.add(ciResultDTO);
-		ciRequestDTO.setResult(ciRequestDTOList.isEmpty() ? new ArrayList<>() : ciRequestDTOList);
+		detailedResultDTO.setDeviceDetails(deviceDTOList.isEmpty() ? new ArrayList<>() : deviceDTOList);
+		resultDTOList.add(detailedResultDTO);
+		resultDTO.setResult(resultDTOList.isEmpty() ? new ArrayList<>() : resultDTOList);
 
-		return ciRequestDTO;
+		return resultDTO;
 	}
 
 	/*
@@ -848,10 +856,9 @@ public class ExecutionAsyncService {
 					// FAILURE ,In that case, the result status is set to FAILURE
 					if (finalExecutionResultStatus == ExecutionResultStatus.INPROGRESS) {
 						finalExecutionResultStatus = ExecutionResultStatus.FAILURE;
-						executionResult.setExecutionRemarks(
-								remarksString
-										+ "Script execution completed with status FAILURE, because the script execution got finished.But no status was set from the python framework or script"
-										+ finalExecutionResultStatus);
+						executionResult.setExecutionRemarks(remarksString
+								+ "Script execution completed with status FAILURE, because the script execution got finished.But no status was set from the python framework or script"
+								+ finalExecutionResultStatus);
 					}
 					executionResult.setResult(finalExecutionResultStatus);
 					executionResultRepository.save(executionResult);
@@ -1210,17 +1217,17 @@ public class ExecutionAsyncService {
 				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + AppConfig.getRealPath()
 				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES
 				+ commonService.getBaseLogPath() + Constants.FILE_PATH_SEPERATOR + Constants.SINGLE_QUOTES
-				+ Constants.COMMA_SEPERATOR
-				+ Constants.SINGLE_QUOTES + execution.getId() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
-				+ Constants.SINGLE_QUOTES + executionDevice.getId() + Constants.SINGLE_QUOTES
-				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + executionResult.getId()
-				+ Constants.SINGLE_QUOTES + Constants.REPLACE_BY_TOKEN + device.getAgentMonitorPort()
-				+ Constants.COMMA_SEPERATOR + device.getStatusPort() + Constants.COMMA_SEPERATOR
-				+ Constants.SINGLE_QUOTES + script.getId() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
-				+ Constants.SINGLE_QUOTES + device.getId() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
-				+ Constants.SINGLE_QUOTES + false + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
-				+ Constants.SINGLE_QUOTES + false + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
-				+ Constants.SINGLE_QUOTES + false + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR;
+				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + execution.getId() + Constants.SINGLE_QUOTES
+				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + executionDevice.getId()
+				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES
+				+ executionResult.getId() + Constants.SINGLE_QUOTES + Constants.REPLACE_BY_TOKEN
+				+ device.getAgentMonitorPort() + Constants.COMMA_SEPERATOR + device.getStatusPort()
+				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + script.getId() + Constants.SINGLE_QUOTES
+				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + device.getId() + Constants.SINGLE_QUOTES
+				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + false + Constants.SINGLE_QUOTES
+				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + false + Constants.SINGLE_QUOTES
+				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + false + Constants.SINGLE_QUOTES
+				+ Constants.COMMA_SEPERATOR;
 	}
 
 	/**
@@ -1522,16 +1529,14 @@ public class ExecutionAsyncService {
 	}
 
 	/**
-	 * This method is used to execute the execution results for the given
-	 * execution and execution results. Primarily used for restarting paused
-	 * executions.
+	 * This method is used to execute the execution results for the given execution
+	 * and execution results. Primarily used for restarting paused executions.
 	 * 
 	 * @param execution        the execution object that was paused
 	 * @param executionResults the list of execution results to be executed
 	 */
 	@Async
-	public void executeThePausedExecutions(Execution execution,
-			List<ExecutionResult> executionResults) {
+	public void executeThePausedExecutions(Execution execution, List<ExecutionResult> executionResults) {
 
 		execution.setExecutionStatus(ExecutionProgressStatus.INPROGRESS);
 		execution.setResult(ExecutionOverallResultStatus.INPROGRESS);
@@ -1547,8 +1552,7 @@ public class ExecutionAsyncService {
 	 * @param execution
 	 * @param executionResults
 	 */
-	public void executeTheListOfExecutionResults(Execution execution,
-			List<ExecutionResult> executionResults) {
+	public void executeTheListOfExecutionResults(Execution execution, List<ExecutionResult> executionResults) {
 		UUID executionId = execution.getId();
 		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 		Device device = deviceRepository.findByName(executionDevice.getDevice());
@@ -1687,10 +1691,9 @@ public class ExecutionAsyncService {
 
 	/**
 	 * This method sets the execution status to PAUSED for the given Execution
-	 * object.
-	 * It updates the execution status to PAUSED and sets the result to PAUSED.
-	 * It also iterates through the list of ExecutionResults associated with the
-	 * Execution object and updates their status to PAUSED if they are currently
+	 * object. It updates the execution status to PAUSED and sets the result to
+	 * PAUSED. It also iterates through the list of ExecutionResults associated with
+	 * the Execution object and updates their status to PAUSED if they are currently
 	 * INPROGRESS or PENDING.
 	 */
 	private void setExecutiontoPausedState(Execution execution) {

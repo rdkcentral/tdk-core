@@ -21,6 +21,7 @@ package com.rdkm.tdkservice.dto;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Data;
 
@@ -96,6 +97,12 @@ public class ExecutionDetailsResponseDTO {
 	 * object.
 	 */
 	private ExecutionSummaryResponseDTO summary;
+	
+	/**
+	 * A map of detailed execution summaries, where the key is a string identifier
+	 * and the value is an ExecutionSummaryResponseDTO object.
+	 */
+	private Map<String ,ExecutionSummaryResponseDTO> detailMap;
 
 	/**
 	 * A list of detailed execution results, each encapsulated in an

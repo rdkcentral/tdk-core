@@ -36,6 +36,11 @@ public class TestSuiteDetailsResponse {
 	private UUID id;
 
 	/*
+	 * Represent the number of scripts in the testuite
+	 */
+	private int scriptCount;
+
+	/*
 	 * Represent the testuite name
 	 */
 	private String testSuiteName;

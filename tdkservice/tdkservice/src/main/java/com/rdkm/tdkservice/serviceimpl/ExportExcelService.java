@@ -164,7 +164,7 @@ public class ExportExcelService implements IExportExcelService {
 
 		// Add Device Details at the top
 		Map<String, ExecutionSummaryResponseDTO> moduleSummaryMap = executionService
-				.getModulewiseExecutionSummary(execution.getId());
+				.getModulewiseExecutionSummary(execution.getId(), null);
 
 		ExecutionSummaryResponseDTO totalSummary = moduleSummaryMap.get(Constants.TOTAL_KEYWORD);
 		double overallSuccessPercentage = totalSummary != null ? totalSummary.getSuccessPercentage() : 0.0;
@@ -612,7 +612,6 @@ public class ExportExcelService implements IExportExcelService {
 			row.createCell(2).setCellValue(result.get("executed").toString());
 			row.createCell(3).setCellValue(result.get("status").toString());
 			row.createCell(4).setCellValue(result.get("executedOn").toString());
-			// Assuming executionResultRepository is available and executionResultIds is a List<String>
 			List<String> ids = (List<String>) result.get("executionResultIds");
 			ExecutionResult executionResult = null;
 			if (ids != null && !ids.isEmpty()) {
@@ -621,10 +620,8 @@ public class ExportExcelService implements IExportExcelService {
 			}
 			result.put("executionResult", executionResult);
 
-// Now call safeExcelValue as before
-			row.createCell(5).setCellValue(
-					safeExcelValue((String) result.get("logData"), executionResult)
-			);
+			// Now call safeExcelValue as before
+			row.createCell(5).setCellValue(safeExcelValue((String) result.get("logData"), executionResult));
 			row.createCell(6).setCellValue(result.get("jiraId").toString());
 			row.createCell(7).setCellValue(result.get("issueType").toString());
 			row.createCell(8).setCellValue(result.get("remarks").toString());
@@ -1664,7 +1661,7 @@ public class ExportExcelService implements IExportExcelService {
 			String[] deviceHeaders = { "Device", "DeviceIP", "Execution Time (min)", "Image", "Overall Pass %" };
 			ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 			Map<String, ExecutionSummaryResponseDTO> moduleSummaryMap = executionService
-					.getModulewiseExecutionSummary(execution.getId());
+					.getModulewiseExecutionSummary(execution.getId(), null);
 
 			ExecutionSummaryResponseDTO totalSummary = moduleSummaryMap.get(Constants.TOTAL_KEYWORD);
 			double overallSuccessPercentage = totalSummary != null ? totalSummary.getSuccessPercentage() : 0.0;
@@ -2040,14 +2037,15 @@ public class ExportExcelService implements IExportExcelService {
 
 		createAndStyleArialHeaders(sheet, 5, headers, 0);
 
-		ExecutionDetailsResponseDTO baseExecutionDetails = executionService.getExecutionDetails(baseExecId);
+		ExecutionDetailsResponseDTO baseExecutionDetails = executionService.getExecutionDetails(baseExecId, null);
 		Map<String, ExecutionDetailsResponseDTO> executionDetailsMap = new LinkedHashMap<>();
 		Execution execution = executionRepository.findById(baseExecId).get();
 
 		executionDetailsMap.put(execution.getName(), baseExecutionDetails);
 		for (UUID executionId : executionIds) {
 			Execution executionDetails = executionRepository.findById(executionId).get();
-			executionDetailsMap.put(executionDetails.getName(), executionService.getExecutionDetails(executionId));
+			executionDetailsMap.put(executionDetails.getName(),
+					executionService.getExecutionDetails(executionId, null));
 		}
 
 		ExecutionDetailsResponseDTO baseScriptNames = executionDetailsMap
@@ -2369,8 +2367,8 @@ public class ExportExcelService implements IExportExcelService {
 			createAndStyleArialHeaders(sheet, rowNum++, testCaseHeaders, 0);
 			// Parse test cases and populate rows
 			Pattern testCasePattern = Pattern.compile(
-				    "#==============================================================================#\\nTEST CASE NAME\\s*:\\s*(.*?)\\n.*?TEST CASE ID\\s*:\\s*(.*?)\\n.*?DESCRIPTION\\s*:\\s*(.*?)\\n.*?##--------- \\[TEST EXECUTION STATUS\\]\\s*:\\s*(.*?)\\s*----------##",
-				    Pattern.DOTALL);
+					"#==============================================================================#\\nTEST CASE NAME\\s*:\\s*(.*?)\\n.*?TEST CASE ID\\s*:\\s*(.*?)\\n.*?DESCRIPTION\\s*:\\s*(.*?)\\n.*?##--------- \\[TEST EXECUTION STATUS\\]\\s*:\\s*(.*?)\\s*----------##",
+					Pattern.DOTALL);
 			Matcher testCaseMatcher = testCasePattern.matcher(logData);
 			int testCaseNum = 1;
 			while (testCaseMatcher.find()) {
@@ -2668,9 +2666,8 @@ public class ExportExcelService implements IExportExcelService {
 
 				row.createCell(3).setCellValue(failedScript.getResult().toString());
 				row.createCell(4).setCellValue(failedScript.getDateOfExecution().toString());
-				row.createCell(5).setCellValue(
-						safeExcelValue(executionService.getExecutionLogs(failedScript.getId().toString()), failedScript)
-				);
+				row.createCell(5).setCellValue(safeExcelValue(
+						executionService.getExecutionLogs(failedScript.getId().toString()), failedScript));
 				ExecutionResultAnalysis analysis = executionResultAnalysisRepository
 						.findByExecutionResult(failedScript);
 				if (analysis != null) {
@@ -2700,23 +2697,22 @@ public class ExportExcelService implements IExportExcelService {
 
 			// Set width for other columns
 			moduleSheet.setColumnWidth(2, 256 * 10);
-			moduleSheet.setColumnWidth(3, 256 * 15); 
-			moduleSheet.setColumnWidth(4, 256 * 25); 
+			moduleSheet.setColumnWidth(3, 256 * 15);
+			moduleSheet.setColumnWidth(4, 256 * 25);
 			moduleSheet.setColumnWidth(5, 256 * 70);
-			moduleSheet.setColumnWidth(6, 256 * 12); 
+			moduleSheet.setColumnWidth(6, 256 * 12);
 			moduleSheet.setColumnWidth(7, 256 * 15);
 			moduleSheet.setColumnWidth(8, 256 * 25);
 		}
 
-		sheet.setColumnWidth(0, 256 * 7); 
-		sheet.setColumnWidth(1, 256 * 20); 
+		sheet.setColumnWidth(0, 256 * 7);
+		sheet.setColumnWidth(1, 256 * 20);
 		sheet.setColumnWidth(2, 256 * 20);
-		sheet.setColumnWidth(3, 256 * 20); 
-		sheet.setColumnWidth(4, 256 * 20); 
+		sheet.setColumnWidth(3, 256 * 20);
+		sheet.setColumnWidth(4, 256 * 20);
 		sheet.setColumnWidth(5, 256 * 20);
-		sheet.setColumnWidth(6, 256 * 20); 
-		sheet.setColumnWidth(7, 256 * 20); 
-
+		sheet.setColumnWidth(6, 256 * 20);
+		sheet.setColumnWidth(7, 256 * 20);
 
 	}
 
@@ -2817,15 +2813,15 @@ public class ExportExcelService implements IExportExcelService {
 		for (int i = 0; i < 8; i++) {
 			rowTotal.getCell(i).setCellStyle(createArialStyle(sheet.getWorkbook()));
 		}
-		
-		sheet.setColumnWidth(0, 256 * 7); 
-		sheet.setColumnWidth(1, 256 * 20); 
-		sheet.setColumnWidth(2, 256 * 20); 
-		sheet.setColumnWidth(3, 256 * 20); 
-		sheet.setColumnWidth(4, 256 * 20); 
-		sheet.setColumnWidth(5, 256 * 20); 
+
+		sheet.setColumnWidth(0, 256 * 7);
+		sheet.setColumnWidth(1, 256 * 20);
+		sheet.setColumnWidth(2, 256 * 20);
+		sheet.setColumnWidth(3, 256 * 20);
+		sheet.setColumnWidth(4, 256 * 20);
+		sheet.setColumnWidth(5, 256 * 20);
 		sheet.setColumnWidth(6, 256 * 20);
-		sheet.setColumnWidth(7, 256 * 20); 
+		sheet.setColumnWidth(7, 256 * 20);
 		return rowCount;
 	}
 
@@ -2876,18 +2872,21 @@ public class ExportExcelService implements IExportExcelService {
 
 	/**
 	 * Safely formats a string value for Excel output, ensuring it does not exceed
+	 * 
 	 * @param input
 	 * @return
 	 */
 	private String safeExcelValue(String input, ExecutionResult executionResult) {
-		if (input == null || input.isEmpty()) return "N/A";
+		if (input == null || input.isEmpty())
+			return "N/A";
 		if (input.length() > 32000) {
 			String logUrl = "N/A";
 			if (executionResult != null) {
 				String serverUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
 				logUrl = serverUrl + "/execution/getExecutionLogs?executionResultID=" + executionResult.getId();
-				LOGGER.info("Log data exceeds Excel cell limit, truncating to 32000 characters and providing a link to view full log. Length: {}, ExecutionResultID: {}, URL: {}", input.length(), executionResult.getId(), logUrl);
-				System.out.println("ExecutionResultID: " + executionResult.getId() + ", LogUrl: " + logUrl);
+				LOGGER.info(
+						"Log data exceeds Excel cell limit, truncating to 32000 characters and providing a link to view full log. Length: {}, ExecutionResultID: {}, URL: {}",
+						input.length(), executionResult.getId(), logUrl);
 			} else {
 				LOGGER.warn("ExecutionResult is null, cannot generate log URL.");
 			}

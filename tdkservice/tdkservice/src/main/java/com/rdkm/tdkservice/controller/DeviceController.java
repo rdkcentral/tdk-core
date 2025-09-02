@@ -513,4 +513,27 @@ public class DeviceController {
 
 	}
 
+	/**
+	 * This method is used to get device details by device name.
+	 *
+	 * @param deviceName This is the name of the device to be fetched.
+	 * @return ResponseEntity<?> This returns the response entity.
+	 */
+	@Operation(summary = "Get device details by device name", description = "Get the device details by device name in the system.")
+	@ApiResponse(responseCode = "200", description = "device details fetched successfully")
+	@ApiResponse(responseCode = "500", description = "Error in fetching device details data")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/getDeviceDetailsByName")
+	public ResponseEntity<DataResponse> getDeviceDetailsByName(@RequestParam String deviceName) {
+		LOGGER.info("Received find device details by name request: " + deviceName);
+		String deviceDetails = deviceService.findDeviceDetailsByName(deviceName);
+		if (deviceDetails != null) {
+			LOGGER.info("Device details fetched successfully");
+			return ResponseUtils.getSuccessDataResponse("Device details fetched successfully", deviceDetails);
+		} else {
+			LOGGER.error("No device found");
+			return ResponseUtils.getNotFoundDataResponse("No device found with name: " + deviceName, null);
+		}
+	}
+
 }

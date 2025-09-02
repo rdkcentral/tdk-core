@@ -28,7 +28,7 @@ import lombok.Data;
  * This class holds information about a CI script, including its name, status, log URL, and associated test information.
  */
 @Data
-public class CIScriptDetailsDTO {
+public class ScriptDetailsDTO {
 
 	/**
 	 * The name of the CI script.
@@ -48,6 +48,6 @@ public class CIScriptDetailsDTO {
 	/**
 	 * A list of test information associated with the CI script.
 	 */
-	public ArrayList<CITestInfoDTO> testInfo;
+	public ArrayList<TestInfoDTO> testInfo;
 
 }

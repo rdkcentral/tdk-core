@@ -470,8 +470,8 @@ public class ScriptController {
 	}
 
 	/**
-	 * API to trigger default test suite creation for all existing modules.
-	 * Useful for data recovery or system initialization scenarios.
+	 * API to trigger default test suite creation for all existing modules. Useful
+	 * for data recovery or system initialization scenarios.
 	 */
 	@Operation(summary = "Create/Update Default Test Suites for All Modules", description = "Creates or updates default test suites for all modules in all categories.")
 	@ApiResponse(responseCode = "200", description = "Default test suites created/updated successfully")
@@ -483,4 +483,48 @@ public class ScriptController {
 		return ResponseUtils.getSuccessResponse("Default test suites created/updated successfully");
 	}
 
+	/*
+	 * This method is used to get all the scripts list by script group. This will
+	 * return the list of scripts for the given script group as script id and script
+	 * name.
+	 *
+	 * @param scriptGroup - the script group
+	 * 
+	 * @return ResponseEntity - the response entity
+	 */
+	@Operation(summary = "Get all scripts by script group", description = "Get all scripts by script group")
+	@ApiResponse(responseCode = "200", description = "Scripts fetched successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/findScriptByTestSuite")
+	public ResponseEntity<DataResponse> findAllScriptsByTestSuite(@RequestParam String scriptGroup) {
+		LOGGER.info("Received get all scripts request for test suite: " + scriptGroup);
+		List<ScriptListDTO> scripts = scriptService.findAllScriptsByTestSuite(scriptGroup);
+		if (scripts != null && !scripts.isEmpty()) {
+			LOGGER.info("Scripts fetched successfully for script group: " + scriptGroup);
+			return ResponseUtils.getSuccessDataResponse("Scripts fetched successfully", scripts);
+		} else {
+			LOGGER.error("Scripts not found for script group: " + scriptGroup);
+			return ResponseUtils.getSuccessDataResponse("Scripts not found for script group", null);
+		}
+
+	}
+
+	/**
+	 * This method is used to get the module execution time.
+	 *
+	 * @param moduleName - the module name
+	 * @return ResponseEntity<DataResponse> - the response entity with execution
+	 *         time value
+	 */
+	@Operation(summary = "Get module execution time", description = "Get the execution time for a specific module")
+	@ApiResponse(responseCode = "200", description = "Module execution time fetched successfully")
+	@ApiResponse(responseCode = "404", description = "Module not found")
+	@ApiResponse(responseCode = "500", description = "Failed to fetch module execution time")
+	@GetMapping("/getModuleScriptTimeOut")
+	public ResponseEntity<DataResponse> getModuleScriptTimeout(@RequestParam String moduleName) {
+		LOGGER.info("Received request to get module execution time for module: " + moduleName);
+		Integer timeout = scriptService.getModuleScriptTimeout(moduleName);
+		LOGGER.info("Module execution time fetched successfully for module: " + moduleName);
+		return ResponseUtils.getSuccessDataResponse("Module execution time fetched successfully", timeout);
+	}
 }

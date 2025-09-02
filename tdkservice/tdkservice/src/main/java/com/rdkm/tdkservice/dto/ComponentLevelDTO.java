@@ -24,19 +24,24 @@ import java.util.ArrayList;
 import lombok.Data;
 
 /**
- * CIResultDTO is a Data Transfer Object that holds the result of a CI execution.
- * It contains the name of the execution and details of the devices involved.
+ * Data Transfer Object for CI Component Level.
+ * This class holds information about a CI component, including its name, status, and associated script details.
  */
 @Data
-public class CIResultDTO {
+public class ComponentLevelDTO {
 
 	/**
-	 * The name of the CI execution.
+	 * Name of the module.
 	 */
-	public String executionName;
+	public String moduleName;
 
 	/**
-	 * A list of device details involved in the CI execution.
+	 * Status of the module.
 	 */
-	public ArrayList<CIDeviceDTO> deviceDetails;
+	public String moduleStatus;
+
+	/**
+	 * List of script details associated with the module.
+	 */
+	public ArrayList<ScriptDetailsDTO> scriptDetails;
 }

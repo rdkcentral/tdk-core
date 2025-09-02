@@ -58,6 +58,21 @@ public class ExecutionResultResponseDTO {
 	private String logs;
 
 	/**
+	 * The device on which the script was executed.
+	 */
+	private String executionDevice;
+
+	/**
+	 * The status of the execution result (e.g., "Passed", "Failed", "In Progress").
+	 */
+	private String executionResultStatus;
+
+	/**
+	 * The URL to access the execution logs.
+	 */
+	private String agentLogUrl;
+
+	/**
 	 * Indicates whether agent logs are available.
 	 */
 	private boolean isAgentLogsAbvailable;

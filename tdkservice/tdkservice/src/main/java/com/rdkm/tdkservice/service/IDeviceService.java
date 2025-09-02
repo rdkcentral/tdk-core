@@ -167,5 +167,13 @@ public interface IDeviceService {
 	 * @return List<Device> - List of devices with updated status
 	 */
 	public List<DeviceStatusResponseDTO> updateAndGetAllDeviceStatus(String category);
+	
+	/**
+	 * This method is used to find device details by its name.
+	 * 
+	 * @param deviceName This is the name of the Device to be found.
+	 * @return String This returns the found Device details in String format.
+	 */
+	String findDeviceDetailsByName(String deviceName);
 
 }

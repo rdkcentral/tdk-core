@@ -88,6 +88,7 @@ import com.rdkm.tdkservice.repository.SocRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IDeviceService;
 import com.rdkm.tdkservice.service.utilservices.CommonService;
+import com.rdkm.tdkservice.service.utilservices.ScriptExecutorService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
@@ -122,6 +123,9 @@ public class DeviceService implements IDeviceService {
 
 	@Autowired
 	DeviceStatusService deviceStatusService;
+
+	@Autowired
+	private ScriptExecutorService scriptExecutorService;
 
 	/**
 	 * This method is used to create a new device. It receives a POST request at the
@@ -1033,4 +1037,36 @@ public class DeviceService implements IDeviceService {
 		return this.getAllDeviceStatus(category);
 	}
 
+	/**
+	 * This method is used to find the device details by its name using SSH.
+	 * 
+	 * @param deviceName The name of the device to find the details for.
+	 * @return A String containing the device details.
+	 */
+	@Override
+	public String findDeviceDetailsByName(String deviceName) {
+		LOGGER.info("Fetching device details for device with name: {}", deviceName);
+		Device device = deviceRepository.findByName(deviceName);
+		if (device == null) {
+			LOGGER.error("Device not found with name: {}", deviceName);
+			throw new ResourceNotFoundException("Device Name", deviceName);
+		}
+		String deviceIp = device.getIp();
+		String sshOptions = "-o StrictHostKeyChecking=no";
+		String sshPass = "sshpass";
+		String password = ""; // Your password here
+		String user = "root";
+		String command = "cat /version.txt";
+		String[] executeScriptCommand = { sshPass, "-p", password, "ssh", sshOptions, user + "@" + deviceIp, command };
+		LOGGER.info("Executing command: {}", String.join(" ", executeScriptCommand));
+		String output = null;
+		try {
+			output = scriptExecutorService.executeScript(executeScriptCommand, 30);
+			return output;
+		} catch (Exception e) {
+			LOGGER.error("Error executing SSH command for device '{}': {}", deviceName, e.getMessage());
+			throw new TDKServiceException("Failed to retrieve device details: " + e.getMessage());
+		}
+
+	};
 }

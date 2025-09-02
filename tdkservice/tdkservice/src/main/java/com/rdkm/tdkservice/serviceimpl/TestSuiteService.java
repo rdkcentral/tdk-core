@@ -776,8 +776,8 @@ public class TestSuiteService implements ITestSuiteService {
 		Category categoryObj = commonService.validateCategory(category);
 		List<TestSuite> testSuiteObj;
 		if (Category.RDKV.equals(categoryObj)) {
-			testSuiteObj = testSuiteRepository.findAllByCategoryIn(
-					Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
+			testSuiteObj = testSuiteRepository
+					.findAllByCategoryIn(Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
 		} else {
 			testSuiteObj = testSuiteRepository.findAllByCategory(categoryObj);
 		}
@@ -851,9 +851,22 @@ public class TestSuiteService implements ITestSuiteService {
 		// Sort alphabetically by test suite name
 		testSuites.sort(Comparator.comparing(TestSuite::getName, String.CASE_INSENSITIVE_ORDER));
 
-		return testSuites.stream()
-				.map(MapperUtils::convertToTestSuiteDetailsResponse)
-				.collect(Collectors.toList());
+		return testSuites.stream().map(MapperUtils::convertToTestSuiteDetailsResponse).collect(Collectors.toList());
+	}
+
+	/**
+	 * This method is used to get the list of all test suites
+	 * 
+	 * @return the list of test suites
+	 */
+	@Override
+	public List<TestSuiteDetailsResponse> getTestSuiteList() {
+		LOGGER.info("Fetching all test suite names");
+		List<TestSuite> testSuites = testSuiteRepository.findAll();
+		// Sort alphabetically by test suite name
+		testSuites.sort(Comparator.comparing(TestSuite::getName, String.CASE_INSENSITIVE_ORDER));
+
+		return testSuites.stream().map(MapperUtils::convertToTestSuiteDetailsResponse).collect(Collectors.toList());
 	}
 
 }

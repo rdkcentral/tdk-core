@@ -795,6 +795,7 @@ public class MapperUtils {
 		TestSuiteDetailsResponse response = new TestSuiteDetailsResponse();
 		response.setId(testSuite.getId());
 		response.setTestSuiteName(testSuite.getName());
+		response.setScriptCount(testSuite.getScriptTestSuite().size());
 		return response;
 	}
 

@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.List;
+
 import com.rdkm.tdkservice.enums.ExecutionTriggerStatus;
 
 import lombok.Data;
@@ -39,4 +41,8 @@ public class ExecutionResponseDTO {
 	 */
 	String message;
 
+	/**
+	 * Represents the execution result details URL.
+	 */
+	List<String> execResultDetailsUrl;
 }

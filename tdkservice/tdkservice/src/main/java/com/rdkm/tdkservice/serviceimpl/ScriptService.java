@@ -157,9 +157,8 @@ public class ScriptService implements IScriptService {
 
 	/**
 	 * Save the script file and the script details freshly from UI or from API call.
-	 * The script file will be saved in
-	 * the location based on the module and category. The script details will be
-	 * saved in the database.
+	 * The script file will be saved in the location based on the module and
+	 * category. The script details will be saved in the database.
 	 */
 	@Override
 	public boolean saveScript(MultipartFile scriptFile, ScriptCreateDTO scriptCreateDTO) {
@@ -168,9 +167,8 @@ public class ScriptService implements IScriptService {
 
 	/**
 	 * Save the script file and the script details freshly from UI or from API call.
-	 * The script file will be saved in
-	 * the location based on the module and category. The script details will be
-	 * saved in the database.
+	 * The script file will be saved in the location based on the module and
+	 * category. The script details will be saved in the database.
 	 * 
 	 * @param scriptFile      - the script file to be saved
 	 * @param scriptCreateDTO - the script creation DTO
@@ -313,9 +311,8 @@ public class ScriptService implements IScriptService {
 	}
 
 	/**
-	 * Updates the given script and its file. For the update functionality
-	 * via XML, the script object will be passed here. For update via UI or Rest
-	 * API, the
+	 * Updates the given script and its file. For the update functionality via XML,
+	 * the script object will be passed here. For update via UI or Rest API, the
 	 * script id will be used to identify the script to be updated.
 	 *
 	 * @param scriptFile      - the script file to be updated
@@ -328,8 +325,8 @@ public class ScriptService implements IScriptService {
 	}
 
 	/**
-	 * Updates the given script and its file. The logic for updating the script
-	 * is common to the source of the update (XML, UI, REST API).
+	 * Updates the given script and its file. The logic for updating the script is
+	 * common to the source of the update (XML, UI, REST API).
 	 *
 	 * @param scriptFile      - the script file to be updated
 	 * @param scriptUpdateDTO - the script update DTO
@@ -1263,8 +1260,7 @@ public class ScriptService implements IScriptService {
 		// Get all the modules based on the category
 		List<Module> modules;
 		if (Category.RDKV.equals(categoryValue)) {
-			modules = moduleRepository.findAllByCategoryIn(
-					Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
+			modules = moduleRepository.findAllByCategoryIn(Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
 		} else {
 			modules = moduleRepository.findAllByCategory(categoryValue);
 		}
@@ -1300,8 +1296,8 @@ public class ScriptService implements IScriptService {
 	}
 
 	/*
-	 * This method is used to create default test suite for existing module
-	 * and also to update the test suite if it already exists with the new scripts
+	 * This method is used to create default test suite for existing module and also
+	 * to update the test suite if it already exists with the new scripts
 	 */
 	@Override
 	public void defaultTestSuiteCreationForExistingModule() {
@@ -1373,9 +1369,7 @@ public class ScriptService implements IScriptService {
 		// Sort scripts by module name
 		scripts.sort(Comparator.comparing(script -> script.getModule().getName()));
 
-		return scripts.stream()
-				.map(MapperUtils::convertToScriptDetailsResponse)
-				.collect(Collectors.toList());
+		return scripts.stream().map(MapperUtils::convertToScriptDetailsResponse).collect(Collectors.toList());
 	}
 
 	/**
@@ -1480,5 +1474,58 @@ public class ScriptService implements IScriptService {
 			throw new TDKServiceException("Error generating markdown file: " + e.getMessage());
 		}
 		return new ByteArrayInputStream(out.toByteArray());
+	}
+
+	/**
+	 * This method is used to get the list of scripts based on the script group.
+	 *
+	 * @param scriptGroup - the script group name (test suite name)
+	 * @return - the list of scripts based on the script group
+	 */
+	@Override
+	public List<ScriptListDTO> findAllScriptsByTestSuite(String testSuite) {
+		LOGGER.info("Getting all scripts based on the test suite: " + testSuite);
+
+		// Find the test suite by name (test suite acts as script group)
+		TestSuite testSuiteObj = testSuiteRepository.findByName(testSuite);
+		if (testSuiteObj == null) {
+			LOGGER.error("Test suite not found with the name: " + testSuite);
+			throw new ResourceNotFoundException("Test suite", testSuite);
+		}
+
+		// Get scripts from the test suite
+		List<ScriptTestSuite> scriptTestSuites = testSuiteObj.getScriptTestSuite();
+		List<ScriptListDTO> scriptListDTO = new ArrayList<>();
+
+		for (ScriptTestSuite scriptTestSuite : scriptTestSuites) {
+			Script script = scriptTestSuite.getScript();
+			ScriptListDTO scriptDTO = MapperUtils.convertToScriptListDTO(script);
+			scriptListDTO.add(scriptDTO);
+			LOGGER.info("Script: " + script.getName() + " added to the list for test suite: " + testSuite);
+		}
+
+		LOGGER.info("Returning all scripts based on the test suite: " + testSuite);
+		return scriptListDTO;
+	}
+
+	/**
+	 * This method is used to get the module execution time.
+	 *
+	 * @param moduleName - the module name
+	 * @return - the module execution time in seconds
+	 */
+	@Override
+	public Integer getModuleScriptTimeout(String moduleName) {
+		LOGGER.info("Getting module execution time for module: " + moduleName);
+
+		Module module = moduleRepository.findByName(moduleName);
+		if (module == null) {
+			LOGGER.error("Module not found with the name: " + moduleName);
+			throw new ResourceNotFoundException(Constants.MODULE, moduleName);
+		}
+
+		Integer timeout = module.getExecutionTime();
+		LOGGER.info("Module execution time for module '" + moduleName + "': " + timeout + " seconds");
+		return timeout;
 	}
 }

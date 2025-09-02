@@ -23,42 +23,41 @@ import java.util.ArrayList;
 
 import lombok.Data;
 
-
 /**
- * CIRequestDTO is a Data Transfer Object that represents a request for a CI (Continuous Integration) service.
- * It contains information about the service, its status, start time, initiator, duration, and results.
+ * CIDeviceDTO is a Data Transfer Object that represents a device with its details.
+ * It contains information about the device, its type, image name, component level details, and system level details.
  */
 @Data
-public class CIRequestDTO {
+public class DeviceDetailsDTO {
     
     /**
-     * The name of the CI service.
+     * The name of the device.
      */
-    public String service;
-
+    public String device;
+    
+	/**
+	 * The name of the device where execution happen.
+	 */
+    private String deviceName;
+  
     /**
-     * The current status of the CI service.
+     * The type of the device.
      */
-    public String status;
-
+    public String deviceType;
+   
     /**
-     * The timestamp when the CI service started.
+     * The name of the image associated with the device.
      */
-    public String started_at;
-
+    public String imageName;
+   
     /**
-     * The identifier of the user who started the CI service.
+     * A list of component level details for the device.
      */
-    public String started_by;
-
+    public ArrayList<ComponentLevelDTO> componentLevelDetails;
+   
     /**
-     * The duration of the CI service.
+     * A list of system level details for the device.
      */
-    public String duration;
-
-    /**
-     * A list of results from the CI service.
-     */
-    public ArrayList<CIResultDTO> result;
+    public ArrayList<Object> systemLevelDetails;
 
 }

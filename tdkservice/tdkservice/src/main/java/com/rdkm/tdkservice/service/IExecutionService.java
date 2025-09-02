@@ -27,6 +27,8 @@ import java.util.UUID;
 import org.json.JSONObject;
 import org.springframework.core.io.Resource;
 
+import com.rdkm.tdkservice.dto.ResultDTO;
+import com.rdkm.tdkservice.dto.ExecutionByDateDTO;
 import com.rdkm.tdkservice.dto.ExecutionDetailsForHtmlReportDTO;
 import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionListDTO;
@@ -121,7 +123,7 @@ public interface IExecutionService {
 	 * @return an ExecutionDetailsResponseDTO containing the details of the
 	 *         execution
 	 */
-	ExecutionDetailsResponseDTO getExecutionDetails(UUID id);
+	ExecutionDetailsResponseDTO getExecutionDetails(UUID id ,String execName);
 
 	/**
 	 * Retrieves the execution result for the given execution result ID.
@@ -146,7 +148,7 @@ public interface IExecutionService {
 	 * @param execId the unique identifier of the execution to be aborted
 	 * @return true if the execution was successfully aborted, false otherwise
 	 */
-	boolean abortExecution(UUID execId);
+	boolean abortExecution(UUID execId ,String execName);
 
 	/**
 	 * Determines whether the execution with the specified ID should be repeated.
@@ -254,7 +256,7 @@ public interface IExecutionService {
 	 * @param executionId - the execution id
 	 * @return the module wise summary
 	 */
-	Map<String, ExecutionSummaryResponseDTO> getModulewiseExecutionSummary(UUID executionId);
+	Map<String, ExecutionSummaryResponseDTO> getModulewiseExecutionSummary(UUID executionId ,String execName);
 
 	/**
 	 * Deletes executions within the specified date range.
@@ -309,8 +311,8 @@ public interface IExecutionService {
 	List<ExecutionDetailsForHtmlReportDTO> getExecutionDetailsForHtmlReport(UUID executionId);
 
 	/**
-	 * Creates a file and writes the provided test data into it.
-	 * This is predominaltly used for Media validation scripts
+	 * Creates a file and writes the provided test data into it. This is
+	 * predominaltly used for Media validation scripts
 	 * 
 	 * @param execId    Execution ID
 	 * @param execDevId Execution Device ID
@@ -320,4 +322,48 @@ public interface IExecutionService {
 	 */
 	JSONObject createFileAndWrite(String execId, String execDevId, String resultId, String test);
 
+	/**
+	 * Retrieves the execution ID for a specific execution name.
+	 *
+	 * @param executionName the name of the execution for which to retrieve the ID
+	 * @return the execution ID as UUID, or null if the execution is not found
+	 */
+	UUID getExecutionId(String executionName);
+
+	/**
+	 * Retrieves the execution result in JSON format for a specific execution name.
+	 *
+	 * @param executionName the name of the execution for which to retrieve the
+	 *                      result
+	 * @return a CIRequestDTO containing the execution result in JSON format
+	 */
+	ResultDTO getExecutionResultInJson(String executionName);
+
+	/**
+	 * Retrieves the device details associated with a specific execution name.
+	 *
+	 * @param executionName the name of the execution for which to retrieve device
+	 *                      details
+	 * @return a String containing the device details, or null if the execution is
+	 *         not found
+	 */
+	String getDeviceDetailsByExecutionName(String executionName);
+
+	/**
+	 * Retrieves a list of executions that were performed on a specific date.
+	 *
+	 * @param date the date for which to retrieve executions, in the format
+	 *             "yyyy-MM-dd"
+	 * @return a list of ExecutionByDateDTO objects representing the executions
+	 *         performed on the specified date
+	 */
+	List<ExecutionByDateDTO> getExecutionByDate(String date);
+	
+	/**
+	 * Retrieves the execution timeout for a specific script.
+	 *
+	 * @param scriptName the name of the script for which to retrieve the timeout
+	 * @return the execution timeout in seconds, or null if the script is not found
+	 */
+	Integer getScriptExecutionTimeout(String scriptName);
 }

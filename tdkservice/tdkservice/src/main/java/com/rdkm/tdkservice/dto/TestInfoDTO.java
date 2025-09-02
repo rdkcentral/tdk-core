@@ -19,29 +19,21 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
-import java.util.ArrayList;
-
 import lombok.Data;
 
 /**
- * Data Transfer Object for CI Component Level.
- * This class holds information about a CI component, including its name, status, and associated script details.
+ * Data Transfer Object for CI Test Information.
  */
 @Data
-public class CIComponentLevelDTO {
+public class TestInfoDTO {
 
 	/**
-	 * Name of the module.
+	 * The name of the test case.
 	 */
-	public String moduleName;
+	public String testCaseName;
 
 	/**
-	 * Status of the module.
+	 * The status of the test case.
 	 */
-	public String moduleStatus;
-
-	/**
-	 * List of script details associated with the module.
-	 */
-	public ArrayList<CIScriptDetailsDTO> scriptDetails;
+	public String testCaseStatus;
 }

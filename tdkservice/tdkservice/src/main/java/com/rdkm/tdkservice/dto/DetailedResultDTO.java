@@ -24,35 +24,29 @@ import java.util.ArrayList;
 import lombok.Data;
 
 /**
- * CIDeviceDTO is a Data Transfer Object that represents a device with its details.
- * It contains information about the device, its type, image name, component level details, and system level details.
+ * CIResultDTO is a Data Transfer Object that holds the result of a CI execution.
+ * It contains the name of the execution and details of the devices involved.
  */
 @Data
-public class CIDeviceDTO {
-    
-    /**
-     * The name of the device.
-     */
-    public String device;
-  
-    /**
-     * The type of the device.
-     */
-    public String deviceType;
-   
-    /**
-     * The name of the image associated with the device.
-     */
-    public String imageName;
-   
-    /**
-     * A list of component level details for the device.
-     */
-    public ArrayList<CIComponentLevelDTO> componentLevelDetails;
-   
-    /**
-     * A list of system level details for the device.
-     */
-    public ArrayList<Object> systemLevelDetails;
+public class DetailedResultDTO {
 
+	/**
+	 * The name of the CI execution.
+	 */
+	public String executionName;
+	
+	/**
+	 * The status of the CI execution.
+	 */
+	private String executionStatus;
+	
+	/**
+	 * The script or test suite used in the CI execution.
+	 */
+	private String scriptOrTestSuite;
+
+	/**
+	 * A list of device details involved in the CI execution.
+	 */
+	public ArrayList<DeviceDetailsDTO> deviceDetails;
 }

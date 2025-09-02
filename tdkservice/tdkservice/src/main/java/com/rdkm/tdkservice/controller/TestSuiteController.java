@@ -366,4 +366,26 @@ public class TestSuiteController {
 		}
 	}
 
+	/**
+	 * This method used to get List of all Test Suite
+	 * 
+	 * @return ResponseEntity<DataResponse>
+	 */
+	@Operation(summary = "Get List of all Test Suite", description = "Get List of all Test Suite")
+	@ApiResponse(responseCode = "200", description = "List of all test suite fetched successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@ApiResponse(responseCode = "500", description = "Issue in fetching all test suites")
+	@GetMapping("/getTestSuiteList")
+	public ResponseEntity<DataResponse> getTestSuiteList() {
+		LOGGER.info("Received request to get list of test suites");
+		List<TestSuiteDetailsResponse> testSuites = testSuiteService.getTestSuiteList();
+		if (testSuites != null) {
+			LOGGER.info("Test suites fetched successfully");
+			return ResponseUtils.getSuccessDataResponse("Test suites fetched successfully", testSuites);
+		} else {
+			LOGGER.warn("No test suites found");
+			return ResponseUtils.getSuccessDataResponse("No test suites found", testSuites);
+		}
+	}
+
 }
