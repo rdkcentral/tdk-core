@@ -374,4 +374,31 @@ def webpa_validate_set(paramName, testValue, WEBPA_URL, AUTH_TOKEN):
     return validation_status
 
 
+
+#---------------------------------------------------------------
+# Integer Check Function
+#---------------------------------------------------------------
+def integer_check (value, threshold_value=None):
+    str_val = str(value.strip())
+    print ("Value obtained : ", str_val)
+    if not str_val.isdigit():
+        print(f"[FAILURE] Value contains Alphabets or non-numeric characters")
+        return "FAILURE"
+    str_val = int(value)
+    if str_val < 0:
+        print(f"[FAILURE] Value is in negative")
+        return "FAILURE"
+    if threshold_value is not None:
+        threshold_value = int(threshold_value)
+        print("Threshold value provided: ", threshold_value)
+        if str_val <= threshold_value:
+            print("[SUCCESS] Value is less than the threshold value")
+            return "SUCCESS"
+        else:
+            print("[FAILURE] Value is greater than the threshold value")
+            return "FAILURE"
+    else:
+        print("Integer value validated successfully")
+        return "SUCCESS"
+
 #----------------------------------------------------------------------------------------------
