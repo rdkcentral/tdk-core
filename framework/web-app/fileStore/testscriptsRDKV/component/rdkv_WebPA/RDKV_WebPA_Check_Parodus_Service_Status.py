@@ -62,10 +62,12 @@
     <test_objective>To verify whether the Parodus Service is currently running</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video Accelerator, RPI</test_setup>
-    <pre_requisite>WEBPA_URL and Authoraization Key should be configured in the device config file</pre_requisite>
+    <pre_requisite></pre_requisite>
     <api_or_interface_used></api_or_interface_used>
     <input_parameters></input_parameters>
-    <automation_approch></automation_approch>
+    <automation_approch>1. Check Parodus Service  status
+2. TM will verify the output by having a cross checking the configured value and output are same
+3. TM will return SUCCESS or FAILURE based on the result from the above step.</automation_approch>
     <expected_output>Parodus service should be in active state</expected_output>
     <priority>High</priority>
     <test_stub_interface></test_stub_interface>
