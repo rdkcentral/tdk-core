@@ -110,11 +110,17 @@ def parseDeviceConfig(obj):
         global wlan_5ghz_interface
         wlan_5ghz_interface = config.get(deviceConfig, "WLAN_5GHZ_INTERFACE")
 
+        global wlan_6ghz_interface
+        wlan_6ghz_interface = config.get(deviceConfig, "WLAN_6GHZ_INTERFACE")
+
         global wlan_2ghz_public_ssid_interface
         wlan_2ghz_public_ssid_interface = config.get(deviceConfig, "WLAN_2GHZ_PUBLIC_SSID_INTERFACE")
 
         global wlan_5ghz_public_ssid_interface
         wlan_5ghz_public_ssid_interface = config.get(deviceConfig, "WLAN_5GHZ_PUBLIC_SSID_INTERFACE")
+
+        global wlan_6ghz_public_ssid_interface
+        wlan_6ghz_public_ssid_interface = config.get(deviceConfig, "WLAN_6GHZ_PUBLIC_SSID_INTERFACE")
 
         global wlan_inet_address
         wlan_inet_address = config.get(deviceConfig, "WLAN_INET_ADDRESS")
@@ -131,11 +137,17 @@ def parseDeviceConfig(obj):
         global wlan_5ghz_ssid_connect_status
         wlan_5ghz_ssid_connect_status = config.get(deviceConfig, "WLAN_5GHZ_SSID_CONNECT_STATUS")
 
+        global wlan_6ghz_ssid_connect_status
+        wlan_6ghz_ssid_connect_status = config.get(deviceConfig, "WLAN_6GHZ_SSID_CONNECT_STATUS")
+
         global wlan_2ghz_ssid_disconnect_status
         wlan_2ghz_ssid_disconnect_status = config.get(deviceConfig, "WLAN_2GHZ_SSID_DISCONNECT_STATUS")
 
         global wlan_5ghz_ssid_disconnect_status
         wlan_5ghz_ssid_disconnect_status = config.get(deviceConfig, "WLAN_5GHZ_SSID_DISCONNECT_STATUS")
+
+        global wlan_6ghz_ssid_disconnect_status
+        wlan_6ghz_ssid_disconnect_status = config.get(deviceConfig, "WLAN_6GHZ_SSID_DISCONNECT_STATUS")
 
         global wlan_2ghz_public_ssid_connect_status
         wlan_2ghz_public_ssid_connect_status = config.get(deviceConfig, "WLAN_2GHZ_PUBLIC_SSID_CONNECT_STATUS")
@@ -143,11 +155,17 @@ def parseDeviceConfig(obj):
         global wlan_5ghz_public_ssid_connect_status
         wlan_5ghz_public_ssid_connect_status = config.get(deviceConfig, "WLAN_5GHZ_PUBLIC_SSID_CONNECT_STATUS")
 
+        global wlan_6ghz_public_ssid_connect_status
+        wlan_6ghz_public_ssid_connect_status = config.get(deviceConfig, "WLAN_6GHZ_PUBLIC_SSID_CONNECT_STATUS")
+
         global wlan_2ghz_public_ssid_disconnect_status
         wlan_2ghz_public_ssid_disconnect_status = config.get(deviceConfig, "WLAN_2GHZ_PUBLIC_SSID_DISCONNECT_STATUS")
 
         global wlan_5ghz_public_ssid_disconnect_status
         wlan_5ghz_public_ssid_disconnect_status = config.get(deviceConfig, "WLAN_5GHZ_PUBLIC_SSID_DISCONNECT_STATUS")
+
+        global wlan_6ghz_public_ssid_disconnect_status
+        wlan_6ghz_public_ssid_disconnect_status = config.get(deviceConfig, "WLAN_6GHZ_PUBLIC_SSID_DISCONNECT_STATUS")
 
         global lan_os_type
         lan_os_type = config.get(deviceConfig, 'LAN_OS_TYPE')
@@ -234,23 +252,32 @@ def parseDeviceConfig(obj):
         global radio_2ghz_index
         global ssid_5ghz_index
         global radio_5ghz_index
+        global ssid_6ghz_index
+        global radio_6ghz_index
         global ssid_2ghz_public_index
         global ssid_5ghz_public_index
+        global ssid_6ghz_public_index
 
         if setup_type == "TDK":
             ssid_2ghz_index = config.get(deviceConfig, "TDK_SSID_2GHZ_INDEX")
             radio_2ghz_index = config.get(deviceConfig, "TDK_RADIO_2GHZ_INDEX")
             ssid_5ghz_index = config.get(deviceConfig, "TDK_SSID_5GHZ_INDEX")
             radio_5ghz_index = config.get(deviceConfig, "TDK_RADIO_5GHZ_INDEX")
+            ssid_6ghz_index = config.get(deviceConfig, "TDK_SSID_6GHZ_INDEX")
+            radio_6ghz_index = config.get(deviceConfig, "TDK_RADIO_6GHZ_INDEX")
             ssid_2ghz_public_index = config.get(deviceConfig, "TDK_SSID_2GHZ_PUBLIC_INDEX")
             ssid_5ghz_public_index = config.get(deviceConfig, "TDK_SSID_5GHZ_PUBLIC_INDEX")
+            ssid_6ghz_public_index = config.get(deviceConfig, "TDK_SSID_6GHZ_PUBLIC_INDEX")
         else:
             ssid_2ghz_index = config.get(deviceConfig, "WEBPA_SSID_2GHZ_INDEX")
             radio_2ghz_index = config.get(deviceConfig, "WEBPA_RADIO_2GHZ_INDEX")
             ssid_5ghz_index = config.get(deviceConfig, "WEBPA_SSID_5GHZ_INDEX")
             radio_5ghz_index = config.get(deviceConfig, "WEBPA_RADIO_5GHZ_INDEX")
+            ssid_6ghz_index = config.get(deviceConfig, "WEBPA_SSID_6GHZ_INDEX")
+            radio_6ghz_index = config.get(deviceConfig, "WEBPA_RADIO_6GHZ_INDEX")
             ssid_2ghz_public_index = config.get(deviceConfig, "WEBPA_SSID_2GHZ_PUBLIC_INDEX")
             ssid_5ghz_index = config.get(deviceConfig, "WEBPA_SSID_5GHZ_PUBLIC_INDEX")
+            ssid_6ghz_index = config.get(deviceConfig, "WEBPA_SSID_6GHZ_PUBLIC_INDEX")
 
         global ssid_5ghz_name
         ssid_5ghz_name = config.get(deviceConfig, "SSID_5GHZ_NAME")
@@ -263,6 +290,18 @@ def parseDeviceConfig(obj):
 
         global ssid_5ghz_invalid_pwd
         ssid_5ghz_invalid_pwd = config.get(deviceConfig, "SSID_5GHZ_INVALID_PWD")
+
+        global ssid_6ghz_name
+        ssid_6ghz_name = config.get(deviceConfig, "SSID_6GHZ_NAME")
+
+        global ssid_6ghz_public_name
+        ssid_6ghz_public_name = config.get(deviceConfig, "SSID_6GHZ_PUBLIC_NAME")
+
+        global ssid_6ghz_pwd
+        ssid_6ghz_pwd = config.get(deviceConfig, "SSID_6GHZ_PWD")
+
+        global ssid_6ghz_invalid_pwd
+        ssid_6ghz_invalid_pwd = config.get(deviceConfig, "SSID_6GHZ_INVALID_PWD")
 
         global connection_timeout
         connection_timeout = config.get(deviceConfig, "CONNECTION_TIMEOUT")
@@ -474,6 +513,12 @@ def parseDeviceConfig(obj):
         global wlan_5ghz_throughput_to_lan
         wlan_5ghz_throughput_to_lan = config.get(deviceConfig, "WLAN_5GHZ_THROUGHPUT_TO_LAN")
 
+        global wlan_6ghz_throughput_to_wan
+        wlan_6ghz_throughput_to_wan = config.get(deviceConfig, "WLAN_6GHZ_THROUGHPUT_TO_WAN")
+
+        global wlan_6ghz_throughput_to_lan
+        wlan_6ghz_throughput_to_lan = config.get(deviceConfig, "WLAN_6GHZ_THROUGHPUT_TO_LAN")
+
         global lan_throughput_to_wlan
         lan_throughput_to_wlan = config.get(deviceConfig, "LAN_THROUGHPUT_TO_WLAN")
 
@@ -488,6 +533,9 @@ def parseDeviceConfig(obj):
 
         global wlan_2ghz_throughput_outfile
         wlan_2ghz_throughput_outfile = config.get(deviceConfig, "WLAN_2GHZ_THROUGHPUT_OUTFILE")
+
+        global wlan_6ghz_throughput_outfile
+        wlan_6ghz_throughput_outfile = config.get(deviceConfig, "WLAN_6GHZ_THROUGHPUT_OUTFILE")
 
         global tm_logs_location
         tm_logs_location = config.get(deviceConfig, "TM_LOGS_LOCATION")
@@ -782,7 +830,7 @@ def wlanConnectWifiSsid(ssidName,ssidPwd,wlanInterface,securityType= "Protected"
             status = checkSsidAvailable(ssidName)
             if ssidName in status:
                 status = wifiConnect(ssidName,ssidPwd,securityType)
-                if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_2ghz_public_ssid_connect_status in status or wlan_5ghz_public_ssid_connect_status in status:
+                if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status or wlan_2ghz_public_ssid_connect_status in status or wlan_5ghz_public_ssid_connect_status in status or wlan_6ghz_public_ssid_connect_status:
                     sleep(60);
                     status = getConnectedSsidName(wlanInterface)
                     if ssidName in status:
@@ -843,7 +891,7 @@ def wlanDisconnectWifiSsid(wlanInterface):
 
     try:
         status = wifiDisconnect(wlanInterface)
-        if wlan_2ghz_ssid_disconnect_status in status or wlan_5ghz_ssid_disconnect_status in status or wlan_2ghz_public_ssid_disconnect_status in status or wlan_5ghz_public_ssid_disconnect_status in status or "SSID is already disconnected" in status:
+        if wlan_2ghz_ssid_disconnect_status in status or wlan_5ghz_ssid_disconnect_status in status or wlan_6ghz_ssid_disconnect_status in status or wlan_2ghz_public_ssid_disconnect_status in status or wlan_5ghz_public_ssid_disconnect_status in status or wlan_6ghz_public_ssid_disconnect_status in status or "SSID is already disconnected" in status:
             return "SUCCESS"
         else:
             return "Failed to disconnect from wifi ssid"
@@ -1481,12 +1529,19 @@ def verifyNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,sour
 # Return Value: Returns the status of ping operation
 
     try:
-        status = clientConnect(source)
+        if source == "WLAN_6G":
+            status = clientConnect("WLAN")
+        else:
+            status = clientConnect(source)
+
         if status == "SUCCESS":
             if wlan_os_type == "UBUNTU":
                 if source == "WLAN":
                     script_name = wlan_script;
                     interface = wlan_2ghz_interface
+                elif source == "WLAN_6G":
+                    script_name = wlan_script
+                    interface = wlan_6ghz_interface
                 elif source == "LAN":
                     script_name = lan_script;
                     interface = lan_interface;
@@ -3124,6 +3179,7 @@ def postExecutionCleanup():
 
     wifiDisconnect(wlan_2ghz_interface);
     wifiDisconnect(wlan_5ghz_interface);
+    wifiDisconnect(wlan_6ghz_interface);
     deleteSavedWifiConnections();
     clientDisconnect();
 
