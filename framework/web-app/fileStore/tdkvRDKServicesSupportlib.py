@@ -4533,7 +4533,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 else:
                     result = "FALSE"
             else:
-                if message is None:
+                if not message:
                     result = "TRUE"
                 else:
                     result = "FALSE"
