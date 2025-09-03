@@ -45,7 +45,7 @@ CONFIGURE_OPTIONS_HYBRID=" --enable-hybrid --enable-xupnp --enable-westeroshal -
 
 CONFIGURE_OPTIONS_HAL=" --enable-wifihal --enable-powermgrhal --enable-deepsleephal --enable-mfrhal --enable-tdkgraphics --enable-bluetoothhal --disable-defaultComponents --enable-mediautils --enable-westeroshal"
 
-CONFIGURE_OPTIONS_COMPONENTS="--enable-netsrvmgr --enable-rdkfwupdater --enable-aamp --enable-hdmicechal"
+CONFIGURE_OPTIONS_COMPONENTS=" --enable-rdkfwupdater --enable-netsrvmgr"
 
 MFRHAL_LIB_NAME="-lRDKMfrLib"
 
