@@ -65,8 +65,11 @@
     <pre_requisite>WEBPA_URL and Authoraization Key should be configured in the device config file</pre_requisite>
     <api_or_interface_used></api_or_interface_used>
     <input_parameters></input_parameters>
-    <automation_approch></automation_approch>
-    <expected_output>RFC parameter should return BTRGamePad is enabled or not</expected_output>
+    <automation_approch>1. Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.BTR.GamePad.Enable will fetch the WebPA server url from the device.
+2. TM will verify the output by having a cross checking the configured value and output are same
+3. TM will return SUCCESS or FAILURE based on the result from the above step.</automation_approch>
+    <expected_output>1. RFC parameter will give the server url from the device.
+2.RFC parameter should return BTRGamePad is enabled or not</expected_output>
     <priority>High</priority>
     <test_stub_interface></test_stub_interface>
     <test_script>RDKV_WebPA_BTRGamePad_Enable</test_script>
