@@ -58,6 +58,8 @@ SRC_LIBSYSWRAPPER="https://github.com/rdkcentral/libSyscallWrapper.git"
 SRC_MIDDLEWARE_SUPPORT="https://github.com/rdkcentral/meta-middleware-generic-support.git"
 SRC_RDKLOGGER="https://github.com/rdkcentral/rdk_logger.git"
 SRC_AAMP="https://github.com/rdkcentral/aamp.git"
+SRC_RFC="https://github.com/rdkcentral/rfc.git"
+SRC_WDMP_C="https://github.com/xmidt-org/wdmp-c.git"
 
 #Platformwise repositories
 SRC_RPI="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
@@ -81,7 +83,7 @@ TDK_SOURCE_DIR=${ROOT_DIR}/${DIR_TDK}
 COMPILE_SKELETON=false
 SYSROOT=${ROOT_DIR}/sysroots
 SKIP_PLATFORM="FALSE"
-SKIP_PACKAGES="TRUE"
+SKIP_PACKAGES="FALSE"
 
 platform_arg=false
 for arg in "$@"
@@ -130,6 +132,16 @@ if [[ $PLATFORM == "BROADCOM" ]];then
 else
     PWRMGRHAL_LIBS=" $MFRHAL_LIB_NAME -liarmmgrs-power-hal "
 fi
+
+REQUIRED_PACKAGES="libtool m4 autoconf build-essential automake"
+for REQUIRED_PKG in $REQUIRED_PACKAGES; do
+    PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+    if [ -z "$PKG_OK" ]; then
+        echo "No $REQUIRED_PKG"
+        echo "Please install using below command and then continue running the shell script\nsudo apt-get install $REQUIRED_PKG"
+        exit
+    fi
+done
 
 #All logs will be written to this file
 LOG_FILE=$ROOT_DIR/logs/$(date +%F_%T)_$PLATFORM.log
@@ -264,6 +276,11 @@ get_component_versions()
     rdkfw_srcrev=${rdkfw_srcrev// /}
     echo "rdkfw_srcrev = $rdkfw_srcrev"
 
+    rfc_srcrev=`grep rfc conf/include/generic-srcrev.inc | cut -d "=" -f 2`
+    rfc_srcrev=${rfc_srcrev//\"/}
+    rfc_srcrev=${rfc_srcrev// /}
+    echo "rfc_srcrev = $rfc_srcrev"
+
     rdklogger_srcrev=1.0.0
     echo "rdklogger_srcrev = $rdklogger_srcrev"
 
@@ -361,6 +378,7 @@ compile_TINYXML2()
     git checkout bf15233ad88390461f6ab0dbcf046cce643c5fcb >> $LOG_FILE 2>&1
 
     compile_status="$(find $SYSROOT -iname libtinyxml2.so.8.0.0)"
+    header_file_status="$(find $SYSROOT -iname tinyxml2.h)"
     if [ ! -z "${compile_status}" ] && [ ! -z "${header_file_status}" ]; then
         echo -e "TINYXML2 is already compiled and library is present in the current directory\n" 2>&1 | tee -a $LOG_FILE
         echo -e "\e[1;42m COMPILE TINYXML2 : SKIPPED \e[0m \n" 2>&1 | tee -a $LOG_FILE
@@ -486,10 +504,8 @@ install_gstreamer_glib()
 	pcreposix_package_name=$(basename "$pcreposix_package")
 	tar -xf $pcreposix_package_name
 	cd $SDKTARGETSYSROOT/additionial_libs/usr/lib
-	ls
 	cp * $SDKTARGETSYSROOT/usr/lib/
 	cd $SDKTARGETSYSROOT/additionial_libs/lib
-	ls
 	cp * $SDKTARGETSYSROOT/lib
 	rm -rf $SDKTARGETSYSROOT/additionial_libs
 	rm $SDKTARGETSYSROOT/$pcreposix_package_name
@@ -529,7 +545,7 @@ compile_JSONRPC()
 {
     echo -e "Entering $DIR_JSONRPC\n" 2>&1 | tee -a $LOG_FILE
     cd $DIR_JSONRPC
-    git checkout c696f6932113b81cd20cd4a34fdb1808e773f23e
+    git checkout c696f6932113b81cd20cd4a34fdb1808e773f23e >> $LOG_FILE 2>&1
     server="$(find .  -iname libjsonrpccpp-server.so.1.3.0)"
     client="$(find . -iname libjsonrpccpp-client.so.1.3.0)"
     common="$(find . -iname libjsonrpccpp-common.so.1.3.0)"
@@ -766,6 +782,7 @@ compile_skeleton_libraries()
                  mv iarmmgrs iarmmgrs_source
 		 cp ${TDK_SOURCE_DIR}/RDK_Source/iarmmgrs_source/hal/include/pwrMgr.h $SYSROOT/usr/include
 		 cp ${TDK_SOURCE_DIR}/RDK_Source/iarmmgrs_source/mfr/include/mfr_temperature.h $SYSROOT/usr/include
+		 cp ${TDK_SOURCE_DIR}/RDK_Source/iarmmgrs_source/mfr/include/mfrTypes.h ${SYSROOT}/usr/include/
 		 cp ${TDK_SOURCE_DIR}/RDK_Source/iarmmgrs_source/power/pwrlogger.h $SYSROOT/usr/include
                  cd ${TDK_SOURCE_DIR}
 	    fi
@@ -915,7 +932,7 @@ compile_skeleton_libraries()
 	    mv aamp aamp_source
 	    cd aamp_source
             if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
-                git checkout $aamp_srcrev
+                git checkout $aamp_srcrev >> $LOG_FILE 2>&1
             fi
             cd ..
 	    sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/Aamp*.h $SYSROOT/usr/include/
@@ -1023,9 +1040,14 @@ compile_tdkv()
         CONF_OPTIONS=" --enable-fncsPackage --enable-tdkgraphics "
 	echo "FNCS Package compilation enabled"
     fi
+    if [[ $CONF_OPTIONS == *"enable-powermgrhal"* ]] || [[ $CONF_OPTIONS == *"enable-rdkfwupdater"* ]];then
+	get_component_versions
+    fi
     if [[ $CONF_OPTIONS == *"enable-powermgrhal"* ]];then
 	echo -e "PowerMgrhal compilation is enabled\n"
 	git clone $SRC_IARMMGRS  >> $LOG_FILE 2>&1
+	cd iarmmgrs ; git checkout $iarmmgrs_srcrev >> $LOG_FILE 2>&1; cd ..
+
 	mkdir -p PowerMgrHal_stub/src/iarmmgr_source/power/
 	cp iarmmgrs/power/therm_mon.c PowerMgrHal_stub/src/iarmmgr_source/power/therm_mon.c
 	rm -rf iarmmgrs
@@ -1033,7 +1055,6 @@ compile_tdkv()
     if [[ $CONF_OPTIONS == *"enable-rdkfwupdater"* ]];then
 	echo -e "rdkfwupdater compilation is enabled\n"
 
-	get_component_versions
 	cd RDK_fwupdater_stub/src
 	if [  ! -d "rdkfwupdater_source" ];then
 	    git clone $SRC_RDKFWUPDATER rdkfwupdater_source >> $LOG_FILE 2>&1
@@ -1050,14 +1071,29 @@ compile_tdkv()
         cd common_utilties_source/
 	if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
             git checkout $common_utilities_srcrev >> $LOG_FILE 2>&1
-	 fi
+	fi
 	find . -type f -name "*.h" -exec cp {} $SYSROOT/usr/include/ \;
 	cd ..; rm -rf common_utilties_source/
+
+	git clone $SRC_RFC rfc_source >> $LOG_FILE 2>&1
+	cd rfc_source/
+        if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
+            git checkout $rfc_srcrev >> $LOG_FILE 2>&1
+        fi
+        find . -type f -name "rfcapi.h" -exec cp {} $SYSROOT/usr/include/ \;
+        cd ..; rm -rf rfc_source/
 
 	git clone $SRC_RDKLOGGER rdklogger_source >> $LOG_FILE 2>&1
 	cd rdklogger_source/
 	find . -type f -name "*.h" -exec cp {} $SYSROOT/usr/include/ \;
 	cd ..; rm -rf rdklogger_source/
+
+	git clone $SRC_WDMP_C wdmp-c_source >> $LOG_FILE 2>&1
+	cd wdmp-c_source/
+	git checkout f9f687b6b4b10c2b72341e792a64334f0a409848 >> $LOG_FILE 2>&1
+	mkdir -p "$SYSROOT/usr/include/wdmp-c"
+	find . -type f -name "wdmp-c.h" -exec cp {} "$SYSROOT/usr/include/wdmp-c" \;
+	cd ..; rm -rf wdmp-c_source/
 
 	cd ${TDK_SOURCE_DIR}
     fi
