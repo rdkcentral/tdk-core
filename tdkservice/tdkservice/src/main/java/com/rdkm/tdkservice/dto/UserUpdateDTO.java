@@ -34,7 +34,7 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDTO {
+public class UserUpdateDTO {
 
 	/**
 	 * Represents the unique identifier for the User. This field is mandatory, hence
@@ -47,6 +47,11 @@ public class UserDTO {
 	 * Represents the username of the User.
 	 */
 	private String userName;
+
+	/**
+	 * Represents the password of the User.
+	 */
+	private String password;
 
 	/**
 	 * Represents the email of the User.

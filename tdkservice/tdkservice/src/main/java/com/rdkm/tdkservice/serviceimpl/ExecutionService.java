@@ -295,11 +295,11 @@ public class ExecutionService implements IExecutionService {
 				continue;
 			}
 
-//			if (!checkDeviceAvailabilityForExecution(device)) {
-//				LOGGER.error("Device: {} is not available for execution in it\n", device.getName());
-//				responseLogs.append("Device: " + device.getName() + " is not available for execution\n");
-//				continue;
-//			}
+			if (!checkDeviceAvailabilityForExecution(device)) {
+				LOGGER.error("Device: {} is not available for execution in it\n", device.getName());
+				responseLogs.append("Device: " + device.getName() + " is not available for execution\n");
+				continue;
+			}
 
 			isScriptExecutionTriggered = true;
 			responseLogs.append("Executing script: ").append(script.getName()).append(" on device: ")
@@ -318,7 +318,7 @@ public class ExecutionService implements IExecutionService {
 					.add(appConfig.getBaseURL() + "/execution/getExecutionResultJson?executionName=" + executionName);
 
 		}
-		// If atleast one script execution is triggered in one box, then return the
+		// If atleast one execution is triggered in one box, then return the
 		// response as triggered
 		if (isScriptExecutionTriggered) {
 			LOGGER.info("Script execution is triggered");
@@ -367,12 +367,13 @@ public class ExecutionService implements IExecutionService {
 		String executionName = null;
 		List<String> executionUrls = new ArrayList<>();
 		for (Device device : executionDetailsDTO.getDeviceList()) {
-//			if (!checkDeviceAvailabilityForExecution(device)) {
-//				LOGGER.error("Device: {} is not available for execution\n", device.getName());
-//				responseLogs.append("Device: " + device.getName()
-//						+ " is not available for execution, So not triggering excution in it\n");
-//				break;
-//			}
+			if (!checkDeviceAvailabilityForExecution(device)) {
+				LOGGER.error("Device: {} is not available for execution\n",
+						device.getName());
+				responseLogs.append("Device: " + device.getName()
+						+ " is not available for execution, So not triggering excution in it\n");
+				break;
+			}
 			executionName = getExecutionName(executionDetailsDTO.getExecutionName(), device,
 					executionDetailsDTO.getTestType());
 			isExecutionTriggered = true;
@@ -432,16 +433,20 @@ public class ExecutionService implements IExecutionService {
 			scripts.add(scriptTestSuite.getScript());
 		}
 
+		boolean isExecutionTriggered = false;
+
 		StringBuilder responseLogs = new StringBuilder();
 		List<String> executionUrls = new ArrayList<>();
 		for (Device device : executionDetailsDTO.getDeviceList()) {
-//			if (!checkDeviceAvailabilityForExecution(device)) {
-//				LOGGER.error("Device: {} is not available for execution\n", device.getName());
-//				responseLogs.append("Device: " + device.getName()
-//						+ " is not available for execution, So not triggering excution in it\n");
-//				continue;
-//			}
-			String executionName = getExecutionName(executionDetailsDTO.getExecutionName(), device,
+			if (!checkDeviceAvailabilityForExecution(device)) {
+				LOGGER.error("Device: {} is not available for execution\n",
+						device.getName());
+				responseLogs.append("Device: " + device.getName()
+						+ " is not available for execution, So not triggering excution in it\n");
+				continue;
+			}
+			isExecutionTriggered = true;
+String executionName = getExecutionName(executionDetailsDTO.getExecutionName(), device,
 					executionDetailsDTO.getTestType());
 			responseLogs.append("TestSuite execution on device: ").append(device.getName()).append(".");
 			executionAsyncService.prepareAndExecuteMultiScript(device, scripts, executionDetailsDTO.getUser(),
@@ -455,10 +460,20 @@ public class ExecutionService implements IExecutionService {
 					.add(appConfig.getBaseURL() + "/execution/getExecutionResultJson?executionName=" + executionName);
 
 		}
-		ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
-				ExecutionTriggerStatus.TRIGGERED, executionUrls);
 
-		return executionResponseDTO;
+		// If atleast one execution is triggered in one box, then return the
+		// response as triggered
+		if (isExecutionTriggered) {
+			LOGGER.info("Execution is triggered");
+			ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
+					ExecutionTriggerStatus.TRIGGERED, executionUrls);
+			return executionResponseDTO;
+		} else {
+			LOGGER.info("Execution is  not triggered");
+			ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
+					ExecutionTriggerStatus.NOTTRIGGERED, null);
+			return executionResponseDTO;
+		}
 
 	}
 
@@ -483,14 +498,17 @@ public class ExecutionService implements IExecutionService {
 			if (!scriptSet.contains(scriptTestSuite.getScript()))
 				scriptSet.add(scriptTestSuite.getScript());
 		}
+		boolean isExecutionTriggered = false;
 		List<String> executionUrls = new ArrayList<>();
 		for (Device device : executionDetailsDTO.getDeviceList()) {
-//			if (!checkDeviceAvailabilityForExecution(device)) {
-//				LOGGER.error("Device: {} is not available for execution\n", device.getName());
-//				responseLogs.append("Device: " + device.getName()
-//						+ " is not available for execution, So not triggering excution in it\n");
-//				break;
-//			}
+			if (!checkDeviceAvailabilityForExecution(device)) {
+				LOGGER.error("Device: {} is not available for execution\n",
+						device.getName());
+				responseLogs.append("Device: " + device.getName()
+						+ " is not available for execution, So not triggering excution in it\n");
+				break;
+			}
+			isExecutionTriggered = true;
 			String executionName = getExecutionName(executionDetailsDTO.getExecutionName(), device,
 					executionDetailsDTO.getTestType());
 			responseLogs.append("Multitestsuite execution on device: ").append(device.getName()).append(".");
@@ -505,9 +523,20 @@ public class ExecutionService implements IExecutionService {
 					.add(appConfig.getBaseURL() + "/execution/getExecutionResultJson?executionName=" + executionName);
 		}
 
-		ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
-				ExecutionTriggerStatus.TRIGGERED, executionUrls);
-		return executionResponseDTO;
+		// If atleast one execution is triggered in one box, then return the
+		// response as triggered
+
+		if (isExecutionTriggered) {
+			LOGGER.info("Execution is triggered");
+			ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
+					ExecutionTriggerStatus.TRIGGERED, executionUrls);
+			return executionResponseDTO;
+		} else {
+			LOGGER.info("Execution is  not triggered");
+			ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
+					ExecutionTriggerStatus.NOTTRIGGERED, null);
+			return executionResponseDTO;
+		}
 
 	}
 
@@ -2042,7 +2071,7 @@ public class ExecutionService implements IExecutionService {
 	public ExecutionSummaryResponseDTO getExecutionSummary(Execution execution) {
 
 		ExecutionSummaryResponseDTO summary = new ExecutionSummaryResponseDTO();
-		summary.setTotalScripts(execution.getScriptCount());
+		summary.setTotalScripts(execution.getExecutionResults().size());
 		summary.setInProgressCount((int) execution.getExecutionResults().stream()
 				.filter(r -> r.getStatus() == ExecutionStatus.INPROGRESS).count());
 
@@ -2055,9 +2084,14 @@ public class ExecutionService implements IExecutionService {
 		int failureCount = (int) execution.getExecutionResults().stream().filter(
 				r -> r.getResult() == ExecutionResultStatus.FAILURE && r.getStatus() != ExecutionStatus.INPROGRESS)
 				.count();
+
+		int timeoutCount = (int) execution.getExecutionResults().stream()
+				.filter(r -> r.getResult() == ExecutionResultStatus.TIMEOUT).count();
+
 		summary.setSuccess(successCount);
 		summary.setFailure(failureCount);
 		summary.setExecuted(failureCount + successCount);
+		summary.setTimeout(timeoutCount);
 		summary.setPending((int) execution.getExecutionResults().stream()
 				.filter(r -> r.getResult() == ExecutionResultStatus.PENDING).count());
 		summary.setNa((int) execution.getExecutionResults().stream()
@@ -2192,36 +2226,36 @@ public class ExecutionService implements IExecutionService {
 	private void setExecutionSummaryCount(ExecutionSummaryResponseDTO executionSummaryResponseDTO,
 			ExecutionResultStatus status) {
 		switch (status) {
-		case SUCCESS:
-			executionSummaryResponseDTO.setSuccess(executionSummaryResponseDTO.getSuccess() + 1);
-			executionSummaryResponseDTO.setExecuted(executionSummaryResponseDTO.getExecuted() + 1);
-			break;
-		case FAILURE:
-			executionSummaryResponseDTO.setFailure(executionSummaryResponseDTO.getFailure() + 1);
-			executionSummaryResponseDTO.setExecuted(executionSummaryResponseDTO.getExecuted() + 1);
-			break;
-		case INPROGRESS:
-			executionSummaryResponseDTO.setInProgressCount(executionSummaryResponseDTO.getInProgressCount() + 1);
-			break;
-		case PENDING:
-			executionSummaryResponseDTO.setPending(executionSummaryResponseDTO.getPending() + 1);
-			break;
-		case NA:
-			executionSummaryResponseDTO.setNa(executionSummaryResponseDTO.getNa() + 1);
-			break;
-		case TIMEOUT:
-			executionSummaryResponseDTO.setTimeout(executionSummaryResponseDTO.getTimeout() + 1);
-			break;
-		case SKIPPED:
-			executionSummaryResponseDTO.setSkipped(executionSummaryResponseDTO.getSkipped() + 1);
-			break;
-		case ABORTED:
-			executionSummaryResponseDTO.setAborted(executionSummaryResponseDTO.getAborted() + 1);
-			break;
+			case SUCCESS:
+				executionSummaryResponseDTO.setSuccess(executionSummaryResponseDTO.getSuccess() + 1);
+				executionSummaryResponseDTO.setExecuted(executionSummaryResponseDTO.getExecuted() + 1);
+				break;
+			case FAILURE:
+				executionSummaryResponseDTO.setFailure(executionSummaryResponseDTO.getFailure() + 1);
+				executionSummaryResponseDTO.setExecuted(executionSummaryResponseDTO.getExecuted() + 1);
+				break;
+			case INPROGRESS:
+				executionSummaryResponseDTO.setInProgressCount(executionSummaryResponseDTO.getInProgressCount() + 1);
+				break;
+			case PENDING:
+				executionSummaryResponseDTO.setPending(executionSummaryResponseDTO.getPending() + 1);
+				break;
+			case NA:
+				executionSummaryResponseDTO.setNa(executionSummaryResponseDTO.getNa() + 1);
+				break;
+			case TIMEOUT:
+				executionSummaryResponseDTO.setTimeout(executionSummaryResponseDTO.getTimeout() + 1);
+				break;
+			case SKIPPED:
+				executionSummaryResponseDTO.setSkipped(executionSummaryResponseDTO.getSkipped() + 1);
+				break;
+			case ABORTED:
+				executionSummaryResponseDTO.setAborted(executionSummaryResponseDTO.getAborted() + 1);
+				break;
 
-		default:
-			// Do nothing
-			break;
+			default:
+				// Do nothing
+				break;
 		}
 
 	}
@@ -2671,6 +2705,11 @@ public class ExecutionService implements IExecutionService {
 					List<ExecutionResult> pausedResults = executionResultRepository.findByExecution(execution).stream()
 							.filter(r -> r.getStatus() == ExecutionStatus.PAUSED)
 							.sorted(Comparator.comparing(ExecutionResult::getCreatedDate)).collect(Collectors.toList());
+					// Set status of all pausedResults to PENDING and save to DB
+					for (ExecutionResult result : pausedResults) {
+						result.setResult(ExecutionResultStatus.PENDING);
+						executionResultRepository.save(result);
+					}
 
 					LOGGER.info("Device {} is UP for paused execution {}", deviceName, execution.getName());
 					deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());

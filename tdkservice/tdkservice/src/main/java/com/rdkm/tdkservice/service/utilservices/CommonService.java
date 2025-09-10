@@ -684,7 +684,7 @@ public class CommonService {
 	public String getConfigProperty(File configFile, String key) {
 		Properties prop = loadPropertiesFromFile(configFile.getPath());
 		if (prop != null) {
-			LOGGER.info(" properties key for getting the property from config file" + prop.getProperty(key));
+			LOGGER.debug(" properties key for getting the property from config file" + prop.getProperty(key));
 			return prop.getProperty(key);
 		}
 		return null;

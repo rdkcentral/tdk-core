@@ -43,7 +43,7 @@ public class LoginService implements ILoginService {
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	UserDetailsService userDetails;
+	UserDetailsService userDetailsService;
 
 	@Autowired
 	UserService userService;
@@ -86,11 +86,22 @@ public class LoginService implements ILoginService {
 		LOGGER.info("Recieved signin request" + signinRequest.toString());
 		SigninResponseDTO signinResponse = new SigninResponseDTO();
 
-		userDetails.loadUserByUsername(signinRequest.getUsername());
+		// This acts as the validation for the user name , which is
+		// done by Spring security itself before proceeding with authentiation
+		userDetailsService.loadUserByUsername(signinRequest.getUsername());
+
+		// If the password is wrong, a BadCredentialsException is thrown.
 		authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(signinRequest.getUsername(), signinRequest.getPassword()));
 
 		User user = userRepository.findByUsername(signinRequest.getUsername());
+
+		// TODO: Once the user status is implemented from the front end , uncomment this
+		// if (user.getStatus() == Constants.USER_PENDING) {
+		// LOGGER.error("User account is pending: " + user.getUsername());
+		// throw new UserInputException("User account is pending: " + user.getUsername()
+		// + " .Please contact your administrator to approve the request");
+		// }
 
 		String jwt = jwtUtils.generateToken(user);
 		signinResponse.setToken(jwt);
@@ -124,7 +135,7 @@ public class LoginService implements ILoginService {
 			LOGGER.error("User doesnt exists with the username: " + userName);
 			throw new ResourceNotFoundException(Constants.USER_NAME, userName);
 		}
-		
+
 		Category categoryEnum = null;
 		try {
 			// Check if the category is valid
@@ -133,7 +144,7 @@ public class LoginService implements ILoginService {
 			LOGGER.error("Invalid category: " + category);
 			throw new UserInputException("Invalid category: " + category); // Changed to InvalidArgumentException
 		}
-        user.setCategory(categoryEnum);
+		user.setCategory(categoryEnum);
 		User savedUser = userRepository.save(user);
 		if (savedUser != null && savedUser.getId() != null) {
 			System.out.println(savedUser.getCategory().toString());

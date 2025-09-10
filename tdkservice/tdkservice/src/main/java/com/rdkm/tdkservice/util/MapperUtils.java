@@ -57,7 +57,6 @@ public class MapperUtils {
 		UserDTO userDTO = new UserDTO();
 		userDTO.setUserId(user.getId());
 		userDTO.setUserName(user.getUsername());
-		userDTO.setPassword(user.getPassword());
 		userDTO.setUserEmail(user.getEmail());
 		userDTO.setUserDisplayName(user.getDisplayName());
 		userDTO.setUserThemeName(user.getTheme() != null ? user.getTheme().name() : null);

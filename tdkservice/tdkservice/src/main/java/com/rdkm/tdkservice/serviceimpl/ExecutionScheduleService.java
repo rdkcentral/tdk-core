@@ -400,6 +400,14 @@ public class ExecutionScheduleService {
 		ExecutionResponseDTO executionResponseDTO = null;
 		try {
 			executionResponseDTO = executionService.startExecution(executionTriggerDTO);
+			// Add unique suffix for each cron execution
+			if (executionSchedule.getScheduleType() == ScheduleType.REPEAT) {
+				String baseName = executionTriggerDTO.getExecutionName();
+				String timestamp = java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+						.withZone(java.time.ZoneId.systemDefault())
+						.format(java.time.Instant.now());
+				executionTriggerDTO.setExecutionName(baseName + "_" + timestamp);
+			}
 			if (executionResponseDTO.getExecutionTriggerStatus() == ExecutionTriggerStatus.NOTTRIGGERED) {
 				LOGGER.error("Execution trigger status was not triggered , the response is: "
 						+ executionResponseDTO.getMessage());
@@ -636,36 +644,37 @@ public class ExecutionScheduleService {
 		String cronExpression = null;
 		switch (cronType.toLowerCase().trim()) {
 
-		case "daily":
-			if (cronQuery.toLowerCase().contains("every") && cronQuery.toLowerCase().contains("days")) {
-				// Extract the number of days
-				String[] parts = cronQuery.split(" ");
-				int days = Integer.parseInt(parts[1]);
-				// Generate cron expression for every <no> days
-				if (days == 1) {
-					cronExpression = "0 0 0 * * *"; // Every day at midnight
-				} else {
-					// Generate cron expression for every <no> days midnight
-					cronExpression = "0 0 0 */" + days + " * *";
+			case "daily":
+				if (cronQuery.toLowerCase().contains("every") && cronQuery.toLowerCase().contains("days")) {
+					// Extract the number of days
+					String[] parts = cronQuery.split(" ");
+					int days = Integer.parseInt(parts[1]);
+					// Generate cron expression for every <no> days
+					if (days == 1) {
+						cronExpression = "0 0 0 * * *"; // Every day at midnight
+					} else {
+						// Generate cron expression for every <no> days midnight
+						cronExpression = "0 0 0 */" + days + " * *";
 
+					}
+				} else if (cronQuery.toLowerCase().contains("every week day")) {
+					// Generate cron expression for every week day (Monday to Friday)
+					cronExpression = "0 0 0 * * 1-5"; // Every weekday at midnight";
+				} else {
+					throw new UserInputException(
+							"Please check the given query format," + "Invalid cron query for daily schedule: "
+									+ cronQuery);
 				}
-			} else if (cronQuery.toLowerCase().contains("every week day")) {
-				// Generate cron expression for every week day (Monday to Friday)
-				cronExpression = "0 0 0 * * 1-5"; // Every weekday at midnight";
-			} else {
-				throw new UserInputException(
-						"Please check the given query format," + "Invalid cron query for daily schedule: " + cronQuery);
-			}
-			break;
-		case "weekly":
-			cronExpression = generateWeeklyCronExpression(cronQuery);
-			break;
-		case "monthly":
-			cronExpression = generateMonthlyCronExpression(cronQuery);
-			break;
-		default:
-			LOGGER.error("Invalid cron type: {}", cronType);
-			throw new UserInputException("Invalid cron type: " + cronType);
+				break;
+			case "weekly":
+				cronExpression = generateWeeklyCronExpression(cronQuery);
+				break;
+			case "monthly":
+				cronExpression = generateMonthlyCronExpression(cronQuery);
+				break;
+			default:
+				LOGGER.error("Invalid cron type: {}", cronType);
+				throw new UserInputException("Invalid cron type: " + cronType);
 		}
 		return cronExpression;
 	}
@@ -743,23 +752,23 @@ public class ExecutionScheduleService {
 	 */
 	private static String mapDayToCronValue(String day) {
 		switch (day.toUpperCase()) {
-		case "SUN":
-			return "0";
-		case "MON":
-			return "1";
-		case "TUE":
-			return "2";
-		case "WED":
-			return "3";
-		case "THU":
-			return "4";
-		case "FRI":
-			return "5";
-		case "SAT":
-			return "6";
-		default:
-			throw new UserInputException(
-					" The days expected are SUN, MON, TUE, WEB, THU, FRI, SAT, Invalid day selected :" + day);
+			case "SUN":
+				return "0";
+			case "MON":
+				return "1";
+			case "TUE":
+				return "2";
+			case "WED":
+				return "3";
+			case "THU":
+				return "4";
+			case "FRI":
+				return "5";
+			case "SAT":
+				return "6";
+			default:
+				throw new UserInputException(
+						" The days expected are SUN, MON, TUE, WEB, THU, FRI, SAT, Invalid day selected :" + day);
 		}
 	}
 }

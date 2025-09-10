@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.rdkm.tdkservice.dto.UserUpdateDTO;
 
 import com.rdkm.tdkservice.dto.ChangePasswordRequestDTO;
 import com.rdkm.tdkservice.dto.UserCreateDTO;
@@ -123,7 +124,7 @@ public class UserController {
 	@ApiResponse(responseCode = "404", description = "User not found")
 	@ApiResponse(responseCode = "409", description = "Conflict")
 	@PutMapping("/update")
-	public ResponseEntity<DataResponse> updateUser(@Valid @RequestBody UserDTO userRequest) {
+	public ResponseEntity<DataResponse> updateUser(@Valid @RequestBody UserUpdateDTO userRequest) {
 		LOGGER.info("Executing updateUser method with request: " + userRequest.toString());
 		UserDTO updatedUser = userService.updateUser(userRequest);
 		if (null != updatedUser) {
@@ -294,6 +295,49 @@ public class UserController {
 		} else {
 			LOGGER.error("App version not found");
 			return ResponseUtils.getNotFoundDataResponse("Version Unavailable", appVersion);
+		}
+	}
+
+	/**
+	 * This API is used to get the list of users pending approval.
+	 * 
+	 * @return ResponseEntity<DataResponse> - the response entity containing the
+	 *         list of users pending approval
+	 */
+	@Operation(summary = "Get Users Pending Approval", description = "This API is used to get the list of users pending approval.")
+	@ApiResponse(responseCode = "200", description = "Successfully retrieved the list of users pending approval")
+	@GetMapping("/getAllPendingUsers")
+	public ResponseEntity<DataResponse> getUsersPendingApproval() {
+		LOGGER.info("Inside getUsersPendingApproval method");
+		List<UserDTO> listOfUsers = userService.getAllPendingUsers();
+		if (listOfUsers != null && !listOfUsers.isEmpty()) {
+			LOGGER.info("Pending users found successfully ");
+			return ResponseUtils.getSuccessDataResponse("Pending users fetched successfully", listOfUsers);
+		} else {
+			LOGGER.error("No pending users found");
+			return ResponseUtils.getSuccessDataResponse("No users pending for approval", null);
+		}
+	}
+
+	/**
+	 * This method is used to approve the user
+	 * 
+	 * @param userName - String username of the user to be approved
+	 * @return ResponseEntity<String> - response entity - message
+	 */
+	@Operation(summary = "Approve User", description = "This API is used to approve a user.")
+	@ApiResponse(responseCode = "200", description = "User approved successfully")
+	@ApiResponse(responseCode = "400", description = "Bad Request")
+	@GetMapping("/approveUser")
+	public ResponseEntity<Response> approveUser(String userName) {
+		LOGGER.info("Inside approveUser method");
+		boolean isApproved = userService.activateUser(userName);
+		if (isApproved) {
+			LOGGER.info("User approved successfully");
+			return ResponseUtils.getSuccessResponse("User approved successfully");
+		} else {
+			LOGGER.error("Error in approving user");
+			throw new TDKServiceException("Error in approving user");
 		}
 	}
 

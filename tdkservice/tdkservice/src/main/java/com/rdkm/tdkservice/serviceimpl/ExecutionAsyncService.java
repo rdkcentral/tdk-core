@@ -142,8 +142,7 @@ public class ExecutionAsyncService {
 			int repeatCount, boolean isRerunOnFailure, boolean isDeviceLogsNeeded, boolean isPerformanceLogsNeeded,
 			boolean isDiagnosticLogsNeeded, String testType, String callBackUrl, String imageVersion) {
 		LOGGER.info("Going to execute script: {} on device: {}", script.getName(), device.getName());
-		// Busy lock in the database device entity before execution
-		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
+
 		try {
 			String realExecutionName = "";
 
@@ -154,6 +153,9 @@ public class ExecutionAsyncService {
 				repeatCount = 1;
 			}
 			for (int i = 0; i < repeatCount; i++) {
+
+				// Busy lock in the database device entity before execution
+				deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
 				if (i == 0) {
 					realExecutionName = executionName;
 				} else {
@@ -298,7 +300,6 @@ public class ExecutionAsyncService {
 			boolean isDeviceLogsNeeded, boolean isDiagnosticsLogsNeeded, boolean isPerformanceNeeded,
 			boolean isIndividualRepeatExecution, String testType, String callBackUrl, String imageVersion) {
 		LOGGER.info("Executing multiple scripts execution in device:" + device.getName());
-		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
 		try {
 			// repeatCount means how many times the execution needs to be done
 			// If 0 is added by the user , then the execution won't happen
@@ -309,6 +310,8 @@ public class ExecutionAsyncService {
 
 			boolean pauseExecution = false;
 			for (int repeatIndex = 0; repeatIndex < repeatCount; repeatIndex++) {
+				deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device.getName());
+
 				String currentExecutionName = executionName;
 
 				// Use the provided execution name for the first execution
@@ -322,7 +325,6 @@ public class ExecutionAsyncService {
 
 				List<Script> applicableScripts = new ArrayList<>();
 				List<Script> invalidScripts = new ArrayList<>();
-				int scriptCount = scriptList.size();
 
 				for (Script script : scriptList) {
 					if ((commonService.validateScriptDeviceDeviceType(device, script))
@@ -352,7 +354,6 @@ public class ExecutionAsyncService {
 				execution.setName(currentExecutionName);
 				execution.setResult(ExecutionOverallResultStatus.INPROGRESS);
 				execution.setExecutionStatus(ExecutionProgressStatus.INPROGRESS);
-				execution.setScriptCount(scriptCount);
 				execution.setTestType(testType);
 				execution.setDeviceLogsNeeded(isDeviceLogsNeeded);
 				execution.setDiagnosticLogsNeeded(isDiagnosticsLogsNeeded);
@@ -430,7 +431,6 @@ public class ExecutionAsyncService {
 					Execution executionCompleted = executionRepository.findById(executionId).orElse(null);
 					double currentExecTime = System.currentTimeMillis();
 					double executionTime = this.computeTimeDifference(executionStartTime, currentExecTime);
-					executionCompleted.setExecutedScriptCount(executedScript);
 					executionCompleted.setExecutionTime(executionTime);
 					executionRepository.save(executionCompleted);
 
@@ -1072,7 +1072,6 @@ public class ExecutionAsyncService {
 		execution.setRerunOnFailure(isRerunOnFailure);
 		execution.setResult(ExecutionOverallResultStatus.INPROGRESS);
 		execution.setExecutionStatus(ExecutionProgressStatus.INPROGRESS);
-		execution.setScriptCount(1);
 		execution.setUser(user);
 		execution.setTestType(testType);
 		execution.setDeviceLogsNeeded(isDeviceLogsNeeded);
@@ -1347,7 +1346,7 @@ public class ExecutionAsyncService {
 			List<ExecutionResult> executionResults = processExecutionResults(execution);
 			if (executionResults.isEmpty()) {
 				LOGGER.warn("No valid execution results found for execution: {}", execution.getName());
-				this.abortPendingAndInProgressResultsWhileRestart(execution);
+				this.pausePendingAndInProgressResultsWhileRestart(execution);
 				return;
 			}
 
@@ -1440,6 +1439,27 @@ public class ExecutionAsyncService {
 		}
 
 		DeviceStatus deviceStatus = deviceStatusService.fetchDeviceStatus(device);
+
+		// For the TDK Agent enabled executions,the status from the devices
+		// will be busy. This will happen when the execution get abruptly stopped
+		// during the restart.
+		if (deviceStatus == DeviceStatus.BUSY) {
+			pythonLibraryScriptExecutorService.resetAgentForTDKDevices(device.getIp(), device.getPort(),
+					Constants.TRUE);
+			// Add wait for 2 seconds
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				LOGGER.error("Error occurred while waiting for device to become available: {}", e.getMessage());
+			}
+			// Fetch the status of the device after 2 sec waiting, if it
+			// comes up the restart will happen immediately, other wise
+			// it will get aborted if the device is still not in FREE state
+			// as per the logic given below
+			deviceStatus = deviceStatusService.fetchDeviceStatus(device);
+		}
+
+		// Check if the device is still busy after waiting
 		if (deviceStatus != DeviceStatus.FREE) {
 			LOGGER.warn("Device {} is not available for re-run of execution: {}", device.getName(),
 					execution.getName());
@@ -1600,7 +1620,6 @@ public class ExecutionAsyncService {
 				double currentExecTime = System.currentTimeMillis();
 				double executionTime = this.computeTimeDifference(executionStartTime, currentExecTime);
 				executionCompleted.setExecutionTime(executionTime);
-				executionCompleted.setExecutedScriptCount(executionCompleted.getExecutedScriptCount() + executedScript);
 				executionRepository.save(executionCompleted);
 
 				DeviceStatus currentStatus = deviceStatusService.fetchDeviceStatus(device);
@@ -1663,9 +1682,11 @@ public class ExecutionAsyncService {
 		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
 
 		for (ExecutionResult result : executionResults) {
-			// Check if the status is PENDING or INPROGRESS
+			// Taking the result status for Pending status and
+			// status checking for InProgress, because the status will be set to FAILURE
+			// or SUCCESS with the saveResultDetails
 			if (result.getResult() == ExecutionResultStatus.PENDING
-					|| result.getResult() == ExecutionResultStatus.INPROGRESS) {
+					|| result.getStatus() == ExecutionStatus.INPROGRESS) {
 				// Update the status to ABORTED
 				result.setStatus(ExecutionStatus.COMPLETED);
 				result.setResult(ExecutionResultStatus.ABORTED);
@@ -1728,20 +1749,22 @@ public class ExecutionAsyncService {
 		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
 
 		for (ExecutionResult result : executionResults) {
-			// Check if the status is PENDING or INPROGRESS
+			// Taking the result status for Pending status and
+			// status checking for InProgress, because the status will be set to FAILURE
+			// or SUCCESS with the saveResultDetails
 			if (result.getResult() == ExecutionResultStatus.PENDING
-					|| result.getResult() == ExecutionResultStatus.INPROGRESS) {
+					|| result.getStatus() == ExecutionStatus.INPROGRESS) {
 				// Update the status to PAUSED
 				result.setStatus(ExecutionStatus.PAUSED);
 				result.setResult(ExecutionResultStatus.PAUSED);
 				result.setExecutionRemarks(
-						"Execution aborted due to app restart and during the start up, the device is not available for execution.");
+						"Execution got paused due to app restart and during the start up, the device was not available for execution.");
 
 				// Save the updated ExecutionResult
 				executionResultRepository.save(result);
 			}
 		}
-		// Update the Execution status to ABORTED
+		// Update the Execution status to PAUSED
 		execution.setExecutionStatus(ExecutionProgressStatus.PAUSED);
 		execution.setResult(ExecutionOverallResultStatus.PAUSED);
 

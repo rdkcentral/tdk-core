@@ -49,7 +49,7 @@ import com.rdkm.tdkservice.serviceimpl.UserService;
 public class SecurityConfig {
 
 	@Autowired
-	UserService userDetailsService;
+	UserService userService;
 
 	@Autowired
 	JWTAuthFilter jwtAuthFilter;
@@ -67,21 +67,25 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		try {
+
 			httpSecurity.csrf(AbstractHttpConfigurer::disable).cors(Customizer.withDefaults())
-					// TODO : Change the user apis from here later also change the swagger ui
 					.authorizeHttpRequests(request -> request
-							.requestMatchers("/api/v1/auth/**", "/api/v1/usergroup/**", "/api/v1/userrole/**",
-									"/api/v1/oem/**", "/api/v1/devicetype/**", "/api/v1/soc/**", "/api/v1/device/**",
-									"/api/v1/module/**", "/api/v1/function/**", "/api/v1/parameter/**",
-									"/api/v1/primitivetest/**", "/api/v1/script/**", "/api/v1/testsuite/**",
-									"/api/v1/rdkcertification/**", "/api/execution/**", "/primitiveTest/**",
-									"/execution/**", "/deviceGroup/**", "/api/v1/users/**",
-									"/api/v1/executionScheduler/**", "/api/v1/analysis/**", "/api/v1/packagemanager/**",
-									"/api/v1/app-upgrade/**", "/actuator/**", "/fileStore/**")
-							.permitAll().requestMatchers("/api/v1/users/**").hasAuthority("admin")
+							// Allowing the access to the below paths without authentication this include
+							// the login and signup apis, the actuator apis and those apis that are being
+							// called from the python framework or scripts.
+							// TODO: Add changes to the python framework and then change these paths to
+							// proper REST API paths
+							.requestMatchers("/api/v1/auth/**", "/actuator/**", "/fileStore/**", "/execution/**",
+									"/deviceGroup/**", "/primitiveTest/**")
+							.permitAll()
+							// Authorization based access control framework is added.
+							// Currently, the authorization based on roles is handled in the frontend.
+							// In the future, backend role-based access can be enabled by uncommenting the
+							// line below
+							// and adding the APIs to be accessed by admin or other roles as needed.
+							// .requestMatchers("/api/v1/users/**").hasAuthority("admin")
 							.requestMatchers(SWAGGER_UI).permitAll().anyRequest().authenticated())
 					.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
 					.authenticationProvider(authenticationProvider())
 					.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 		} catch (Exception e) {
@@ -101,32 +105,35 @@ public class SecurityConfig {
 
 	/**
 	 * This method is used to configure the authentication provider
+	 * by injecting the authentication provider bean
 	 * 
-	 * @return
+	 * @return AuthenticationProvider
 	 */
 	@Bean
 	AuthenticationProvider authenticationProvider() {
 		// Configure the authentication provider
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-		daoAuthenticationProvider.setPasswordEncoder(PasswordEncoder());
+		daoAuthenticationProvider.setUserDetailsService(userService);
+		daoAuthenticationProvider.setPasswordEncoder(getPasswordEncoder());
 
 		return daoAuthenticationProvider;
 	}
 
 	/**
-	 * This method is used to configure the password encoder
+	 * This method is used to configure the password encoder by
+	 * injecting the password encoder bean
 	 * 
-	 * @return
+	 * @return PasswordEncoder
 	 */
 	@Bean
-	PasswordEncoder PasswordEncoder() {
+	PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 
 	}
 
 	/**
-	 * This method is used to configure the authentication manager
+	 * This method is used to configure the authentication manager by
+	 * injecting the authentication configuration bean
 	 * 
 	 * @param authenticationConfiguration
 	 * @return AuthenticationManager
@@ -135,9 +142,7 @@ public class SecurityConfig {
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
 			throws Exception {
-
 		return authenticationConfiguration.getAuthenticationManager();
-
 	}
 
 }

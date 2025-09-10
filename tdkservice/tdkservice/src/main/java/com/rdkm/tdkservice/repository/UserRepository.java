@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -79,5 +80,13 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	 * @return User
 	 */
 	User findByEmail(String userEmail);
+
+	/**
+	 * This method is used to find all users by their status.
+	 *
+	 * @param status the status of the users to find *
+	 * @return a list of User objects containing the users' information
+	 */
+	List<User> findByStatus(String status);
 
 }

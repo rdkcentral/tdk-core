@@ -297,6 +297,12 @@ public class Constants {
 	// Base filestore folder
 	public static final String BASE_FILESTORE_FOLDER = "src/main/webapp/filestore";
 
+	// Pending status for a user
+	public static final String USER_PENDING = "PENDING";
+
+	// Active status for a user
+	public static final String USER_ACTIVE = "ACTIVE";
+
 	// Zip file extension
 	public static final String ZIP_EXTENSION = ".zip";
 

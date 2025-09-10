@@ -40,6 +40,7 @@ import com.rdkm.tdkservice.controller.LoginController;
 import com.rdkm.tdkservice.dto.ChangePasswordRequestDTO;
 import com.rdkm.tdkservice.dto.UserCreateDTO;
 import com.rdkm.tdkservice.dto.UserDTO;
+import com.rdkm.tdkservice.dto.UserUpdateDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.Theme;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
@@ -61,7 +62,10 @@ import com.rdkm.tdkservice.util.Utils;
 /**
  * The UserService class is a service class that handles the business logic for
  * user-related operations. It interacts with the UserRepository to perform CRUD
- * operations on the User entity.
+ * operations on the User entity. In addition to that it is implementing
+ * the UserDetailsService interface which allows it to load user-specific data
+ * used for
+ * Spring Security based authentication.
  */
 @Service
 public class UserService implements UserDetailsService {
@@ -94,7 +98,11 @@ public class UserService implements UserDetailsService {
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepository.findByUsername(username);
+		User user = userRepository.findByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found: " + username);
+		}
+		return user;
 	}
 
 	/**
@@ -143,7 +151,12 @@ public class UserService implements UserDetailsService {
 		if (Utils.isEmpty(userRoleName))
 			userRoleName = Constants.DEFAULT_USER_ROLE;
 		UserRole userRole = userRoleRepository.findByName(userRoleName);
-		user.setUserRole(userRole);
+		if (userRole != null) {
+			user.setUserRole(userRole);
+		} else {
+			LOGGER.error("User role not found: " + userRoleName);
+			throw new ResourceNotFoundException(Constants.USER_ROLE, userRoleName);
+		}
 
 		// Setting User theme, if empty default theme LIGHT is set
 		String userThemeName = userRequest.getUserThemeName();
@@ -158,6 +171,9 @@ public class UserService implements UserDetailsService {
 		UserGroup userGroup = userGroupRepository.findByName(userRequest.getUserGroupName());
 		if (null != userGroup)
 			user.setUserGroup(userGroup);
+
+		// Setting user status to pending during the registration
+		user.setStatus(Constants.USER_PENDING);
 
 		User savedUser = userRepository.save(user);
 		if (savedUser != null && savedUser.getId() != null) {
@@ -205,6 +221,40 @@ public class UserService implements UserDetailsService {
 	}
 
 	/**
+	 * This method is to get all the users who are pending for approval
+	 * 
+	 * @return List<UserDTO> A list of UserDTO objects representing all the users
+	 *         who are pending for approval.
+	 */
+	public List<UserDTO> getAllPendingUsers() {
+		LOGGER.info("Fetching all pending users");
+		List<User> pendingUsers = userRepository.findByStatus(Constants.USER_PENDING);
+		if (pendingUsers.isEmpty() || pendingUsers.size() == 0) {
+			return null;
+		}
+		return pendingUsers.stream().map(MapperUtils::populateUserDTO).collect(Collectors.toList());
+	}
+
+	/**
+	 * This method is used to approve the user
+	 *
+	 * @param username - String
+	 * @return boolean - returns true if user is approved successfully
+	 */
+	public boolean activateUser(String username) {
+		LOGGER.info("Activating user: " + username);
+		User user = userRepository.findByUsername(username);
+		if (user == null) {
+			LOGGER.error("User not found: " + username);
+			return false;
+		}
+		user.setStatus(Constants.USER_ACTIVE);
+		userRepository.save(user);
+		LOGGER.info("User activated successfully: " + username);
+		return true;
+	}
+
+	/**
 	 * This method is used to update a user's details.
 	 *
 	 * @param updateUserRequest The DTO containing the updated details of the user.
@@ -213,7 +263,7 @@ public class UserService implements UserDetailsService {
 	 * @throws ResourceNotFoundException If the user with the provided ID does not
 	 *                                   exist.
 	 */
-	public UserDTO updateUser(UserDTO updateUserRequest) {
+	public UserDTO updateUser(UserUpdateDTO updateUserRequest) {
 		LOGGER.info("Executing updateUser method for the user: " + updateUserRequest.toString());
 
 		// Retrieve the user from the database

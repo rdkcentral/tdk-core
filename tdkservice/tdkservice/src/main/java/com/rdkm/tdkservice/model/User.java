@@ -108,31 +108,71 @@ public class User extends BaseEntity implements UserDetails {
 	@JoinColumn(name = "user_role_id")
 	private UserRole userRole;
 
+	/**
+	 * This method is used to get the authorities granted to the user.
+	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority(userRole.getName()));
 	}
 
+	/**
+	 * This method is used to get the username of the user.
+	 */
 	@Override
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * Indicates whether the user's account has expired.
+	 *
+	 * @return true if the user's account is valid (non-expired), false if no longer
+	 *         valid
+	 *
+	 *         Note: Actual account expiration logic is not implemented here; always
+	 *         returns true.
+	 */
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
+	/**
+	 * Indicates whether the user is locked or unlocked.
+	 *
+	 * @return true if the user is not locked, false otherwise
+	 *
+	 *         Note: Actual account lock logic is not implemented here; always
+	 *         returns true.
+	 */
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
+	/**
+	 * Indicates whether the user's credentials (password) have expired.
+	 *
+	 * @return true if the user's credentials are valid (non-expired), false
+	 *         otherwise
+	 *
+	 *         Note: Actual credential expiration logic is not implemented here;
+	 *         always returns true.
+	 */
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
+	/**
+	 * Indicates whether the user is enabled or disabled.
+	 *
+	 * @return true if the user is enabled, false otherwise
+	 *
+	 *         Note: Actual enable/disable logic is not implemented here; always
+	 *         returns true.
+	 */
 	@Override
 	public boolean isEnabled() {
 		return true;

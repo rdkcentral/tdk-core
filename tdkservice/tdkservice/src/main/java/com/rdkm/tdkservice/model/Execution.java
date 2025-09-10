@@ -137,16 +137,6 @@ public class Execution extends BaseEntity {
 	private Category category;
 
 	/*
-	 * Represents the total script count
-	 */
-	private int scriptCount;
-
-	/*
-	 * Represents the executed script count
-	 */
-	private int executedScriptCount;
-
-	/*
 	 * Represents the execution results.
 	 */
 	@OneToMany(mappedBy = "execution", fetch = FetchType.EAGER)

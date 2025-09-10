@@ -56,9 +56,6 @@ public class JWTUtils {
 	 */
 	public JWTUtils(JwtConfig jwtConfig) {
 		this.jwtConfig = jwtConfig;
-		// TODO: Remove this print later security concern
-		System.out.println("secretKey: " + jwtConfig.getSecret());
-		System.out.println("jwtExpiration: " + jwtConfig.getExpirationTime());
 		byte[] keyBytes = Base64.getDecoder().decode(jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8));
 		this.key = new SecretKeySpec(keyBytes, "HmacSHA256");
 	}
