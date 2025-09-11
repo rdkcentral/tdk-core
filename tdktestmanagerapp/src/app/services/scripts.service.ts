@@ -357,6 +357,11 @@ export class ScriptsService {
   
   }
 
-
+downloadAllMdZip(category: string): Observable<any> {
+  const headers = new HttpHeaders({
+    'Authorization': this.authService.getApiToken()
+  });
+  return this.http.get(`${this.config.apiUrl}api/v1/script/downloadMarkdownByCategoryZip?category=${category}`, { headers, responseType: 'blob' });
+}
 
 }

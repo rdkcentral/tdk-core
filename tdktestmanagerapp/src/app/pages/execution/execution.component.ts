@@ -589,7 +589,7 @@ export class ExecutionComponent implements OnInit, OnDestroy {
    */
   getAllExecutions(): void {
     this.storeSelection();
-    if (this.selectedCategory === 'ExecutionName' && this.searchValue != '') {
+  if (this.selectedCategory === 'ExecutionName' && this.searchValue != '') {
       this.executionservice
         .getAllExecutionByName(
           this.searchValue,
@@ -603,9 +603,12 @@ export class ExecutionComponent implements OnInit, OnDestroy {
             if (data === null || data === undefined) {
               this.rowData = [];
               this.totalItems = 0;
+            } else if (Array.isArray(data)) {
+              this.rowData = data;
+              this.totalItems = data.length;
             } else {
-              this.rowData = data.executions;
-              this.totalItems = data.totalItems;
+              this.rowData = data.executions || [];
+              this.totalItems = data.totalItems || this.rowData.length;
             }
             setTimeout(() => {
               this.reSoreSelection();
@@ -651,7 +654,7 @@ export class ExecutionComponent implements OnInit, OnDestroy {
             });
           },
         });
-    } else if (this.selectedCategory === 'Device' && this.searchValue != '') {
+  } else if (this.selectedCategory === 'Device' && this.searchValue != '') {
       this.executionservice
         .getAllExecutionByDevice(
           this.searchValue,
@@ -679,10 +682,44 @@ export class ExecutionComponent implements OnInit, OnDestroy {
             });
           },
         });
-    } else if (this.selectedCategory === 'User' && this.selectedOption != '') {
+  } else if (this.selectedCategory === 'User') {
+      if (this.selectedOption && this.selectedOption.trim() !== '') {
+        this.executionservice
+          .getAllExecutionByUser(
+            this.selectedOption,
+            this.selectedDfaultCategory,
+            this.currentPage,
+            this.pageSize
+          )
+          .subscribe({
+            next: (res) => {
+              let data = res.data;
+              if (data === null || data === undefined) {
+                this.rowData = [];
+                this.totalItems = 0;
+              } else {
+                this.rowData = data.executions;
+                this.totalItems = data.totalItems;
+              }
+            },
+            error: (err) => {
+              this._snakebar.open(err.message, '', {
+                duration: 2000,
+                panelClass: ['err-msg'],
+                horizontalPosition: 'end',
+                verticalPosition: 'top',
+              });
+            },
+          });
+      } else {
+        // If no user is selected, clear the data
+        this.rowData = [];
+        this.totalItems = 0;
+      }
+    } else if (this.selectedCategory === 'Result' && this.searchValue != '') {
       this.executionservice
-        .getAllExecutionByUser(
-          this.selectedOption,
+        .getAllExecutionByStatus(
+          this.searchValue,
           this.selectedDfaultCategory,
           this.currentPage,
           this.pageSize
@@ -693,9 +730,12 @@ export class ExecutionComponent implements OnInit, OnDestroy {
             if (data === null || data === undefined) {
               this.rowData = [];
               this.totalItems = 0;
+            } else if (Array.isArray(data)) {
+              this.rowData = data;
+              this.totalItems = data.length;
             } else {
-              this.rowData = data.executions;
-              this.totalItems = data.totalItems;
+              this.rowData = data.executions || [];
+              this.totalItems = data.totalItems || this.rowData.length;
             }
           },
           error: (err) => {
@@ -1162,6 +1202,7 @@ export class ExecutionComponent implements OnInit, OnDestroy {
    * Handles the search button click event and triggers search based on selected category.
    */
   onSearchClick(): void {
+    console.log('Search Clicked:', this.selectedCategory, this.searchValue);
     if (
       this.selectedCategory === 'ExecutionName' ||
       this.selectedCategory === 'Scripts/Testsuite' ||
@@ -1169,6 +1210,11 @@ export class ExecutionComponent implements OnInit, OnDestroy {
     ) {
       this.currentPage = 0;
       this.paginator.firstPage();
+      this.getAllExecutions();
+    }
+    if (this.selectedCategory === 'Result') {
+      this.currentPage = 0;
+      if (this.paginator && this.paginator.firstPage) this.paginator.firstPage();
       this.getAllExecutions();
     }
     if (this.searchValue === '') {
