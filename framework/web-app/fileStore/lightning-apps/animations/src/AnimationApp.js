@@ -48,7 +48,7 @@ export default class App extends Lightning.Component {
         x: 1200,
         y: 80,
         text: {
-          text: "TDK Lightning Animation App",
+          text: "Lightning Animation App",
           fontStyle: 'italic bold',
           fontSize: 40,
           textColor: 0xbbffffff,

@@ -43,7 +43,7 @@ export default class App extends Lightning.Component {
         x: 1000,
         y: 60,
         text: {
-          text: "TDK Lightning Player Test App",
+          text: "Lightning Player Test App",
           fontFace: 'bold',
           fontSize: 40,
           textColor: 0xffffffff,

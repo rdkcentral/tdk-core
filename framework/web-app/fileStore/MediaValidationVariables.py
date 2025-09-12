@@ -89,17 +89,17 @@ webinspect_port_lightning = "10002"
 
 
 #lightning application url
-lightning_video_test_app_url     = lightning_apps_loc + "tdkunifiedplayer/build/index.html?player=sdk"
-lightning_shaka_test_app_url     = lightning_apps_loc + "tdkunifiedplayer/build/index.html?player=shaka"
-lightning_uve_test_app_url       = lightning_apps_loc + "tdkunifiedplayer/build/index.html?player=aamp"
+lightning_video_test_app_url     = lightning_apps_loc + "unifiedplayer/build/index.html?player=sdk"
+lightning_shaka_test_app_url     = lightning_apps_loc + "unifiedplayer/build/index.html?player=shaka"
+lightning_uve_test_app_url       = lightning_apps_loc + "unifiedplayer/build/index.html?player=aamp"
 
 
-lightning_animation_test_app_url = lightning_apps_loc + "tdkanimations/build/index.html"
-lightning_multianimation_test_app_url    = lightning_apps_loc + "tdkmultianimations/build/index.html"
-lightning_objects_animation_test_app_url = lightning_apps_loc + "tdkobjectanimations/build/index.html"
+lightning_animation_test_app_url = lightning_apps_loc + "animations/build/index.html"
+lightning_multianimation_test_app_url    = lightning_apps_loc + "multianimations/build/index.html"
+lightning_objects_animation_test_app_url = lightning_apps_loc + "objectanimations/build/index.html"
 
 #HTML player application url
-html_video_test_app_url = lightning_apps_loc + "tdkhtmlplayer.html"
+html_video_test_app_url = lightning_apps_loc + "htmlplayer.html"
 
 
 

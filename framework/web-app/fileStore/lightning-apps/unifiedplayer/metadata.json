@@ -1,0 +1,6 @@
+{
+  "name": "UnifiedPlayerApp",
+  "identifier": "unifiedplayer",
+  "version": "1.0.0",
+  "icon": "./static/icon.png"
+}

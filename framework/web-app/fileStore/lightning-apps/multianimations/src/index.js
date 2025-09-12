@@ -18,7 +18,7 @@
  */
 
 import { Launch } from '@lightningjs/sdk'
-import App from './TDKAnimationApp.js'
+import App from './MultiAnimationApp.js'
 
 export default function() {
   return Launch(App, ...arguments)

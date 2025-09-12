@@ -1,6 +1,6 @@
 {
-  "name": "tdkanimations",
-  "description": "TDKAnimationApp",
+  "name": "multianimations",
+  "description": "MultiAnimationApp",
   "dependencies": {
     "@lightningjs/sdk": "^4.8.1"
   },

@@ -19,7 +19,7 @@
 
 
 import { Launch } from '@lightningjs/sdk'
-import App from './TDKObjectsAnimationApp.js'
+import App from './ObjectsAnimationApp.js'
 
 export default function() {
   return Launch(App, ...arguments)

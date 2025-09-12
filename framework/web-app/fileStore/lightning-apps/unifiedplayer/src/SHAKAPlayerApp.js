@@ -45,7 +45,7 @@ export default class App extends Lightning.Component {
         x: 1000,
         y: 60,
         text: {
-          text: "TDK Lightning SHAKA Player Test App",
+          text: "Lightning SHAKA Player Test App",
           fontFace: 'bold',
           fontSize: 40,
           textColor: 0xffffffff,

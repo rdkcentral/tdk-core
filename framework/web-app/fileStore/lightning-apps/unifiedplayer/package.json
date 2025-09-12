@@ -1,6 +1,6 @@
 {
-  "name": "tdkunifiedplayer",
-  "description": "TDKUnifiedPlayerApp",
+  "name": "unifiedplayer",
+  "description": "UnifiedPlayerApp",
   "dependencies": {
     "@lightningjs/sdk": "^5.5.5"
   },
