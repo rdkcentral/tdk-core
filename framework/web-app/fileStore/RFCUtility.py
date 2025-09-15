@@ -73,6 +73,13 @@ def rfc_configure_feature(obj, feature_id, name, param_value_dict):
     print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    # Validation logic: Check if the response contains the feature name and the DM parameter/value.
+    expected_param = list(config_data.keys())[0]
+    expected_value = config_data[expected_param]
+    if name in details and expected_param in details and expected_value in details:
+        actualresult = "SUCCESS"
+    else:
+        actualresult = "FAILURE"
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -112,22 +119,44 @@ def rfc_set_feature_rule(obj, rule_id, name, mac):
     print("Command : %s" % command)  # Debug print to verify command
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    # Validation logic: Check if the response contains the feature name and the MAC address.
+    if name in details and mac.replace(":", "").upper() in details.replace(":", "").upper():
+        actualresult = "SUCCESS"
+    else:
+        actualresult = "FAILURE"
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
 # rfc_validate_feature_rule
-# Syntax      : rfc_validate_feature_rule(obj, mac)
+# Syntax      : rfc_validate_feature_rule(obj, mac, feature_name, param_value_dict)
 # Description : Function to validate the feature rule using a GET request with MAC
 # Parameters  : obj - module object
 #               mac - device MAC address
+#               feature_name - name of the feature to validate
+#               param_value_dict - dictionary with clean parameters and values expected in response
 # Return Value: tdkTestObj - test object
 #               actualresult - SUCCESS/FAILURE
 #               details - response from CURL command
-def rfc_validate_feature_rule(obj, mac):
+
+def rfc_validate_feature_rule(obj, mac, feature_name, param_value_dict):
     sleep(20)
     command = f"curl -s -i '{RFC_URL}?estbMacAddress={mac}'"
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    # Validation logic: Check if feature name, DM parameter, and its value are present.
+    is_valid = False
+    # Check for feature name
+    if feature_name in details:
+        # Check for each parameter-value pair
+        for param, value in param_value_dict.items():
+            expected_string = f"\\\"tr181.{param}\\\":\\\"{value}\\\""
+            if expected_string in details:
+                is_valid = True
+                break
+    if is_valid:
+        actualresult = "SUCCESS"
+    else:
+        actualresult = "FAILURE"
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -188,7 +217,6 @@ def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
     print("Command : %s" % command)
     tdkTestObj = sysobj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-
     print("PUT command executed. Response: %s" % details)
     if "SUCCESS" in actualresult and details:
         print("PUT command executed successfully.")
@@ -199,7 +227,6 @@ def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
             print("RFC service restarted successfully")
             sleep(60)
             print("Sleeping for 1 min after RFC restart...")
-
             # Check if DM values have reverted to initial values
             for param, init_val in param_value_dict.items():
                 tdkTestObj_Tr181_Get = obj.createTestStep('TDKB_TR181Stub_Get')
@@ -213,7 +240,6 @@ def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
                     details += f"\nFailed to revert {param}: got {reverted_value}, expected {str(init_val)}"
                     print(f"Failed to revert {param}: got {reverted_value}, expected {str(init_val)}")
                     actualresult = "FAILURE"
-
             # Only set actualresult to SUCCESS if all parameters were successfully reverted
             if actualresult == "SUCCESS":
                 for param, init_val in param_value_dict.items():
@@ -283,3 +309,4 @@ def rfc_delete_feature(obj, feature_id):
         print(details)
     return tdkTestObj, actualresult, details
 ########## End of function ##########
+
