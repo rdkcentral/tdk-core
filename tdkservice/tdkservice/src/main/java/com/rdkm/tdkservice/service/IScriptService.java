@@ -202,4 +202,17 @@ public interface IScriptService {
 	 * @return - the module execution time in seconds
 	 */
 	Integer getModuleScriptTimeout(String moduleName);
+
+	/**
+	 * This method is used to download the all MD files
+	 * @return ByteArrayInputStream containing the ZIP
+	 */
+    ByteArrayInputStream downloadAllMarkdownFilesZip();
+
+	/**
+	 * This method is used to download the MD files based on category
+	 * @param category
+	 * @return ByteArrayInputStream containing the ZIP
+	 */
+	ByteArrayInputStream downloadMarkdownByCategoryZip(String category);
 }

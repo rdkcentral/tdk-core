@@ -1528,4 +1528,61 @@ public class ScriptService implements IScriptService {
 		LOGGER.info("Module execution time for module '" + moduleName + "': " + timeout + " seconds");
 		return timeout;
 	}
+
+	/**
+	 * This method is used to dowload the all the MD files in ZIP format
+	 * @return ByteArrayInputStream containing the ZIP
+	 */
+	@Override
+	public ByteArrayInputStream downloadAllMarkdownFilesZip() {
+		List<Script> scripts = scriptRepository.findAll();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+			for (Script script : scripts) {
+				ByteArrayInputStream mdStream = generateMarkdownFile(script);
+				ZipEntry entry = new ZipEntry(script.getName() + ".md");
+				zos.putNextEntry(entry);
+				byte[] buffer = mdStream.readAllBytes();
+				zos.write(buffer);
+				zos.closeEntry();
+			}
+			zos.finish();
+		} catch (IOException e) {
+			LOGGER.error("Error generating markdown ZIP: " + e.getMessage());
+			throw new TDKServiceException("Error generating markdown ZIP: " + e.getMessage());
+		}
+		return new ByteArrayInputStream(baos.toByteArray());
+	}
+
+	/**
+	 * Download all markdown files by category, organized by module folders in a ZIP.
+	 * @param category the category name
+	 * @return ByteArrayInputStream containing the ZIP
+	 */
+	@Override
+	public ByteArrayInputStream downloadMarkdownByCategoryZip(String category) {
+		Category cat = commonService.validateCategory(category);
+		List<Module> modules = moduleRepository.findAllByCategory(cat);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+			for (Module module : modules) {
+				List<Script> scripts = scriptRepository.findAllByModule(module);
+				for (Script script : scripts) {
+					ByteArrayInputStream mdStream = generateMarkdownFile(script);
+					String entryName = module.getName() + "/" + script.getName() + ".md";
+					ZipEntry entry = new ZipEntry(entryName);
+					zos.putNextEntry(entry);
+					byte[] buffer = mdStream.readAllBytes();
+					zos.write(buffer);
+					zos.closeEntry();
+				}
+			}
+			zos.finish();
+		} catch (IOException e) {
+			LOGGER.error("Error generating markdown ZIP by category: " + e.getMessage());
+			throw new TDKServiceException("Error generating markdown ZIP by category: " + e.getMessage());
+		}
+		return new ByteArrayInputStream(baos.toByteArray());
+	}
+
 }

@@ -59,6 +59,11 @@ public class ExecutionSearchFilterDTO {
 	String deviceType;
 
 	/**
+	 * The name of the device to filter by (optional).
+	 */
+	String deviceName;
+
+	/**
 	 * The category of the execution
 	 */
 	@NotBlank

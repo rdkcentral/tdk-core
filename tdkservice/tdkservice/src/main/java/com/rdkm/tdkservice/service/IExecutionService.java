@@ -366,4 +366,13 @@ public interface IExecutionService {
 	 * @return the execution timeout in seconds, or null if the script is not found
 	 */
 	Integer getScriptExecutionTimeout(String scriptName);
+	/**
+	 * Get all executions by status, with optional category and pagination.
+	 * @param status execution status (e.g., RUNNING, COMPLETED, FAILED)
+	 * @param categoryName category name (optional)
+	 * @param page page number (optional)
+	 * @param size page size (optional)
+	 * @return List of ExecutionListDTO
+	 */
+	List<ExecutionListDTO> getAllExecutionByStatus(String status, String categoryName, int page, int size);
 }
