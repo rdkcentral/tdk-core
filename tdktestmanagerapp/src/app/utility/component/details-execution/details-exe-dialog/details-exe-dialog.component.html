@@ -16,19 +16,20 @@ limitations under the License.
 <!--
   Main container for the execution result details dialog.
 -->
-<div class="container-fluid">
-    <!--
-      Row for the main content area.
-    -->
-    <div class="row mt-2">
-      <!--
-        Column for the main content, full width on medium and up, printable area.
-      -->
+<div class="container-fluid details-dialog-container" style="position: relative;">
+  <div class="page-corner-btns">
+    <button class="btn btn-sm top-download page-corner-download-btn" matTooltip="Download Reports" (click)="showPopup()">
+      <i class="bi bi-cloud-arrow-down-fill extra-icon download"></i>
+    </button>
+    <button class="btn btn-sm top-download page-corner-close-btn" (click)="onClose()" matTooltip="Close">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <div class="row" style="margin-top: 8px;">
+      <div class="col-md-12 d-flex align-items-center" style="position: relative;">
+        <h1 class="view-title mb-0" style="flex:1;">Execution Result Details</h1>
+      </div>
       <div class="col-md-12" #printableArea>
-        <!--
-          Title for the execution result details view.
-        -->
-        <h1 class="view-title">Execution Result Details</h1>
         <!--
           Dropdown section for download and refresh buttons.
         -->
@@ -36,9 +37,6 @@ limitations under the License.
           <button type="button" class="download-btn refresh" matTooltip="Click here to update" (click)="dataUpdate()"
           *ngIf ="data.executionStatus === 'INPROGRESS'">
             <i class="bi bi-arrow-clockwise download-icon"></i>
-          </button>
-          <button class="btn btn-sm top-download" matTooltip="Download Reports" (click)="showPopup()">
-            <i class="bi bi-cloud-arrow-down-fill extra-icon download"></i>
           </button>
         </div>
         <div *ngIf="showPopupFlag" class="popup">
@@ -480,17 +478,73 @@ limitations under the License.
               </div>
             </div>
           </div>
-          <div class="col-md-12">
-            <div class="mt-2 text-end mb-2">
-              <button class="view-btn close" (click)="onClose()">
-                Close
-              </button>
-                <!-- <button class="view-btn close-script" (click)="closeLastExpanded()" *ngIf="expandedIndexes.length > 0">
-                  Close Script Panel
-                </button> -->
-            </div>
-          </div>
         </div>
       </div>
     </div>
   </div>
+  <style>
+    .page-corner-btns {
+      position: absolute;
+      top: 12px;
+      right: 24px;
+      display: flex;
+      gap: 8px;
+      z-index: 1000;
+      align-items: center;
+    }
+    .page-corner-download-btn {
+      background: #fff;
+      border: 1.5px solid #bbb;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+      height: 36px;
+      width: 36px;
+      font-size: 1.5rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.2s, background 0.2s;
+      padding: 0;
+    }
+    .page-corner-download-btn:hover, .page-corner-download-btn:focus {
+      background: #f5f5f5;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      outline: none;
+    }
+    .page-corner-close-btn {
+      background: #e53935;
+      border: 1.5px solid #b71c1c;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+      height: 36px;
+      width: 36px;
+      font-size: 1.5rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.2s, background 0.2s;
+      padding: 0;
+    }
+    .page-corner-close-btn .bi-x-lg {
+      font-size: 1.3rem;
+      line-height: 1;
+      display: block;
+      margin: 0 auto;
+    }
+    .page-corner-download-btn .bi-cloud-arrow-down-fill {
+      font-size: 1.3rem;
+      line-height: 1;
+      display: block;
+      margin: 0 auto;
+    }
+    .page-corner-close-btn:hover, .page-corner-close-btn:focus {
+      background: #f5f5f5;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      outline: none;
+    }
+    .details-dialog-container {
+      position: relative;
+    }
+  </style>

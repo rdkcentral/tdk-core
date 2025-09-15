@@ -620,10 +620,10 @@ export class ScriptListComponent {
     this.paginateSuiteData();
   }
 
-  /**
-   * Handles the input event for the global search box with debounce.
-   */
-  onSearchInput() {
+  /** 
+   * Handles the input event for th e global search box with debounce.
+   */ 
+  onSearchInput() { 
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
     }
@@ -1246,4 +1246,22 @@ export class ScriptListComponent {
     suite.expanded = !suite.expanded;
     this.suitePanelOpen = !this.suitePanelOpen;
   }
+
+  /**
+   * This method used to dowload the all MD files in ZIP format
+   */
+  downloadAllMdZip() {
+  this.scriptservice.downloadAllMdZip(this.selectedCategory).subscribe((blob: Blob) => {
+    const zipBlob = new Blob([blob], { type: 'application/zip' });
+    const url = window.URL.createObjectURL(zipBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AllMdFiles_${this.selectedCategory}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  });
+}
+
 }
