@@ -51,6 +51,11 @@ public class PrimitiveTestCreateDTO {
 	private String primitiveTestfunctionName;
 
 	/*
+	 * The primitive test category
+	 */
+	private String primitiveTestCategory;
+
+	/*
 	 * The primitive test user group .This field is mandatory.
 	 */
 	private String primitiveTestUserGroup;

@@ -52,4 +52,9 @@ public class ParameterCreateDTO {
 	 */
 	@NotBlank(message = "Function is required")
 	private String function;
+
+	/*
+	 * The Category of the parameter
+	 */
+	private String parameterCategory;
 }

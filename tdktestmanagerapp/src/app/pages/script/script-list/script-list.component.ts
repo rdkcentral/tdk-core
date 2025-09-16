@@ -620,10 +620,10 @@ export class ScriptListComponent {
     this.paginateSuiteData();
   }
 
-  /** 
+  /**
    * Handles the input event for th e global search box with debounce.
-   */ 
-  onSearchInput() { 
+   */
+  onSearchInput() {
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
     }
@@ -1251,17 +1251,63 @@ export class ScriptListComponent {
    * This method used to dowload the all MD files in ZIP format
    */
   downloadAllMdZip() {
-  this.scriptservice.downloadAllMdZip(this.selectedCategory).subscribe((blob: Blob) => {
-    const zipBlob = new Blob([blob], { type: 'application/zip' });
-    const url = window.URL.createObjectURL(zipBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `AllMdFiles_${this.selectedCategory}.zip`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  });
-}
+    this.scriptservice
+      .downloadAllMdZip(this.selectedCategory)
+      .subscribe((blob: Blob) => {
+        const zipBlob = new Blob([blob], { type: 'application/zip' });
+        const url = window.URL.createObjectURL(zipBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `AllMdFiles_${this.selectedCategory}.zip`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      });
+  }
 
+  /**
+   * Refreshes all test suites by invoking the script service's refresh method.
+   * 
+   * - Displays a loader while the refresh operation is in progress.
+   * - On success, shows a success snackbar message and reloads the test suite data.
+   * - On error, logs the error, displays an error snackbar message, and hides the loader.
+   * - Ensures the loader is hidden when the operation completes.
+   */
+  refreshAllTestSuites() {
+    // Show loader while refreshing
+    this.showLoader = true;
+
+    this.scriptservice.refreshTestSuite().subscribe({
+      next: (res) => {
+        this._snakebar.open(res.message, '', {
+          duration: 1000,
+          panelClass: ['success-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+        });
+        // Reload the test suite data after refresh
+        this.allTestSuilteListByCategory();
+      },
+      error: (err) => {
+        console.error('Error refreshing test suites:', err);
+        this._snakebar.open(
+          err.message ||
+            'Failed to refresh test suites. Please check network connection.',
+          '',
+          {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+          }
+        );
+        this.showLoader = false;
+      },
+      complete: () => {
+        // Make sure loader is hidden when complete
+        this.showLoader = false;
+      },
+    });
+  }
 }

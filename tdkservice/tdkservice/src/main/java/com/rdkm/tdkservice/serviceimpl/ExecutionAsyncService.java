@@ -542,7 +542,7 @@ public class ExecutionAsyncService {
 		ResultDTO resultDTO = new ResultDTO();
 		resultDTO.setService(Constants.TDK_PORTAL_SERVICE);
 		resultDTO.setStarted_at(getEpochTime(execution.getCreatedDate()));
-		if (testType.equals("CI")) {
+		if (testType != null && testType.equals("CI")) {
 			resultDTO.setStarted_by("RDKPortal/Jenkins");
 		}
 		resultDTO.setStatus(execution.getResult().name());
@@ -559,7 +559,7 @@ public class ExecutionAsyncService {
 		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 		if (executionDevice != null) {
 			DeviceDetailsDTO deviceDetailsDTO = new DeviceDetailsDTO();
-			if (testType.equals("CI")) {
+			if (testType != null && testType.equals("CI")) {
 				deviceDetailsDTO.setDevice(getDeviceNameFromConfigFile(imageVersion));
 				deviceDetailsDTO.setImageName(imageVersion);
 			} else {
@@ -757,6 +757,9 @@ public class ExecutionAsyncService {
 		executionResult.setResult(ExecutionResultStatus.INPROGRESS);
 		executionResult.setStatus(ExecutionStatus.INPROGRESS);
 		executionResult.setDateOfExecution(Instant.now());
+		remarksString.append("Date of execution: ").append(executionResult.getDateOfExecution().toString())
+				.append("\n");
+		executionResult.setExecutionRemarks(remarksString.toString());
 		executionResultRepository.save(executionResult);
 		ExecutionResultStatus finalExecutionResultStatus = ExecutionResultStatus.FAILURE;
 		try {

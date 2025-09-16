@@ -33,6 +33,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -42,13 +43,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true, exclude = "parameters")
 @Data
 @Entity
-@Table(name = "functions")
+@Table(name = "functions" ,uniqueConstraints = @UniqueConstraint(columnNames = { "name", "category" }))
 public class Function extends BaseEntity {
 
 	/**
 	 * The name of the function.
 	 */
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String name;
 
 	/**

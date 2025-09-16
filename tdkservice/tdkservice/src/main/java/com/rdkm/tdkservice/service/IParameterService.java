@@ -56,13 +56,14 @@ public interface IParameterService {
 	public boolean deleteParameter(UUID id);
 
 	/**
-	 * Finds all parameters by their function.
+	 * Finds all parameters by their function and category.
 	 *
 	 * @param functionName the name of the function
+	 * @param category     category of function
 	 * @return a list of data transfer objects containing the details of all
 	 *         parameters for the specified function
 	 */
-	public List<ParameterDTO> findAllParametersByFunction(String functionName);
+	public List<ParameterDTO> findAllParametersByFunction(String functionName, String category);
 
 	/**
 	 * Finds all parameter enums.

@@ -334,6 +334,34 @@ public class ScriptService implements IScriptService {
 	 * @return true if the script was updated successfully, false otherwise
 	 */
 	private boolean updateTheGivenScriptAndFile(MultipartFile scriptFile, ScriptDTO scriptUpdateDTO, Script script) {
+
+		// Get the primitive test based on the primitive test name
+		PrimitiveTest primitiveTest = primitiveTestRepository.findByName(scriptUpdateDTO.getPrimitiveTestName());
+		if (null != primitiveTest) {
+			script.setPrimitiveTest(primitiveTest);
+		} else {
+			LOGGER.error("Primitive test not found with the name: " + scriptUpdateDTO.getPrimitiveTestName());
+			throw new ResourceNotFoundException(Constants.PRIMITIVE_TEST_NAME, scriptUpdateDTO.getPrimitiveTestName());
+		}
+
+		// Get the module based on the primitive test
+		Module module = primitiveTest.getModule();
+		if (module == null) {
+			LOGGER.error("Module not found for the primitive test: " + primitiveTest.getName());
+			throw new TDKServiceException("Module not found for the primitive test: " + primitiveTest.getName());
+		}
+		script.setModule(module);
+
+		// Set the category based on the module
+		Category category = this.getCategoryBasedOnModule(module);
+		script.setCategory(category);
+
+		// Get script location based on the module and category
+		String scriptLocation = this.getScriptLocation(module, category);
+		if (scriptLocation != script.getScriptLocation()) {
+			this.deleteScriptFile(script.getName(), script.getScriptLocation());
+			script.setScriptLocation(scriptLocation);
+		}
 		// Updating the script entity with the updated script details
 		script = MapperUtils.updateScript(script, scriptUpdateDTO);
 
@@ -351,9 +379,7 @@ public class ScriptService implements IScriptService {
 			LOGGER.info("No test steps to update for the script: " + script.getName());
 		}
 
-		// Primitive test and thus the module is not editable or changable. So there
-		// won't be any change in scriptlocation, primitive test and thus module. If the
-		// script file is changed, then the script is saved in the same location
+		// If the script file is updated, validate and save the new script file
 		if (!scriptFile.isEmpty()) {
 			this.validateScriptFile(scriptFile, script.getName(), script.getScriptLocation());
 			// This will replave the existing file with the new file
@@ -361,7 +387,7 @@ public class ScriptService implements IScriptService {
 		}
 
 		// Set devicetypes in the script entity if the devicetypes are updated
-		if (null != scriptUpdateDTO.getDeviceTypes() || !scriptUpdateDTO.getDeviceTypes().isEmpty()) {
+		if (null != scriptUpdateDTO.getDeviceTypes() && !scriptUpdateDTO.getDeviceTypes().isEmpty()) {
 			List<DeviceType> deviceType = this.getScriptDevicetypes(scriptUpdateDTO.getDeviceTypes(),
 					script.getCategory());
 			script.setDeviceTypes(deviceType);
@@ -425,7 +451,7 @@ public class ScriptService implements IScriptService {
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SCRIPT_ID, scriptId.toString()));
 		try {
 			scriptRepository.delete(script);
-			this.deleteScriptFile(script.getName() + Constants.PYTHON_FILE_EXTENSION, script.getScriptLocation());
+			this.deleteScriptFile(script.getName(), script.getScriptLocation());
 			LOGGER.info("Script deleted successfully: " + scriptId.toString());
 			return true;
 		} catch (DataIntegrityViolationException e) {
@@ -654,7 +680,7 @@ public class ScriptService implements IScriptService {
 			if (!Files.exists(uploadPath)) {
 				Files.createDirectories(uploadPath);
 			}
-			Path filePath = uploadPath.resolve(scriptName);
+			Path filePath = uploadPath.resolve(scriptName + Constants.PYTHON_FILE_EXTENSION);
 			LOGGER.info("Deleting file: " + filePath.toString());
 			if (!Files.exists(filePath)) {
 				LOGGER.error("File not found: " + filePath.toString());
@@ -1531,6 +1557,7 @@ public class ScriptService implements IScriptService {
 
 	/**
 	 * This method is used to dowload the all the MD files in ZIP format
+	 * 
 	 * @return ByteArrayInputStream containing the ZIP
 	 */
 	@Override
@@ -1555,7 +1582,9 @@ public class ScriptService implements IScriptService {
 	}
 
 	/**
-	 * Download all markdown files by category, organized by module folders in a ZIP.
+	 * Download all markdown files by category, organized by module folders in a
+	 * ZIP.
+	 * 
 	 * @param category the category name
 	 * @return ByteArrayInputStream containing the ZIP
 	 */

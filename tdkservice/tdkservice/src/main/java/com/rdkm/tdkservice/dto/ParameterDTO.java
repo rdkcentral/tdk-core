@@ -57,4 +57,9 @@ public class ParameterDTO {
 	 * The function associated with the parameter type.
 	 */
 	private String function;
+
+	/*
+	 * The Parameter category
+	 */
+	private String parameterCategory;
 }

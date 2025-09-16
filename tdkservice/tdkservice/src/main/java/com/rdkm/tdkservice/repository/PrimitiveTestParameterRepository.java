@@ -43,8 +43,7 @@ public interface PrimitiveTestParameterRepository extends JpaRepository<Primitiv
 	 * @return List<PrimitiveTestParameter>
 	 */
 	List<PrimitiveTestParameter> findByPrimitiveTest(PrimitiveTest primitivetTest);
-	
-	
+
 	/**
 	 * This method is used to get the primitive test parameter by created date or
 	 * updated at.
@@ -54,5 +53,17 @@ public interface PrimitiveTestParameterRepository extends JpaRepository<Primitiv
 	 * @return List<PrimitiveTestParameter>
 	 */
 	List<PrimitiveTestParameter> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
+
+	/*
+	 * This method is used to get the primitive test parameter by primitivetest and
+	 * name.
+	 * 
+	 * @param primitiveTest
+	 * 
+	 * @param name
+	 * 
+	 * @return PrimitiveTestParameter
+	 */
+	PrimitiveTestParameter findByPrimitiveTestAndParameterName(PrimitiveTest primitiveTest, String name);
 
 }

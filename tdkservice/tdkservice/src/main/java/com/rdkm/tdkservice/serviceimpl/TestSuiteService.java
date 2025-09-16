@@ -501,7 +501,7 @@ public class TestSuiteService implements ITestSuiteService {
 			scriptTestSuite.setTestSuite(testSuite);
 			scriptTestSuite.setScriptOrder(i);
 			scriptTestSuiteRepository.save(scriptTestSuite);
-			LOGGER.info("Script added to test suite: " + scriptName);
+			LOGGER.debug("Script added to test suite: " + scriptName);
 		}
 	}
 

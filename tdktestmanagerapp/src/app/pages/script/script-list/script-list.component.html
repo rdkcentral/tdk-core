@@ -69,10 +69,9 @@ limitations under the License.
           matTooltip="Upload {{selectedCategory}} testsuites">
           <i class="bi bi-cloud-arrow-up-fill download-icon"></i>
         </button>
-        <!-- TODO : Remove this for now and decide if it is needed later
-        <button type="button" class="download-btn" matTooltip="Update Test Suite"><i
-            class="bi bi-arrow-repeat download-icon"></i> </button> -->
-
+        <button type="button" class="download-btn" matTooltip="Update Test Suite"><i class="bi bi-arrow-repeat download-icon"
+            (click)="refreshAllTestSuites()"></i>
+        </button>
         <button *ngIf="testsuitTable && categoryName !== 'Video'" class="download-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
           matTooltip="Create {{selectedCategory}} Suite">
           <i class="bi bi-plus-circle-fill download-icon"></i>

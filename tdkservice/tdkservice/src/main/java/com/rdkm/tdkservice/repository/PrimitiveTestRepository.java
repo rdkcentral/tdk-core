@@ -80,12 +80,20 @@ public interface PrimitiveTestRepository extends JpaRepository<PrimitiveTest, UU
 	boolean existsByName(String primitiveTestname);
 
 	/**
-	 * This method is used to get the primitive test by created date or
-	 * updated at.
+	 * This method is used to get the primitive test by created date or updated at.
 	 * 
 	 * @param createdDate
 	 * @param updatedAt
 	 * @return List<PrimitiveTest>
 	 */
 	List<PrimitiveTest> findByCreatedDateAfterOrUpdatedAtAfter(Instant createdDate, Instant updatedAt);
+
+	/*
+	 * This method is used to get the primitive test list by function
+	 * 
+	 * @param function
+	 * 
+	 * @return List<PrimitiveTest>
+	 */
+	List<PrimitiveTest> findByFunction(Function function);
 }
