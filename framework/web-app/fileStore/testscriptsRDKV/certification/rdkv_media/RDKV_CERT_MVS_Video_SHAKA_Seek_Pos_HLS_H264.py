@@ -150,7 +150,7 @@ if expectedResult in result.upper():
         video_test_url = getTestURL(appURL,appArguments)
 
         #Example video test url
-        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?
+        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<video_hls_h264_url>.m3u8&operations=seekpos(30:120),seekpos(30:75),close(30)&options=checkInterval(10),loop&autotest=true
 
         # Setting the video test url in webkit instance using RDKShell

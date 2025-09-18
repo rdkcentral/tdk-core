@@ -148,7 +148,7 @@ if expectedResult in result.upper():
         print("SELECTED PLAYERS: ", players_list)
         video_test_urls = getTestURLs(players_list,appArguments)
         #Example video test url
-        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?
+        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<video_4k_hls_url>.m3u8&operations=seekfwd(10),repeat(15)&autotest=true&type=hls
 
         # Setting the video test url in webkit instance using RDKShell

@@ -162,7 +162,7 @@ if expectedResult in result.upper() and FFEnabledStatus.lower() != "no" and conf
         video_test_urls = getTestURLs(players_list,appArguments)
 
         #Example video test url
-        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?
+        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<video_4k_dash_url>.mpd&operations=fastfwd4x(30),playnow(10),close(30)&options=checkInterval(5)&autotest=true&type=dash
 
         # Setting the video test url in webkit instance using RDKShell

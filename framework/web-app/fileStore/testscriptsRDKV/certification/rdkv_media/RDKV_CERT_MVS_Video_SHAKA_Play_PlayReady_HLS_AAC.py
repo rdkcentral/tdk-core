@@ -140,7 +140,7 @@ MediaValidationVariables.video_src_url_playready_hls_aac_drmconfigs)
         video_test_url = getTestURL(appURL,appArguments)
 
         #Example video test url
-        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?
+        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<playready_hls_aac_url>.m3u8&drmconfigs=com.playready(license_url)&operations=close(60)&autotest=true
 
         # Setting the video test url in webkit instance using RDKShell
