@@ -364,7 +364,11 @@ export class DetailsExeDialogComponent {
           next: (res) => {
             parent.details = res.data
             const logs = parent.details.logs;
-            parent.formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
+            if (parent.status === 'PENDING' && (!logs || logs === 'null')) {
+              parent.formatLogs = 'Execution is yet to start, logs are not available.';
+            } else {
+              parent.formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
+            }
             parent.detailsLoading = false; // Stop loading
             this.changeDetectorRef.detectChanges();
 
