@@ -458,9 +458,14 @@ limitations under the License.
                                             <div [innerHTML]="parent.formatLogs" class="format-text"></div>
                                           </ng-container>
                                           <ng-container *ngIf="key === 'logs' && parent.status === 'INPROGRESS'">
-                                            <button type="button" class="download-btn log-btn" matTooltip="Live Logs" (click)="liveLogs()">
-                                              View Live Logs
-                                            </button>
+                                            <ng-container *ngIf="parent.status === 'INPROGRESS'">
+                                              <button type="button" class="download-btn log-btn" matTooltip="Live Logs" (click)="liveLogs()">
+                                                View Live Logs
+                                              </button>
+                                            </ng-container>
+                                            <ng-container *ngIf="parent.status === 'PENDING'">
+                                              <span class="text-muted">Execution is yet to start, logs are not available.</span>
+                                            </ng-container>
                                           </ng-container>
                                           <ng-container *ngIf="key !== 'logs'">{{ parent.details[key] }}</ng-container>
                                         </td>
