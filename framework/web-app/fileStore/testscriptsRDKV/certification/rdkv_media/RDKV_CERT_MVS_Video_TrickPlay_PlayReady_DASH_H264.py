@@ -178,7 +178,7 @@ if expectedResult in result.upper() and FFEnabledStatus.lower() != "no" and conf
 
 
         #Example video test url
-        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?
+        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<video_h264_url>.mpd&drmconfigs=com.playready(license_url)&seekfwd(10),fastfwd(10),playnow(10),pause(10),play(10),seekbwd(10),fastfwd(10)
         #&options=checkInterval(5),loop&autotest=true&type=dash
 

@@ -171,7 +171,7 @@ if expectedResult in result.upper() and FFEnabledStatus.lower() != "no" and conf
         video_test_urls = getTestURLs(players_list,appArguments)
 
         #Example video test url
-        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkvideoplayer/build/index.html?
+        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<video_url>.m3u8&operations=fastfwd(10),repeat(3),playnow(10),repeat(1),fastfwd(10),repeat(3),playnow(10)
         #&options=checkInterval(5),loop&autotest=true&type=hls
 

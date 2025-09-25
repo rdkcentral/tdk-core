@@ -161,7 +161,7 @@ if expectedResult in result.upper():
 
 
         #Example video test url
-        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?player=VIDEO
+        #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?player=VIDEO
         #url=<video_src_url_hevc_60fps>&operations=mute(30),unmute(30)&autotest=true&type=mp4&options=collectfps(WebKitBrowser),deviceport(9998),expectedfps(57)
 
         # Setting the video test url in webkit instance using RDKShell
