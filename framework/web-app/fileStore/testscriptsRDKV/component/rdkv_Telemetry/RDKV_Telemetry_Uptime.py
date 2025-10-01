@@ -111,7 +111,27 @@ print("[LIB LOAD STATUS]  :  %s" %result);
 
 pre_requisite_set = False
 if "SUCCESS" in result.upper():
+    tdkTestObj = obj.createTestStep('telemetry_deviceconfig_value')
+    tdkTestObj.addParameter("basePath",obj.realpath)
+    tdkTestObj.addParameter("configKey","Telemetry_Collector_URL")
+    tdkTestObj.executeTestCase(expectedResult)
+    details = tdkTestObj.getResultDetails()
+
+    print("Details : ", details)
+    details=details.replace("(","").replace(")","")
+    print("D : ", details)
+    details = details.split(",")
+    Telemetry_Collector_URL = details[1]
+    dummy_url = details[2]
+
+    if "SUCCESS" in details:
+        tdkTestObj.setResultStatus("SUCCESS")
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+
+if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('setPreRequisites');
+    tdkTestObj.addParameter("Telemetry_Collector_URL",Telemetry_Collector_URL)
     tdkTestObj.executeTestCase("SUCCESS");
     details = tdkTestObj.getResultDetails()
     if "SUCCESS" in details:
@@ -123,15 +143,17 @@ if "SUCCESS" in result.upper():
         tdkTestObj.setResultStatus("FAILURE");
 
 if pre_requisite_set:
-    tdkTestObj = obj.createTestStep('form_rbuscli_command');
     param = "Device.DeviceInfo.UpTime"
-    tdkTestObj.addParameter("param_name", param)
     profile_name = "RDKV-Profile-1"
-    tdkTestObj.addParameter("profile_name", profile_name)
     description = "Report to check Uptime"
-    tdkTestObj.addParameter("description", description)
     name = "Uptime"
+
+    tdkTestObj = obj.createTestStep('form_rbuscli_command');
+    tdkTestObj.addParameter("param_name", param)
+    tdkTestObj.addParameter("profile_name", profile_name)
+    tdkTestObj.addParameter("description", description)
     tdkTestObj.addParameter("name", name)
+    tdkTestObj.addParameter("Telemetry_Collector_URL",Telemetry_Collector_URL)
     tdkTestObj.executeTestCase("SUCCESS");
     details = tdkTestObj.getResultDetails()
     details = re.sub(r"\n", "", details)
@@ -186,9 +208,12 @@ if pre_requisite_set:
             if "cJSON Report" in line:
                 cJSON_line = line
                 cJSON_found = True
-            if "Report Sent Successfully over HTTP : 200" in line:
+            if "Report Sent Successfully over HTTP : 200" in line and not dummy_url:
                 HTTP_line = line
                 HTTP_found = True
+            if dummy_url:
+                HTTP_line = line
+                HTTP_found = False
         print ("\n[TEST STEP 3]: Verify if cJSON Report is generated successfully")
         if not cJSON_found:
             print("FAILURE : Unable to find cJSON report")
@@ -204,7 +229,12 @@ if pre_requisite_set:
             print("\n[TEST STEP RESULT] : SUCCESS\n");
             tdkTestObj.setResultStatus("SUCCESS");
         print ("\n[TEST STEP 4] : Verify if report is sent successfully into server")
-        if not HTTP_found:
+        if not HTTP_found and dummy_url:
+            print("FAILURE : report not sent successfully to server")
+            print("\n[TEST STEP RESULT] : FAILURE\n")
+            print("EXPECTED RESULT AS DUMMY URL USED\n")
+            tdkTestObj.setResultStatus("SUCCESS")
+        elif not HTTP_found:
             print("FAILURE : report not sent successfully to server")
             print("\n[TEST STEP RESULT] : FAILURE\n")
             tdkTestObj.setResultStatus("FAILURE")

@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_Telemetry_MAC</name>
+  <name>RDKV_Telemetry_FeatureEnable</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>To send mac report to telemetry server and verify output</synopsis>
+  <synopsis>To send device Telemetry Feature Enable report to telemetry server and verify output</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -58,8 +58,8 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>rdkv_Telemetry_05</test_case_id>
-    <test_objective>To send mac report to telemetry server and verify output</test_objective>
+    <test_case_id>rdkv_Telemetry_17</test_case_id>
+    <test_objective>To send device Telemetry Feature Enable or not report to telemetry server and verify output</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video Accelerator, RPI</test_setup>
     <pre_requisite>1. SSH_METHOD, SSH_USERNAME  and SSH_PASSWORD  must be configured in device config file
@@ -68,25 +68,21 @@
     4. Set Telemetry config URL.</pre_requisite>
     <api_or_interface_used></api_or_interface_used>
     <input_parameters></input_parameters>
-    <automation_approch>1. Execute rbuscli command to set profile to report mac into server.
+    <automation_approch>1. Execute rbuscli command to set profile to report device Telemetry Feature Enable into server.
     2. Verify if rbuscli rules are set correctly.
     3. Verify if cJSON report is generated succcessfully from telemetry logs.
     4. Verify if report is sent to server successfully from telemetry logs.
-    5. Verify if MAC is updated in cJSON report.
-    6. Get mac from /tmp/.deviceDetails.cache file in DUT.
-    7. Verify if mac from cJSON report is correct by validating against /tmp/.deviceDetails.cache value.</automation_approch>
+    5. Verify if device Telemetry Feature Enable is updated in cJSON report.
     <expected_output>1. rbuscli command must be executed successfully.
     2. rbuscli rules must be set successfully set with current profile.
     3. cJSON report must be present in telemetry logs.
     4. "Report Sent Successfully over HTTP : 200" must be present in telemetry logs.
-    5. MAC must be successfully retrieved from cJSON report.
-    6. MAC must be successfully retrieved from /proc/mac.
-    7. Both cJSON reported MAC and /tmp/.deviceDetails.cache MAC must match.</expected_output>
+    5. Device Telemetry Feature Enable must be successfully retrieved from cJSON report.</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_Telemetry</test_stub_interface>
-    <test_script>RDKV_Telemetry_MAC</test_script>
+    <test_script>RDKV_Telemetry_FeatureEnable</test_script>
     <skipped>No</skipped>
-    <release_version>M140</release_version>
+    <release_version>M141</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -103,7 +99,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_telemetry","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Telemetry_MAC');
+obj.configureTestCase(ip,port,'RDKV_Telemetry_FeatureEnable');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -121,11 +117,12 @@ if "SUCCESS" in result.upper():
     details = tdkTestObj.getResultDetails()
 
     print("Details : ", details)
+
     details=details.replace("(","").replace(")","")
-    print("D : ", details)
     details = details.split(",")
     Telemetry_Collector_URL = details[1]
     dummy_url = details[2]
+
 
     if "SUCCESS" in details:
         tdkTestObj.setResultStatus("SUCCESS")
@@ -145,11 +142,12 @@ if "SUCCESS" in result.upper():
         print("Unable to set PRE-REQUISITES successfully")
         tdkTestObj.setResultStatus("FAILURE");
 
+
 if pre_requisite_set:
-    param = "Device.DeviceInfo.X_COMCAST-COM_STB_MAC"
-    profile_name = "RDKV-Profile-2"
-    description = "Report to check MAC"
-    name = "mac"
+    param = "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.Enable"
+    profile_name = "RDKV-Profile-14"
+    description = "Report to check Telemetry Feature Enable"
+    name = "TelemetryEnabled"
 
     tdkTestObj = obj.createTestStep('form_rbuscli_command');
     tdkTestObj.addParameter("param_name", param)
@@ -225,7 +223,7 @@ if pre_requisite_set:
             print("\n[TEST STEP RESULT] : FAILURE\n")
             tdkTestObj.setResultStatus("FAILURE")
         elif name not in cJSON_line:
-            print("FAILURE : Unable to find mac in cJSON report")
+            print("FAILURE : Unable to find device Telemetry Feature Enable in cJSON report")
             print("\n[TEST STEP RESULT] : FAILURE\n")
             tdkTestObj.setResultStatus("FAILURE")
         else:
@@ -250,46 +248,25 @@ if pre_requisite_set:
             tdkTestObj.setResultStatus("SUCCESS");
 
         print ("\n[TEST STEP 5] : Verify if report is generated correctly")
-        mac = ""
+        Telemetry_Feature_Enable = ""
         if cJSON_line and name in cJSON_line:
             try:
                 match = re.search(r'(\{.*\})', cJSON_line)
                 if match:
                     json_str = match.group(1)
                     data = json.loads(json_str)
-                    mac = data["Report"][0][name]
-                    print("MAC:", mac)
-                    print("SUCCESS : Able to obtain  \"MAC\" from cJSON report")
+                    Telemetry_Feature_Enable = data["Report"][0][name]
+                    print("Telemetry Feature Enable:", Telemetry_Feature_Enable)
+                    print("SUCCESS : Able to check whether Telemetry Feature is enabled or not")
                     print("\n[TEST STEP RESULT] : SUCCESS\n");
                     tdkTestObj.setResultStatus("SUCCESS");
             except:
-                print("FAILURE : Unable to obtain \"MAC\" from cJSON report")
+                print("FAILURE : Unable to check whether Telemetry Feature is enabled or not")
                 print("\n[TEST STEP RESULT] : FAILURE\n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
             print("No JSON found in log line")
-            print("Unable to get MAC from cJSON report")
+            print("Unable to check whether Telemetry Feature is enabled or not from cJSON report")
 
-        if mac:
-            print("\n[TEST STEP 6] :Obtain mac from /tmp/.deviceDetails.cache")
-            tdkTestObj = obj.createTestStep('telemetry_executeCmdInDUT');
-            command = "cat /tmp/.deviceDetails.cache | grep estb_mac | cut -d '=' -f2"
-            tdkTestObj.addParameter("command", command)
-            tdkTestObj.executeTestCase("SUCCESS");
-            details = tdkTestObj.getResultDetails()
-            cache_mac = details.splitlines()[1].strip("\r\n")
-            print ("MAC from /tmp/.deviceDetails.cache : ", cache_mac)
-
-            print("\n[TEST STEP 7] :Verifying if cJSON report mac value is correct")
-            print("MAC from cJSON report : ", mac)
-            print("MAC from /tmp/.deviceDetails.cache : ", cache_mac)
-            if mac == cache_mac:
-                print ("SUCCESS : MAC obtained from /tmp/.deviceDetails.cache and cJSON report match")
-                print ("\n[TEST STEP RESULT] : SUCCESS\n");
-                tdkTestObj.setResultStatus("SUCCESS");
-            else:
-                print ("FAILURE : MAC obtained from /tmp/.deviceDetails.cache and cJSON report do not match")
-                print("\n[TEST STEP RESULT] : FAILURE\n")
-                tdkTestObj.setResultStatus("FAILURE")
 
 obj.unloadModule("rdkv_telemetry");

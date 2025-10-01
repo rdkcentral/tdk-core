@@ -13,9 +13,9 @@
  limitations under the License.
 -->
 <?xml version="1.0" encoding="UTF-8"?><xml>
-  <module testGroup="Component" name="rdkv_Telemetry">
+  <module name="rdkv_Telemetry" testGroup="Component">
     <primitiveTests>
-      <primitiveTest name="telemetry_deviceconfig_value" id="" version="1">
+      <primitiveTest name="telemetry_deviceconfig_value" id=" " version="2">
         <function>telemetry_deviceconfig_value</function>
         <parameters>
           <parameter name="basePath" value=""/>
@@ -28,13 +28,14 @@
           <parameter name="rfcparameter" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest name="form_rbuscli_command" id=" " version="2">
+      <primitiveTest name="form_rbuscli_command" id=" " version="3">
         <function>form_rbuscli_command</function>
         <parameters>
           <parameter name="param_name" value=""/>
-	  <parameter name="profile_name" value="RDKV-Profile"/>
-	  <parameter name="description" value=""/>
-	  <parameter name="name" value=""/>
+          <parameter name="profile_name" value="RDKV-Profile"/>
+          <parameter name="description" value=""/>
+          <parameter name="name" value=""/>
+          <parameter name="Telemetry_Collector_URL" value=""/>
         </parameters>
       </primitiveTest>
       <primitiveTest name="run_rbuscli_and_check" id=" " version="1">
@@ -50,9 +51,21 @@
           <parameter name="command" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest name="setPreRequisites" id="" version="1">
+      <primitiveTest name="setPreRequisites" id=" " version="2">
         <function>setPreRequisites</function>
-        <parameters/>
+        <parameters>
+          <parameter name="Telemetry_Collector_URL" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="form_rbuscli_event_command" id=" " version="1">
+        <function>form_rbuscli_event_command</function>
+        <parameters>
+          <parameter name="component_name" value=""/>
+          <parameter name="description" value=""/>
+          <parameter name="event_name" value=""/>
+          <parameter name="profile_name" value=""/>
+          <parameter name="Telemetry_Collector_URL" value=""/>
+        </parameters>
       </primitiveTest>
     </primitiveTests>
   </module>
