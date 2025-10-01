@@ -1944,9 +1944,9 @@
 		<!--  whether set value will be retained and set should be followed by a get or not  -->
 		<persistentSet>false</persistentSet>
 		<!-- default value of the param after factory reset  -->
-		<defaultValue>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition, WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open,WPA3-Personal-Compatibility</defaultValue>
+		<defaultValue>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition,WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open,WPA3-Personal-Compatibility</defaultValue>
 		<!--  the range of values acceptable  -->
-		<expectedValues>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition, WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open,WPA3-Personal-Compatibility</expectedValues>
+		<expectedValues>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition,WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open,WPA3-Personal-Compatibility</expectedValues>
 	</parameter>
 	<parameter>
 		<!-- the tr-181 parameter name  -->
@@ -1960,9 +1960,9 @@
 		<!--  whether set value will be retained and set should be followed by a get or not  -->
 		<persistentSet>false</persistentSet>
 		<!-- default value of the param after factory reset  -->
-		<defaultValue>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition, WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open,WPA3-Personal-Compatibility</defaultValue>
+		<defaultValue>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition,WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open,WPA3-Personal-Compatibility</defaultValue>
 		<!--  the range of values acceptable  -->
-		<expectedValues>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition, WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open,WPA3-Personal-Compatibility</expectedValues>
+		<expectedValues>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition,WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open,WPA3-Personal-Compatibility</expectedValues>
 	</parameter>
 	<parameter>
 		<!-- the tr-181 parameter name  -->
@@ -1976,7 +1976,7 @@
 		<!--  whether set value will be retained and set should be followed by a get or not  -->
 		<persistentSet>false</persistentSet>
 		<!-- default value of the param after factory reset  -->
-		<defaultValue>WPA3-Personal-Transition</defaultValue>
+		<defaultValue>WPA2-Personal</defaultValue>
 		<!--  the range of values acceptable  -->
 		<expectedValues>None,WEP-64,WEP-128,WPA-Personal,WPA2-Personal,WPA-WPA2-Personal,WPA-Enterprise,WPA2-Enterprise,WPA-WPA2-Enterprise,WPA3-Personal,WPA3-Enterprise</expectedValues>
 	</parameter>
@@ -1992,7 +1992,7 @@
 		<!--  whether set value will be retained and set should be followed by a get or not  -->
 		<persistentSet>false</persistentSet>
 		<!-- default value of the param after factory reset  -->
-		<defaultValue>WPA3-Personal</defaultValue>
+		<defaultValue>WPA2-Personal</defaultValue>
 		<!--  the range of values acceptable  -->
 		<expectedValues>None,WEP-64,WEP-128,WPA-Personal,WPA2-Personal,WPA-WPA2-Personal,WPA-Enterprise,WPA2-Enterprise,WPA-WPA2-Enterprise,WPA3-Personal,WPA3-Enterprise</expectedValues>
 	</parameter>
@@ -2288,7 +2288,7 @@
 		<!--  whether set value will be retained and set should be followed by a get or not  -->
 		<persistentSet>false</persistentSet>
 		<!-- default value of the param after factory reset  -->
-		<defaultValue>127.0.0.1</defaultValue>
+		<defaultValue>0.0.0.0</defaultValue>
 	</parameter>
 	<parameter>
 		<!-- the tr-181 parameter name  -->
@@ -2304,7 +2304,7 @@
 		<!--  whether set value will be retained and set should be followed by a get or not  -->
 		<persistentSet>false</persistentSet>
 		<!-- default value of the param after factory reset  -->
-		<defaultValue>127.0.0.1</defaultValue>
+		<defaultValue>0.0.0.0</defaultValue>
 	</parameter>
 	<parameter>
 	<!-- the tr-181 parameter name  -->
@@ -2388,9 +2388,9 @@
 		<!--  whether set value will be retained and set should be followed by a get or not  -->
 		<persistentSet>false</persistentSet>
 		<!-- default value of the param after factory reset  -->
-		<defaultValue>Optional</defaultValue>
+		<defaultValue>Disabled</defaultValue>
 		<!--  the range of values acceptable  -->
-		<expectedValues>Optional</expectedValues>
+		<expectedValues>Disabled</expectedValues>
 	</parameter>
 	<parameter>
 		<!-- the tr-181 parameter name  -->
@@ -2404,8 +2404,8 @@
 		<!--  whether set value will be retained and set should be followed by a get or not  -->
 		<persistentSet>false</persistentSet>
 		<!-- default value of the param after factory reset  -->
-		<defaultValue>Optional</defaultValue>
-		<expectedValues>Optional</expectedValues>
+		<defaultValue>Disabled</defaultValue>
+		<expectedValues>Disabled</expectedValues>
 	</parameter>
 	<parameter>
 		<!-- the tr-181 parameter name  -->
