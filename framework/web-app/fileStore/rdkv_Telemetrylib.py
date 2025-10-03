@@ -361,8 +361,8 @@ def form_rbuscli_event_command(event_name, Telemetry_Collector_URL, profile_name
                 "Parameter": [
                     {
                         "type": "event",
-                        "eventName": event_name
-                        "component": component_name
+                        "eventName": event_name,
+                        "component": component_name,
                         "use": "absolute"
                     }
                 ],

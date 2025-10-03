@@ -72,7 +72,7 @@
     2. Verify if rbuscli rules are set correctly.
     3. Verify if cJSON report is generated succcessfully from telemetry logs.
     4. Verify if report is sent to server successfully from telemetry logs.
-    5. Verify if device Hardware_Memory_Used is updated in cJSON report.
+    5. Verify if device Hardware_Memory_Used is updated in cJSON report. </automation_approch>
     <expected_output>1. rbuscli command must be executed successfully.
     2. rbuscli rules must be set successfully set with current profile.
     3. cJSON report must be present in telemetry logs.
