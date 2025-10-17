@@ -124,7 +124,7 @@ if expectedResult in result.upper():
             tdkTestObj = obj.createTestStep('rdkservice_rebootDevice')
             tdkTestObj.addParameter("waitTime",rebootwaitTime)
             #get the current system time before reboot
-            start_time = str(datetime.utcnow()).split()[1]
+            start_time = str(datetime.now()).split()[1]
             tdkTestObj.executeTestCase(expectedResult)
             result = tdkTestObj.getResultDetails()
             if expectedResult in result:

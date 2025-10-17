@@ -162,7 +162,7 @@ if expectedResult in result.upper():
                         tdkTestObj.addParameter("method","org.rdk.System.1.setPowerState");
                         tdkTestObj.addParameter("value",params);
                         if power_states[i] == "ON":
-                            start_power_on = str(datetime.utcnow()).split()[1]
+                            start_power_on = str(datetime.now()).split()[1]
                         tdkTestObj.executeTestCase(expectedResult);
                         result = tdkTestObj.getResult();
                         if expectedResult in result:

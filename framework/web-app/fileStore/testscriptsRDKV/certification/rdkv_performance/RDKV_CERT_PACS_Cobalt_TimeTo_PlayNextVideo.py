@@ -166,7 +166,7 @@ if expectedResult in result.upper():
                 tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
                 tdkTestObj.addParameter("value",params)
                 if keycode == '13':
-                    play_start_time = str(datetime.utcnow()).split()[1]
+                    play_start_time = str(datetime.now()).split()[1]
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 if expectedResult in result:

@@ -127,7 +127,7 @@ if expectedResult in result.upper():
         tdkTestObj = obj.createTestStep('rdkservice_setValue')
         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.suspend")
         tdkTestObj.addParameter("value",params)
-        start_suspend = str(datetime.utcnow()).split()[1]
+        start_suspend = str(datetime.now()).split()[1]
         tdkTestObj.executeTestCase(expectedResult)
         time.sleep(5)
         result = tdkTestObj.getResult()
@@ -148,7 +148,7 @@ if expectedResult in result.upper():
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","org.rdk.RDKShell.1.launch")
                 tdkTestObj.addParameter("value",params)
-                start_resume = str(datetime.utcnow()).split()[1]
+                start_resume = str(datetime.now()).split()[1]
                 tdkTestObj.executeTestCase(expectedResult)
                 time.sleep(5)
                 result = tdkTestObj.getResult()

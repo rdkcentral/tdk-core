@@ -142,7 +142,7 @@ if expectedResult in result.upper():
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","Cobalt.1.deeplink")
                 tdkTestObj.addParameter("value",cobalt_test_url)
-                video_start_time = str(datetime.utcnow()).split()[1][:-3]
+                video_start_time = str(datetime.now()).split()[1][:-3]
                 tdkTestObj.executeTestCase(expectedResult)
                 cobalt_result = tdkTestObj.getResult()
                 time.sleep(10)

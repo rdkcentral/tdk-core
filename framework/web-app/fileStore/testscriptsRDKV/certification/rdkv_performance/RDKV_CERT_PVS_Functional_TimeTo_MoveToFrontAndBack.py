@@ -158,7 +158,7 @@ if expectedResult in result.upper():
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method","org.rdk.RDKShell.1."+method)
                         tdkTestObj.addParameter("value",param_val)
-                        start_time_dict[method] = str(datetime.utcnow()).split()[1]
+                        start_time_dict[method] = str(datetime.now()).split()[1]
                         tdkTestObj.executeTestCase(expectedResult)
                         result = tdkTestObj.getResult()
                         if expectedResult in result:

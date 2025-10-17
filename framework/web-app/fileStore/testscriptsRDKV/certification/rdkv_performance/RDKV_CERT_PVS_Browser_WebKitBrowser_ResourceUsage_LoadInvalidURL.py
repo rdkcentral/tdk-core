@@ -167,7 +167,7 @@ if expectedResult in result.upper():
                         tdkTestObj.setResultStatus("SUCCESS");
                         print("Current URL:",current_url)
                         print("\n Setting the test URL")
-                        Execution_start_time = str(datetime.utcnow()).split()[1]
+                        Execution_start_time = str(datetime.now()).split()[1]
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method","WebKitBrowser.1.url")
                         tdkTestObj.addParameter("value",browser_invalid_test_url)
