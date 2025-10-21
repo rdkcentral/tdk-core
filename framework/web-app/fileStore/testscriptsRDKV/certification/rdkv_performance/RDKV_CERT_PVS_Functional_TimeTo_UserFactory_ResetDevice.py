@@ -150,7 +150,7 @@ if expectedResult in result.upper():
                 tdkTestObj = obj.createTestStep('rdkservice_setValue');
                 tdkTestObj.addParameter("method","org.rdk.Warehouse.1.resetDevice");
                 tdkTestObj.addParameter("value",params)
-                reset_start_time = str(datetime.utcnow()).split()[1]
+                reset_start_time = str(datetime.now()).split()[1]
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult();
                 if expectedResult in result:

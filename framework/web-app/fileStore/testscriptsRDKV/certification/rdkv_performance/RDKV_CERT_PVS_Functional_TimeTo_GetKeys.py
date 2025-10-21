@@ -184,7 +184,7 @@ if expectedResult in result.upper():
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
                             tdkTestObj.addParameter("value",params)
-                            start_get_key_time = str(datetime.utcnow()).split()[1]
+                            start_get_key_time = str(datetime.now()).split()[1]
                             tdkTestObj.executeTestCase(expectedResult)
                             result = tdkTestObj.getResult()
                             if expectedResult in result:
