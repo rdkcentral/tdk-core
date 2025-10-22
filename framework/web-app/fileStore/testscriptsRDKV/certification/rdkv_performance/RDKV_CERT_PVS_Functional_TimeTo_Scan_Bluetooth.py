@@ -135,7 +135,7 @@ if expectedResult in result.upper():
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","org.rdk.Bluetooth.1.startScan")
             tdkTestObj.addParameter("value",params)
-            scan_start_time = str(datetime.utcnow()).split()[1]
+            scan_start_time = str(datetime.now()).split()[1]
             tdkTestObj.executeTestCase(expectedResult)
             result = tdkTestObj.getResult()
             details = tdkTestObj.getResultDetails()

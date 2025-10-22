@@ -177,7 +177,7 @@ if flag >0:
                     tdkTestObj.addParameter("method",method_param)
                     tdkTestObj.addParameter("value",plugin_link)
                     tdkTestObj.executeTestCase(expectedResult)
-                    video_start_time = str(datetime.utcnow()).split()[1]
+                    video_start_time = str(datetime.now()).split()[1]
                     launch_result = tdkTestObj.getResult()
                     time.sleep(10)
                     if plugin_name != "Cobalt" and expectedResult in result:
