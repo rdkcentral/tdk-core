@@ -144,7 +144,7 @@ if expectedResult in result.upper():
                 tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                 tdkTestObj.addParameter("plugin",plugin)
                 tdkTestObj.addParameter("status","deactivate")
-                start_deactivate = str(datetime.utcnow()).split()[1]
+                start_deactivate = str(datetime.now()).split()[1]
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 if result == "SUCCESS":

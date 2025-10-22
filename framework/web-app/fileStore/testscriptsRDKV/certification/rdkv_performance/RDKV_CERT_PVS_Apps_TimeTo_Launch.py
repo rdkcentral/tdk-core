@@ -173,7 +173,7 @@ if expectedResult in result.upper():
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.addParameter("value",video_test_urls[0]);
-            start_time = str(datetime.utcnow()).split()[1]
+            start_time = str(datetime.now()).split()[1]
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
             if expectedResult in result:

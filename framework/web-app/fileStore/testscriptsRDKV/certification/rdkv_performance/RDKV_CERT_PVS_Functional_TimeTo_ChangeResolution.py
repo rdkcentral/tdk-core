@@ -172,7 +172,7 @@ if expectedResult in result.upper():
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setCurrentResolution")
                             tdkTestObj.addParameter("value",input_params)
-                            resol_change_start_time = str(datetime.utcnow()).split()[1]
+                            resol_change_start_time = str(datetime.now()).split()[1]
                             tdkTestObj.executeTestCase(expectedResult)
                             result = tdkTestObj.getResult()
                             if result == "SUCCESS":

@@ -199,7 +199,7 @@ if expectedResult in result.upper():
             print("\nSet Channel change test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method",set_method);
-            current_system_time = str(datetime.utcnow()).split()[1]
+            current_system_time = str(datetime.now()).split()[1]
             tdkTestObj.addParameter("value",channel_change_url);
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
