@@ -20,7 +20,7 @@
 
 #imports
 import os
-from configparser import SafeConfigParser
+from configparser import RawConfigParser
 Aamp_log_file='/opt/TDK/logs/AgentConsole.log'
 ##################################################################################
 #
@@ -35,7 +35,7 @@ Aamp_log_file='/opt/TDK/logs/AgentConsole.log'
 ####################################################################################
 
 def getAampTuneURL(stream):
-    parser = SafeConfigParser()
+    parser = RawConfigParser()
     # Fetching the stream details from configuration file
     parser.read( os.path.dirname(os.path.abspath(__file__))+'/Aamp_Tune_Config.ini')
     print("Parsing Aamp streams ...")
