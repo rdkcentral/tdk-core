@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>19b31a73-b79f-4c60-99ee-2c0ade0c021f</moduleId>
+        <!-- Module name -->
+        <moduleName>FWUpgradeHAL</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>15</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="4fd15782-8770-4d54-a8f0-2d57269ef2c9" name="FWUPGRADEHAL_Reboot_Now">
+                <parameters/>
+            </function>
+            <function id="a089cc0f-5bfe-44da-b590-4032a8db0fa2" name="FWUPGRADEHAL_Set_Download_Interface">
+                <parameters>
+                    <parameter id="d7fecbd7-af56-4578-9956-9ab5405501b5" parameterName="interface" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="b82cc1db-8ec5-4e32-9f0a-402533aa162f" name="FWUPGRADEHAL_GetParamUlongValue">
+                <parameters>
+                    <parameter id="ebf4fb5c-5ddd-4cef-9122-7089cd812f75" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="016601b0-b36a-466f-a8c1-5d9b4f8dc114" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="98f9b67a-88b1-435d-b1a0-93a43a0e51ef" name="FWUPGRADEHAL_Download">
+                <parameters/>
+            </function>
+            <function id="41e2468e-1097-4051-897d-91fc0b7a2c59" name="WUPGRADEHAL_Update_And_FactoryReset">
+                <parameters>
+                    <parameter id="17991ea4-5388-4ed9-89a5-bd7dbea18d29" parameterName="url" parameterType="STRING" range="A-Z"/>
+                    <parameter id="21b91ae0-a8ee-4e6b-8f82-6db66f5ef469" parameterName="imagename" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="22f578f9-5500-41cc-a605-6947b67d586b" name="FWUPGRADEHAL_Get_Download_Url">
+                <parameters>
+                    <parameter id="01adc1ac-2264-48dc-84da-513c96d8b7b7" parameterName="URL" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2403fb43-ff01-4c78-9c12-3455aa4e66ad" parameterName="filename" parameterType="STRING" range="A-Z"/>
+                    <parameter id="dfcd03f0-f05a-4da0-b712-f5a2a8d23fc2" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c7669e13-b990-4ae1-871e-cddc3d4d7ec2" name="FWUPGRADEHAL_Set_Download_Url">
+                <parameters>
+                    <parameter id="1f56e729-74b0-4539-a198-7b190e2148e1" parameterName="URL" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f4866755-c001-4c05-b92d-3ff5ac61b3ac" parameterName="filename" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9b0f2d40-85fb-4e97-a1fd-005b633e5f77" name="FWUPGRADEHAL_Update_And_FactoryReset">
+                <parameters>
+                    <parameter id="ec7c190a-8f12-4c12-a3ff-c523e6aa1149" parameterName="url" parameterType="STRING" range="A-Z"/>
+                    <parameter id="45d2b6df-958a-42a0-85e1-78e3a12389fd" parameterName="imagename" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>84200926-548e-4181-8202-ddd377aa95ba</id>
+                <name>FWUPGRADEHAL_Download</name>
+                <funName>FWUPGRADEHAL_Download</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>8adea12e-bd21-4e01-bc62-360f37279c4d</id>
+                <name>FWUPGRADEHAL_GetParamUlongValue</name>
+                <funName>FWUPGRADEHAL_GetParamUlongValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>87bdb39d-a6ba-47c2-97d1-b2365e19f0cc</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9566083c-5c92-4e7c-8179-6aba44dae22f</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b65bcb5f-06fc-4267-9a38-8f2b88e77531</id>
+                <name>FWUPGRADEHAL_Get_Download_Url</name>
+                <funName>FWUPGRADEHAL_Get_Download_Url</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9bead210-7b2f-41bc-acf6-05c7e6c3c2b0</id>
+                        <parameterName>URL</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9f7a0226-9b87-4475-9bc7-317720ef3181</id>
+                        <parameterName>filename</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fccfb353-8f57-4ba1-bd58-cb96c057125c</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bfd59698-1484-484d-87a2-3b6b2bbc94a1</id>
+                <name>FWUPGRADEHAL_Set_Download_Interface</name>
+                <funName>FWUPGRADEHAL_Set_Download_Interface</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9937677f-94f1-4850-90f9-54cbcc310dda</id>
+                        <parameterName>interface</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c2d8039d-baf9-478b-a806-05147632899f</id>
+                <name>FWUPGRADEHAL_Reboot_Now</name>
+                <funName>FWUPGRADEHAL_Reboot_Now</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c3049d06-02a7-407a-839e-03ef467618dd</id>
+                <name>FWUPGRADEHAL_Set_Download_Url</name>
+                <funName>FWUPGRADEHAL_Set_Download_Url</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>00a1668c-1b30-48d0-8501-947dd6e64d25</id>
+                        <parameterName>URL</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>89c07870-eb66-4418-a6c7-36b3974d3571</id>
+                        <parameterName>filename</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c67c5141-6d51-4781-a808-8d2f4af1fd7a</id>
+                <name>FWUPGRADEHAL_Update_And_FactoryReset</name>
+                <funName>WUPGRADEHAL_Update_And_FactoryReset</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>63c68d70-02de-480a-b304-58e150f154b1</id>
+                        <parameterName>imagename</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6fcc0ded-9075-4342-94be-6e8062a1438e</id>
+                        <parameterName>url</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

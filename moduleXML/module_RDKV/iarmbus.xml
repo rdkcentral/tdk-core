@@ -1,0 +1,895 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>71584c16-54c1-46fa-aae4-04ff23f5edde</moduleId>
+        <!-- Module name -->
+        <moduleName>iarmbus</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>3</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[/opt/logs/uimgr_log.txt]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="591bab1b-51bf-4983-87a9-248cf7501bd8" name="TestMgr_IARMBUSPERF_Term">
+                <parameters/>
+            </function>
+            <function id="fd5b5c9a-1198-49e1-8e3a-5da95112aeef" name="TestMgr_IARMBUS_BroadcastEvent">
+                <parameters>
+                    <parameter id="bb9d0b26-a1b3-4b22-bd99-e62328f99d2d" parameterName="payload" parameterType="STRING" range="A-Z"/>
+                    <parameter id="72f13fdc-2063-4a97-991a-ea47a7c50592" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="9aa4203d-59e0-40be-b6ba-5b4910a5c4ea" parameterName="resource_type" parameterType="INTEGER" range="0-7"/>
+                    <parameter id="82537c93-857b-468f-b7d2-24eb034712d8" parameterName="keyCode" parameterType="INTEGER" range="1-65535"/>
+                    <parameter id="88a57d29-c112-4151-a8a0-114ae38ba940" parameterName="state" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="9e7632e2-e257-4453-b1ce-6df3f179900d" parameterName="keyType" parameterType="INTEGER" range="1-65535"/>
+                    <parameter id="4be47493-29d3-4d9c-820c-ed5b095d2e48" parameterName="error" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="654d06e6-6048-40dd-9ed3-666cc2dad1da" parameterName="newState" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="4e2aa44d-6125-451d-95b9-d89ad881e1da" parameterName="event_id" parameterType="INTEGER" range="0-2"/>
+                </parameters>
+            </function>
+            <function id="ec3874d7-8136-45b6-b056-a9e81ca0b08c" name="TestMgr_IARMBUS_ReleaseResource">
+                <parameters>
+                    <parameter id="028fef02-c927-430b-b4bc-ba0d7ff19603" parameterName="resource_type" parameterType="INTEGER" range="0-7"/>
+                </parameters>
+            </function>
+            <function id="37262df8-5e56-4819-b371-a64dad904693" name="TestMgr_IARMBUS_Disconnect">
+                <parameters/>
+            </function>
+            <function id="a2a17fa4-4e9b-4610-93c0-55a7a98e84c7" name="TestMgr_IARMBUS_BusCall">
+                <parameters>
+                    <parameter id="04488b1b-0a7c-4b7b-84fa-60b68b1069ad" parameterName="newState" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="852fcfee-0296-49ca-8405-5682aa67ba10" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="74e60703-d826-4321-8fae-6ebaf4fdb431" parameterName="imagepath" parameterType="STRING" range="A-Z"/>
+                    <parameter id="af42ae55-ff99-48ff-8bd3-efc3321ee6ad" parameterName="set_timeout" parameterType="INTEGER" range="1-65535"/>
+                    <parameter id="acbcc072-607d-4677-ac83-0c357aea2a4e" parameterName="imagename" parameterType="STRING" range="A-Z"/>
+                    <parameter id="0ea18a43-c98a-4f3a-984d-af44a1174e54" parameterName="testapp_API0_data" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="7b68b7a3-e48e-495e-b279-66fc05fb7225" parameterName="testapp_API1_data" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="c310e5b7-ac04-4031-ae76-e18cb78121b3" parameterName="method_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b11ab996-bea6-47b7-a729-9450c6b5f329" parameterName="resource_type" parameterType="INTEGER" range="0-7"/>
+                    <parameter id="896f49c2-1b78-4db4-8cc1-94fa0232b87c" parameterName="mfr_param_type" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="daf4ae83-f61a-4ee9-ad01-34b51abb365e" name="TestMgr_IARMBUS_Connect">
+                <parameters/>
+            </function>
+            <function id="e060f901-efb0-4d2e-bd9a-2103ea1083af" name="TestMgr_IARMBUS_GetLastReceivedEventPerformanceDetails">
+                <parameters/>
+            </function>
+            <function id="c8d64f22-f334-4590-9561-f65fc3eb3b8d" name="TestMgr_IARMBUS_Init">
+                <parameters>
+                    <parameter id="8638932b-f0e7-4ca2-b067-f4014b253d70" parameterName="Process_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d799f8d2-08c2-4ab0-beb8-3a705619e6e4" name="TestMgr_IARMBUSPERF_Connect">
+                <parameters/>
+            </function>
+            <function id="d5c88fbb-738a-413d-8e11-5549aa5eb142" name="TestMgr_IARMBUSPERF_Disconnect">
+                <parameters/>
+            </function>
+            <function id="021bad41-0c47-460f-b352-932bc3252988" name="TestMgr_IARMBUS_RemoveEventHandler">
+                <parameters>
+                    <parameter id="ee233358-a065-4433-8a97-25bf69f27936" parameterName="owner_name" parameterType="STRING" range="owner name"/>
+                    <parameter id="93c81cda-f57c-4d50-a3c8-347cfb80effe" parameterName="event_id" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="dc328b2b-95ce-428d-9013-9fe7467819df" parameterName="evt_handler" parameterType="STRING" range="Event Handler"/>
+                </parameters>
+            </function>
+            <function id="40732f3a-2f4a-4022-a1ba-87788f22914e" name="TestMgr_IARMBUS_RegisterEventHandler">
+                <parameters>
+                    <parameter id="b896cca7-caef-4d9b-b21d-1e82d64c77c5" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4401c910-ab40-4d62-98f2-3caf0d0e52da" parameterName="event_id" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="805f23cb-d482-4a98-889a-3282f2fa4e6f" parameterName="evt_handler" parameterType="STRING" range="Event Handler"/>
+                </parameters>
+            </function>
+            <function id="d9fa0e20-6f13-49bb-b3cc-301d523c0fed" name="TestMgr_IARMBUS_InvokeEventTransmitterApp">
+                <parameters>
+                    <parameter id="a2dd86cf-6a9f-4091-aa44-1f4ac54fa522" parameterName="evttxappname" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c1dff1f0-c1b9-4899-b25a-7fca4d414f14" parameterName="newState" parameterType="INTEGER" range="0-10000"/>
+                    <parameter id="5ed8f009-d010-4871-972e-6e74f5a4ec92" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="9ddd752e-552d-432e-a709-2f176ac5a2f6" parameterName="event_id" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="6826c6d8-790c-40c3-988d-8d37a0140d93" parameterName="resource_type" parameterType="INTEGER" range="0-10000"/>
+                    <parameter id="9751d383-a66a-4c7c-9988-4733ba990b47" parameterName="keyType" parameterType="INTEGER" range="0-10000"/>
+                    <parameter id="499fa44f-0a60-4902-ac38-f748fc8d08e8" parameterName="keyCode" parameterType="INTEGER" range="0-10000"/>
+                </parameters>
+            </function>
+            <function id="1a954347-4c29-4ae6-a045-8b80c48a03dd" name="anooptestfn">
+                <parameters/>
+            </function>
+            <function id="ffaccca3-c571-4841-9700-5529e4b4263e" name="TestMgr_IARMBUSPERF_Init">
+                <parameters>
+                    <parameter id="f6049537-1cb4-44aa-8f78-940ccdad565b" parameterName="Process_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="87e15074-fb9c-4926-b751-77d949cc46e3" name="TestMgr_IARMBUSPERF_RegisterEventHandler">
+                <parameters>
+                    <parameter id="b6f89a5c-0f5e-4506-a5b5-4bd4a4454341" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f4185f48-8ade-49e9-93f6-0788d5d00a7f" parameterName="event_id" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="393c5b29-6e49-4826-a03a-817171e43cf2" name="TestMgr_IARMBUSPERF_RegisterTwoEvtHandlersTwoEvents">
+                <parameters>
+                    <parameter id="6f41e732-e73d-49d7-8501-32d559e3d93e" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="569c44a7-446d-4215-8e00-83a35f671169" parameterName="event_id" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="c6da70c7-12f9-4352-af74-e094c1b188d1" name="TestMgr_IARMBUS_RegisterCall">
+                <parameters>
+                    <parameter id="6f30b1ca-5f76-4d7d-8415-f2d4b546628a" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fa4a8b13-5b97-4251-a0cd-6f0f252d6624" name="TestMgr_IARMBUS_SyncSecondApplication">
+                <parameters>
+                    <parameter id="1ae05be0-365f-4737-bf8c-89b6175d3c24" parameterName="lockenabled" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="85b58ede-505d-4c80-ac53-b4d5bb7f298d" name="TestMgr_IARMBUSPERF_InvokeEventTransmitterApp">
+                <parameters>
+                    <parameter id="875791f6-f34f-4017-bbd4-92fa1c2eb7da" parameterName="resource_type" parameterType="INTEGER" range="0-10000"/>
+                    <parameter id="91328f6b-5cb6-4969-9ae0-ef7aa13d4750" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a04eb40a-5004-4c7b-8889-5b82931e8d00" parameterName="evttxappname" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e7e9f934-6e03-400d-bd99-61333cc8d259" parameterName="newState" parameterType="INTEGER" range="0-10000"/>
+                    <parameter id="012f2fa9-894a-4599-a5e5-a4191b15c01d" parameterName="keyCode" parameterType="INTEGER" range="0-10000"/>
+                    <parameter id="40593a8f-0da0-4e40-a4bb-01350f8453d3" parameterName="keyType" parameterType="INTEGER" range="0-10000"/>
+                    <parameter id="a79f20df-d5cc-462b-bf32-8dc42f010e2a" parameterName="event_id" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="acb9724d-8d1b-44b4-a36a-a5554d03a6a0" name="TestMgr_IARMBUS_UnRegisterEventHandler">
+                <parameters>
+                    <parameter id="1bb4aa7e-b4cf-4583-8fbf-3f3eea2dad2d" parameterName="event_id" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="eb981628-7321-4161-a605-6aa273e28c9e" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e2016ddb-7ee5-4eed-814c-1786f2290daa" name="TestMgr_IARMBUS_GetLastReceivedEventDetails">
+                <parameters/>
+            </function>
+            <function id="f2147aa1-8bf3-4206-9d38-1f7488347c30" name="TestMgr_IARMBUS_GetContext">
+                <parameters/>
+            </function>
+            <function id="21800e98-87f2-4e4f-8e59-95bc705b88c0" name="TestMgr_IARMBUS_RegisterEvent">
+                <parameters>
+                    <parameter id="c3a2dc9f-a23d-49a0-9914-90d38dc3ef84" parameterName="max_event" parameterType="INTEGER" range="0-2"/>
+                </parameters>
+            </function>
+            <function id="93031723-0216-4458-af8e-d533c0fa1898" name="TestMgr_IARMBUSPERF_GetLastReceivedEventDetails">
+                <parameters/>
+            </function>
+            <function id="1fc85553-8320-4413-8586-d6e4e7b37e22" name="TestMgr_IARMBUS_Term">
+                <parameters/>
+            </function>
+            <function id="036b5113-8a1e-4756-9183-e6ab7f7530ea" name="TestMgr_IARMBUSPERF_UnRegisterEventHandler">
+                <parameters>
+                    <parameter id="1a5ff04f-76b2-4188-90c1-99c9beec6047" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="339ac2f0-2efe-4815-90d8-38adfa0fef06" parameterName="event_id" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="55526944-f3f7-4727-a727-f3f814f42140" name="TestMgr_IARMBUS_InvokeSecondApplication">
+                <parameters>
+                    <parameter id="5122f1a7-8876-44a9-9304-6f210b86d904" parameterName="iterationcount" parameterType="INTEGER" range="0-100000"/>
+                    <parameter id="6e5d380e-a6aa-4b53-818b-06cb0a66124d" parameterName="appname" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b7c1f619-4721-43d2-af88-14eb6572a8c7" parameterName="apptype" parameterType="STRING" range="A-Z"/>
+                    <parameter id="02c6dc9b-9998-4803-b587-390b2fb219fa" parameterName="argv1" parameterType="STRING" range="ON,OFF,PAIR"/>
+                </parameters>
+            </function>
+            <function id="52ecdbb3-4656-4529-ab1e-c6c692af6443" name="TestMgr_IARMBUS_RegisterMultipleEventHandlers">
+                <parameters>
+                    <parameter id="fc07502d-e636-4cd5-aec6-b68c982ff373" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8fcd469b-8997-478d-b5cd-1757c6d7b6f3" parameterName="event_id" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="03b9cad9-19ea-42e2-a3a2-524546135b6e" name="TestMgr_IARMBUS_RequestResource">
+                <parameters>
+                    <parameter id="6b7bc4ff-7c7b-4fbe-a616-b0a44a3164e9" parameterName="resource_type" parameterType="INTEGER" range="0-7"/>
+                </parameters>
+            </function>
+            <function id="94702820-1e94-47f4-a823-d70d6cb7faad" name="TestMgr_IARMBUS_IsConnected">
+                <parameters>
+                    <parameter id="537ae450-adcd-4ecf-9081-197b60fa79ba" parameterName="member_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="cd5ade63-a191-4e83-a82c-64b664ee4860" name="TestMgr_IARMBUSPERF_RegisterMultipleEventHandlers">
+                <parameters>
+                    <parameter id="02dfacfb-473e-496b-8e3d-00d3bb4174f4" parameterName="event_id" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="57b7c854-b22a-438a-8a42-79ba1f89befb" parameterName="owner_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>1bb8abb6-a377-4fa8-902c-fa265cd23ad8</id>
+                <name>IARMBUS_RegisterCall</name>
+                <funName>TestMgr_IARMBUS_RegisterCall</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>eb6c0080-01f0-4235-baa7-57e3b7e5c91f</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>ReleaseOwnership</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1c6a0cbf-3e0f-4c13-873b-a023a4fb25a2</id>
+                <name>IARMBUS_InvokeSecondApplication</name>
+                <funName>TestMgr_IARMBUS_InvokeSecondApplication</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>54ec665d-2834-4324-9093-f5d7a6f4cd94</id>
+                        <parameterName>iterationcount</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ada3cf9b-e066-477f-a239-00979ae9ae5b</id>
+                        <parameterName>apptype</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>normal</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dd5ba523-81b2-4754-9f3a-343184df9ae2</id>
+                        <parameterName>argv1</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>ON,OFF,PAIR</range>
+                        <value>ON</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e9b695fa-3d73-4948-b264-0e5c7b6a5280</id>
+                        <parameterName>appname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>/tst_iarmbus</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>22372eb2-d7ef-47ae-82db-fad25df7811e</id>
+                <name>IARMBUS_Connect</name>
+                <funName>TestMgr_IARMBUS_Connect</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>22ee75c3-5e00-421c-acf6-f082359b2fa7</id>
+                <name>IARMBUS_DisConnect</name>
+                <funName>TestMgr_IARMBUS_Disconnect</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>3b872c68-46fd-452c-8a63-efa9123c755d</id>
+                <name>IARMBUS_ReleaseResource</name>
+                <funName>TestMgr_IARMBUS_ReleaseResource</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>893c2199-be85-4cb1-b8d4-ff212828dc03</id>
+                        <parameterName>resource_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-7</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>446031b3-0b50-4131-818a-dd2eca9cede9</id>
+                <name>IARMBUSPERF_RegisterEventHandler</name>
+                <funName>TestMgr_IARMBUSPERF_RegisterEventHandler</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>bc4bac80-59bc-47e2-842a-ff27a5fd392a</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IRMgr</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e3b229e4-c725-4abe-a006-cf36b2b8f9f6</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>49bb0822-74e5-4e6b-b428-f73cd7f65f2f</id>
+                <name>IARMBUS_RegisterMultipleEventHandlers</name>
+                <funName>TestMgr_IARMBUS_RegisterMultipleEventHandlers</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d28a3c09-0466-424f-a621-7ddb1451bea7</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IRMgr</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e76874d0-3b58-491e-a745-9d59656b10e9</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4a5b0b1b-9ea8-4c80-820e-75cc30e031a0</id>
+                <name>IARMBUS_RequestResource</name>
+                <funName>TestMgr_IARMBUS_RequestResource</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>72b78859-eaaf-4d7d-9e95-5ba79347b70b</id>
+                        <parameterName>resource_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-7</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4ac0dabd-324a-4906-8448-6ff082791a72</id>
+                <name>IARMBUS_RemoveEventHandler</name>
+                <funName>TestMgr_IARMBUS_RemoveEventHandler</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>31053460-43f2-47be-af27-f24028fb4d03</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>owner name</range>
+                        <value>evtHandler</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a3d3749e-cd5b-4a77-8747-0171bd7f159a</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c0b24d19-2502-4dd7-89ae-e1ae018dc226</id>
+                        <parameterName>evt_handler</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>Event Handler</range>
+                        <value>Daemon</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>55fa35bd-3593-442c-bcbc-0dd04e246dfd</id>
+                <name>IARMBUS_RegisterEventHandler</name>
+                <funName>TestMgr_IARMBUS_RegisterEventHandler</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0ea94955-c286-4014-ab9a-7cff4ecff4ac</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Daemon</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>81c81e9e-4453-4977-be69-c6b6717b0b82</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a259f564-42cd-440c-915d-0a3025aa977a</id>
+                        <parameterName>evt_handler</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>Event Handler</range>
+                        <value>evtHandler</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5637d210-ea11-404a-a89a-333cde02e501</id>
+                <name>IARMBUS_Term</name>
+                <funName>TestMgr_IARMBUS_Term</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6a153b1d-ce6b-4f22-b203-cb4446c85b53</id>
+                <name>IARMBUSPERF_GetLastReceivedEventDetails</name>
+                <funName>TestMgr_IARMBUSPERF_GetLastReceivedEventDetails</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6fc33953-8225-4127-9ab7-ea9dfc2d6728</id>
+                <name>IARMBUSPERF_RegisterMultipleEvtHandlersForSingleEvt</name>
+                <funName>TestMgr_IARMBUSPERF_RegisterMultipleEventHandlers</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c2bdcd40-a2ae-40e7-9410-52ddcac856b8</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>def1b63e-766f-4e74-becb-312b1f9ac372</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IRMgr</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6ff3528e-12f1-453d-a657-cf3739f9cb06</id>
+                <name>IARMBUS_SyncSecondApplication</name>
+                <funName>TestMgr_IARMBUS_SyncSecondApplication</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9c042981-5291-46e3-b188-cff4c42d5ffb</id>
+                        <parameterName>lockenabled</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7793742a-60e8-4a3d-be01-a03e866311cb</id>
+                <name>IARMBUS_GetLastReceivedEventDetails</name>
+                <funName>TestMgr_IARMBUS_GetLastReceivedEventDetails</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>7a79bc7b-4078-4130-9d75-668fb1fb8c88</id>
+                <name>IARMBUSPERF_UnRegisterEventHandler</name>
+                <funName>TestMgr_IARMBUSPERF_UnRegisterEventHandler</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2bb4c722-6bf7-4715-ac8f-0850ef6ef93b</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IRMgr</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b61e219b-564e-4d44-a008-e0d57c34837c</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>90589759-6ce4-4015-b51a-7d8a06cbc72f</id>
+                <name>IARMBUSPERF_Term</name>
+                <funName>TestMgr_IARMBUSPERF_Term</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>94004dd5-ca0c-4bee-a74b-77914398971b</id>
+                <name>IARMBUSPERF_Init</name>
+                <funName>TestMgr_IARMBUSPERF_Init</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>48e82446-4ded-412b-8379-922b7505b466</id>
+                        <parameterName>Process_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>agent</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9705fa8f-b6c3-420b-95c4-34fbad79d685</id>
+                <name>IARMBUS_Init</name>
+                <funName>TestMgr_IARMBUS_Init</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>865fbe86-2a35-4e5d-a14a-6292fda407a1</id>
+                        <parameterName>Process_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>agent</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9c7c59de-c2fe-4041-9b4f-26a252c1c11b</id>
+                <name>IARMBUS_BroadcastEvent</name>
+                <funName>TestMgr_IARMBUS_BroadcastEvent</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>02e28e84-f34e-4327-9559-16f6a5f729c7</id>
+                        <parameterName>newState</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>11c1c659-3e99-463b-9797-95f3845433d2</id>
+                        <parameterName>state</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>39e79fb5-606b-4cb7-9b92-4ea09d4191ca</id>
+                        <parameterName>keyType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-65535</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>56580e5b-912a-45c4-91a4-f3020e362382</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>761e2b48-6d83-478f-9c66-98232340ab3a</id>
+                        <parameterName>keyCode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-65535</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b6fa7fa1-3dd1-4ece-9dab-11ba76121ada</id>
+                        <parameterName>error</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ba8d8bbd-822c-4c21-bb97-04b2b5eb6d18</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Daemon</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c1d64579-a21f-40e8-ab4b-a8267985c7b6</id>
+                        <parameterName>payload</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>abc</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f0e35dce-2808-49f3-9b76-e43c73aa2ded</id>
+                        <parameterName>resource_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-7</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9dde3c93-9f60-477b-9a9e-0b9ea5657236</id>
+                <name>IARMBUSPERF_RegisterTwoEvtHandlersTwoEvents</name>
+                <funName>TestMgr_IARMBUSPERF_RegisterTwoEvtHandlersTwoEvents</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2f2b1c01-66b4-4870-94be-37259ff12ea6</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IRMgr</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9c5af556-5be5-4431-90e6-2edf34d5eb20</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9f042121-c711-4c7d-923f-bacf4d183d56</id>
+                <name>IARMBUS_IsConnected</name>
+                <funName>TestMgr_IARMBUS_IsConnected</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c5af8bab-bfca-4621-b1c4-f2c094d7ff77</id>
+                        <parameterName>member_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>agent</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c821190c-8d17-4404-917a-d875a5ee143c</id>
+                <name>IARMBUS_UnRegisterEventHandler</name>
+                <funName>TestMgr_IARMBUS_UnRegisterEventHandler</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2fe738b8-dc05-4525-a21b-bd01ff363199</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Daemon</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a51fbf40-8e50-4005-86ea-fc1f0d858e12</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cd8a0090-811f-482d-b078-e5e80e4583dd</id>
+                <name>IARMBUSPERF_Disconnect</name>
+                <funName>TestMgr_IARMBUSPERF_Disconnect</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>d1bf8d5b-a5ea-4cc5-a47b-9d3e620309df</id>
+                <name>IARMBUS_InvokeEventTransmitterApp</name>
+                <funName>TestMgr_IARMBUS_InvokeEventTransmitterApp</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>017c1b43-c4c2-451a-a1b0-f4af1a0c2a3f</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IRMgr</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>31210658-9e14-4d0b-8714-4e7cfda75bc3</id>
+                        <parameterName>keyCode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value>300</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>38b859a5-0655-48ad-b257-3d84c967c317</id>
+                        <parameterName>newState</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>40f8d793-6aeb-4b77-b047-31d87be1fed4</id>
+                        <parameterName>evttxappname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>gen_single_event</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>75271f27-788b-4028-bfc9-5f055ac2cc62</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ae1936f2-f880-4fe1-9e25-8ed30ee38cf9</id>
+                        <parameterName>resource_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ff3a2c08-f502-47e3-86a0-b404a0a525bd</id>
+                        <parameterName>keyType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value>32768</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d8e356a9-c495-41ef-b380-00f2e8588f65</id>
+                <name>IARMBUSPERF_RegisterMultipleEventHandlers</name>
+                <funName>TestMgr_IARMBUSPERF_RegisterMultipleEventHandlers</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ddb9fc0a-9a8c-4473-98ce-557f15b00f00</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ecb9e574-0189-44ed-831e-4b344f1db70d</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IRMgr</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>dc6950c9-cebd-40a1-913e-67d8712d1dec</id>
+                <name>IARMBUS_BusCall</name>
+                <funName>TestMgr_IARMBUS_BusCall</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>13ebc456-5d01-4def-8b62-4d075c3747c5</id>
+                        <parameterName>newState</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>258f0d3f-ddd4-439b-85ad-dac6db58e226</id>
+                        <parameterName>set_timeout</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-65535</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>62028261-e40f-4191-9832-6989ad20a59b</id>
+                        <parameterName>mfr_param_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>828854bd-d64d-4d2f-9093-36835e93e7d2</id>
+                        <parameterName>testapp_API0_data</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-1000</range>
+                        <value>2</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>86d27a6e-80ec-42f6-9ed1-cf755147ef78</id>
+                        <parameterName>resource_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-7</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>897da650-d3c6-484f-ad03-e15cb8f1af94</id>
+                        <parameterName>imagename</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>name.bin</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>99eb4dcb-08e2-46d8-b4e4-91792d3a1963</id>
+                        <parameterName>method_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>GetRepeatInterval</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bfb6ad0d-90ff-4749-bfc2-00b58482958b</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IRMgr</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c0378125-2631-4778-a55e-e0625a915ff7</id>
+                        <parameterName>testapp_API1_data</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-1000</range>
+                        <value>3</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d8c05023-ccaa-4fd8-be0e-2da223c2df22</id>
+                        <parameterName>imagepath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>/opt/</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>df21aacb-cbbe-4b35-87ac-d633963a9ede</id>
+                <name>IARMBUS_GetContext</name>
+                <funName>TestMgr_IARMBUS_GetContext</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e0b2044d-935d-4d42-9e8b-489190cdc815</id>
+                <name>IARMBUSPERF_Connect</name>
+                <funName>TestMgr_IARMBUSPERF_Connect</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e753459e-e3b8-4d2c-ad10-1910880febbc</id>
+                <name>IARMBUS_RegisterEvent</name>
+                <funName>TestMgr_IARMBUS_RegisterEvent</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>26af1910-1990-41bb-8924-4d3270c9ec04</id>
+                        <parameterName>max_event</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>2</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e8f6ed41-c0cb-4501-89c9-1a08e4f72eed</id>
+                <name>IARMBUS_RegisterMultipleEvtHandlersForSingleEvt</name>
+                <funName>TestMgr_IARMBUS_RegisterMultipleEventHandlers</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>05766af0-07fd-4b65-b593-792c081a1b13</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>48464ff4-bb02-4601-b9b6-e6ec2630b68f</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IRMgr</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f4087f1f-e0a0-4ee5-8ebb-438ed6ee3916</id>
+                <name>IARMBUSPERF_InvokeEventTransmitterApp</name>
+                <funName>TestMgr_IARMBUSPERF_InvokeEventTransmitterApp</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0b1b0385-f51c-4761-964c-bc8fa00b5954</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>146f61b9-2592-4449-a39b-070e1686f9df</id>
+                        <parameterName>keyCode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value>300</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>45b125c4-8800-4043-a6fa-4596f7e319ea</id>
+                        <parameterName>resource_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7e5bbefb-93ab-4500-8348-dc038ba0678b</id>
+                        <parameterName>newState</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a29c1a78-5d40-474c-8c8d-5e9755d136af</id>
+                        <parameterName>evttxappname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>gen_single_event</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b3c0c924-13ea-41da-a1a9-2f7e0a1f6072</id>
+                        <parameterName>owner_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IRMgr</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d43e9c09-000a-4805-aab7-aec41e7a6f83</id>
+                        <parameterName>keyType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value>32768</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fec5fdae-15b5-4861-a8c3-00bd5dac62cf</id>
+                <name>IARMBUS_GetLastReceivedEventPerformanceDetails</name>
+                <funName>TestMgr_IARMBUS_GetLastReceivedEventPerformanceDetails</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

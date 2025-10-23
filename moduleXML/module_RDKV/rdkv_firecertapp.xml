@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>d44bd566-c35b-4817-b4f0-d7daa0fa2a3f</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_firecertapp</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Certification</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="be9a300e-af41-488e-86eb-0d98acf30a9f" name="rdkv_firecertapp_createURL">
+                <parameters>
+                    <parameter id="e3b3007f-0b01-4f96-ade4-0a34321a42df" parameterName="url_type" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="c0b40281-af98-4a65-aa3c-d0d408f6b252" name="rdkv_firecertapp_execute">
+                <parameters>
+                    <parameter id="3981bc74-9af9-4f26-beeb-8309ac749170" parameterName="sequence" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>4abdb640-fc44-4a29-a3b0-9be804905bc6</id>
+                <name>rdkv_firecertapp_execute</name>
+                <funName>rdkv_firecertapp_execute</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>255e6231-e014-4b5e-a86b-37b6126407b1</id>
+                        <parameterName>sequence</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>668fb83c-51ff-4d70-813d-f48555bebf20</id>
+                <name>rdkv_firecertapp_createURL</name>
+                <funName>rdkv_firecertapp_createURL</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4255060c-b57f-4c89-956e-ce3ddbcfc1d3</id>
+                        <parameterName>url_type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

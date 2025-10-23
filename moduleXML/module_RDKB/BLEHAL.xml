@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>2a190827-1f44-48e6-bcbc-fe28c0c0608f</moduleId>
+        <!-- Module name -->
+        <moduleName>BLEHAL</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="789426f9-aaac-44f1-8354-475fbd91e0b3" name="BLEHAL_GetStatus">
+                <parameters>
+                    <parameter id="eb20dc99-15a2-4229-97c1-ec0d87d6b13c" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="fcc1b47e-1bc3-4780-aaca-46ada6dad78e" name="BLEHAL_Enable">
+                <parameters>
+                    <parameter id="01a519a3-d9a1-4c37-af99-a48fdcb8df3e" parameterName="enable" parameterType="INTEGER" range="1-3"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>18c80601-ea74-416a-8cf1-18d9204b11bb</id>
+                <name>BLEHAL_Enable</name>
+                <funName>BLEHAL_Enable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>37ce8f33-279b-406c-b981-3d7bb81039f0</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-3</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8eb14488-e67d-4827-b363-bc729bc0a3fc</id>
+                <name>BLEHAL_GetStatus</name>
+                <funName>BLEHAL_GetStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>44055956-d4ca-426d-b77a-dbf598015cc1</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

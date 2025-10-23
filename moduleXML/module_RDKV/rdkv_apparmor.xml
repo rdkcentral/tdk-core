@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>722b2150-83d6-4d11-90f6-5f4c71e978ca</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_apparmor</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/opt/logs/startup_stdout_log.txt, /opt/logs/system.log]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="7e05d5e3-6f6e-4ace-beb2-408000f8b602" name="obtainCredentials">
+                <parameters/>
+            </function>
+            <function id="30ef116e-aa2e-4117-9873-ffcc19ef093e" name="rdkvapparmor_getTestDeviceStatus">
+                <parameters/>
+            </function>
+            <function id="f15ff4c4-563c-4496-abcb-7efe279b2a73" name="execute_step">
+                <parameters>
+                    <parameter id="930e812c-3ba8-4abf-a3e4-d9f1f02e8ec6" parameterName="data" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="165a9184-d5a6-4d4e-8656-a748256dc7df" name="rdkvapparmor_setValue">
+                <parameters>
+                    <parameter id="27dd8dea-cbbf-4f79-8016-5fdb141e6289" parameterName="value" parameterType="STRING" range="a-z"/>
+                    <parameter id="b35e033c-e2d9-41a0-a66e-a7776fc6d448" parameterName="method" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="2f9ee631-35b9-497b-9941-02489011ef3a" name="rdkvapparmor_getDeviceConfig">
+                <parameters>
+                    <parameter id="95474d61-3858-4abd-b3b1-8ae11652da14" parameterName="key_list" parameterType="STRING" range="a-z"/>
+                    <parameter id="03a98770-c035-4433-9f47-0e0ec43c68aa" parameterName="configKey" parameterType="STRING" range="a-z"/>
+                    <parameter id="5036637f-e579-4100-a8e0-b589d51fc027" parameterName="basePath" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="7d7471ff-1a78-4839-8a4e-f8b0d30a19eb" name="rdkvapparmor_executeInDUT">
+                <parameters>
+                    <parameter id="23e5f578-48b0-4f18-85f6-d0b8ffb04948" parameterName="command" parameterType="STRING" range="a-z"/>
+                    <parameter id="13f7f18a-a9a7-4af9-b078-35f1520b0319" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                    <parameter id="52fd73ae-d0f2-495e-9e1e-50b6fa43cfd9" parameterName="sshMethod" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="cf187667-ff21-475b-a6d4-78f03603673e" name="rdkvapparmor_getPluginStatus">
+                <parameters>
+                    <parameter id="4ebfa812-a83d-4dbe-a91e-1c0bb5bd694c" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="9169bc0f-2d2a-4d14-9d9a-2581d97e8eb1" name="rdkvapparmor_rebootDevice">
+                <parameters>
+                    <parameter id="ec4cf838-5473-4083-9ced-188e1ae0c66a" parameterName="waitTime" parameterType="INTEGER" range="0-60"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0b917991-c6d9-4623-80ea-b3a13fd2632b</id>
+                <name>execute_step</name>
+                <funName>execute_step</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0595ea5d-d359-4f69-a680-db5d91b551c9</id>
+                        <parameterName>data</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2dfb5e5d-96ff-4f2e-bfc2-08e39f9b45b8</id>
+                <name>obtainCredentials</name>
+                <funName>obtainCredentials</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>40472b0c-dd16-4212-8dc1-bccdc6d40308</id>
+                <name>rdkvapparmor_rebootDevice</name>
+                <funName>rdkvapparmor_rebootDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b81551a0-d6b3-4d22-9d4d-eb30b4793e14</id>
+                        <parameterName>waitTime</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-60</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>48d53a7d-c9ae-40a0-b405-b5d047569623</id>
+                <name>rdkvapparmor_getDeviceConfig</name>
+                <funName>rdkvapparmor_getDeviceConfig</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6564ea2f-fe6f-4fc5-9246-62741e66f4b5</id>
+                        <parameterName>basePath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ebe668a6-ff97-42d4-8a62-e661ca60a7d4</id>
+                        <parameterName>configKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>55f7d120-bc20-4b45-b250-c8af05630e35</id>
+                <name>rdkvapparmor_getPluginStatus</name>
+                <funName>rdkvapparmor_getPluginStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>69a394dc-ff60-4e1f-8332-d9687e902e6f</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bd61ff8c-a2e9-451c-9517-b541c2d1c35a</id>
+                <name>rdkvapparmor_executeInDUT</name>
+                <funName>rdkvapparmor_executeInDUT</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>bbf8571c-3199-4599-8c50-d9d5b66bdecc</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d4cf43aa-4b1e-44d7-a53e-d8f3ad9dcf7f</id>
+                        <parameterName>sshMethod</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f6e1e005-9e78-4563-96a0-9e99a2b7fb68</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e9193631-d6fe-4d2d-ba4e-adbc788d7664</id>
+                <name>rdkvapparmor_getTestDeviceStatus</name>
+                <funName>rdkvapparmor_getTestDeviceStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f0ef939a-5268-42b3-8161-5d84eba4388d</id>
+                <name>rdkvapparmor_setValue</name>
+                <funName>rdkvapparmor_setValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>300ec17f-8e63-4ec9-87a3-fa4f70f29c30</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c86a1f2f-8410-4e2e-9d38-59a963ff4d5b</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

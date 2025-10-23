@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>9ae83a63-ab02-4420-b7c3-e1f4cdb4096c</moduleId>
+        <!-- Module name -->
+        <moduleName>WIFIAgent</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="de334a68-f9ae-45ea-8c8f-b07bc325eb21" name="WIFIAgent_Set">
+                <parameters>
+                    <parameter id="6df509c7-ade5-41df-a72e-112339b0519d" parameterName="paramValue" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="157d03fa-f909-464d-b098-f90a47e77950" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="e399e1eb-6674-4ada-bd46-d64024d4b7ba" parameterName="paramType" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="0a780433-947d-4d16-82e2-3f286b53b869" name="WIFIAgent_AddObject">
+                <parameters>
+                    <parameter id="b58bffd0-0cd4-4a32-a770-2f44b7e1c3f0" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="501ccb4f-e6b4-46bd-b80b-dc8d37388d70" name="WIFIAgent_GetNames">
+                <parameters>
+                    <parameter id="79e94394-6477-4f8d-842f-25144766795c" parameterName="brecursive" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="c50338c0-aa55-40f1-8e12-624377bd36b1" parameterName="pathname" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="197c8517-5e00-4983-a00f-1e442706413b" name="WIFIAgent_Get_LargeValue">
+                <parameters>
+                    <parameter id="3f908bb9-0679-491f-894d-cb98b066c8a6" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="56274ed4-ebef-4a6c-bfae-132304323b6f" name="WIFIAgent_DelObject">
+                <parameters>
+                    <parameter id="86a8c707-8204-4e53-b320-e38174f5731b" parameterName="apiTest" parameterType="STRING" range="0-1"/>
+                    <parameter id="f1195520-277f-4f28-a628-279f0473bfc8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b319c9be-27e1-4cda-a86b-83eeb78d3f1f" name="WIFIAgent_SetAttr">
+                <parameters>
+                    <parameter id="bc4c9f35-3465-4dbc-b8ea-aa81e1dd3e23" parameterName="paramname" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="8356aad0-bd3c-48c2-8d6f-57f106c63b55" parameterName="accessControlChanged" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="688a6424-b995-4b20-823f-a8bcb7c6e85e" parameterName="notification" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="27c7767c-7869-4465-a9ef-7982400d8692" name="WIFIAgent_SetMultiple">
+                <parameters>
+                    <parameter id="f34c17de-ca92-47c0-9ab2-441404ce8a0b" parameterName="paramList" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f3f9a830-814b-4e0b-b131-1ff602b308bc" name="WIFIHal_CallMethodForString">
+                <parameters>
+                    <parameter id="007d17d8-7627-45ff-a263-c0249a0921c9" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5a0c657c-970e-43e4-ba93-d7b382fc0d54" parameterName="radioIndex" parameterType="STRING" range="A-Z"/>
+                    <parameter id="6232d96a-1891-400c-971e-040174f710a7" parameterName="param" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5e980cfb-ff77-42df-80b1-73a2cce2d2c4" name="WIFIAgent_Set_LargeValue">
+                <parameters>
+                    <parameter id="787c0b39-ef05-4de0-8534-b3008b23bad1" parameterName="ParamType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cfc3fad3-a2b1-4d2d-9a7c-558ada282887" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5888b6c2-6edc-43a2-ac1b-f17bdbda70c2" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b69f9c39-3565-4637-8dbf-63f295053e6a" name="WIFIAgent_Set_Get">
+                <parameters>
+                    <parameter id="6c7cc867-9b1c-43c5-980d-a3aab71a940a" parameterName="paramValue" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="d6f67aaf-f2b5-4de6-81bd-894eb53f067a" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="7feee272-4411-4d5b-9990-df999b5c92a8" parameterName="paramType" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="922abd6d-19b0-4096-8540-aa8ddcec809b" name="WIFIHal_CallMethodForULong">
+                <parameters>
+                    <parameter id="7a5aae7d-ac20-46f9-bcd8-29aba95c6f73" parameterName="param" parameterType="STRING" range="A-Z"/>
+                    <parameter id="7baa7ad8-a52b-4482-be81-3a3525a1d56d" parameterName="radioIndex" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8b4121a0-c563-49f0-b3ef-ee4547b3f59c" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9a4f02cc-4775-4acf-a48f-bc600ac22fb9" name="WIFIAgent_SetSessionId">
+                <parameters>
+                    <parameter id="08ad0bb1-0f73-4cad-bbb5-779921c51bd8" parameterName="priority" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="23070498-a07d-44ae-9663-5966a4d8e1c7" parameterName="sessionId" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="045a9a99-46d8-4881-8f09-acddee90ad6e" parameterName="pathname" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="ffaa4bd3-9ef0-4850-8c8d-ba19e2d33254" parameterName="override" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="3adccb62-8685-430c-862f-580f1e008015" name="WIFIAgent_Get">
+                <parameters>
+                    <parameter id="e6f86b62-0739-439c-804b-3feaaa91d4cc" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="501f1678-9a5c-4270-97e4-e9f7e0c1e768" name="WIFIAgent_GetAttr">
+                <parameters>
+                    <parameter id="ea65fbc2-840e-46e0-9230-8c7ec1cdaf3b" parameterName="paramname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="859de89a-a1cb-4833-b079-6043e7dd0001" name="WIFIAgent_SetCommit">
+                <parameters>
+                    <parameter id="910d217a-817b-4aa4-aa38-b7e192f12420" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="6b963ee6-248a-47de-8d70-6abd2afe9f4c" name="WIFIAgent_GetHealth">
+                <parameters>
+                    <parameter id="772afb73-c2fb-4496-b438-ca413d895eb8" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="5c6c0d9f-281c-4ebe-b3b0-fdb10ba99c56" name="WIFIHal_CallMethodForBool">
+                <parameters>
+                    <parameter id="49d59e20-893e-4584-b329-e4461313b007" parameterName="radioIndex" parameterType="STRING" range="A-Z"/>
+                    <parameter id="526318e3-9312-4a1e-842e-5c14f48b4f2d" parameterName="param" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2c57ffe0-4502-4af5-ad79-9c3bbc33c58f" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e18dc2ac-2f2a-416d-979b-1339816a2d68" name="WIFIHal_CallMethodForInt">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0b2bb884-1424-4314-be88-799656ef71c6</id>
+                <name>WIFIAgent_SetSessionId</name>
+                <funName>WIFIAgent_SetSessionId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>252273ab-a6c1-4e46-9aae-fb5e274773bc</id>
+                        <parameterName>sessionId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>557280dc-4ccb-4343-9089-0bad6001edc5</id>
+                        <parameterName>priority</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5c15fde1-d0f8-40c9-adf3-7d0c9f0c4e8b</id>
+                        <parameterName>override</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fce22be1-9626-4dff-8307-32e8e4f7a7a0</id>
+                        <parameterName>pathname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value>Device.WiFi.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1b7e3132-d663-4267-8741-4c9155274554</id>
+                <name>WIFIAgent_DelObject</name>
+                <funName>WIFIAgent_DelObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9232abe2-2703-448f-81df-cc7b30076896</id>
+                        <parameterName>apiTest</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a9767561-66a7-4dfd-8006-e5f8d32f2120</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.WiFi.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>35dad188-9816-485a-8b7d-52902fea1f3e</id>
+                <name>WIFIAgent_Set</name>
+                <funName>WIFIAgent_Set</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>22f99adc-dcfd-4213-bece-a496f4984a59</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value>AES+TKIP</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>43442aa7-1596-450a-b066-4921e0a060ca</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value>Device.WiFi.AccessPoint.1.Security.X_CISCO_COM_EncryptionMethod</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>469e3889-79bf-4e62-b5fa-0f1bb8bb310d</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value>string</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3f735d09-2d07-4047-8d4f-0b4e9ecf2943</id>
+                <name>WIFIAgent_Get</name>
+                <funName>WIFIAgent_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>68a515af-1af9-4625-a3ef-0205eb6686e0</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.WiFi.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>70b73652-1230-4841-8284-0c47e4e47dca</id>
+                <name>WIFIAgent_Set_Get</name>
+                <funName>WIFIAgent_Set_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0643d48a-b40d-4d00-8570-ae25c2f34594</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a7c8fd14-1a5c-43b4-84f9-e297621ade19</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fc8a2fcd-b1e6-499d-b342-0923998cc815</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7264272b-d9ac-47d7-b6f1-0837a469e1e9</id>
+                <name>WIFIHal_CallMethodForString</name>
+                <funName>WIFIHal_CallMethodForString</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>38ae87f6-4b77-44cf-b9b4-df72b0cbd347</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>aabdf5fe-ef82-41b7-80a4-e7acd6d689b2</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>edbc6e8c-6087-4fb1-80b9-f9d500a7cd12</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>81f4123b-23ec-4b08-8088-d057b3145524</id>
+                <name>WIFIAgent_AddObject</name>
+                <funName>WIFIAgent_AddObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6af008ec-f182-4983-a782-c08062b1693d</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.WiFi.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9915fe55-2066-47e1-8891-2acec7e6c3bf</id>
+                <name>WIFIAgent_SetAttr</name>
+                <funName>WIFIAgent_SetAttr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1836cabc-a9a9-469d-8eb9-b6610ea71202</id>
+                        <parameterName>accessControlChanged</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value>Device.WiFi.</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1fd28159-ae00-400e-9542-133b6bae47a7</id>
+                        <parameterName>notification</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value>passive</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ad6104f2-6ea8-4a2a-8f0f-996062d0c092</id>
+                        <parameterName>paramname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value>anybody</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>aa6af4f6-54a2-4195-a32b-3c828f3cf3a4</id>
+                <name>WIFIAgent_SetCommit</name>
+                <funName>WIFIAgent_SetCommit</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>762a02b8-cf00-4942-978d-d98421825710</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value>Device.WiFi.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cab3c8a0-a9d1-4411-af15-88d0da424eee</id>
+                <name>WIFIAgent_GetAttr</name>
+                <funName>WIFIAgent_GetAttr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c4372697-7326-4672-ad58-08cdccf06e90</id>
+                        <parameterName>paramname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.WiFi.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cb5cd7ba-d4a1-419c-8804-a2ef14731b4d</id>
+                <name>WIFIHal_CallMethodForBool</name>
+                <funName>WIFIHal_CallMethodForBool</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8abe4144-ce3a-45a7-a3eb-201b3c88cd97</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a0fe2a6b-b6a9-4046-a737-aa2c08dc4772</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f0d45764-c8b9-428e-b355-2c3c48fd294f</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cb6e8753-a621-409c-9182-3e98d93512d6</id>
+                <name>WIFIAgent_GetNames</name>
+                <funName>WIFIAgent_GetNames</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>be5c526c-aa02-401f-a672-6bb2c5b64250</id>
+                        <parameterName>pathname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value>Device.WiFi.</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fcb5bde5-67d1-495c-acc1-d79623c13d59</id>
+                        <parameterName>brecursive</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ccc98fa5-7943-4d62-8003-2b8672e574e7</id>
+                <name>WIFIAgent_Get_LargeValue</name>
+                <funName>WIFIAgent_Get_LargeValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>989baa9f-ade8-4b02-9dc0-98b3e9bf5c34</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ce7419ad-0cd7-4755-901f-7dd088fb2d0c</id>
+                <name>WIFIAgent_SetMultiple</name>
+                <funName>WIFIAgent_SetMultiple</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>baa57d24-f4b7-4766-b3bb-7c05ec67c816</id>
+                        <parameterName>paramList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d71d69d7-b2d0-4852-99f4-806e75101417</id>
+                <name>WIFIAgent_GetHealth</name>
+                <funName>WIFIAgent_GetHealth</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8209c36c-47e6-4a2c-8dab-27da1b990811</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z,A-Z</range>
+                        <value>Device.WiFi.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f1ec5ff3-8ff9-4247-9f7d-847c9afcd0de</id>
+                <name>WIFIHal_CallMethodForInt</name>
+                <funName>WIFIHal_CallMethodForInt</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>fbfde8b9-dbb6-40b1-a4a9-1cdf1f88b698</id>
+                <name>WIFIAgent_Set_LargeValue</name>
+                <funName>WIFIAgent_Set_LargeValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>457a1d7a-3f2b-4e2d-8051-9a5d3f9f95f8</id>
+                        <parameterName>ParamType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9bf540ce-3d14-4fa3-ae84-f4fde2a0ec05</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c18de405-7451-41c1-acb1-f62e412463ac</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ff4ef2b9-9537-48ee-8528-9e1383b9f093</id>
+                <name>WIFIHal_CallMethodForULong</name>
+                <funName>WIFIHal_CallMethodForULong</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>07a5f65d-aab1-4137-9a36-2d51b6d37b20</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>167e3e2a-1709-44ef-a69c-37eba20aea4e</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8a51533b-8556-4a9f-bfca-2c18069301f8</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

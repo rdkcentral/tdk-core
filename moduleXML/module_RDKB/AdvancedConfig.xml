@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>639cff31-efdc-4509-b339-500a7088a9cc</moduleId>
+        <!-- Module name -->
+        <moduleName>AdvancedConfig</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>0</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="42f7f81d-6064-4673-bec1-edc2a48d4268" name="AdvancedConfig_AddObject">
+                <parameters>
+                    <parameter id="6eec90a5-1f98-4d5c-aebf-8f6f9d19f324" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="971701ef-09f0-41fe-9292-6bafa538357a" name="AdvancedConfig_Get">
+                <parameters>
+                    <parameter id="26c13eb4-405c-40c9-8237-46dfad0ff972" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8b5bde82-c2ef-47d7-aee6-83a57193b1bb" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="776be3e9-604f-4dca-9735-14b4cfd8105f" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="19744b7b-1744-4368-96b4-fcba9233d3ab" name="AdvancedConfig_SetMultiple">
+                <parameters>
+                    <parameter id="25ab703d-6f02-44a1-849b-c1dd4300e387" parameterName="paramList" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fc3b8404-b797-4d3a-a2d9-983764930bfb" name="AdvancedConfig_DelObject">
+                <parameters>
+                    <parameter id="ff01a329-7718-454f-bc3b-d22596a460e0" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6c773bb2-b6cd-4de6-b15a-bc1f99f5caa1" name="AdvancedConfig_Set">
+                <parameters>
+                    <parameter id="da850508-d197-4bf1-a2a9-1eb2f3d1eacb" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4ebb10c8-3011-4860-961e-efe1f0b57433" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c36c8b22-ed41-46e0-b086-74773bf7583f" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d2e32d4a-8c36-49c2-b06d-861a714c716e" name="AdvancedConfig_GetNames">
+                <parameters>
+                    <parameter id="b3319acd-e032-4cdc-8e85-6ff52ca4299f" parameterName="brecursive" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="f25057fb-8c80-42e5-bbdd-a399a4e35a4d" parameterName="pathname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>1e8581bb-add4-4a4c-b4c6-d563986d3513</id>
+                <name>AdvancedConfig_AddObject</name>
+                <funName>AdvancedConfig_AddObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7b2e990b-39b1-41ad-95ca-1d3e9cda9724</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.NAT.PortMapping.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>636d741f-a056-46a5-bb6c-a031a8251f60</id>
+                <name>AdvancedConfig_DelObject</name>
+                <funName>AdvancedConfig_DelObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>74b366a9-0b29-4300-9851-4ecbdcd929ab</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.NAT.PortMapping.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>75959f06-efd0-4d96-891f-539ba2a1cd27</id>
+                <name>AdvancedConfig_Set</name>
+                <funName>AdvancedConfig_Set</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>28452772-e102-4c58-856f-1788259d59ff</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>string</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>485a6e25-1f7b-42ff-868c-8fc2aadaf2b2</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Enable</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c19ca6b6-38c1-4adc-8f0b-c9a561b19374</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.NAT.PortMapping.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>877c69fc-1bbe-4160-b8e1-4b4b95681130</id>
+                <name>AdvancedConfig_Get</name>
+                <funName>AdvancedConfig_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3ed9fa9c-8d73-40b5-b370-64d9785090a1</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.NAT.PortMapping.</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>58322e16-e104-4d4a-8c2d-8252f39e1b71</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>string</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5c878bf1-7680-4d65-89ff-1f27177838dc</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Enable</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c59b7f71-86f4-4f82-bba3-1d9102584f38</id>
+                <name>AdvancedConfig_SetMultiple</name>
+                <funName>AdvancedConfig_SetMultiple</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d918cfdc-1f0c-44cb-b10e-f337185a6737</id>
+                        <parameterName>paramList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>[null]</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>dd542bda-6869-49f0-80db-334b01db40a0</id>
+                <name>AdvancedConfig_GetNames</name>
+                <funName>AdvancedConfig_GetNames</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>95a750dd-3387-46f9-b98c-65462aa3ce13</id>
+                        <parameterName>brecursive</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>af7a866c-ea5d-41dd-aa2a-16a0ca2aa452</id>
+                        <parameterName>pathname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.NAT.PortMapping.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

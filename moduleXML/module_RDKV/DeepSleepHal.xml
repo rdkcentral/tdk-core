@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>c7ff5178-9a85-4fb7-ad93-75fe5dd2b6f7</moduleId>
+        <!-- Module name -->
+        <moduleName>DeepSleepHal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="0e475919-2761-483e-9c60-0de06e767d40" name="TestMgr_DeepSleepHal_SetDeepSleep">
+                <parameters>
+                    <parameter id="bd525f7d-0279-4e52-af73-22ec5f996155" parameterName="networkStandby" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="0c97dfb7-8b91-4b19-bb4c-c9ddae7a3755" parameterName="timeout" parameterType="INTEGER" range="1-180"/>
+                </parameters>
+            </function>
+            <function id="1d1a1c94-b724-47cc-bd15-aa0f69c88873" name="TestMgr_DeepSleepHal_GetLastWakeupKeyCode">
+                <parameters>
+                    <parameter id="6300de94-58d1-44b0-8ad3-1dfb71b8efb1" parameterName="Is_null_param_check" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="2f1f3c78-299b-4664-a81b-49f3ddc69445" name="TestMgr_DeepSleepHal_GetLastWakeupReason">
+                <parameters>
+                    <parameter id="6ca572fa-09cd-4cf5-97ab-b7fda1b16c5f" parameterName="Is_null_param_check" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>939da4b2-deb3-4066-b5e4-77bd27d36c4f</id>
+                <name>DeepSleepHal_SetDeepSleep</name>
+                <funName>TestMgr_DeepSleepHal_SetDeepSleep</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>22cd1fdc-8c06-42f5-9801-790151d5e4df</id>
+                        <parameterName>timeout</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-180</range>
+                        <value>60</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bf921bbe-7e56-48a5-b001-6a6d30a0656a</id>
+                        <parameterName>networkStandby</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c30ed771-f143-43f5-8de6-1a4848d7838c</id>
+                <name>DeepSleepHal_GetLastWakeupKeyCode</name>
+                <funName>TestMgr_DeepSleepHal_GetLastWakeupKeyCode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>732cba92-5561-4418-9baf-8ffd30a86786</id>
+                        <parameterName>Is_null_param_check</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e42e1afd-2483-49e7-b41b-c881af334264</id>
+                <name>DeepSleepHal_GetLastWakeupReason</name>
+                <funName>TestMgr_DeepSleepHal_GetLastWakeupReason</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>02d5f069-8e1b-41ce-86ca-358eb7cc3d01</id>
+                        <parameterName>Is_null_param_check</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

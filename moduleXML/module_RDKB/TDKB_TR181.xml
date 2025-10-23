@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>ebf573b7-a996-4486-99c6-8c8822014731</moduleId>
+        <!-- Module name -->
+        <moduleName>TDKB_TR181</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>2</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="aa33f545-9901-4565-80e9-5e47d0286244" name="TDKB_TR181Stub_SetMultiple">
+                <parameters>
+                    <parameter id="fb6bdf16-3d7b-4783-826a-390c1a97d2de" parameterName="paramList" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="468a3361-f2dc-4989-b3d5-b7218d50c1e7" name="TDKB_TR181Stub_Get">
+                <parameters>
+                    <parameter id="33e3442e-573e-4ccc-a3e8-8806533732ac" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6c7af10a-fe63-4cec-a62e-2c9169f5f63d" name="TDKB_TR181Stub_DelObject">
+                <parameters>
+                    <parameter id="a5be0d7d-4610-4495-a0e0-e958790f6958" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="86f98207-1c46-450f-be90-bdbc408cbf48" name="TDKB_TR181Stub_AddObject">
+                <parameters>
+                    <parameter id="357353e3-8c85-477a-a335-b31e6cf5b31c" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="bc101088-f4b3-42e1-974d-f2a7a05355ad" name="TDKB_TR181Stub_SetOnly">
+                <parameters>
+                    <parameter id="627c84fb-1060-491c-a28f-710ef9bfce56" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="6ce64b46-c6ed-43f1-a1d8-cfb1a553892f" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f00eaa4e-ae9d-4f0e-b66f-9926f820d8e9" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ed9acaf2-acf2-4d30-95b0-a86721c66687" name="TDKB_TR181Stub_Set">
+                <parameters>
+                    <parameter id="d57e9923-2cf6-416c-a79e-928928e47e6c" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d9bf0091-0f71-436a-9c8b-0e135ae04181" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a736c9c5-0ab6-4e45-9187-1c101322b41a" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>31b9cf79-5d39-4cff-946e-dd731ecb7281</id>
+                <name>TDKB_TR181Stub_Set</name>
+                <funName>TDKB_TR181Stub_Set</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9f82146c-f857-4c52-a2c4-332ac40e29ae</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bd11a869-36eb-44d1-8e3f-2f721c9033c5</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ee54ffa8-365c-4734-91a6-713c21ae2c4b</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6ffc3785-d87c-4412-89b9-8d68a08b9412</id>
+                <name>TDKB_TR181Stub_SetMultiple</name>
+                <funName>TDKB_TR181Stub_SetMultiple</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f01daa76-cedf-447d-8729-6e20af3d3b41</id>
+                        <parameterName>paramList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7b7918bf-a79d-4437-8673-942f864e5c6b</id>
+                <name>TDKB_TR181Stub_DelObject</name>
+                <funName>TDKB_TR181Stub_DelObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8e5b1b5b-4d21-47be-8b77-b49adf29e955</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7d820638-ccbb-4902-aad9-031a35f00d75</id>
+                <name>TDKB_TR181Stub_Get</name>
+                <funName>TDKB_TR181Stub_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3cde4264-67bb-44d6-831d-3c4d059b37ae</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>88275668-a6ef-433e-b4a6-df4677f15bf6</id>
+                <name>TDKB_TR181Stub_AddObject</name>
+                <funName>TDKB_TR181Stub_AddObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b2943076-b808-478a-850f-05627bb940dc</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c8af0d51-360d-4cd7-823e-e4172ef1a0c9</id>
+                <name>TDKB_TR181Stub_SetOnly</name>
+                <funName>TDKB_TR181Stub_SetOnly</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>17fa3ddb-5598-48e2-a68a-335dc109ff14</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>30ba9b61-505b-4b75-89c0-24c2fd5856af</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>87302180-c913-4de4-896b-31afe338f6a2</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

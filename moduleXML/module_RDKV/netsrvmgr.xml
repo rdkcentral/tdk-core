@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>2de40a74-6535-4956-a18a-332497f6bdbd</moduleId>
+        <!-- Module name -->
+        <moduleName>netsrvmgr</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>2</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="74dd07e5-0e3c-4b54-8a59-a1aafb9de449" name="TestMgr_NetSrvMgr_WifiMgrGetAvailableSSIDs">
+                <parameters/>
+            </function>
+            <function id="f926537a-4e46-42cc-ae84-913275b1db01" name="TestMgr_NetSrvMgr_WifiMgrGetPairedSSID">
+                <parameters/>
+            </function>
+            <function id="5af57b2a-0e9a-43cf-aa16-324d1772429d" name="TestMgr_NetSrvMgr_WifiMgrGetCurrentState">
+                <parameters/>
+            </function>
+            <function id="3c37800e-3b2e-46f7-975a-9f3e5cc6b5b1" name="TestMgr_WifiMgr_getAvailableSSIDWithName">
+                <parameters>
+                    <parameter id="de3d1f2f-1b19-4396-a39e-099f4ddd91a3" parameterName="frequency" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5fc112d1-e5eb-4961-b642-087e5957fd82" parameterName="ssid" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="35263628-2f34-4a8f-947f-b9da73e52eb0" name="TestMgr_NetSrvMgrAgent_WifiMgr_BroadcastEvent">
+                <parameters>
+                    <parameter id="e1e37acc-7749-41fa-b42f-37e6419c7a0d" parameterName="event_log" parameterType="STRING" range="A-Z"/>
+                    <parameter id="22fce9ea-1b9a-4bc4-b3cb-b4b9ac4cf995" parameterName="key_code" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="8414dab2-aa6f-4373-8b86-5c612f6894c1" parameterName="key_type" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="dff4d4d6-1c86-4372-804d-af0871e18adf" parameterName="event_id" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="dd65fc17-089d-480b-8636-3f5578399c79" parameterName="owner" parameterType="STRING" range="A-Z"/>
+                    <parameter id="034225c6-bc88-47cf-bca4-833c255f861e" parameterName="isFP" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="fb846ce0-a0c0-43e7-8b54-3c51414a561c" parameterName="value" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="0e6c114b-f4fa-4c5f-bcfa-487ca675cf07" name="TestMgr_NetSrvMgr_WifiMgrSetGetParameters">
+                <parameters>
+                    <parameter id="5fd71dba-59f1-49dc-84ca-990bcbf4eddf" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="0d374a55-5c8b-49d4-8b0a-6507772cdd5d" parameterName="passphrase" parameterType="STRING" range="A-Z"/>
+                    <parameter id="abe14d41-a0c7-4a01-95fe-5f1ff2244cad" parameterName="new_mode" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="58886bdb-8294-4f3a-8df9-89010188c187" parameterName="method_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c2e23531-a4d0-4337-b849-875bf2e84c3f" parameterName="security_mode" parameterType="INTEGER" range="0-15"/>
+                    <parameter id="4a27b4a2-a611-4284-8462-01dd1d7b128e" parameterName="ssid" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="63aae4af-2ad8-4e41-a71d-0f1bba520053" name="TestMgr_NetSrvMgr_WifiMgrSetEnabled">
+                <parameters>
+                    <parameter id="c3b9c38a-4911-4d5d-85a7-2291b8b02ec7" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="20670e5e-8717-47ee-a05b-10091669ad4b" name="TestMgr_NetSrvMgr_WifiMgrGetLAFState">
+                <parameters/>
+            </function>
+            <function id="3c8cb0d1-b025-4418-b150-6b9d7a688236" name="TestMgr_NetSrvMgr_FunctionCall">
+                <parameters>
+                    <parameter id="f53dcfaa-c3f0-4556-9bea-779030b70b93" parameterName="interface" parameterType="STRING" range="A-Z"/>
+                    <parameter id="26281590-5184-419e-abbd-0ebf17e465eb" parameterName="ipversion" parameterType="STRING" range="A-Z"/>
+                    <parameter id="6b12b9ac-5396-4f73-b785-51e512edbb12" parameterName="method_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="151633ff-2369-4ecf-856d-b31246d8c6a7" parameterName="family" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>4afeb1d2-9c30-459a-a491-a7f770583135</id>
+                <name>NetSrvMgr_WifiMgr_GetPairedSSID</name>
+                <funName>TestMgr_NetSrvMgr_WifiMgrGetPairedSSID</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4fcddb75-0a4e-4058-aefd-c657e1e0a3f6</id>
+                <name>NetSrvMgr_WifiMgr_SetGetParameters</name>
+                <funName>TestMgr_NetSrvMgr_WifiMgrSetGetParameters</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>02918a91-8193-4fbc-b429-f0b7db89b4e5</id>
+                        <parameterName>ssid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>0c4aa0d8-a1f2-49d9-a98c-d29856ad8106</id>
+                        <parameterName>security_mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-15</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3652fa52-7efc-4e29-a240-a6b59c059649</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c6a31905-32eb-4ebd-b605-1f76f8b0aa75</id>
+                        <parameterName>new_mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>daa44467-8e3b-40fd-920f-9a18d66a2e4a</id>
+                        <parameterName>passphrase</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f73d05b4-9237-42f9-b71e-4c2de145781d</id>
+                        <parameterName>method_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5c7badb4-8b46-470b-9919-a3b4e4cef727</id>
+                <name>NetSrvMgr_WifiMgr_GetCurrentState</name>
+                <funName>TestMgr_NetSrvMgr_WifiMgrGetCurrentState</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>7886ffb1-d01d-4345-a9f9-c5790686fea3</id>
+                <name>NetSrvMgr_WifiMgr_getAvailableSSIDWithName</name>
+                <funName>TestMgr_WifiMgr_getAvailableSSIDWithName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>07b1cfbe-2d8b-44b8-90d7-e70dad75df62</id>
+                        <parameterName>ssid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4483d989-c5e0-41a9-b92a-2cf2ad9434a5</id>
+                        <parameterName>frequency</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>84f4f573-65a8-4453-9eb4-21f0927fc177</id>
+                <name>NetSrvMgr_WifiMgr_GetLAFState</name>
+                <funName>TestMgr_NetSrvMgr_WifiMgrGetLAFState</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9e4b0a7a-4780-4f52-828e-b7a58d4c2651</id>
+                <name>NetSrvMgr_WifiMgr_SetEnabled</name>
+                <funName>TestMgr_NetSrvMgr_WifiMgrSetEnabled</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e6f009c8-4e70-4d02-b216-1a0823d39c6b</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c7772509-8b1b-4a41-8838-6aaf8150b85f</id>
+                <name>NetSrvMgr_WifiMgr_GetAvailableSSIDs</name>
+                <funName>TestMgr_NetSrvMgr_WifiMgrGetAvailableSSIDs</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c92d962c-0794-46f8-9410-b90ead6c580f</id>
+                <name>NetSrvMgrAgent_NetSrvMgr_FunctionCall</name>
+                <funName>TestMgr_NetSrvMgr_FunctionCall</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1c94d027-0ee7-4a19-89ae-675ef74a1ea0</id>
+                        <parameterName>family</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4442ff19-61aa-469c-8be7-935eb5971109</id>
+                        <parameterName>method_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>88a9ddc5-031a-452d-892f-eb968217ec87</id>
+                        <parameterName>interface</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>abb08abd-b67d-43f8-9086-b5e582f32b3a</id>
+                        <parameterName>ipversion</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f29f77fc-69d8-4273-969f-3a1399244f3e</id>
+                <name>NetSrvMgrAgent_WifiMgr_BroadcastEvent</name>
+                <funName>TestMgr_NetSrvMgrAgent_WifiMgr_BroadcastEvent</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2d62971e-788e-42ef-a4f3-3ef13ef29be3</id>
+                        <parameterName>isFP</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>67a8f92c-ac25-4aed-ab01-a7efbcef77bd</id>
+                        <parameterName>key_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bfc9a317-05c1-443c-b20b-0677cfc253d6</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c375250a-f7b2-4caf-83b5-54c86343b36a</id>
+                        <parameterName>owner</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ce0dcf6a-bbc7-4466-a1a3-a919e7d233ea</id>
+                        <parameterName>key_code</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d7139334-bf28-4f2f-844a-6cfe749e5fe0</id>
+                        <parameterName>event_log</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e25c705b-d9c6-450d-a22c-c639fbb20d2b</id>
+                        <parameterName>event_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>05e44bbe-6f09-4fe2-aa17-42731459b2c7</moduleId>
+        <!-- Module name -->
+        <moduleName>CosaMTA</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="9763158e-0b3a-4663-9050-a5cbe63848f2" name="CosaMTA_DectGetRegistrationMode">
+                <parameters>
+                    <parameter id="a01963e4-bd70-4861-8682-59a4dc2bd47a" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="93f9e9cf-8037-4136-bdcf-575aee476774" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="1d49d3c7-cec4-453a-ae16-2b5f0281bbbc" name="CosaMTA_GetDSXLogs">
+                <parameters>
+                    <parameter id="2928d1c4-f8ee-4b7b-8325-544ad50af9f7" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3e61c2ec-e66e-4586-884c-981db5db6a17" name="CosaMTA_GetDHCPInfo">
+                <parameters>
+                    <parameter id="75c84cd1-2809-4cdd-8a28-1dc43cdee599" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="374f57ee-5f3f-4c94-9653-aaab176f62c0" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="019accd1-5d22-4f6f-bde0-aa22e78634b2" name="CosaMTA_GetMtaLog">
+                <parameters>
+                    <parameter id="01d27ac5-27a4-4e1a-8d17-51f527acc733" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="11a6e5d2-83be-4b19-8d0f-ad579286fafe" name="CosaMTA_SetDSXLogEnable">
+                <parameters>
+                    <parameter id="0b7d6862-6c1a-4c2f-a213-15741cd34c03" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="775953c5-903a-4e2d-885e-826d2a324b51" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="8046df90-3a96-4b9b-b014-0978576e611c" name="CosaMTA_GetDect">
+                <parameters>
+                    <parameter id="44afe921-8e51-432d-a212-ec9fe5bf1c13" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="dfe4fcdf-5073-44ad-8f6e-ad21cac9fefd" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="a2609bdc-8f03-4823-996b-8d63e4769e71" name="CosaMTA_ClearDSXLog">
+                <parameters>
+                    <parameter id="39513705-5d21-4e61-9bd4-785d349ea67a" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="53b40b68-54df-43f8-b4a0-a58be93b3b72" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="31a72fd5-27bf-4669-8c62-8e0912412197" name="CosaMTA_GetCallSignallingLogEnable">
+                <parameters>
+                    <parameter id="cc6eea36-20e7-4feb-ba7f-842bf1bc44c7" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="50e5a7a2-9420-4ff3-9d3b-1ba91f3487b5" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="b13780c7-488b-489b-9c33-bed260a251a4" name="CosaMTA_BatteryGetInfo">
+                <parameters>
+                    <parameter id="68169454-1905-425b-a392-a06b335a4c26" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="ad431c60-ae0e-4448-bdd1-9427b06a162e" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="1a72aee8-e7f7-44a1-b406-69880eb9a6e4" name="CosaMTA_DectSetRegistrationMode">
+                <parameters>
+                    <parameter id="d0269ea0-1b73-4de7-8423-bae801379e1d" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="02424294-9c4c-4766-8ebb-0227c34dfa84" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="9d2a4917-2751-47ad-ad70-6741487a18a9" name="CosaMTA_LineTableGetEntry">
+                <parameters>
+                    <parameter id="4b1826f0-7cbe-48da-8947-618c8ab28a4d" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="01374212-1ff2-46bc-bcbc-4e277de32739" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="d31cc2a6-a720-4158-a3d8-65a739db3ea4" name="CosaMTA_BatteryGetPowerStatus">
+                <parameters>
+                    <parameter id="774de76a-8a15-48a4-9c72-9b2ee5cc95ed" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="183a1a56-1ec3-40ad-8d14-0d7866d70649" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="00c25332-dfee-4173-aec0-300e4416eb7c" name="CosaMTA_GetLineRegisterStatus">
+                <parameters/>
+            </function>
+            <function id="48c904cc-228a-47fb-856e-42578105c426" name="CosaMTA_BatteryGetNumberofCycles">
+                <parameters>
+                    <parameter id="869b560a-cf40-4c0a-bfb2-5eb867b52e84" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="aa481930-03c8-45ec-a1be-4ce6199e5b58" name="CosaMTA_BatteryGetLife">
+                <parameters>
+                    <parameter id="41494679-6e9f-4c4d-8cd9-c2606e57045a" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="c6d7a832-8f03-455f-b624-816c2964041c" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="f731949a-b715-4633-ba73-878c2f783fc9" name="CosaMTA_GetCalls">
+                <parameters>
+                    <parameter id="8ae7f673-077a-48b3-9591-df0d2e0de0cd" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d9f7d001-66a9-4380-b282-706de7bbfdd9" parameterName="value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c01bafc7-68c0-4a3c-98e6-03b2269b5f62" name="CosaMTA_SetDectPIN">
+                <parameters>
+                    <parameter id="5c6701eb-7142-4f33-8ccc-67d33bf387e6" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="cc1c0bb5-27be-421b-8b10-04b479987d2e" parameterName="value" parameterType="STRING" range="A-Z"/>
+                    <parameter id="41aaae17-adf9-4bc4-958a-215c1b70a0d0" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="7ae87c73-4f5a-43bf-b6f2-af737e96f429" name="CosaMTA_SetCallSignallingLogEnable">
+                <parameters>
+                    <parameter id="ae941ad0-091d-4371-be49-0efbe70ffb65" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="648a5e62-4713-4547-aa55-ee97d707dc73" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="de6d765f-a88c-4fab-8a06-9a9bb802b57a" name="CosaMTA_LineTableGetNumberOfEntries">
+                <parameters>
+                    <parameter id="16eb2e26-9f34-4dd7-a2fa-569a541193b7" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="be317f35-fe42-4ba4-9557-858c82e21dd3" name="CosaMTA_GetResetCount">
+                <parameters>
+                    <parameter id="4202cab8-26b7-46ed-99e7-1386bb486b15" parameterName="resetType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="9f8fba84-6964-48e8-9836-1e14af7f4fdf" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="f21d53cd-25e7-4698-821a-7402af8f4dc0" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="ce201e4f-8814-4a15-9065-209fc2b3ad7e" name="CosaMTA_ClearCallSignallingLog">
+                <parameters>
+                    <parameter id="316fa723-b3cd-4f11-aa36-94ab02c77b28" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="398d56d9-095c-4fb9-b26e-58061723493e" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="805bc8b6-2f77-4fd6-ac81-a2f32cb6e510" name="CosaMTA_DectSetEnable">
+                <parameters>
+                    <parameter id="59f4acb0-3d23-482b-b7ba-45f506e0572a" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="df59a318-8fdd-48ee-ac99-880e7fe27756" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="005a2891-1e2e-4486-8f6b-2dc93c1d2d54" name="CosaMTA_BatteryGetCondition">
+                <parameters>
+                    <parameter id="c943d4e9-73c1-4a9d-8b00-489c7087b30d" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="f0d0992a-d06c-4ff6-a608-006d0b9c2d7b" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="652f9770-ab14-4b34-8a9a-4045f6d19b51" name="CosaMTA_DectGetEnable">
+                <parameters>
+                    <parameter id="6fcb0d66-057f-4800-bb8f-e07d35deb4c0" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="5e49f3e7-25db-4e87-91ca-3d183546a475" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="ba02337b-77f4-4089-bc30-603514ece0db" name="CosaMTA_GetHandsets">
+                <parameters>
+                    <parameter id="90900c80-3bc1-479f-9cd8-18cbe70f1eee" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="20962b6e-4fb1-40ec-b9a0-32f91b099faa" name="CosaMTA_BatteryGetRemainingTime">
+                <parameters>
+                    <parameter id="dd2011fb-4807-4623-9abf-f9ae624c2630" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="e62bea28-933e-4b9a-be0a-cdcb59cb7c82" name="CosaMTA_GetDectPIN">
+                <parameters>
+                    <parameter id="4bd253bc-8c0d-42cb-8278-6303683a31d0" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="8ca1fa32-db03-4ec6-a1b8-478347fa2850" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="86e6f907-0e4e-4531-bffe-71dfe4858d8a" name="CosaMTA_GetParamUlongValue">
+                <parameters>
+                    <parameter id="59f06dee-0581-43ea-80e6-0100d6ada5c8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a6aa8ecc-89b9-43c7-8a8e-cc9bbfb317ae" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ee759a07-1e62-4a9d-afd9-2898ee318654" name="CosaMTA_BatteryGetStatus">
+                <parameters>
+                    <parameter id="1166a99a-fd04-4930-90d5-6b832a1dfd31" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="f537c12d-cbe1-4131-a477-3e6ddd1a4945" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="dbd53a15-9b33-49c6-924a-2075e6375ab2" name="CosaMTA_Triggerdiagnostics">
+                <parameters>
+                    <parameter id="18712d49-941a-463a-a799-d85146d26d63" parameterName="index" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="c0ad5a70-086e-442a-a93f-af8f03a07c3f" name="CosaMTA_GetDSXLogEnable">
+                <parameters>
+                    <parameter id="a1a4ac0d-5bad-48d6-bf03-571a37ea4aed" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="20079db6-c291-4a3f-a941-feab5ffb147d" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="531226b2-71eb-4105-b449-1120c03fdbef" name="CosaMTA_GetDhcpStatus">
+                <parameters/>
+            </function>
+            <function id="780b26ff-b09b-401a-9826-42d9f635c3da" name="CosaMTA_GetServiceFlow">
+                <parameters>
+                    <parameter id="ba5a97cd-5107-490a-850a-a5707c575681" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="13f8c457-a06e-4770-9190-a05598dd03fa" name="CosaMTA_GetServiceClass">
+                <parameters>
+                    <parameter id="8e9d4745-5e47-4927-98d2-fdc8c39147b8" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="7857c325-30ca-423d-a8d7-4b932b98ae39" name="CosaMTA_GetConfigFileStatus">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>08dd2771-2657-42d3-83b1-5b1cbc45b58c</id>
+                <name>CosaMTA_GetDSXLogEnable</name>
+                <funName>CosaMTA_GetDSXLogEnable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>321a7240-7018-45ee-ac5c-1aa15d48e9f5</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>792bb1b4-990c-451b-9c48-235b1d6ca430</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>15ec3145-a566-4288-9e6c-4af4572e7f1c</id>
+                <name>CosaMTA_ClearCallSignallingLog</name>
+                <funName>CosaMTA_ClearCallSignallingLog</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>34adc1c6-214b-4b7b-b6ba-3ec99a8bee60</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ff308abf-2cf3-42a7-9dcf-da72095cb125</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>163db782-60fe-411e-982f-9dc2f59b7b70</id>
+                <name>CosaMTA_GetMtaLog</name>
+                <funName>CosaMTA_GetMtaLog</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>bdb3fb30-0800-453c-a907-0407e2b36bb1</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>169e972d-30dc-4688-a810-e2a1fbcbc4e5</id>
+                <name>CosaMTA_BatteryGetStatus</name>
+                <funName>CosaMTA_BatteryGetStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9fde81fe-2342-464f-b33c-a1409bf7724b</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a02a3588-8281-4cd5-935c-1721d28605e0</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>16c52eb1-6acd-4f57-80bb-c0f4876a37f7</id>
+                <name>CosaMTA_GetDectPIN</name>
+                <funName>CosaMTA_GetDectPIN</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0951c635-5d44-4f72-b5e8-333d8b322db4</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>78dee493-70e6-43d8-869f-e222d31b7f61</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>190ccb6a-cad4-4e12-8b70-b887b01c3401</id>
+                <name>CosaMTA_GetCalls</name>
+                <funName>CosaMTA_GetCalls</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8e924f14-d9b5-4437-bb94-4ff94fe63b32</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d35e1cb0-4b40-4be0-99d7-61fc02666e4d</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>281f181f-7aeb-4940-90d1-52ff655a7ba7</id>
+                <name>CosaMTA_LineTableGetEntry</name>
+                <funName>CosaMTA_LineTableGetEntry</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>96611686-fd49-418b-8eb9-16e4322cbd10</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>aa81c8d4-e649-48d6-9250-ffe89b2179df</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2ef97e09-e256-4eee-aaf0-039fa2a1863a</id>
+                <name>CosaMTA_GetDect</name>
+                <funName>CosaMTA_GetDect</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6c50aef1-5a1c-4eab-8851-9ff93ec276b5</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7050aabe-0c27-4b0c-ad95-fd04d1e5c207</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3201533c-f3fc-4421-92d1-cf399c8a5e8b</id>
+                <name>CosaMTA_GetLineRegisterStatus</name>
+                <funName>CosaMTA_GetLineRegisterStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>350b652a-3930-441b-9e49-e9a91f147130</id>
+                <name>CosaMTA_GetResetCount</name>
+                <funName>CosaMTA_GetResetCount</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>77f7a124-6797-4b1d-aad6-0473c48edf00</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7b71803a-6aab-4742-a5af-0babf5649fd1</id>
+                        <parameterName>resetType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>aa</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8eec159a-0158-4c52-991c-a067a4409a6b</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3c6d94a5-ba0d-4b4c-81a1-990d4e75ed7a</id>
+                <name>CosaMTA_DectSetRegistrationMode</name>
+                <funName>CosaMTA_DectSetRegistrationMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>02490bd4-2b79-4588-a020-cf70bb5178a5</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2082e2bc-7980-4942-b030-bb00d7ec491a</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>44e0ab42-99ea-4126-b2bd-d3ed05e305c9</id>
+                <name>CosaMTA_GetConfigFileStatus</name>
+                <funName>CosaMTA_GetConfigFileStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4c90b602-b955-495e-8f23-b96fa6f788a0</id>
+                <name>CosaMTA_SetDectPIN</name>
+                <funName>CosaMTA_SetDectPIN</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1592695c-c5ff-4785-93f8-8307f9bc57eb</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2bd55c6e-044e-49d3-b1c2-d2cbfc475851</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3e2fd89e-367f-47b5-8309-3236ac878234</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>DectPin</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5723903d-6c68-4d35-8b2e-65639e38ee8c</id>
+                <name>CosaMTA_LineTableGetNumberOfEntries</name>
+                <funName>CosaMTA_LineTableGetNumberOfEntries</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5fdcbece-8a51-4824-a738-4eaab04b5a3f</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5a1207d6-8bf9-435d-8c8f-ac972b99323a</id>
+                <name>CosaMTA_GetParamUlongValue</name>
+                <funName>CosaMTA_GetParamUlongValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a71cc4d4-f2f5-47d6-b4b3-fd25dc1b9497</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a82e32a9-1d64-43e7-bfe8-d305a44b3070</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6dbb31c9-6b54-4be8-81ac-4ade2b766d81</id>
+                <name>CosaMTA_BatteryGetPowerStatus</name>
+                <funName>CosaMTA_BatteryGetPowerStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4438f79f-1f3f-470d-8624-71827ee9ad5f</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9cac3eb3-6dda-428f-ab5f-2c09f5922677</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6ec7785a-99ca-493d-a5eb-c786de5aab53</id>
+                <name>CosaMTA_DectSetEnable</name>
+                <funName>CosaMTA_DectSetEnable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>099abb64-5c37-4ed5-89b5-607e75d9ae38</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>484e0e21-37d1-49a2-88b9-f2a1cc601493</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7b34d966-5585-4d72-bfc3-d4b9bfc5937c</id>
+                <name>CosaMTA_GetServiceClass</name>
+                <funName>CosaMTA_GetServiceClass</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4037af00-9681-4e79-8935-9ae718482bca</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>91bf0d4c-6e17-4f23-ae72-c285d01dbc7c</id>
+                <name>CosaMTA_GetServiceFlow</name>
+                <funName>CosaMTA_GetServiceFlow</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>65ca3ef6-c190-4ae3-9717-4c61ddf3efb4</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a2b7c89b-dd60-4006-81d2-2e81249615c6</id>
+                <name>CosaMTA_GetDSXLogs</name>
+                <funName>CosaMTA_GetDSXLogs</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>604368e7-e7df-4286-b12c-3aed962f3a9a</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a988ae51-4f9f-48f7-bd0e-21eca302943d</id>
+                <name>CosaMTA_GetHandsets</name>
+                <funName>CosaMTA_GetHandsets</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2cbf17b8-0b5f-4e74-8cb4-0e8f65a7d74c</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>abbdf68e-19f3-424a-b139-5bd3cb830a12</id>
+                <name>CosaMTA_Triggerdiagnostics</name>
+                <funName>CosaMTA_Triggerdiagnostics</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>eb6bf998-79d5-4ca6-862c-866989ed7c10</id>
+                        <parameterName>index</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ae01e748-901f-4ee2-a318-3454f244ee56</id>
+                <name>CosaMTA_BatteryGetInfo</name>
+                <funName>CosaMTA_BatteryGetInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>19b2181f-3ef2-418f-8479-5e241f6a6bbf</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>69fe670c-205c-429d-82c4-20de60c04e6d</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>af89fc83-a8b8-4b7d-9b31-b66f897466f7</id>
+                <name>CosaMTA_SetCallSignallingLogEnable</name>
+                <funName>CosaMTA_SetCallSignallingLogEnable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>18ed615e-7563-4161-a2b4-827ef9a78daa</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5bd5b3f3-c36a-4005-b3e5-9d0c637e9cea</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b77301f7-5c55-41a3-a8ad-cfbd800208bb</id>
+                <name>CosaMTA_ClearDSXLog</name>
+                <funName>CosaMTA_ClearDSXLog</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>18908f81-83e8-4888-948f-cdcb2db5c84b</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4bfce3d2-37fe-494a-b66c-5ec938917a09</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>be0d9573-6574-4aaa-8917-44a0e4a547ba</id>
+                <name>CosaMTA_GetCallSignallingLogEnable</name>
+                <funName>CosaMTA_GetCallSignallingLogEnable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1826d516-1236-434a-b2a7-6847102b5c01</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ccc5f3dd-f7a8-412d-a12c-91ad79fcd7a6</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d023a818-80b6-4dfd-87a6-2d7741805b5a</id>
+                <name>CosaMTA_DectGetEnable</name>
+                <funName>CosaMTA_DectGetEnable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9f6ffefb-8056-43cf-bae4-b26628f0a4f7</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d8bb34c5-522f-4043-86bf-ec601d18e3aa</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d54f5864-be6d-4f8d-9690-d481a5341d94</id>
+                <name>CosaMTA_DectGetRegistrationMode</name>
+                <funName>CosaMTA_DectGetRegistrationMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>60e7c6f9-716d-4941-aa63-be1dad52ed60</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>895ad42e-be4b-45ff-8bb4-c48aed8f3bfb</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d894dae9-e634-4256-8c2b-055fd79b3762</id>
+                <name>CosaMTA_BatteryGetRemainingTime</name>
+                <funName>CosaMTA_BatteryGetRemainingTime</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8e5c3336-1300-41fd-8ba5-258c74d2c786</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>db491884-53a6-49f8-8ec7-237dd9bda04c</id>
+                <name>CosaMTA_BatteryGetLife</name>
+                <funName>CosaMTA_BatteryGetLife</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>52a3d691-250e-44dd-8cab-6d9d61c270b0</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>eb0c645a-ca33-474b-98cd-5524e27e8ae4</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>dd26a719-22f1-4009-a952-028e39a415d6</id>
+                <name>CosaMTA_GetDHCPInfo</name>
+                <funName>CosaMTA_GetDHCPInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2bc1cede-95bc-479c-9378-5b775d368172</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c9569d9d-43a9-4c71-84f2-7995e985f18f</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>dd34cd97-874b-4fcd-8300-c40ca5ad4d3c</id>
+                <name>CosaMTA_BatteryGetCondition</name>
+                <funName>CosaMTA_BatteryGetCondition</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9cb2fe3b-8802-40c2-b979-59416b477625</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d55a2b8c-b96a-418e-ac38-9b08509e8042</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>de5feab1-d6ec-4409-a9a5-ebaf9a4571cf</id>
+                <name>CosaMTA_GetDhcpStatus</name>
+                <funName>CosaMTA_GetDhcpStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e7ec0e32-414d-449d-a763-c4e1dfebac81</id>
+                <name>CosaMTA_BatteryGetNumberofCycles</name>
+                <funName>CosaMTA_BatteryGetNumberofCycles</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>fe9460d4-42bd-4192-b7c4-d5c900bfec1c</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ef7452e2-481a-45c0-bd85-36fd3954e14e</id>
+                <name>CosaMTA_SetDSXLogEnable</name>
+                <funName>CosaMTA_SetDSXLogEnable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6085cfd4-395f-445d-83a2-f50b2bb9328c</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>796d5256-91eb-40b9-8069-7d0be808aebe</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

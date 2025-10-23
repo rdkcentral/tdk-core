@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>2e2882d5-5e1e-4a00-b3d8-f3c98e26f79a</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_WebPA</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="2c2a25a3-6a12-4443-b24d-04b5435910d4" name="webpa_validate_set">
+                <parameters>
+                    <parameter id="2e89d0d2-dd49-4429-b3e0-bf08b846c779" parameterName="AUTH_TOKEN" parameterType="STRING" range="a-z"/>
+                    <parameter id="26e6e240-41ea-45a5-98c5-31a2e6f758c7" parameterName="WEBPA_URL" parameterType="STRING" range="a-z"/>
+                    <parameter id="a6b3a983-b938-4189-8415-836abd81bfe1" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                    <parameter id="f517e7d0-a818-4bea-bd60-1a57bc1a864a" parameterName="testValue" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="d2e23770-a6f2-4bd1-9a27-976c407a177b" name="webpa_set">
+                <parameters>
+                    <parameter id="cf6c9ed6-2fe0-4653-92c8-92d6848708e6" parameterName="AUTH_TOKEN" parameterType="STRING" range="a-z"/>
+                    <parameter id="cc6b4abf-0c5f-4f13-aded-80547a768e53" parameterName="dataType" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="0db31047-5f25-4737-ac48-8181d412cab6" parameterName="testValue" parameterType="STRING" range="a-z"/>
+                    <parameter id="63d37ce4-66c6-4930-9d18-b7ee126d54f8" parameterName="WEBPA_URL" parameterType="STRING" range="a-z"/>
+                    <parameter id="21ac3ec5-21fe-4238-b3fa-67a36338a6c2" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="5319d56d-215a-4c23-8f28-3ba9e8a5dc40" name="webpa_get">
+                <parameters>
+                    <parameter id="0701eab8-3c62-4a7b-982e-8feed1d1db97" parameterName="AUTH_TOKEN" parameterType="STRING" range="a-z"/>
+                    <parameter id="93355427-1bf2-447e-9ca5-828875078855" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                    <parameter id="755e1a86-ea7e-4287-8e16-f0ec7ceec6f9" parameterName="WEBPA_URL" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="687342a1-f469-4ea6-a86f-db704ef21c78" name="webpa_deviceconfig_value">
+                <parameters>
+                    <parameter id="9f2b0f6b-3de6-4ec6-9d0f-c47e151fa42f" parameterName="configKey2" parameterType="STRING" range="a-z"/>
+                    <parameter id="df06e735-186c-435d-adb0-c6760ca2a10e" parameterName="configKey" parameterType="STRING" range="a-z"/>
+                    <parameter id="2575c3b2-366e-4174-8d6d-4333463034b2" parameterName="basePath" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="30187cb6-f553-4242-950d-55b25b10deb3" name="webpa_revert_parameter">
+                <parameters>
+                    <parameter id="5c35ac74-ab76-4c87-89fb-0b0a929a2f4e" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="00947129-71c4-4ba2-affb-b4c0917024a0" name="webpa_parodusstatuscheck">
+                <parameters/>
+            </function>
+            <function id="c1d2c1dd-dc60-49ea-b15b-c1aa7b4ef97b" name="integer_check">
+                <parameters>
+                    <parameter id="b096ecea-43f3-44fe-b010-14c19d551b20" parameterName="value" parameterType="STRING" range="A-Z"/>
+                    <parameter id="42d1c39e-da7d-4a1c-92af-c748b10adf0a" parameterName="threshold_value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>25b9c409-0c8b-4bde-a7b1-6e7b3f5985c6</id>
+                <name>integer_check</name>
+                <funName>integer_check</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>26c9c8e7-96f3-40a9-9bf3-0c9dac182f65</id>
+                        <parameterName>threshold_value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d18af883-f1dd-4ed4-ab28-3ca525a93ea3</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>42ec57cb-708a-4920-865a-5fb32a6fee6e</id>
+                <name>webpa_deviceconfig_value</name>
+                <funName>webpa_deviceconfig_value</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>601efaa9-37d7-4bb9-a8ba-f1d0f8a52395</id>
+                        <parameterName>basePath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6a9a1993-5cdb-460d-bab3-b94695f3937a</id>
+                        <parameterName>configKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ee364641-a11f-479e-b645-2a2f72f43ddc</id>
+                        <parameterName>configKey2</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>59d103a0-d36a-4196-854c-195e33c78944</id>
+                <name>webpa_parodusstatuscheck</name>
+                <funName>webpa_parodusstatuscheck</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>8761ce6b-e552-485d-8f81-d041aa413d02</id>
+                <name>webpa_validate_set</name>
+                <funName>webpa_validate_set</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0b7182e9-b7b6-4ff2-9552-188fb97e0ec4</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>139610a7-7ae6-4383-b53b-c83d4ca4448d</id>
+                        <parameterName>testValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>287d3522-39d9-43a8-9836-da030f42cef0</id>
+                        <parameterName>WEBPA_URL</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>974898d0-1a58-4590-b871-48314f3024dd</id>
+                        <parameterName>AUTH_TOKEN</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ac549348-17d6-4265-9bf7-a4403ba6e705</id>
+                <name>webpa_get</name>
+                <funName>webpa_get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>14e7cd6b-ea60-4d75-93cd-c6634a523528</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>44c42df6-280c-433d-95fc-0c742cf11e48</id>
+                        <parameterName>WEBPA_URL</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dec282ff-162d-426b-acf4-2c7cabb03c61</id>
+                        <parameterName>AUTH_TOKEN</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f1f9f803-ea25-4659-8bd4-9e5c4657fd25</id>
+                <name>webpa_set</name>
+                <funName>webpa_set</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>51737e0a-1d6d-48fa-821b-7f994753dec2</id>
+                        <parameterName>AUTH_TOKEN</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6d2b10a2-89a3-45f9-859e-695110a2655b</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b9ea2bef-8916-45a6-9335-521860f52101</id>
+                        <parameterName>testValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fb4612ce-784d-40b5-9737-78c5f1a3826b</id>
+                        <parameterName>WEBPA_URL</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fd218c8b-1e4d-4a65-b8a0-07e8fa4c74e5</id>
+                        <parameterName>dataType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

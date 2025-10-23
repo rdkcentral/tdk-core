@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>8a80562e-8ac3-4ddf-8e3a-5f80f85fdedf</moduleId>
+        <!-- Module name -->
+        <moduleName>WECB</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>0</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="09974e80-5761-4ad4-8f66-989e747abef6" name="WECB_AddObject">
+                <parameters>
+                    <parameter id="81d51846-0097-4f0c-9c44-71b17e31b791" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d2a75ba8-dcb1-472e-84a9-0d21671dd138" name="WECB_SetCommit">
+                <parameters>
+                    <parameter id="c22d5f67-e0a9-45c5-96c8-543867df8363" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e7e84d8c-5cfb-4a16-8623-e75f84f20f05" name="WECB_GetParamValues">
+                <parameters>
+                    <parameter id="222732c1-cc82-4665-b1ab-70d165743427" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="625f9c69-5fd6-4469-a302-d581098facce" name="WECB_SetSessionId">
+                <parameters>
+                    <parameter id="918419d9-ef04-4e08-9fa4-58acb7f19d6a" parameterName="sessionId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="3b6fe828-f115-4783-9f40-85338f97991f" name="WECB_SetParamValues">
+                <parameters>
+                    <parameter id="81fe0988-738f-4cda-ae43-a15ba606c3b2" parameterName="commit" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="fa253445-cdab-4c2d-a22b-2e1bfa3e6f9f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="71b809e9-dedf-45be-baa5-299c4a6f4bc7" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="617337e6-53ec-420e-a6ff-0b5d43421bd3" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6deb756a-509e-490f-b916-d495cd961599" name="WECB_SetParamAttribute">
+                <parameters>
+                    <parameter id="e400f08a-bd6b-4f56-b643-9ff15a8ef5c8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="71a29ea5-48bb-4359-be34-0a13390034d5" parameterName="notify" parameterType="STRING" range="A-Z"/>
+                    <parameter id="999779aa-18e1-4629-bbd9-c38213b9e00f" parameterName="accessControl" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="741092d8-3b8d-4e06-b129-a986dfa8a6b6" name="WECB_GetParamNames">
+                <parameters>
+                    <parameter id="51958d62-ac13-4f90-9687-cae6955931b4" parameterName="recursive" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="83c23c46-7ea4-4ce5-82ea-4739845b7f34" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="737b2e77-dad0-4ff8-9ce9-5417b20d02b6" parameterName="paramList" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8557ea62-e2e0-4925-a156-f502cbe2450e" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="9c534f8e-7676-4938-8133-e4473fdba827" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="edd05545-31f2-4dab-b7ea-0941d7191e54" parameterName="commit" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="d9c28fcd-72aa-4572-b1eb-8fe42a48c3d8" name="WECB_GetParamAttributes">
+                <parameters>
+                    <parameter id="12c06551-e98d-43da-8eda-aaa2272c612d" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f2927f83-1ed7-4b15-898b-2dae2cd9165f" name="WECB_DelObject">
+                <parameters>
+                    <parameter id="fd9be3b3-df8f-4684-8f56-6eabf1e323ec" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>23a5a0df-c901-4459-8ea7-2afde677e1a1</id>
+                <name>WECB_GetParamAttributes</name>
+                <funName>WECB_GetParamAttributes</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2d7df8b1-aea5-483c-adce-f899e0f6ac46</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.MoCA.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>282d5eac-1762-41be-ba90-49f3d58d1772</id>
+                <name>WECB_GetParamNames</name>
+                <funName>WECB_GetParamNames</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>19c33bb6-a91a-42fd-9011-5e7ff08a238d</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.MoCA.X_CISCO_COM_ProvisioningServerAddress</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>43dac9f1-85c6-42fa-be62-df8395c3b436</id>
+                        <parameterName>paramList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.MoCA.</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cc5f520f-fef4-4772-be71-471e1a020ca3</id>
+                        <parameterName>recursive</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3556ac9f-d490-4371-8118-346e2cbd0e91</id>
+                <name>WECB_SetCommit</name>
+                <funName>WECB_SetCommit</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>05884b6b-801d-4ecb-a7f0-e13287d3156a</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.MoCA.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>71248c7c-38dd-49f4-a59f-455590520a1a</id>
+                <name>WECB_SetSessionId</name>
+                <funName>WECB_SetSessionId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5d3b4932-fa6a-4381-a4e8-06de9a737d6f</id>
+                        <parameterName>sessionId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>74535777-1bc6-4b2a-b93b-12c472cbb1a3</id>
+                <name>WECB_SetParamAttribute</name>
+                <funName>WECB_SetParamAttribute</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6647fd22-bbcd-4736-a74c-30472bb65242</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.MoCA.</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6a6b6436-b8c1-440c-93cb-45ee9012b0d3</id>
+                        <parameterName>accessControl</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>anybody</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e6c584bd-d5b2-4831-a45f-417c7371f517</id>
+                        <parameterName>notify</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>active</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7af0b264-bb04-4aba-b7d7-62fe3407a333</id>
+                <name>WECB_SetParamValues</name>
+                <funName>WECB_SetParamValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>073b4089-97bc-460d-86a0-1a9fbff20bf1</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.MoCA.</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>59f0c92f-5b7b-4f4e-9ce8-16cdd3a90aa3</id>
+                        <parameterName>commit</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c2f40365-a438-409a-8682-575b98766568</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Moca</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e903c840-42f2-4f7c-8e44-721bb7d43806</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>string</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>928d005e-ae44-4b71-9681-7ea563b32a27</id>
+                <name>WECB_AddObject</name>
+                <funName>WECB_AddObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>720c4563-3213-4790-86a3-2fc7e207ba7f</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.MoCA.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b556eae9-902c-4c19-92f3-a33a35442d1f</id>
+                <name>WECB_GetParamValues</name>
+                <funName>WECB_GetParamValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>fcc33696-64de-4b44-b594-ec72bf981fcb</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.MoCA</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e724ee9a-85ca-4464-9ac5-929b851d46c9</id>
+                <name>WECB_DelObject</name>
+                <funName>WECB_DelObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2552bd79-a96a-4b4a-b295-ff102aa2d2e9</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.MoCA.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

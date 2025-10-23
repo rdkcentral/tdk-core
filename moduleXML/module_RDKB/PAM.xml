@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>5997d1e0-8079-45a8-bb0b-5e99d17d9d43</moduleId>
+        <!-- Module name -->
+        <moduleName>PAM</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="9f7c70b0-3b3a-46a3-bfd1-8475e64db08a" name="pam_GetParameterValues">
+                <parameters>
+                    <parameter id="c3177c61-cfb5-430f-8c5a-e423fc2fe5db" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5c316aac-5444-4bbb-8be0-6c2aa11f30b7" name="COSAPAM_Test_Lm">
+                <parameters/>
+            </function>
+            <function id="b28eb910-f72b-42a7-a6da-d2807ca9b022" name="pam_Setparams">
+                <parameters>
+                    <parameter id="3b09b9b1-f119-4750-a76e-9a1955d547f8" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ed39fcd7-fa3b-4e39-86c1-61d6c9bbe76f" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="9f5fc00d-a9a2-40a2-b308-7b64bf1cc61e" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8993d53f-f676-4112-af6c-a765d04bf4d0" name="pam_DelObject">
+                <parameters>
+                    <parameter id="f661c9b4-3fa2-4beb-9be5-db09cbc2180f" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b497ef52-4925-4abe-82e5-ccd1b7668196" name="COSAPAM_DmlDiGetParamValue">
+                <parameters>
+                    <parameter id="5b990430-7afd-42a2-8051-f27b207e9ccc" parameterName="MethodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="62547d1f-201f-4e4f-8c88-e5bed252e9ab" name="pam_bridge_GetParamUlongValue">
+                <parameters>
+                    <parameter id="438a48eb-c6c5-439a-9f87-83efe75cdd87" parameterName="module" parameterType="STRING" range="A-Z"/>
+                    <parameter id="7a1bae0b-c2ec-4a68-87a8-89f4d2e5dc55" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2d4e2456-f984-4ac4-bb6f-4df39b2c3c35" name="pam_DeviceInfo_GetParamStringValue">
+                <parameters>
+                    <parameter id="aef50485-509f-417c-93ec-1e7f365a614c" parameterName="module" parameterType="STRING" range="A-Z"/>
+                    <parameter id="45f83336-6539-4087-84ec-600ed6dbb5b8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0e0675d6-ebfe-41ee-8bf8-cb1ba5f14ec1" name="COSAPAM_DmlMlanGetParamValue">
+                <parameters>
+                    <parameter id="7efeb010-a77a-455a-a685-bed4036392fc" parameterName="MethodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b654fcb4-1a8a-44be-b718-ce97a5ace5ce" name="COSAPAM_DnsGet">
+                <parameters>
+                    <parameter id="df1002f2-e6ae-425f-b83f-1d990c529227" parameterName="MethodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="78bcc2a3-cc37-425f-802d-0f867fa0b2d3" name="pam_MTAAgentRestart">
+                <parameters/>
+            </function>
+            <function id="6167cb7c-98e3-4190-ab95-d461fee2d928" name="pam_AddObject">
+                <parameters>
+                    <parameter id="eabad8d4-2e72-4947-a798-c79dce7b5f44" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6d4036a1-9517-45b7-b85d-c7b9d05556f6" name="COSAPAM_UpnpEnable">
+                <parameters>
+                    <parameter id="76e5e804-282b-4f59-b9c3-bdb0cdf12287" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="aa8a8395-78b7-4c69-9e65-36ac8fa4111c" parameterName="MethodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9daa53f6-376e-471f-8850-27484e705b1e" name="pam_CRRestart">
+                <parameters/>
+            </function>
+            <function id="cd60cb7a-bf77-46a7-b638-2b3a103d3c36" name="COSAPAM_DmlEthGetParamValue">
+                <parameters>
+                    <parameter id="87015971-38a9-452b-9dfe-e70c86ed93df" parameterName="MethodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c58f9b32-96d7-4d0b-b78f-540a86f85064" name="pam_Init">
+                <parameters/>
+            </function>
+            <function id="3b6d4e3e-31f7-48f4-889b-aa84fcffa2f7" name="COSAPAM_DhcpsEnable">
+                <parameters>
+                    <parameter id="8a63e481-bd67-4268-8d22-27d7fe7be232" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="4c87c5a0-dfde-4733-8307-206ca1cd848e" name="COSAPAM_DhcpGet">
+                <parameters>
+                    <parameter id="95b21a6f-67ef-4b24-8076-d10ef6f3eaad" parameterName="MethodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e956977c-b80c-4015-aa0f-bd510c3e4562" name="COSAPAM_DnsEnable">
+                <parameters>
+                    <parameter id="d24ced80-4d50-4afd-b365-edc9ae67918e" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="b34888e2-70a8-4929-bf84-2f4a459f35e4" parameterName="MethodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5da86552-96c8-4358-8486-64abb6369568" name="pam_ExecCmd">
+                <parameters>
+                    <parameter id="b18dfe91-4fe6-4d61-9de0-e2eeff1ffa7f" parameterName="command" parameterType="STRING" range="command to execute"/>
+                </parameters>
+            </function>
+            <function id="bf9accd4-fad0-4f66-a34d-62d5c9af0798" name="pam_SetParameterValues">
+                <parameters>
+                    <parameter id="f3644db4-8890-4bc5-964a-1e8c811c2b90" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="3197b941-8f79-451d-b60f-4934e2f1bbe7" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="815609f6-6106-4b17-9718-7a9ceef58979" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="853df336-a875-4897-885c-f681be23877c" name="COSAPAM_UpnpGetState">
+                <parameters>
+                    <parameter id="af6f2ef1-6a29-4980-993e-21a8482a266b" parameterName="MethodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e1bd4232-d001-46fd-890d-5e11d1327742" name="pam_bridge_GetParamBoolValue">
+                <parameters>
+                    <parameter id="3f5b90fa-cd2e-462a-828b-72254d3eed62" parameterName="module" parameterType="STRING" range="A-Z"/>
+                    <parameter id="00c214d8-9b43-4166-8ce4-574d05712042" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b15865fd-9e3d-4baa-b9e2-abbeec7399b6" name="pam_GetParameterNames">
+                <parameters>
+                    <parameter id="0a2768af-5c57-4c77-a6c5-e89dd4964bf5" parameterName="ParamList" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4faae165-e7ea-4ec6-8952-7bc9634ec7ed" parameterName="brecursive" parameterType="STRING" range="A-Z"/>
+                    <parameter id="79510914-331d-4688-bb5b-3d92f2a5e508" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>025cb97f-f856-449a-91c2-48016cf875c8</id>
+                <name>pam_AddObject</name>
+                <funName>pam_AddObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>214ac3d6-6187-476f-994e-e4e04aad32ce</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>04ff047d-02f6-470f-b839-d3c8316acbc4</id>
+                <name>pam_CRRestart</name>
+                <funName>pam_CRRestart</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>16ebb017-20f2-4793-883b-9ba7dd6ac1f8</id>
+                <name>pam_GetParameterNames</name>
+                <funName>pam_GetParameterNames</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>79ecf28c-3788-406c-915c-19eccf1f7899</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>80273650-e61b-4fdf-89f7-4d3c652abb9f</id>
+                        <parameterName>brecursive</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e43bdba0-308c-481d-aa7a-e5fd6809a0b4</id>
+                        <parameterName>ParamList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1e3dc5de-b77a-48e9-b3c2-3da752a18c84</id>
+                <name>COSAPAM_DmlDiGetParamValue</name>
+                <funName>COSAPAM_DmlDiGetParamValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>772bbe62-1917-4be0-88cb-dce027eb68c4</id>
+                        <parameterName>MethodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2272d797-dc38-4f44-9d51-12b87933c077</id>
+                <name>pam_bridge_GetParamUlongValue</name>
+                <funName>pam_bridge_GetParamUlongValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6d88cc55-5fee-4b9b-bb39-c4e874ab8c33</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>MaxBridgeEntries</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bc18f2d2-ccbe-4308-b687-fc9c75d24cc4</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Bridging</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>242d3216-c427-47d2-95e0-dfaa1a03fea7</id>
+                <name>COSAPAM_DmlMlanGetParamValue</name>
+                <funName>COSAPAM_DmlMlanGetParamValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>62ff0c94-6d06-488f-9dc6-d55937dd1980</id>
+                        <parameterName>MethodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>40683297-3776-4465-87e3-85a8df138838</id>
+                <name>COSAPAM_DmlEthGetParamValue</name>
+                <funName>COSAPAM_DmlEthGetParamValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7497ec2c-d898-412b-9f21-8119d110d57e</id>
+                        <parameterName>MethodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4e069c18-f45a-435a-a608-a50765bd7178</id>
+                <name>pam_MTAAgentRestart</name>
+                <funName>pam_MTAAgentRestart</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>5fae73da-41cb-4ad2-bc72-d8d843312076</id>
+                <name>pam_ExecCmd</name>
+                <funName>pam_ExecCmd</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4edbec5d-57c0-4d80-9014-769b87bd9adf</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>command to execute</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>73d09335-096a-433a-84b7-53e74f9fe5e9</id>
+                <name>pam_Setparams</name>
+                <funName>pam_Setparams</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3fb869e2-a3f4-447b-b1de-6b3a28a6e098</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7bb4933d-173e-4879-9758-39a42fe33c89</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e180131e-2c6f-48c5-8517-7cd5320308aa</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8c4fb0fc-a2f3-4a82-8dba-c992e7a68b1f</id>
+                <name>COSAPAM_UpnpGetState</name>
+                <funName>COSAPAM_UpnpGetState</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ba37ea58-21b8-468b-b5ab-0e69081b31cd</id>
+                        <parameterName>MethodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9ad4c179-4878-4e7f-a156-7ee534588f19</id>
+                <name>pam_GetParameterValues</name>
+                <funName>pam_GetParameterValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>dd7cc67d-8764-4362-b609-07d3beb6b711</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a4ad675a-42a2-41db-aecb-7f101c0de25a</id>
+                <name>COSAPAM_DhcpsEnable</name>
+                <funName>COSAPAM_DhcpsEnable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6647f9e6-cc49-4847-98aa-55a422e3fda9</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ad644680-7602-4a36-afdc-48f2091340ba</id>
+                <name>COSAPAM_DnsEnable</name>
+                <funName>COSAPAM_DnsEnable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>22171bf1-8f9f-46c5-986b-e4d0daaa7128</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>38bfd3c8-f3bf-422c-b4fa-4237e68a824e</id>
+                        <parameterName>MethodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c22f953d-33ce-4367-886e-8a0535604d11</id>
+                <name>pam_bridge_GetParamBoolValue</name>
+                <funName>pam_bridge_GetParamBoolValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>304c367e-8690-40d0-ae6c-3d03f4623b76</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>MaxBridgeEntries</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b06bba84-3ff0-42b6-9f13-67a101c04249</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Bridging</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c72735e7-c178-4421-bd4e-b4dfc97b16e1</id>
+                <name>COSAPAM_DhcpGet</name>
+                <funName>COSAPAM_DhcpGet</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a1b035a5-c10a-47cc-be5a-4accd5f9dd2a</id>
+                        <parameterName>MethodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cb088ff4-7e60-4828-bf28-03bf7b47b75b</id>
+                <name>pam_SetParameterValues</name>
+                <funName>pam_SetParameterValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1ac6a026-45bd-4702-9b5b-1ec529d39165</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9e1f25a9-27e4-495a-b125-44c2a5510ed5</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cf2e9e74-7577-46d5-91f4-0b6feaf01765</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d7755d04-4f80-41ed-bf5d-395da9c37542</id>
+                <name>pam_Init</name>
+                <funName>pam_Init</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>d95a9355-4104-48ff-9a38-47c012186cf4</id>
+                <name>COSAPAM_DnsGet</name>
+                <funName>COSAPAM_DnsGet</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>da1aa937-da39-4aa9-84ae-2cd5c1215fb1</id>
+                        <parameterName>MethodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>de265abe-ecc5-4abb-a985-2a1d3efe8ff1</id>
+                <name>pam_DelObject</name>
+                <funName>pam_DelObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e4373d99-d170-48ae-b539-f31943e3db1f</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f9ff6b8a-910e-47ab-aa59-be5991f4b3b9</id>
+                <name>COSAPAM_UpnpEnable</name>
+                <funName>COSAPAM_UpnpEnable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>173db706-4ae7-43fe-be4e-1df889e36f83</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>879d5aa9-afb3-43be-8848-712e02e7f267</id>
+                        <parameterName>MethodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

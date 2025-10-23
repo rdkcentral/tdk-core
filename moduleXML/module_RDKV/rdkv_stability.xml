@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>c0cd6904-98c2-4f21-96e9-51f0dba96606</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_stability</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Certification</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="a6dfdfe5-ce7c-4871-8062-dd20cdac507e" name="rdkservice_getCPULoad">
+                <parameters/>
+            </function>
+            <function id="13d064c7-e73f-47b0-82af-0af22e5cf82a" name="rdkservice_synchronous_request">
+                <parameters>
+                    <parameter id="a3c928e8-cad8-43e3-a49b-029bbf8435cf" parameterName="method" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="843a924e-6ad5-40ec-bc02-ae217d33b42a" name="rdkservice_rebootDevice">
+                <parameters>
+                    <parameter id="33df9838-dd15-4acf-aa76-2435bacefeb7" parameterName="waitTime" parameterType="INTEGER" range="0-300"/>
+                </parameters>
+            </function>
+            <function id="7b6231f4-fbae-4dd8-a288-e2032d246b3d" name="rdkservice_sendKeyCodes">
+                <parameters>
+                    <parameter id="5858a0ea-9f91-4a51-be19-b8cb2f7da88d" parameterName="keyword" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="9e39d798-81cb-4fc0-bab9-ad833f645c5e" name="rdkservice_setDefaultInterface">
+                <parameters>
+                    <parameter id="ee89687a-6711-4352-a47e-550d13a1b7fb" parameterName="new_interface" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="82c3947e-cb9d-4d33-9661-58f6f6bd97dc" name="rdkservice_executeLifeCycle">
+                <parameters>
+                    <parameter id="9af14d30-167c-407a-b4ee-cc53af605b13" parameterName="operations" parameterType="STRING" range="a-z"/>
+                    <parameter id="d8c71249-4a7a-41e4-969f-5e00cf2d9e93" parameterName="validation_details" parameterType="STRING" range="a-z"/>
+                    <parameter id="d2bc2765-8092-4747-8c2d-468c06281425" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="e8ca9830-e7bd-4e1f-b262-3d61a0d02838" name="rdkservice_validateProcEntry">
+                <parameters>
+                    <parameter id="f083dea1-6d58-4541-ba16-35704a5ca602" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                    <parameter id="78a87ca2-7f8c-4c29-9ff5-69b96e8bb000" parameterName="video_validation_script" parameterType="STRING" range="a-z"/>
+                    <parameter id="7c1c97ae-6e19-406c-99a1-d18178bdf20b" parameterName="sshmethod" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="82ec598c-8529-4120-9739-6edffde43ecc" name="rdkservice_validateCPULoad">
+                <parameters>
+                    <parameter id="5197320a-ec0d-4546-91f5-937ff691bebb" parameterName="value" parameterType="FLOAT" range="0-1000"/>
+                    <parameter id="1869495c-4641-4308-ae24-9f631dbe3011" parameterName="threshold" parameterType="FLOAT" range="0-1000"/>
+                </parameters>
+            </function>
+            <function id="9202075e-82a6-43cf-bd10-49c8cab76f39" name="rdkservice_validateMemoryUsage">
+                <parameters>
+                    <parameter id="1237b239-9fcc-4ab0-9198-3c4f89732ffc" parameterName="value" parameterType="FLOAT" range="0-1000"/>
+                    <parameter id="7e318db1-03ea-48e9-b9e7-a1731a1c12a4" parameterName="threshold" parameterType="FLOAT" range="0-1000"/>
+                </parameters>
+            </function>
+            <function id="74966947-e79d-4c40-831a-b6f26aa29164" name="rdkservice_checkChannelChangeLog">
+                <parameters>
+                    <parameter id="1e820be5-d4ea-4ee4-8a66-8e6d06cc00e9" parameterName="log" parameterType="STRING" range="a-z"/>
+                    <parameter id="c7ae8e62-d160-47ce-b600-7d486227c032" parameterName="text" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="576483a7-3efd-43bd-8139-2ce3588f5d2b" name="rdkservice_memcrApps_executeLifeCycle">
+                <parameters>
+                    <parameter id="c76f522a-63ec-454d-bf96-01910ffc17cc" parameterName="operations" parameterType="STRING" range="a-z"/>
+                    <parameter id="25a394ea-1eae-4ac3-9e39-0e28e83566e3" parameterName="validation_details" parameterType="STRING" range="a-z"/>
+                    <parameter id="1378f908-94e8-4805-8cb9-bace955c49b4" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="aedb9ce6-2d6b-494a-ad7c-192cfe4d3d46" name="rdkservice_getMemoryUsage">
+                <parameters/>
+            </function>
+            <function id="d9199c73-2541-44a5-a2f2-2b46c12184c3" name="rdkservice_launchAndDestroy">
+                <parameters>
+                    <parameter id="b5410bfd-236f-47d7-8d15-68385ba026d0" parameterName="uri" parameterType="STRING" range="a-z"/>
+                    <parameter id="e2bb0ea7-2d39-4452-9e7a-e19caafb3a85" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="07935f2d-3813-4cb5-ab95-a88455a796df" name="rdkservice_validateResourceUsage">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>077b7037-c756-4a90-aaac-08d9888864ba</id>
+                <name>rdkservice_rebootDevice</name>
+                <funName>rdkservice_rebootDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1a3dab7d-b598-4b69-ade0-a54dc74677df</id>
+                        <parameterName>waitTime</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-300</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1d4fd89a-3a14-4c90-a01a-93edbac8a6c6</id>
+                <name>rdkservice_getMemoryUsage</name>
+                <funName>rdkservice_getMemoryUsage</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>3e76c777-dfd3-423e-9771-4c4d992a1174</id>
+                <name>rdkservice_launchAndDestroy</name>
+                <funName>rdkservice_launchAndDestroy</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>24472565-a45b-4aa2-83b9-d6f7903f2d5e</id>
+                        <parameterName>uri</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d1333973-036f-4c15-8496-ff6521753ff3</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>43fa5997-4943-45b1-a605-f1d905a3f72a</id>
+                <name>rdkservice_validateCPULoad</name>
+                <funName>rdkservice_validateCPULoad</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>119d51a1-e3ad-430c-ae40-04aedf376257</id>
+                        <parameterName>threshold</parameterName>
+                        <parameterType>FLOAT</parameterType>
+                        <range>0-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b02045b3-ab9f-4bc4-9234-f689f4b66d96</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>FLOAT</parameterType>
+                        <range>0-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6988d719-11d5-4c55-b375-d10d5ff35ca6</id>
+                <name>rdkservice_getCPULoad</name>
+                <funName>rdkservice_getCPULoad</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>92726827-4c6d-4534-935e-afad2e0df1e3</id>
+                <name>rdkservice_memcrApps_executeLifeCycle</name>
+                <funName>rdkservice_memcrApps_executeLifeCycle</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>00098339-2913-41ae-b744-4496f8c4f9c1</id>
+                        <parameterName>operations</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9208c146-b2e3-4335-a5cb-c8e2c0d72572</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f30b2582-96ad-4b59-97cb-f3ede8eabec8</id>
+                        <parameterName>validation_details</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9656ac36-ffef-4e5b-9c71-748fe043dfa0</id>
+                <name>rdkservice_executeLifeCycle</name>
+                <funName>rdkservice_executeLifeCycle</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7414bf18-15ec-467d-b98e-08e8bea01ab7</id>
+                        <parameterName>operations</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ccc02191-b538-44a5-9a56-c6326e61bb95</id>
+                        <parameterName>validation_details</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>de3a5134-df46-4ddb-b22d-7a3c08bbef49</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b5d67faf-adeb-4ce2-8359-a4c972bdf6d3</id>
+                <name>rdkservice_validateMemoryUsage</name>
+                <funName>rdkservice_validateMemoryUsage</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>218d565e-549b-45f4-bc79-f8052b0fa763</id>
+                        <parameterName>threshold</parameterName>
+                        <parameterType>FLOAT</parameterType>
+                        <range>0-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>72283fc4-16b2-4196-b7ac-cf3a66c4bf8c</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>FLOAT</parameterType>
+                        <range>0-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bc8e860d-9db7-49d8-b9d0-368766c64139</id>
+                <name>rdkservice_synchronous_request</name>
+                <funName>rdkservice_synchronous_request</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>32cb862f-7bc1-4986-a746-6ffe84a9f9ea</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c4268780-75bf-4c04-b244-f79706735084</id>
+                <name>rdkservice_validateProcEntry</name>
+                <funName>rdkservice_validateProcEntry</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9c2905d2-d476-427b-9692-e9fc088863c0</id>
+                        <parameterName>video_validation_script</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a27a37cd-6bd3-4287-aebe-8a4715fcf4d5</id>
+                        <parameterName>sshmethod</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c561de68-bad1-436b-ba21-814fbbf3016c</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>df7e3ff5-2e6a-46a6-93cf-ff786ef1f950</id>
+                <name>rdkservice_sendKeyCodes</name>
+                <funName>rdkservice_sendKeyCodes</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e6a185de-e145-42e5-b099-b517ad6f5cc8</id>
+                        <parameterName>keyword</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e55bd8b4-4e0e-4211-9763-a25531fb791c</id>
+                <name>rdkservice_validateResourceUsage</name>
+                <funName>rdkservice_validateResourceUsage</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e7470df0-99ae-4826-9a33-9434bac96e53</id>
+                <name>rdkservice_setDefaultInterface</name>
+                <funName>rdkservice_setDefaultInterface</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f862d2b8-23d9-43a9-bccb-10c841bc89e0</id>
+                        <parameterName>new_interface</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e963505d-aca2-4f51-9f5f-0eff26f8824e</id>
+                <name>rdkservice_checkChannelChangeLog</name>
+                <funName>rdkservice_checkChannelChangeLog</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5e4f90cc-f818-41f0-aa2f-6791febc78da</id>
+                        <parameterName>text</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>65805e30-a6c3-43b2-82ae-bf96b1f700fd</id>
+                        <parameterName>log</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

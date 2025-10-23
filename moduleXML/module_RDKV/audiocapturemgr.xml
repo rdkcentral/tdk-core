@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>7c342536-df28-48d1-8c1f-9aebdcbe5eea</moduleId>
+        <!-- Module name -->
+        <moduleName>audiocapturemgr</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>20</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="96700628-e3d9-405f-83c6-66f11eee669d" name="TestMgr_AudioCaptureMgr_GetSessionDetails">
+                <parameters/>
+            </function>
+            <function id="4cc2d5c1-cb28-41f1-bc22-3f61b2ff37e0" name="TestMgr_AudioCaptureMgr_ExecuteCmd">
+                <parameters>
+                    <parameter id="7233a6eb-eb7b-4a8c-bfaf-6e7343f4228d" parameterName="command" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="9463a5e5-fb19-4aa9-8ba3-df14bad002c0" name="TestMgr_AudioCaptureMgr_SetAudioProperties">
+                <parameters>
+                    <parameter id="1e4524e5-c624-462b-88a1-ac364aea2e8a" parameterName="delay" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="59709754-1cc8-444b-9de5-755c975a40ad" parameterName="fifoSize" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="2b8dd37e-44b9-45ea-b4ef-be9cb793ae7d" parameterName="threshold" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="b34d40dc-17b8-42e2-aadb-c226b6998183" parameterName="session" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="5a2ebbd8-42f1-4f53-bf99-3f19188936e1" name="TestMgr_AudioCaptureMgr_GetOutputProperties">
+                <parameters>
+                    <parameter id="130ea97c-60b8-4a44-97ec-b3d9826f4696" parameterName="session" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="7c565a98-7d03-4a9a-8a2b-a7af489367d2" name="TestMgr_AudioCaptureMgr_Session_Close">
+                <parameters/>
+            </function>
+            <function id="8ff6536c-c0be-44d4-bc59-082db3f342b4" name="TestMgr_AudioCaptureMgr_Stop">
+                <parameters/>
+            </function>
+            <function id="c1089380-c849-4594-a166-cd6192ba96e1" name="TestMgr_AudioCaptureMgr_Session_Open">
+                <parameters/>
+            </function>
+            <function id="eff1fe3a-bf4b-4039-a75f-af363fa7dd5e" name="TestMgr_AudioCaptureMgr_Start">
+                <parameters/>
+            </function>
+            <function id="cf279805-b021-4d18-ae16-45f54c7dc0ef" name="TestMgr_AudioCaptureMgr_GetAudioProperties">
+                <parameters>
+                    <parameter id="c08ca5c0-f288-42d7-8b54-e7b10d7c5593" parameterName="session" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="1d0313e8-9918-416c-b1b1-86736a63ab49" name="TestMgr_AudioCaptureMgr_GetDefaultAudioProperties">
+                <parameters>
+                    <parameter id="3a1cbce9-6f23-4418-8a87-968251d3385f" parameterName="session" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>7ecbe58d-931f-4031-b7cc-178a4fe7b7aa</id>
+                <name>AudioCaptureMgr_GetDefaultAudioProperties</name>
+                <funName>TestMgr_AudioCaptureMgr_GetDefaultAudioProperties</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ac0818cc-ea03-4eb3-8e58-5a933e58550c</id>
+                        <parameterName>session</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>VALID</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>80f721b4-10c2-44b8-a3dd-1d1726de0cda</id>
+                <name>AudioCaptureMgr_Session_Open</name>
+                <funName>TestMgr_AudioCaptureMgr_Session_Open</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a3e1f621-83bf-4aaf-b9db-f4c430ec1fb3</id>
+                <name>AudioCaptureMgr_ExecuteCmd</name>
+                <funName>TestMgr_AudioCaptureMgr_ExecuteCmd</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9e46ffe6-9e24-4d74-af40-2e6974196b29</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a686c047-2ddb-4937-934d-1c8a67673c4c</id>
+                <name>AudioCaptureMgr_Stop</name>
+                <funName>TestMgr_AudioCaptureMgr_Stop</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a921f341-85f2-45e5-86ee-38ebeeada0b0</id>
+                <name>AudioCaptureMgr_Session_Close</name>
+                <funName>TestMgr_AudioCaptureMgr_Session_Close</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>bbf62091-423d-4fb6-b963-af8e20438b5f</id>
+                <name>AudioCaptureMgr_GetAudioProperties</name>
+                <funName>TestMgr_AudioCaptureMgr_GetAudioProperties</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>408d6d05-cc31-475c-8282-a0db9eeec9d7</id>
+                        <parameterName>session</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>VALID</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cb9291dc-1b76-41d4-969f-0d22d97015b1</id>
+                <name>AudioCaptureMgr_Start</name>
+                <funName>TestMgr_AudioCaptureMgr_Start</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e6d3357a-95b9-4b57-be63-674c66fd2260</id>
+                <name>AudioCaptureMgr_SetAudioProperties</name>
+                <funName>TestMgr_AudioCaptureMgr_SetAudioProperties</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0e4e28b2-cf4a-4be6-ae74-d6d294ee406b</id>
+                        <parameterName>threshold</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>-1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>375a61c2-79a0-4b2d-87f1-34aa85232752</id>
+                        <parameterName>fifoSize</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>-1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>60916e29-078e-47ae-936b-c48605b1bac5</id>
+                        <parameterName>session</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>VALID</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>849bd817-fc16-4483-a30e-b1a008ddfb80</id>
+                        <parameterName>delay</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>-1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f6dfcf61-9727-49c3-9bcd-714ffc4974f5</id>
+                <name>AudioCaptureMgr_GetSessionDetails</name>
+                <funName>TestMgr_AudioCaptureMgr_GetSessionDetails</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>fc167705-9dd9-437e-9c6a-0446d022e3ab</id>
+                <name>AudioCaptureMgr_GetOutputProperties</name>
+                <funName>TestMgr_AudioCaptureMgr_GetOutputProperties</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8be17493-1f04-4f61-9810-a5b1d27a3591</id>
+                        <parameterName>session</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>VALID</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

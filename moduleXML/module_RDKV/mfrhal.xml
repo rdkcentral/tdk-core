@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>b02a64a4-9935-4b97-9b31-21c956332be6</moduleId>
+        <!-- Module name -->
+        <moduleName>mfrhal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="89c68caa-9543-43d0-8988-9b8763d0554d" name="TestMgr_MfrHal_GetSerializedData">
+                <parameters>
+                    <parameter id="17accb92-23d9-4490-a916-a672bd4c2680" parameterName="data_type" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>01c0864a-dde4-4c32-9fbc-2f85d8f1087a</id>
+                <name>MfrHal_GetSerializedData</name>
+                <funName>TestMgr_MfrHal_GetSerializedData</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0c0ddc4b-5710-4f2e-a4f3-215a0d6eaf94</id>
+                        <parameterName>data_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

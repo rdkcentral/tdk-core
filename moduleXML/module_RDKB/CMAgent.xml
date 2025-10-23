@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>3b2108d6-c2d3-49cc-a1d8-95947f77b287</moduleId>
+        <!-- Module name -->
+        <moduleName>CMAgent</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="6b77e670-69c6-402e-9229-742397ad198e" name="CMAgent_SetCommit">
+                <parameters>
+                    <parameter id="d7d1cade-c604-4e05-b294-c9df5500f1be" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3b18035b-5477-47d2-9986-88cad19b8335" name="CMAgent_GetNames">
+                <parameters>
+                    <parameter id="5ed0de51-7660-43d2-8f52-0c360c70bef9" parameterName="brecursive" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="4b8f706a-4f59-41c3-8f3c-b2d7163361fb" parameterName="pathname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5788c100-d2c1-4c89-ac81-6b85b0b22070" name="CMAgent_DelObject">
+                <parameters>
+                    <parameter id="472e6c83-f318-4d36-86bc-cfe02ad9a28e" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="18cb5529-f1c2-42ee-935e-d634a0b57ce8" parameterName="apiTest" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="a9aa6ee6-5225-4f6e-b866-76425664e61a" name="CMAgent_Set_Get">
+                <parameters>
+                    <parameter id="3f91f7a7-2334-457a-a626-75d717601172" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="1a78f0be-36c5-4580-ba84-8d0022a57041" parameterName="commit" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="5e13227a-c998-403f-bcf0-2ea597c210bf" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2202628b-3803-4151-9286-4a4ab1c565c5" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a78cdc72-8821-45c9-be8d-6e7e37cf3091" name="CMAgent_Get">
+                <parameters>
+                    <parameter id="17a64a65-376d-4e32-8e0a-3940b53a09b8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2c25b3bb-249d-4936-90cd-14dfb890d7b3" name="CMAgent_GetHealth">
+                <parameters>
+                    <parameter id="993b97bc-e05a-417e-9958-17ce5f9e5d59" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2dc1cab5-9511-4329-a92a-851632eea199" name="CMAgent_GetAttr">
+                <parameters>
+                    <parameter id="0a65d6e5-0cee-4267-a41f-2fcf1d3cc32d" parameterName="paramname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="af6e8f4e-7d71-4c6e-8e62-7f8f96bb0fd1" name="CMAgent_SetSessionId">
+                <parameters>
+                    <parameter id="97853ec0-1300-4b76-a9f1-f2e44a7b2fab" parameterName="sessionId" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="f28a2b28-d036-433d-9871-404d35d4e160" parameterName="priority" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="9c04febe-f7aa-4962-b812-6bb2df6d2305" parameterName="override" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="1256b7f4-cd0d-4ab8-a2d3-51a37234d274" parameterName="pathname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a3e3a396-a46d-428d-add6-eeec315313b5" name="CMAgent_AddObject">
+                <parameters>
+                    <parameter id="1679a666-816b-4468-af29-646af1f3d028" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6b1f07e2-4277-4554-ae70-d1c33b79426c" name="CMAgent_SetAttr">
+                <parameters>
+                    <parameter id="ce935680-a438-4151-a8b7-f8b4cec8a109" parameterName="accessControlChanged" parameterType="STRING" range="A-Z"/>
+                    <parameter id="09e4b1a3-9ef8-43f2-b01e-1a8701fe93cd" parameterName="notification" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f54ac0b7-71cd-4715-97a6-8fa5db67c9d3" parameterName="paramname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c8f6a384-eb27-464c-8c2d-ee080fadb403" name="CMAgent_Set">
+                <parameters>
+                    <parameter id="14553b9d-dd54-4986-9c48-c7ef38d4bcb4" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ae5dd325-8342-4819-a778-268906048864" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="66d80498-6ea4-4650-af5b-644e7457cb5f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f099921b-d44e-4ca8-99fa-ffbb67fc8676" parameterName="commit" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>44cdb1ff-1daf-415f-a1ac-a3a899585d81</id>
+                <name>CMAgent_AddObject</name>
+                <funName>CMAgent_AddObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2698d88f-fd19-426f-8ede-04e715091e92</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_CableModem.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4a5f0f80-e618-41b8-bd07-64739743d936</id>
+                <name>CMAgent_GetHealth</name>
+                <funName>CMAgent_GetHealth</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3c4ba2aa-3ded-461d-bdaa-f000b767a9e4</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_CableModem.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7a155c11-8322-4aa1-a55f-97df6f888f85</id>
+                <name>CMAgent_SetSessionId</name>
+                <funName>CMAgent_SetSessionId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>282aa306-ba80-42f2-9973-4651e893e224</id>
+                        <parameterName>override</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3a26be0a-69e9-4582-b246-af8cb2bf53e5</id>
+                        <parameterName>sessionId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b7f68d6c-8866-4fc7-a03d-80274d23068b</id>
+                        <parameterName>priority</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e41474e4-ae39-4ee4-9437-bc4f89fa6573</id>
+                        <parameterName>pathname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_CableModem.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7b3e16fe-9245-45ad-bb98-29741035c88e</id>
+                <name>CMAgent_Set</name>
+                <funName>CMAgent_Set</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>41bacc87-ac24-45ff-9783-6fc93a2f8c98</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>TDKTEST.cm</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5eee427d-6d49-4843-9ce1-1b9c96609bef</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_CableModem.DOCSISConfigFileName</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>73873265-6519-496c-b643-70fdcbc22d34</id>
+                        <parameterName>commit</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d177e31a-73aa-4b14-b480-e019adb649bf</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>string</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bdd7fb60-869a-4cdf-af86-fb05929ddee1</id>
+                <name>CMAgent_SetAttr</name>
+                <funName>CMAgent_SetAttr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>047b14d2-6e02-47d8-b97f-ea934fa96e84</id>
+                        <parameterName>notification</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>passive</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e814bb8a-85df-4adc-a648-a690a39825ba</id>
+                        <parameterName>paramname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_CableModem.LoopDiagnosticsDetails</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>faa7166b-d36f-4d08-9cc0-4024335d93c1</id>
+                        <parameterName>accessControlChanged</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>anybody</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cb9058e0-b92b-4ce9-945c-c49d9bad54e1</id>
+                <name>CMAgent_Get</name>
+                <funName>CMAgent_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b50b9c7c-d28a-41b8-a33f-9ff0dca97256</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_CableModem.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ce345193-5e7e-4201-a471-3b56f719dce6</id>
+                <name>CMAgent_DelObject</name>
+                <funName>CMAgent_DelObject</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>66b852ad-f7eb-4805-b437-042370d028a6</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_CableModem.</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d5d0f670-e7c3-42af-b95e-b6ce61ab6865</id>
+                        <parameterName>apiTest</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e073ffef-9e8a-402f-b40e-10f749231bfe</id>
+                <name>CMAgent_GetNames</name>
+                <funName>CMAgent_GetNames</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>27d1fa2b-7057-4d04-becf-3d9a7b394d3e</id>
+                        <parameterName>brecursive</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6351c35b-cc7a-4e30-bdf3-bac42242d485</id>
+                        <parameterName>pathname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_CableModem.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>eb2b4cdd-1a46-4631-9579-ed0dca2c7d08</id>
+                <name>CMAgent_Set_Get</name>
+                <funName>CMAgent_Set_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6a704bc8-aee1-4193-a2bf-3bc5f546e2ec</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8d585890-ef67-4079-a663-42ace44c8bb5</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ad30b787-d963-46e2-b3e5-d7b61674c3b1</id>
+                        <parameterName>commit</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c8b5eb49-da9f-4390-aa98-baab977fc9d7</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f81e2e89-ddf3-41d5-a102-93c1866e3a88</id>
+                <name>CMAgent_GetAttr</name>
+                <funName>CMAgent_GetAttr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>cec60e91-8fff-465b-8b8d-96d355fb98c2</id>
+                        <parameterName>paramname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_CableModem.LoopDiagnosticsDetails</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f8778432-f318-43fd-9791-dfbb7281c0d7</id>
+                <name>CMAgent_SetCommit</name>
+                <funName>CMAgent_SetCommit</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>05fce742-55fc-494c-810f-9cb0fc1a2785</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_CableModem.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

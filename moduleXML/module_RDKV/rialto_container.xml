@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>2ac98df0-2e72-472c-bf60-842586082d53</moduleId>
+        <!-- Module name -->
+        <moduleName>rialto_container</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>E2E</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="1b7667c8-13e2-4aa6-8852-8a8bad7b89f1" name="Press_key">
+                <parameters>
+                    <parameter id="448cc20a-86ba-448f-a5bf-bba06c19e243" parameterName="key_code" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b114ce01-68c9-4676-89a6-d465a0c278ab" name="InstallApplication">
+                <parameters/>
+            </function>
+            <function id="b71845af-b1f7-4f06-bf95-ba9d079fa435" name="ChangeContainerStatus">
+                <parameters>
+                    <parameter id="746ae7a9-fc27-4080-9da5-ec35d4413748" parameterName="operation" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="bf22ed05-f717-4e5e-ad7f-33c1121ee0ee" name="HandleHomePage">
+                <parameters>
+                    <parameter id="3d3daff6-bbba-476a-920e-ec1ce45f41bb" parameterName="image" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3f7132ac-e93f-4713-939f-55ed8171530d" name="executeCurlCommand">
+                <parameters>
+                    <parameter id="dcf1eab1-3098-4c2b-98d5-8f59e33dc1ea" parameterName="method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="07b87cc9-ffdf-4931-aa69-0f7c6ddd0b19" parameterName="value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="1d60afea-29f8-4fda-87b4-a0d3eddbdd27" name="executeInDUT">
+                <parameters>
+                    <parameter id="8829e6d6-d09c-4f0f-8b4d-4c1c2215e0b0" parameterName="command" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="861b58e5-521c-4dc0-ae68-fd5dcc38baee" name="KillApplication">
+                <parameters/>
+            </function>
+            <function id="327e68dc-b28e-4491-bb53-f8ae7613f7e3" name="checkApplicationInstalled">
+                <parameters/>
+            </function>
+            <function id="1672a6b6-d8f5-4f49-87fc-d85a4278f0c2" name="LaunchApplication">
+                <parameters/>
+            </function>
+            <function id="2994ca10-28e8-44a8-ad43-5705a05d9faa" name="getSSHParams">
+                <parameters>
+                    <parameter id="4e3a21a5-9fbd-4252-9812-d7ad4942ff05" parameterName="deviceIP" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ca8f1351-a23a-4ef5-853e-cca33740a10d" parameterName="realpath" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a0a9183e-82d7-4fb0-a5c8-12be4ae2d09b" name="HandleYoutubeSignIn">
+                <parameters>
+                    <parameter id="4be04526-af6c-4292-b74c-98dcd14472ea" parameterName="image" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3b580fed-a7fc-46a9-bf64-de9625f560a9" name="checkPROC">
+                <parameters>
+                    <parameter id="838ca898-1028-45a6-ad83-38415290f697" parameterName="check_pause" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>049b0d5e-2e3b-4f4e-bf7c-ad9f7fa945a1</id>
+                <name>HandleYoutubeSignIn</name>
+                <funName>HandleYoutubeSignIn</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b5800fdd-7200-4510-8e8b-1b996df2acc8</id>
+                        <parameterName>image</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>243f8331-170f-433c-be6e-05083a689aed</id>
+                <name>executeInDUT</name>
+                <funName>executeInDUT</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b421bb82-e7c2-4762-aac0-6b7ca937ea77</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2a6ac56f-01c7-4ec3-800f-1a3cecfce63a</id>
+                <name>HandleHomePage</name>
+                <funName>HandleHomePage</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>00bcf491-5fec-47b8-8852-2cba3fad8e04</id>
+                        <parameterName>image</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>693ac5f1-9c05-4abd-a99c-7c4d7bbb2e39</id>
+                <name>executeCurlCommand</name>
+                <funName>executeCurlCommand</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>705e599e-9586-4499-85d5-c3e266128ab5</id>
+                <name>checkPROC</name>
+                <funName>checkPROC</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a7757c40-35a5-4b08-9453-603294340d63</id>
+                        <parameterName>check_pause</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>False</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>99d1cc7c-71b8-499b-8855-3843e5fa82b2</id>
+                <name>KillApplication</name>
+                <funName>KillApplication</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b6dc4a07-6841-48ca-99f8-80c594815562</id>
+                <name>checkApplicationInstalled</name>
+                <funName>checkApplicationInstalled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>d8d0017a-b800-46c5-9759-19b27be078ce</id>
+                <name>Press_key</name>
+                <funName>Press_key</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>fda71c61-d689-40a1-99dc-cd5de335aed7</id>
+                        <parameterName>key_code</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d99b152c-eb6b-4181-82f8-f132750de046</id>
+                <name>getSSHParams</name>
+                <funName>getSSHParams</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e40871dd-2f59-40df-9fc9-60a7582eb2e1</id>
+                <name>ChangeContainerStatus</name>
+                <funName>ChangeContainerStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>578cfa91-dcd9-436a-ab23-b0e64d0289aa</id>
+                        <parameterName>operation</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ec0b1a8e-d78a-4fb3-9648-08c47c97488c</id>
+                <name>InstallApplication</name>
+                <funName>InstallApplication</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>faba32b1-449c-4111-a1d4-68e85ca049ea</id>
+                <name>LaunchApplication</name>
+                <funName>LaunchApplication</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

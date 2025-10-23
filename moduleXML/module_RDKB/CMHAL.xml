@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>5986fc81-3da1-485d-8714-b9253560912d</moduleId>
+        <!-- Module name -->
+        <moduleName>CMHAL</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="9e67867b-0ae6-4e54-940a-440fdffb424a" name="CMHAL_Reboot_Now">
+                <parameters/>
+            </function>
+            <function id="048e5103-f9c3-4480-b9eb-773097a9bc62" name="CMHAL_HTTP_Download">
+                <parameters/>
+            </function>
+            <function id="e07a1526-8337-493b-bdf8-b3644a4a0d42" name="CMHAL_FWupdateAndFactoryReset">
+                <parameters/>
+            </function>
+            <function id="7663a226-f0b6-4cff-a94f-668e937fb752" name="CMHAL_SetStartFreq">
+                <parameters>
+                    <parameter id="b69ec7c4-0f9a-40c9-88f5-85a1a0418e05" parameterName="Value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="193ffbcc-e3c6-43c0-8382-dd141e079722" name="CMHAL_SetUSChannelId">
+                <parameters>
+                    <parameter id="e6a68dd4-81eb-41fb-8448-048c31759b56" parameterName="Value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ca31168b-b591-43f0-a074-83760d871188" name="CMHAL_GetCPEList">
+                <parameters>
+                    <parameter id="e3c1cf28-4274-4cf0-9ec2-570c74052c19" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                    <parameter id="92b556a2-41ba-4259-97c7-d36b92741253" parameterName="lanMode" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="13535fd2-21ed-4092-a45f-c47ac3bb4d99" name="CMHAL_GetUsOfdmChanTable">
+                <parameters>
+                    <parameter id="b37e377e-db2f-48fc-a2e5-31db8d894e9f" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="345e6237-7cfa-48f1-b495-2d1269be3e4d" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="bb052848-2cc7-46d3-ba85-8ff74319370d" name="CMHAL_GetStatusOfdmaUsTable">
+                <parameters>
+                    <parameter id="b46e2892-647f-424a-99ce-ade6946f5720" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="928d0376-abc1-4e55-a52f-b6af1af34390" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="7d31cd54-2a89-4aa3-bb3e-546d5dfd8cf3" name="CMHAL_GetParamCharValue">
+                <parameters>
+                    <parameter id="a61c6de1-d294-4a90-b3da-a2b66073465e" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="45f7b691-2654-41f1-9ac8-94900fb6d534" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="02aebb73-768d-473b-867b-f0fdda0b7311" name="CMHAL_SetMddIpModeOverride">
+                <parameters>
+                    <parameter id="b9935986-7321-4a08-acc6-b2cabea34ee6" parameterName="value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="50bbb52e-17d8-4ef6-87a8-36a6e9ef5f92" name="CMHAL_GetDsOfdmChanTable">
+                <parameters>
+                    <parameter id="3c87d3f4-2fbe-4d4c-87de-8c6ee27bd73a" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b7383d9a-e694-4ef1-9f2c-a7b07e68a91c" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="535e87ba-6f06-406f-ae23-4bbf14bf0571" name="CMHAL_GetErrorCodeWords">
+                <parameters>
+                    <parameter id="8837d012-3a8a-434c-8702-8eb98bd53dba" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6a36d6b3-cc5b-4c1d-9d88-6182580f94ba" name="CMHAL_ClearDocsisEventLog">
+                <parameters/>
+            </function>
+            <function id="8e5d942c-bb5f-45d3-bdf1-2be250f40158" name="CMHAL_Init">
+                <parameters>
+                    <parameter id="ed111a81-c643-4d14-925c-71fb313946db" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5f91b1a9-0097-47cb-a540-2056e0952a7d" name="CMHAL_IsEnergyDetected">
+                <parameters>
+                    <parameter id="813472d5-0a70-4cfe-958f-d0b8390b636f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="00ef1b6c-b778-4649-b17e-7e71af8d2350" name="CMHAL_SetHTTP_Download_Interface">
+                <parameters>
+                    <parameter id="e5f765bb-a2a2-40d2-8ab5-8b75193ceb50" parameterName="interface" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ea002660-6249-4a78-bf72-5759142716f3" name="CMHAL_SetLEDFlashStatus">
+                <parameters>
+                    <parameter id="8ea104e4-2d16-4c80-99e2-734fec960905" parameterName="LEDFlash" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6fc9b710-86a9-4c9f-91f4-98658510c7b3" name="CMHAL_SetHTTP_Download_Url">
+                <parameters>
+                    <parameter id="31ff81ca-9630-4efb-bd4c-4935cea9324a" parameterName="httpURL" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e085f4ce-d3c7-48ed-b62c-e5d6b5449f0d" parameterName="filename" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a4fb5d2c-2931-4674-98a8-77a65d570bc7" name="CMHAL_GetParamUlongValue">
+                <parameters>
+                    <parameter id="b50268ba-abe4-41ca-8d6a-78d7fca2874d" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c6bf5afc-7b4b-4e79-84b3-cf2757aa45f0" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="1746b970-b0e5-4424-9db3-7196eff5b461" name="CMHAL_GetDocsisEventLogItems">
+                <parameters>
+                    <parameter id="0265186c-825a-4cf7-a958-bf49b10a437b" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="edafd989-d442-4fa9-a797-f546f5b31f6f" name="CMHAL_GetHTTP_Download_Url">
+                <parameters>
+                    <parameter id="3f29a84b-bb2b-4552-be9a-a6578c60530a" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>00206bdd-49c2-4aaa-a9e0-a67b10eef369</id>
+                <name>CMHAL_SetMddIpModeOverride</name>
+                <funName>CMHAL_SetMddIpModeOverride</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9c643c67-fe11-4859-8ab7-1664146d1179</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>10d1a28a-f6a3-431d-853a-75abee630890</id>
+                <name>CMHAL_GetCPEList</name>
+                <funName>CMHAL_GetCPEList</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>28e2fd14-a86d-44c9-995d-59107cd6bcab</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>32a4df1a-f0bb-4837-a168-326a507482de</id>
+                        <parameterName>lanMode</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>131c8e4e-4d08-4ddc-bf9b-73aa65bfea8e</id>
+                <name>CMHAL_SetLEDFlashStatus</name>
+                <funName>CMHAL_SetLEDFlashStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8296e9b9-400d-41e7-ab2c-5b4a2df7d938</id>
+                        <parameterName>LEDFlash</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>180e4145-6a23-4c3a-9d76-b5035f20738d</id>
+                <name>CMHAL_SetUSChannelId</name>
+                <funName>CMHAL_SetUSChannelId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8bd3811e-2780-4f45-b2a7-f9144579cfba</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1f35020b-a6a0-47d3-8bf3-9d1a6109ac69</id>
+                <name>CMHAL_SetStartFreq</name>
+                <funName>CMHAL_SetStartFreq</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f0ab4faa-3144-4d81-8938-c3dfe2456349</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2118f766-0d62-42a9-bd5c-fbbe9b1a7bd9</id>
+                <name>CMHAL_GetUsOfdmChanTable</name>
+                <funName>CMHAL_GetUsOfdmChanTable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>18f40394-3d10-4d1e-9503-f6084786daee</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>   </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a8e25764-caf4-4ec1-a52d-1dcd23417def</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3fb3ba9e-979a-4414-9d37-98e214d49b3a</id>
+                <name>CMHAL_FWupdateAndFactoryReset</name>
+                <funName>CMHAL_FWupdateAndFactoryReset</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4c38963c-d51a-4307-bd5f-1d80a11a9dd4</id>
+                <name>CMHAL_Init</name>
+                <funName>CMHAL_Init</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>131cf37e-5631-4a17-8bef-f59b4e254173</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6777178c-01f0-4c3b-b20a-2cbcc542fed5</id>
+                <name>CMHAL_IsEnergyDetected</name>
+                <funName>CMHAL_IsEnergyDetected</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>efbc08f4-b3f8-48a2-a23e-a4519203945c</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>  </value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>68d864dc-6532-42ea-868b-d59979fd42f0</id>
+                <name>CMHAL_GetStatusOfdmaUsTable</name>
+                <funName>CMHAL_GetStatusOfdmaUsTable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3eb88de4-98bc-401f-9a2c-4bc53be28d11</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fdbbb085-2b18-41cb-a46b-21e1addf2ebc</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>   </value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6dc2aee1-6a88-43da-888d-7eb0d8e35d7a</id>
+                <name>CMHAL_ClearDocsisEventLog</name>
+                <funName>CMHAL_ClearDocsisEventLog</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>8fbafddc-e3ba-4b84-a84a-9b3c06872fa3</id>
+                <name>CMHAL_GetHTTP_Download_Url</name>
+                <funName>CMHAL_GetHTTP_Download_Url</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a02f2c52-c0df-4ded-851e-e7949f4eff73</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>  </value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9905187a-265e-4ee6-9c93-05d8d04f813a</id>
+                <name>CMHAL_Reboot_Now</name>
+                <funName>CMHAL_Reboot_Now</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b12194a2-ae88-4c15-898a-f565106f79c9</id>
+                <name>CMHAL_GetErrorCodeWords</name>
+                <funName>CMHAL_GetErrorCodeWords</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ce94df32-8693-44b3-b55f-806eb63fe471</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c6a9466d-c911-4481-a426-2ddcefbc553a</id>
+                <name>CMHAL_GetDsOfdmChanTable</name>
+                <funName>CMHAL_GetDsOfdmChanTable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>425f1ac6-a0dc-4d89-a790-4e87916a1207</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>   </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>55c11690-7340-4068-a78e-b42fc7be451a</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d981b67b-7682-4809-9754-b3ea5abfe561</id>
+                <name>CMHAL_GetDocsisEventLogItems</name>
+                <funName>CMHAL_GetDocsisEventLogItems</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1eb2ed20-6bbe-47f5-b187-7f5458602298</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ddaadb45-f5f7-4c37-83d2-2a8dd9c10416</id>
+                <name>CMHAL_HTTP_Download</name>
+                <funName>CMHAL_HTTP_Download</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>dfd647c7-c5d0-4d8d-85ff-816dff44d709</id>
+                <name>CMHAL_GetParamUlongValue</name>
+                <funName>CMHAL_GetParamUlongValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>87cc7147-71cc-4b34-b813-790536f2546d</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8d225db8-52f6-4063-be79-529ce1bc3e6f</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>efb57ca1-700e-41c7-ae5f-48e826a45c41</id>
+                <name>CMHAL_GetParamCharValue</name>
+                <funName>CMHAL_GetParamCharValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e329c1ea-82a8-4d4b-9c50-f88b115b4eb0</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fc213670-3ac0-48f5-9a00-fd9defedcb17</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f077f4a5-c78b-443c-aa4b-c0ef0e5788c2</id>
+                <name>CMHAL_SetHTTP_Download_Url</name>
+                <funName>CMHAL_SetHTTP_Download_Url</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5214b4bb-d5ab-4cd9-b07a-a2484c91eda6</id>
+                        <parameterName>filename</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d5b526b6-8f1a-42e6-a279-295272743832</id>
+                        <parameterName>httpURL</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f15eab3f-5255-49d8-8d13-84fde1fdc02c</id>
+                <name>CMHAL_SetHTTP_Download_Interface</name>
+                <funName>CMHAL_SetHTTP_Download_Interface</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>496351e3-22d4-4e5e-8fbb-f5740cce57b1</id>
+                        <parameterName>interface</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

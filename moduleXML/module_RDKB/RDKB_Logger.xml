@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>bc92a1c9-0060-4755-9194-cd427839b573</moduleId>
+        <!-- Module name -->
+        <moduleName>RDKB_Logger</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="8971b115-dca1-4e42-be09-bd0b00025368" name="TestMgr_RDKBLogger_Init">
+                <parameters/>
+            </function>
+            <function id="9434beeb-91c6-4c87-ad95-97ca70df8513" name="TestMgr_RDKBLogger_Dbg_Enabled_Status">
+                <parameters>
+                    <parameter id="97fb1dc2-fe7a-4b1a-8dc2-75aaeec52687" parameterName="level" parameterType="STRING" range="A-Z"/>
+                    <parameter id="092c5ef0-03d5-44cb-9c68-58cc83b723aa" parameterName="module" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e81815ed-ae05-4e06-9edb-58cab07da935" name="TestMgr_RDKBLogger_EnvGetNum">
+                <parameters>
+                    <parameter id="cf002e41-7bd9-4209-ab2a-471d6c2d8e86" parameterName="module" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="10ae312c-f396-4b91-b2b1-6609777944d1" name="TestMgr_RDKBLogger_CheckMPELogEnabled">
+                <parameters/>
+            </function>
+            <function id="9d8d7ce9-1365-457b-a3b5-8986434d37a4" name="TestMgr_RDKBLogger_Log_None">
+                <parameters>
+                    <parameter id="1f19322a-1513-4e3d-a479-759d1321a245" parameterName="module" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0547d668-e6f3-4649-8417-b540d7293446" name="TestMgr_RDKBLogger_EnvGet">
+                <parameters>
+                    <parameter id="7ac2e578-b1fa-43b7-9aa3-e83777dba081" parameterName="module" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="59546136-67f2-4096-96ce-8d396f0f1135" name="TestMgr_RDKBLogger_SetLogLevel">
+                <parameters>
+                    <parameter id="c27de2f8-9e39-4e8a-9259-9c0d7b6857ed" parameterName="module" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5e42e821-e8a9-4b6c-bdc4-c169ace29bd8" parameterName="level" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8a11096f-6bc6-4217-a65b-4ea0644788b1" name="TestMgr_RDKBLogger_Log">
+                <parameters>
+                    <parameter id="7d879834-d8a2-4a7c-9771-0fbd5898235a" parameterName="module" parameterType="STRING" range="A-Z"/>
+                    <parameter id="14892ff3-13b0-485c-b6ac-456d03ccbad1" parameterName="level" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f672565e-da5a-4ad5-a219-76db4612b6ba" name="TestMgr_RDKBLogger_Log_MPEOSDisabled">
+                <parameters>
+                    <parameter id="bcd03848-46f1-4c9d-8e35-033fb709b798" parameterName="level" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e9d020ac-a319-45b2-a2dc-aeaa6bbf2c2d" parameterName="module" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4b8c434b-5297-4e64-9dfe-72e23d3861bd" name="TestMgr_RDKBLogger_EnvGetModFromNum">
+                <parameters>
+                    <parameter id="2045984b-2bed-48ce-969c-b5d16961cbf8" parameterName="number" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="7a2b9d5e-439a-42a6-b4a8-e57302d13560" name="TestMgr_RDKBLogger_EnvGetValueFromNum">
+                <parameters>
+                    <parameter id="9e9ebd26-1669-4560-bb80-f15013cc3957" parameterName="number" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="947813b4-7749-49c9-9668-bb783115b787" name="TestMgr_RDKBLogger_Log_Trace">
+                <parameters>
+                    <parameter id="ce148d31-251b-45f7-8a15-8488e9f38018" parameterName="module" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="45bce6f0-cf59-46f2-a5a6-ecca1488ac1b" name="TestMgr_RDKBLogger_Log_InverseTrace">
+                <parameters>
+                    <parameter id="626ad96a-390b-4d17-b647-1065698d3186" parameterName="module" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a1ec14e0-8679-45f9-a737-503cf5f765b8" name="TestMgr_RDKBLogger_Log_Msg">
+                <parameters>
+                    <parameter id="8dcde9d5-0e3b-4ba2-9a59-0007be8473e3" parameterName="level" parameterType="STRING" range="A-Z"/>
+                    <parameter id="debd7219-c981-4fe7-8255-8583d5a8fc79" parameterName="module" parameterType="STRING" range="A-Z"/>
+                    <parameter id="09be7e7f-ff20-4521-a2ab-b2ea0c1fc595" parameterName="msg" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9fc0e834-0c7d-4310-84fc-2cfbcf85dda8" name="TestMgr_RDKBLogger_Log_All">
+                <parameters>
+                    <parameter id="b09c389c-4f96-4169-9a19-26a05a5009fe" parameterName="module" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c4d26744-7069-47a3-96f3-2a4765a40ea2" name="TestMgr_RDKBLogger_GetLogLevel">
+                <parameters>
+                    <parameter id="8f2d977a-6f2e-4585-a6ad-c260849a6b1e" parameterName="module" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0a0a2c76-e655-4a88-b087-69d8b642f6b5</id>
+                <name>RDKBLogger_EnvGetValueFromNum</name>
+                <funName>TestMgr_RDKBLogger_EnvGetValueFromNum</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f29e31eb-e556-454d-b843-5a4c64421e2b</id>
+                        <parameterName>number</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0e593fb7-e746-4723-b058-56ada81b7658</id>
+                <name>RDKBLogger_Log_InverseTrace</name>
+                <funName>TestMgr_RDKBLogger_Log_InverseTrace</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f8fb004d-5edd-463e-b2f9-ae4f64632c52</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>141e1c81-506d-4e15-af05-1c9e14087954</id>
+                <name>RDKBLogger_Log_MPEOSDisabled</name>
+                <funName>TestMgr_RDKBLogger_Log_MPEOSDisabled</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ef0fb7af-4aa3-42b1-913f-183a379cf807</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f0afe655-f367-44c5-8567-5a473d5c5ac2</id>
+                        <parameterName>level</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>21d4c1fa-b14b-4a6c-bcd0-692bc3433880</id>
+                <name>RDKBLogger_Log</name>
+                <funName>TestMgr_RDKBLogger_Log</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>186de14f-b5bb-4f07-a616-6661906274ed</id>
+                        <parameterName>level</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>69172ae0-17f7-4f2a-b67d-97d8b118c59b</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>229797a5-3677-4267-b563-b2896f6b22e3</id>
+                <name>RDKBLogger_GetLogLevel</name>
+                <funName>TestMgr_RDKBLogger_GetLogLevel</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0cdb6034-4dc3-4089-8cbe-eaaf0b3fc5a2</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>50f00a83-dfd7-401a-b3e8-bf4721c058cb</id>
+                <name>RDKBLogger_CheckMPELogEnabled</name>
+                <funName>TestMgr_RDKBLogger_CheckMPELogEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6695243f-1c6d-44ed-84ed-3dfea0791e52</id>
+                <name>RDKBLogger_EnvGet</name>
+                <funName>TestMgr_RDKBLogger_EnvGet</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4b80d91c-e28e-4a9a-9748-e45896628f9d</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>675f1ffa-2c4d-4810-97c6-107599ed3b9e</id>
+                <name>RDKBLogger_Log_All</name>
+                <funName>TestMgr_RDKBLogger_Log_All</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e82cdfe3-84ec-43ff-9566-fae316632a3e</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6cdc63d8-15a9-4493-a008-d8d07645b5a5</id>
+                <name>RDKBLogger_SetLogLevel</name>
+                <funName>TestMgr_RDKBLogger_SetLogLevel</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>33f912df-8d85-4324-9203-09556e48e6a4</id>
+                        <parameterName>level</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cbd63035-9c46-4aef-83ab-7bcef2cf7c1e</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6f72b5ff-ee0e-485a-be9f-e686ef530fba</id>
+                <name>RDKBLogger_Log_Trace</name>
+                <funName>TestMgr_RDKBLogger_Log_Trace</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>87ba6921-2ed1-4da1-9b7d-b09dcae0ecd0</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>82d9e1ee-09b0-4b97-a5fb-4173288e4f9c</id>
+                <name>RDKBLogger_EnvGetModFromNum</name>
+                <funName>TestMgr_RDKBLogger_EnvGetModFromNum</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a5948815-c94b-418b-a8e6-d4f0161e6cc9</id>
+                        <parameterName>number</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>93cffcde-bfe5-4bf9-958c-e5c8f848ddaf</id>
+                <name>RDKBLogger_Log_Msg</name>
+                <funName>TestMgr_RDKBLogger_Log_Msg</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3a8b0b73-2042-4ce8-8e9e-d2e720f018e7</id>
+                        <parameterName>msg</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3b2e6dd6-bc12-4be0-9fee-3e453694c109</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b0fc193b-bc6d-48f9-a85a-2c950369081f</id>
+                        <parameterName>level</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9d1e0908-0720-499d-b4c5-483ddbecc1df</id>
+                <name>RDKBLogger_Log_None</name>
+                <funName>TestMgr_RDKBLogger_Log_None</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ec9c4ae8-55a0-4862-8abf-6056eacd3f8a</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b9c11310-9b6e-4d46-947a-465581acdedf</id>
+                <name>RDKBLogger_Init</name>
+                <funName>TestMgr_RDKBLogger_Init</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e5728aa2-6480-4f3d-a401-ad111624dcaf</id>
+                <name>RDKBLogger_EnvGetNum</name>
+                <funName>TestMgr_RDKBLogger_EnvGetNum</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>85aad774-ed3f-4d03-a24b-dd322cec0e04</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f63b0f19-3d1c-47db-854a-b71fcfa19748</id>
+                <name>RDKBLogger_Dbg_Enabled_Status</name>
+                <funName>TestMgr_RDKBLogger_Dbg_Enabled_Status</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8d730dde-5702-44dc-8b85-391e63d28dbc</id>
+                        <parameterName>level</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cd8e29b9-4ba7-480e-bf85-1fc3a8195d49</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>
