@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>0aec5e10-f75b-4358-92d4-071a8abdb0e2</moduleId>
+        <!-- Module name -->
+        <moduleName>wifi-hal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="aefc5a84-8fe1-41f9-a308-29d0cb1a2485" name="TestMgr_WIFIHAL_GetSSIDTrafficStats">
+                <parameters>
+                    <parameter id="833edce1-81e4-4669-9a7d-993ce0ec7f21" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="874441e7-a413-4244-be9b-473cd13efdde" name="TestMgr_WIFIHAL_SetRadioScanningFreqList">
+                <parameters>
+                    <parameter id="19543e5b-43be-4cd3-b50f-a3c564a45c91" parameterName="freqList" parameterType="STRING" range="A-Z"/>
+                    <parameter id="6ea68bf4-cfc6-40e9-ab1f-315247daaff4" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="de695ee7-b893-43b4-ab70-faa963c6939e" name="TestMgr_WIFIHAL_GetSpecificSSIDInfo">
+                <parameters>
+                    <parameter id="567437be-a939-4c50-91c8-3af358ead23b" parameterName="band" parameterType="STRING" range="0-2"/>
+                    <parameter id="80568a57-beac-4be5-86d0-abfb78d81d5a" parameterName="ssid" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4c9389ce-ae68-428b-8408-ebb297a990d5" name="TestMgr_WIFIHAL_GetNeighboringWiFiDiagnosticResult">
+                <parameters>
+                    <parameter id="85293c99-2142-445f-925c-a1b67facfa67" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="72f5cbf0-453e-4be5-a2c9-ece75f077045" name="TestMgr_WIFIHAL_GetDualBandSupport">
+                <parameters/>
+            </function>
+            <function id="ac8bc254-1bb5-40e0-ba57-0b0bced82df1" name="TestMgr_WIFIHAL_Init">
+                <parameters/>
+            </function>
+            <function id="47593116-23b7-4da0-89e1-93bd56b97ac5" name="TestMgr_WIFIHAL_GetStats">
+                <parameters>
+                    <parameter id="ad5770eb-347e-4070-88db-c600eeec9f86" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="ba088297-cd2b-43c2-ae83-0b679db05d68" name="TestMgr_WIFIHAL_GetRadioTrafficStats">
+                <parameters>
+                    <parameter id="105816be-8fec-45a8-adab-1d27224c1cb4" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="428b3106-a325-4ec1-b958-a9620fe5cc84" name="TestMgr_WIFIHAL_GetOrSetRadioStandard">
+                <parameters>
+                    <parameter id="87b77071-d47b-4141-9e2a-2e45c16ebb1d" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="95a7ad07-de14-4b90-9312-ee00ce1e20eb" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="835b172f-10e6-45ae-b875-84cb13757047" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="905ef74d-9ea6-45a9-bd55-89c0c757d808" parameterName="param" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0811c336-c558-4e96-bc3a-97cdc639d989" name="TestMgr_WIFIHAL_GetOrSetParamBoolValue">
+                <parameters>
+                    <parameter id="2fb0f0b1-106c-4759-bdd4-6cc0d7f26fbc" parameterName="param" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="85c9a051-618e-4c35-a30c-adfdde1a1547" parameterName="paramType" parameterType="STRING" range="NULL"/>
+                    <parameter id="bb80da9b-e51a-46df-bec9-bda8878ad0d4" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b384ee37-752b-499b-8bb0-9a7617aeccb7" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="20dea333-8846-4c7e-9d52-a6725d7b26c6" name="TestMgr_WIFIHAL_ConnectEndpoint">
+                <parameters>
+                    <parameter id="5431b014-2274-4e5b-a1d2-0d5579c07d1f" parameterName="saveSSID" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="d48edf8a-d034-4173-a52c-5e984c08a981" parameterName="eapIdentity" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a6bbbc22-37ad-4407-afcb-3adb3fba4af3" parameterName="privatekey" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f5464297-3c1b-4219-b22c-7e592ef0aa2a" parameterName="PreSharedKey" parameterType="STRING" range="A-Z"/>
+                    <parameter id="7afa7be9-d781-44ce-bcdd-fbbc7c204370" parameterName="security_mode" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="40161d43-70ce-4d9c-aa4a-8211124102fc" parameterName="KeyPassphrase" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cdd3896c-8265-4a84-ba31-06f540ff2fb9" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="df080581-98cd-4d10-a28f-8adfcf495569" parameterName="ssid" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2cc7ebea-4f8b-4fc6-8313-2de9134837d3" parameterName="WEPKey" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="1f4bdadc-6ce1-4073-869e-f9bc40ff9171" name="TestMgr_WIFIHAL_GetOrSetParamStringValue">
+                <parameters>
+                    <parameter id="7fa58636-a884-443f-8420-c282e1093cc7" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a0220de8-abb3-4a3c-bbdf-e3dd46d8c608" parameterName="paramType" parameterType="STRING" range="NULL"/>
+                    <parameter id="cf757660-ddb1-4053-84ed-090d19a9e02b" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="fedf2a46-8058-46ca-9541-5bd3686585c7" parameterName="param" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="942fb28b-f842-4988-8927-811c7b585688" name="TestMgr_WIFIHAL_GetOrSetParamULongValue">
+                <parameters>
+                    <parameter id="6d306394-7db6-4e7f-af8b-2a3e194a9a64" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="a9ca252c-20e9-4aa2-9ee6-6e86b5d40aea" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="77904239-7712-498f-82e0-371ce7e4731e" parameterName="param" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="99e3e832-4f39-469f-820a-7fb23ee9205c" parameterName="paramType" parameterType="STRING" range="NULL"/>
+                </parameters>
+            </function>
+            <function id="b552bf84-6bc9-4b5c-89a2-9a57e81b6c5f" name="TestMgr_WIFIHAL_Down">
+                <parameters/>
+            </function>
+            <function id="b9721277-c694-40c8-9e56-902ad585a7bd" name="TestMgr_WIFIHAL_Uninit">
+                <parameters/>
+            </function>
+            <function id="7488c6ab-7cc7-4403-a90d-17da6e3c1a1a" name="TestMgr_WIFIHAL_LastConnected_Endpoint">
+                <parameters/>
+            </function>
+            <function id="08f9835e-f868-413b-ac65-97e8c3952888" name="TestMgr_WIFIHAL_DisconnectEndpoint">
+                <parameters>
+                    <parameter id="48fdd4fe-2e64-4eac-8716-15e9578bce8a" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="5e20b6d9-7315-4129-8f56-4f984aa7f9fc" parameterName="ssid" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d5222324-f3f1-4bec-bb8c-12f45acc022e" name="TestMgr_WIFIHAL_SetCliWpsButtonPush">
+                <parameters>
+                    <parameter id="ee171e28-9782-471e-bf7e-480815c4ed90" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="4a463545-3992-4c2e-9a36-652318039d24" name="TestMgr_WIFIHAL_ClearSSIDInfo">
+                <parameters>
+                    <parameter id="c8129a49-2057-403f-aab9-c1cfa97d2510" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>04eaa751-778a-4371-916a-df97ab232444</id>
+                <name>WIFI_HAL_GetOrSetParamStringValue</name>
+                <funName>TestMgr_WIFIHAL_GetOrSetParamStringValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>34bd48b6-897c-418f-b508-36920888aec2</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>NULL</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>52e3309d-ce6d-498d-b902-2107b7bc9cd1</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5b42e9c7-eba6-4072-bb21-248eb51a4121</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e6630584-d84d-4240-87a0-923793f8a836</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>06e05bea-523c-473d-a28b-7e9caaedb2a2</id>
+                <name>WIFI_HAL_ClearSSIDInfo</name>
+                <funName>TestMgr_WIFIHAL_ClearSSIDInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5655239a-f728-4830-bfe2-0ab9fb6aba20</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>14e26b65-143b-4e08-b2d7-673abdb76d30</id>
+                <name>WIFI_HAL_Init</name>
+                <funName>TestMgr_WIFIHAL_Init</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>274a9229-ad1a-457f-b2ed-f761a32e806c</id>
+                <name>WIFI_HAL_Uninit</name>
+                <funName>TestMgr_WIFIHAL_Uninit</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>38bccbf1-2a95-4ae1-9678-d9baee1b5aa4</id>
+                <name>WIFI_HAL_GetDualBandSupport</name>
+                <funName>TestMgr_WIFIHAL_GetDualBandSupport</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>3f078aff-f12c-49bb-8363-d8ae5d8d3afe</id>
+                <name>WIFI_HAL_GetRadioTrafficStats</name>
+                <funName>TestMgr_WIFIHAL_GetRadioTrafficStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a4c5f297-ba5d-43f4-ab4f-f239cddae70f</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5b9180ef-a4b7-4455-8ecd-35dad0e5882e</id>
+                <name>WIFI_HAL_GetOrSetRadioStandard</name>
+                <funName>TestMgr_WIFIHAL_GetOrSetRadioStandard</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>383ddb7d-d5c3-43b7-9d26-896918250673</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>74a0d8bc-1c61-4a3c-9a1d-7eaddc468d18</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cccb0106-37e7-427a-95bc-10309f1c8299</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f3371811-781d-4518-8ab5-ed175ee94b74</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5de9eca4-5425-43d1-be26-0fd88351389a</id>
+                <name>WIFI_HAL_GetSpecificSSIDInfo</name>
+                <funName>TestMgr_WIFIHAL_GetSpecificSSIDInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2fecbcb7-145b-46b4-a371-109b0d6e001d</id>
+                        <parameterName>ssid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ae32a2f9-a9cb-47eb-9253-6746f68eb8ed</id>
+                        <parameterName>band</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>63c00f48-7fb7-49d1-b292-367b130b0306</id>
+                <name>WIFI_HAL_GetNeighboringWiFiDiagnosticResult</name>
+                <funName>TestMgr_WIFIHAL_GetNeighboringWiFiDiagnosticResult</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>627eb30f-988e-405e-9831-65061ecb9e64</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6d8598da-3ce9-4bd5-90fd-70faa1344a27</id>
+                <name>WIFI_HAL_LastConnected_Endpoint</name>
+                <funName>TestMgr_WIFIHAL_LastConnected_Endpoint</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6f280a41-cb32-4b33-a011-f103efa18559</id>
+                <name>WIFI_HAL_SetRadioScanningFreqList</name>
+                <funName>TestMgr_WIFIHAL_SetRadioScanningFreqList</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9de7432d-4600-4286-b1be-28f6f96d8c77</id>
+                        <parameterName>freqList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c3b285e6-368c-4277-92f1-357771eb4099</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>790aeeb5-f547-4ee0-abed-6be219d6a89f</id>
+                <name>WIFI_HAL_GetOrSetParamULongValue</name>
+                <funName>TestMgr_WIFIHAL_GetOrSetParamULongValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0571efa9-020b-429f-b030-c6583a2851e2</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4fa31dab-4ed8-4c17-a790-6007520ffc05</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>NULL</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ee53154a-c4c8-4eab-a46d-b4dddb503cce</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f0507623-62d8-4ce1-8cd5-71d75c115c42</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>84cb01ae-5751-43e9-90c3-f51a982937f4</id>
+                <name>WIFI_HAL_GetOrSetParamBoolValue</name>
+                <funName>TestMgr_WIFIHAL_GetOrSetParamBoolValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>10ea3535-7ced-4b4f-8d6b-987741c46526</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>20c1eb27-69ae-4999-b3d6-7e20905987a8</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5a48d94b-b918-40e2-b5b9-75502a7f9e12</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>NULL</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a23154d5-3b55-45bf-8d12-79f7d1566569</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9319be29-818f-4847-b9d5-a77a7d840a83</id>
+                <name>WIFI_HAL_DisconnectEndpoint</name>
+                <funName>TestMgr_WIFIHAL_DisconnectEndpoint</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>30703ab3-d44b-493a-af2a-9f884b92ca26</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>34f0b3ba-3895-4b4f-ae6b-e89f97fe63b6</id>
+                        <parameterName>ssid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>937b8b11-a1b4-4a83-8ca5-3b6dbb1c723c</id>
+                <name>WIFI_HAL_GetStats</name>
+                <funName>TestMgr_WIFIHAL_GetStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4bd1a3c7-e1e1-453f-af56-0b6871fbaf1f</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bbff4ff1-28c5-4830-b1e2-bd1d4bec667e</id>
+                <name>WIFI_HAL_GetSSIDTrafficStats</name>
+                <funName>TestMgr_WIFIHAL_GetSSIDTrafficStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a12c8341-a255-4698-beb5-6b9c77203080</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>dbe561c7-5641-4f23-9e42-9049bdaec28f</id>
+                <name>WIFI_HAL_ConnectEndpoint</name>
+                <funName>TestMgr_WIFIHAL_ConnectEndpoint</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>190d37e6-ff0d-4e19-8f05-6955bcc122fe</id>
+                        <parameterName>WEPKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1d585b06-fd82-414a-96fe-c8ae75b4a0bf</id>
+                        <parameterName>saveSSID</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5b5678a4-39d6-4489-ab77-abcf78190d99</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5e39eaf4-3ecf-469b-9d62-70998a72308e</id>
+                        <parameterName>eapIdentity</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6d35ef52-9263-45d6-8ad6-3b85ceafa086</id>
+                        <parameterName>PreSharedKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8c5fdc70-bb52-40fb-81f7-c78e6482b66c</id>
+                        <parameterName>ssid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a04a9418-d777-4382-88e1-a175a6b0fe4d</id>
+                        <parameterName>KeyPassphrase</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e5566097-322d-4be4-b097-14413b41e02a</id>
+                        <parameterName>security_mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ec04cc65-3a6e-4edd-8742-54c9ff7a295b</id>
+                        <parameterName>privatekey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f2fd8a85-fa3c-4a4c-acd9-16115711183a</id>
+                <name>WIFI_HAL_Down</name>
+                <funName>TestMgr_WIFIHAL_Down</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

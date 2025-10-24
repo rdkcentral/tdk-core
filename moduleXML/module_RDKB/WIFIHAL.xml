@@ -1,0 +1,2789 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>a759b252-ae14-446e-846b-23fa655a4892</moduleId>
+        <!-- Module name -->
+        <moduleName>WIFIHAL</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/rdklogs/logs/qtn_hal.log, /rdklogs/logs/WiFilog.txt.1, /rdklogs/logs/WiFilog.txt.0]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="7521f7a3-dcfe-43f8-85bf-83c05c8a4d68" name="WIFIHAL_GetAPCapabilities">
+                <parameters>
+                    <parameter id="ac69f888-7a87-4214-a868-8961b9833da8" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="c1b643f9-020c-4784-8e61-401381dfb423" name="WIFIHAL_GetBasicTrafficStats">
+                <parameters>
+                    <parameter id="fc15b560-fdfa-4efe-aac2-c1ab1965ee1c" parameterName="apIndex" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="d1f4fe0c-f509-4301-bda3-df13638f9aea" name="WIFIHAL_EnableCSIEngine">
+                <parameters>
+                    <parameter id="855a469a-3637-4639-9b9b-45918dead33b" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="de69884c-f6eb-4e06-9bb7-5c33e75d6fa3" parameterName="MacAddress" parameterType="STRING" range="A-Z"/>
+                    <parameter id="6bfe1461-04da-45ee-a8f2-7f7fd8d2f717" parameterName="apIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="2ebc4ec0-4eb1-42ed-931c-17f42c1504b6" name="WIFIHAL_GetRadioChannelStats">
+                <parameters>
+                    <parameter id="02c13cc8-bce3-471b-828a-d4fd697d940f" parameterName="inPool" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="c716f46b-29cc-4ad6-a9e0-87948c43310f" parameterName="radioIndex" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="6f1a00ba-bbbf-46a7-9fb8-ea0d4d60e676" parameterName="channel" parameterType="INTEGER" range="0-1000"/>
+                </parameters>
+            </function>
+            <function id="1410b456-87d7-44ed-bf74-1e772ea1eb7b" name="WIFIHAL_GetVAPTelemetry">
+                <parameters>
+                    <parameter id="fb1b1ab8-813d-4a9e-8cbd-bcaf6e6ae49a" parameterName="apIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="673be180-4f33-4405-a26f-390995a63235" name="WIFIHAL_GetSSIDTrafficStats2">
+                <parameters>
+                    <parameter id="e182417e-67fa-4918-8c52-21f1e11797cd" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="d4c3e4fe-dea5-4aa7-915a-94c26f57e3d6" name="WIFIHAL_PushApRoamingConsortiumElement">
+                <parameters>
+                    <parameter id="b016df19-2da0-48af-9e30-7eacfc23f270" parameterName="ouiLen" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a7485d04-cb43-4b75-bb03-31f53d0997d9" parameterName="ouiCount" parameterType="STRING" range="A-Z"/>
+                    <parameter id="81561817-4b71-49e3-8b63-18e4c3cab336" parameterName="ouiList" parameterType="STRING" range="A-Z"/>
+                    <parameter id="3b9c9fd8-02a3-4b5c-9933-1bda952816b0" parameterName="apIndex" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="029fbc59-97bd-464c-8c85-7e055273a7d7" name="WIFIHAL_GetApAclDevices">
+                <parameters>
+                    <parameter id="1762f8e2-27ec-4557-8fad-9fc92bd864be" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="09d2040a-47cb-4025-bb3a-3d72c2b6b2cc" name="WIFIHAL_PushApInterworkingElement">
+                <parameters>
+                    <parameter id="b11972ac-eb36-4d4b-8259-0d928fb529ba" parameterName="accessNetworkType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="64e8cf18-e00a-4a9b-b815-75820abb661e" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="c9d2fd45-44d7-4718-9ef6-45eed189a2fc" parameterName="hessOptionPresent" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="e8ccdf1c-35a5-4055-81d0-f9a27ffa9cc9" parameterName="esra" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="58f29a37-9a5c-449c-99a9-d7e89ebf6a73" parameterName="interworkingEnabled" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="398ff6f4-7451-4f76-9e26-1aac5441154c" parameterName="venueGroup" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="0bccac07-f665-47b7-8c22-9dccf9feba08" parameterName="asra" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="4a4456af-ca14-4874-9efc-43bf8c5cb039" parameterName="uesa" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="8a9b4326-9b90-4df5-bc1e-9c237eb6db6e" parameterName="internetAvailable" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="fe9cb1a5-febb-4af9-834b-6f4233cfa661" parameterName="venueType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="b3d8b6c2-a97a-4e7c-8438-922ed4c55e6d" parameterName="venueOptionPresent" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="46b44b62-a29e-49e9-b54b-7e230dfea083" parameterName="hessid" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="95be763a-02e9-40ee-abaa-2bd371dc3e9a" name="WIFIHAL_SetApSecurity">
+                <parameters>
+                    <parameter id="01d2fa22-d306-41b0-8299-b6df9f730540" parameterName="key_type" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="26920e4a-03b3-4dfd-afe9-5eaab98191e8" parameterName="mfp" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="9e5dd134-5101-41ec-b3a3-df8777fc17ae" parameterName="key" parameterType="STRING" range="A-Z"/>
+                    <parameter id="56ad81ed-0363-4db8-806e-7b5eaf67623e" parameterName="mode" parameterType="INTEGER" range="0-3000"/>
+                    <parameter id="a28c88eb-00b8-4743-af73-a3b27606419a" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="41f85855-e495-41ef-bce1-6d20d3ddb6bf" parameterName="encr" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="ece78471-3bf6-411e-b3e9-4cfc3aec0f72" parameterName="wpa3_transition_disable" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="13ae7983-41aa-4e50-a28b-ebb62aac4860" name="WIFIHAL_GetBTMClientCapabilityList">
+                <parameters>
+                    <parameter id="a2d29f1c-51bb-482f-a87a-5073ac59e23f" parameterName="apIndex" parameterType="INTEGER" range="0-20"/>
+                    <parameter id="19a24655-a65d-432c-aa87-ed8175a25419" parameterName="clientMAC" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d1e5f2d8-e7a1-44cc-9128-987a3fe8b9fc" parameterName="count" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="b41e43e9-fc3c-44bd-b00c-7305663b34c0" name="WIFIHAL_GetOrSetSecurityRadiusServer">
+                <parameters>
+                    <parameter id="47b1998f-f011-47cb-94f1-273b8768c854" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4cca357e-6f16-473f-bf97-985c2c422f28" parameterName="port" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="4626f6b9-9976-44dd-aaef-54c8c9564098" parameterName="IPAddress" parameterType="STRING" range="A-Z"/>
+                    <parameter id="922b2fbd-c473-4553-a13e-b6fc45b795a2" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="328ca9ca-47c3-4c38-a1f2-0a9934c24d04" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="597818da-f0a3-4444-a146-2b4ede698622" parameterName="RadiusSecret" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6fa9d7ae-809f-4c9c-b2bc-8fb49caeaae8" name="WIFIHAL_GetApRoamingConsortiumElement">
+                <parameters>
+                    <parameter id="4295a68a-0e11-47c8-ae6a-dcdb3b613446" parameterName="apIndex" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="23b7d986-bf73-41ab-abeb-b637e267f892" name="WIFIHAL_GetRadioChannels">
+                <parameters>
+                    <parameter id="2352d516-e378-4f33-a6c5-2a44bb2ea235" parameterName="radioIndex" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="303450a4-c96c-494c-a1ac-bbe8c2f8f12c" parameterName="numberOfChannels" parameterType="INTEGER" range="0-200"/>
+                </parameters>
+            </function>
+            <function id="2402ef56-8fd1-458f-a3e3-caccf4c5aae2" name="WIFIHAL_PushApFastTransitionConfig">
+                <parameters>
+                    <parameter id="7c8b2fea-5244-40ae-89fe-3d4f902ce3a4" parameterName="overDS" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="84dff707-acbd-4193-91ac-162ecd48f65e" parameterName="radioIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="cea68543-36bf-46e2-9bd9-70614fed544b" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="23233abb-c362-4db1-a4d2-26260be861aa" parameterName="support" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="726cc601-2ea6-407d-8de5-d872dd595359" parameterName="mobilityDomain" parameterType="INTEGER" range="0-10000"/>
+                </parameters>
+            </function>
+            <function id="eb746976-710c-4e5f-b2f5-1e1cccf0d5d0" name="WIFIHAL_ParamApIndex">
+                <parameters>
+                    <parameter id="5febc089-9313-49dd-858e-e5dc239225ac" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a3528e6e-94d0-46f8-8d02-9827127cfd8c" parameterName="apIndex" parameterType="INTEGER" range="1-100"/>
+                </parameters>
+            </function>
+            <function id="69f2b737-2efc-4cc7-8faf-98b64d78bca4" name="WIFIHAL_SetApScanFilter">
+                <parameters>
+                    <parameter id="d7356f34-04bf-450a-9b6a-f06d151cf7e8" parameterName="essid" parameterType="STRING" range="A-Z"/>
+                    <parameter id="fbfaaf95-6058-4442-8dc5-807e6fee1e90" parameterName="apIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="4db40032-bcfe-42d9-9441-cbfeea3cddef" parameterName="mode" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="2aee03c2-3b17-41ee-8377-99960dcfec42" name="WIFIHAL_PushRadioChannel2">
+                <parameters>
+                    <parameter id="317c6c4e-8845-43fa-a2cf-65e17961e2bf" parameterName="csa_beacon_count" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="2f0403d9-66c0-49c5-b26a-df6e5c97f3ad" parameterName="channel_width_MHz" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="54857702-bd6c-40d1-aea9-6d0cdf37ba76" parameterName="channel" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="209617b6-7bc1-40a5-b6cf-be32cce75762" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="cc84f55e-6343-47eb-abd8-fd44b670bdf1" name="WIFIHAL_GetRMCapabilities">
+                <parameters>
+                    <parameter id="ff15f3dc-58af-4a98-b2a0-4db731974eaa" parameterName="peer" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c8d1c7f2-dfd6-4d82-8ec8-a820b548a7cc" name="WIFIHAL_GetApAssociatedDeviceTidStatsResult">
+                <parameters>
+                    <parameter id="730b3f0b-da63-4686-a2f6-9c84fa870c99" parameterName="radioIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="cbeb4678-6949-4fbc-9e1d-7e5284872e55" parameterName="MAC" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3a226eab-f760-441d-a564-13df384816a7" name="WIFIHAL_GetRadioMode">
+                <parameters>
+                    <parameter id="4a3d3774-a9e1-4bff-82f8-412ba01e3247" parameterName="radioIndex" parameterType="INTEGER" range="0-16"/>
+                </parameters>
+            </function>
+            <function id="c2f23d5c-e57f-4018-8e1a-edb077a0e37c" name="WIFIHAL_GetEAPParam">
+                <parameters>
+                    <parameter id="4248bcfe-94d4-4a04-9c38-3574bf67ea6c" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="5e8e2f75-18b6-4f65-9032-d3e3ceff8f5d" name="WIFIHAL_GetApDeviceRSSI">
+                <parameters>
+                    <parameter id="d6aecc8f-d482-4524-b516-861d49d85984" parameterName="MAC" parameterType="STRING" range="a-z"/>
+                    <parameter id="2a06e396-9b1a-4565-b55e-d5cd435a3acc" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="71f7fc6d-b2f9-45fe-8e8f-917bee048629" parameterName="methodName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="e98ac220-74d0-4b02-8d4b-3780c596ba44" name="WIFIHAL_GetMuEdca">
+                <parameters>
+                    <parameter id="6076234c-dea6-426e-a86f-c979b901d345" parameterName="radioIndex" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="1635f9ce-a508-42b1-b2d2-817239e0fe24" parameterName="accessCategory" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="7cf62c70-d1a0-4198-ba65-a37da68b1489" name="WIFIHAL_Reset">
+                <parameters/>
+            </function>
+            <function id="a0f4d8db-eef7-4f73-a812-0766074dd451" name="WIFIHAL_GetOrSetFTMobilityDomainID">
+                <parameters>
+                    <parameter id="015cf81a-b1dd-4fc8-92ce-efd77da92a5f" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="191e950c-929a-4bb9-b301-13cb47d8ab09" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="958c7a01-d432-46e8-8594-0c947a443f5c" parameterName="radioIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="cd6323c4-b3b6-47f2-81ed-75b271623f37" parameterName="mobilityDomain" parameterType="INTEGER" range="0-10000"/>
+                </parameters>
+            </function>
+            <function id="87596a72-0f08-4fa9-9c83-5abb7152dcac" name="WIFIHAL_GetOrSetRadioDCSScanTime">
+                <parameters>
+                    <parameter id="1178453b-7ff0-4c72-912d-ef01b2c0969b" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5248cb05-8687-4522-a84a-1882fbea93d1" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5f2de0a2-97aa-4a47-8dd5-6d815fcb8124" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="3df496d9-cfe9-4bf1-8bbd-9a674a0dd168" parameterName="output_interval_seconds" parameterType="INTEGER" range="0-500"/>
+                    <parameter id="7ab0e324-c00d-453e-ab66-d0897fa27a3d" parameterName="output_dwell_milliseconds" parameterType="INTEGER" range="0-500"/>
+                </parameters>
+            </function>
+            <function id="8baaa5b9-787d-4677-94e3-0cd404c5f17f" name="WIFIHAL_GetRadioVapInfoMap">
+                <parameters>
+                    <parameter id="23f87917-80c8-4759-931a-914a20fb37de" parameterName="apIndex" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="dd7efa56-d61d-4509-9d63-005e338fc5ad" name="WIFIHAL_SteeringClientSet">
+                <parameters>
+                    <parameter id="46e4d43c-fa33-4e58-8a69-854ebc320858" parameterName="authRejectReason" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="d885f1fa-d5f0-404e-a4cc-2cae027e49dd" parameterName="apIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="015677de-c4e0-4550-9bb2-933811781935" parameterName="rssiAuthLWM" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="64baef1d-8194-4b60-8938-d05736ee87d7" parameterName="rssiProbeHWM" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="c2a6d448-2834-4bd8-b8c5-926234598cc2" parameterName="rssiLowXing" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="fb1b75cf-56c9-4135-b0be-9fe1ea63735c" parameterName="clientMAC" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="47ce6fa3-1cc7-4ecc-b215-6098ff759998" parameterName="rssiHighXing" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="b631b0a2-1300-449a-be87-dc8444103943" parameterName="steeringgroupIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="3ee82d70-1940-41aa-9d37-00f4ffca17d2" parameterName="rssiAuthHWM" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="46bb6fee-58c2-4e8c-a9bd-71462ee91f47" parameterName="rssiProbeLWM" parameterType="INTEGER" range="1-10"/>
+                    <parameter id="6187b127-5d11-442e-a21a-ce3d4cdcac83" parameterName="rssiInactXing" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="139b6888-8adb-4269-a6a0-93f2adb7f681" name="WIFIHAL_Init">
+                <parameters/>
+            </function>
+            <function id="1cf3ef8f-554e-47ae-95a9-b254633a450b" name="WIFIHAL_ParamRadioIndex">
+                <parameters>
+                    <parameter id="48c84ad6-bb93-4c8f-976d-7be8a0b19f84" parameterName="radioIndex" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="50932b64-7886-4104-b644-5a9cb95d0770" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f5aef953-8f88-4441-aa31-483a11fec459" name="WIFIHAL_GetApAssociatedDeviceRxStatsResult">
+                <parameters>
+                    <parameter id="fec72e38-38e9-4227-abe5-1da983105f29" parameterName="MAC" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c20423f3-11e1-457c-af3a-b5c09f488230" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="d7e86df7-b519-40b1-848f-e5ab1c81dcf5" name="WIFIHAL_GetApWpsConfiguration">
+                <parameters>
+                    <parameter id="f5e7993f-d256-4be7-b0bb-05320adbfe62" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="1ded05c9-71f2-439d-9c27-83e613234bec" name="WIFIHAL_SetBSSColor">
+                <parameters>
+                    <parameter id="7a67bb78-f392-4393-99d0-c1ebf8a3aa55" parameterName="radioIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="b4103f1d-9abc-4909-9c92-5cd154c6e260" parameterName="color" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="019831a8-cebe-47c1-b98e-2c25c26a1ca1" name="WIFIHAL_ApplySettings">
+                <parameters>
+                    <parameter id="86af4e38-3c2b-4589-b210-ab913beb2853" parameterName="radioIndex" parameterType="INTEGER" range="0-2"/>
+                </parameters>
+            </function>
+            <function id="0a44b2fe-6072-4e6b-8a56-70d5adf958c5" name="WIFIHAL_FactoryReset">
+                <parameters>
+                    <parameter id="5fdc28c8-3489-41bd-8704-d13f97b2e337" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e0e290af-9f30-425b-81f9-d3c88d8a4e50" name="WIFIHAL_GetApAssociatedDevice">
+                <parameters>
+                    <parameter id="461ac056-1ff3-4a56-8d25-58bc7762617f" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="7f64802e-5585-4f2c-87c5-3fa63c0e5b60" name="WIFIHAL_GetApAssociatedDeviceDiagnosticResult2">
+                <parameters>
+                    <parameter id="3a0d6b7e-5610-40c8-a244-aebf350dcb9e" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="a0adcd90-9da3-4bd2-b200-0261750ec800" name="WIFIHAL_GetOrSetRadioStandard">
+                <parameters>
+                    <parameter id="63be509d-ffb8-4859-9cb4-f661b7502564" parameterName="gOnly" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="0b596d6f-d50f-4fbd-9d18-15ece103e3a8" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="56beebfc-d3a2-41b4-94c7-7a124324c612" parameterName="acOnly" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="ed34c8ad-8732-4c09-969b-a18ac63c8aa8" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="44a68216-63b8-4021-9bea-242ce67c3ce9" parameterName="nOnly" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="3709b9f4-ad22-47fd-94f4-675eca0f0511" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a76c86d3-bdb2-4bd9-9c13-524fadcee64d" parameterName="param" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f5e7c14d-1730-4b81-9b1e-fd0c07af88d9" name="WIFIHAL_GetNeighboringWiFiDiagnosticResult2">
+                <parameters>
+                    <parameter id="93f7931a-8945-4c9f-9e88-ff1eb829f30c" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="47fb892a-cbfa-46af-ad74-ebeabdb7a382" name="WIFIHAL_GetOrSetParamULongValue">
+                <parameters>
+                    <parameter id="ca63af5a-d19e-4d31-9912-7a79f585c700" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5fdca46a-66cb-4e93-b39b-f426289acee4" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="273675f5-73b6-4efb-bf29-9a6c41305970" parameterName="radioIndex" parameterType="INTEGER" range="1-2"/>
+                    <parameter id="2378766d-0da7-4e7a-a227-ca2cd608f65d" parameterName="param" parameterType="INTEGER" range="1-100"/>
+                </parameters>
+            </function>
+            <function id="d065aa87-af88-4db5-87ea-fe718e176fc5" name="WIFIHAL_ClearRadioResetCount">
+                <parameters/>
+            </function>
+            <function id="449b63c2-3951-4ecf-9903-4726554dd470" name="WIFIHAL_StartorStopHostApd">
+                <parameters>
+                    <parameter id="b83a9e8e-942b-4015-8679-8345d9ad80c2" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="71419d33-9e0b-47d2-b583-e578b8dc4a5b" name="WIFIHAL_GetApAssociatedDeviceTxStatsResult">
+                <parameters>
+                    <parameter id="1183dd0b-0c00-4b6e-96d6-17569335c31f" parameterName="MAC" parameterType="STRING" range="A-Z"/>
+                    <parameter id="aa8cac29-36c2-4135-aaac-83b432b0259e" parameterName="radioIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="d1000b66-0004-43ca-b2a0-6a2930728bac" name="WIFIHAL_GetOrSetParamIntValue">
+                <parameters>
+                    <parameter id="1f3db61d-f43d-4ee4-a2a6-0b13ce5050c7" parameterName="param" parameterType="INTEGER" range="1-10"/>
+                    <parameter id="4228fda1-6105-4904-9d82-6acbad3d5a08" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a8d31a24-9586-4269-ba17-8bf7a1a4e077" parameterName="radioIndex" parameterType="INTEGER" range="1-2"/>
+                    <parameter id="8cb3501c-f95d-4389-bb9e-62ee3bb6b228" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="dc952336-c959-4dd7-a8b8-84591ba07eb0" name="WIFIHAL_SetNeighborReports">
+                <parameters>
+                    <parameter id="762cd450-0171-46cd-98c5-aa2d4cc65336" parameterName="channel" parameterType="INTEGER" range="0-1000"/>
+                    <parameter id="c960df5f-002b-42b2-9744-91967c5c26ee" parameterName="phyTable" parameterType="INTEGER" range="0-1000"/>
+                    <parameter id="711d567a-d623-4d0c-b0a9-ac06365e3693" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="8dc6a60a-ca11-4e28-ac0a-e6deb944d9dc" parameterName="info" parameterType="INTEGER" range="0-10000"/>
+                    <parameter id="4ba8054e-b719-4f9d-b4a0-3926d3cfff58" parameterName="reports" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="695e3554-16ac-47a6-ba40-0ac31cc03c71" parameterName="opClass" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="f362ff71-6221-4c50-a390-467ce2c5d52f" parameterName="bssid" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fafb8089-819a-4586-94ae-783314fed5b0" name="WIFIHAL_GetApSecurity">
+                <parameters>
+                    <parameter id="06fe9de8-1a88-4629-b167-6d16837fc4a6" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="4d7839f2-5902-4438-bf8f-c99d6edf7ad9" name="WIFIHAL_GetApAssociatedDeviceStats">
+                <parameters>
+                    <parameter id="0eabbd10-4ae5-42d3-82ff-6e38a2de36ec" parameterName="MAC" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ee6299c3-f20a-46ef-961d-60971150672b" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="1e108c00-b3db-489a-a205-6eca677333d3" name="WIFIHAL_GetRadioOperatingParameters">
+                <parameters>
+                    <parameter id="bda3734b-8219-4cb0-b4d1-ca4a4851b91e" parameterName="radioIndex" parameterType="INTEGER" range="0-2"/>
+                </parameters>
+            </function>
+            <function id="20c4f7fe-6ffe-4423-9048-d80a70d75566" name="WIFIHAL_SendDataFrame">
+                <parameters>
+                    <parameter id="3cc9afd7-d3ae-4d99-b97c-4b61f3159150" parameterName="MacAddress" parameterType="STRING" range="A-Z"/>
+                    <parameter id="7ad1939c-1dfb-452a-a46c-18f9ccc4d455" parameterName="apIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="2c7eca11-f6ca-4673-9f85-4cf4506d8d3a" parameterName="priority" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="9934333b-b4cb-48ee-b76f-5ae6b4027649" parameterName="insert_llc" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="3186450a-d495-45e3-a283-c9409565678b" parameterName="length" parameterType="INTEGER" range="0-1000"/>
+                    <parameter id="0c26e669-013c-4c57-94a0-9e1683e8da29" parameterName="protocol" parameterType="INTEGER" range="0-1000"/>
+                </parameters>
+            </function>
+            <function id="e6b9ae6a-c77e-466c-bffb-e2881e49cd27" name="WIFIHAL_GetNeighboringWiFiStatus">
+                <parameters>
+                    <parameter id="e931f6c9-96ed-40a2-ab8b-528ec7ee03b8" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="2479f090-d87d-4cdf-8498-db5d6b6739f1" name="WIFIHAL_GetBandSteeringLog">
+                <parameters>
+                    <parameter id="31c9a3a6-a399-42d9-a7e1-f0cf99a2055f" parameterName="record_index" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="4109200e-2c66-424c-bce5-229f599aacbe" name="WIFIHAL_GetApDeviceTxRxRate">
+                <parameters>
+                    <parameter id="c1dfb582-aa14-433e-85f3-bccd827070e5" parameterName="MAC" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d648fefe-1725-4f8c-a958-d8d5c6547fa2" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="23064843-1b17-4d72-a913-fa8cb66240b8" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6e1b10e5-b7f4-4d8e-8e83-f1bf5af1e696" name="WIFIHAL_SteeringClientRemove">
+                <parameters>
+                    <parameter id="10ef4a99-4523-4c0e-95fa-4d87696ed49c" parameterName="apIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="666191b4-b0f8-43fc-bf7e-0b53eb31e112" parameterName="clientMAC" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2f148d04-f059-4551-b602-cba54c857a91" parameterName="steeringgroupIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="7179d330-448e-4127-81b9-d624b9d48bf9" name="WIFIHAL_GetOrSetParamStringValue">
+                <parameters>
+                    <parameter id="8b4d067d-644d-4bfd-9ebd-97cf321daaa0" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e8e059ae-0c41-4a0c-9d94-c1bc63817572" parameterName="radioIndex" parameterType="INTEGER" range="1-2"/>
+                    <parameter id="49c9147e-9658-45f0-94c9-0c557744bfb0" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="92a2b9a7-79a2-47cb-ad6a-ffd76fdd4754" parameterName="param" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="27853157-ecb3-4a50-b03e-943941978402" name="WIFIHAL_GetApAssociatedDeviceDiagnosticResult3">
+                <parameters>
+                    <parameter id="f920362a-b92d-4400-9433-cc1fb0493542" parameterName="apIndex" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="e6a19643-0750-4c50-ace6-18cabb356163" name="WIFIHAL_GetApAssociatedClientDiagnosticResult">
+                <parameters>
+                    <parameter id="b4098463-e6fe-47da-a476-dbc471a8e038" parameterName="mac_addr" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2c0774ef-b5da-4bcb-b99a-12a38fdb9604" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="692703f3-0806-4af4-9537-5f112a322e61" name="WIFIHAL_StartNeighborScan">
+                <parameters>
+                    <parameter id="3cf16750-99ba-4873-882c-4e2127cae75b" parameterName="dwell_time" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="1f5b64bd-3d2f-4590-a4e9-fec7d934bbce" parameterName="scan_mode" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="c8e30874-b95f-46cc-bf99-b6469bc6f504" parameterName="apIndex" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="12e0aa81-4537-4b98-afa0-226ab12712a5" name="WIFIHAL_GetBSSColorValue">
+                <parameters>
+                    <parameter id="7776bf2e-1ac5-4845-9cf3-9ef88a693849" parameterName="radioIndex" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="890300e2-9277-45a3-8af7-4d6637c6ae34" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4ff42d0b-ddd0-4618-9ab7-d010c25f8456" name="WIFIHAL_GetRadioChannelStats2">
+                <parameters>
+                    <parameter id="3a01e8aa-df7a-4171-9bbb-0b2cd2fd35bf" parameterName="radioIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="73a25b1d-b0bb-41fc-a918-a50b5b1f630f" name="WIFIHAL_GetRadioTrafficStats2">
+                <parameters>
+                    <parameter id="e1722ba9-4193-4408-9cc6-c7f9a9fd773c" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="7fd7ca0f-2304-4a5c-ac05-e43bbda85fc4" parameterName="radio_BytesSent" parameterType="INTEGER" range="0-500"/>
+                    <parameter id="d8a964b4-8586-4a62-9e07-7b7e428d338a" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6ee1d9e0-c13a-4d2a-b357-28d649c3aef9" name="WIFIHAL_GetApIndexFromName">
+                <parameters>
+                    <parameter id="b783cb0d-b786-4d3c-9a3a-cacc03a1d122" parameterName="param" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e69f9a4c-e549-4790-9a40-3d894537dde9" name="WIFIHAL_GetOrSetParamUIntValue">
+                <parameters>
+                    <parameter id="7c899061-7d3b-4bde-a88f-7faf6c9885ea" parameterName="param" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="168b184b-dd51-4c70-bfe3-d0958553ad16" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cf1843d3-0a4a-4471-8626-0455cc62ada3" parameterName="radioIndex" parameterType="INTEGER" range="1-2"/>
+                    <parameter id="fdf0c307-301f-4b9d-9c10-1100ba643a5f" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c7663c01-ba5e-493f-9a92-ee47cccbc63c" name="WIFIHAL_GetIndexFromName">
+                <parameters>
+                    <parameter id="d33280af-fc9d-40d7-a812-20a9a87c4bd1" parameterName="param" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3f115dc0-81e4-428d-83c4-37e41111376d" name="WIFIHAL_DelApAclDevices">
+                <parameters>
+                    <parameter id="4fe96497-cbf6-4896-b2be-ea09265abf21" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="0435db1f-14b2-488b-b5bf-9c1bb5f75ce9" name="WIFIHAL_IfConfigUporDown">
+                <parameters>
+                    <parameter id="04baad74-d803-4637-9da0-e6ec2332ede1" parameterName="apIndex" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="9e0f7d5c-be20-4528-9167-8c86216ee8b7" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="108e0c34-9468-47e3-bbe1-8a000638b528" name="WIFIHAL_CreateAp">
+                <parameters>
+                    <parameter id="c9516414-5e98-4637-8903-863820d7e658" parameterName="radioIndex" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="1e4ea127-15b3-4555-84d2-1c67f8020199" parameterName="apIndex" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="c98ca39b-c887-449d-96d2-180bcde30eb5" parameterName="hideSsid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="5b2bc221-09a9-42df-bd6f-7d2364ffee8f" parameterName="essid" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="835276cb-2c26-4ab2-b6c0-021cb0ae370e" name="WIFIHAL_ApplyGASConfiguration">
+                <parameters>
+                    <parameter id="5452d8a0-4f4c-4e54-b7ca-a5a8e0d43e3f" parameterName="pauseForServerResponse" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="a2a768d4-6efb-4e2a-aa4d-0737e146383d" parameterName="responseTimeout" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="19a7bee6-bc82-4886-9ad2-b1d0ef90ffd5" parameterName="responseBufferingTime" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="70cf0f4b-d1cf-42ae-bcfb-8bcc0fd046ff" parameterName="queryResponseLengthLimit" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="febeacc2-8ada-4e30-8769-04b7f1e61d63" parameterName="comeBackDelay" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="034b951c-ddbe-42f0-85df-5b477916592b" parameterName="advertisementID" parameterType="INTEGER" range="0-50"/>
+                </parameters>
+            </function>
+            <function id="2f766ca0-d9b5-4439-b9e6-d320f4d7e2b1" name="WIFIHAL_GetApAssociatedDeviceDiagnosticResult">
+                <parameters>
+                    <parameter id="9eaa8401-efec-4919-a6e7-bb5d3c3373a9" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="d3f509c6-c0e7-4c63-839a-711196f28e96" name="WIFIHAL_SetApWpsConfiguration">
+                <parameters>
+                    <parameter id="3f2e2d65-a176-4ab4-888c-7e12311a9e06" parameterName="radioIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="493c5e4f-106b-43dd-9639-950aefa4d05b" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="eb61b851-9c7c-49ab-a3ac-8de71e9c2c02" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="bc3cda47-a5fe-4487-8c0a-0179a8f5a076" parameterName="methods" parameterType="INTEGER" range="0-60000"/>
+                    <parameter id="99d11ebb-808f-4499-b82d-71cdcfbcf88a" parameterName="pin" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="947ed1db-343c-4317-80b6-2df76133acbb" name="WIFIHAL_GetAssociatedDeviceDetail">
+                <parameters>
+                    <parameter id="c9ff5062-743f-4399-8c0f-8b8d1e2f5236" parameterName="devIndex" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="76a152a7-7fbb-44bb-a890-4289b9b4546e" parameterName="apIndex" parameterType="INTEGER" range="0-50"/>
+                </parameters>
+            </function>
+            <function id="431b254d-b718-4de1-90ed-279f947d14e1" name="WIFIHAL_GetOrSetApBridgeInfo">
+                <parameters>
+                    <parameter id="503f4c97-e44e-47ef-8cef-8ee22245b843" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="97cb1f92-9138-4856-8e85-fa4cedd06a8c" parameterName="subnet" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ae05249f-e7fc-450c-8e8b-172dd3fa49dd" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b8705afa-5d4c-4b61-927d-4bc43d741cef" parameterName="IP" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e1049085-7ed0-419b-9ce5-2a5ed4376e8b" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="bd7e6bfb-e7e5-4765-b2ff-597a3d24ceaa" parameterName="bridgeName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4d612f2f-85e0-497f-8663-cb8d481b5678" name="WIFIHAL_GetApInterworkingElement">
+                <parameters>
+                    <parameter id="88ba11be-1182-4026-95d9-35dfa248cab9" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="4dc15c17-2802-4fc9-ac08-e7d6b7a9a057" name="WIFIHAL_GetOrSetFTR0KeyHolderID">
+                <parameters>
+                    <parameter id="1afb3817-9db4-470f-a6f4-aa76706abb06" parameterName="KeyHolderID" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8d966ddf-26eb-444b-9aed-1c8b1f042e6d" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="33e177d7-2bbf-4aaa-bd27-34f44f77f274" parameterName="radioIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="821391c9-c8b4-4ad1-899b-b6895c659075" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="33339364-1986-4a1c-80bf-f3e254f50313" name="WIFIHAL_SetRadioMode">
+                <parameters>
+                    <parameter id="c5e6a901-9c86-4586-92d1-8d5658162d13" parameterName="chnmode" parameterType="STRING" range="A-Z"/>
+                    <parameter id="150c0cdb-88c2-4f6d-bcda-a94924de07f7" parameterName="puremode" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="5ba415d8-bf1d-4401-8a08-1d19fdc76889" parameterName="radioIndex" parameterType="INTEGER" range="0-16"/>
+                </parameters>
+            </function>
+            <function id="8f997049-eb4c-4b20-9ea5-78968b129cc5" name="WIFIHAL_SteeringClientDisconnect">
+                <parameters>
+                    <parameter id="a023daf5-1739-40e5-ac5d-7670ec7ea0b7" parameterName="apIndex" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="ec9c43e9-ca8d-474b-a120-db6678ad1180" parameterName="steeringgroupIndex" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="a932b19b-7a71-4089-a6d0-b35451ee638b" parameterName="clientMAC" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ecba7a39-eab9-4228-a924-d92959879e91" parameterName="reason" parameterType="INTEGER" range="0-50"/>
+                    <parameter id="5297be47-c642-4884-8b29-b0f7ec15002e" parameterName="disconnectType" parameterType="INTEGER" range="0-50"/>
+                </parameters>
+            </function>
+            <function id="1a47a746-2655-49f2-8dda-736075b02385" name="WIFIHAL_GetOrSetParamBoolValue">
+                <parameters>
+                    <parameter id="93322876-8a9a-4109-8241-327f5f674e62" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cbcf56a3-5a85-4bc7-892f-280f697f911a" parameterName="param" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="83189d9e-1228-464c-ad3a-f8b56ebc943a" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ef59339f-e9c1-4171-8aea-ee8e7d45bf9b" parameterName="radioIndex" parameterType="INTEGER" range="1-2"/>
+                </parameters>
+            </function>
+            <function id="58db524b-8167-40a3-843e-ec86de8b35e7" name="WIFIHAL_GetOrSetFTR1KeyHolderID">
+                <parameters>
+                    <parameter id="4da959f5-ab2d-41dc-a2fc-0605a3de006c" parameterName="apIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="c0bb6268-3cb3-4416-949b-ee669b3b150f" parameterName="KeyHolderID" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e80faaf5-e971-41c0-9edb-284650ba32bf" parameterName="radioIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="69d77b3c-8101-49f0-83d8-d91b9ade7439" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="cc652196-53fa-4d65-845a-0b7f8a61209c" name="WIFIHAL_AddorDelApAclDevice">
+                <parameters>
+                    <parameter id="9a349de9-400b-4251-8fbd-ec4beba0b7e9" parameterName="apIndex" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="2010c3dd-2eb6-41b5-8e3c-823e2849ebd4" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="410d732f-20c8-4d76-8fe8-5037c3543eaf" parameterName="DeviceMacAddress" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="21c6a604-7575-4b05-98b2-b278421bf618" name="WIFIHAL_GetWifiTrafficStats">
+                <parameters>
+                    <parameter id="e0120eb2-ba43-4c7e-9c5f-e3b21b71894d" parameterName="apIndex" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="6bd067f5-a747-44f7-8ed2-28bcef5079d8" name="WIFIHAL_CreateInitialConfigFiles">
+                <parameters/>
+            </function>
+            <function id="84719a00-3c0d-4599-b255-4dfac106beb6" name="WIFIHAL_GetOrSetSecurityRadiusSettings">
+                <parameters>
+                    <parameter id="5923c959-dccd-4ea7-a7cb-ef9c375c6a83" parameterName="RadiusServerRetries" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="97784590-0f8a-4fa3-891a-6c1edcdf0049" parameterName="IdentityRequestRetryInterval" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="f996a8b6-1d7b-4311-9c38-b56c135480ba" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="548e8069-57f3-4ae7-abc2-d200baa14659" parameterName="PMKCaching" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="d7bb1547-53a7-4db6-aae0-3805b24a12bc" parameterName="PMKCacheInterval" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="230c9caf-6b1d-4704-9701-4c39587d2879" parameterName="RadiusServerRequestTimeout" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="a1dcc79e-09bf-4ac3-ba19-1a0b44709230" parameterName="radioIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="14cc009e-4745-45e5-a55f-189b0681a971" parameterName="MaxAuthenticationAttempts" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="9c9ffeb1-0ad7-4483-a64f-fef8adf1347a" parameterName="BlacklistTableTimeout" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="7aeeee3a-e64b-49c2-9b88-fdd7de02fd99" parameterName="PMKLifetime" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="4f7efc84-4485-43bd-9baa-721cb2a6501b" parameterName="QuietPeriodAfterFailedAuthentication" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="750625a0-9086-4df3-a8da-89b1296ef6ce" name="WIFIHAL_GetAvailableBSSColor">
+                <parameters>
+                    <parameter id="5e5febec-2c13-4219-9d9e-09d670a674de" parameterName="radioIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="c0238351-8d1e-4a37-81e2-bb030f8c23f2" parameterName="maxNumberColors" parameterType="INTEGER" range="0-200"/>
+                </parameters>
+            </function>
+            <function id="6dbade00-a162-49fa-98d9-2e5712962108" name="WIFIHAL_Down">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>020f6270-bbf3-4feb-bcdf-b3a7f9ba87bf</id>
+                <name>WIFIHAL_SteeringClientRemove</name>
+                <funName>WIFIHAL_SteeringClientRemove</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>19ae5cb1-6377-4d91-a991-5761854622f0</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>82233846-dc16-40da-8408-35d9347b0f19</id>
+                        <parameterName>clientMAC</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a286163d-98a9-44cc-b5c6-6a125fc8cb41</id>
+                        <parameterName>steeringgroupIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>097eb704-ac0f-4d74-94ab-ed60d26a8a86</id>
+                <name>WIFIHAL_GetOrSetFTMobilityDomainID</name>
+                <funName>WIFIHAL_GetOrSetFTMobilityDomainID</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1c73cba3-1ed4-4991-9603-160ccf1e1499</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>27fe23dd-7941-46a0-a31e-353205267e64</id>
+                        <parameterName>mobilityDomain</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>62d218ee-cdce-401e-a14a-a835aa4d50a6</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>665174ed-65d8-4038-9671-34fe05f3dcad</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>09d06faa-b850-4982-8c5b-4d0f9b116482</id>
+                <name>WIFIHAL_StartNeighborScan</name>
+                <funName>WIFIHAL_StartNeighborScan</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>10f0b345-1aa5-4b62-8273-d192bb8d17fa</id>
+                        <parameterName>scan_mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8d9ff579-3c6b-42e0-8a80-7fd3c33639e1</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a87ff5a7-7a2f-477b-8a49-bcc94091e818</id>
+                        <parameterName>dwell_time</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0a5b8d83-8229-4b28-91b1-22d6c3d94865</id>
+                <name>WIFIHAL_GetApAssociatedDevice</name>
+                <funName>WIFIHAL_GetApAssociatedDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2cb4a1a5-811a-4779-b3c3-32af57bde7d2</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0bca9191-6f90-4026-bb93-4e7dc6863f68</id>
+                <name>WIFIHAL_GetApAssociatedDeviceRxStatsResult</name>
+                <funName>WIFIHAL_GetApAssociatedDeviceRxStatsResult</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>63c51ebb-eb15-41c6-8811-1bdff03b8e43</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>94a7b3e3-e89d-4424-bef3-74015b41d505</id>
+                        <parameterName>MAC</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0c76a001-07e7-4306-9ff0-dea300a151b8</id>
+                <name>WIFIHAL_GetRadioChannelStats2</name>
+                <funName>WIFIHAL_GetRadioChannelStats2</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5bf53f30-4306-470f-b9a1-4bfe8c7a7e36</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0d9a8a8d-2f20-42b8-b3c7-4e8655fb4e62</id>
+                <name>WIFIHAL_GetApDeviceRSSI</name>
+                <funName>WIFIHAL_GetApDeviceRSSI</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1cb4ad97-2a76-403d-aba2-c4887fbc2d37</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>21e820df-2db2-477e-96bf-d355d4f61225</id>
+                        <parameterName>MAC</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a6dbf136-6709-4919-a5bb-1ed7047db5e5</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0ee29acc-7c1a-453b-b13c-69d6d24bb3e8</id>
+                <name>WIFIHAL_GetApAssociatedClientDiagnosticResult</name>
+                <funName>WIFIHAL_GetApAssociatedClientDiagnosticResult</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5e4c9c34-6b16-4f24-b64b-15323d816855</id>
+                        <parameterName>mac_addr</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e524cc49-eab8-4e01-a642-cf150b7c4e46</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1081b955-3075-48a3-a2fb-cb4a93083bb0</id>
+                <name>WIFIHAL_GetApInterworkingElement</name>
+                <funName>WIFIHAL_GetApInterworkingElement</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>198894d6-0ac0-47e6-a909-42188bcae7c7</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>147c755d-6bce-480d-86d2-c652ed330707</id>
+                <name>WIFIHAL_GetBSSColorValue</name>
+                <funName>WIFIHAL_GetBSSColorValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>392c1b89-42d4-438f-904b-78d6e3440ba4</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e4503ae9-ca4e-4eb8-9f5e-2eb681442f8f</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>17fdfb97-76a8-4b59-8d4f-5acd035bb37f</id>
+                <name>WIFIHAL_GetApAssociatedDeviceTxStatsResult</name>
+                <funName>WIFIHAL_GetApAssociatedDeviceTxStatsResult</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>66254b9f-5c7d-4f9d-adfa-fb9db2fc5b2d</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ee97c423-6fc2-4ec1-9aa3-2c48a7813c59</id>
+                        <parameterName>MAC</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1dedc2e8-8aed-4b58-b85d-1ae4a19afc5c</id>
+                <name>WIFIHAL_CreateInitialConfigFiles</name>
+                <funName>WIFIHAL_CreateInitialConfigFiles</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>1e3939f4-6251-4db0-a68b-806a9674869a</id>
+                <name>WIFIHAL_GetMuEdca</name>
+                <funName>WIFIHAL_GetMuEdca</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0fff203b-2ec3-4cb4-9db2-8319abfa79c0</id>
+                        <parameterName>accessCategory</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bd284ea8-f97b-46b2-a4bb-bcf002e73d5b</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>20d4105c-90e6-4b3e-8c55-9400ab64a31a</id>
+                <name>WIFIHAL_GetAssociatedDeviceDetail</name>
+                <funName>WIFIHAL_GetAssociatedDeviceDetail</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>61755787-b6d4-4c7d-bc8c-d15e61d78049</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ab3dd69a-efb7-4dad-9769-c8e35c59e4c2</id>
+                        <parameterName>devIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2c7d3e5f-4953-42c9-8422-046d4d34c696</id>
+                <name>WIFIHAL_GetOrSetApBridgeInfo</name>
+                <funName>WIFIHAL_GetOrSetApBridgeInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>144ff572-0ef7-41a7-90b1-d0924036a4b1</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2c1ca8c5-3993-42ae-97b4-88ca085b44a9</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5cbcff93-1494-4181-806e-bf3484cf9644</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>63387689-65a4-4ece-b0f6-63cab12792a8</id>
+                        <parameterName>bridgeName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e7dd1ed3-54f3-4516-ae5e-e5e72ae21f9f</id>
+                        <parameterName>subnet</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f6f167e1-00ec-40a6-85c2-c618b7d5cddc</id>
+                        <parameterName>IP</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>301098a4-27d5-4ea5-b923-1fdda823af4b</id>
+                <name>WIFIHAL_GetOrSetParamStringValue</name>
+                <funName>WIFIHAL_GetOrSetParamStringValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>092451ce-6fcc-4e24-aeec-b0472aad6710</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4672ebfa-9c3e-4c1d-8420-784e2fe0c0a4</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6202b24a-3bfb-4c20-a98d-267df6d9a30a</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6ef36394-9f8c-4b78-a0cf-02a29e0b1867</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>36e77c89-5b0c-4d6e-8d6a-78fc27c6605b</id>
+                <name>WIFIHAL_SteeringClientDisconnect</name>
+                <funName>WIFIHAL_SteeringClientDisconnect</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4c6dd041-ce5b-4b72-802f-e6e384984bda</id>
+                        <parameterName>disconnectType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>78a00afe-7e8f-4db0-bd8b-7e76c63590ea</id>
+                        <parameterName>steeringgroupIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9203020b-0705-4e75-9030-2d577d58c07b</id>
+                        <parameterName>clientMAC</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>eacc15fb-0e20-4488-a2ed-96e26e9b4ac2</id>
+                        <parameterName>reason</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f823a589-2bff-47b2-ab4c-966552eedeab</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>37095702-d8bb-484b-8e0f-631230383aa5</id>
+                <name>WIFIHAL_GetSSIDTrafficStats2</name>
+                <funName>WIFIHAL_GetSSIDTrafficStats2</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c4f7c694-eeb3-446a-bb03-9215475b7cbb</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>37dee1b0-f585-4925-91b4-5923f6cfa05e</id>
+                <name>WIFIHAL_GetOrSetParamBoolValue</name>
+                <funName>WIFIHAL_GetOrSetParamBoolValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>019ae684-4a3f-42bd-8e65-020d42f5e598</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>25e995dd-2e2e-43d1-9bc0-ea32fe48b7c6</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2ac025ac-38ed-43e9-9311-47e940d96640</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>63278782-e80d-42da-bcea-6bb511497b1b</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3ac4e06c-3de9-4a7e-8c50-457dbafd106f</id>
+                <name>WIFIHAL_GetNeighboringWiFiStatus</name>
+                <funName>WIFIHAL_GetNeighboringWiFiStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c022127d-ef49-48a6-9237-53d92cf6514e</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>43d80924-3983-420a-9444-349bafc2790f</id>
+                <name>WIFIHAL_SetNeighborReports</name>
+                <funName>WIFIHAL_SetNeighborReports</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1928bcc1-b2e8-4746-9b30-e23ff5a55ed1</id>
+                        <parameterName>channel</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2c87f661-60a9-48e9-a9cc-feb292f698e3</id>
+                        <parameterName>reports</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>44917a5e-1dc8-407c-944d-f11c7cdc58e0</id>
+                        <parameterName>phyTable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5e788243-d608-45d7-ab55-ad0786b002e7</id>
+                        <parameterName>info</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>958704cd-33e2-41c8-91e4-bd5cfbddb842</id>
+                        <parameterName>bssid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c035b929-6aa3-4a33-9df7-06c6263e7535</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ead89497-6783-4bb9-90f6-866dbcd24a7a</id>
+                        <parameterName>opClass</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4424063e-7ebb-4f19-8774-443e0dd4cfea</id>
+                <name>WIFIHAL_GetOrSetParamUIntValue</name>
+                <funName>WIFIHAL_GetOrSetParamUIntValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>10dd9e90-3bcd-4a13-a1fa-32b968bf989a</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1e4c72f0-7833-4c9f-b133-01b0f15e7d37</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bf1b7aca-9394-4843-a588-f539c5d552c9</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f7448b37-6a9c-415b-9210-b68140bc32cd</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4666077f-195b-4d64-8004-0d9cf36a5808</id>
+                <name>WIFIHAL_GetRadioOperatingParameters</name>
+                <funName>WIFIHAL_GetRadioOperatingParameters</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c79777a3-c229-4b96-8e23-261e941be9c1</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>47ac0c22-d2d3-4ca0-84e3-adf3ff51512e</id>
+                <name>WIFIHAL_GetOrSetParamULongValue</name>
+                <funName>WIFIHAL_GetOrSetParamULongValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2ca85cc9-4294-451b-98c7-d6defb97bc87</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>809c1e21-fcec-4924-a086-ed35c5da754d</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>aeda0470-16be-4989-bded-ef7ec5787a14</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d1fe008e-308f-4ccb-87e8-02145e6a82e9</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>47fc3baf-6beb-4c95-80c1-392a813a8451</id>
+                <name>WIFIHAL_SetApSecurity</name>
+                <funName>WIFIHAL_SetApSecurity</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>27050228-af9e-45b9-986d-7f40317ce7e6</id>
+                        <parameterName>mfp</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5769634e-e789-4aec-b845-1815661732fa</id>
+                        <parameterName>key_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5c471b17-ddfd-493a-809d-2c02ea1e0e5e</id>
+                        <parameterName>wpa3_transition_disable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b4e5e2d4-a0b4-4a78-9068-739beb174871</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ce24c156-c768-4a94-9e8a-3fa897cdf33f</id>
+                        <parameterName>key</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e138d7e3-c8a0-4908-9fc6-b82a26e8bc7f</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-3000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>effc7871-0e73-4984-93f1-3630bfb672f0</id>
+                        <parameterName>encr</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>50275282-7b28-4f52-a1e2-39719b91c092</id>
+                <name>WIFIHAL_GetOrSetParamIntValue</name>
+                <funName>WIFIHAL_GetOrSetParamIntValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>06f1bcca-334b-4d68-ad15-2701216aec10</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> 0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1a959a27-39fe-456a-9260-c31c44fda815</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> 0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2095c305-bdb5-4992-9413-147cf256e0c2</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-10</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>894d8cdd-4aed-4656-9fea-b3a12d762794</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>54dbf502-74c6-4649-a878-61df2abba689</id>
+                <name>WIFIHAL_EnableCSIEngine</name>
+                <funName>WIFIHAL_EnableCSIEngine</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2fae7e96-7682-4df4-95bc-ba695329ccfd</id>
+                        <parameterName>MacAddress</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c4092138-df07-4734-a285-c18bfac05fa2</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fa483b87-8809-4b10-a676-d5e984a8c90b</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>59d36e45-1d07-4994-a89c-c610417fc76d</id>
+                <name>WIFIHAL_GetOrSetFTR1KeyHolderID</name>
+                <funName>WIFIHAL_GetOrSetFTR1KeyHolderID</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3d857a91-d214-4c25-ba39-229d14d76f19</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>71158d6d-d7bc-4988-b862-d16c0be26621</id>
+                        <parameterName>KeyHolderID</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cfc82cb5-1793-435c-bf79-159ae00478a2</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d3f99dc4-852b-415b-b709-f975991a15b6</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5b480296-33ba-483e-a927-54b092c9ab3a</id>
+                <name>WIFIHAL_GetOrSetSecurityRadiusSettings</name>
+                <funName>WIFIHAL_GetOrSetSecurityRadiusSettings</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1c10f06c-34d8-421f-b7cf-f33c2fbe0b5c</id>
+                        <parameterName>PMKCacheInterval</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>214df883-1d22-4cbd-adc6-9bb60b9c5e84</id>
+                        <parameterName>BlacklistTableTimeout</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3510950b-f950-4d6a-9201-21d877409a3b</id>
+                        <parameterName>RadiusServerRetries</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>43604d7a-41d0-457a-ac5e-505afdbf991a</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5600059c-fb56-486c-ad3e-f030b89366b4</id>
+                        <parameterName>MaxAuthenticationAttempts</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>736c0abe-913b-449e-948a-6821ad94256b</id>
+                        <parameterName>RadiusServerRequestTimeout</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ba0fa433-68d7-4186-b102-2b7ea33084de</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cce604d6-4ac6-415d-b4af-9659567ec311</id>
+                        <parameterName>QuietPeriodAfterFailedAuthentication</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>efeb0857-d7a8-4d46-a8f4-361afdb5a341</id>
+                        <parameterName>PMKCaching</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f3c0437d-416f-421f-901a-d1d8418c8cf3</id>
+                        <parameterName>IdentityRequestRetryInterval</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f5397966-70c5-43ab-9834-40b63e4f937e</id>
+                        <parameterName>PMKLifetime</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5e00adcd-1043-49c6-9c42-9cc1d57e2227</id>
+                <name>WIFIHAL_Reset</name>
+                <funName>WIFIHAL_Reset</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>5e54c5d5-2be1-4756-a519-38b6de74273e</id>
+                <name>WIFIHAL_GetAvailableBSSColor</name>
+                <funName>WIFIHAL_GetAvailableBSSColor</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>13d1bf9a-9454-47be-b20c-777546fad9a6</id>
+                        <parameterName>maxNumberColors</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-200</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>25a1fa24-9bdd-4506-8a4c-65a1bced694d</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5f812af2-cef8-4c74-a0c9-fba0d6559bf9</id>
+                <name>WIFIHAL_GetAPCapabilities</name>
+                <funName>WIFIHAL_GetAPCapabilities</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2d4187ea-6162-4936-8910-fbb499ef233e</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>609faa75-6060-4900-8270-1df8bfc0efcb</id>
+                <name>WIFIHAL_GetApAssociatedDeviceDiagnosticResult</name>
+                <funName>WIFIHAL_GetApAssociatedDeviceDiagnosticResult</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>33c11cb2-94f9-4ce0-ba63-18367dbe032d</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6441e102-cba1-4473-bece-3ecc45b793ac</id>
+                <name>WIFIHAL_IfConfigUporDown</name>
+                <funName>WIFIHAL_IfConfigUporDown</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>12d37f9e-173e-4e0a-890f-5ef81223301f</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cb3367c8-b2bb-4f71-bd97-06497ac750b4</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>68335e39-f176-4f08-b44c-3295d5929e3d</id>
+                <name>WIFIHAL_StartorStopHostApd</name>
+                <funName>WIFIHAL_StartorStopHostApd</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e5a5bc4b-6051-4b38-82cd-b8d411a4b0ac</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6dd9b72b-aeab-4573-b890-2c8e9c40bb4c</id>
+                <name>WIFIHAL_GetBandSteeringLog</name>
+                <funName>WIFIHAL_GetBandSteeringLog</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8fcfa69b-785d-46db-a9fd-6cf99e306aa4</id>
+                        <parameterName>record_index</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6f6e2241-acc1-4279-b2ea-559e27534958</id>
+                <name>WIFIHAL_GetRadioMode</name>
+                <funName>WIFIHAL_GetRadioMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d9bdb355-3c3b-45f8-99c5-f5b00a81a0a7</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-16</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>72462c47-a4dc-4f08-951c-decdbbcefd90</id>
+                <name>WIFIHAL_GetApAssociatedDeviceDiagnosticResult3</name>
+                <funName>WIFIHAL_GetApAssociatedDeviceDiagnosticResult3</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a97fcab1-7b57-4419-8899-17e6700c7bfa</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>72e57ee6-e5fc-43dd-a22c-39289964edae</id>
+                <name>WIFIHAL_GetApRoamingConsortiumElement</name>
+                <funName>WIFIHAL_GetApRoamingConsortiumElement</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>fa3fce1d-3a3f-483b-bf56-c4da49c76e68</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7333ed79-ac6d-44e1-a3c4-364a3ad73f7d</id>
+                <name>WIFIHAL_GetOrSetRadioDCSScanTime</name>
+                <funName>WIFIHAL_GetOrSetRadioDCSScanTime</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4387690b-4936-4e40-ad7d-b34af825428a</id>
+                        <parameterName>output_interval_seconds</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-500</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c0b7fab8-46bf-4701-89b3-18022b07b4a8</id>
+                        <parameterName>output_dwell_milliseconds</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-500</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d2546e7c-a268-4108-b8a6-22577c2fcddb</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f772c535-c91b-4ff2-81cb-6c6b2dd96c4a</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f8b3a2cf-7961-49bd-8ef8-1522578c8a83</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>74fe7a7d-a9dc-4acd-89d9-3d0089e6ca5d</id>
+                <name>WIFIHAL_PushRadioChannel2</name>
+                <funName>WIFIHAL_PushRadioChannel2</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6d1f22cb-1566-42a4-b342-9533952899e2</id>
+                        <parameterName>csa_beacon_count</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>98605fd8-480b-44a7-b290-12891b136151</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c268dbfb-b878-42ff-a8ec-a9f6f57c19fd</id>
+                        <parameterName>channel_width_MHz</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e824ad29-56e9-44be-9ef2-1d6f27834750</id>
+                        <parameterName>channel</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>77dc0f7c-6821-448c-9f9a-becc2f332bac</id>
+                <name>WIFIHAL_GetOrSetSecurityRadiusServer</name>
+                <funName>WIFIHAL_GetOrSetSecurityRadiusServer</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3bba9a22-7e0c-43a0-8630-273b18ac5abe</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7d343d28-4dca-4c77-8bd2-46f52ae098a2</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>87727f67-b3e4-4e7c-bc61-4be76298722c</id>
+                        <parameterName>RadiusSecret</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8dda7389-cbe5-44b6-ac10-b8008c9140b7</id>
+                        <parameterName>IPAddress</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>958f647c-7e99-42a7-a06f-93a6c747d909</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ec8ebc9d-6e64-404e-8905-e76d3240faf9</id>
+                        <parameterName>port</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>78cc666b-8763-43f2-ab00-2e3bdeda7e80</id>
+                <name>WIFIHAL_Down</name>
+                <funName>WIFIHAL_Down</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>7ac7785b-9166-45b7-a8bd-2f1eebb7cde0</id>
+                <name>WIFIHAL_GetBasicTrafficStats</name>
+                <funName>WIFIHAL_GetBasicTrafficStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8f0c263a-3a1f-469f-8a75-9bff8e584289</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7ac8fccc-639f-4a6d-8c02-99aa0b8fdb1c</id>
+                <name>WIFIHAL_GetRadioChannelStats</name>
+                <funName>WIFIHAL_GetRadioChannelStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6ccfa93f-99b9-47c7-a152-0a29364b528b</id>
+                        <parameterName>channel</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d5404537-cc21-49de-bff7-0ce878aa0a35</id>
+                        <parameterName>inPool</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fe02303a-29ff-4b57-96bd-236bd4eb592d</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7b1a367c-83f4-49d6-9c58-f4c17d7eeefd</id>
+                <name>WIFIHAL_PushApInterworkingElement</name>
+                <funName>WIFIHAL_PushApInterworkingElement</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>01852e20-5520-457f-880b-32622010310e</id>
+                        <parameterName>asra</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>466f05c1-e76d-4c63-878a-9759ef7c9a16</id>
+                        <parameterName>interworkingEnabled</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4c3f865d-a1e5-4434-a31e-4868d8bbd75c</id>
+                        <parameterName>venueOptionPresent</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5e2f177d-c6ad-4269-bcf0-36b13750bd78</id>
+                        <parameterName>uesa</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7a518d22-87de-4dbd-a2a9-4d1467969f57</id>
+                        <parameterName>hessid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9542c5ff-1a5a-4430-80e6-c370238a6e70</id>
+                        <parameterName>venueType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b173165f-9303-4ec7-bf8c-a21568be46b6</id>
+                        <parameterName>venueGroup</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b4b53ab0-8fbe-45a7-9d3b-c216a6d48ecb</id>
+                        <parameterName>hessOptionPresent</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c35fc384-4fe1-48be-a1fe-a61abba2a6d8</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>de179d13-3f6e-49db-a006-f246931466ca</id>
+                        <parameterName>esra</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e0cf16e8-2e17-4af8-aa77-c3b2694d59b9</id>
+                        <parameterName>internetAvailable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>eec526d5-9709-40fa-9c2e-6c1286ee4ced</id>
+                        <parameterName>accessNetworkType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7bd8949b-11c4-4f7c-b719-33a34db16e75</id>
+                <name>WIFIHAL_SetApScanFilter</name>
+                <funName>WIFIHAL_SetApScanFilter</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>178e3c20-01e1-4d2a-b5d5-8cbb4840dc10</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8c3aa39f-5483-41d9-9fb4-7efa0fb6c91d</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dce221d0-612c-44a0-a7ae-7b8c81be4042</id>
+                        <parameterName>essid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>86c4c13c-66f4-4da8-bacd-380ef08f1987</id>
+                <name>WIFIHAL_Init</name>
+                <funName>WIFIHAL_Init</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>8912cffb-3469-430e-b721-ce418ac8a793</id>
+                <name>WIFIHAL_ParamApIndex</name>
+                <funName>WIFIHAL_ParamApIndex</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c9889d6d-be38-402b-8995-99748c4c20d9</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f7d0c1d0-9168-4fd7-8c65-b9270d8ddbf4</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8ce900af-d45d-4194-9fb5-2bc2699fd9e2</id>
+                <name>WIFIHAL_SendDataFrame</name>
+                <funName>WIFIHAL_SendDataFrame</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>16c6234c-f263-49cb-8548-b61dd9368e37</id>
+                        <parameterName>length</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9b4df48d-462c-43bd-b2a0-525653523d1f</id>
+                        <parameterName>protocol</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a766cd88-0758-4b09-b226-3496ea7aad98</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ec3f51a8-208b-4a12-8853-583d185ebce6</id>
+                        <parameterName>insert_llc</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ef509d40-432d-4bf9-9587-39d57b552114</id>
+                        <parameterName>priority</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f36b4a18-f627-4235-a40b-313dfb1d34a4</id>
+                        <parameterName>MacAddress</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8e7b4b1c-654c-4471-93c0-864121f88e98</id>
+                <name>WIFIHAL_GetApWpsConfiguration</name>
+                <funName>WIFIHAL_GetApWpsConfiguration</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c943fa76-542c-4966-bb6c-3ff904e80597</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>934393d1-2a1b-4534-b056-1af89914c89b</id>
+                <name>WIFIHAL_GetWifiTrafficStats</name>
+                <funName>WIFIHAL_GetWifiTrafficStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3a7cc72f-bc18-497b-b0f9-6b0a696b0dcf</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>93b082ea-fb64-496a-8841-38a9a186d683</id>
+                <name>WIFIHAL_SetRadioMode</name>
+                <funName>WIFIHAL_SetRadioMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7b4371b8-54d8-4676-873d-04c07174ba42</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-16</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>83edc0c3-d090-4e53-9fcc-41523b7db20a</id>
+                        <parameterName>chnmode</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9096d020-0290-4b42-81cf-ccc494e5f0f9</id>
+                        <parameterName>puremode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>94524d7d-850f-4f6c-93c2-b757d156cac4</id>
+                <name>WIFIHAL_GetRadioVapInfoMap</name>
+                <funName>WIFIHAL_GetRadioVapInfoMap</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>382d1625-1190-4ea4-aa6c-dd3acdcf85d4</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9b3a9494-2881-495b-bdfa-0f371dbeaaaf</id>
+                <name>WIFIHAL_GetRadioTrafficStats2</name>
+                <funName>WIFIHAL_GetRadioTrafficStats2</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3384147a-776b-45a5-9177-8960a38aecbd</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a0f213d2-167a-4cb1-99ef-a19fc4d2ff7f</id>
+                <name>WIFIHAL_GetApAssociatedDeviceDiagnosticResult2</name>
+                <funName>WIFIHAL_GetApAssociatedDeviceDiagnosticResult2</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ec7d290e-1201-4f6d-ba63-abc4bccecc5e</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a3322e82-c053-4a8b-aceb-6fb3f6c54667</id>
+                <name>WIFIHAL_GetOrSetRadioStandard</name>
+                <funName>WIFIHAL_GetOrSetRadioStandard</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1fe86ed7-c77e-4f66-94de-83a5d0df40fd</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2bbf4125-036a-474e-aa56-61cec6529bc4</id>
+                        <parameterName>gOnly</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5cbd4b41-1d99-40e4-83a9-d299f25d59c0</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>73154695-d1ef-466a-b0a2-b28d7f7c03f4</id>
+                        <parameterName>acOnly</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7e9b0f4f-db8c-4014-b180-f092dcbca4be</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a58fbc99-af7e-44d1-b1ee-b33d328e5e32</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b76ff665-1e82-435b-ac82-f95d2ed44d43</id>
+                        <parameterName>nOnly</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a5f9a1d2-2b39-4768-9f5a-9e625ef568d3</id>
+                <name>WIFIHAL_CreateAp</name>
+                <funName>WIFIHAL_CreateAp</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0c50c920-288f-44dc-83f8-2c0a32185748</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>12d4b295-fe91-4556-967d-070e58caa45d</id>
+                        <parameterName>hideSsid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9f0c9f0e-3df1-4134-9f52-295796907ea1</id>
+                        <parameterName>essid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dd25cc59-3fce-4b4f-bc38-956782d17f13</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ac0f53c8-2f27-47db-9835-2fdfc5c85a7e</id>
+                <name>WIFIHAL_GetBTMClientCapabilityList</name>
+                <funName>WIFIHAL_GetBTMClientCapabilityList</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>85802768-b3d6-41fd-8aa5-9f918ea11d5e</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-20</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b92405c0-dfc8-492c-be21-1b5f8ec1fca6</id>
+                        <parameterName>clientMAC</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>deea8f48-2ff8-42d3-98c4-cfee62e46948</id>
+                        <parameterName>count</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ae53f21a-985e-4478-beda-7ff4b81c0336</id>
+                <name>WIFIHAL_GetVAPTelemetry</name>
+                <funName>WIFIHAL_GetVAPTelemetry</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d38e38c7-4247-484c-a961-8a7921d97670</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b1f6d59f-37ab-4373-9f56-7e4181ac358a</id>
+                <name>WIFIHAL_PushApRoamingConsortiumElement</name>
+                <funName>WIFIHAL_PushApRoamingConsortiumElement</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>29bd111d-e308-4e62-802a-183614a1fe85</id>
+                        <parameterName>ouiLen</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>737944e2-3769-4e9c-b4c2-02131a92eab0</id>
+                        <parameterName>ouiCount</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a8ce23c0-1c3d-4d07-96df-00178e8f7b26</id>
+                        <parameterName>ouiList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e02819cf-ac36-42f5-b75c-d80cfecf9d09</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b62a1cf4-2511-449e-b3c7-2253a9423457</id>
+                <name>WIFIHAL_AddorDelApAclDevice</name>
+                <funName>WIFIHAL_AddorDelApAclDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>018ea232-1193-46fa-83c1-6f60957be9b7</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1a665c2a-d533-4054-a265-6868ca041635</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>da583487-792c-4d5c-a6f3-c16a990c512f</id>
+                        <parameterName>DeviceMacAddress</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b6906963-6afe-4d08-ba32-3b1dce7ff845</id>
+                <name>WIFIHAL_GetApSecurity</name>
+                <funName>WIFIHAL_GetApSecurity</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7f8a4687-0440-4af1-a67b-86948a4654cc</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bcb2b215-d311-4039-8017-f273b3a6e901</id>
+                <name>WIFIHAL_GetApAclDevices</name>
+                <funName>WIFIHAL_GetApAclDevices</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8a285f39-0a79-45a3-898b-17feb9aca1f2</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bd877065-47e1-4439-af3d-2eecdcbefe40</id>
+                <name>WIFIHAL_GetApAssociatedDeviceStats</name>
+                <funName>WIFIHAL_GetApAssociatedDeviceStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>caaf59b0-4779-4c0f-bed5-7daa0646d860</id>
+                        <parameterName>MAC</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d8384c92-1527-4889-9745-6f3b26e668e3</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c075ccfe-746b-4014-80cf-e2d30d0d05fa</id>
+                <name>WIFIHAL_GetNeighboringWiFiDiagnosticResult2</name>
+                <funName>WIFIHAL_GetNeighboringWiFiDiagnosticResult2</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c7da658a-36e7-4716-9778-9a238773204b</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c6cd7a5c-5dba-467b-b347-3e3bf7a4a318</id>
+                <name>WIFIHAL_GetRMCapabilities</name>
+                <funName>WIFIHAL_GetRMCapabilities</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>791b198c-d08f-4ba4-be89-8cedf1727080</id>
+                        <parameterName>peer</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c8ec32c3-72ae-4102-863d-d5ea65df5ec5</id>
+                <name>WIFIHAL_GetRadioChannels</name>
+                <funName>WIFIHAL_GetRadioChannels</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>77ccda4b-8e64-4235-a77c-985544bcf392</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ee094b0f-e041-4dcf-bb7f-2bb27319bf4b</id>
+                        <parameterName>numberOfChannels</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-200</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c9a04d37-d44c-42a8-81d8-ae058b3bde0d</id>
+                <name>WIFIHAL_GetApIndexFromName</name>
+                <funName>WIFIHAL_GetApIndexFromName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2e0b0668-ad2b-4f72-bf20-938fef608d8d</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cc37992c-5b24-498a-a280-4f95be7ced12</id>
+                <name>WIFIHAL_SteeringClientSet</name>
+                <funName>WIFIHAL_SteeringClientSet</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>002f413b-9033-4fb2-a6c4-59984de3e665</id>
+                        <parameterName>authRejectReason</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>03f8b151-f33b-4e34-99f2-cd4be0ad11ed</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5c579f32-8590-4025-9584-ff8045463c16</id>
+                        <parameterName>rssiProbeLWM</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>63165b07-4861-49cf-93ff-27ee900fe920</id>
+                        <parameterName>rssiAuthLWM</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>74bcb381-4513-4445-a69e-70eacf6dcaf3</id>
+                        <parameterName>rssiLowXing</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8d365caf-ff79-4fe0-bc0e-8a5d3c3d5819</id>
+                        <parameterName>rssiHighXing</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8d81c7bd-5e05-446a-9062-fe6ab5d1b129</id>
+                        <parameterName>rssiAuthHWM</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dc2d6bef-2f57-4cbd-bcce-1a57a878ba97</id>
+                        <parameterName>clientMAC</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e2a96ea9-888e-4200-8b89-174f1cb7f038</id>
+                        <parameterName>steeringgroupIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e914db6c-1266-457f-b7ec-4498e34bd2ea</id>
+                        <parameterName>rssiInactXing</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fef59861-a5cb-4084-8bed-7967b7f96e4e</id>
+                        <parameterName>rssiProbeHWM</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ccbd2049-28b3-4c3b-9c61-e57468dea499</id>
+                <name>WIFIHAL_GetIndexFromName</name>
+                <funName>WIFIHAL_GetIndexFromName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>03bacc26-7142-41d4-a152-8dee501fd3c2</id>
+                        <parameterName>param</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d24c137d-963f-4bd1-9929-d3381dfb1093</id>
+                <name>WIFIHAL_ParamRadioIndex</name>
+                <funName>WIFIHAL_ParamRadioIndex</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>05553456-80de-47d9-afac-d400990bd1ff</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>61715dc3-6243-4a9f-96e7-d355504f222a</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d6964787-f9e8-49e1-b0f0-64b99d42027a</id>
+                <name>WIFIHAL_GetEAPParam</name>
+                <funName>WIFIHAL_GetEAPParam</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>bb7d298a-e4e0-4e26-97b3-b5ed58967e6f</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d9c5b602-5673-49b7-b637-be2f91cda165</id>
+                <name>WIFIHAL_FactoryReset</name>
+                <funName>WIFIHAL_FactoryReset</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2f85b1a4-1323-4821-b800-e3a4e4a3266e</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e09324f1-14f9-4c92-9d09-fd2ec147f74b</id>
+                <name>WIFIHAL_GetApAssociatedDeviceTidStatsResult</name>
+                <funName>WIFIHAL_GetApAssociatedDeviceTidStatsResult</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7b4f9e83-b776-427f-a46a-305f872bf89f</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c02dcb91-d173-4259-9331-899814921f95</id>
+                        <parameterName>MAC</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e722b8f9-31af-4975-b93a-4d27ec56f7f2</id>
+                <name>WIFIHAL_ApplySettings</name>
+                <funName>WIFIHAL_ApplySettings</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c815cb69-1afe-4f63-8948-e3d0887461c2</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e8d1ed10-84d2-45a5-a979-d0a8c254eaeb</id>
+                <name>WIFIHAL_SetBSSColor</name>
+                <funName>WIFIHAL_SetBSSColor</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>73691cb9-a8b1-4fb7-87df-4b3f5795f059</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cd2af952-4ca6-4c38-97ca-f4293790f07c</id>
+                        <parameterName>color</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e979ba3d-c2a7-424a-930f-a2dc5696e31a</id>
+                <name>WIFIHAL_SetApWpsConfiguration</name>
+                <funName>WIFIHAL_SetApWpsConfiguration</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3b40f74a-d3dd-42c1-ba90-290eb7755280</id>
+                        <parameterName>methods</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-60000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7fe6db0e-dbe9-49dd-9e0a-796c703f9cd2</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>da46116f-0e43-4b38-8f79-037a24114e3e</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e0705552-fb3a-4761-a98c-0ac85dd13e66</id>
+                        <parameterName>pin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e8de9f9e-1d86-41f3-bfd1-f3454bb77bac</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>eb759c23-580e-4bd5-9ec5-539e32814a18</id>
+                <name>WIFIHAL_GetOrSetFTR0KeyHolderID</name>
+                <funName>WIFIHAL_GetOrSetFTR0KeyHolderID</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8f824574-be17-45e4-97a2-4a7bb8c407e1</id>
+                        <parameterName>KeyHolderID</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>afe93468-4101-4463-b3d8-fb7ec6e8bea9</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b00955b4-2009-466c-be17-312978475472</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f158b058-ddb1-470d-ab8d-fc6c9c97d3ff</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ef0d6eb5-4186-4cb8-b325-bc0ab015178e</id>
+                <name>WIFIHAL_ClearRadioResetCount</name>
+                <funName>WIFIHAL_ClearRadioResetCount</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f53f2008-1b4a-49d4-b90c-3911e01da65f</id>
+                <name>WIFIHAL_ApplyGASConfiguration</name>
+                <funName>WIFIHAL_ApplyGASConfiguration</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0e0d2b80-341e-4c78-8094-4e4c91f32835</id>
+                        <parameterName>responseBufferingTime</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2c560e85-1a66-4e26-8358-c3b07c0b44c4</id>
+                        <parameterName>advertisementID</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>37321cb5-e3b0-41ed-9d09-eec9126bd9bb</id>
+                        <parameterName>responseTimeout</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3f4151d7-9a0f-4d46-8728-bda4a4f3bbff</id>
+                        <parameterName>queryResponseLengthLimit</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>65a44827-75dc-4761-b56d-e7861a41fd3c</id>
+                        <parameterName>pauseForServerResponse</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>af96cc3b-60f6-4466-b3b0-3ddb13d6d11b</id>
+                        <parameterName>comeBackDelay</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-50</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f6a68635-edde-427e-b50b-3cd3c6c8e488</id>
+                <name>WIFIHAL_GetApDeviceTxRxRate</name>
+                <funName>WIFIHAL_GetApDeviceTxRxRate</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3a56f0b2-a7aa-474d-9df9-c0289591493a</id>
+                        <parameterName>MAC</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5605a61d-4daa-4c3a-a911-cd3354af4178</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>89f0c407-5d74-4aea-aa6e-39e8f262cbdb</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f707fd11-d278-4ac9-8af4-9a5f1d93b04b</id>
+                <name>WIFIHAL_PushApFastTransitionConfig</name>
+                <funName>WIFIHAL_PushApFastTransitionConfig</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1c0c4813-e502-46b1-86ca-f2b5eb52d176</id>
+                        <parameterName>overDS</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6d7b961c-1e56-4a84-a991-5d0f8ff48529</id>
+                        <parameterName>radioIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8ebb5653-ec48-4f33-968a-4b6f172a7b3d</id>
+                        <parameterName>mobilityDomain</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dcd79670-2b4c-42a4-8f2f-9eaf848f6e14</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dd00b94b-2683-418a-a090-8800adc9ba1a</id>
+                        <parameterName>support</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fc3bb35b-0109-4e08-b853-1bd50b42d687</id>
+                <name>WIFIHAL_DelApAclDevices</name>
+                <funName>WIFIHAL_DelApAclDevices</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>815e0d87-6feb-4bdb-88ee-a08c42fdc4fc</id>
+                        <parameterName>apIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

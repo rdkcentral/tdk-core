@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>3597aed7-75a3-43fe-8463-56cacc408a21</moduleId>
+        <!-- Module name -->
+        <moduleName>HAL_DHCP</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="08f74a3e-b699-4cfe-b7da-36c6929cff6e" name="dhcp_stub_hal_get_ert_remain_lease_time">
+                <parameters>
+                    <parameter id="acb91ca1-1c5d-4e3d-9673-5492024eb7bf" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="acb4eb71-d4b9-499f-91fc-c3dc88bedaaa" name="dhcp_stub_hal_get_ert_dhcp_svr">
+                <parameters>
+                    <parameter id="c6f26b1c-235c-4fc3-8d50-8c485346993f" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="481c2d26-d240-4d82-8514-60f782b11020" name="erouter_ip_stub_get_ip_address">
+                <parameters>
+                    <parameter id="83c4f341-fbd1-4ab3-a356-15ac5d95cf97" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="3e5a52ae-3830-43aa-a934-e766b67158ea" name="dhcp_stub_hal_get_ecm_lease_time">
+                <parameters>
+                    <parameter id="9b60de15-4f2d-4d47-a556-c3127afc219d" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="67cd946c-03a5-4664-acdf-db8b6a553915" name="dhcp_stub_hal_get_emta_remain_renew_time">
+                <parameters>
+                    <parameter id="6ebc5c95-d202-43b5-8a58-be86b3d17e5a" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="31a2c772-0b7e-49da-9d10-6511ddfb6bf9" name="dhcp_stub_hal_get_ert_fsm_state">
+                <parameters>
+                    <parameter id="a7a782fd-3f06-4950-a2ad-840034151dd4" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="a905e373-c1dd-4d3e-b83a-00661ae7e912" name="dhcp_stub_hal_get_ert_ip_addr">
+                <parameters>
+                    <parameter id="5e8121de-db89-45cb-987a-cad365269aaa" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="b756642a-2c16-4e5b-84ac-1118eae4bc0d" name="dhcp_stub_hal_get_ert_remain_renew_time">
+                <parameters>
+                    <parameter id="08b10c35-ca2e-4ef2-b271-49c618c02077" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="b26a0380-b809-4175-90bb-e4c53d9b8622" name="dhcp_stub_hal_get_ecm_fsm_state">
+                <parameters>
+                    <parameter id="6cf8c7ba-e026-4b13-8c32-9be7583a7636" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="e7a2ec3e-930f-4b50-98f5-f078e20032f2" name="dhcp_stub_hal_get_ert_remain_rebind_time">
+                <parameters>
+                    <parameter id="904a58e7-1138-401d-bf07-79a1dc8046ca" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="11b81e19-4756-4e5f-b80b-2bf1535e5425" name="dhcp_stub_hal_get_ecm_gw">
+                <parameters>
+                    <parameter id="4f908682-29e6-4d24-a485-21d33c0275d0" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="8252e863-0059-4bff-8c81-9d029dd8aa09" name="dhcp_stub_hal_get_emta_remain_rebind_time">
+                <parameters>
+                    <parameter id="ab01471d-3138-41a5-b166-6f66a6244a34" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="aa0842ad-e10e-4d6e-8d55-713e0f0fdd45" name="dhcp_stub_hal_get_ecm_remain_lease_time">
+                <parameters>
+                    <parameter id="ad300048-7769-469d-ad74-f3d72f238813" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="db1891ef-d5fb-41e6-9426-e6c229bf005f" name="dhcp_stub_hal_get_ert_config_attempts">
+                <parameters>
+                    <parameter id="d1501f52-c318-4d5a-94fe-a7d078e8fa53" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="19b5f117-4b15-4483-b438-9967ed9eb8b1" name="dhcp_stub_hal_get_ecm_dhcp_svr">
+                <parameters>
+                    <parameter id="81aa4492-d797-4efe-b368-77388f09261d" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="bff4bdb6-1d02-4b05-88a0-332ee73073b2" name="dhcp_stub_hal_get_ert_lease_time">
+                <parameters>
+                    <parameter id="19edaf1a-a7bb-4cad-8dd9-0cb9d4e86365" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="2212d88a-b927-4b73-8d60-1fb97b519e9d" name="dhcp_stub_hal_get_ecm_remain_renew_time">
+                <parameters>
+                    <parameter id="eebdcf5a-979b-40b9-990b-5e98e8ba33c9" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="50710e6c-83ef-48d0-bb13-d7339be10794" name="dhcp_stub_hal_get_ecm_mask">
+                <parameters>
+                    <parameter id="aa8581da-31d6-4068-bb0f-bf6dc4193f1b" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="72090648-1b29-4292-ac69-337bfad051bd" name="dhcp_stub_hal_get_ert_ifname">
+                <parameters>
+                    <parameter id="77faa56e-081e-4fb1-9e2c-688406699c0a" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="aa25fa0d-8500-4470-8be9-519e989efdf3" name="dhcp_stub_hal_get_ecm_dns_svrs">
+                <parameters>
+                    <parameter id="562799cb-4710-4b96-ba70-56de5f4d9d72" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="7755ecae-71e4-46e2-9892-4489c70b9f2f" name="dhcp_stub_hal_get_ecm_ifname">
+                <parameters>
+                    <parameter id="22dbb4f6-7d52-449a-a57e-76ccef383025" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="44511fed-bf5c-4ffe-9be2-13cd3da43233" name="dhcp_stub_hal_get_ert_gw">
+                <parameters>
+                    <parameter id="d0864c2e-8de8-447f-9c0f-e68408c0f42f" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="61d113f5-2070-4287-a6dd-60888449a329" name="dhcp_stub_hal_get_ert_mask">
+                <parameters>
+                    <parameter id="345ea3ac-cb86-4347-a18b-2c9a94d09a90" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="e5719e5d-4bb8-42f7-889f-2355e4ed56ba" name="dhcp_stub_hal_get_ecm_ip_addr">
+                <parameters>
+                    <parameter id="535b391f-bcf8-4190-8fdc-450e6d565656" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="b549124b-d182-46a2-a892-fe971ace4c26" name="dhcp_stub_hal_get_ecm_config_attempts">
+                <parameters>
+                    <parameter id="a8c4e332-068c-484d-a4f8-e091991670d1" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="b81b79c7-0deb-424f-ba9e-635e3ed27a63" name="dhcp_stub_hal_get_ert_dns_svrs">
+                <parameters>
+                    <parameter id="c64b7ae0-372c-4ed2-a6e8-0d25f0e55016" parameterName="flag" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="1204884a-2c9b-49c1-a887-82933244bdde" name="dhcp_stub_hal_get_emta_remain_lease_time">
+                <parameters>
+                    <parameter id="16e4c405-bb2a-4209-8f7b-23fc05422d4d" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>01f406f6-14b9-4c69-a303-b215d81169a7</id>
+                <name>dhcp_stub_hal_get_emta_remain_rebind_time</name>
+                <funName>dhcp_stub_hal_get_emta_remain_rebind_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>eb478301-d80e-4add-bd54-3ce1706392f8</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>033f938e-de0e-46aa-b79b-4f5a31322405</id>
+                <name>dhcp_stub_hal_get_ert_lease_time</name>
+                <funName>dhcp_stub_hal_get_ert_lease_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b713f895-21b6-4021-9f64-0e783fac7f43</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1b4a3293-23b6-452a-b5ef-7e31d05b8c91</id>
+                <name>dhcp_stub_hal_get_ecm_dhcp_svr</name>
+                <funName>dhcp_stub_hal_get_ecm_dhcp_svr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a8f4b33f-8f74-46af-b413-cb729c666539</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>20478b81-6d19-410a-bda6-4cc8b3fd2a1a</id>
+                <name>dhcp_stub_hal_get_ert_ifname</name>
+                <funName>dhcp_stub_hal_get_ert_ifname</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1649f1eb-cb20-4de1-87a9-5d2865a9fcba</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2138a33a-6d05-4657-a0d9-320f8064088a</id>
+                <name>dhcp_stub_hal_get_ecm_dns_svrs</name>
+                <funName>dhcp_stub_hal_get_ecm_dns_svrs</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>02b94880-293d-46af-b211-1c9a69b4fea1</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>21c30577-f4eb-4c9c-83a9-06b3e3f7fb77</id>
+                <name>dhcp_stub_hal_get_ecm_remain_lease_time</name>
+                <funName>dhcp_stub_hal_get_ecm_remain_lease_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>61ad4ca5-b273-4934-9396-7dcedc4d967f</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2723f9e0-04a6-4553-82c1-00db4cc89a1f</id>
+                <name>dhcp_stub_hal_get_ert_dns_svrs</name>
+                <funName>dhcp_stub_hal_get_ert_dns_svrs</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d94e508d-d3ad-4bcf-831b-f0c89795d323</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>292a067e-8c69-40c7-a2d1-7063eb2ccdb4</id>
+                <name>dhcp_stub_hal_get_ert_ip_addr</name>
+                <funName>dhcp_stub_hal_get_ert_ip_addr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>cbcf944a-358e-46c0-a1da-151a2eaee61b</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>31ff434f-ba5d-4cf4-b342-661052ef799e</id>
+                <name>dhcp_stub_hal_get_ert_fsm_state</name>
+                <funName>dhcp_stub_hal_get_ert_fsm_state</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1c8e1600-f725-4070-802e-a8552888543a</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3f908f39-4efd-433f-abf3-ab18d8d2ae2e</id>
+                <name>dhcp_stub_hal_get_ecm_lease_time</name>
+                <funName>dhcp_stub_hal_get_ecm_lease_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a7678611-4efd-4e39-9573-2692a7c3d897</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4553183f-27eb-4ca5-8e94-830cc0af340f</id>
+                <name>dhcp_stub_hal_get_ert_config_attempts</name>
+                <funName>dhcp_stub_hal_get_ert_config_attempts</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e529babb-b07a-4f98-98a3-fbed10869c4f</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>49f2b3fd-dcf4-415b-abdc-bb68f6a184a2</id>
+                <name>dhcp_stub_hal_get_ert_remain_lease_time</name>
+                <funName>dhcp_stub_hal_get_ert_remain_lease_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>71b1427a-bfce-4b00-937c-ce551d66e4be</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4b4e5711-2b6b-47a8-9804-2d6eae6cad09</id>
+                <name>dhcp_stub_hal_get_ert_remain_renew_time</name>
+                <funName>dhcp_stub_hal_get_ert_remain_renew_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ebd388c6-0592-40bf-8fe9-fe4d26bf63ed</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>50be3b8b-5ed1-44fc-937f-f05acbaa6448</id>
+                <name>dhcp_stub_hal_get_ecm_remain_renew_time</name>
+                <funName>dhcp_stub_hal_get_ecm_remain_renew_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f018ae64-87db-4cea-bee3-ca7bb64ffaa7</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6442a9f1-d1af-42f5-a88f-172710dc65be</id>
+                <name>dhcp_stub_hal_get_ert_mask</name>
+                <funName>dhcp_stub_hal_get_ert_mask</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4383b8ea-ae8a-43dc-9ceb-20534773d843</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>794033c3-8d75-47b5-a3fc-5acefaa4fa62</id>
+                <name>dhcp_stub_hal_get_emta_remain_renew_time</name>
+                <funName>dhcp_stub_hal_get_emta_remain_renew_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1a8c0fb6-b3ab-4104-97be-163afd725634</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7af12507-932d-4d32-9306-4e4ffa4cca03</id>
+                <name>dhcp_stub_hal_get_ecm_gw</name>
+                <funName>dhcp_stub_hal_get_ecm_gw</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>445d1504-aa60-4257-86de-c8eca880b643</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>849a774a-c365-49af-a9b8-173b10fdc988</id>
+                <name>erouter_ip_stub_get_ip_address</name>
+                <funName>erouter_ip_stub_get_ip_address</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>205a952a-1cfe-4380-bb2a-4b5558cbc0fb</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>85c7cdb4-ec69-472a-a46a-06df0c64b8e8</id>
+                <name>dhcp_stub_hal_get_ecm_fsm_state</name>
+                <funName>dhcp_stub_hal_get_ecm_fsm_state</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e6152357-9831-4586-9554-f5f3aed882e9</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>85cfbaa5-eb97-43eb-8cb5-c270eb5b7d1d</id>
+                <name>dhcp_stub_hal_get_ert_remain_rebind_time</name>
+                <funName>dhcp_stub_hal_get_ert_remain_rebind_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>dcc2d0bd-6b3d-459a-a0cd-4255c7f00774</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>86bf957a-7da0-4951-b7df-651fede98743</id>
+                <name>dhcp_stub_hal_get_ecm_mask</name>
+                <funName>dhcp_stub_hal_get_ecm_mask</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d23c9524-e730-45ab-9a58-af33c06a71d9</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>90073c43-6b6f-4f09-8d14-5c16c071b73e</id>
+                <name>dhcp_stub_hal_get_ecm_remain_rebind_time</name>
+                <funName>dhcp_stub_hal_get_ecm_remain_renew_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>882757f0-cd0c-4a4d-9e5e-e5ee2d9b5202</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9ec1fa6e-0e39-467c-8c0a-7c258e561b87</id>
+                <name>dhcp_stub_hal_get_ert_dhcp_svr</name>
+                <funName>dhcp_stub_hal_get_ert_dhcp_svr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e5e33011-4208-4b12-8036-924f9fa264f5</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>aceb1ef5-f6da-49c3-b606-56083c35f563</id>
+                <name>dhcp_stub_hal_get_ecm_ip_addr</name>
+                <funName>dhcp_stub_hal_get_ecm_ip_addr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3784d404-be97-478e-9727-0b30bc15a044</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c90cc6b5-806b-46e0-afab-2923cc6b9c55</id>
+                <name>dhcp_stub_hal_get_ecm_ifname</name>
+                <funName>dhcp_stub_hal_get_ecm_ifname</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6fda74c8-cd28-454b-aafc-88300995a0d4</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d2777ab6-f97d-4e99-afed-7d7d52722a1b</id>
+                <name>dhcp_stub_hal_get_ecm_config_attempts</name>
+                <funName>dhcp_stub_hal_get_ecm_config_attempts</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>842ffd3c-5517-4887-9b32-46a653d4d3e1</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d941de42-9e00-4675-85e7-6040c50ed215</id>
+                <name>dhcp_stub_hal_get_ert_gw</name>
+                <funName>dhcp_stub_hal_get_ert_gw</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>832ccd0a-f309-483a-b740-2cc7a2d5d01d</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fd00af8e-f1fd-421d-bcd4-6bb977c521ac</id>
+                <name>dhcp_stub_hal_get_emta_remain_lease_time</name>
+                <funName>dhcp_stub_hal_get_emta_remain_lease_time</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b1ce96e2-7429-4c75-bc06-e28e279c0292</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

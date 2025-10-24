@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>73853aed-9c74-4a8a-af73-a82d37cea99e</moduleId>
+        <!-- Module name -->
+        <moduleName>TAD</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[ /rdklogs/logs/TDMlog.txt.0, /rdklogs/logs/SelfHeal.txt.0, /rdklogs/logs/SelfHeal.txt.1,/rdklogs/logs/TDMlog.txt.1]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="b03843ab-8d1b-40e7-9cb3-5c1445338e1c" name="TADstub_GetCfg">
+                <parameters>
+                    <parameter id="d2b1b7a9-b8db-47da-b32a-f74a4e286335" parameterName="mode" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="bd8bb7c0-1fa9-48f3-8768-c40ec25bbb4b" name="TADstub_Start">
+                <parameters>
+                    <parameter id="6a5488fa-e617-4358-bf71-eb98fb535103" parameterName="mode" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="998e245c-54c8-4374-b522-e7f2fa62380f" name="TADstub_SetOnly">
+                <parameters>
+                    <parameter id="d97c496f-cded-4a8a-917b-953ee49bdfcc" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="13830c49-6769-4ea6-a34b-6ec9d407dbe4" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="80867d2e-1fc0-4b81-b090-108dd0702700" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="225b47ed-e1cf-4049-9551-1dc230d40870" name="TADstub_SetDiagnosticsState">
+                <parameters>
+                    <parameter id="7f2c9ac8-bd80-4979-ba44-f40c53f9ec1c" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="06f7fc86-800b-41ea-b8f5-cd83bd7d66c0" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5eee491d-2103-49b4-96a9-10b8bbe6ceeb" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9ce9fab5-5c8e-45df-8f0a-65583e767509" name="TADstub_Init">
+                <parameters/>
+            </function>
+            <function id="1666c577-3fb7-4ac1-ac22-e177c32e4ad3" name="TADstub_SetCfg">
+                <parameters>
+                    <parameter id="37a951e0-cc8f-4c2f-9185-72f803dcd1e7" parameterName="host" parameterType="STRING" range="A-Z"/>
+                    <parameter id="da037e35-61f2-4624-bcd3-4201e8e37ebd" parameterName="mode" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="09fc90a7-7c5b-4a23-aafe-12d7345bfcbd" name="TADstub_Set">
+                <parameters>
+                    <parameter id="00973dbf-7907-4267-adaf-68ed65e817e2" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="42cba732-caeb-41ab-9108-e10b92116e2c" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="1c99a7a1-a613-44a8-9d22-387da47f3b73" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8c8be670-80ec-4802-ad07-e4128bfc498d" name="TADstub_GetState">
+                <parameters>
+                    <parameter id="fbfbba75-3ba7-4275-925e-6d99c2fa78a7" parameterName="mode" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="39981e9a-3408-46b1-ac92-ad71fd9e7a7b" name="TADstub_Stop">
+                <parameters>
+                    <parameter id="0c65e3d5-6b6f-4815-9b0f-8380b27379b0" parameterName="mode" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="d9f64a54-5a22-450f-9a6f-ff4a1d83f3da" name="TADstub_Get">
+                <parameters>
+                    <parameter id="92263d61-41e1-4ff9-9598-8e7c39e702dd" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0d796bb5-738b-4a05-92e6-72edd82ecd09</id>
+                <name>TADstub_Get</name>
+                <funName>TADstub_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7dd234fd-1da7-47c6-b461-6925baa710e7</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>590d0fb2-70c4-46cc-96e0-f3be1030b654</id>
+                <name>TADstub_Set</name>
+                <funName>TADstub_Set</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7ceb9f1f-f1a2-47f4-85e2-2f6a640b80c2</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a74b67fd-d105-499f-a60c-0d07cb511cd1</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f3c8547c-6060-4cc8-849b-bf3a34e0eb90</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6c3320f7-7e0d-4e34-8347-d935586b6698</id>
+                <name>TADstub_Stop</name>
+                <funName>TADstub_Stop</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>de260fd1-098f-4e7d-a6c8-c49d82ce83cd</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7397e685-fae7-42fa-91c1-97584456c24a</id>
+                <name>TADstub_Init</name>
+                <funName>TADstub_Init</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>76821850-5218-4510-8422-52cd425ae5bd</id>
+                <name>TADstub_GetState</name>
+                <funName>TADstub_GetState</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2c5598d7-2a39-41af-8f7b-9cd635027648</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>98286271-a8d3-43b4-b777-fd6b0f022b97</id>
+                <name>TADstub_SetDiagnosticsState</name>
+                <funName>TADstub_SetDiagnosticsState</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>24b585a3-b171-4ed3-9d88-f4871360540d</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>40d431ee-842a-4009-9e98-690cb221040a</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c0a1f76b-36c9-45dd-8e19-4daf76d93be0</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ae177519-8920-4f9d-9a41-f546f9692b21</id>
+                <name>TADstub_Start</name>
+                <funName>TADstub_Start</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>99e41e1e-daef-4f33-88f0-800c260108aa</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bffd13b5-330e-4c74-8615-3aaf6cd12e00</id>
+                <name>TADstub_SetOnly</name>
+                <funName>TADstub_SetOnly</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1ff20681-cc4e-4c97-ac07-c52c5aa0f41d</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6fca6587-2ee3-4e2f-a37b-0f22d1495fc2</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>862de8e9-ac8f-4cdc-971a-53d94384a217</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c35c740d-ca82-40e7-b57a-d7a236d9eff6</id>
+                <name>TADstub_SetCfg</name>
+                <funName>TADstub_SetCfg</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b89e9675-6920-4c18-988e-251a823d29bf</id>
+                        <parameterName>host</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e4325287-fddc-4d0d-b56e-4c6af8401252</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fcafca22-e8ea-4af1-aa9d-84fbd2d0ad95</id>
+                <name>TADstub_GetCfg</name>
+                <funName>TADstub_GetCfg</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>83a03d8c-29cf-44e0-85de-3d3c7bbc6ec9</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

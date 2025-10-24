@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>bd0f7023-50b6-4ad0-86b6-b31f0e93811f</moduleId>
+        <!-- Module name -->
+        <moduleName>systemutil</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>20</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="5bc355df-812e-4e8b-a86e-9bf386be57b2" name="TestMgr_ExecuteBinary">
+                <parameters>
+                    <parameter id="844be95b-222e-4cbe-a7f6-9ef6e59e9227" parameterName="log_file" parameterType="STRING" range="a-z"/>
+                    <parameter id="a6e4b1c0-eac8-4758-946e-fbdfdf3bc562" parameterName="shell_script" parameterType="STRING" range="a-z"/>
+                    <parameter id="c769d429-9fb8-4693-a2ac-d28003bc8fa8" parameterName="tool_path" parameterType="STRING" range="a-z"/>
+                    <parameter id="5582bb09-a055-428a-aa02-41107fa2b4f4" parameterName="timeout" parameterType="INTEGER" range="0-30"/>
+                </parameters>
+            </function>
+            <function id="099704d5-cdf0-4bc6-b437-df0ec0e267b1" name="TestMgr_ExecuteCmd">
+                <parameters>
+                    <parameter id="61eb3348-7e0e-48e5-b9a3-0fd6c90d97ab" parameterName="command" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>3a718d58-5b32-40e0-a9a2-ec78b89673e7</id>
+                <name>ExecuteCommand</name>
+                <funName>TestMgr_ExecuteCmd</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f0b91a27-809d-438f-a897-d89f687a0e4f</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ae754753-949b-4b4d-b6ca-13585ed5948f</id>
+                <name>SystemUtilAgent_ExecuteBinary</name>
+                <funName>TestMgr_ExecuteBinary</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>36d0d812-26bf-4624-8cd1-6948ccb4278d</id>
+                        <parameterName>tool_path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3cecd924-2d86-4f22-a93c-7f4fd56fbda2</id>
+                        <parameterName>timeout</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-30</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4868ea2b-6767-4046-8207-9b8150809eb3</id>
+                        <parameterName>log_file</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a1ccd389-df29-4a4a-a72b-8ad6ed18a211</id>
+                        <parameterName>shell_script</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

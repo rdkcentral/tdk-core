@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>99ef7d04-43d4-4d94-802c-78a1cdac47df</moduleId>
+        <!-- Module name -->
+        <moduleName>moca-hal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>2</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="b084229e-6e0e-4405-94e0-52d03e451c37" name="TestMgr_MocaHal_RemoteNode_GetRxPackets">
+                <parameters>
+                    <parameter id="767aa205-f47e-43fd-9d29-d48323b65455" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="c620047a-f7e8-444c-af9a-df0ad4530549" name="TestMgr_MocaHal_GetNCNodeId">
+                <parameters/>
+            </function>
+            <function id="c64c74ae-8f8e-4e10-b34e-a65d59a68e19" name="TestMgr_MocaHal_GetPrimaryChannelFreq">
+                <parameters/>
+            </function>
+            <function id="863c96b3-c445-48d3-9228-e31a1f5ca44a" name="TestMgr_MocaHal_GetLOF">
+                <parameters/>
+            </function>
+            <function id="024b3c34-99f8-45fa-822a-927ee6ac420e" name="TestMgr_MocaHal_GetNumNodes">
+                <parameters/>
+            </function>
+            <function id="4d87941f-c69c-4bbc-84d6-e0a26037b99c" name="TestMgr_MocaHal_GetMoCALinkUp">
+                <parameters/>
+            </function>
+            <function id="ff28059c-87f5-4fab-a7e8-2efef14b960f" name="TestMgr_MocaHal_GetTxTotalBytes">
+                <parameters/>
+            </function>
+            <function id="79a73869-af83-48fd-bd00-b32378a01331" name="TestMgr_MocaHal_SetLOF">
+                <parameters>
+                    <parameter id="a326599e-1bd9-4a9d-b289-9382f37baf0c" parameterName="freq" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="9145d230-c842-4f79-8eb5-438b6b7933e1" name="TestMgr_MocaHal_GetTxBeaconPowerReductionEnabled">
+                <parameters/>
+            </function>
+            <function id="ad8b0d95-4c3c-4cc9-ad14-63b7b6f00fd3" name="TestMgr_MocaHal_GetTxTotalPackets">
+                <parameters/>
+            </function>
+            <function id="1d8554bc-3708-413c-9aba-9cd8e9da312a" name="TestMgr_MocaHal_SetPreferredNCEnabled">
+                <parameters>
+                    <parameter id="7531b4c1-1dc5-49e8-8b8b-fcab5dade424" parameterName="enable" parameterType="STRING" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="8e9e930a-598c-4ce7-a6be-72a7e1d171f7" name="TestMgr_MocaHal_SetTurboEnabled">
+                <parameters>
+                    <parameter id="a27621ed-684f-495a-bfd5-cdf20093d732" parameterName="enable" parameterType="STRING" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="533f1611-6624-451d-bd29-fc0ff16cc0ff" name="TestMgr_MocaHal_GetLastResetReason">
+                <parameters/>
+            </function>
+            <function id="a9a29c34-0e87-4e03-a23e-af6afc83604a" name="TestMgr_MocaHal_RemoteNode_GetRxBroadcastPower">
+                <parameters>
+                    <parameter id="f08ac646-1a1f-461f-8a58-0bbe473df8ae" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="fa6ee098-f8d1-44bb-bd63-5903ed7f4ab5" name="TestMgr_MocaHal_RemoteNode_GetMaxPacketAggregation">
+                <parameters>
+                    <parameter id="8a562a70-563d-427b-968a-19a51f731496" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="44269066-1d76-4946-96f4-f9352272dcea" name="TestMgr_MocaHal_RemoteNode_GetRxUnicastPower">
+                <parameters>
+                    <parameter id="601ee7ba-a959-459f-8fd5-81061a5f34c6" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="055ad154-cf3d-4be3-a8e7-418a139d6ba5" name="TestMgr_MocaHal_GetMaxPacketAggregation">
+                <parameters/>
+            </function>
+            <function id="e81ee201-3d1f-408f-b358-e225c4e50c35" name="TestMgr_MocaHal_RemoteNode_GetRxUnCorrectedErrors">
+                <parameters>
+                    <parameter id="f1cdf98a-9475-41f9-83ad-41ecba0430c8" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="003ed455-c9ba-4995-b506-27da186b0319" name="TestMgr_MocaHal_RemoteNode_GetRxTotalErrors">
+                <parameters>
+                    <parameter id="77ae1b7b-712c-4f43-810a-a712ac4e64f4" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="d4c0eb65-48bc-4250-96f1-301c550f02ab" name="TestMgr_MocaHal_GetTxBroadcastPhyRate">
+                <parameters/>
+            </function>
+            <function id="0326dcaf-5748-47d7-b4bc-98dce04d0b1e" name="TestMgr_MocaHal_RemoteNode_GetRxUnicastPhyRate">
+                <parameters>
+                    <parameter id="ad90f38c-bcfd-429a-bf5d-857f33b6d4a6" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="1f552d71-9ea2-409d-8888-2965ebfd1971" name="TestMgr_MocaHal_GetEnabled">
+                <parameters/>
+            </function>
+            <function id="684a24ec-240c-4cd2-943e-172d97d94ade" name="TestMgr_MocaHal_RemoteNode_GetTxPackets">
+                <parameters>
+                    <parameter id="bf86ec3d-93c2-463e-8e53-d0fe357fda18" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="0da52980-d104-4386-be39-f24d6c56351d" name="TestMgr_MocaHal_GetLinkUptime">
+                <parameters/>
+            </function>
+            <function id="84520a2b-32c7-48cb-b9a2-a0a2b9e783dd" name="TestMgr_MocaHal_RemoteNode_GetMac">
+                <parameters>
+                    <parameter id="6aed3ee0-522b-4307-abd4-ad89394f1854" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="5b5bfde5-c89f-4d08-a4dc-b7b5905562a8" name="TestMgr_MocaHal_GetPrivacyEnabled">
+                <parameters/>
+            </function>
+            <function id="c72bfc05-e278-4648-bf3e-14074a205810" name="TestMgr_MocaHal_GetResetCount">
+                <parameters/>
+            </function>
+            <function id="c9181869-6d66-4795-bc47-9479857b41f3" name="TestMgr_MocaHal_GetName">
+                <parameters/>
+            </function>
+            <function id="5615d566-d580-4f6b-b1d8-23fd209f4b24" name="TestMgr_MocaHal_GetLowBandwidthLimit">
+                <parameters/>
+            </function>
+            <function id="a3a2bd30-f85c-42f5-a9bb-23bc5e07179b" name="TestMgr_MocaHal_GetTxPowerLimit">
+                <parameters/>
+            </function>
+            <function id="46beb9eb-4a6e-4a07-ad6e-30294bcbc75d" name="TestMgr_MocaHal_GetMixedMode">
+                <parameters/>
+            </function>
+            <function id="9088bc6c-62be-40d6-9f0f-412de9ef5494" name="TestMgr_MocaHal_RemoteNode_GetTxUnicastPhyRate">
+                <parameters>
+                    <parameter id="0989fbf3-a00e-41ff-a579-1aa7e3e1d69b" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="47a10440-870d-4df3-ba50-a6289f21538a" name="TestMgr_MocaHal_GetSoftwareVersion">
+                <parameters/>
+            </function>
+            <function id="502e09e7-eaf3-4837-a481-5ccd7eebbb3d" name="TestMgr_MocaHal_GetRemoteNodeIds">
+                <parameters/>
+            </function>
+            <function id="1a452385-e6e1-4046-b748-71c226bd7329" name="TestMgr_MocaHal_GetRxDroppedPackets">
+                <parameters/>
+            </function>
+            <function id="38be3c5b-7766-4a79-87ce-ca9d6f334c23" name="TestMgr_MocaHal_GetSupportedFrequencies">
+                <parameters/>
+            </function>
+            <function id="bbe80f7b-945e-417d-bb8b-a3faa99701cc" name="TestMgr_MocaHal_GetMode">
+                <parameters/>
+            </function>
+            <function id="2cef0d7f-6de2-45b8-a429-cf0aa9133bc0" name="TestMgr_MocaHal_GetTxDroppedPackets">
+                <parameters/>
+            </function>
+            <function id="7b3eb335-8925-4b7c-b298-b601cce05a34" name="TestMgr_MocaHal_GetNetworkNodeIds">
+                <parameters/>
+            </function>
+            <function id="e24c7b07-91eb-498c-8337-3e0e8bf7065d" name="TestMgr_MocaHal_RemoteNode_GetActiveMoCAVersion">
+                <parameters>
+                    <parameter id="5824672d-4e99-43c5-be72-11d689e2b721" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="73ba5915-18da-4857-8a70-16d761ed9687" name="TestMgr_MocaHal_GetTurboEnabled">
+                <parameters/>
+            </function>
+            <function id="4bf6aee2-5906-4e47-8928-9a74378ca2c9" name="TestMgr_MocaHal_GetSupportedModes">
+                <parameters/>
+            </function>
+            <function id="bec39557-9991-45fe-99ba-c1e6300feb09" name="TestMgr_MocaHal_GetFrequencyMask">
+                <parameters/>
+            </function>
+            <function id="15cfddaf-8937-4f49-b30a-af1d6f0748c5" name="TestMgr_MocaHal_GetHighestSupportedMoCAVersion">
+                <parameters/>
+            </function>
+            <function id="14fd64d2-5de6-4d32-9d8f-4d9ae10c7225" name="TestMgr_MocaHal_GetPreferredNCEnabled">
+                <parameters/>
+            </function>
+            <function id="08369948-5792-451d-8ad1-eb8c1d4ea046" name="TestMgr_MocaHal_GetBackupNCNodeId">
+                <parameters/>
+            </function>
+            <function id="401d8065-574b-460b-99c3-0a8166891fe0" name="TestMgr_MocaHal_GetNCMac">
+                <parameters/>
+            </function>
+            <function id="97a0bc5b-468c-4b3c-a710-2767fa61567d" name="TestMgr_MocaHal_GetMaxBitRate">
+                <parameters/>
+            </function>
+            <function id="97fc8915-6219-4a27-8aa0-2fe3e5b84ddc" name="TestMgr_MocaHal_GetRFChannelFreq">
+                <parameters/>
+            </function>
+            <function id="128d2435-3234-4660-a1be-6f4650336838" name="TestMgr_MocaHal_GetSecondaryChannelFreq">
+                <parameters/>
+            </function>
+            <function id="6561d901-2df4-4f22-b4bd-477949fa7180" name="TestMgr_MocaHal_RemoteNode_GetRxSNR">
+                <parameters>
+                    <parameter id="4387c04b-725d-4489-9629-753ffd3019e3" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="1f7d6c53-c58e-42ba-89ef-83222806d64d" name="TestMgr_MocaHal_RemoteNode_GetPreferredNC">
+                <parameters>
+                    <parameter id="35255397-d957-4bcb-9c78-d733662ef72a" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="b01b545f-55b5-43bd-ad7a-ecf3ff444fc2" name="TestMgr_MocaHal_GetTxGCDPhyRate">
+                <parameters/>
+            </function>
+            <function id="03192e43-a313-4b9d-aae4-280b3c7791b6" name="TestMgr_MocaHal_GetLinkDownCount">
+                <parameters/>
+            </function>
+            <function id="a49d7322-e4bf-4557-85d5-4113bfd73b5b" name="TestMgr_MocaHal_GetMac">
+                <parameters/>
+            </function>
+            <function id="bee45328-56ec-4cea-8503-14d0a629cb7a" name="TestMgr_MocaHal_RemoteNode_GetMaxFrameSize">
+                <parameters>
+                    <parameter id="1da20391-f126-492e-8937-93c86b85d0a3" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="407aee83-495c-4c34-a222-8efea0f86a2e" name="TestMgr_MocaHal_GetTxMapPhyRate">
+                <parameters/>
+            </function>
+            <function id="4e0dee00-f38b-4a2f-ad04-28e4c5dfb23a" name="TestMgr_MocaHal_GetTxPowerControlEnabled">
+                <parameters/>
+            </function>
+            <function id="11b5bd9e-5d9f-41c7-8c3b-f80265c7e280" name="TestMgr_MocaHal_RemoteNode_GetTxUnicastPower">
+                <parameters>
+                    <parameter id="14225bd6-1a3a-47de-9650-b84c793bc4ca" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="c2469881-7e23-4362-92bc-477bc8042356" name="TestMgr_MocaHal_RemoteNode_GetRxMapPower">
+                <parameters>
+                    <parameter id="822a4e7d-f7d1-4aec-b375-8ec158d799ea" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="a07f7f9b-f9fe-4b88-8015-9cbcdb23c006" name="TestMgr_MocaHal_Initialize">
+                <parameters/>
+            </function>
+            <function id="ca42e5e0-8873-4901-a9aa-e2774a425c2c" name="TestMgr_MocaHal_GetRxTotalPackets">
+                <parameters/>
+            </function>
+            <function id="bcd70d23-5589-4908-ae4b-7f59a2ae7708" name="TestMgr_MocaHal_GetMaxFrameSize">
+                <parameters/>
+            </function>
+            <function id="dabb4e4b-efcb-4f8c-866f-9e61b1364527" name="TestMgr_MocaHal_GetRxTotalBytes">
+                <parameters/>
+            </function>
+            <function id="18b50e95-7b4b-4133-bde4-ddc00081b869" name="TestMgr_MocaHal_RemoteNode_GetRxCorrectedErrors">
+                <parameters>
+                    <parameter id="7dc00a77-0a78-465e-b53b-deaa8854f79d" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="a1db0d2f-3c04-4d85-98b0-4960086454b4" name="TestMgr_MocaHal_SetEnabled">
+                <parameters>
+                    <parameter id="3c325f84-28c1-4be6-8855-6d4e24809f38" parameterName="enable" parameterType="STRING" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="28841809-febf-433c-bd3c-e91fc8eb75e5" name="TestMgr_MocaHal_GetMoCAVersion">
+                <parameters/>
+            </function>
+            <function id="d88423e0-b046-4da8-a53d-d47d8acc9dc5" name="TestMgr_MocaHal_RemoteNode_GetRxBroadcastPhyRate">
+                <parameters>
+                    <parameter id="6ae74895-bee5-44d3-998d-82d6c60cad92" parameterName="nodeId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="fb16e034-e0ef-47f4-a4d2-3aa20952c7a0" name="TestMgr_MocaHal_GetSupportedBand">
+                <parameters/>
+            </function>
+            <function id="53919db7-320c-4cd0-9a3e-f2580395e017" name="TestMgr_MocaHal_GetNodeId">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0b061560-0023-41c8-8762-14e78eafb46b</id>
+                <name>MocaHal_RemoteNode_GetActiveMoCAVersion</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetActiveMoCAVersion</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>52f24920-369a-416e-abda-701c94afbdb0</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0e7f3ca8-ce19-430c-9645-317a05d6bf82</id>
+                <name>MocaHal_GetLinkDownCount</name>
+                <funName>TestMgr_MocaHal_GetLinkDownCount</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>0ee82990-94c2-482c-a1cd-98766d1b96d2</id>
+                <name>MocaHal_Get_ResetCount</name>
+                <funName>TestMgr_MocaHal_GetResetCount</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>0fb6cb93-53de-4037-8499-9d071386378b</id>
+                <name>MocaHal_GetLOF</name>
+                <funName>TestMgr_MocaHal_GetLOF</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>185d86a6-7d66-4e4f-978a-ddcfa81b36fe</id>
+                <name>MocaHal_GetHighestSupportedMoCAVersion</name>
+                <funName>TestMgr_MocaHal_GetHighestSupportedMoCAVersion</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>1bf43198-a78f-4465-a050-a9a1680c2b08</id>
+                <name>MocaHal_RemoteNode_GetPreferredNC</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetPreferredNC</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>bb3a5af4-2088-4693-92e5-11e15c0fe7da</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1ccc4d32-a63f-480f-a29e-694b59b8ea61</id>
+                <name>MocaHal_GetRemoteNodeIds</name>
+                <funName>TestMgr_MocaHal_GetRemoteNodeIds</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>1ef9265a-3505-421a-af12-704cec05ab46</id>
+                <name>MocaHal_GetTxTotalPackets</name>
+                <funName>TestMgr_MocaHal_GetTxTotalPackets</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>22a3d613-726c-487c-bead-3960de9a13fd</id>
+                <name>MocaHal_GetLowBandwidthLimit</name>
+                <funName>TestMgr_MocaHal_GetLowBandwidthLimit</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>2735f752-80f7-4853-89ad-98d51d238359</id>
+                <name>MocaHal_RemoteNode_GetMaxFrameSize</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetMaxFrameSize</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a7022eaf-e807-486e-96ef-1484ef64a700</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2a897f51-a7c2-4522-a63c-3e13281991a1</id>
+                <name>MocaHal_GetNodeId</name>
+                <funName>TestMgr_MocaHal_GetNodeId</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>2f8589b9-489e-4475-94a3-9694d10bb84f</id>
+                <name>MocaHal_GetSecondaryChannelFreq</name>
+                <funName>TestMgr_MocaHal_GetSecondaryChannelFreq</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>3232112f-962e-4b42-a251-a3b0c91d0ba2</id>
+                <name>MocaHal_GetMaxPacketAggregation</name>
+                <funName>TestMgr_MocaHal_GetMaxPacketAggregation</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>39ea3d92-6088-4e2d-8c6b-0881facdcc8d</id>
+                <name>MocaHal_GetLinkUptime</name>
+                <funName>TestMgr_MocaHal_GetLinkUptime</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>3b6b6dab-3cd4-4fb5-8929-ff174c7d6c67</id>
+                <name>MocaHal_GetMixedMode</name>
+                <funName>TestMgr_MocaHal_GetMixedMode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4547dcfa-cfb7-40c9-8bc8-89175edf9c6c</id>
+                <name>MocaHal_RemoteNode_GetRxUnicastPhyRate</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetRxUnicastPhyRate</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9bd03370-970b-442b-8af7-ccd10799baf5</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4627f91f-4adf-4652-84d3-0221fbc77daf</id>
+                <name>MocaHal_GetMac</name>
+                <funName>TestMgr_MocaHal_GetMac</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>49237171-da17-4c03-8492-b66dff3a74f8</id>
+                <name>MocaHal_RemoteNode_GetRxMapPower</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetRxMapPower</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>35e30b40-7e9b-4e4d-a8a4-ae10eb4a5b41</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5338da1c-db8a-435b-a426-4bf1c4f2de7b</id>
+                <name>MocaHal_GetSupportedFrequencies</name>
+                <funName>TestMgr_MocaHal_GetSupportedFrequencies</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>55c5bfd6-3a41-44ea-9b9a-1d008dfc0274</id>
+                <name>MocaHal_GetSupportedBand</name>
+                <funName>TestMgr_MocaHal_GetSupportedBand</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>579e1297-6613-4fbb-8126-750dbe65ed22</id>
+                <name>MocaHal_RemoteNode_GetTxPackets</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetTxPackets</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>073d1d43-99ff-4317-898a-db2b8d7bba01</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>57feb6f7-0636-44e7-89db-1a852884e10d</id>
+                <name>MocaHal_RemoteNode_GetRxPackets</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetRxPackets</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c2281401-d9ae-4e42-a7ba-b5c04c430c60</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5f52ca06-a418-4ada-82cf-c06def07e83f</id>
+                <name>MocaHal_RemoteNode_GetRxTotalErrors</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetRxTotalErrors</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0220144b-5726-4f51-88f4-8edbf572cf2a</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>60da6449-3233-4b51-828f-e7df84ebacf9</id>
+                <name>MocaHal_GetTxPowerControlEnabled</name>
+                <funName>TestMgr_MocaHal_GetTxPowerControlEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6205f50f-c328-479b-a656-fec58fa47d37</id>
+                <name>MocaHal_GetNCNodeId</name>
+                <funName>TestMgr_MocaHal_GetNCNodeId</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6256cf83-51fd-488e-9988-a1ca5bb180ce</id>
+                <name>MocaHal_GetNCMac</name>
+                <funName>TestMgr_MocaHal_GetNCMac</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6ac12428-61e8-4b1a-b04b-d249d00ee7e1</id>
+                <name>MocaHal_RemoteNode_GetTxUnicastPhyRate</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetTxUnicastPhyRate</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>bfac19d2-8ba0-472d-9b69-660ba6a7a1ed</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>731ad9af-da1a-4b51-86c4-281ac259644a</id>
+                <name>MocaHal_RemoteNode_GetRxBroadcastPhyRate</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetRxBroadcastPhyRate</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6ef2dad9-b1f5-4bd3-b1ce-4fa0b8c5ffe6</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7448579d-cf9b-4c1a-94f7-54764ae51f80</id>
+                <name>MocaHal_GetTxDroppedPackets</name>
+                <funName>TestMgr_MocaHal_GetTxDroppedPackets</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>74a76d2f-b1fc-4244-811f-29e944e6752d</id>
+                <name>MocaHal_GetRxTotalPackets</name>
+                <funName>TestMgr_MocaHal_GetRxTotalPackets</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>77e29654-032a-4c98-90da-95ee27993474</id>
+                <name>MocaHal_GetNumNodes</name>
+                <funName>TestMgr_MocaHal_GetNumNodes</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>78ded938-bb47-40cd-a90c-cdf20e7678c9</id>
+                <name>MocaHal_GetTxBroadcastPhyRate</name>
+                <funName>TestMgr_MocaHal_GetTxBroadcastPhyRate</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>79efd130-e708-41e5-8d48-72ff9b7ec759</id>
+                <name>MocaHal_GetFrequencyMask</name>
+                <funName>TestMgr_MocaHal_GetFrequencyMask</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>7bbb91fa-d208-4a39-b3af-690d00f4a4cc</id>
+                <name>MocaHal_GetRxTotalBytes</name>
+                <funName>TestMgr_MocaHal_GetRxTotalBytes</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>82848c0d-e4f5-49de-9a39-aa2549988e08</id>
+                <name>MocaHal_GetTxPowerLimit</name>
+                <funName>TestMgr_MocaHal_GetTxPowerLimit</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>8c4b0d76-f21f-4cc5-a9e5-40d14bab83af</id>
+                <name>MocaHal_GetEnabled</name>
+                <funName>TestMgr_MocaHal_GetEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9d24612b-a19a-4759-b203-e411fbdacfbf</id>
+                <name>MocaHal_GetPrimaryChannelFreq</name>
+                <funName>TestMgr_MocaHal_GetPrimaryChannelFreq</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9f86ce4f-4208-4469-ab5f-3c81c02cee13</id>
+                <name>MocaHal_RemoteNode_GetRxCorrectedErrors</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetRxCorrectedErrors</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f1b16806-e636-4b76-b111-8afcafb34daf</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a2bbd68b-022b-4ace-8200-7f6533ab2623</id>
+                <name>MocaHal_SetEnabled</name>
+                <funName>TestMgr_MocaHal_SetEnabled</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>aacd5e04-8c09-4657-9adc-9bd372b1c591</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a64cb307-4805-444f-ab0a-e59a1ab9eeac</id>
+                <name>MocaHal_RemoteNode_GetRxSNR</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetRxSNR</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>19487215-b69f-4c40-8ac4-aa5ebf4e39ba</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ab7b443a-1b1b-49cc-8d98-2c9d50d394e6</id>
+                <name>MocaHal_GetTxMapPhyRate</name>
+                <funName>TestMgr_MocaHal_GetTxMapPhyRate</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>af434659-618b-49bd-892f-363c64f5df93</id>
+                <name>MocaHal_GetName</name>
+                <funName>TestMgr_MocaHal_GetName</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b0da9f33-72e0-4a5f-8dd7-64fa6e257472</id>
+                <name>MocaHal_GetTxBeaconPowerReductionEnabled</name>
+                <funName>TestMgr_MocaHal_GetTxBeaconPowerReductionEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b0e35acf-8a93-4cc0-b4da-05b300b1e39c</id>
+                <name>MocaHal_RemoteNode_GetRxUnicastPower</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetRxUnicastPower</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b2155705-469e-44cc-88fb-b93793239300</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b4b6c798-a113-43d4-bd98-e9d73ca9ae7c</id>
+                <name>MocaHal_GetTurboEnabled</name>
+                <funName>TestMgr_MocaHal_GetTurboEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b7465176-db7e-4639-9f3b-bd37cfdebe09</id>
+                <name>MocaHal_GetRxDroppedPackets</name>
+                <funName>TestMgr_MocaHal_GetRxDroppedPackets</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b8f50d2b-a75d-49f6-a75a-6e5236677ddc</id>
+                <name>MocaHal_GetTxGCDPhyRate</name>
+                <funName>TestMgr_MocaHal_GetTxGCDPhyRate</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>bd2e6348-a4e5-493d-92c5-983adb21b3d0</id>
+                <name>MocaHal_SetPreferredNCEnabled</name>
+                <funName>TestMgr_MocaHal_SetPreferredNCEnabled</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>76ce9690-86f6-48eb-9fe4-2a762afbb1db</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bd36461e-9c49-4318-b98a-c9c40a9bcea8</id>
+                <name>MocaHal_RemoteNode_GetRxBroadcastPower</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetRxBroadcastPower</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f3eab3fb-eee1-42c8-9f35-2b81e199ab5d</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c08232a6-34cb-4e14-ba38-973c75085c9c</id>
+                <name>MocaHal_GetMaxFrameSize</name>
+                <funName>TestMgr_MocaHal_GetMaxFrameSize</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c3a9bcc0-bf0f-4a52-ab5f-af111bdf3d28</id>
+                <name>MocaHal_GetRFChannelFreq</name>
+                <funName>TestMgr_MocaHal_GetRFChannelFreq</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c8214ec4-9ee1-4a9b-bdc1-bc28c449e481</id>
+                <name>MocaHal_GetMoCAVersion</name>
+                <funName>TestMgr_MocaHal_GetMoCAVersion</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c9ff825f-7423-4b54-8a2c-2ad5b5378c31</id>
+                <name>MocaHal_GetTxTotalBytes</name>
+                <funName>TestMgr_MocaHal_GetTxTotalBytes</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>cd6447c9-6a70-4bf6-b11d-e071837f7cbe</id>
+                <name>MocaHal_RemoteNode_GetMac</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetMac</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>38624a2e-4a22-46ec-8ea2-275a652ec055</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ceb7ef3e-b81e-4748-81b5-40f3dda3d558</id>
+                <name>MocaHal_SetTurboEnabled</name>
+                <funName>TestMgr_MocaHal_SetTurboEnabled</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>33e622e5-3054-407e-80ee-65da654b67f2</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ced5c4aa-2211-4dfe-96b4-25c0c4e1fb26</id>
+                <name>MocaHal_GetSupportedModes</name>
+                <funName>TestMgr_MocaHal_GetSupportedModes</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>d3ad6ed1-94d3-48df-a26a-360abddaff9e</id>
+                <name>MocaHal_RemoteNode_GetRxUnCorrectedErrors</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetRxUnCorrectedErrors</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2498c9a2-d9ba-4c8a-ada3-bd62bc06462f</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d73318cf-728e-4b5d-aac9-3a07d4491ffc</id>
+                <name>MocaHal_GetBackupNCNodeId</name>
+                <funName>TestMgr_MocaHal_GetBackupNCNodeId</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>da688320-0228-4ae6-b975-34ccfbf83076</id>
+                <name>MocaHal_GetSoftwareVersion</name>
+                <funName>TestMgr_MocaHal_GetSoftwareVersion</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>dee093b7-9c1b-40d3-9b68-29f2f38c6936</id>
+                <name>MocaHal_GetPrivacyEnabled</name>
+                <funName>TestMgr_MocaHal_GetPrivacyEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e4e3f846-74f6-4b71-adcf-ab8378be7535</id>
+                <name>MocaHal_RemoteNode_GetTxUnicastPower</name>
+                <funName>TestMgr_MocaHal_RemoteNode_GetTxUnicastPower</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>71a786ce-ec39-4d11-b72b-2cccc6b0a0ee</id>
+                        <parameterName>nodeId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e6c1adfd-0b75-4120-b627-4593fad34cf1</id>
+                <name>MocaHal_GetMaxBitRate</name>
+                <funName>TestMgr_MocaHal_GetMaxBitRate</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f52a0e24-e935-4724-ac52-d895264f13fb</id>
+                <name>MocaHal_GetPreferredNCEnabled</name>
+                <funName>TestMgr_MocaHal_GetPreferredNCEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f56c4bc4-cac5-4c25-a062-b0bc68adee50</id>
+                <name>MocaHal_GetMode</name>
+                <funName>TestMgr_MocaHal_GetMode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f6a69b41-8448-4eed-90e6-c829c0bde77f</id>
+                <name>MocaHal_GetNetworkNodeIds</name>
+                <funName>TestMgr_MocaHal_GetNetworkNodeIds</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f8aefb55-97b2-4d20-915e-9c02a1785df6</id>
+                <name>MocaHal_GetMoCALinkUp</name>
+                <funName>TestMgr_MocaHal_GetMoCALinkUp</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

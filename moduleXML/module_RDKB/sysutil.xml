@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>b8ca48cc-acf6-4ee1-a301-a27508320f9a</moduleId>
+        <!-- Module name -->
+        <moduleName>sysutil</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="0a380ec3-5488-4c9d-b78e-db959a8fffdd" name="TestMgr_ExecuteCmd">
+                <parameters>
+                    <parameter id="2260720c-0989-4e29-b088-25f2a5659ff6" parameterName="command" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5d0a438a-3760-4411-a651-1c7eadd92a03" name="TestMgr_ExecuteCmdReboot">
+                <parameters>
+                    <parameter id="63fe74c1-6b96-4bac-885f-9de9946325bf" parameterName="command" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>42afa724-194a-4669-b74c-728dd59bdc95</id>
+                <name>ExecuteCmdReboot</name>
+                <funName>TestMgr_ExecuteCmdReboot</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e182c04c-d3d2-4e0b-9e50-a12507ed6227</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8837062a-8d32-4895-87c7-3b210b18b924</id>
+                <name>ExecuteCmd</name>
+                <funName>TestMgr_ExecuteCmd</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4d6fd931-1ba9-42da-be4c-c05026162f69</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

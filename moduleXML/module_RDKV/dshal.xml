@@ -1,0 +1,2047 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>679acd49-a190-4d63-af8e-86a50a0660d4</moduleId>
+        <!-- Module name -->
+        <moduleName>dshal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>2</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="e384d89f-6a9a-4cff-af7e-30047ae6e203" name="TestMgr_DSHal_GetAudioCapabilities">
+                <parameters>
+                    <parameter id="7dac08ac-364d-4af8-9855-547db487d61f" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="b4c80ee0-e6b4-44bc-8d7f-c72fcd6b06c7" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="63840187-7aa3-4652-9c12-7beb1d61f38f" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                </parameters>
+            </function>
+            <function id="ebafbc17-b2fe-403a-84d0-cb717a6e6895" name="TestMgr_DSHal_GetSupportedTvResolutions">
+                <parameters/>
+            </function>
+            <function id="7e5ec5af-1298-4408-8754-665b63d01c7f" name="TestMgr_DSHal_GetHDRCapabilities">
+                <parameters/>
+            </function>
+            <function id="b997940a-0ec0-4d53-b227-e8e9b14205b7" name="TestMgr_DSHal_SetVersion">
+                <parameters>
+                    <parameter id="e36591e4-547a-4312-bd68-1d84386f0688" parameterName="version" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="f4cebd57-b254-43b2-ba26-b7e9e9a9cb8f" name="TestMgr_DSHal_SetBassEnhancer">
+                <parameters>
+                    <parameter id="47eda617-603c-47ae-980a-82ae2efb1d26" parameterName="boost" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="1d881efe-fbb3-4e76-9920-d844624f8dfa" name="TestMgr_DSHal_IsHDCPEnabled">
+                <parameters/>
+            </function>
+            <function id="69976121-0b4c-44e1-a83e-7da973691488" name="TestMgr_DSHal_SetAudioDelay">
+                <parameters>
+                    <parameter id="4baa93a7-0c7e-44f9-b1a8-82785b458bce" parameterName="audioDelay" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="97d69861-0e59-4112-a1df-92201a102980" name="TestMgr_DSHal_SetStereoAuto">
+                <parameters>
+                    <parameter id="8ee633f3-9dca-491f-8982-5fdc9aefd138" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="227b8551-0d6e-4208-b21f-f6d570fa3a1e" parameterName="automode" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="458d24eb-c36d-4eaa-8dd5-967baae4d3ed" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                </parameters>
+            </function>
+            <function id="e84a05b9-786c-49e8-b4f8-eb46d534a270" name="TestMgr_DSHal_HdmiInScaleVideo">
+                <parameters>
+                    <parameter id="c1aa5e57-16d7-4062-9b8a-2c90d06b2e7d" parameterName="height" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="6654629c-338e-4878-9681-aa97445fc920" parameterName="y" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="2942d40c-f8d0-4eb9-83c0-fc62734f0eb3" parameterName="x" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="f4afcaf8-f0f8-4e1a-9aab-755025c1ca79" parameterName="width" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="725957ae-2552-414a-9506-a5c54283766c" name="TestMgr_DSHal_GetStereoAuto">
+                <parameters>
+                    <parameter id="da70bb49-6233-40d8-9769-ed3802da95f6" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="6b3b169c-1fda-4343-b675-d1fd1cebdc1c" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="e4776e14-4ce1-44aa-b83b-81f398f6569d" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="f6daaf7e-24f9-4556-af7c-b56a060506ee" name="TestMgr_DSHal_IsVideoPortEnabled">
+                <parameters/>
+            </function>
+            <function id="2ef55b0c-cd7e-4d86-b392-4dbc195ce78e" name="TestMgr_DSHal_SetAudioLevel">
+                <parameters>
+                    <parameter id="4cb6792d-4c42-4256-a235-a469a3fee745" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="17e72ca4-1b87-4884-9274-eb5ed29d6cc7" parameterName="audiolevel" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="fde25e2a-33a7-4dd8-9002-663e994928c5" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="f713a8ab-b10c-4de2-a2d8-43a821260e87" name="TestMgr_DSHal_GetCPUTemperature">
+                <parameters/>
+            </function>
+            <function id="75237c26-0594-440e-b0c7-5ed0fd40ae61" name="TestMgr_DSHal_HdmiInSelectPort">
+                <parameters>
+                    <parameter id="6f54bcb0-7097-4886-ac15-91375c488f8b" parameterName="port" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="d3e7f3dc-86b0-4e8b-8eff-4f697e13727f" name="TestMgr_DSHal_GetEDIDBytes">
+                <parameters/>
+            </function>
+            <function id="a98fd26e-15be-4867-9beb-f6b5fc0b8159" name="TestMgr_DSHal_GetAudioDelayOffset">
+                <parameters/>
+            </function>
+            <function id="5ac0e60d-60fc-4ee1-a09d-5b091cbd11db" name="TestMgr_DSHal_SetAudioDelayOffset">
+                <parameters>
+                    <parameter id="6ddf4cc6-80cb-4468-bddf-9f59d10f5c14" parameterName="offset" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="1ccfb23c-d671-4655-a503-fd36a8e28984" name="TestMgr_DSHal_SetAudioMute">
+                <parameters>
+                    <parameter id="95d271fe-0068-477c-940c-c8ab40d66abb" parameterName="muted" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="88576a09-a0fa-45d6-beb0-88f4bf91e3c9" name="TestMgr_DSHal_GetFPBrightness">
+                <parameters>
+                    <parameter id="e96ae7f0-a7ef-4712-b113-5846cb30c56f" parameterName="indicator" parameterType="INTEGER" range="0-4"/>
+                </parameters>
+            </function>
+            <function id="08f40134-63f1-4316-86c7-00fe141b6fad" name="TestMgr_DSHal_GetVideoPort">
+                <parameters>
+                    <parameter id="f554e255-e710-48c6-944b-80229b591cf0" parameterName="get_DefaultType" parameterType="INTEGER" range="0-14"/>
+                    <parameter id="a95ab961-fae5-4b38-a4a8-c76e486fdc47" parameterName="secondary_portType" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="550a01f3-d886-4ce3-9a33-62379e939d78" parameterName="index" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="0022eb81-91a0-4188-a0ee-4ca17588f36a" parameterName="portType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="068d7a22-66ba-4586-a739-873e3e8ae568" name="TestMgr_DSHal_GetMS12AudioProfile">
+                <parameters>
+                    <parameter id="1c58c662-4214-49c0-bafc-a1bb9b2c9f43" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="4239f4e9-6fd0-4427-a4ab-660bc1198409" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="68dc1baf-90f3-4254-b884-fdd5044846c7" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                </parameters>
+            </function>
+            <function id="37d80060-9275-4436-aa7c-7ab4dc548646" name="TestMgr_DSHal_GetColorSpace">
+                <parameters/>
+            </function>
+            <function id="0f92fa58-323b-4efa-90e1-9d286457525b" name="TestMgr_DSHal_GetMS12Capabilities">
+                <parameters>
+                    <parameter id="58a3f4b5-6fef-4995-b228-c5e302f0d9d7" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="f0a9cbad-55ee-4044-9660-eb5b2c954a9f" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="587f4b0e-cad8-48e7-8d11-c4fcf2c7b2e0" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                </parameters>
+            </function>
+            <function id="31e0303a-2ee8-40ac-8905-cb90e88de062" name="TestMgr_DSHal_GetAudioEncoding">
+                <parameters/>
+            </function>
+            <function id="6eb78c3d-f5ea-4bbc-83ab-06d354856781" name="TestMgr_DSHal_GetCurrentOutputSettings">
+                <parameters/>
+            </function>
+            <function id="ce35b3a5-114f-448f-8490-532685d16595" name="TestMgr_DSHal_SetMISteering">
+                <parameters>
+                    <parameter id="c76d0d25-61c7-49cb-bbdb-66dbd95afdc0" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="58f601ee-acfa-4fa5-9410-bbe7e6747f7f" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="9bfdabb2-1654-4e23-bfc2-013ab356e9cb" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                </parameters>
+            </function>
+            <function id="5b4c38cf-57fa-4bc6-abba-a45f2d135407" name="TestMgr_DSHal_IsAudioMute">
+                <parameters/>
+            </function>
+            <function id="7b90ad9a-6925-4631-b817-93031e6a0bd2" name="TestMgr_DSHal_EnableLoopThru">
+                <parameters>
+                    <parameter id="a00d8ebf-56bb-4f2b-9a57-69401b8b3b0d" parameterName="enableLoopThru" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="77216a44-c026-427a-b631-84222e8db3ab" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="90c7e993-5185-4c1e-bfa2-49d8868cc2cd" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                </parameters>
+            </function>
+            <function id="9d7d3b8f-8574-4dc5-8b3b-1c3f68f6c4c6" name="TestMgr_DSHal_GetMS12AudioProfileList">
+                <parameters>
+                    <parameter id="012850b1-89ee-48cf-bc5e-38e0d45bb3e1" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="d8edecaa-71fd-41fe-9692-d83488fb6dfb" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="5b6ed48f-7801-4ea1-92c6-c6835ac577b3" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="5fd0fd1a-6608-41dc-ac05-def5c1bf7365" name="TestMgr_DSHal_SetFPBlink">
+                <parameters>
+                    <parameter id="8565911b-212e-47cb-9e82-043c85d2b88b" parameterName="indicator" parameterType="INTEGER" range="0-4"/>
+                    <parameter id="33b90bff-f5c0-4d66-b585-a3fdb618f43d" parameterName="blinkDuration" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="eaf7247c-44b9-4c95-8576-5806cd94d206" parameterName="blinkIteration" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="795ea4f9-485d-4c28-a6a4-29470eb5c8dd" name="TestMgr_DSHal_GetEDID">
+                <parameters/>
+            </function>
+            <function id="9538de26-0672-411c-9bc1-f19c2e40e559" name="TestMgr_DSHal_GetAudioPort">
+                <parameters>
+                    <parameter id="6173137e-b4cb-457f-bf24-875f8f9640d6" parameterName="secondary_portType" parameterType="INTEGER" range="0-14"/>
+                    <parameter id="99ba7e52-26ae-482f-a27f-3d72e92257bf" parameterName="get_DefaultType" parameterType="INTEGER" range="0-14"/>
+                    <parameter id="c176f3f6-de3a-4673-b77f-9b93e18699b2" parameterName="portType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="9a63a11e-d75f-437a-9ec8-abdd953a4045" parameterName="index" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="626bbaa0-c549-4fa6-8b73-51c9e48a355f" name="TestMgr_DSHal_GetDolbyVolumeMode">
+                <parameters/>
+            </function>
+            <function id="1912bd30-9fe8-4d96-bf0e-bf58dd6d8812" name="TestMgr_DSHal_SetResolution">
+                <parameters>
+                    <parameter id="71a14358-7367-4be4-8aad-f92c84195790" parameterName="resolution" parameterType="STRING" range="a-z"/>
+                    <parameter id="fee19223-c520-4319-957c-42a876e1b320" parameterName="pixelResolution" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="205837ae-3d1e-46f7-8cbd-4b60cdfa1da4" parameterName="interlaced" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="e25cbe8c-4d15-4b9f-b933-e00338e8ebed" parameterName="stereoScopicMode" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="3cb705e8-aa2d-4486-baf1-84d74ea52cdb" parameterName="aspectRatio" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="7dbf05d0-57f6-40c0-9857-278ac9eee2c4" parameterName="persist" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="ac368c05-aab0-4222-9cb8-976d03b0b7f2" parameterName="frameRate" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="e9fbd1a1-963a-47e0-8081-70d58ca91c12" name="TestMgr_DSHal_SetBackgroundColor">
+                <parameters>
+                    <parameter id="15da67a4-32e2-4567-b313-98389da271c2" parameterName="color" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="707c46eb-4993-4c01-8ace-bf86da461f86" name="TestMgr_DSHal_SetStereoMode">
+                <parameters>
+                    <parameter id="73a1335d-48c7-4d2c-b822-bede4a0a3278" parameterName="stereoMode" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="3f8982ea-2dc6-4eb7-a762-2cadcf9b52f2" name="TestMgr_DSHal_GetIntelligentEqualizerMode">
+                <parameters/>
+            </function>
+            <function id="cadeb0cd-97ed-45cf-96f0-01a893f784da" name="TestMgr_DSHal_SetVolumeLeveller">
+                <parameters>
+                    <parameter id="a29967e2-1d1c-4059-8d8c-0faaeb3ee144" parameterName="level" parameterType="INTEGER" range="0-14"/>
+                    <parameter id="348df843-e36c-40c3-a9cb-dbb68caef384" parameterName="mode" parameterType="INTEGER" range="0-14"/>
+                </parameters>
+            </function>
+            <function id="25a746f9-d728-4bf7-bd1c-2ce738957884" name="TestMgr_DSHal_GetAudioDB">
+                <parameters>
+                    <parameter id="43dff047-f70d-49e7-9762-8caaf6b45daa" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="1fba5205-5d82-431b-a7f1-6eadbdabd2e3" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="2362554b-414d-4e11-9303-6aa2b77a7ed1" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="e7dfc642-821f-4343-9e7f-b3dea80e5f2f" name="TestMgr_DSHal_GetDRCMode">
+                <parameters/>
+            </function>
+            <function id="cd384692-fc02-409a-ab95-9dfbdf24afd9" name="TestMgr_DSHal_SetHdmiPreference">
+                <parameters>
+                    <parameter id="84daf68b-510e-476c-b8a0-8ace24628bd5" parameterName="hdcpProtocol" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="1c2264d0-1809-4bdd-9c05-efe9fa544d3b" name="TestMgr_DSHal_GetAudioLevel">
+                <parameters>
+                    <parameter id="00c33f43-301d-4587-bfb5-93f164a22b3e" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="e6f89e15-8416-4ac8-af3a-0e4990ce82bd" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="2ed089bf-5f5b-44e9-a98b-caa13856e7a3" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="03720d60-1174-4967-89bd-3f5e9da8020c" name="TestMgr_DSHal_SetFPText">
+                <parameters>
+                    <parameter id="595ba502-b6e9-4f6d-b1fd-04365b94be2e" parameterName="text" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="dd42de32-0199-4e68-b38b-ae49dc8de7f5" name="TestMgr_DSHal_IsDisplaySurround">
+                <parameters/>
+            </function>
+            <function id="be8d4f98-76b4-48c3-b8dc-0506e011bcf4" name="TestMgr_DSHal_GetSocIDFromSDK">
+                <parameters/>
+            </function>
+            <function id="3e5f8979-668b-49bc-910b-c85948f50aa9" name="TestMgr_DSHal_SetDialogEnhancement">
+                <parameters>
+                    <parameter id="efbf01e5-fa0c-485f-9fd2-acd35ebc26e7" parameterName="level" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="3fa72de2-8a77-4209-8785-e24fe874ea3b" name="TestMgr_DSHal_IsAudioLoopThru">
+                <parameters>
+                    <parameter id="7198d6ed-60e7-4edb-bdc0-6f063de866c2" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="cf44f9b5-7a59-42c5-990a-59eb0bf6fc59" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="f32974af-9cc9-46e0-9e3e-24c176680c98" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="dea51e95-23ac-495d-9bbc-c99faa09ac0f" name="TestMgr_DSHal_HdmiInSelectZoomMode">
+                <parameters>
+                    <parameter id="e8349c35-1283-43f5-905b-784b2ee3bb84" parameterName="mode" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="80af62d0-0b0c-4599-9449-ca405df9dbb1" name="TestMgr_DSHal_GetAudioFormat">
+                <parameters>
+                    <parameter id="b7b33a51-cd5c-4adb-8a2d-fbb4c49f41fa" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="59414391-f4d2-4d7f-a619-95b05aea71b4" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="719699ac-d9dd-41f7-b269-c1bc243df459" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                </parameters>
+            </function>
+            <function id="852d0570-4c83-49bb-9a1b-5ccd691b2f4e" name="TestMgr_DSHal_HdmiInGetNumberOfInputs">
+                <parameters/>
+            </function>
+            <function id="774befc6-1243-42c3-8a0a-60cef2b141e2" name="TestMgr_DSHal_EnableMS12Config">
+                <parameters/>
+            </function>
+            <function id="7850e30e-2f53-4397-bc98-2d8eccb0b545" name="TestMgr_DSHal_GetGraphicEqualizerMode">
+                <parameters>
+                    <parameter id="2deb773f-b22f-4011-a82d-381088c84f60" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="0026b12c-f7fb-4bba-a44b-e83a6451b024" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="5e3dca28-b05f-4b89-9c3d-3c2fc72e7f88" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                </parameters>
+            </function>
+            <function id="b844c3ea-f92f-422b-ac4f-fdaff304f4de" name="TestMgr_DSHal_GetStereoMode">
+                <parameters/>
+            </function>
+            <function id="1ead9cc9-9b70-4685-bf4e-70bc849b1362" name="TestMgr_DSHal_GetResolution">
+                <parameters/>
+            </function>
+            <function id="1cdc891c-43b2-4598-9bcd-c9bdb194f5e7" name="TestMgr_DSHal_GetHdmiInCurrentVideoMode">
+                <parameters/>
+            </function>
+            <function id="f59e9920-074f-4ef3-ba93-a18316eb7b34" name="TestMgr_DSHal_SetAudioGain">
+                <parameters>
+                    <parameter id="52289a9f-d50e-4500-8587-91f207e2eac2" parameterName="audiogain" parameterType="INTEGER" range="-2080-480"/>
+                    <parameter id="e0bb4d54-18fe-44c0-ba85-5b35f88e62db" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="2ed1ce5d-bdd9-49a7-8d89-067333b08dde" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="0cdd28e1-947a-4e93-9fa9-e81eed0040a2" name="TestMgr_DSHal_SetAudioAtmosOutputMode">
+                <parameters>
+                    <parameter id="602ff528-7688-4f6d-b410-fd60b3e39323" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="cb880af5-973c-4554-b18f-c17a668e6f79" name="TestMgr_DSHal_SetFPBrightness">
+                <parameters>
+                    <parameter id="c69614bd-8d0a-462b-a35b-c2773c44e4c3" parameterName="indicator" parameterType="INTEGER" range="0-5"/>
+                    <parameter id="c53b4ca7-dd26-4bad-8730-213611ca28d6" parameterName="brightness" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="a79f843e-41e8-4e7f-9e76-628387dcd48b" name="TestMgr_DSHal_GetMISteering">
+                <parameters>
+                    <parameter id="237d1825-2dca-463e-9a05-4a5f7d1fa1fb" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="136fe791-e6bc-4d45-9cb3-012c1ed4c123" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="11cf94cf-bada-436b-9fe3-fc4a12bbc4d8" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="f98f9c7d-9280-4627-977e-300af9cf6a00" name="TestMgr_DSHal_IsOutputHDR">
+                <parameters/>
+            </function>
+            <function id="c1412db8-89d6-4ab5-a8b8-a6b44ce05043" name="TestMgr_DSHal_GetVideoEOTF">
+                <parameters/>
+            </function>
+            <function id="7be70e1b-d729-49db-af61-7a5f84b5a874" name="TestMgr_DSHal_SetFPTime">
+                <parameters>
+                    <parameter id="7e6de52a-76ae-4f0f-88fc-9ba6e93be9f0" parameterName="minutes" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="b71d98ba-3d98-4e7b-b9c8-625690ef627c" parameterName="hours" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="204253b2-f098-4c07-bd6c-6015b0413afb" parameterName="format" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a0f592d7-bb12-4dc0-9635-23e0646d7945" name="TestMgr_DSHal_SetFPTextBrightness">
+                <parameters>
+                    <parameter id="3857d171-7c53-403b-89db-e68358122190" parameterName="brightness" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="d2886618-c787-49cf-bb17-02fe1993c41c" name="TestMgr_DSHal_HdmiInGetStatus">
+                <parameters/>
+            </function>
+            <function id="2e185346-b08c-4f40-aa97-97134ad4c3db" name="TestMgr_DSHal_GetDialogEnhancement">
+                <parameters/>
+            </function>
+            <function id="ec5fd733-51ec-4396-a750-50a38f25aadf" name="TestMgr_DSHal_SetAudioDB">
+                <parameters>
+                    <parameter id="3fe5da24-f01c-4595-8424-1b549ad4bd11" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="f7a3793b-4e7d-4a68-aebb-8a38071d8a61" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="3ffb60f0-33da-4f92-93ad-8a6e98358855" parameterName="audiodBlevel" parameterType="INTEGER" range="-1450-180"/>
+                </parameters>
+            </function>
+            <function id="eb75e6da-9f7f-4dec-8154-1995772a6922" name="TestMgr_DSHal_SetDRCMode">
+                <parameters>
+                    <parameter id="6f2a9be6-a3e8-4bb1-831e-39b418df4e99" parameterName="mode" parameterType="INTEGER" range="1-10"/>
+                </parameters>
+            </function>
+            <function id="ad5cf678-6ed2-4821-95da-7bc1a906479b" name="TestMgr_DSHal_SetGraphicEqualizerMode">
+                <parameters>
+                    <parameter id="98e47282-9bf5-4a0a-aed2-6670f46c29f0" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="0d437a25-d263-4e8f-8eca-0f8f2c360f57" parameterName="mode" parameterType="INTEGER" range="0-5"/>
+                    <parameter id="635ea1c2-e833-42ff-b7f7-ff093386d476" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="f2833e09-8824-497d-b19f-156389ced4e5" name="TestMgr_DSHal_IsAudioPortEnabled">
+                <parameters/>
+            </function>
+            <function id="a7c9f6b7-9567-41d8-a3dc-e8fa840cbce8" name="TestMgr_DSHal_GetSurroundMode">
+                <parameters/>
+            </function>
+            <function id="8803683b-79ed-4ae6-9595-72eb63a9ad08" name="TestMgr_DSHal_SetIntelligentEqualizerMode">
+                <parameters>
+                    <parameter id="a46f731e-69d9-4170-bd58-8d9069c57a95" parameterName="mode" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="552aaec4-5a41-4b86-903b-4674354786db" name="TestMgr_DSHal_GetHDCPProtocol">
+                <parameters/>
+            </function>
+            <function id="82b328cf-4d9f-4833-a584-6486bbc4063d" name="TestMgr_DSHal_IsAudioMSDecode">
+                <parameters/>
+            </function>
+            <function id="e0969714-8cde-4f4e-a8c3-e4b3abcd6281" name="TestMgr_DSHal_GetAudioDelay">
+                <parameters/>
+            </function>
+            <function id="57505b35-0c91-421a-8a00-5b45d202b795" name="TestMgr_DSHal_GetHDCPReceiverProtocol">
+                <parameters/>
+            </function>
+            <function id="3955288a-1045-4e70-bd4b-6cc28869d36c" name="TestMgr_DSHal_GetMatrixCoefficients">
+                <parameters/>
+            </function>
+            <function id="86dc2c2b-8eb4-4247-8473-1c2344ff4b19" name="TestMgr_DSHal_GetAudioCompression">
+                <parameters/>
+            </function>
+            <function id="209bf7f7-1ae2-4fc7-bf4e-160c44c77343" name="TestMgr_DSHal_GetBassEnhancer">
+                <parameters/>
+            </function>
+            <function id="5d669a94-2dbb-4e82-9c63-915ab19cc2c0" name="TestMgr_DSHal_GetTVHDRCapabilities">
+                <parameters/>
+            </function>
+            <function id="89fb054a-e50f-4354-abae-6f10c95a87e7" name="TestMgr_DSHal_GetVideoCodecInfo">
+                <parameters>
+                    <parameter id="7fbddbbe-3fd0-4fbb-827e-622048d5c303" parameterName="format" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="42309833-2efe-4325-8962-44418a8d5ab8" name="TestMgr_DSHal_EnableSurroundDecoder">
+                <parameters>
+                    <parameter id="d5fa9596-06ee-4bc1-a866-cf5ae03b7c21" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="7f4642e3-152d-4ade-ae21-7c72fa523297" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="d92875e1-f794-4ee2-b8c0-00c236589ff6" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="7cc2999f-0339-4f82-89cc-610f8dcad156" name="TestMgr_DSHal_GetColorDepth">
+                <parameters/>
+            </function>
+            <function id="cf49d3ae-9e3b-4e4d-97fa-cb98cc1af84a" name="TestMgr_DSHal_IsSurroundDecoderEnabled">
+                <parameters>
+                    <parameter id="268e4522-f652-44c1-bd45-7688c67460d1" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="6f0a2bb0-28e5-4a96-853b-22d30db60e94" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="e7379de3-1720-4b2d-a936-47ebca47b0f6" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="d47dd9eb-c595-4838-bc8f-9ed747ac4eae" name="TestMgr_DSHal_GetVolumeLeveller">
+                <parameters/>
+            </function>
+            <function id="474e3023-0abf-40dc-b64f-6da5b629475a" name="TestMgr_DSHal_GetSinkDeviceAtmosCapability">
+                <parameters/>
+            </function>
+            <function id="971ceba6-9b5e-4c07-8cca-caaebdc0800d" name="TestMgr_DSHal_GetSurroundVirtualizer">
+                <parameters/>
+            </function>
+            <function id="efa4432d-103e-4448-893c-0c1842d8afff" name="TestMgr_DSHal_GetLEConfig">
+                <parameters/>
+            </function>
+            <function id="ab132ef4-b671-4915-b509-d0e03d1d78e2" name="TestMgr_DSHal_IsDisplayConnected">
+                <parameters/>
+            </function>
+            <function id="2c5ecb6c-1ff5-491b-aac3-aa90b116cd63" name="TestMgr_DSHal_GetHDCPCurrentProtocol">
+                <parameters/>
+            </function>
+            <function id="fee066a6-4e2f-4e01-936e-771b0d401134" name="TestMgr_DSHal_SetFPColor">
+                <parameters>
+                    <parameter id="62094007-d24a-41a0-b75f-68db28f6c523" parameterName="indicator" parameterType="INTEGER" range="0-4"/>
+                    <parameter id="4fed6387-dc4b-4528-b15a-a1b343749bba" parameterName="color" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="bd104b14-9bb6-4a50-99f9-4fe0ee1e4fd6" name="TestMgr_DSHal_GetVideoDevice">
+                <parameters>
+                    <parameter id="ad9a0546-48d3-41b8-90fc-cc227839687e" parameterName="index" parameterType="INTEGER" range="0"/>
+                </parameters>
+            </function>
+            <function id="3055e5cf-b06f-4389-84ba-df4baa676b9b" name="TestMgr_DSHal_EnableVideoPort">
+                <parameters>
+                    <parameter id="8490329c-9414-45c6-a1dc-13ceb24888f9" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="a4c68f81-ab82-452c-a4b3-d0214d730379" name="TestMgr_DSHal_GetSupportedVideoCodingFormats">
+                <parameters/>
+            </function>
+            <function id="3ee61327-82e3-4636-8e0a-a5574fefc679" name="TestMgr_GetCurrentOutputSettings">
+                <parameters/>
+            </function>
+            <function id="3e178c3f-6b0b-4d6e-97cb-2e977fad0194" name="TestMgr_DSHal_GetDisplay">
+                <parameters>
+                    <parameter id="252c0aa2-76fb-48ed-a249-7b5501c946f8" parameterName="index" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="6719edc2-178d-4758-bece-cb868b3f90bb" parameterName="portType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="7c27feb3-e2ae-4ddf-9d39-4c370f2d9312" name="TestMgr_DSHal_EnableLEConfig">
+                <parameters>
+                    <parameter id="26c727ad-0485-4031-88d9-97a2fd72380a" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="6cb6c746-991a-437f-8ce8-7ebf02a51745" name="TestMgr_DSHal_GetVersion">
+                <parameters/>
+            </function>
+            <function id="8304a082-9a23-4792-88e5-000c4173b7de" name="TestMgr_DSHal_GetDisplayAspectRatio">
+                <parameters/>
+            </function>
+            <function id="823d2783-3fbb-4898-9c7f-a64161730f4a" name="TestMgr_DSHal_EnableAudioPort">
+                <parameters>
+                    <parameter id="c61d392c-afd2-4ad8-9f89-f0a9d154683b" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="f7dccc2f-f03b-4a4f-845a-05b6a98b3eca" name="TestMgr_DSHal_IsVideoPortActive">
+                <parameters/>
+            </function>
+            <function id="b1cc7d3c-70ad-4d4d-b4a1-75bce00f2227" name="TestMgr_DSHal_IsAudioMS12Decode">
+                <parameters/>
+            </function>
+            <function id="2eb9e7af-2879-4d67-b4b3-72ca6915a862" name="TestMgr_DSHal_GetAudioGain">
+                <parameters>
+                    <parameter id="6123f345-2748-41af-836f-a0844e51912f" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="cb35762c-e800-4133-828c-01377f0ffe13" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="1536603b-f3cd-4c52-adf2-64c1962a526f" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                </parameters>
+            </function>
+            <function id="a5850bb5-27b0-42ac-a75f-9d1241ad0b63" name="TestMgr_DSHal_SetDolbyVolumeMode">
+                <parameters>
+                    <parameter id="c7c019dd-9363-4d87-836c-49c9c8d3a7c3" parameterName="mode" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="5938eae8-7492-4250-bdec-021349f7e168" name="TestMgr_DSHal_GetHdmiPreference">
+                <parameters/>
+            </function>
+            <function id="8196e9a6-a08c-4517-b19e-4cc9179a0fa4" name="TestMgr_DSHal_SetAudioCompression">
+                <parameters>
+                    <parameter id="89fde76a-1f17-41cd-9db5-71e735a984a1" parameterName="audioCompression" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="30d26acc-266d-41a5-a895-088bb06d4ab0" name="TestMgr_DSHal_SetSurroundVirtualizer">
+                <parameters>
+                    <parameter id="8e309dde-097a-4737-a710-38bee804887d" parameterName="mode" parameterType="INTEGER" range="0-14"/>
+                    <parameter id="f8cd6ed5-d496-4acb-92a4-26b35a7b9f51" parameterName="boost" parameterType="INTEGER" range="0-14"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>028cbd5a-8bb5-4bce-85ce-75551c3b8a94</id>
+                <name>DSHal_GetVideoPort</name>
+                <funName>TestMgr_DSHal_GetVideoPort</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>65a92fe5-3082-4c6d-b7d9-7f81515f7691</id>
+                        <parameterName>index</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c0054410-4f41-4d91-9c03-13e1f1b20313</id>
+                        <parameterName>secondary_portType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>8</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d4de94c1-047d-46a7-8021-a45c8ad8e62f</id>
+                        <parameterName>portType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d8a13795-0d8a-4e86-81d5-2b0ba64224ac</id>
+                        <parameterName>get_DefaultType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-14</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>044e9341-aafc-4e02-932f-81b4695b3169</id>
+                <name>DSHal_GetHdmiPreference</name>
+                <funName>TestMgr_DSHal_GetHdmiPreference</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>09956d28-0714-46fb-9936-3425b3276146</id>
+                <name>DSHal_IsOutputHDR</name>
+                <funName>TestMgr_DSHal_IsOutputHDR</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>0b9d514f-a147-4c4f-a0b5-9bc3a1ecf202</id>
+                <name>DSHal_GetDolbyVolumeMode</name>
+                <funName>TestMgr_DSHal_GetDolbyVolumeMode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>0bfa7429-178e-4149-8813-8164ea49914a</id>
+                <name>DSHal_GetGraphicEqualizerMode</name>
+                <funName>TestMgr_DSHal_GetGraphicEqualizerMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>44eddc34-7a0d-4064-99f2-688e0b9e33d2</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>49b21f4d-5f6c-4206-87a7-0f97489baa8f</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d2db68e7-d00b-4e85-a636-56c94e2bc8ec</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0c3490ab-2af5-4628-bdbb-171944416086</id>
+                <name>DSHal_GetAudioFormat</name>
+                <funName>TestMgr_DSHal_GetAudioFormat</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9cb85855-a40a-42df-9aee-b992dc63a4ef</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a6f49287-1a12-4c39-a3eb-ea3c1651d7f2</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b3478ebc-7202-40ad-970e-d0d65c2bdda3</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0ce0cebd-ec09-4639-ac5d-d6dc96a57afc</id>
+                <name>DSHal_IsAudioPortEnabled</name>
+                <funName>TestMgr_DSHal_IsAudioPortEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>0f228a7b-63ed-44ec-a7e1-2ab83557ec93</id>
+                <name>DSHal_GetLEConfig</name>
+                <funName>TestMgr_DSHal_GetLEConfig</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>125b0d06-84bb-498a-8d52-bbd4402cec22</id>
+                <name>DSHal_GetDialogEnhancement</name>
+                <funName>TestMgr_DSHal_GetDialogEnhancement</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>12880c26-3ff0-4238-b869-7189185ee217</id>
+                <name>DSHal_IsAudioLoopThru</name>
+                <funName>TestMgr_DSHal_IsAudioLoopThru</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>158053dd-c683-4354-8874-ead048418eea</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2aa4080a-0803-40c0-9120-15e245d6cbd4</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>35e92191-7c6a-43b1-b0a0-d0cace84a3ec</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>18fcacd8-3cd4-4614-9b68-96c53459ab4c</id>
+                <name>DSHal_GetSurroundMode</name>
+                <funName>TestMgr_DSHal_GetSurroundMode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>1c6633b0-d2bf-4ce9-a913-bbac1837aa17</id>
+                <name>DSHal_SetDialogEnhancement</name>
+                <funName>TestMgr_DSHal_SetDialogEnhancement</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>035e72b8-af09-414a-8b3d-1430ea34d13a</id>
+                        <parameterName>level</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1dd51897-3163-45a8-8212-dd7a52215020</id>
+                <name>DSHal_HdmiInGetStatus</name>
+                <funName>TestMgr_DSHal_HdmiInGetStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>229658a9-0ec0-4fe5-8633-907d2be21db5</id>
+                <name>DSHal_SetStereoMode</name>
+                <funName>TestMgr_DSHal_SetStereoMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>dc0aad66-929b-4021-9f5a-ebdb8af6678e</id>
+                        <parameterName>stereoMode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2355f7eb-ed62-407d-8b67-fce075741ead</id>
+                <name>DSHal_IsAudioMute</name>
+                <funName>TestMgr_DSHal_IsAudioMute</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>23aa5203-59cd-43aa-8342-91d1a1a2b5e8</id>
+                <name>DSHal_GetVolumeLeveller</name>
+                <funName>TestMgr_DSHal_GetVolumeLeveller</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>269d0f05-b07f-40ae-a8e0-cd37279d0aa8</id>
+                <name>DSHal_GetCPUTemperature</name>
+                <funName>TestMgr_DSHal_GetCPUTemperature</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>27000bda-60ea-43f0-be14-de918fe3041d</id>
+                <name>DSHal_EnableLoopThru</name>
+                <funName>TestMgr_DSHal_EnableLoopThru</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1b97d0cc-d6e3-4a6e-b9b1-09a399081066</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5fcf3614-6ed0-469d-83f8-add50bec99d3</id>
+                        <parameterName>enableLoopThru</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>aaac11c6-9cff-4e07-b598-9077b1a85e98</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2824fabc-2a1b-4c6f-90e3-54229c7882ad</id>
+                <name>DSHal_GetStereoMode</name>
+                <funName>TestMgr_DSHal_GetStereoMode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>2835e374-dffd-414a-b433-2c1e5d111fff</id>
+                <name>DSHal_GetSupportedVideoCodingFormats</name>
+                <funName>TestMgr_DSHal_GetSupportedVideoCodingFormats</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>2860dad8-484f-4523-b2b0-a0c24c795b1f</id>
+                <name>DSHal_GetMISteering</name>
+                <funName>TestMgr_DSHal_GetMISteering</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1dde83f2-72a4-4dc3-97c5-f1e975e62ae1</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9b3e0e2d-d828-43d0-a7f3-d300095b7be0</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d940e57a-7d51-4f48-a18a-7d7ec974d9ff</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>286f155a-013a-4a88-b028-8016feea0b3f</id>
+                <name>DSHal_SetIntelligentEqualizerMode</name>
+                <funName>TestMgr_DSHal_SetIntelligentEqualizerMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6377d4fa-b9e4-457d-b4a6-6256fed0b650</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2cc4474d-1b52-4f11-af02-1e0e49d241fd</id>
+                <name>DSHal_GetVideoCodecInfo</name>
+                <funName>TestMgr_DSHal_GetVideoCodecInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>629ae18a-c43b-45f1-a16a-f95182a4753c</id>
+                        <parameterName>format</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2e75ddd9-53f8-4933-9969-a2ae58bb6b4e</id>
+                <name>DSHal_GetAudioPort</name>
+                <funName>TestMgr_DSHal_GetAudioPort</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>04604a4b-69d4-4930-9ea5-37598f699174</id>
+                        <parameterName>index</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>0aa29c46-a9b0-4108-846f-0f34b84ae291</id>
+                        <parameterName>secondary_portType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-14</range>
+                        <value>3</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cc9c78bb-1595-4aae-b5d3-85ddea8f0595</id>
+                        <parameterName>get_DefaultType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-14</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f1a01718-0137-493b-8cdc-5b9c490838e8</id>
+                        <parameterName>portType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>302c1903-de97-4bdf-90bd-d511b5bcf6a6</id>
+                <name>DSHal_GetMS12AudioProfile</name>
+                <funName>TestMgr_DSHal_GetMS12AudioProfile</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4170d9b0-c943-4797-b1da-bc805422aa8d</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c650fb1d-15ce-4e7c-9d10-73e729ab031b</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c79a16e4-6895-4cb8-ab0c-15edef3cf06c</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3111b7aa-07bb-4f85-8a14-cb796aa39b82</id>
+                <name>DSHal_SetResolution</name>
+                <funName>TestMgr_DSHal_SetResolution</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>24807148-1920-4aa3-b20b-9850ba08f535</id>
+                        <parameterName>interlaced</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2da2dc06-85a7-48f6-8312-943bf3a3c736</id>
+                        <parameterName>frameRate</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>8</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3c620ace-a922-4bc3-ba42-49858ed3d0b1</id>
+                        <parameterName>stereoScopicMode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>43605159-97fb-4239-98a7-895ece8ee9f7</id>
+                        <parameterName>persist</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5a4cebc3-11ee-4368-820d-4aef1c08b40c</id>
+                        <parameterName>aspectRatio</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7a75f223-8d73-4d77-8500-89beb21e5fa3</id>
+                        <parameterName>pixelResolution</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c8be5c9e-f875-4ea3-bee2-4d777b30090e</id>
+                        <parameterName>resolution</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>32da56d4-3e5a-4dca-af35-d3396b648fec</id>
+                <name>DSHal_GetSurroundVirtualizer</name>
+                <funName>TestMgr_DSHal_GetSurroundVirtualizer</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>336f5034-d978-42b4-8297-99307b8904a8</id>
+                <name>DSHal_SetDolbyVolumeMode</name>
+                <funName>TestMgr_DSHal_SetDolbyVolumeMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>018d1e79-25ab-46d5-bb71-eb81729c6621</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>34254eb9-02fa-4597-9c3c-86679537401a</id>
+                <name>DSHal_SetAudioAtmosOutputMode</name>
+                <funName>TestMgr_DSHal_SetAudioAtmosOutputMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>bd12477b-6469-4f23-aa37-79cf7fe893e9</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3813bef5-4c05-4efc-ac74-d158ef597fc9</id>
+                <name>DSHal_SetSurroundVirtualizer</name>
+                <funName>TestMgr_DSHal_SetSurroundVirtualizer</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3c343d57-28f9-4ec4-a80b-c33f5d059fd4</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-14</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fdf97619-fd39-49e8-8c88-e37a4777a083</id>
+                        <parameterName>boost</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-14</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>434e5bf3-a3cc-40ed-8ef5-c15e92a7bc91</id>
+                <name>DSHal_GetMS12Capabilities</name>
+                <funName>TestMgr_DSHal_GetMS12Capabilities</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8e21ee55-a920-493c-8fb0-3a714f78e824</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b6e9fd3d-258b-4f18-af8a-6453f8301cc2</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d58006e6-6717-45ae-a5da-568bd208329d</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>43a59b68-8b89-4b2a-927e-a37484d2d64f</id>
+                <name>DSHal_SetHdmiPreference</name>
+                <funName>TestMgr_DSHal_SetHdmiPreference</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>116d1aff-79bf-4fd3-ba61-2d33d8b91f60</id>
+                        <parameterName>hdcpProtocol</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>444e9551-27ae-488d-a42a-a9021bd83a7f</id>
+                <name>DSHal_SetAudioDelay</name>
+                <funName>TestMgr_DSHal_SetAudioDelay</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>14044f0f-f9b2-42f3-a88c-a3da03b5a71d</id>
+                        <parameterName>audioDelay</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>46e532c2-e1b8-498b-b143-f9f07e5fdf91</id>
+                <name>DSHal_GetHDCPProtocol</name>
+                <funName>TestMgr_DSHal_GetHDCPProtocol</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4e15dcdb-a9e5-49e9-a570-13636617c63d</id>
+                <name>DSHal_GetTVHDRCapabilities</name>
+                <funName>TestMgr_DSHal_GetTVHDRCapabilities</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>51f0aa6d-3a5b-4f71-b2af-b52dea42fe45</id>
+                <name>DSHal_SetFPBlink</name>
+                <funName>TestMgr_DSHal_SetFPBlink</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0aa24a3b-d766-41bc-ac31-9fc948646af2</id>
+                        <parameterName>blinkDuration</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>61d14a16-a375-4721-ba3f-3848203321cb</id>
+                        <parameterName>indicator</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-4</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8672a664-39bd-4933-913c-8e4e27a95bad</id>
+                        <parameterName>blinkIteration</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>545ae90b-989b-48af-a3e5-4147a2e61f08</id>
+                <name>DSHal_GetHdmiInCurrentVideoMode</name>
+                <funName>TestMgr_DSHal_GetHdmiInCurrentVideoMode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>55b15db6-1454-4b75-968a-1ec44e590515</id>
+                <name>DSHal_EnableVideoPort</name>
+                <funName>TestMgr_DSHal_EnableVideoPort</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>19783f5e-006c-4c3e-92d2-e398f66b186c</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>56973d1d-682a-4c2e-b4f3-6fd97d93234b</id>
+                <name>DSHal_IsVideoPortEnabled</name>
+                <funName>TestMgr_DSHal_IsVideoPortEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>589ba04c-25a7-465c-aab3-f4477d5c7c8f</id>
+                <name>DSHal_GetMatrixCoefficients</name>
+                <funName>TestMgr_DSHal_GetMatrixCoefficients</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>58fbfc80-fb8c-4ca3-b3f1-fefb3ee5d4d2</id>
+                <name>DSHal_SetAudioDelayOffset</name>
+                <funName>TestMgr_DSHal_SetAudioDelayOffset</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9afff366-34f0-43e2-8e7d-e0065d2d58d8</id>
+                        <parameterName>offset</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>59f7e330-daa0-41a5-a77c-1002a4bb83bc</id>
+                <name>DSHal_SetBackgroundColor</name>
+                <funName>TestMgr_DSHal_SetBackgroundColor</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>bad00d5b-0c7c-4835-a0ed-ace2e67ebd37</id>
+                        <parameterName>color</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5a7873ef-e33d-4949-b8b9-9ff4f9435f42</id>
+                <name>DSHal_EnableSurroundDecoder</name>
+                <funName>TestMgr_DSHal_EnableSurroundDecoder</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>20fb393e-47eb-4d32-946d-94ea4457e6c8</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3cb2e6ff-00e6-4380-b196-dc6477af44aa</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>54f6112e-fc4b-4fb4-82ef-135e110b788b</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5e7bcc1f-fdc1-4f8d-a6dc-947fe7d00dc6</id>
+                <name>DSHal_GetResolution</name>
+                <funName>TestMgr_DSHal_GetResolution</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>61dfecb7-f633-442f-8575-7a4b49fad390</id>
+                <name>DSHal_SetBassEnhancer</name>
+                <funName>TestMgr_DSHal_SetBassEnhancer</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b7320b8d-1a69-43e4-85c0-e31b53cec434</id>
+                        <parameterName>boost</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6206926c-3809-4b03-ab3e-5d2983206eb6</id>
+                <name>DSHal_HdmiInGetNumberOfInputs</name>
+                <funName>TestMgr_DSHal_HdmiInGetNumberOfInputs</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6579ce08-4a7a-45e8-8204-fd3a93ddfd4b</id>
+                <name>DSHal_GetAudioDelayOffset</name>
+                <funName>TestMgr_DSHal_GetAudioDelayOffset</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>69fe4e46-dde4-445b-97d1-a012b6936ef1</id>
+                <name>DSHal_SetAudioLevel</name>
+                <funName>TestMgr_DSHal_SetAudioLevel</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0264505f-e71b-490f-b7fc-0b35ae7ca30b</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>807779cf-aacb-4e02-9459-ad96fd92095d</id>
+                        <parameterName>audiolevel</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ce811bb2-6218-4bad-a937-d5f3607fe37a</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>76597726-1972-4458-a9b3-18fb67a1cfe8</id>
+                <name>DSHal_GetDisplay</name>
+                <funName>TestMgr_DSHal_GetDisplay</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>06c7c5e5-8a7d-4ed8-89f9-26fd32177bb5</id>
+                        <parameterName>portType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>da562394-da79-4803-81f1-a51350bb765f</id>
+                        <parameterName>index</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>77f79e5b-b8ad-4d4e-8642-dbdd13bd71c9</id>
+                <name>DSHal_HdmiInSelectZoomMode</name>
+                <funName>TestMgr_DSHal_HdmiInSelectZoomMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4db94460-746d-40fa-864e-924d7b0864b7</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7afd47d8-d48d-4815-9df6-196cf71b94b0</id>
+                <name>DSHal_GetSinkDeviceAtmosCapability</name>
+                <funName>TestMgr_DSHal_GetSinkDeviceAtmosCapability</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>7c8f035f-1fbb-412c-9837-4122f9b6a304</id>
+                <name>DSHal_SetFPTextBrightness</name>
+                <funName>TestMgr_DSHal_SetFPTextBrightness</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>21e275f8-383b-45e2-bf5d-a9cdfe54967b</id>
+                        <parameterName>brightness</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>50</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7e96d27d-e549-4e65-9510-0bd6bd0c0cb6</id>
+                <name>DSHal_IsDisplayConnected</name>
+                <funName>TestMgr_DSHal_IsDisplayConnected</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>7f529e21-e053-4287-a465-41c25471d7eb</id>
+                <name>DSHal_SetAudioGain</name>
+                <funName>TestMgr_DSHal_SetAudioGain</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3c44b490-ad59-4535-8950-e087081ac3cc</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>54ca1da6-4dab-45a5-b3e9-b9f465b13935</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b3d7fae6-6c06-4d69-8a5d-b8052d449fd0</id>
+                        <parameterName>audiogain</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-2080-480</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>820b2fca-a7b9-4b2b-a65d-732532b587d0</id>
+                <name>DSHal_SetFPText</name>
+                <funName>TestMgr_DSHal_SetFPText</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2142cb4c-08f6-423c-a749-aa92d7f4e853</id>
+                        <parameterName>text</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>841a2db5-aa5a-46df-8b27-199164e9a94e</id>
+                <name>DSHal_SetFPTime</name>
+                <funName>TestMgr_DSHal_SetFPTime</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0396cc8f-9856-4554-88d3-505cf3472ced</id>
+                        <parameterName>format</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7d580b25-2879-4ab1-958d-849265d1ff59</id>
+                        <parameterName>hours</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c54c8910-60da-4462-96d4-77517c46a1dc</id>
+                        <parameterName>minutes</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>86398966-e449-4e65-9263-cae1b908ec26</id>
+                <name>DSHal_GetVideoEOTF</name>
+                <funName>TestMgr_DSHal_GetVideoEOTF</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>8682ae01-861a-4b0c-aea1-5862675fe747</id>
+                <name>DSHal_GetFPBrightness</name>
+                <funName>TestMgr_DSHal_GetFPBrightness</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>95d7dae3-617b-4f31-a35e-42610230033d</id>
+                        <parameterName>indicator</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-4</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>86beb6ab-836b-4767-874a-53d887785819</id>
+                <name>DSHal_GetSocIDFromSDK</name>
+                <funName>TestMgr_DSHal_GetSocIDFromSDK</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>888deac2-bc5b-4cd5-83c9-fa3612fadb28</id>
+                <name>DSHal_GetCurrentOutputSettings</name>
+                <funName>TestMgr_DSHal_GetCurrentOutputSettings</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>88ae7b6e-4b7a-4326-8b90-f462bbdedd7c</id>
+                <name>DSHal_SetFPBrightness</name>
+                <funName>TestMgr_DSHal_SetFPBrightness</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>72a8436f-4c1b-4959-9e41-a155a3f4e764</id>
+                        <parameterName>brightness</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a335a4bc-43b4-49b7-b28c-7d0f3076c7e7</id>
+                        <parameterName>indicator</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-5</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8c8466d8-cdba-423f-9686-cf9368fb5dd9</id>
+                <name>DSHal_SetVolumeLeveller</name>
+                <funName>TestMgr_DSHal_SetVolumeLeveller</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>193686d2-5329-4f88-a992-50bbf17e697f</id>
+                        <parameterName>level</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-14</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7918c629-ed44-45e2-a95c-a7af797bbeae</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-14</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8d945c1d-2813-45e5-bc8f-279e6c367626</id>
+                <name>DSHal_GetAudioDB</name>
+                <funName>TestMgr_DSHal_GetAudioDB</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7aff76ae-490f-46b9-bf44-3b8949fa90be</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c04ccfd5-f9c9-4a6c-aa33-269aa587bbb0</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f8449796-8533-4d2a-8409-ce5b62c2f648</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8ecf60b9-3f3b-4b41-a8e6-ef6ead3ba832</id>
+                <name>DSHal_GetBassEnhancer</name>
+                <funName>TestMgr_DSHal_GetBassEnhancer</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>94c9a6dc-bf5a-4fc0-a0a0-cde41e404028</id>
+                <name>DSHal_IsVideoPortActive</name>
+                <funName>TestMgr_DSHal_IsVideoPortActive</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>96607fb4-72b0-4333-a027-074a5aeff86b</id>
+                <name>DSHal_GetColorSpace</name>
+                <funName>TestMgr_DSHal_GetColorSpace</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>98dece49-a2a8-4379-ac49-ebb9e0e17dd9</id>
+                <name>DSHal_SetAudioCompression</name>
+                <funName>TestMgr_DSHal_SetAudioCompression</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e7302dd6-9931-4e4f-a328-6f3c3bc022a1</id>
+                        <parameterName>audioCompression</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9c201eb0-a218-4803-85f9-b2ab8a19141c</id>
+                <name>DSHal_GetColorDepth</name>
+                <funName>TestMgr_DSHal_GetColorDepth</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9cba45e0-dc31-4597-9c76-16ee779a58a7</id>
+                <name>DSHal_GetDisplayAspectRatio</name>
+                <funName>TestMgr_DSHal_GetDisplayAspectRatio</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9da7987d-5e73-401d-be96-e5a0d08755a4</id>
+                <name>DSHal_EnableLEConfig</name>
+                <funName>TestMgr_DSHal_EnableLEConfig</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>18530845-b422-421b-8520-47f0ea2cf8d8</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9df0ee0d-4da5-4aea-972e-37595bbe5587</id>
+                <name>DSHal_GetAudioEncoding</name>
+                <funName>TestMgr_DSHal_GetAudioEncoding</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9f0d3650-4831-4f6b-850b-87629af5ec23</id>
+                <name>DSHal_SetDRCMode</name>
+                <funName>TestMgr_DSHal_SetDRCMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>bd98015f-15fa-4998-8430-34c43215c356</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a579100e-f680-418d-a0a7-72fee72de10e</id>
+                <name>DSHal_GetHDCPCurrentProtocol</name>
+                <funName>TestMgr_DSHal_GetHDCPCurrentProtocol</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a84ad16a-a377-4651-b610-30bc3e7a46e9</id>
+                <name>DSHal_SetGraphicEqualizerMode</name>
+                <funName>TestMgr_DSHal_SetGraphicEqualizerMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>809770bd-14db-4902-b01c-81c56aa8e67b</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b73fbbe8-83a2-48c3-b2c1-34d6a32a76e5</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-5</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f090e278-adea-4b6c-bb0a-2522529a786c</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a8b4dd4d-997e-4a78-a891-5b8540466dcc</id>
+                <name>DSHal_HdmiInSelectPort</name>
+                <funName>TestMgr_DSHal_HdmiInSelectPort</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3604e844-3923-47e3-a23c-0487bc8cfc49</id>
+                        <parameterName>port</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a8bf94cb-0137-40d8-b14f-52d0657c679e</id>
+                <name>DSHal_SetAudioMute</name>
+                <funName>TestMgr_DSHal_SetAudioMute</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3c78a6cd-b327-4996-96a2-73022868e585</id>
+                        <parameterName>muted</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a8e113a8-2a1f-4aca-a046-e2ec5e86e8ad</id>
+                <name>DSHal_GetAudioCapabilities</name>
+                <funName>TestMgr_DSHal_GetAudioCapabilities</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2495abe7-96f6-421d-b417-2b86751d9a74</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4dfde6bb-1676-4316-b3ae-dfda592b6b71</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>51514ffd-8e40-4902-a6d5-e01eb70708e9</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>aa9c6618-c79d-4e1e-ac08-da0734a7b789</id>
+                <name>DSHal_GetIntelligentEqualizerMode</name>
+                <funName>TestMgr_DSHal_GetIntelligentEqualizerMode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>aaca3bb2-2d19-49a6-95bf-431f10eda276</id>
+                <name>DSHal_GetHDRCapabilities</name>
+                <funName>TestMgr_DSHal_GetHDRCapabilities</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b7d6bb20-1d43-4940-bb74-724e01378314</id>
+                <name>DSHal_SetMISteering</name>
+                <funName>TestMgr_DSHal_SetMISteering</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a21e5082-6f5e-4c5a-952e-b53f4e29824a</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b001e296-5844-408b-9c07-296a6ac9a40c</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c13b5370-8998-4a23-92ea-d89383a58430</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bb9f3262-5444-4414-9eb9-d229cf918db6</id>
+                <name>DSHal_IsAudioMS12Decode</name>
+                <funName>TestMgr_DSHal_IsAudioMS12Decode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>bd764c05-431f-4cd7-9554-2b13f0948eaa</id>
+                <name>DSHal_IsAudioMSDecode</name>
+                <funName>TestMgr_DSHal_IsAudioMSDecode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c6a24082-5516-4dcb-9a87-5b54872d3c18</id>
+                <name>DSHal_GetSupportedTvResolutions</name>
+                <funName>TestMgr_DSHal_GetSupportedTvResolutions</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>cc57a8b5-f523-4966-808f-59232797d76e</id>
+                <name>DSHal_GetEDID</name>
+                <funName>TestMgr_DSHal_GetEDID</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>cd1cdf43-6a4e-4604-b09e-d0852a481093</id>
+                <name>DSHal_GetAudioLevel</name>
+                <funName>TestMgr_DSHal_GetAudioLevel</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>01c0602e-717f-4fda-a0fb-681c4e0f4f48</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6b60d505-283c-4f3e-a949-14331e7af677</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fa07c604-c3a5-4782-89f3-3a8b846fa7d4</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cd42a10b-20cd-44db-8699-e01e4cc6585e</id>
+                <name>DSHal_GetDRCMode</name>
+                <funName>TestMgr_DSHal_GetDRCMode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>d31d329e-2715-4bd1-89c7-a6f3172bf76a</id>
+                <name>DSHal_SetAudioDB</name>
+                <funName>TestMgr_DSHal_SetAudioDB</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>526d36d2-5798-4a1c-9f05-1cb4a7bad809</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a774af17-7249-4c36-87e6-91d0a9455474</id>
+                        <parameterName>audiodBlevel</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1450-180</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cead7a38-8f75-4f91-8222-e64bb75d9c29</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d5246d50-570a-41ca-82f3-b69cafccb30e</id>
+                <name>DSHal_GetMS12AudioProfileList</name>
+                <funName>TestMgr_DSHal_GetMS12AudioProfileList</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>75551b16-e908-48ed-903a-c2bad3bb613d</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>85f29051-fefe-45ad-a5b8-06650e12fc39</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fc327dc4-5ac3-4f34-8e89-336d4bd91d9b</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d614d987-4549-48f3-a1e3-735a3e24c23b</id>
+                <name>DSHal_IsHDCPEnabled</name>
+                <funName>TestMgr_DSHal_IsHDCPEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>d7d887da-deb0-42b7-bae5-d58e2686320b</id>
+                <name>DSHal_SetVersion</name>
+                <funName>TestMgr_DSHal_SetVersion</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>cbec061e-7d61-456b-911e-4e6d3ec05cfd</id>
+                        <parameterName>version</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>dd4884e7-a3f7-4c8a-9370-20472e5d7277</id>
+                <name>DSHal_GetAudioCompression</name>
+                <funName>TestMgr_DSHal_GetAudioCompression</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>dd7671bf-b3f4-40ff-9a5a-bee643c2c184</id>
+                <name>DSHal_IsSurroundDecoderEnabled</name>
+                <funName>TestMgr_DSHal_IsSurroundDecoderEnabled</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4df17563-5a68-4b0e-ab29-ac8630e8b71e</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5bbf84b4-f073-4b1d-9cbd-a0a52e28901f</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>74abff38-2a46-4cde-8ab6-e29f49aeb054</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>df37401e-8779-43d4-a208-f2632b5af4ef</id>
+                <name>DSHal_EnableAudioPort</name>
+                <funName>TestMgr_DSHal_EnableAudioPort</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>de02d674-8052-4059-add9-9da7ed65f41d</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>dfc79081-283d-4bef-b148-54c843761513</id>
+                <name>DSHal_GetVersion</name>
+                <funName>TestMgr_DSHal_GetVersion</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ecb0c46e-2402-4358-9d7e-128c18909ce9</id>
+                <name>DSHal_GetEDIDBytes</name>
+                <funName>TestMgr_DSHal_GetEDIDBytes</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ecf2d5ab-1ee0-4ddd-b72d-168de6998735</id>
+                <name>DSHal_SetFPColor</name>
+                <funName>TestMgr_DSHal_SetFPColor</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>142207d1-8773-48e5-a71b-1f10ea4bc20c</id>
+                        <parameterName>color</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a2a4b1ce-df9f-4a8e-92ec-4679a534e1ec</id>
+                        <parameterName>indicator</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-4</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f30ee5a6-7977-4dbf-9afa-0390abec934e</id>
+                <name>DSHal_GetAudioGain</name>
+                <funName>TestMgr_DSHal_GetAudioGain</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>23132bc5-68a2-46de-9742-309a319db0fa</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7cb14c76-1e66-4d9b-b41c-1c4f120d2677</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>edddc58c-5ee4-472c-9868-86c99d9b0a0e</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f685c404-ce12-4a66-aa85-dea87a8c108e</id>
+                <name>DSHal_GetAudioDelay</name>
+                <funName>TestMgr_DSHal_GetAudioDelay</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f6dbd0da-8e15-44d7-9241-bdcac287f47d</id>
+                <name>DSHal_HdmiInScaleVideo</name>
+                <funName>TestMgr_DSHal_HdmiInScaleVideo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7ae5053b-70b3-48e5-ae6b-5c39e16d9164</id>
+                        <parameterName>height</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a9e7b9c5-986e-4671-808c-6849cfd621a8</id>
+                        <parameterName>x</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cda08a78-208b-412a-94bf-646dda7f9930</id>
+                        <parameterName>y</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f43e50c0-99e2-499c-9f51-044c5117b251</id>
+                        <parameterName>width</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f8e277cd-25c6-4000-953c-8d1e5a97b9b5</id>
+                <name>DSHal_GetStereoAuto</name>
+                <funName>TestMgr_DSHal_GetStereoAuto</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9ce6f6d3-d31a-44d3-8696-6b04022b39cf</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a31abfa5-5afc-4d2b-8475-1e4ace3b5b7c</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>da0f55c7-c13f-4d8c-8be1-32e9b6c415a9</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fb9b19f6-35ad-47e3-9f12-b26ea9d67808</id>
+                <name>DSHal_IsDisplaySurround</name>
+                <funName>TestMgr_DSHal_IsDisplaySurround</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>fd95642d-31c0-4414-a40e-28eda073217f</id>
+                <name>DSHal_GetHDCPReceiverProtocol</name>
+                <funName>TestMgr_DSHal_GetHDCPReceiverProtocol</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>fdf0c5ed-cf53-495a-84bd-2595585731e7</id>
+                <name>DSHal_SetStereoAuto</name>
+                <funName>TestMgr_DSHal_SetStereoAuto</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>75f25e36-8f0c-4b29-a8f1-3cb093f03cd2</id>
+                        <parameterName>automode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8e3dc603-acb4-4fdb-bada-4aae9f2048bb</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e829e3c4-4043-4d28-8cd3-8c8889e82802</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ff30faad-3584-4e1c-a8fe-f075cc615322</id>
+                <name>DSHal_EnableMS12Config</name>
+                <funName>TestMgr_DSHal_EnableMS12Config</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

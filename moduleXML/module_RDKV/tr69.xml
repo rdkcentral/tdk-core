@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>aeb6b318-3cb6-4851-92f4-a8d475187bcc</moduleId>
+        <!-- Module name -->
+        <moduleName>tr69</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="4e091faf-f5bb-45be-97ec-6b9f5efac8e0" name="TestMgr_VerifyParameterValue">
+                <parameters>
+                    <parameter id="f9cb1880-510b-4de4-ab23-019fbff97627" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="dbd6a6fb-3718-42da-9eaf-2199cb204377" parameterName="path" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="efdaca5b-29dd-430e-9e68-247b173a7bdb" name="TestMgr_GetParameterValue">
+                <parameters>
+                    <parameter id="97391610-ec08-45f8-ac55-e1451c9e5001" parameterName="path" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>319e4516-3869-48bc-8ba8-faceb04882de</id>
+                <name>Tr069_Verify_Profile_Parameter_Values</name>
+                <funName>TestMgr_VerifyParameterValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>28745864-b07b-433d-a532-677e8a86ed9d</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e75d0eba-30f2-4779-95d5-84669bfba65e</id>
+                        <parameterName>path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>83d84bb1-1ba1-444a-a933-4b3410db2abf</id>
+                <name>Tr069_Get_Profile_Parameter_Values</name>
+                <funName>TestMgr_GetParameterValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>60f94599-dc22-450c-8957-35306d8c54c1</id>
+                        <parameterName>path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

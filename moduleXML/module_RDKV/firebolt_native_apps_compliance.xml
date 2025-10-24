@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>869b3a38-69f4-4b90-87eb-43ce6b921f86</moduleId>
+        <!-- Module name -->
+        <moduleName>firebolt_native_apps_compliance</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>3</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>E2E</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="612346de-b7ba-4e33-96ec-7fef78cb2ea0" name="checkifCodecPlayed">
+                <parameters>
+                    <parameter id="34487afd-3819-4eac-a8ed-055ff81867a5" parameterName="codec" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="3c9088db-93e7-4a50-9603-aeae580a9bff" name="checkMediaPipelineTestStatus">
+                <parameters>
+                    <parameter id="97c1be0f-f359-45cf-9b79-1d5d47edbeb1" parameterName="outputString" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="9e31d46f-4040-4dd2-865b-29e98afbd356" name="executeCmndInDUT">
+                <parameters>
+                    <parameter id="440fc796-1a77-4bc6-bb92-df4c50b8290a" parameterName="command" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="c9a08dee-b164-484d-b13d-e5d82c704ab8" name="DurationParse">
+                <parameters>
+                    <parameter id="499ba55c-27fb-4769-b330-1338b98246b9" parameterName="duration_to_be_verified" parameterType="DOUBLE" range="1-1000"/>
+                    <parameter id="c4de2114-d1d5-4d34-9415-01aac766992e" parameterName="output" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5f5adc04-95c1-41ce-939f-2bc25f7fbcbe" name="setOperations">
+                <parameters>
+                    <parameter id="c3caf82d-81ce-48a0-b5ea-a44167b71d2a" parameterName="operation" parameterType="STRING" range="a-z"/>
+                    <parameter id="40adac00-8c57-4a4e-995b-9ece66530d53" parameterName="arguments" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="4c696a3b-fe68-4df9-8b5f-2bc153e318d0" name="checkifLanguagePlayed">
+                <parameters>
+                    <parameter id="6c91bdfd-2099-471b-981a-9d67ec332df8" parameterName="language" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="b33fe5e9-1148-4b65-837f-dc4339769801" name="parseLatency">
+                <parameters>
+                    <parameter id="cee07e46-4d75-47ec-b58d-38a86ab0432f" parameterName="latencyThreshold" parameterType="DOUBLE" range="1-1000"/>
+                    <parameter id="53492123-5eb3-492b-b8c7-5951efa2481a" parameterName="output" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8c20f641-20a8-4a12-aeb3-f9aa9075bba1" name="getDeviceConfigValue">
+                <parameters>
+                    <parameter id="c51b3a63-bdea-49a6-bca5-8923ad79aa50" parameterName="configKey" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="be3ca858-5895-4dfa-bd21-559f0742f6c5" name="getDeviceDetails">
+                <parameters>
+                    <parameter id="96da987b-2bc9-4327-8ed1-981642015d89" parameterName="detail" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="54f58468-bfcb-4d57-8709-55434b7c2e29" name="init_module">
+                <parameters>
+                    <parameter id="08c0b771-3a5a-4f3d-8d99-79eba1c4257f" parameterName="libobj" parameterType="STRING" range="a-z"/>
+                    <parameter id="d38c280c-0056-44a2-bc58-d81c8718c37e" parameterName="port" parameterType="STRING" range="a-z"/>
+                    <parameter id="dc15953d-14f5-48ca-a019-5d432116da72" parameterName="deviceInfo" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="9049b3a5-f5cb-4861-8bb4-6c98d2e6d05e" name="getDeviceConfig">
+                <parameters>
+                    <parameter id="4ad01077-b4c8-4f3e-b386-7cc6e7b9e1ca" parameterName="getDeviceConfig" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="af01b4ca-e627-42c2-9ed4-4008427ccc12" name="checkFPS">
+                <parameters>
+                    <parameter id="a8d9862c-4ef3-41b8-863b-f8c87cbfef07" parameterName="checkFPS" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="c0012920-7f53-42ab-9b06-3c5de5d55dc3" name="ParseGraphicsOutput">
+                <parameters>
+                    <parameter id="4c886282-db6b-475a-a595-7bb170782769" parameterName="test_app" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f1fee93d-ac11-4682-af30-e2f9be9ff8ae" parameterName="graphics_output" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b9f4c551-7949-4e32-bab4-b18dd582a2d5" name="getMediaPipelineTestCommand">
+                <parameters>
+                    <parameter id="9e69038f-8eb7-434c-9ac1-74afdb8226ba" parameterName="test_url" parameterType="STRING" range="a-z"/>
+                    <parameter id="36df0f53-9efe-4a3f-a0ac-85992bd66ada" parameterName="getMediaPipelineTestCommand" parameterType="STRING" range="a-z"/>
+                    <parameter id="4f824991-360f-4cdf-a133-6e35cfe1f483" parameterName="arguments" parameterType="STRING" range="a-z"/>
+                    <parameter id="ccebb67b-803d-485e-9513-f0c29365a9c5" parameterName="test_name" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="e02e9108-388d-4a5a-b5b5-e237256d8f4a" name="getOperations">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>15708d68-7910-4f09-a8cd-5285f0730fc9</id>
+                <name>setOperations</name>
+                <funName>setOperations</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2cc03a27-e56f-4171-b698-f85887f9ef13</id>
+                        <parameterName>operation</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>87cfff9a-aa33-4c0d-ac2f-7c7304f49106</id>
+                        <parameterName>arguments</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>27abd66c-a38b-49a3-bc13-6186943220a8</id>
+                <name>getDeviceDetails</name>
+                <funName>getDeviceDetails</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>925bbae2-dcc6-4078-a98a-f253b3c92d9d</id>
+                        <parameterName>detail</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>51182fbd-a53e-47bd-b141-aa4d603afaef</id>
+                <name>getDeviceConfigValue</name>
+                <funName>getDeviceConfigValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>549ac151-845a-437f-a74a-b23f75af7578</id>
+                        <parameterName>configKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>57c18781-d705-43e7-b0cf-3d20a3df652f</id>
+                <name>getDeviceConfig</name>
+                <funName>getDeviceConfig</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>aa67107c-59d6-4b5e-96f6-dd34515b18f7</id>
+                        <parameterName>getDeviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5cf98070-ec85-4acb-b006-e8be19df3124</id>
+                <name>checkFPS</name>
+                <funName>checkFPS</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9c791e68-d426-40e6-a279-e6f373ade7d3</id>
+                        <parameterName>checkFPS</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>633e7e90-25a3-4ffa-8874-fa20c9eb5ab5</id>
+                <name>getOperations</name>
+                <funName>getOperations</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>695be1fe-9105-4270-8664-6644091a24af</id>
+                <name>init_module</name>
+                <funName>init_module</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>cfbf1397-b2d6-4ca2-800b-431a5a1adac3</id>
+                        <parameterName>deviceInfo</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8d6713d1-050d-430e-9a58-ada7fe14b33d</id>
+                <name>getMediaPipelineTestCommand</name>
+                <funName>getMediaPipelineTestCommand</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>094f11d2-0944-4274-a290-caac24f169b2</id>
+                        <parameterName>test_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bbe2bcd1-059e-48ef-9e31-c8f1ac74c990</id>
+                        <parameterName>test_url</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c0869174-33c8-4cc3-b339-f84e4864d353</id>
+                        <parameterName>arguments</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>961b98b3-79db-473a-aaf9-8a1f6657a6e8</id>
+                <name>DurationParse</name>
+                <funName>DurationParse</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2b24c842-3499-4caa-807c-37c2c672e2ce</id>
+                        <parameterName>duration_to_be_verified</parameterName>
+                        <parameterType>DOUBLE</parameterType>
+                        <range>1-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8793519b-38e6-4bc2-bed3-c95552f00722</id>
+                        <parameterName>output</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a6b481eb-6c44-4ec2-8fc7-0a47092799a3</id>
+                <name>checkifLanguagePlayed</name>
+                <funName>checkifLanguagePlayed</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0a6a7f6d-0d15-421e-96a1-5e06c1c5ca5c</id>
+                        <parameterName>language</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>aaa8b069-5d03-4a90-9ae6-732c42461474</id>
+                <name>parseLatency</name>
+                <funName>parseLatency</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4da3f907-377e-4ee2-bf2c-39cf67fffbbc</id>
+                        <parameterName>output</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fc31142d-a5cd-4cc9-96fa-d43d88624bf5</id>
+                        <parameterName>latencyThreshold</parameterName>
+                        <parameterType>DOUBLE</parameterType>
+                        <range>1-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c589a2e3-ae8f-4efe-ba04-2dab7fd1ae05</id>
+                <name>checkifCodecPlayed</name>
+                <funName>checkifCodecPlayed</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c95e87ed-1f22-47a2-9ff0-091218e8f31e</id>
+                        <parameterName>codec</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c86b5db6-8df8-4758-b0f0-6e2f13357fde</id>
+                <name>checkMediaPipelineTestStatus</name>
+                <funName>checkMediaPipelineTestStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>43909d67-6188-4427-a7a5-ee40f9eb1f85</id>
+                        <parameterName>outputString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d78ff8e8-e9af-45d5-87e1-0c0a35dbc345</id>
+                <name>ParseGraphicsOutput</name>
+                <funName>ParseGraphicsOutput</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4c9fbf0c-d59d-4f01-855e-48ce92e59366</id>
+                        <parameterName>test_app</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Essos_TDKTestApp</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9572065c-1849-4b90-a9ed-eb21f482ed57</id>
+                        <parameterName>graphics_output</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fd5485e5-2d4c-4271-bda6-b10d91397069</id>
+                <name>executeCmndInDUT</name>
+                <funName>executeCmndInDUT</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1f789c5c-da9d-474c-9ed0-1ece5a3be593</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

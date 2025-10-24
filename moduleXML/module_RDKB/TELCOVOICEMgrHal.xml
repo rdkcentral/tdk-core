@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>feee616e-084d-4a6a-b90b-8e73cf673cb4</moduleId>
+        <!-- Module name -->
+        <moduleName>TELCOVOICEMgrHal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>2</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="c4003ca6-ea29-41a0-9405-9b9d36af5aaa" name="TELCOVOICEMgrHal_Init">
+                <parameters/>
+            </function>
+            <function id="95de6488-83cb-475e-949d-a264b6bfbad6" name="TELCOVOICEMgrHal_GetInitData">
+                <parameters/>
+            </function>
+            <function id="b8e7b525-eb37-4f97-a902-e03b575b3d3c" name="TELCOVOICEMgrHal_GetParamValue">
+                <parameters>
+                    <parameter id="4286038b-7432-4baf-a203-de5ccafc986e" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="40d43d2a-6c46-40e9-b811-1b84db2957e5" name="TELCOVOICEMgrHal_GetLineStats">
+                <parameters>
+                    <parameter id="53ceb410-bbda-4f11-a086-782420f032bd" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="72fe6b4e-a12d-4db3-a0b3-12bc8aa88f7d" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="8c72684c-5c68-4c3d-ab28-7160d89a5b8a" name="TELCOVOICEMgrHal_GetVoiceProfile">
+                <parameters>
+                    <parameter id="5f1cd32e-79de-42c7-ba01-c2a49f152861" parameterName="index" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="50dcac99-ae7e-4010-a5ed-21bc98cad379" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="da6a6560-cca4-4d00-94cf-08443adbb824" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4e2e13ca-10f2-40b2-a5d7-55591774fc65" name="TELCOVOICEMgrHal_SetParamValue">
+                <parameters>
+                    <parameter id="ecf6b4d1-88d5-4d9e-81c3-1cb267e5d647" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d2e0968b-1caf-49fb-add1-ea47447d605c" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="21b92a8d-4f7f-4e93-af2e-a9b18339576e" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="1fd93b9a-0189-4f09-bc05-15f2638f0b71" name="TELCOVOICEMgrHal_GetVoiceServices">
+                <parameters/>
+            </function>
+            <function id="e42cb679-9a96-4924-8330-1e99a5f1c0ae" name="TELCOVOICEMgrHal_InitData">
+                <parameters>
+                    <parameter id="91d6651d-0e4c-4eee-82bd-e4213774baad" parameterName="bStatus" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="c80c8446-b05a-457c-ad3e-4acc33ec4ab2" name="TELCOVOICEMgrHal_GetCapabilities">
+                <parameters>
+                    <parameter id="00999e45-cb53-483d-9f0a-048c212ea077" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="7a06bbcf-d927-4746-aed2-342492baf55f" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e4b66ef5-3912-4119-8a57-3c4eaffd5460" name="TELCOVOICEMgrHal_GetPhyInterface">
+                <parameters>
+                    <parameter id="3c95e7bb-0396-41b1-92c0-8e7e1223daba" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="250f0a14-be27-4cca-8e5d-c749453a5814" parameterName="index" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="7ec0e43d-87f3-4d54-b5b9-c6e94a25cc40" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0eea9959-e7e0-4586-b7ff-47eb8a858bee</id>
+                <name>TELCOVOICEMgrHal_GetPhyInterface</name>
+                <funName>TELCOVOICEMgrHal_GetPhyInterface</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>296698ec-144e-456d-b685-d7eb3a2b444b</id>
+                        <parameterName>index</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3647d709-1dda-4fcd-80dc-c964ae3f0e27</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7cbdde67-a90f-4ae3-8497-d58367fcb19f</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>26f223eb-258d-4ed5-8936-a9d35a3554c7</id>
+                <name>TELCOVOICEMgrHal_Init</name>
+                <funName>TELCOVOICEMgrHal_Init</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>366439a6-707f-4917-bf14-92ffb702a399</id>
+                <name>TELCOVOICEMgrHal_GetInitData</name>
+                <funName>TELCOVOICEMgrHal_GetInitData</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>516cf139-a17b-4932-983c-665040bcbdb3</id>
+                <name>TELCOVOICEMgrHal_GetLineStats</name>
+                <funName>TELCOVOICEMgrHal_GetLineStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>695e3bea-10e6-45b6-825b-a9a560097a43</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9590a990-c0f4-4560-9d38-fd3e69bdd0e1</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>53eafe55-cfaa-4427-bf6f-3b386910f6bb</id>
+                <name>TELCOVOICEMgrHal_SetParamValue</name>
+                <funName>TELCOVOICEMgrHal_SetParamValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>500b8773-4581-41d9-aa63-c9c76e880ca1</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>915d5384-d8f9-42cf-bbcd-3c75926e695a</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9811646e-5fe1-4204-a795-5eb5343861e3</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bbfd6059-476f-460b-88d5-a1585fa607e3</id>
+                <name>TELCOVOICEMgrHal_GetCapabilities</name>
+                <funName>TELCOVOICEMgrHal_GetCapabilities</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>825b38f0-d3ba-48ec-8449-a47f74ba8f7a</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>db816173-24b2-47c4-b2fb-0306edc5f635</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>befb5f2b-6d5d-4b91-a004-cd9450090c3f</id>
+                <name>TELCOVOICEMgrHal_InitData</name>
+                <funName>TELCOVOICEMgrHal_InitData</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d9053146-c722-4347-a558-9e69194c65eb</id>
+                        <parameterName>bStatus</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>df0ad38b-304f-4292-b04b-f1d0da264649</id>
+                <name>TELCOVOICEMgrHal_GetVoiceProfile</name>
+                <funName>TELCOVOICEMgrHal_GetVoiceProfile</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>24d85014-a400-4c2b-b6e3-60532e89d958</id>
+                        <parameterName>index</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4bce8dcf-d85a-4667-97c1-8b63ed715ecd</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>70155b5f-8138-4e20-bd00-ee33711ed242</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e4a8bd15-4e12-4071-9ad7-681e9147b28c</id>
+                <name>TELCOVOICEMgrHal_GetParamValue</name>
+                <funName>TELCOVOICEMgrHal_GetParamValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0577863a-a156-4f28-85c2-ccdb67178141</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f91bce84-3db3-4841-8456-22d93830bb6d</id>
+                <name>TELCOVOICEMgrHal_GetVoiceServices</name>
+                <funName>TELCOVOICEMgrHal_GetVoiceServices</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>c8488b19-6f19-46d3-8403-bad806977ac6</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_media</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Certification</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/opt/logs/wpeframework.log]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="64fc22d6-6fe9-4aa4-bd75-46aa02225974" name="rdkv_media_checkProcEntry">
+                <parameters>
+                    <parameter id="c9090bd6-5c7e-45e8-92a1-b61e1f52f2de" parameterName="sshMethod" parameterType="STRING" range="a-z"/>
+                    <parameter id="2603d514-9015-4c72-b041-5c5ceaf06606" parameterName="validation_script" parameterType="STRING" range="a-z"/>
+                    <parameter id="4ad3e832-718b-4f00-b381-96ec04ce91ce" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                    <parameter id="236c8ebc-7733-4902-858e-9956790890bf" parameterName="mode" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="ce8dd598-8bef-414e-b2ce-ad7334e38c04" name="rdkv_media_readUIData">
+                <parameters>
+                    <parameter id="5d1534a0-9e7d-4741-8d51-4b24bc387c54" parameterName="dataXpath" parameterType="STRING" range="a-z"/>
+                    <parameter id="4cd53bef-532e-4a16-8b8a-50f6d1315996" parameterName="elementExpandXpath" parameterType="STRING" range="a-z"/>
+                    <parameter id="2637b9a0-3407-4b33-a954-da87eae904cc" parameterName="count" parameterType="INTEGER" range="0-60"/>
+                </parameters>
+            </function>
+            <function id="20a9f833-cfe0-474d-8e7d-c75754cc766e" name="rdkv_media_getProcCheckInfo">
+                <parameters>
+                    <parameter id="d86f2e8a-b116-4701-baaa-6f39521e3d36" parameterName="realpath" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="2db7b81b-6015-4431-94ff-43203f8dee0f" name="rdkv_media_post_requisites">
+                <parameters/>
+            </function>
+            <function id="9a1033c6-273b-4e3a-98bd-187f6333d3f4" name="rdkv_media_pre_requisites">
+                <parameters/>
+            </function>
+            <function id="fce8842c-bcfc-4797-af7c-71178a38813d" name="rdkv_media_test">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>09d91678-15e9-465e-af6d-05f6aefa9f7f</id>
+                <name>rdkv_media_pre_requisites</name>
+                <funName>rdkv_media_pre_requisites</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>348fc786-9d7e-4f36-80c1-8605d06f1abc</id>
+                <name>rdkv_media_post_requisites</name>
+                <funName>rdkv_media_post_requisites</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ca8643f6-bd3e-4cef-b57b-e0d578c88bc0</id>
+                <name>rdkv_media_getProcCheckInfo</name>
+                <funName>rdkv_media_getProcCheckInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>518a2fcb-8b8c-4b50-a0f1-5d2313398b39</id>
+                        <parameterName>realpath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d3ef13e5-9c55-4150-a031-5986a2dbd2bc</id>
+                <name>rdkv_media_test</name>
+                <funName>rdkv_media_test</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ec138832-6dc4-4730-a6f5-11ebe06d4d3c</id>
+                <name>rdkv_media_readUIData</name>
+                <funName>rdkv_media_readUIData</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>03e2f380-357c-49b4-bd8e-4133886c4ca8</id>
+                        <parameterName>elementExpandXpath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>639fb659-4cbf-43a1-9f5c-30be8a03e32b</id>
+                        <parameterName>count</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-60</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>eed83ddb-120f-4728-b45e-197da04de909</id>
+                        <parameterName>dataXpath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f7b76226-6ec8-4898-9d06-c5ae9c6439f6</id>
+                <name>rdkv_media_checkProcEntry</name>
+                <funName>rdkv_media_checkProcEntry</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5bdc3e19-2ad0-458d-9884-b60a747badf3</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b7b38a32-b5d6-4b0f-a19a-8e79c3399526</id>
+                        <parameterName>sshMethod</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e958e828-0f5e-486e-a402-40079762bebe</id>
+                        <parameterName>validation_script</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>eaf78cd4-0ede-433b-8291-937723dc9757</id>
+                        <parameterName>mode</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

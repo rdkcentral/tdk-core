@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>2e346395-0965-4a35-a40d-efc5a383e7d8</moduleId>
+        <!-- Module name -->
+        <moduleName>XDNS</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[ /rdklogs/logs/PAMlog.txt.1,/rdklogs/logs/atom_journal_logs.txt.0, /rdklogs/logs/PAMlog.txt.0]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="5990f2ae-48ec-4bc2-b805-0592ab8df7d1" name="XDNS_DoNothing">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>acd646cd-4cc8-426f-85dd-333ed2f38261</id>
+                <name>XDNS_DoNothing</name>
+                <funName>XDNS_DoNothing</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>
