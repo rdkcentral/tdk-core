@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>48d47fed-4330-4990-9d6c-fbb91decceb5</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_security</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Certification</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="d4feb25d-3077-4801-88eb-f25ccca731cf" name="rdkvsecurity_executeInTM">
+                <parameters>
+                    <parameter id="8b7198db-0a08-4917-82e6-0a67ffaf597c" parameterName="command" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="42ced266-1081-4171-bddb-d50d2575becd" name="rdkvsecurity_getValue">
+                <parameters>
+                    <parameter id="2587a082-b925-42f8-a8ef-06e70f18e5dc" parameterName="method" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="022531bc-25ae-4c6e-a2c3-fcf20366d06c" name="rdkvsecurity_setValue">
+                <parameters>
+                    <parameter id="4906a660-0e91-449e-b148-ff838eac8815" parameterName="value" parameterType="STRING" range="A-Z"/>
+                    <parameter id="32cbb444-c929-4384-9b40-a3147f1d801e" parameterName="method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9e78927d-89f3-4c01-961f-21d1ff758044" name="rdkvsecurity_getDeviceConfig">
+                <parameters>
+                    <parameter id="bbb74275-dfde-4ad2-ba25-123452db0bc6" parameterName="configKey" parameterType="STRING" range="A-Z"/>
+                    <parameter id="70263ba3-ce49-4683-8b1d-52d821e5501e" parameterName="basePath" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3f0e4f9e-f5d9-4065-8dbd-000d77d26f06" name="rdkvsecurity_executeInDUT">
+                <parameters>
+                    <parameter id="0c1c3097-51ea-49f2-809f-52c8cc7db459" parameterName="sshMethod" parameterType="STRING" range="A-Z"/>
+                    <parameter id="0e38a7d2-a8df-489f-af67-8cc93ee2f05d" parameterName="command" parameterType="STRING" range="A-Z"/>
+                    <parameter id="16ff39b7-34ac-4348-b3b2-bd9f66a58754" parameterName="credentials" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="7b8b9d54-8be8-4ef0-a602-1cf4dc226442" name="rdkvsecurity_getPluginStatus">
+                <parameters>
+                    <parameter id="02c5575c-b7e5-4a01-a0ca-af8fd2f7eab8" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3bcef282-7034-4f3f-ad16-1f267e2581fe" name="rdkvsecurity_getReqValueFromResult">
+                <parameters>
+                    <parameter id="94e19f73-c41d-451e-820e-3037c52cedad" parameterName="method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cbd26bd4-4417-49bc-8552-1bf482500edd" parameterName="reqValue" parameterType="STRING" range="reqValue"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>60f4d8fb-5904-4e46-a279-dcedd8bf29f6</id>
+                <name>rdkvsecurity_getPluginStatus</name>
+                <funName>rdkvsecurity_getPluginStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6e7a909e-0a0d-4036-8040-7a7ccba6d607</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7e8b16f6-bddc-4e32-ac73-8f856d1251da</id>
+                <name>rdkvsecurity_setValue</name>
+                <funName>rdkvsecurity_setValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>161b706d-e8a2-4aa1-88eb-4d692d34012f</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4edcc831-eb3e-4183-ab9b-f8a92841fce7</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a476b918-0aa5-4518-8e01-a23324d3ea5c</id>
+                <name>rdkvsecurity_getReqValueFromResult</name>
+                <funName>rdkvsecurity_getReqValueFromResult</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>86e3aacf-f0d5-400b-afdb-dcc63f1cb28e</id>
+                        <parameterName>reqValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>reqValue</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8c05a5ad-e91f-4467-9914-166bde8c9bf2</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c2facba5-b011-44b4-9d2c-5156702e585e</id>
+                <name>rdkvsecurity_getValue</name>
+                <funName>rdkvsecurity_getValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d933dbbe-7004-4d43-865d-34fb046939a3</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c921e258-272b-4073-a2ed-a0bbde564c00</id>
+                <name>rdkvsecurity_executeInTM</name>
+                <funName>rdkvsecurity_executeInTM</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7f82f45d-60fa-4ce9-8156-097443960a81</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>edea82ec-92e4-49de-b52d-207f98bc21df</id>
+                <name>rdkvsecurity_getDeviceConfig</name>
+                <funName>rdkvsecurity_getDeviceConfig</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4432b901-6e9e-498b-b2fe-e5a81ca4f01d</id>
+                        <parameterName>basePath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5fa262d4-a9c8-4d69-9190-b62018ea7ea3</id>
+                        <parameterName>configKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fabd3097-114a-4a28-9c48-2de9fd17b146</id>
+                <name>rdkvsecurity_executeInDUT</name>
+                <funName>rdkvsecurity_executeInDUT</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5161456c-5c78-4dc5-9bce-f8bc769540e2</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9e6618fd-5f9a-4f51-8624-b2188e39fbf7</id>
+                        <parameterName>sshMethod</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b33fe91d-e2d8-4f70-9f46-a271f9aa7d65</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

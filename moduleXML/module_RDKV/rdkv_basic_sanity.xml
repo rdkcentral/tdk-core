@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>a6d14794-43b0-4923-80c3-a663b14c6877</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_basic_sanity</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="a0643756-10ac-44de-974d-75a204104f27" name="rdkv_basic_sanity_getDeviceConfig">
+                <parameters>
+                    <parameter id="d0451141-8d06-442b-9ed9-273bb51ca880" parameterName="configKey" parameterType="STRING" range="a-z"/>
+                    <parameter id="afc29e6d-2868-4c0c-a103-c7147d167f26" parameterName="basePath" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="66bbbb1e-e252-40ac-a324-22cb8d98ba7c" name="rdkv_basic_sanity_rebootexecution">
+                <parameters>
+                    <parameter id="1a2d1a2f-f927-4621-9369-2d7ce0b9d525" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                    <parameter id="4dbec4fe-70de-4b0b-a815-375b60d8e5c5" parameterName="command" parameterType="STRING" range="a-z"/>
+                    <parameter id="29346132-6e41-450a-8d5d-33275adc0f68" parameterName="sshMethod" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="e4fc9db2-768c-4fdd-896f-a09ca494b2f8" name="rdkv_basic_sanity_executeInDUT">
+                <parameters>
+                    <parameter id="5a1530a6-57ea-412d-af69-65d9f10b902e" parameterName="command" parameterType="STRING" range="a-z"/>
+                    <parameter id="cf385cb8-c5e1-4654-8f20-60b47a157903" parameterName="fetch_SSH_params" parameterType="INTEGER" range="a-z"/>
+                    <parameter id="0b070a27-a165-4d97-9f03-5dfa2e99f0fe" parameterName="sshMethod" parameterType="STRING" range="a-z"/>
+                    <parameter id="f81b6354-d696-45bf-97ab-b2099e23bd4a" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>334d5cfb-f658-4801-8f13-485ca5f55dc2</id>
+                <name>rdkv_basic_sanity_rebootexecution</name>
+                <funName>rdkv_basic_sanity_rebootexecution</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>31d196c9-df63-4333-8dec-effedce830da</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b7c5b5e2-4988-46d1-8ec1-24759774ac30</id>
+                        <parameterName>sshMethod</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e21fb750-74d9-4e7f-b622-e08699fa99db</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3baffcda-9d2a-4b5b-9ee3-34dae916b235</id>
+                <name>rdkv_basic_sanity_executeInDUT</name>
+                <funName>rdkv_basic_sanity_executeInDUT</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3798ac67-bd89-4528-9a11-53ea2560cb22</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>54f78906-551b-4205-8d2d-0308d2cb5562</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f9492c91-7363-440b-afcc-24be43bb2b16</id>
+                        <parameterName>sshMethod</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>813683f8-5ac0-4005-89a8-18abafa0cddf</id>
+                <name>rdkv_basic_sanity_getDeviceConfig</name>
+                <funName>rdkv_basic_sanity_getDeviceConfig</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a8300671-5a40-40a1-a298-00a8641778db</id>
+                        <parameterName>configKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>df6b5bbe-1914-47c2-97c5-d53f67cb1c48</id>
+                        <parameterName>basePath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>cc61f797-8bbf-496a-9596-6e1b460fbf8c</moduleId>
+        <!-- Module name -->
+        <moduleName>containerization</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/opt/logs/wpeframework.log]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="6b82943e-7539-48ee-b72c-afd5095c90da" name="containerization_obtainCredentials">
+                <parameters/>
+            </function>
+            <function id="d655cd5c-0ac4-4fba-b6b0-3439f8a2e785" name="containerization_validateResourceUsage">
+                <parameters/>
+            </function>
+            <function id="30b3ed32-5293-4a17-99f4-16057138c5f5" name="containerization_checkDobbyVersion">
+                <parameters>
+                    <parameter id="895d12a9-e5ca-48af-b9bc-e99801945d71" parameterName="testCase" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8ddb4174-31d1-48e3-92b3-b016328a37da" name="containerization_getPluginStatus">
+                <parameters>
+                    <parameter id="31558398-8ebe-4dfa-922d-2f0c2afd0d2d" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="14aaa024-3fb5-44ba-97be-14adf80fca48" name="containerization_launchApplication">
+                <parameters>
+                    <parameter id="eb9e0a39-65b6-49d3-9b48-61ca8b65a250" parameterName="launch" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b8e486fd-5152-4d7e-9fe6-a1547a131468" name="get_validation_params">
+                <parameters>
+                    <parameter id="e51cb6b5-0f74-4074-897b-d88721756e6d" parameterName="realpath" parameterType="STRING" range="A-Z"/>
+                    <parameter id="7e2d66a3-e99d-4c4e-b2d6-0c2112bd19c6" parameterName="deviceIP" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="fb2f3e5c-d5cf-4314-be5a-a6b517e1698f" name="containerization_setPreRequisites">
+                <parameters>
+                    <parameter id="72ff655d-3abb-42b1-8e17-bf3b235e32fe" parameterName="datamodel" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="22b01e69-fd6e-459a-8e63-c592abfb4dae" name="containerization_executeInDUT">
+                <parameters>
+                    <parameter id="044eebbc-d5dd-448f-97bf-73b14b972c99" parameterName="sshMethod" parameterType="STRING" range="a-z"/>
+                    <parameter id="a07cdd32-32ef-4bc9-8af2-7692dc0203f3" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                    <parameter id="6391d0db-b089-4a23-b2f4-5fe089fb3631" parameterName="command" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="6c8dc422-d07d-467e-90b6-978d4f10d092" name="containerization_getDeviceConfig">
+                <parameters>
+                    <parameter id="38c3d457-9df2-49dc-ac9c-e4f7ffa43bcd" parameterName="configKey" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2d11888a-8de7-4f4b-b2c2-e324a6721e96" parameterName="basePath" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5e89513e-4605-4515-bb22-ecbcda751ee7" name="containerization_getSSHParams">
+                <parameters>
+                    <parameter id="a5380e3c-d5e4-49bd-91b8-2a6c435a489d" parameterName="realpath" parameterType="STRING" range="A-Z"/>
+                    <parameter id="51ff4f64-ff37-44a8-adc7-a49058172a3a" parameterName="deviceIP" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="c12896f2-852d-4934-a8a6-b04471e68f92" name="containerization_setPluginStatus">
+                <parameters>
+                    <parameter id="e30f2e8b-344b-40cc-8276-5cf20470a850" parameterName="uri" parameterType="STRING" range="A-Z"/>
+                    <parameter id="85d27a43-54eb-4e39-a9f5-e3846be0cff2" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                    <parameter id="61570bd9-b605-484b-b432-53417f71efd7" parameterName="status" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f9caf33a-c08c-41c3-a1a1-8b54ade40d84" name="containerization_checkContainerRunningState">
+                <parameters>
+                    <parameter id="2850cda4-1e2a-4694-80d4-1032726bf6ff" parameterName="callsign" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3bd30290-775b-43b0-a32a-87fd41038e07" name="containerization_validateProcEntry">
+                <parameters>
+                    <parameter id="902dcd1c-1079-4223-9238-aca7a6d6c46c" parameterName="video_validation_script" parameterType="STRING" range="A-Z"/>
+                    <parameter id="39465e16-5a57-441c-8674-b944284c8d7f" parameterName="credentials" parameterType="STRING" range="A-Z"/>
+                    <parameter id="0cb255a6-7aa9-4a75-b3a5-addddefc6509" parameterName="ssh_method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="039a4289-176b-4112-85b6-2727ba079e9a" name="containerization_executeDobbyTest">
+                <parameters>
+                    <parameter id="8b9e2c85-12d9-44ab-bc40-ea8d450e09d8" parameterName="containername" parameterType="STRING" range="A-Z"/>
+                    <parameter id="17dbe241-7b5a-45ea-9052-c6f7cce67c25" parameterName="testCases" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4f7f71ed-f2df-4008-8709-fed41bb6cba6" name="containerization_executeLifeCycle">
+                <parameters>
+                    <parameter id="920a6d33-7d9e-449a-87db-94e444aeb7a1" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ce78f62f-85ca-43ec-adfa-d985dc4cb32f" parameterName="validation_details" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4d4a18f0-b901-4bbc-bb31-e40c3d3c0b29" parameterName="operations" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d7087f7c-2b98-4d8d-bb86-aeba83e27206" name="containerization_suspend_plugin">
+                <parameters/>
+            </function>
+            <function id="6ff72bee-e117-4eda-93dd-13f10525e4d1" name="containerization_validatePluginFunctionality">
+                <parameters>
+                    <parameter id="66343c61-4e47-4e37-8d51-a30bd813491c" parameterName="validation_details" parameterType="STRING" range="A-Z"/>
+                    <parameter id="93ca3e64-f8cf-4bbf-90c6-1068ba1baa64" parameterName="operations" parameterType="STRING" range="A-Z"/>
+                    <parameter id="57464d48-713b-4ad8-8866-28f32535e3d7" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="62274788-9ea6-4b88-8e3d-e492279604a4" name="Containerization_Do_Nothing">
+                <parameters/>
+            </function>
+            <function id="047c331c-dd2c-4a9c-9677-1088d0082d27" name="containerization_cloneDobby">
+                <parameters>
+                    <parameter id="57a3ee9b-b204-4a66-b18a-a5f11a26b9a8" parameterName="basePath" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4a1ff057-c00a-434a-b30f-2cfed4148d5d" name="containerization_setValue">
+                <parameters>
+                    <parameter id="1a728efc-dd63-4916-a886-ff521460fe32" parameterName="value" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5d6f4d5d-25a4-4217-bc5c-6af13031bdae" parameterName="method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="94bc537c-9515-4c88-90c0-6b0e3d1e0d28" name="containerization_getValue">
+                <parameters>
+                    <parameter id="6a3b61d1-b1d6-44a5-b1e1-a128edbdb48e" parameterName="method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="103f8560-ca1e-4e67-8021-16841efea564" name="containerization_checkDevLoopPartition">
+                <parameters>
+                    <parameter id="0fce043b-63ef-412d-9299-b275bd172bc1" parameterName="testCase" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="af06b770-b091-4b99-8e2d-82febea87dfa" name="containerization_setPostRequisites">
+                <parameters>
+                    <parameter id="55ab30f9-0914-4216-b5f2-d6e44fb77d09" parameterName="datamodel" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="883f144b-9f45-4a26-8d97-ce633d02e811" name="containerization_rebootDevice">
+                <parameters>
+                    <parameter id="2e339858-9ef6-4d58-a775-ce8eea455823" parameterName="waitTime" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>096d7ae8-4b14-44b3-9c18-c481a05cfa82</id>
+                <name>containerization_rebootDevice</name>
+                <funName>containerization_rebootDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3fcb2a6b-8e6b-465c-872e-f592c47265e0</id>
+                        <parameterName>waitTime</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>098d45ba-4f86-408c-a51a-757b4b5cda41</id>
+                <name>containerization_setValue</name>
+                <funName>containerization_setValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>42ed2783-70dc-4ca3-98b4-d031724af0c7</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fd6d8b99-5dfa-4d0a-8e1f-58b2a4994168</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0d0c9849-45e1-416f-a670-e6b18a3fc6a9</id>
+                <name>containerization_setPreRequisites</name>
+                <funName>containerization_setPreRequisites</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>622ac726-d36c-4248-8ff5-eb33e631d341</id>
+                        <parameterName>datamodel</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0ebc9399-f34c-4741-b776-8b44d999d2af</id>
+                <name>containerization_getSSHParams</name>
+                <funName>containerization_getSSHParams</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9a4b449a-1cb6-4786-b4bf-7438b5333431</id>
+                        <parameterName>deviceIP</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>df527946-2997-44dd-8695-19ebfa1bcd46</id>
+                        <parameterName>realpath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>28eb68c9-827a-4a64-a4d9-3694c1b6dd3e</id>
+                <name>containerization_setPostRequisites</name>
+                <funName>containerization_setPostRequisites</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>36f462da-2efc-4a03-9535-763156e6e817</id>
+                        <parameterName>datamodel</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4f264499-9427-45fd-b9b3-92aab33f0c14</id>
+                <name>containerization_obtainCredentials</name>
+                <funName>containerization_obtainCredentials</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6068ad21-d0e5-46ab-a176-cb229b00233d</id>
+                <name>containerization_validateProcEntry</name>
+                <funName>containerization_validateProcEntry</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ba00f6d1-4b92-416a-8c57-acd77b516add</id>
+                        <parameterName>ssh_method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>eb6ba5d1-9b30-41be-8a14-05269c1d745c</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f003d528-feec-4497-be2f-c2489f0074b5</id>
+                        <parameterName>video_validation_script</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>738093d7-5615-4933-af5c-f49da6939232</id>
+                <name>containerization_suspend_plugin</name>
+                <funName>containerization_suspend_plugin</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>756e26df-7386-4404-98e8-60627a0c5c3c</id>
+                <name>containerization_checkDobbyVersion</name>
+                <funName>containerization_checkDobbyVersion</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e3e96540-d4f4-4978-aa57-e8377369c3e3</id>
+                        <parameterName>testCase</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>81b6daea-5c4b-4d03-ae18-cb9d320cb34d</id>
+                <name>containerization_cloneDobby</name>
+                <funName>containerization_cloneDobby</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>62efeb9f-1b47-4ee8-a696-9e4e73430f45</id>
+                        <parameterName>basePath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>867ab451-eeaa-41ee-a5ab-0df3e93d81c4</id>
+                <name>containerization_validateResourceUsage</name>
+                <funName>containerization_validateResourceUsage</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9940b72f-0e8d-47c1-9aa7-4e46300e893b</id>
+                <name>containerization_getValue</name>
+                <funName>containerization_getValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>66fff656-d7b9-4764-9c36-d660fdeb1554</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9ccb0d83-3990-4833-88d5-17ac69b71cde</id>
+                <name>containerization_setPluginStatus</name>
+                <funName>containerization_setPluginStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>354a2812-01a3-4035-8008-51020278ba2a</id>
+                        <parameterName>status</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>72d21639-04a9-44f0-b44e-55365fdc155a</id>
+                        <parameterName>uri</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c35c8692-d123-4994-a381-83269e1fbc43</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>aa99323a-3b26-4149-9cfc-b358658bff89</id>
+                <name>containerization_executeInDUT</name>
+                <funName>containerization_executeInDUT</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2e77e4d5-9db8-4125-a1da-7b72468faa72</id>
+                        <parameterName>sshMethod</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>50360b8e-d9d0-485f-b521-e93d7310b292</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a2b6e73b-6d12-49c6-88c0-99f6d31f3d5a</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b23e6c41-743b-49e9-ad42-8e2bad5f4e97</id>
+                <name>containerization_executeLifeCycle</name>
+                <funName>containerization_executeLifeCycle</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>95badf8d-d117-4805-a57a-19d8603b04ac</id>
+                        <parameterName>operations</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9b950061-5da6-49b7-94d4-754f62ae451d</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dde2875e-22ca-49cb-b957-fb171ab7f5a3</id>
+                        <parameterName>validation_details</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b895a5d0-9a97-4bb2-9278-106991cf5a40</id>
+                <name>containerization_getPluginStatus</name>
+                <funName>containerization_getPluginStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>211b1c54-d275-4cfa-adbe-2683ea984f08</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>baa5c1f6-5e2d-4562-b763-bd5b599e677b</id>
+                <name>containerization_getDeviceConfig</name>
+                <funName>containerization_getDeviceConfig</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>df9f620d-f234-41fd-aca8-c379a4633562</id>
+                        <parameterName>configKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ef48fe29-2a27-4dab-afd9-1eeb2ba73754</id>
+                        <parameterName>basePath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cad8d8e7-394e-42b3-ab5b-f3a16168ffe8</id>
+                <name>containerization_launchApplication</name>
+                <funName>containerization_launchApplication</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f207100f-b961-40fa-a3ec-fa8f20f93f4f</id>
+                        <parameterName>launch</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d15c31a7-466d-4456-93ba-3128cfdac25b</id>
+                <name>containerization_checkDevLoopPartition</name>
+                <funName>containerization_checkDevLoopPartition</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>cefde5f7-37af-4725-b22e-810913bfc7f9</id>
+                        <parameterName>testCase</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e18b015a-397f-4dea-a90a-2428c060d091</id>
+                <name>get_validation_params</name>
+                <funName>get_validation_params</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>94dc8066-890e-4b37-884c-b7f2807df5ec</id>
+                        <parameterName>realpath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>99ded7f5-089f-42eb-9c43-fdc92191c02b</id>
+                        <parameterName>deviceIP</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e4216bdb-f521-4581-8f48-5d3a1fe5ba48</id>
+                <name>containerization_checkContainerRunningState</name>
+                <funName>containerization_checkContainerRunningState</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6a3d9427-4ea3-4bfd-9a3e-558ee609808e</id>
+                        <parameterName>callsign</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fc4d65e6-f6bc-441e-a83a-7788a5f13dd9</id>
+                <name>containerization_executeDobbyTest</name>
+                <funName>containerization_executeDobbyTest</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8991101a-6d30-432c-8b0d-215595aaf2d2</id>
+                        <parameterName>containername</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b1ba3f40-18e6-48b2-8005-499cf4a06107</id>
+                        <parameterName>testCases</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

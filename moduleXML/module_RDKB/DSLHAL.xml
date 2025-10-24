@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>152b6d40-39ec-424e-b6b3-f8035400aded</moduleId>
+        <!-- Module name -->
+        <moduleName>DSLHAL</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="62985590-71f9-426a-880d-6783b1228f46" name="DSLHAL_GetLineInfo">
+                <parameters>
+                    <parameter id="63f78a2b-9d13-40b6-afb6-8bab2359dec6" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="05165158-fd40-4688-864c-729d6391c2a9" name="DSLHAL_GetParamValue">
+                <parameters>
+                    <parameter id="752fe0a7-69c6-4bd3-85c7-31a0c0ec7eda" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="1faa538a-db8a-4356-9d81-5eb64cd746e7" name="DSLHAL_SetParamValue">
+                <parameters>
+                    <parameter id="2dd1adbc-5dea-425b-9c5f-b5d4ae3eb930" parameterName="paramValue" parameterType="STRING" range="a-z"/>
+                    <parameter id="8bd9fbfd-2bce-4d50-9ebf-28ab4b50376e" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                    <parameter id="e7f63859-c8e1-43df-8960-8efad729ca47" parameterName="paramType" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="df45c5b4-7b5f-4624-a0d6-274793cc5309" name="DSLHAL_GetLineStats">
+                <parameters>
+                    <parameter id="6fdaa487-05a0-4f27-81a2-41ca85c3272e" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="29bcee43-9fcb-4ee0-8470-860dbc8f6dec" name="DSLHAL_AtmGetLinkStats">
+                <parameters>
+                    <parameter id="0741be1a-7fe6-4e5d-8ee3-0ce4c8b1b564" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="2b42b328-0e29-40d3-aedf-0eeff68b0f2c" name="DSLHAL_XtmGetLinkStats">
+                <parameters>
+                    <parameter id="cca584dc-0672-4a66-a65e-5f9daf3bd1f3" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="a5e34dcc-a0d9-4d47-b62a-b05027c93562" name="DSLHAL_GetChannelInfo">
+                <parameters>
+                    <parameter id="6e75676e-bb6a-457a-99d0-1fc7ca0fd565" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="84d55d3e-7eb7-4b58-abbb-e15126af4c6b" name="DSLHAL_GetXRdk_Nlm">
+                <parameters>
+                    <parameter id="ca0131be-526d-4afa-90b0-a203b9dd678b" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="bc91089d-ed5d-40a4-a6de-49432acdbfe7" name="DSLHAL_Init">
+                <parameters/>
+            </function>
+            <function id="bae4fea9-f24b-4a9a-8fc6-9e2390149dda" name="DSLHAL_GetChannelStats">
+                <parameters>
+                    <parameter id="c924d2f8-61ae-458e-af8e-8a2f4c73c38e" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="d4cb68c2-5f5c-49aa-88be-dddf17018787" name="DSLHAL_AtmSetLinkInfoParam">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>359d0855-7673-496b-8cdf-ef176cd1b75d</id>
+                <name>DSLHAL_AtmGetLinkStats</name>
+                <funName>DSLHAL_AtmGetLinkStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c9ff1059-4eee-4bd0-b755-4d0543e504d5</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6c51e487-cac3-44e2-b43b-a2a4650ea10e</id>
+                <name>DSLHAL_GetChannelInfo</name>
+                <funName>DSLHAL_GetChannelInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3df6e189-d940-409b-b2da-2b46afa81f67</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6f76ce3f-0165-4bd9-8331-4605b65ac1c6</id>
+                <name>DSLHAL_GetLineStats</name>
+                <funName>DSLHAL_GetLineStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d97fdcb7-df31-4883-a335-ed561722cd94</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>818252db-0257-4042-880a-579b16df3902</id>
+                <name>DSLHAL_GetChannelStats</name>
+                <funName>DSLHAL_GetChannelStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>78d05823-bb1b-418b-b3dd-980412a5404d</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>83d50a1a-8401-4655-9585-f33c312125f3</id>
+                <name>DSLHAL_AtmSetLinkInfoParam</name>
+                <funName>DSLHAL_AtmSetLinkInfoParam</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9a676dbf-5a2e-4fad-9258-b14b7b5e4dc4</id>
+                <name>DSLHAL_SetParamValue</name>
+                <funName>DSLHAL_SetParamValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>83335d30-d83b-476d-941b-266148adbef4</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d4155e87-9f74-4bdf-af3b-a7c7f571d045</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f52b01fb-d31f-48ee-b998-b49827e81b1a</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a38a20dd-d0b4-486b-92d5-5d03b774c9fe</id>
+                <name>DSLHAL_GetXRdk_Nlm</name>
+                <funName>DSLHAL_GetXRdk_Nlm</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e00ae48d-e438-42a7-9767-100d9d7b680a</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b0bbe8b7-8a9c-4b20-b868-79627571b83d</id>
+                <name>DSLHAL_Init</name>
+                <funName>DSLHAL_Init</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>d8dc589f-8cb6-4c42-b7fa-975db42c6ef3</id>
+                <name>DSLHAL_XtmGetLinkStats</name>
+                <funName>DSLHAL_XtmGetLinkStats</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6373ecfa-4c85-4e6f-834a-6790f3182ca0</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>df95187b-20eb-4138-a939-60f55469ca92</id>
+                <name>DSLHAL_GetLineInfo</name>
+                <funName>DSLHAL_GetLineInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>07a150c4-f57a-46d8-bb49-2d1e68275826</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fce69dc6-32b9-4b12-87c6-da9349830ebe</id>
+                <name>DSLHAL_GetParamValue</name>
+                <funName>DSLHAL_GetParamValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9fa09012-8d9e-40b8-bf3a-b569ad855432</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

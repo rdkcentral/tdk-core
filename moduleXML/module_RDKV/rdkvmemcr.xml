@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>19ed19a7-3d2e-4407-a2b6-6c2da1563a78</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkvmemcr</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/opt/logs/wpeframework.log]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="c4af5cb9-2945-40f4-a2af-82e7f3fbed3b" name="memcr_appMemorySize">
+                <parameters>
+                    <parameter id="f4603ed9-86f0-4ecc-89d8-7a1315c52ded" parameterName="processID" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="6a3382d7-b03e-4762-82cc-813047981289" name="memcr_rebootDevice">
+                <parameters>
+                    <parameter id="d4907b52-7773-4d36-bcdd-c3bb72921dbf" parameterName="waitTime" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="a257c3a1-19cf-417f-9f6a-d3bb7aa48dbc" name="memcr_datamodelcheck">
+                <parameters>
+                    <parameter id="16272ce9-1618-42fe-a881-e36e347d033f" parameterName="datamodel" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c38024ae-d9e3-4de0-af78-327441941040" name="memcr_setValue">
+                <parameters>
+                    <parameter id="5eae639f-bb25-484a-ae0e-1d56b50e9328" parameterName="value" parameterType="STRING" range="A-Z"/>
+                    <parameter id="0dab339f-4d15-4953-8b5d-9b752f31f11d" parameterName="method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c8dd0a8a-884f-4131-a20a-347253c3b2be" name="memcr_getTR181Value">
+                <parameters>
+                    <parameter id="5f80fc9d-eab5-40ac-bc44-243c65b5b8b4" parameterName="configKey" parameterType="STRING" range="A-Z"/>
+                    <parameter id="19a3abde-6f3e-47ef-bad6-0d2ffc372d60" parameterName="basePath" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4ec53dd7-bc2f-4d8f-bec9-34e05928d520" name="memcr_restart_wpeframework_service">
+                <parameters/>
+            </function>
+            <function id="507c460d-8d37-4217-9b07-cc6dd49dbebb" name="memcr_logValidation">
+                <parameters>
+                    <parameter id="b9696d25-6175-4c73-b590-dbae50be79bc" parameterName="log_Occurrences" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6acc9f3c-b158-422d-8122-ff2175b86b63" name="memcr_checkImgFile">
+                <parameters>
+                    <parameter id="73604cc7-0903-4cb0-9bf6-c202ad48af19" parameterName="processID" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="11528866-7eba-4e0f-9c33-60f65bfacf88" parameterName="filepath" parameterType="STRING" range="A-Z"/>
+                    <parameter id="400746d4-30ee-4b9f-80e0-b9ca49e408dd" parameterName="checkfile" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0eae0185-6ec8-4a63-8f6e-d68866a65b36" name="memcr_statuscheck">
+                <parameters/>
+            </function>
+            <function id="a5530e42-5201-4865-a05c-19a44a141b1a" name="memcr_checkAppHibernateRFC">
+                <parameters>
+                    <parameter id="74c1a9a4-f3df-47e1-9290-a86d98b69df6" parameterName="datamodel" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fc690feb-800f-46ff-bd57-b656938cc3b2" name="memcr_getValue">
+                <parameters>
+                    <parameter id="61c82b27-e88d-4e0b-a39a-3d35d0fcd73c" parameterName="method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="575bccf9-24e7-4acf-a165-62ee9640a030" name="memcr_getProcessID">
+                <parameters>
+                    <parameter id="4f34516d-4f54-438f-924c-e0bbcb081fc6" parameterName="appname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a030057a-eba7-49e0-a4b7-162c693ea226" name="memcr_checkPluginStatus">
+                <parameters>
+                    <parameter id="f8d78d35-9eb7-4b66-a1d9-cd6a7788c4f0" parameterName="method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="0435c334-2a38-4567-8919-94f9ac7c3505" parameterName="params" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>04d86c46-c240-4e91-88f9-63c17fc3f155</id>
+                <name>memcr_rebootDevice</name>
+                <funName>memcr_rebootDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1ae3c50f-01d6-45b6-94f7-9db965f62d9d</id>
+                        <parameterName>waitTime</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>079a0cf7-9fd8-47a7-8a24-6db3fea3201a</id>
+                <name>memcr_getProcessID</name>
+                <funName>memcr_getProcessID</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b9fe1cce-e7b0-4c2d-9f45-ae6a8d6f360b</id>
+                        <parameterName>appname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0b4c4afd-8112-4518-ad07-20fa889e8310</id>
+                <name>memcr_logValidation</name>
+                <funName>memcr_logValidation</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>aa5beaae-06d4-4b56-aff9-be4a14ca26be</id>
+                        <parameterName>log_Occurrences</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1c5c1497-cb7c-47fa-95fa-50b89494a129</id>
+                <name>memcr_datamodelcheck</name>
+                <funName>memcr_datamodelcheck</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2a47a98b-868e-4bac-8c1c-e6a7dc98d6f0</id>
+                        <parameterName>datamodel</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2134e403-5cb9-41c9-a26a-398ad560fcc2</id>
+                <name>memcr_getValue</name>
+                <funName>memcr_getValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b85107fc-39f0-4699-8124-1558e6883ef0</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3e4b59f7-4fe8-462d-8d24-5d052d9dad8d</id>
+                <name>memcr_statuscheck</name>
+                <funName>memcr_statuscheck</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>431ce03e-eefd-4529-a2fa-10a7c28b7f5d</id>
+                <name>memcr_checkAppHibernateRFC</name>
+                <funName>memcr_checkAppHibernateRFC</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4013ddca-703c-4a9e-ab97-f1e706965478</id>
+                        <parameterName>datamodel</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>449b23cd-2744-4d96-9442-58c65df177d1</id>
+                <name>memcr_getTR181Value</name>
+                <funName>memcr_getTR181Value</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>10c8c544-064a-4437-afbb-ca24b8af6695</id>
+                        <parameterName>configKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>df8aa916-be5e-4f1f-bf54-208e22bc4e65</id>
+                        <parameterName>basePath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>78eb4b05-4333-450a-9af3-195ddf61f993</id>
+                <name>memcr_checkImgFile</name>
+                <funName>memcr_checkImgFile</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>00c58fbc-01e8-4d77-8712-6a23f7a6195f</id>
+                        <parameterName>processID</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>20ac7a7f-048e-40c0-a3c8-fb8b771d9aac</id>
+                        <parameterName>filepath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>57cd891e-e67c-4d60-9039-69ed0e38bdde</id>
+                        <parameterName>checkfile</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>890aa04f-93f7-4ae7-8087-88ea1718b751</id>
+                <name>memcr_appMemorySize</name>
+                <funName>memcr_appMemorySize</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1cad11c2-0fbd-4d44-a75e-e120b1990567</id>
+                        <parameterName>processID</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9a398ee8-759b-4eec-8245-41514c9551fc</id>
+                <name>memcr_checkPluginStatus</name>
+                <funName>memcr_checkPluginStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>06690cff-1d77-4edf-8fe7-f109799f3daf</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2bb506da-f102-4d6a-af23-6b9bc1ec435d</id>
+                        <parameterName>params</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a7584952-17bb-4d33-bf16-9b32d84989e8</id>
+                <name>memcr_restart_wpeframework_service</name>
+                <funName>memcr_restart_wpeframework_service</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>dc028682-2bf8-426a-ba59-0baf5afaf9e8</id>
+                <name>memcr_setValue</name>
+                <funName>memcr_setValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>01b55472-a330-47ec-bdef-064f7e5174a7</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>25d39f1a-436c-489b-a9e3-cc2f2f0b6c00</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

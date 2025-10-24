@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>138733cb-b006-425b-982b-6f84205b90c2</moduleId>
+        <!-- Module name -->
+        <moduleName>WesterosHal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>3</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="bbd9e5de-a726-4f39-b727-76a741316d97" name="TestMgr_WesterosHal_AddDisplaySizeListener">
+                <parameters/>
+            </function>
+            <function id="c193f8c8-b630-4b8d-ba62-c42babbcc578" name="TestMgr_WesterosHal_GetDisplaySafeArea">
+                <parameters/>
+            </function>
+            <function id="657b267d-0b0b-4c27-8633-19f9c9e2f0f7" name="TestMgr_WesterosHal_DestroyNativeWindow">
+                <parameters/>
+            </function>
+            <function id="84f5736c-8f82-4f0f-90dc-db4a3b217b8a" name="TestMgr_WesterosHal_GetDisplayInfo">
+                <parameters/>
+            </function>
+            <function id="91288b7e-f228-44cd-96e9-6a594c0ca5fa" name="TestMgr_WesterosHal_RemoveDisplaySizeListener">
+                <parameters/>
+            </function>
+            <function id="d52f18f4-429f-4a6b-9bcf-fb53dfccedbe" name="TestMgr_WesterosHal_GetCallBackData">
+                <parameters/>
+            </function>
+            <function id="81d8fae9-16c5-4c00-b7ac-b0cbbe9269ae" name="TestMgr_WesterosHal_CreateNativeWindow">
+                <parameters>
+                    <parameter id="99094cb5-8c8a-4fee-b7b6-4445bbd384c1" parameterName="height" parameterType="INTEGER" range="0-3000"/>
+                    <parameter id="dea125be-4988-4b95-83ec-4bd1236c8443" parameterName="width" parameterType="INTEGER" range="0-3000"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>1307e245-8180-4435-8803-c468040ab71d</id>
+                <name>WesterosHal_DestroyNativeWindow</name>
+                <funName>TestMgr_WesterosHal_DestroyNativeWindow</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>41a6c47f-7281-4614-9e3b-98b4a71c6388</id>
+                <name>WesterosHal_GetDisplayInfo</name>
+                <funName>TestMgr_WesterosHal_GetDisplayInfo</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>65bbdb26-cc40-45f7-bd12-c4625cea2050</id>
+                <name>WesterosHal_RemoveDisplaySizeListener</name>
+                <funName>TestMgr_WesterosHal_RemoveDisplaySizeListener</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6b8342d8-fca3-4119-8bd4-b3b158686e20</id>
+                <name>WesterosHal_CreateNativeWindow</name>
+                <funName>TestMgr_WesterosHal_CreateNativeWindow</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>30951f58-9873-49de-bc0e-d7ca5c8b128e</id>
+                        <parameterName>height</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-3000</range>
+                        <value>1080</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4246cd19-da9c-4480-9317-b133d3244c65</id>
+                        <parameterName>width</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-3000</range>
+                        <value>1920</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bf61f868-3d12-4b69-b7d8-5f1f2ef517d7</id>
+                <name>WesterosHal_AddDisplaySizeListener</name>
+                <funName>TestMgr_WesterosHal_AddDisplaySizeListener</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ecf58143-dc83-408e-928b-0dae2fd3cef3</id>
+                <name>WesterosHal_GetCallBackData</name>
+                <funName>TestMgr_WesterosHal_GetCallBackData</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ee4ec7d0-0381-4835-b19c-ea7171423aae</id>
+                <name>WesterosHal_GetDisplaySafeArea</name>
+                <funName>TestMgr_WesterosHal_GetDisplaySafeArea</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

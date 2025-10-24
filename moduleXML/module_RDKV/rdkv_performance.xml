@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>6dc9e511-07f9-4ac8-a6dc-a448bd565afb</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_performance</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Certification</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/opt/logs/nlmon.log, /opt/logs/netsrvmgr.log, /opt/logs/wpeframework.log]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="42f0dfbf-b259-4abb-b7c6-35c7fc23e3c8" name="rdkservice_getBluetoothMac">
+                <parameters/>
+            </function>
+            <function id="7b6d96d2-e93a-4d45-a5ef-73c1bdb9d935" name="rdkservice_getBrowserScore_SunSpider">
+                <parameters/>
+            </function>
+            <function id="fc2e9856-8ca4-4f5f-bbc3-e72714882dd9" name="rdkservice_getBrowserScore_Kraken">
+                <parameters/>
+            </function>
+            <function id="2009c9e1-b8c7-46ab-bbb3-bfdce2f6cc39" name="rdkservice_getMaxResponseTime">
+                <parameters>
+                    <parameter id="f8e7068c-6543-42a8-83d5-1bfb46804e8d" parameterName="method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="82350588-b38b-42f5-9d2b-4c85e19646ea" name="rdkservice_getBrowserScore_Smashcat">
+                <parameters/>
+            </function>
+            <function id="e1cf80fe-62e3-48d1-b158-52af114537e1" name="rdkservice_setPluginState">
+                <parameters>
+                    <parameter id="5323121f-d690-4c34-80e9-ba69590a9249" parameterName="state" parameterType="STRING" range="a-z"/>
+                    <parameter id="a008c90f-f303-4905-be42-b8b5230a6dbc" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="d39d9512-7daa-4ac6-8331-604cdd273b53" name="getDeviceIP_and_Status">
+                <parameters/>
+            </function>
+            <function id="e9966a26-0b65-4f0b-9d4b-117a13ad450e" name="rdkservice_getBrowserScore_Octane">
+                <parameters/>
+            </function>
+            <function id="82a1c01d-63b0-4383-9381-c4ebf2764833" name="rdkservice_getPluginStatus">
+                <parameters>
+                    <parameter id="d5197182-3940-450f-8c91-9a7173e55729" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="31bad264-68c6-4203-8f6f-de808bc00b88" name="rdkservice_getBrowserScore_AnimationBenchmark">
+                <parameters/>
+            </function>
+            <function id="2b30a2e2-2ebd-40f2-974f-10789a9d20e9" name="rdkservice_getBrowserScore_CSS3">
+                <parameters/>
+            </function>
+            <function id="f24039e8-d5bd-4ebc-9577-935da4734ad0" name="rdkservice_getNoOfPlugins">
+                <parameters/>
+            </function>
+            <function id="aa7e34e2-8126-420c-b1f9-f860b4150874" name="rdkservice_setPluginStatus">
+                <parameters>
+                    <parameter id="90bf366d-4cd5-4b81-812b-2e2f1dc1e8c8" parameterName="status" parameterType="STRING" range="a-z"/>
+                    <parameter id="1387120b-6868-4168-84b0-05fd9780686b" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                    <parameter id="56a96f77-eb6b-461e-8f2c-d1d6ed621082" parameterName="uri" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="1cb038b2-3aae-4374-8d5a-cba787eac86a" name="rdkservice_validatePluginFunctionality">
+                <parameters>
+                    <parameter id="d1ac674a-b377-4cb0-8ca9-73ccb753863b" parameterName="validation_details" parameterType="STRING" range="a-z"/>
+                    <parameter id="bfb87ed4-267c-4a31-97d3-4dcba4228da0" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                    <parameter id="d06d58bb-53ee-4085-9603-148660973a05" parameterName="operations" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="a27eceec-67e1-4908-bf63-6503440d8b06" name="rdkservice_getSupportedPlugins">
+                <parameters>
+                    <parameter id="3baeb0cf-cc8c-47fe-bf0b-f557f9f631c2" parameterName="realpath" parameterType="STRING" range="a-z"/>
+                    <parameter id="42b9ee67-91f3-41ca-a4e9-318c4228cece" parameterName="plugins" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="7dca4de2-acbd-465d-bc02-7b1cfccf5f73" name="rdkservice_getBrowserScore_MotionMark">
+                <parameters/>
+            </function>
+            <function id="ed9bb87f-23ed-4dce-86d8-81aaba36c8a4" name="rdkservice_getAllPluginStatus">
+                <parameters/>
+            </function>
+            <function id="1844a3f6-b3b0-4525-b6d6-fa122774ed4b" name="rdkservice_getBrowserURL">
+                <parameters>
+                    <parameter id="661574a6-1b12-42d0-9574-f40b54f56f30" parameterName="webinspect_port" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="e6d2a9b7-344d-450d-b5c4-c951edbc7f48" name="rdkservice_getSSHParams">
+                <parameters>
+                    <parameter id="51dcb18e-234b-4f3c-9977-c2a41959e6f1" parameterName="deviceIP" parameterType="STRING" range="a-z"/>
+                    <parameter id="f44bae51-87cb-426e-89f7-26cae957be3d" parameterName="realpath" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="e2366e6e-8fa7-47a6-bf09-111de915d97e" name="rdkservice_getBrowserScore_Speedometer">
+                <parameters/>
+            </function>
+            <function id="639eb3e0-8941-4245-8b0f-eb9fa0662761" name="rdkservice_getValueWithParams">
+                <parameters>
+                    <parameter id="564f2ee9-2081-4667-a651-277967fa4830" parameterName="method" parameterType="STRING" range="a-z"/>
+                    <parameter id="d32d94c8-1e21-4fab-9622-f146bf1f8297" parameterName="params" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="a94c6a47-0238-4d43-8495-f52e1bb5426b" name="rdkservice_setValue">
+                <parameters>
+                    <parameter id="50a5290e-0ad5-4442-9245-dabdf9899fb5" parameterName="method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="282a2f4e-a5ef-4d2c-8c56-825be4910dc1" parameterName="value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="1fef7446-9b06-4693-a057-01e19ccaf201" name="rdkservice_getRequiredLog">
+                <parameters>
+                    <parameter id="aec497b7-6ded-4075-992f-dc11bc8c68f7" parameterName="ssh_method" parameterType="STRING" range="a-z"/>
+                    <parameter id="03633352-6f5f-4bf0-b0ee-d8b0ee934dd3" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                    <parameter id="9d7e1a95-a915-4c9f-88ac-1f635d4dcd24" parameterName="command" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="e0efe2f1-45d7-4c0e-abb4-29184ea066d8" name="rdkservice_getBrowserScore_HTML5">
+                <parameters/>
+            </function>
+            <function id="b5b04a31-46b1-45a0-ad80-1bd69336e412" name="rdkservice_getReqValueFromResult">
+                <parameters>
+                    <parameter id="4e7e7b4c-442b-46d5-a16e-0e467238f13d" parameterName="reqValue" parameterType="STRING" range="a-z"/>
+                    <parameter id="6ed5581a-c1c0-4d9b-b3e9-fb3386c012d9" parameterName="method" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="93989dc4-82d8-4f63-a85f-0bdb24fe711a" name="rdkservice_getValue">
+                <parameters>
+                    <parameter id="766b412c-f169-405f-8727-a689e0570457" parameterName="method" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0f2887ff-1f41-4c90-b15a-da3a777ef993</id>
+                <name>rdkservice_getBrowserScore_MotionMark</name>
+                <funName>rdkservice_getBrowserScore_MotionMark</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>237759a1-a57c-42d9-a081-db50b6fe537f</id>
+                <name>rdkservice_getBrowserScore_HTML5</name>
+                <funName>rdkservice_getBrowserScore_HTML5</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>271c2bd3-ccd1-4c1a-a3b8-3b02f0d88637</id>
+                <name>rdkservice_setPluginStatus</name>
+                <funName>rdkservice_setPluginStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>011457bd-ca2a-490e-967d-f8f26ebb936f</id>
+                        <parameterName>uri</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2b8807f5-5938-4605-9a91-e5c180ce8df1</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>433a16fc-34d5-4ad6-892d-8c4d582e0f5f</id>
+                        <parameterName>status</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2962b17e-c3a7-4e4b-b1ea-7dd56c1824d1</id>
+                <name>rdkservice_getMaxResponseTime</name>
+                <funName>rdkservice_getMaxResponseTime</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>729c0380-dabe-496e-8afa-8955db98a446</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2eefc402-52dc-4828-93d6-9b61c3d92c22</id>
+                <name>rdkservice_getNoOfPlugins</name>
+                <funName>rdkservice_getNoOfPlugins</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>36ee3716-2bc9-442f-a8c6-c4c6b227c0df</id>
+                <name>rdkservice_getBluetoothMac</name>
+                <funName>rdkservice_getBluetoothMac</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>3e692ec9-bd31-47e9-bf22-b271cedd7103</id>
+                <name>rdkservice_getBrowserScore_CSS3</name>
+                <funName>rdkservice_getBrowserScore_CSS3</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>489c5344-9078-4b35-a37f-cfc1badeead1</id>
+                <name>rdkservice_getAllPluginStatus</name>
+                <funName>rdkservice_getAllPluginStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>68ee7571-e08c-4b44-a662-2eb2b2813f84</id>
+                <name>rdkservice_setValue</name>
+                <funName>rdkservice_setValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e1a07358-7194-419c-96d0-d0e30a5e8303</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ffba2ab9-c14f-4bd2-aa0a-380df1488da3</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>74c658db-d612-4375-ab79-67d7e0304e60</id>
+                <name>rdkservice_validatePluginFunctionality</name>
+                <funName>rdkservice_validatePluginFunctionality</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3e7f7696-c2d6-4714-9fea-347f87d79ff3</id>
+                        <parameterName>validation_details</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>45a4687f-3953-4a17-ad91-901f7a3cf1f3</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ae00d220-0ad7-4e04-9000-563e7c5cfd27</id>
+                        <parameterName>operations</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>76b866d2-efe1-4a2b-b27b-5374ecc815a3</id>
+                <name>rdkservice_getBrowserScore_Smashcat</name>
+                <funName>rdkservice_getBrowserScore_Smashcat</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>7854ed4e-efc0-44f8-b6b9-72f12d71b6da</id>
+                <name>rdkservice_getValue</name>
+                <funName>rdkservice_getValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>87676b44-12ee-4280-9965-07b085ef81cf</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7df2f44f-6d9c-4e1a-bfee-af458364c19c</id>
+                <name>rdkservice_getBrowserScore_Kraken</name>
+                <funName>rdkservice_getBrowserScore_Kraken</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>7fce2883-153b-4a9a-93b0-c23e2602352d</id>
+                <name>rdkservice_getRequiredLog</name>
+                <funName>rdkservice_getRequiredLog</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7cab1358-604a-4edf-9947-057d2d20cd53</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c51b2719-294b-40f1-a153-a26addf50857</id>
+                        <parameterName>ssh_method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ec2b87e3-4f78-47ae-82f9-0af00267a0b8</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8309f9bb-19b7-4360-b1bd-e522b9538005</id>
+                <name>rdkservice_getBrowserScore_AnimationBenchmark</name>
+                <funName>rdkservice_getBrowserScore_AnimationBenchmark</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>967bb924-29e3-4019-9590-784a78a9daa2</id>
+                <name>rdkservice_getBrowserScore_SunSpider</name>
+                <funName>rdkservice_getBrowserScore_SunSpider</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9a21aa16-d817-4a93-aa46-5582e978e52a</id>
+                <name>rdkservice_setPluginState</name>
+                <funName>rdkservice_setPluginState</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0afc6bde-5b07-4da8-a047-8d7f509e715d</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>980a6bbd-4222-4516-8800-89e43acf8f8b</id>
+                        <parameterName>state</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9cf968fb-a358-4fd6-a969-2bb386b4ba37</id>
+                <name>rdkservice_getBrowserScore_Octane</name>
+                <funName>rdkservice_getBrowserScore_Octane</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9eb4d5dc-1fc6-421e-9d86-cec4bfa4da60</id>
+                <name>rdkservice_getBrowserURL</name>
+                <funName>rdkservice_getBrowserURL</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>fc404502-7ba3-496e-8d45-b997037bc40a</id>
+                        <parameterName>webinspect_port</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b40cf144-4625-453a-aaa7-2fea4b038974</id>
+                <name>rdkservice_getReqValueFromResult</name>
+                <funName>rdkservice_getReqValueFromResult</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>566a4376-a338-42a7-966a-9f79a164559b</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>78b9a643-cb7a-41f0-b0da-f17a7e37ad6e</id>
+                        <parameterName>reqValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bc2ffce7-e967-45e4-9aa4-3ea4f2a1f2a9</id>
+                <name>rdkservice_getPluginStatus</name>
+                <funName>rdkservice_getPluginStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ab98468d-3f00-43b2-b4f2-5fb000def75a</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c20a06d0-0505-4440-b9a0-c3859b3a8fe5</id>
+                <name>rdkservice_getSSHParams</name>
+                <funName>rdkservice_getSSHParams</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d4801ecb-3a9b-453d-ba93-083d05c28277</id>
+                        <parameterName>deviceIP</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d9e426c2-6498-47c0-9b90-022d84e84829</id>
+                        <parameterName>realpath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cd2fb90a-3587-409a-aa43-9d72bb7201f1</id>
+                <name>rdkservice_getSupportedPlugins</name>
+                <funName>rdkservice_getSupportedPlugins</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3c2ffd46-c005-482b-93b3-e26be83a25f9</id>
+                        <parameterName>plugins</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a3baa83c-e9b4-4812-a68f-736de25f206d</id>
+                        <parameterName>realpath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d17d9080-eafc-4117-b5ae-4f2539e291ef</id>
+                <name>rdkservice_getBrowserScore_Speedometer</name>
+                <funName>rdkservice_getBrowserScore_Speedometer</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>dc6cfc2b-3805-47a4-a55b-03676b531b51</id>
+                <name>rdkservice_getValueWithParams</name>
+                <funName>rdkservice_getValueWithParams</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0e13f845-8cd3-49d4-a5c7-a745c0f7d619</id>
+                        <parameterName>params</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4c86a204-0547-49b4-88c9-2566cde5f3bf</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

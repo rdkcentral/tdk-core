@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>34b4f051-03bf-4d89-8640-2c4c69c7f525</moduleId>
+        <!-- Module name -->
+        <moduleName>HdmicecHal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>3</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="0d52b1de-6622-4dab-a829-2b3cc0a46b80" name="TestMgr_HdmicecHal_GetPhysicalAddress">
+                <parameters>
+                    <parameter id="382c1b2e-cf5b-4eaf-ab6b-461428590a49" parameterName="Is_handle_invalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="8b0f2d12-c887-4b27-a9c5-1421e5fab4b5" parameterName="handle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="02f078f7-9750-427f-8347-9e332b913035" parameterName="Is_null_param_check" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="693eea96-59aa-483c-a334-a7f0e18c4339" name="TestMgr_HdmicecHal_SetTxCallback">
+                <parameters/>
+            </function>
+            <function id="5b7cf5c8-cc03-4ccc-8914-98feed4bdf7c" name="TestMgr_HdmicecHal_RemoveLogicalAddress">
+                <parameters>
+                    <parameter id="53d6188a-ba34-4608-85de-409b1b025e58" parameterName="Is_handle_invalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="86783985-4162-4179-89d3-87bfad9f7071" parameterName="handle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="05bce7b8-d954-42d2-9e14-c8321daabd61" parameterName="logical_addr" parameterType="INTEGER" range="0-15"/>
+                </parameters>
+            </function>
+            <function id="a862fb71-1697-43c6-96b1-aaeae477b93b" name="TestMgr_HdmicecHal_AddLogicalAddress">
+                <parameters>
+                    <parameter id="20b81ccf-5ae2-4382-8489-bfb7251fc3ec" parameterName="logical_addr" parameterType="INTEGER" range="0-15"/>
+                    <parameter id="78b291df-7e4d-4f6a-89d8-13ec0b4480a5" parameterName="handle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="97da1fa4-95b3-4a99-8647-428f5234528e" parameterName="Is_handle_invalid" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="6df10f57-ea56-499a-a6a2-15fc07198172" name="TestMgr_HdmicecHal_GetLogicalAddress">
+                <parameters>
+                    <parameter id="218dfd56-369f-401a-a170-f97cc6287190" parameterName="dev_type" parameterType="INTEGER" range="0-15"/>
+                    <parameter id="25ae890b-11ba-47ab-a58b-6e1653a5b528" parameterName="handle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="ed54a4d7-8005-496d-b21e-a0b4b81b3b59" parameterName="Is_null_param_check" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="3efba2a2-1dc1-43f8-8531-2af66d9cbcdb" parameterName="Is_handle_invalid" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="4d58841f-cc10-4391-b23f-eec737a3e53e" name="TestMgr_HdmicecHal_Tx">
+                <parameters>
+                    <parameter id="4af41b3e-6b20-428f-821b-d4d796544578" parameterName="opcode" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2aea37c8-4acd-4170-a07c-9cc9d30096d8" parameterName="receive_frames" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="33bd2515-0a32-41d1-865b-0315a3713fee" parameterName="header" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f3a3384a-2b6f-4f30-8b65-c371ddd4956f" name="TestMgr_HdmicecHal_TxAsync">
+                <parameters>
+                    <parameter id="fedb86a7-b740-47d0-85bf-441f012f7913" parameterName="opcode" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a1af4c8b-eadc-40bd-bdde-653988fb8260" parameterName="receive_frames" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="3934885d-50b5-4c7f-a311-da0d9fe3d149" parameterName="header" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8e42cadd-9293-479b-82ce-ea8f7d8470fc" name="TestMgr_HdmicecHal_SetRxCallback">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>085a7bd9-9fca-41bf-a257-e9e7121562c7</id>
+                <name>HdmicecHal_SetTxCallback</name>
+                <funName>TestMgr_HdmicecHal_SetTxCallback</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>08e464bd-7560-41f8-9406-236424a7d37c</id>
+                <name>HdmicecHal_Remove_LogicalAddress_InvalidHandle_Check</name>
+                <funName>TestMgr_HdmicecHal_RemoveLogicalAddress</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0f06b574-9797-46d7-8ee2-7a03d5d5eab1</id>
+                        <parameterName>logical_addr</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7c2b07fe-e6ea-4e2e-b13b-42e2a9a1fea2</id>
+                        <parameterName>Is_handle_invalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fc6e23e2-8c1e-4e1b-a520-6a3b2e41fc23</id>
+                        <parameterName>handle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0d20850b-038a-43eb-892e-5a024ffc0bf7</id>
+                <name>HdmicecHal_GetLogicalAddress</name>
+                <funName>TestMgr_HdmicecHal_GetLogicalAddress</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>799a2faf-c7af-4c1a-9b95-dcf968a7272e</id>
+                        <parameterName>Is_null_param_check</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a8b8f9a5-2ad5-4c63-8dbd-8c19a047f31b</id>
+                        <parameterName>handle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>de0ec02b-6f41-453a-837c-7e1a59769991</id>
+                        <parameterName>dev_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-15</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e0eb7659-bfb2-4996-a7df-624bdeb46452</id>
+                        <parameterName>Is_handle_invalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1738905b-120f-4311-b52c-b54039dbad7d</id>
+                <name>HdmicecHal_AddLogicalAddress</name>
+                <funName>TestMgr_HdmicecHal_AddLogicalAddress</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1c7cbc39-e781-46bd-aa15-3007d47c2ac0</id>
+                        <parameterName>Is_handle_invalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5cd4a37d-c4e2-45c2-86da-dc7c4fa17671</id>
+                        <parameterName>logical_addr</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d7deaec1-0ed6-4e50-8969-bdab1e2ebbef</id>
+                        <parameterName>handle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>39edd69b-7937-4268-9016-4cc4dc8bb333</id>
+                <name>HdmicecHal_AddLogicalAddress_InvalidHandle_check</name>
+                <funName>TestMgr_HdmicecHal_RemoveLogicalAddress</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0c61affb-2a01-4a75-9270-32251bbde55c</id>
+                        <parameterName>handle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3b5adbf2-2c18-49a0-8f1d-7674f8d01fe4</id>
+                        <parameterName>Is_handle_invalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b20d0a12-30d3-48d2-a6a6-396539104b00</id>
+                        <parameterName>logical_addr</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>635ea4b0-7bab-4df1-ab71-25af690cce6a</id>
+                <name>HdmicecHal_TxAsync</name>
+                <funName>TestMgr_HdmicecHal_TxAsync</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>057e9d6e-567c-4ef1-a76d-4ddb209cef2c</id>
+                        <parameterName>opcode</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1fd7d933-e539-467d-b04d-9cc99e75756e</id>
+                        <parameterName>receive_frames</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>32cc3eec-db4b-4973-a056-3aa40dc98bd8</id>
+                        <parameterName>header</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9ef9de0a-1f74-4c85-991b-c010124560b1</id>
+                <name>HdmicecHal_RemoveLogicalAddress</name>
+                <funName>TestMgr_HdmicecHal_RemoveLogicalAddress</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>06cfa906-162e-4575-8f36-2b80fa49d990</id>
+                        <parameterName>Is_handle_invalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>39c86078-c20d-41bd-b9dd-2d24cf9085f8</id>
+                        <parameterName>logical_addr</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>caedbe84-ce16-4b1b-b271-051713d50ac7</id>
+                        <parameterName>handle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a42ca3d1-ab09-4ef8-a6ae-7239d69ff7a9</id>
+                <name>HdmicecHal_Add_LogicalAddress_InvalidArgument_Check</name>
+                <funName>TestMgr_HdmicecHal_AddLogicalAddress</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6c04f84e-9a7e-4bf4-8002-b56dd1b3d183</id>
+                        <parameterName>handle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6c3e1602-751b-4148-bd81-d545c572370c</id>
+                        <parameterName>logical_addr</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b8602bac-5048-48e1-8e59-9a5bf6164da0</id>
+                        <parameterName>Is_handle_invalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>adb6f84a-eb24-4e47-9042-6c3b0b7aaf3a</id>
+                <name>HdmicecHal_GetPhysicalAddress</name>
+                <funName>TestMgr_HdmicecHal_GetPhysicalAddress</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2d45fb20-d918-450c-a1a9-4a427303754e</id>
+                        <parameterName>Is_handle_invalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d781127d-c01e-4593-8acd-09d5bd96aa45</id>
+                        <parameterName>Is_null_param_check</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fd1bb426-434f-4f0a-8d76-fe3f6dc272ba</id>
+                        <parameterName>handle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ce2a5564-d47e-4782-8d58-9aacd8a7875c</id>
+                <name>HdmicecHal_Tx</name>
+                <funName>TestMgr_HdmicecHal_Tx</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5a1fc4ef-ad9e-4558-a408-2bdf945c1336</id>
+                        <parameterName>opcode</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e4308753-16f1-43f5-a74c-0774edb91051</id>
+                        <parameterName>receive_frames</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e4eea45c-a72c-4e0e-9887-131bc65adaf2</id>
+                        <parameterName>header</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e6a15b12-e217-4685-8bce-e50669a574b7</id>
+                <name>HdmicecHal_SetRxCallback</name>
+                <funName>TestMgr_HdmicecHal_SetRxCallback</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>33d4f9d8-07af-493b-aed5-5dceaf5d8037</moduleId>
+        <!-- Module name -->
+        <moduleName>xupnp</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>7</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="b870920d-0e83-4538-9643-8a63046a44e2" name="TestMgr_XUPNP_GetSystemIds">
+                <parameters/>
+            </function>
+            <function id="d7fb830d-2dcd-49f9-86de-826535f7f5cc" name="TestMgr_XUPNP_GetHostMacAddress">
+                <parameters/>
+            </function>
+            <function id="dcbdf871-5289-4cdd-b747-f02fbc9bd08c" name="TestMgr_XUPNP_GetSerialNo">
+                <parameters/>
+            </function>
+            <function id="09aa040b-658c-4c82-b232-a66a95ccbcc2" name="TestMgr_XUPNPAgent_checkPBurl">
+                <parameters/>
+            </function>
+            <function id="bf602479-059e-4937-9cff-fca8ed25879b" name="TestMgr_XUPNP_ModifyBasicDeviceXml">
+                <parameters/>
+            </function>
+            <function id="03f9c9b8-d9c1-4273-9d98-d3a74066c54e" name="TestMgr_XUPNP_GetBaseStreamingUrl">
+                <parameters/>
+            </function>
+            <function id="f2586dde-3d30-4260-bdac-4a868e49f75a" name="TestMgr_XUPNP_GetPlaybackUrl">
+                <parameters/>
+            </function>
+            <function id="585be7ad-0583-42ba-9e0e-9e22ee5e0a9e" name="TestMgr_XUPNP_GetTimeZone">
+                <parameters/>
+            </function>
+            <function id="9a22cc34-b4b9-4f5f-8a88-22f54aa95a85" name="TestMgr_XUPNP_GetHosts">
+                <parameters/>
+            </function>
+            <function id="b778e888-3c88-4c85-bb73-72bf9afb186a" name="TestMgr_XUPNP_GetUpnpResult">
+                <parameters>
+                    <parameter id="cbd81bf9-b14a-4927-8b09-65c80c6fcd09" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d6ae34c6-466f-47c3-a44d-593dd92cb1f3" name="TestMgr_XUPNPAgent_checkSTRurl">
+                <parameters/>
+            </function>
+            <function id="08b49178-7526-42bf-9c78-e50dfb092430" name="TestMgr_XUPNP_GetBaseTrmUrl">
+                <parameters/>
+            </function>
+            <function id="02f16af6-fc97-4e7b-9119-bfca40f87305" name="TestMgr_XUPNPAgent_checkSerialNo">
+                <parameters/>
+            </function>
+            <function id="1bd26481-42a8-4887-8b99-6edc1d43836e" name="TestMgr_XUPNP_ReadXcalDeviceLogFile">
+                <parameters/>
+            </function>
+            <function id="9f53a9d5-885f-478e-9136-72e7c6a244d8" name="TestMgr_XUPNP_CheckXMLRestoration">
+                <parameters/>
+            </function>
+            <function id="6cf9a571-20a7-4dbb-8823-123b73b6991c" name="TestMgr_XUPNPAgent_evtCheck">
+                <parameters>
+                    <parameter id="0e6f057f-c777-409e-9be8-fe8eaf014dd1" parameterName="evtValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f1987157-68e7-4842-a917-434657b15d3b" parameterName="evtName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="eb709ad8-8afc-4bce-b3b3-56b926d41fb1" name="TestMgr_XUPNP_ReadXDiscOutputFile">
+                <parameters>
+                    <parameter id="19f1c2e5-9020-4499-827b-bfc0099880a3" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2f384fdb-46c5-40bf-bbc3-7be035efccea" name="TestMgr_XUPNP_GetReceiverId">
+                <parameters/>
+            </function>
+            <function id="053ad696-1c5f-455d-abad-8d9526d473ce" name="TestMgr_XUPNP_GetDnsConfig">
+                <parameters/>
+            </function>
+            <function id="2c42edbd-4f61-4047-8ab8-72b70a56e1c0" name="TestMgr_XUPNPAgent_removeXmls">
+                <parameters/>
+            </function>
+            <function id="9a99b3f3-be41-4361-81f1-22f024419c50" name="TestMgr_XUPNP_GetRequiresTRM">
+                <parameters/>
+            </function>
+            <function id="41fe623b-5c4c-4cb4-b5db-941ed7dfe832" name="TestMgr_XUPNP_GetGatewayIP">
+                <parameters/>
+            </function>
+            <function id="87ade15f-57e7-467e-bf11-918325944b5f" name="TestMgr_XUPNP_CheckXDiscOutputFile">
+                <parameters/>
+            </function>
+            <function id="2b72f5bb-0193-48fa-ba1e-4e278a8376ee" name="TestMgr_XUPNP_GetIsGateway">
+                <parameters/>
+            </function>
+            <function id="b69f2ff1-1d2d-45dd-b5dc-4e32618ce8df" name="TestMgr_XUPNPAgent_CheckXDiscOutputFile">
+                <parameters/>
+            </function>
+            <function id="92bd2970-9f14-42f3-8358-5c28830622a8" name="TestMgr_XUPNP_GetRecvDevType">
+                <parameters/>
+            </function>
+            <function id="c2f29601-e650-4dbb-a8bc-e3a29ff6fdfb" name="TestMgr_XUPNPAgent_checkjson">
+                <parameters/>
+            </function>
+            <function id="5b95edf4-64fb-4ad9-8673-658f1ffc9582" name="TestMgr_XUPNPAgent_ModBasicDevice">
+                <parameters/>
+            </function>
+            <function id="d8357124-615f-402c-afc9-3972e83835d0" name="TestMgr_XUPNP_BroadcastEvent">
+                <parameters>
+                    <parameter id="c9291079-9a51-4c12-8921-f803d7b98684" parameterName="payload" parameterType="STRING" range="A-Z"/>
+                    <parameter id="0355f8e8-e56c-4331-9377-d8e872a50d7e" parameterName="state" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="749186b0-ac9f-468d-9504-0f72e5139df3" parameterName="stateId" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="284fb76d-7151-4b9b-bad4-eba88ff9bbc9" parameterName="eventLog" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b1a716ef-d0eb-44ad-ad6e-2e121139e50a" parameterName="error" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="fef3e14e-73db-4aa1-b962-76cfdae8a6e3" name="TestMgr_XUPNPAgent_recordId">
+                <parameters/>
+            </function>
+            <function id="29f15106-84a0-42d7-ab5e-28b613671595" name="TestMgr_XUPNP_GetBuildVersion">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0f40312b-6d95-4511-ba58-b3f4266bab1a</id>
+                <name>XUPNP_GetUpnpResult</name>
+                <funName>TestMgr_XUPNP_GetUpnpResult</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>696d73bc-ac09-4283-9d77-e32d63b063f4</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>sno</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4889a96a-515c-4a44-9d89-96df352f11e8</id>
+                <name>XUPNP_BroadcastEvent</name>
+                <funName>TestMgr_XUPNP_BroadcastEvent</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1832525b-b296-4218-b62d-46e68487b50e</id>
+                        <parameterName>state</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>2</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2b97f5bd-c884-432d-832b-e74815089055</id>
+                        <parameterName>stateId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6560a982-34ce-4378-b98d-e2d3f970ceed</id>
+                        <parameterName>eventLog</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>TestXcalLog</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>70243acb-9768-448c-a91a-694cb0364557</id>
+                        <parameterName>error</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e09376e3-f897-46ed-b57a-63f06e6ff17a</id>
+                        <parameterName>payload</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>TestPayload</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b9b50330-feb0-44f5-a990-088e61395e5a</id>
+                <name>XUPNP_ReadXDiscOutputFile</name>
+                <funName>TestMgr_XUPNP_ReadXDiscOutputFile</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>65a00a32-eb2f-4d20-a088-e50054c79cab</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>sno</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e6d42192-c548-4e57-81f0-afc2b255a9f1</id>
+                <name>XUPNP_CheckXDiscOutputFile</name>
+                <funName>TestMgr_XUPNP_CheckXDiscOutputFile</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

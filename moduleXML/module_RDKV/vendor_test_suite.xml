@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>284696c4-9474-4fad-8dbc-ad82695acce9</moduleId>
+        <!-- Module name -->
+        <moduleName>vendor_test_suite</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>3</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="9eb2019e-5695-45ce-9ac4-ccf41b460241" name="getDeviceConfigValues">
+                <parameters>
+                    <parameter id="2259ef8d-9f73-4d09-9235-b3a6adbc6c58" parameterName="configKey" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="879c0a9c-bd10-4ced-bcca-1a45961cf048" name="setVTSResult">
+                <parameters>
+                    <parameter id="9e6c1b93-0fe5-4d3d-ac7e-cb416921fd32" parameterName="failed_testCases" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fec570b6-7623-4cc0-89c9-aa09bf62011e" name="executePostRequisites">
+                <parameters/>
+            </function>
+            <function id="4b84e748-bda3-45c7-a82b-96d0a64d6fb3" name="SetupPreRequisites">
+                <parameters>
+                    <parameter id="ebf8f4ad-6dea-4707-9147-e09b0d9cbee4" parameterName="password" parameterType="STRING" range="A-Z"/>
+                    <parameter id="50acf880-c0bc-4253-9bbb-4df0c2c1ad45" parameterName="module" parameterType="STRING" range="A-Z"/>
+                    <parameter id="6b324a10-d45c-4298-9288-b1756a06f221" parameterName="binaryName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="00e6597f-87bc-498a-9a3c-bcb507f5b9d8" parameterName="host" parameterType="STRING" range="A-Z"/>
+                    <parameter id="741e8697-f48a-4543-9331-a831ceee24eb" parameterName="binaryConfig" parameterType="STRING" range="A-Z"/>
+                    <parameter id="126aec19-fe4d-4c6a-97a2-46deebddc34b" parameterName="basePath" parameterType="STRING" range="A-Z"/>
+                    <parameter id="caf9443b-aec2-4928-aa72-033ed539344e" parameterName="username" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>5a8dfe54-8d79-4f08-9cd6-8920008e3a49</id>
+                <name>setVTSResult</name>
+                <funName>setVTSResult</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3b4ee25b-0a9c-4778-b37b-3d0ca568f394</id>
+                        <parameterName>failed_testCases</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bec63192-5275-4faf-a667-e43704be75bd</id>
+                <name>executePostRequisites</name>
+                <funName>executePostRequisites</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e7e700f2-c700-435a-ab49-8d6789502b54</id>
+                <name>getDeviceConfigValues</name>
+                <funName>getDeviceConfigValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ee497cc1-8cb1-41f5-b21a-fd665f562872</id>
+                        <parameterName>configKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f4b8c00a-f042-4dd1-87e7-97511c25a2a5</id>
+                <name>SetupPreRequisites</name>
+                <funName>SetupPreRequisites</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>120ca686-81c3-4115-a3e3-31cbfd6e8058</id>
+                        <parameterName>module</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>796d463f-7ce7-4100-93a6-f5914243ee6b</id>
+                        <parameterName>binaryConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>80fb3e4a-aee1-4aa7-bb64-49c63f0f05c9</id>
+                        <parameterName>basePath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9be0d8c2-8fed-427e-b417-36acb3990490</id>
+                        <parameterName>password</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a19426f3-5a33-4b7b-9919-8b4ff5389bd2</id>
+                        <parameterName>username</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ae342c90-4a99-4f9d-a297-88fe1fd5b5ed</id>
+                        <parameterName>host</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f9da3069-a693-4c50-8ccf-2527becab54c</id>
+                        <parameterName>binaryName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

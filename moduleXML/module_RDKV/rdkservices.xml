@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>ac3c1912-0579-4bdd-9ede-5161b2dc757e</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkservices</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>2</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="dc6e5709-b6b6-48ca-85d9-3bcc410c25c2" name="TestMgr_RdkService_Test">
+                <parameters>
+                    <parameter id="0c241b57-fe39-470e-b511-16f1bc6ba490" parameterName="xml_name" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>755d3ca6-6bc1-45b5-a183-2eb98203cc8f</id>
+                <name>RdkService_Test</name>
+                <funName>TestMgr_RdkService_Test</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b87b4430-f855-4dbc-97ac-b489f9036fed</id>
+                        <parameterName>xml_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

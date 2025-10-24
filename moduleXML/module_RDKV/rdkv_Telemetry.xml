@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>28afab69-f367-4926-bebe-df028fe0af80</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_Telemetry</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="bca35425-251f-4820-a550-10bf77fb1acf" name="form_rbuscli_command">
+                <parameters>
+                    <parameter id="073d14b1-20a4-47e7-8249-954a91473c86" parameterName="param_name" parameterType="STRING" range="a-z"/>
+                    <parameter id="4dcdc782-403c-4a3d-bb6c-4842982070c8" parameterName="name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="843d9c95-7fdd-412f-90ef-e7b8c4721b46" parameterName="profile_name" parameterType="STRING" range="a-z"/>
+                    <parameter id="97b6b3ff-aa07-48e7-8dd2-8d0326a12bc1" parameterName="description" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="65cc8af9-fe7e-4dc7-99c1-76a77c1f1ceb" name="telemetry_datamodelcheck">
+                <parameters>
+                    <parameter id="0da4ee9d-3b28-403c-81bd-a66356ea87e4" parameterName="rfcparameter" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="91096c57-aab4-4371-afbe-c24977c99e3a" name="run_rbuscli_and_check">
+                <parameters>
+                    <parameter id="327d5d60-92cd-4387-882e-388b78c79949" parameterName="param_name" parameterType="STRING" range="a-z"/>
+                    <parameter id="4ee0be80-7c62-4ebb-bbc6-8658d7f8f15f" parameterName="profile_name" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="acb1620b-d334-4470-b868-be2c71946baf" name="execute_CmndInDUT">
+                <parameters>
+                    <parameter id="6afa512e-f941-4b28-92b2-5d8edd90b081" parameterName="command" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d30d1d01-4466-48da-a2eb-0496543eca21" name="telemetry_deviceconfig_value">
+                <parameters>
+                    <parameter id="5d14cacb-3fe1-42a7-8803-683f20436f98" parameterName="basePath" parameterType="STRING" range="a-z"/>
+                    <parameter id="c7812939-ff78-425f-aa4c-c89d7be062c2" parameterName="configKey" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="94063d84-e1a7-4058-ac79-8eff0b0e5fa7" name="setPreRequisites">
+                <parameters/>
+            </function>
+            <function id="9c71075e-f48d-4364-bb39-fbb23bda1113" name="form_rbuscli_event_command">
+                <parameters>
+                    <parameter id="5b50a085-beb1-42cd-a12b-33d0419dc3e2" parameterName="Telemetry_Collector_URL" parameterType="STRING" range="A-Z"/>
+                    <parameter id="851c1a1e-8bd7-4b53-a249-fd690c7199cc" parameterName="component_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cbd25a3e-ffea-4fda-b8b9-3e9d24657bba" parameterName="description" parameterType="STRING" range="A-Z"/>
+                    <parameter id="73f3aa13-1b64-47b3-b2e9-3ab8e5689b8a" parameterName="event_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="513079af-bae5-48f8-81c8-473963bc6388" parameterName="profile_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>097cb95d-f087-4435-9404-68ce7482b33e</id>
+                <name>telemetry_executeCmdInDUT</name>
+                <funName>execute_CmndInDUT</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>13bd8bb3-3d11-4ed8-8587-0478b1bdac12</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5ba3186c-baa4-48cd-82b0-acf38d263a02</id>
+                <name>telemetry_deviceconfig_value</name>
+                <funName>telemetry_deviceconfig_value</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>098b08eb-0353-4f9b-a4e1-fa89db537e11</id>
+                        <parameterName>basePath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>54f2d06d-03dd-4229-86c9-ef713b44f636</id>
+                        <parameterName>configKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>93c7f017-0b7b-403e-b72d-2ec5148a3b5e</id>
+                <name>run_rbuscli_and_check</name>
+                <funName>run_rbuscli_and_check</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4ef2153b-f8c9-463c-8cbb-e57b7be2cd79</id>
+                        <parameterName>param_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>83861c2c-44b9-46f4-b1b0-3e12b3c4a475</id>
+                        <parameterName>profile_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9f68c65c-db7a-486a-b7ac-abebeee080da</id>
+                <name>form_rbuscli_command</name>
+                <funName>form_rbuscli_command</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2842bb85-ea8f-4248-8dcb-d6338bbfa195</id>
+                        <parameterName>param_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6845ece1-68a1-47d2-988e-09fc86aaee8c</id>
+                        <parameterName>name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bca06b96-2c4a-43de-99f6-d5b0e3aac5b8</id>
+                        <parameterName>description</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e7838c12-db36-4d1d-bc81-608c91da29ad</id>
+                        <parameterName>profile_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>RDKV-Profile</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a683bf78-6628-45ff-a514-126953c31a86</id>
+                <name>setPreRequisites</name>
+                <funName>setPreRequisites</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b1153c0b-7200-424c-aa31-c62ae28bed8c</id>
+                <name>form_rbuscli_event_command</name>
+                <funName>form_rbuscli_event_command</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>15d5b179-1f0e-41cd-a558-f099c55e4a49</id>
+                        <parameterName>event_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>287f07cd-48ca-4fc3-9dca-2e89fddd80c2</id>
+                        <parameterName>description</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3e1f4340-0f97-4b58-b03f-52b75e0573d4</id>
+                        <parameterName>component_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e7fa5fb3-9bf4-4519-beea-785f12884f53</id>
+                        <parameterName>profile_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>eab7fe31-6afa-406a-8e05-791e310002dd</id>
+                        <parameterName>Telemetry_Collector_URL</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>da6906c7-0a67-4c3d-9ecc-8e509b9bd40a</id>
+                <name>telemetry_datamodelcheck</name>
+                <funName>telemetry_datamodelcheck</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>80123f11-981c-4c29-aea8-a05319feb53c</id>
+                        <parameterName>rfcparameter</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

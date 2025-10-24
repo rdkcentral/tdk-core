@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>a5d5288b-2a24-4d57-bd0c-af65fe02970c</moduleId>
+        <!-- Module name -->
+        <moduleName>PowerMgrHal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>3</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="dec0281b-f64a-44fb-abc8-82139f3a411c" name="TestMgr_PowerMgrHal_GetCmdTimeTaken">
+                <parameters>
+                    <parameter id="d9e0a527-2068-4fde-b8b6-32e7e94930d9" parameterName="cmd" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e6610091-70c2-4f6d-89d4-6d9abe1783c4" name="TestMgr_PowerMgrHal_SetClockSpeed">
+                <parameters>
+                    <parameter id="5b08dc69-e187-4091-8698-99c4a25f27c5" parameterName="speed" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="f9b3f4d9-fef7-47d6-acc8-60c820c477c1" name="TestMgr_PowerMgrHal_SetWakeupSrc">
+                <parameters>
+                    <parameter id="02bc9331-7100-4ca5-a171-8f9604c78550" parameterName="wakeupsrc" parameterType="STRING" range="A-Z"/>
+                    <parameter id="77f74d42-9adf-4e3c-b98b-7659a0fcad25" parameterName="Is_wkup_src_enable" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="ed553056-f76b-4d50-a599-fdd55772d4e5" name="TestMgr_PowerMgrHal_DetemineClockSpeeds">
+                <parameters/>
+            </function>
+            <function id="c0ee4f3f-934a-4846-b2a4-85080154088d" name="TestMgr_PowerMgrHal_Reset">
+                <parameters/>
+            </function>
+            <function id="f4c76232-43e9-48b6-a9b7-3cba1273bafa" name="TestMgr_PowerMgrHal_SetPowerState">
+                <parameters>
+                    <parameter id="df138e71-6be6-4e93-8a3e-8ca10551c9fb" parameterName="state" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b4108c02-6bfa-4908-9d91-759b03493eb5" name="TestMgr_PowerMgrHal_GetWakeupSrc">
+                <parameters>
+                    <parameter id="74c4dcc4-3fb5-4a98-8cd8-0f67a98dcf6b" parameterName="wakeupsrc" parameterType="STRING" range="A-Z"/>
+                    <parameter id="af704b8d-9c79-4400-8f27-31adbbaba6b8" parameterName="Is_null_param_check" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="85e50b64-1ed3-4b0d-8581-7d1f483b5745" name="TestMgr_PowerMgrHal_SetTempThresholds">
+                <parameters>
+                    <parameter id="71e08326-51ee-4ea6-9638-1a5d3a383fcc" parameterName="high" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="e3448db4-a29e-475e-abd8-290f50d5a13b" parameterName="critical" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="e3cd696e-38e9-4e27-8a89-bfcce60747cd" name="TestMgr_PowerMgrHal_GetTemperature">
+                <parameters/>
+            </function>
+            <function id="df5d182e-c642-4a24-b967-46d5728afaa0" name="TestMgr_PowerMgrHal_GetTempThresholds">
+                <parameters/>
+            </function>
+            <function id="2c35b792-5b1f-4739-843f-fb22759b2df6" name="TestMgr_PowerMgrHal_GetPowerState">
+                <parameters/>
+            </function>
+            <function id="93ceada5-cf9c-43a7-9f60-bb83fac73304" name="TestMgr_PowerMgrHal_GetClockSpeed">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>00ee435e-766b-4abf-bf79-b029decf6bb7</id>
+                <name>PowerMgrHal_GetTempThresholds</name>
+                <funName>TestMgr_PowerMgrHal_GetTempThresholds</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>08c8b251-6d75-41f5-a793-70c7569155dd</id>
+                <name>PowerMgrHal_SetWakeupSrc</name>
+                <funName>TestMgr_PowerMgrHal_SetWakeupSrc</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>281f0444-168a-4269-b17c-761d7332adfe</id>
+                        <parameterName>Is_wkup_src_enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>60cae838-8cf8-471a-8b23-10de4a9196fe</id>
+                        <parameterName>wakeupsrc</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>235264b7-cb59-4433-82c3-682ffd0a81db</id>
+                <name>PowerMgrHal_SetTempThresholds</name>
+                <funName>TestMgr_PowerMgrHal_SetTempThresholds</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8ce5d658-bb45-4581-bae7-4e56b49a2e50</id>
+                        <parameterName>critical</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>95c28efd-fed2-4ecc-ba10-89310c2e13af</id>
+                        <parameterName>high</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4338ea2d-7717-41e2-81c5-c7722a0edeb0</id>
+                <name>PowerMgrHal_GetTemperature</name>
+                <funName>TestMgr_PowerMgrHal_GetTemperature</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4ece8326-256f-4636-92f2-e43d7ff6d9e7</id>
+                <name>PowerMgrHal_SetPowerState</name>
+                <funName>TestMgr_PowerMgrHal_SetPowerState</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>37ed6db3-dfdd-461f-98b6-036a10389b15</id>
+                        <parameterName>state</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>50d879a4-65ae-4478-8953-5e59be82f155</id>
+                <name>PowerMgrHal_GetClockSpeed</name>
+                <funName>TestMgr_PowerMgrHal_GetClockSpeed</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6cd3e5a4-92f1-4a19-8438-8b72d843ca85</id>
+                <name>PowerMgrHal_DetemineClockSpeeds</name>
+                <funName>TestMgr_PowerMgrHal_DetemineClockSpeeds</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>879dff49-ef7a-44fe-bc64-8176ad83541b</id>
+                <name>PowerMgrHal_GetCmdTimeTaken</name>
+                <funName>TestMgr_PowerMgrHal_GetCmdTimeTaken</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>89462ee0-8c4e-4ff9-b2cd-5b8a77b273b6</id>
+                        <parameterName>cmd</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A-Z</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>90808d4f-e662-427f-9014-f96f5afea7b9</id>
+                <name>PowerMgrHal_SetClockSpeed</name>
+                <funName>TestMgr_PowerMgrHal_SetClockSpeed</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>42d86df6-3110-4c7f-ab74-961331632adc</id>
+                        <parameterName>speed</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a1632b6b-9785-49e1-8c8e-e2ef13cfe531</id>
+                <name>PowerMgrHal_GetPowerState</name>
+                <funName>TestMgr_PowerMgrHal_GetPowerState</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b024d34b-92d9-4d58-bd17-7fe972a835ad</id>
+                <name>PowerMgrHal_GetWakeupSrc</name>
+                <funName>TestMgr_PowerMgrHal_GetWakeupSrc</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>023b7be8-796b-4bd6-b4fe-f8d10ecda785</id>
+                        <parameterName>wakeupsrc</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>467d90e0-711e-429b-80a0-00433da172f0</id>
+                        <parameterName>Is_null_param_check</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b0d515a2-76eb-442c-89f1-e46858a8801b</id>
+                <name>PowerMgrHal_Reset</name>
+                <funName>TestMgr_PowerMgrHal_Reset</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

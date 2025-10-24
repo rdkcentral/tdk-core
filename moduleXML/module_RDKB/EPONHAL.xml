@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>8116590a-9182-427a-a17a-c26d45fe3752</moduleId>
+        <!-- Module name -->
+        <moduleName>EPONHAL</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="0531eb10-e9dc-47b8-8d03-208b0dfeb302" name="EPONHAL_GetDeviceSysDescrInfo">
+                <parameters/>
+            </function>
+            <function id="d2fd08c2-b31c-482a-92fa-96c4c2a063c4" name="EPONHAL_hal_Get_eponResetCount">
+                <parameters/>
+            </function>
+            <function id="1644dc06-2422-40ef-9dc6-3e1dfa444165" name="EPONHAL_GetMaxLogicalLinks">
+                <parameters/>
+            </function>
+            <function id="91d21cd1-e376-4f7a-aafa-c9c35641f687" name="EPONHAL_GetFirmwareInfo">
+                <parameters/>
+            </function>
+            <function id="9d9c23c8-aa0d-4c84-953c-9fcfd5f59349" name="EPONHAL_SetClearOnuLinkStatistics">
+                <parameters/>
+            </function>
+            <function id="165b45a2-2ab3-4a2a-b22f-a562e43e4855" name="EPONHAL_GetEponChipInfo">
+                <parameters/>
+            </function>
+            <function id="79b00230-5150-43e5-8720-c64782461725" name="EPONHAL_GetManufacturerInfo">
+                <parameters/>
+            </function>
+            <function id="b36ecc21-3bd3-4a15-8ce9-0c4b150ca134" name="EPONHAL_GetOamFrameRate">
+                <parameters>
+                    <parameter id="36e6afc0-7271-4b4d-bc22-2d415507abc6" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="eb959ead-229e-4d56-b6a9-12975488499e" name="EPONHAL_hal_LocalResetCount">
+                <parameters/>
+            </function>
+            <function id="baf16006-9d1d-45b9-a964-b1b838bc09be" name="EPONHAL_GetOnuLinkStatistics">
+                <parameters>
+                    <parameter id="eb6046af-ae1b-4906-8bcc-106b02ea7a56" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="28fad897-ef75-4965-95e8-42f5f0407701" name="EPONHAL_GetParamUshortValue">
+                <parameters/>
+            </function>
+            <function id="1d3101c3-5f4f-41c3-8a11-c3234ea12403" name="EPONHAL_GetDynamicMacTable">
+                <parameters>
+                    <parameter id="fc353e40-65e9-44aa-89ef-ed77a67b072c" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="8e5437a2-3574-4329-afd3-0bceba6c5315" name="EPONHAL_GetOnuPacketBufferCapabilities">
+                <parameters/>
+            </function>
+            <function id="3be3ce8a-4f91-424b-8b92-f23fb2f9f900" name="EPONHAL_hal_Get_ErouterResetCount">
+                <parameters/>
+            </function>
+            <function id="9c796f4f-4ccc-432a-840a-0bd08f8e53e0" name="EPONHAL_SetResetOnu">
+                <parameters/>
+            </function>
+            <function id="bd45d191-c023-4af5-ae01-9237d5d3b855" name="EPONHAL_OnuLinkStatisticsGetEntryCount">
+                <parameters/>
+            </function>
+            <function id="8838e1e9-6939-490e-a01d-513b8a1a1e6e" name="EPONHAL_GetStaticMacTable">
+                <parameters>
+                    <parameter id="af45e2e0-9db2-48a5-909e-91f7ba6ad904" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="6ad6d644-d148-4b18-9d68-2a5af90e55df" name="EPONHAL_GetLlidForwardingState">
+                <parameters>
+                    <parameter id="6056304a-ca00-42ee-a223-0162c8c106b0" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="8caf5f75-caa1-4fea-94f4-81655e4bd074" name="EPONHAL_GetParamUlongValue">
+                <parameters>
+                    <parameter id="02d6cc6e-2cd5-4ca2-8e7f-ec072f9a46f8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="3ef30270-724c-49c8-bb8d-8277cd162c64" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f2ffe810-c3d5-4568-b32b-0f334c0a472b" name="EPONHAL_OamFrameRateGetEntryCount">
+                <parameters/>
+            </function>
+            <function id="c755a408-6380-4961-a624-e3a6b6419f31" name="EPONHAL_GetOnuId">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>185524e6-9299-4eac-a43d-e3741d11f1b2</id>
+                <name>EPONHAL_GetManufacturerInfo</name>
+                <funName>EPONHAL_GetManufacturerInfo</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>2676732a-cfe9-4600-9e3a-0480652664c4</id>
+                <name>EPONHAL_GetOnuLinkStatistics</name>
+                <funName>EPONHAL_GetOnuLinkStatistics</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6cde3f8b-1800-4552-a494-46bd4e532141</id>
+                        <parameterName>numEntries</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5c0d14f2-82f2-4841-9c4a-a08a9c9d8a0d</id>
+                <name>EPONHAL_GetMaxLogicalLinks</name>
+                <funName>EPONHAL_GetMaxLogicalLinks</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>635982b4-4ce8-40e2-8b04-695ba79e6fc0</id>
+                <name>EPONHAL_GetParamUlongValue</name>
+                <funName>EPONHAL_GetParamUlongValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>04c5dccc-e49b-4112-bb18-8737ec64535a</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2e12ed71-afb7-4c3a-a4d7-c529fc7d7cce</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>66fc6fbe-6ba3-4d2d-9714-443af973c966</id>
+                <name>EPONHAL_GetDeviceSysDescrInfo</name>
+                <funName>EPONHAL_GetDeviceSysDescrInfo</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>888071df-63ca-4c0d-8d3e-c2ce810ee115</id>
+                <name>EPONHAL_GetLlidForwardingState</name>
+                <funName>EPONHAL_GetLlidForwardingState</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1b9c07e3-074d-4bf6-8e56-ecc9e548cb6c</id>
+                        <parameterName>numEntries</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>93c7875e-27c3-44ad-b071-f13190589625</id>
+                <name>EPONHAL_GetOnuPacketBufferCapabilities</name>
+                <funName>EPONHAL_GetOnuPacketBufferCapabilities</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9dc3b1d0-7cea-42e3-87e1-34110d7d49eb</id>
+                <name>EPONHAL_GetOamFrameRate</name>
+                <funName>EPONHAL_GetOamFrameRate</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3d7bfde1-e871-4f96-89b8-d8547fabd59d</id>
+                        <parameterName>numEntries</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>aacbbfc6-46af-42f2-a4ad-7adef4a9dc46</id>
+                <name>EPONHAL_SetClearOnuLinkStatistics</name>
+                <funName>EPONHAL_SetClearOnuLinkStatistics</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ac233dd9-f853-466e-b503-0ef302d17093</id>
+                <name>EPONHAL_GetDynamicMacTable</name>
+                <funName>EPONHAL_GetDynamicMacTable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e209f08a-5885-4776-8a0a-eb86d41390f4</id>
+                        <parameterName>numEntries</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b0281916-54dd-441a-8041-8046b5aef48b</id>
+                <name>EPONHAL_GetStaticMacTable</name>
+                <funName>EPONHAL_GetStaticMacTable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e7bcd0fe-a964-43ec-9c82-6c1327352de5</id>
+                        <parameterName>numEntries</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bc5b9c46-c27d-4772-b986-d601ae91a936</id>
+                <name>EPONHAL_SetResetOnu</name>
+                <funName>EPONHAL_SetResetOnu</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c378da52-a835-4dc8-8b5e-ff73a83e7122</id>
+                <name>EPONHAL_GetOnuId</name>
+                <funName>EPONHAL_GetOnuId</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>d2001c48-7fad-4e5a-904c-3b9434c3b117</id>
+                <name>EPONHAL_GetParamUshortValue</name>
+                <funName>EPONHAL_GetParamUshortValue</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e6ccb436-bfdf-453f-943e-a4d670a8939b</id>
+                <name>EPONHAL_GetFirmwareInfo</name>
+                <funName>EPONHAL_GetFirmwareInfo</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ed6e02da-7cec-435b-a69b-103365db7e65</id>
+                <name>EPONHAL_GetEponChipInfo</name>
+                <funName>EPONHAL_GetEponChipInfo</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

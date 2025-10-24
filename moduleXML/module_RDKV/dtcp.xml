@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>83e589e3-d53f-4920-886e-c89fde6b34dc</moduleId>
+        <!-- Module name -->
+        <moduleName>dtcp</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="f27d10c8-6065-42ed-b52f-eeeace45fba4" name="TestMgr_DTCPAgent_Init">
+                <parameters>
+                    <parameter id="cb09a252-ee83-499a-b997-0eaf2d7c465a" parameterName="param4" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="6671ab5a-47c9-4050-8b7d-edbd5ea48f19" parameterName="funcName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cccca1db-533e-4035-aaf5-818450a82e58" parameterName="param3" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="f8f19de7-4c2e-4a14-91a2-4bcfc011ed66" parameterName="param1" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b205b28a-4fbb-47f3-9e31-270c76e9d772" parameterName="param2" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="8a2b6bf4-5869-4628-9d1e-6ce1f71760c2" name="TestMgr_DTCP_Test_Execute">
+                <parameters>
+                    <parameter id="12d94d2b-cac2-41ee-a49a-7b74a018cbad" parameterName="intParam3" parameterType="INTEGER" range="0-65535"/>
+                    <parameter id="f15ba539-35bd-485c-b7a2-3973fcaa1cd7" parameterName="intParam2" parameterType="INTEGER" range="0-65535"/>
+                    <parameter id="07e72df8-fba7-4fea-a86b-d1a72d8a21c6" parameterName="funcName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f80faa1d-6339-4aef-ae9a-f1e55c97b65e" parameterName="strParam1" parameterType="STRING" range="A-Z"/>
+                    <parameter id="06f9c1c8-6975-4ed4-a913-884cf4e60df1" parameterName="intParam4" parameterType="INTEGER" range="0-65535"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>a9914327-c034-4ca6-bd0d-a62658960c97</id>
+                <name>DTCP_Comp_Test</name>
+                <funName>TestMgr_DTCP_Test_Execute</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1ca626f5-69a2-4441-9d03-9fb690204d8f</id>
+                        <parameterName>intParam4</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-65535</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>40424690-1ecf-4593-8653-f6573d24b937</id>
+                        <parameterName>intParam3</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-65535</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>556c66ff-0da2-4d0f-83df-c5924f2ed75d</id>
+                        <parameterName>intParam2</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-65535</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>aa5fa7ca-85bc-4f7e-9d74-4bf862b2d682</id>
+                        <parameterName>funcName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>DTCPMgrInitialize</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d91be31a-48b9-4503-adee-764df4c75280</id>
+                        <parameterName>strParam1</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>lo</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

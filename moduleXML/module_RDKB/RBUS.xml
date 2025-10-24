@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>2755b53e-f2fa-41ca-a13f-4a556aae0c48</moduleId>
+        <!-- Module name -->
+        <moduleName>RBUS</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>15</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="b28a80cf-9c87-4dd9-9aef-13337f0f43ab" name="RBUS_ObjectCommands">
+                <parameters>
+                    <parameter id="87e73567-0c6d-4809-b06a-acaeb9b5dfa3" parameterName="object_name" parameterType="STRING" range="a-z"/>
+                    <parameter id="182fdef2-348a-4a48-8823-741b828c05cf" parameterName="operation" parameterType="STRING" range="a-z"/>
+                    <parameter id="19c25d60-23f9-49df-a560-883c65ddbf78" parameterName="obj_count" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="34c0edb3-56bc-43b7-9696-29e20deb0812" name="RBUS_Open">
+                <parameters/>
+            </function>
+            <function id="491f00db-f5f8-4c8a-ab14-5ef0f1a2c925" name="RBUS_SetValue">
+                <parameters>
+                    <parameter id="570cb016-b7b8-40a1-b9b6-125182936302" parameterName="paramValue" parameterType="STRING" range="a-z"/>
+                    <parameter id="998a1c48-5847-4be9-a3f3-dd03bc7dc0af" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                    <parameter id="364ceda2-8fd1-47af-8d7f-cd912a59a886" parameterName="paramType" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="198778f7-fd3e-4292-9944-aa7f859fa87a" name="RBUS_GetValue">
+                <parameters>
+                    <parameter id="15a46378-da6e-410c-aaed-46d4b8a88125" parameterName="paramType" parameterType="STRING" range="a-z"/>
+                    <parameter id="cef61cec-933a-457f-88c4-4bf86edcf901" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="a0a6b583-76e7-4f0a-b7e4-fa4af9899686" name="RBUS_Close">
+                <parameters/>
+            </function>
+            <function id="80ebd279-1c92-4549-b255-4d1ad8774aa9" name="RBUS_DataElements">
+                <parameters>
+                    <parameter id="1e080e05-6d45-4f1e-a6a7-5b7f1935f58c" parameterName="element1" parameterType="STRING" range="a-z"/>
+                    <parameter id="faddad6b-f766-4d3d-a514-347ca411a8ac" parameterName="operation" parameterType="STRING" range="a-z"/>
+                    <parameter id="326fe553-97ba-4196-8079-fa90e1fdc1b9" parameterName="element2" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="1c9a927a-3fd0-4251-9b43-bb8e01e92a18" name="RBUS_CloseSession">
+                <parameters>
+                    <parameter id="ef54f8e5-abad-475f-94bb-9f55d4579297" parameterName="sessionid" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="36ca9dbd-21c6-4d50-bdca-30e6cef05291" name="RBUS_RegisterOperation">
+                <parameters>
+                    <parameter id="456300b2-a5b2-45a3-b0e2-0c7841c9a840" parameterName="objectName" parameterType="STRING" range="a-z"/>
+                    <parameter id="4c2227d1-4cd9-4782-be3d-975c23e16c17" parameterName="methodName" parameterType="STRING" range="a-z"/>
+                    <parameter id="d311b009-621f-4496-af8a-04a660b792e3" parameterName="operation" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="0e34f15b-6814-4817-a459-1912d07f4153" name="RBUS_DiscoverComponentDataElements">
+                <parameters>
+                    <parameter id="c3b468f5-ccd2-49e0-9639-fe3feabdf404" parameterName="componentName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="936cef14-544f-41ef-a9ea-8c5926fcc9eb" name="RBUS_Session">
+                <parameters>
+                    <parameter id="238b963c-6cb3-49fe-b24c-06c8c327b051" parameterName="operation" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="a61936b7-c9d4-4bb4-b473-4b5f663dc629" name="RBUS_SetLogLevel">
+                <parameters>
+                    <parameter id="5e3d3553-7257-4ea9-a034-169d23a118de" parameterName="level" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="4ff2f7fc-e40f-4430-a6d8-282d62b51916" name="RBUS_CheckStatus">
+                <parameters/>
+            </function>
+            <function id="11359c8e-7e7d-4ea1-897d-cf27b510e3bf" name="RBUS_TableRowCommands">
+                <parameters>
+                    <parameter id="5ca691c3-349c-4e11-ade4-5fc022128778" parameterName="table_row" parameterType="STRING" range="a-z"/>
+                    <parameter id="63a17edf-cce9-4772-82f0-7efc529ab00a" parameterName="operation" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="52cb4fa4-2f9f-4029-b5b2-78ed4a916047" name="RBUS_Get">
+                <parameters>
+                    <parameter id="3af7fa03-a1cb-4fbd-a007-67b9cd089052" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="fa252fb9-16de-453f-a30e-93d26b718d97" name="RBUS_DoNothing">
+                <parameters/>
+            </function>
+            <function id="0b66b087-6fd0-4423-8c7e-3fc9b2212472" name="RBUS_PropertyCommands">
+                <parameters>
+                    <parameter id="190cde4b-df59-4f8e-9d06-b5c570726b1d" parameterName="operation" parameterType="STRING" range="a-z"/>
+                    <parameter id="aa3adc1d-5059-4c14-96ba-aa75fcef270e" parameterName="property_name" parameterType="STRING" range="a-z"/>
+                    <parameter id="9498d5a4-de90-4cf6-b04c-44eb98309363" parameterName="prop_count" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>041becac-3201-4b2f-bcff-076bb2f70821</id>
+                <name>RBUS_SetLogLevel</name>
+                <funName>RBUS_SetLogLevel</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1b5e75a3-e0a2-46c8-b998-72ee2d469dad</id>
+                        <parameterName>level</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0f13a4c4-7897-4094-b00c-39802a907617</id>
+                <name>RBUS_SetValue</name>
+                <funName>RBUS_SetValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>689f2b12-f925-4d89-bbce-b52af95ac2a5</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7e5b14a2-aa56-4e98-bf52-dd9db5bfbbb5</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>84efbe7a-6d96-4be4-8f48-67265626a309</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>15672d89-8aed-43ed-b3ec-f7074b83a4fc</id>
+                <name>RBUS_Session</name>
+                <funName>RBUS_Session</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2a86a3f9-ac38-41c2-b9d6-1b3ad8d69d93</id>
+                        <parameterName>operation</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>23f6d93c-9614-45aa-8bbc-f6b8634c7a9c</id>
+                <name>RBUS_DataElements</name>
+                <funName>RBUS_DataElements</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0d7db460-04b9-485a-a2be-768daa3e6d47</id>
+                        <parameterName>operation</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9e2a0cd2-3dce-4a2f-986b-8fd1b4dd686c</id>
+                        <parameterName>element2</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d9488ef1-839a-4124-a804-1131aeb85486</id>
+                        <parameterName>element1</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>270fb3a6-672a-4bc1-9826-825450279aa0</id>
+                <name>RBUS_PropertyCommands</name>
+                <funName>RBUS_PropertyCommands</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1358e811-e972-4e89-8283-0584a543fb48</id>
+                        <parameterName>property_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5c898bd4-28d7-4090-bd6f-01901d8343ee</id>
+                        <parameterName>operation</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9a51e595-567b-46b2-aecd-26661a43ccef</id>
+                        <parameterName>prop_count</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>303db526-8631-4d65-8bf5-aa1b28c29401</id>
+                <name>RBUS_ObjectCommands</name>
+                <funName>RBUS_ObjectCommands</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2381d97c-8341-45a5-aeb0-fe1e665851a3</id>
+                        <parameterName>object_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d5d3efdb-f6f8-4eec-a7d9-725e1ac864a3</id>
+                        <parameterName>obj_count</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>eafb685d-4cbe-4410-9932-db2a46e2b488</id>
+                        <parameterName>operation</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>476132b7-a9ae-40f9-a65e-89420d4924b3</id>
+                <name>RBUS_DoNothing</name>
+                <funName>RBUS_DoNothing</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4d8675a0-c9f0-4be3-ba42-391966299ea5</id>
+                <name>RBUS_RegisterOperation</name>
+                <funName>RBUS_RegisterOperation</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>09fb54fb-261f-4dc6-99b1-c420e4d1b217</id>
+                        <parameterName>objectName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1a024460-8b4b-4cb8-a975-06b314f77e6a</id>
+                        <parameterName>methodName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9cf57c17-1c8b-4a55-ac49-2083a0b2c94c</id>
+                        <parameterName>operation</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5fe3df03-01ae-4dc0-8636-97f314adb2e2</id>
+                <name>RBUS_Get</name>
+                <funName>RBUS_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>551e0bf5-94a8-41a5-9c65-d2285e9860c1</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8b8042e7-be36-459f-b870-4bec4c302551</id>
+                <name>RBUS_Open</name>
+                <funName>RBUS_Open</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>91210da6-f16c-49c0-a6ab-e9d6fb663e5b</id>
+                <name>RBUS_CloseSession</name>
+                <funName>RBUS_CloseSession</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ed971143-59c3-4779-bcb9-b32bcb104b59</id>
+                        <parameterName>sessionid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cdb59f1a-6058-4af5-a17c-c1baacb1cbb7</id>
+                <name>RBUS_TableRowCommands</name>
+                <funName>RBUS_TableRowCommands</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>381ff819-06af-4a45-b069-94d59823df19</id>
+                        <parameterName>table_row</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6e827c98-f181-4233-a291-74b4c84696d6</id>
+                        <parameterName>operation</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>dfbc3373-a342-4f2a-bb78-038848654f42</id>
+                <name>RBUS_DiscoverComponentDataElements</name>
+                <funName>RBUS_DiscoverComponentDataElements</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>70a8d4fb-6d90-4ca0-9e00-c4441bcbfe7b</id>
+                        <parameterName>componentName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ea879ad9-2e7d-42d6-8661-6e1505e7e7f2</id>
+                <name>RBUS_GetValue</name>
+                <funName>RBUS_GetValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2bb34be8-2d28-4f2a-962f-ece279ff1a71</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a503998c-a7f4-4985-8601-4d3105ddc775</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f8362e81-1a89-4567-9b2b-b050be5a92dc</id>
+                <name>RBUS_Close</name>
+                <funName>RBUS_Close</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>fac5e99b-a494-4883-a2ec-f8e67ed0aec7</id>
+                <name>RBUS_CheckStatus</name>
+                <funName>RBUS_CheckStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>1daf175e-2d23-4b6f-ab57-2d67cb2eaa9e</moduleId>
+        <!-- Module name -->
+        <moduleName>TDKB_E2E</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>15</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>E2E</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="2d47ff02-435a-4910-ba21-cf686497aea8" name="tdkb_e2e_Set">
+                <parameters>
+                    <parameter id="eaa43e8d-76a7-45da-8589-e3303f5f777d" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a721cb79-3477-4542-a193-f51c51e0f8d7" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cfc320c6-b072-47e7-ab68-29457ee08625" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fdb2da13-3567-48d8-9dfc-7c96f87a2581" name="tdkb_e2e_SetMultipleParams">
+                <parameters>
+                    <parameter id="623912e5-0406-4987-9182-2a733e01a97d" parameterName="paramList" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="7e1d3d86-6f13-4ddc-9d62-1fe7fef25ac9" name="tdkb_e2e_Get">
+                <parameters>
+                    <parameter id="2f0fdb6f-32fd-4a80-9ee5-70ece3834d7b" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>3c61bc2b-1bf3-489a-bfd2-f54f081eff4f</id>
+                <name>tdkb_e2e_Get</name>
+                <funName>tdkb_e2e_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>07d26c2e-9a10-4f98-877b-2a9df9545b04</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3f4f82b4-e175-486e-9a59-efc09220ab3f</id>
+                <name>tdkb_e2e_SetMultipleParams</name>
+                <funName>tdkb_e2e_SetMultipleParams</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>db66d1fd-b144-479e-901b-7394a8f4c63c</id>
+                        <parameterName>paramList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7a7253cd-5af1-4463-8d2c-4456d233ba81</id>
+                <name>tdkb_e2e_Set</name>
+                <funName>tdkb_e2e_Set</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6afdf329-c0c6-49e3-89e1-58bc9647fd9f</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9db03a84-429c-4ce7-944b-4e0317b2538a</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d9ff1917-23c9-4839-9663-bca6cea88b87</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

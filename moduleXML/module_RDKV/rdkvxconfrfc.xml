@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>0ef2a705-c0f6-4398-a61f-062ecf24e4c3</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkvxconfrfc</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="053a11fc-57a6-4f63-a3cf-ce18609e4a71" name="rfc_partnersdefaultschecker">
+                <parameters>
+                    <parameter id="7d6f8a71-bf90-40f7-ae78-dee958f13f47" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0e768733-2b93-4e8b-b235-747cc7da5f1c" name="rfc_enable_maintenance_manager">
+                <parameters>
+                    <parameter id="700ca910-17ce-4add-bd03-0a49db357043" parameterName="method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="39789abc-c342-4cb0-ab6b-ecc89cfe5417" parameterName="params" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c1661d1c-addf-461d-a45c-496f3da315db" name="rfc_initializefeatures">
+                <parameters>
+                    <parameter id="61edd512-2190-4d27-bd79-5d7b7ec914fb" parameterName="feature_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="42ba22a8-bd2a-46ad-a3a9-df090a9a8a10" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4e72be4b-c04b-4acb-9da7-149a82b51694" parameterName="expectedvalue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="71ade6e5-cc09-4da2-bc3a-857746438836" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="99d4c4de-2714-481b-b699-086c94b57e1a" name="rfc_checkconfiguredata">
+                <parameters>
+                    <parameter id="1b2f41a9-f895-4ab3-b0d2-d8bb7d02d15d" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f2d28210-b5de-4a3a-8c94-3c26f7a6462c" parameterName="expectedvalue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8c66ec4c-6f22-4179-a866-94f95f43c826" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
+                    <parameter id="231931f2-b092-4311-9dc7-6390e3add9e3" parameterName="feature_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="582fdcd2-60f1-47d9-bb03-b7fdca054480" name="rfc_urlvalidate">
+                <parameters>
+                    <parameter id="7c7d4586-1e8e-49ad-974d-12f11a0fe6f3" parameterName="configKey" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e1851193-093e-4330-97dd-182f04634dd4" parameterName="basePath" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="72c45b63-9066-4644-8198-f60eb6e7d10e" name="rfc_disable_enable_maintenance_manager">
+                <parameters>
+                    <parameter id="ac391a3f-df2f-494b-80fa-f6288adc11a6" parameterName="params" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f82ba196-89a2-4ace-b602-9e2bcd1f05d4" parameterName="method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c7a566eb-16b1-43be-970d-15bfcbc6203c" name="rfc_datfilechecker">
+                <parameters/>
+            </function>
+            <function id="5790c622-f87a-47f9-8f18-e6b566fb1bf6" name="rfc_formfeaturename">
+                <parameters>
+                    <parameter id="fe30398a-d1ac-49db-ab65-502d27aaa6cf" parameterName="feature_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="1858d47b-e1e1-4f9e-a896-57b21e47d8c1" name="rfc_deletefeature">
+                <parameters>
+                    <parameter id="e2cc091c-cbc5-433a-9849-e148bb0f08eb" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0da95c03-c341-4323-86cb-c88f4d02c2e1" name="rfc_datamodelcheck">
+                <parameters>
+                    <parameter id="8efb7e4a-0217-4192-976f-7cbcfcfd397c" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="44a34311-97d0-4bc4-8fd6-4628c86b5627" name="rfc_deletefeaturerule">
+                <parameters>
+                    <parameter id="764875d5-9588-4690-8c1e-db13a46f05fa" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e62345dd-273d-4ba0-b766-30889478e87e" name="rfc_check_setornot_configdata">
+                <parameters>
+                    <parameter id="27d0a7f6-f8ae-46a9-ba98-06492add7faa" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f7f7c0fe-7921-41e6-a48f-80a9cbff6602" parameterName="expectedvalue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>128f4cda-bff7-4503-9c1b-e0ab59a9bb4a</id>
+                <name>rfc_formfeaturename</name>
+                <funName>rfc_formfeaturename</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>115424e5-8d13-424c-aec0-d33a3c3bd07a</id>
+                        <parameterName>feature_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>16181666-11c5-4ffb-aa64-5a038a209d05</id>
+                <name>rfc_urlvalidate</name>
+                <funName>rfc_urlvalidate</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>616892cd-bc1f-48fc-b270-402450f31ad2</id>
+                        <parameterName>basePath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c776c753-f289-4f9f-b5a2-caac1581a1e8</id>
+                        <parameterName>configKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1709d738-ec5d-4a01-9588-1392b7a0853e</id>
+                <name>rfc_deletefeaturerule</name>
+                <funName>rfc_deletefeaturerule</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ef1acb28-01a7-4e30-a199-aebc8a3e805b</id>
+                        <parameterName>xconfdomainname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1915ece7-35df-41e3-aa2a-081b6f7f6ef7</id>
+                <name>rfc_check_setornot_configdata</name>
+                <funName>rfc_check_setornot_configdata</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b1f447a5-caea-49b5-ac7f-b2bfba646078</id>
+                        <parameterName>expectedvalue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f4480855-4913-4a3b-9b93-16570ce7e76b</id>
+                        <parameterName>rfcparameter</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1d30fe6e-cd80-4568-9ad2-722e0267d996</id>
+                <name>rfc_initializefeatures</name>
+                <funName>rfc_initializefeatures</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9582162a-0bae-4eaa-86f3-72d5be1c8c83</id>
+                        <parameterName>feature_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9dbe2f54-aa64-4159-a930-e945b5de140f</id>
+                        <parameterName>rfcparameter</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d5bb428a-3710-4149-8780-3051a60c8cdd</id>
+                        <parameterName>xconfdomainname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f11a68cc-348c-43be-bd76-012fa43bca95</id>
+                        <parameterName>expectedvalue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4032e7ee-2e3e-4958-b383-8bed7213569b</id>
+                <name>rfc_datamodelcheck</name>
+                <funName>rfc_datamodelcheck</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>44456436-93a7-46f5-ae4f-650cd5861e12</id>
+                        <parameterName>rfcparameter</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5d8af07e-f8c3-4880-9858-3ba91313aa70</id>
+                <name>rfc_partnersdefaultschecker</name>
+                <funName>rfc_partnersdefaultschecker</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7904974b-148a-41c9-8183-1bd840941d1e</id>
+                        <parameterName>xconfdomainname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>adfcc266-7aa6-49f2-b843-86f134445b3c</id>
+                <name>rfc_deletefeature</name>
+                <funName>rfc_deletefeature</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0e655ef4-3a4c-4408-93e9-ea1f81b9c0e6</id>
+                        <parameterName>xconfdomainname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b2a855f3-b04c-4e18-a217-a09df799824f</id>
+                <name>rfc_checkconfiguredata</name>
+                <funName>rfc_checkconfiguredata</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2ba822de-c1ab-4074-861a-661cdec10855</id>
+                        <parameterName>rfcparameter</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>50bec1c9-521f-4466-bb54-f51af8dcaca4</id>
+                        <parameterName>expectedvalue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>55374ef9-7235-4039-a9d8-6f0c41514385</id>
+                        <parameterName>feature_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>96d9a984-4905-4662-9687-af35d30557c5</id>
+                        <parameterName>xconfdomainname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b6d781f5-3461-44a9-a510-9f6ed067bbf4</id>
+                <name>rfc_enable_maintenance_manager</name>
+                <funName>rfc_enable_maintenance_manager</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1abba57f-695c-4447-9fcc-3bed069d2e68</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>de38d508-2995-476a-a9b2-f2d315ad944c</id>
+                        <parameterName>params</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ba417b09-b0b3-4faa-a028-1d5e85098b9a</id>
+                <name>rfc_disable_enable_maintenance_manager</name>
+                <funName>rfc_disable_enable_maintenance_manager</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>992d6384-8152-4726-87ae-fec998233beb</id>
+                        <parameterName>params</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b57ac33c-202c-4f0e-9741-4f9e91d0f9cf</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f5d4dd2f-807a-4020-bb6d-e2b5d457223d</id>
+                <name>rfc_datfilechecker</name>
+                <funName>rfc_datfilechecker</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

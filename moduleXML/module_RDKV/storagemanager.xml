@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>cd604872-7bf2-473c-934f-fe8793e8364f</moduleId>
+        <!-- Module name -->
+        <moduleName>storagemanager</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="66d35640-21bb-439c-8b20-d7e6e6596e73" name="TestMgr_StorageMgr_IsTSBEnabled">
+                <parameters/>
+            </function>
+            <function id="92e109f2-5a7d-424c-ad69-c32014d4353e" name="TestMgr_StorageMgr_GetDVRCapacity">
+                <parameters/>
+            </function>
+            <function id="e363c5f8-ac37-45b0-b610-fb1572907ff6" name="TestMgr_StorageMgr_SetTSBMaxMinutes">
+                <parameters>
+                    <parameter id="671a9bd1-f5a5-44b5-bf55-ba1059cbc1ec" parameterName="TSBminutes" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="2b1e47bb-d095-4a1e-aaaf-b3c55c00ef75" name="TestMgr_StorageMgr_GetDeviceInfo">
+                <parameters>
+                    <parameter id="8a91496f-8a82-485c-8b50-9b676d44400c" parameterName="DeviceIDIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="d3f845ef-7e12-463a-bf10-41696dd4a932" parameterName="DeviceID" parameterType="STRING" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="227b6ddc-41a9-47fa-85bb-737305ec3b90" name="TestMgr_StorageMgr_GetTSBMaxMinutes">
+                <parameters/>
+            </function>
+            <function id="5fff46a1-91f7-4930-9473-b1b54d92db7a" name="TestMgr_StorageMgr_SetTSBEnabled">
+                <parameters>
+                    <parameter id="a78b2388-b025-4910-a702-96a79df722fe" parameterName="isEnabled" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="71b66aa2-f776-433c-927d-f11a235d42ce" name="TestMgr_StorageMgr_GetTSBStatus">
+                <parameters/>
+            </function>
+            <function id="d86c0602-53ae-41b8-9177-302da24e7646" name="TestMgr_StorageMgr_GetTSBCapacity">
+                <parameters/>
+            </function>
+            <function id="c7cc4f2c-6761-4706-943e-41c6ab0a40ec" name="TestMgr_StorageMgr_SetDVREnabled">
+                <parameters>
+                    <parameter id="c060c3ed-b9f8-49ad-8a0f-450aa35934f1" parameterName="isDVREnabled" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="fb0463aa-fd0e-4bf5-bbb2-8c78ab3fe571" name="TestMgr_StorageMgr_GetTSBCapacityMinutes">
+                <parameters/>
+            </function>
+            <function id="77d7be17-e92f-40f8-9e45-81fe13f999d4" name="TestMgr_StorageMgr_GetTSBFreeSpace">
+                <parameters/>
+            </function>
+            <function id="9b3443e9-2e32-4fa8-a94f-4032bbf61158" name="TestMgr_StorageMgr_IsDVREnabled">
+                <parameters/>
+            </function>
+            <function id="6059036c-f582-471d-9522-f96a57106a0d" name="TestMgr_StorageMgr_GetMountPath">
+                <parameters>
+                    <parameter id="efb790c7-dd4e-49b7-b9c3-8a8928b0272e" parameterName="command" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="487da32b-4d75-4412-94c4-b72332eda321" name="TestMgr_StorageMgr_GetHealth">
+                <parameters>
+                    <parameter id="94ef9f06-5a2f-4db1-857f-3b5bfa0fe4b8" parameterName="DeviceIDIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="25bfea44-2711-4ed1-b0ef-d7afe6499459" parameterName="DeviceID" parameterType="STRING" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="3949e177-cdc6-4394-ac95-6882a0987c9a" name="TestMgr_StorageMgr_GetDeviceInfoList">
+                <parameters/>
+            </function>
+            <function id="c400ccef-ff2b-4f30-b8e8-e364a1e94914" name="TestMgr_StorageMgr_GetDeviceID">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>1bcd218b-30e1-4318-8e15-092f3aa175b6</id>
+                <name>SetDVREnabled</name>
+                <funName>TestMgr_StorageMgr_SetDVREnabled</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c87a59d7-bad4-455d-8001-d3556d46050e</id>
+                        <parameterName>isDVREnabled</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>21e79c39-3424-466a-96cb-c3d87d7f515e</id>
+                <name>GetDVRCapacity</name>
+                <funName>TestMgr_StorageMgr_GetDVRCapacity</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>228888dd-7e86-41d5-b06a-2dfa5f56d1a4</id>
+                <name>GetTSBCapacityMinutes</name>
+                <funName>TestMgr_StorageMgr_GetTSBCapacityMinutes</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>2952ba87-6aef-4b01-a4e8-cedc79d30dac</id>
+                <name>Execute_Command</name>
+                <funName>TestMgr_StorageMgr_GetMountPath</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ab2a0f9f-5647-4c44-ba51-fb90b2a6cfe8</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>42c205d3-8a42-4d9a-96b2-dc6cfe10a28f</id>
+                <name>GetHealth</name>
+                <funName>TestMgr_StorageMgr_GetHealth</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8a056ac4-8dba-4905-95f9-2c09eba8b8f0</id>
+                        <parameterName>DeviceID</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c2392f75-5565-4343-856f-c697554de22e</id>
+                        <parameterName>DeviceIDIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4d6616f5-969e-4902-bea2-ef252dc6c2df</id>
+                <name>GetDeviceInfo</name>
+                <funName>TestMgr_StorageMgr_GetDeviceInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>795f9a12-dd9a-42fb-a1b3-458e09287d87</id>
+                        <parameterName>DeviceIDIndex</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bda43a83-cfc9-4ad0-b026-3e450ce3e683</id>
+                        <parameterName>DeviceID</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>731a50be-997f-4eba-861b-ea01670ae073</id>
+                <name>IsTSBEnabled</name>
+                <funName>TestMgr_StorageMgr_IsTSBEnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>755a354b-0e96-4698-b96a-b9ee7cdd7855</id>
+                <name>TSBMountPath</name>
+                <funName>TestMgr_StorageMgr_GetMountPath</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>88dbb390-994d-4e04-bf65-6064e7f174e4</id>
+                <name>IsDVREnabled</name>
+                <funName>TestMgr_StorageMgr_IsDVREnabled</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>8c9d5785-02a1-454c-8d83-52f21cf065b2</id>
+                <name>GetTSBStatus</name>
+                <funName>TestMgr_StorageMgr_GetTSBStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>93f8563c-53e4-4b67-b6ba-cb5dd693294d</id>
+                <name>GetTSBFreeSpace</name>
+                <funName>TestMgr_StorageMgr_GetTSBFreeSpace</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9f96c561-b620-4337-9583-eb81f6dd6868</id>
+                <name>SetTSBMinutes</name>
+                <funName>TestMgr_StorageMgr_SetTSBMaxMinutes</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a5649eab-1745-4471-99fc-9799b0be096b</id>
+                        <parameterName>TSBminutes</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a4386336-bc3e-41e7-ba77-76858c0976f0</id>
+                <name>GetTSBMaxMinutes</name>
+                <funName>TestMgr_StorageMgr_GetTSBMaxMinutes</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a7378213-902f-4e7b-a252-8f84aa40294e</id>
+                <name>GetDeviceID</name>
+                <funName>TestMgr_StorageMgr_GetDeviceID</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c51388f9-76bd-48b5-bd1d-43dddaf66ef8</id>
+                <name>SetTSBDisable</name>
+                <funName>TestMgr_StorageMgr_SetTSBEnabled</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>866ea936-9555-4718-9434-fb9beeaa2916</id>
+                        <parameterName>isEnabled</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>caec1179-8fcc-4b2e-8ecb-054decabdd57</id>
+                <name>GetTSBCapacity</name>
+                <funName>TestMgr_StorageMgr_GetTSBCapacity</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e8ffff3b-058d-4ad6-91ae-b86253260ae4</id>
+                <name>GetDeviceInfoList</name>
+                <funName>TestMgr_StorageMgr_GetDeviceInfoList</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>eeb6b01c-bcbc-4cdf-aa2a-628e4f7cbf28</id>
+                <name>SetTSBEnabled</name>
+                <funName>TestMgr_StorageMgr_SetTSBEnabled</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0eccb159-5bc7-46ed-82f6-3ccefd3e7a2f</id>
+                        <parameterName>isEnabled</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>
