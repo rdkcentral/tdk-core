@@ -1,6 +1,6 @@
 #!/bin/bash
 ##########################################################################
-# If not stated otherwise in this file or this component's Licenses.txt
+# If not stated otherwise in this file or this component's LICENSE
 # file the following copyright and licenses apply:
 #
 # Copyright 2025 RDK Management
@@ -17,21 +17,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #########################################################################
-# Default backup directory
 
 # Default backup directory
 default_backup_dir="/mnt/TM_BACKUP"
-
 # Use the provided argument if given, otherwise use the default
 backup_dir="${1:-$default_backup_dir}"
 
-log_dir="${2:-$backup_dir/deployment_logs}"
+log_dir="${2:-$backup_dir/configBackupLogs}"
 
+backup_dir="$backup_dir/tdkservice/fileStore"
 # Create the log directory if it doesn't exist
 mkdir -p "$log_dir"
 
 # Log file path
-log_file="/log_dir/deployment_log_$(date +%Y%m%d_%H%M%S).log"
+log_file="/$log_dir/config_backup_$(date +%Y%m%d_%H%M%S).log"
 echo "Starting script execution at $(date)" | tee -a "$log_file"
 
 # ...existing code...
@@ -246,5 +245,27 @@ process_all_pythons "$backup_file_ipchange_validation" "$source_file_ipchange_va
 
 # Wait for all background processes to complete
 wait
+
+# Copy logs folder from backup directory to fileStore location
+backup_logs_dir="$backup_dir/logs"
+destination_logs_dir="/opt/tomcat/webapps/tdkservice/fileStore/logs"
+
+if [ -d "$backup_logs_dir" ]; then
+    echo "Copying logs folder from backup directory to fileStore..." | tee -a "$log_file"
+    echo "Source: $backup_logs_dir" | tee -a "$log_file"
+    echo "Destination: $destination_logs_dir" | tee -a "$log_file"
+    
+    # Create destination directory if it doesn't exist
+    mkdir -p "$destination_logs_dir"
+    
+    # Copy the logs folder contents
+    cp -r "$backup_logs_dir"/* "$destination_logs_dir/" 2>/dev/null || {
+        echo "Warning: No files found in logs directory or copy failed" | tee -a "$log_file"
+    }
+    
+    echo "Logs folder copy completed successfully." | tee -a "$log_file"
+else
+    echo "Warning: Backup logs directory not found: $backup_logs_dir" | tee -a "$log_file"
+fi
 
 echo "All tasks completed."

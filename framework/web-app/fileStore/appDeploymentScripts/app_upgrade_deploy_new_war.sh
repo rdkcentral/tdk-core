@@ -1,15 +1,37 @@
 #!/bin/bash
+##########################################################################
+# If not stated otherwise in this file or this component's LICENSE
+# file the following copyright and licenses apply:
+#
+# Copyright 2025 RDK Management
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##########################################################################
+
+
  
-# Usage: ./app_upgrade_deploy_new_war.sh {backupPath} {newWarPath}
+# Usage: ./app_upgrade_deploy_new_war.sh {backupPath} {newWarPath} {appurl}
  
 backupPath="$1"
 newWarPath="$2"
+appUrl="$3"
 webapps_dir="/opt/tomcat/webapps"
 war_name="tdkservice.war"
 app_dir_name="tdkservice"
 supervisor_service_name="tomcat"  # Change if your supervisor program name is different
  
 log_dir="/mnt/backup/deploymentLogs"
+config_backup_log_dir="/mnt/backup/configBackupLogs"
 mkdir -p "$log_dir"
 log_file="$log_dir/deployment_log_$(date +%Y%m%d_%H%M%S).log"
 echo "Starting script execution at $(date)" | tee -a "$log_file"
@@ -51,7 +73,7 @@ max_attempts=12
 attempt=1
 while [ $attempt -le $max_attempts ]; do
     sleep 10
-    health_status=$(curl -s http://52.206.149.108:8443/tdkservice/actuator/health | grep '"status":"UP"')
+    health_status=$(curl -s $appUrl | grep '"status":"UP"')
     if [ -n "$health_status" ]; then
         echo "Application is UP after $((attempt*10)) seconds." | tee -a "$log_file"
         break
@@ -66,6 +88,6 @@ if [ -z "$health_status" ]; then
 fi
  
 echo "Calling app_upgrade_config_backup.sh with backupPath: $backupPath" | tee -a "$log_file"
-./app_upgrade_config_backup.sh "$backupPath" "$log_file"
+/opt/tomcat/webapps/app_upgrade_config_backup.sh "$backupPath" "$config_backup_log_dir"
  
 echo "Upgrade and deployment script completed." | tee -a "$log_file"
