@@ -206,7 +206,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method",generatekey_method)
                         tdkTestObj.addParameter("value",params)
-                        video_start_time = str(datetime.utcnow()).split()[1][:-3]
+                        video_start_time = str(datetime.now()).split()[1][:-3]
                         tdkTestObj.executeTestCase(expectedResult)
                         result = tdkTestObj.getResult()
                         if expectedResult in result:
