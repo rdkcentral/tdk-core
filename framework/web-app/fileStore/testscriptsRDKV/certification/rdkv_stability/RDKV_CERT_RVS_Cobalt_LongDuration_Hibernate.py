@@ -241,7 +241,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
                                    tdkTestObj.addParameter("value",params)
-                                   video_start_time = str(datetime.utcnow()).split()[1]
+                                   video_start_time = str(datetime.now()).split()[1]
                                    tdkTestObj.executeTestCase(expectedResult)
                                    result1 = tdkTestObj.getResult()
                                    time.sleep(40)
@@ -277,7 +277,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
                                             tdkTestObj.addParameter("value",params)
-                                            pause_start_time = str(datetime.utcnow()).split()[1]
+                                            pause_start_time = str(datetime.now()).split()[1]
                                             tdkTestObj.executeTestCase(expectedResult)
                                             result = tdkTestObj.getResult()
                                             if result == "SUCCESS":
@@ -307,7 +307,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                                                       tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                                       tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
                                                       tdkTestObj.addParameter("value",params)
-                                                      play_start_time = str(datetime.utcnow()).split()[1]
+                                                      play_start_time = str(datetime.now()).split()[1]
                                                       tdkTestObj.executeTestCase(expectedResult)
                                                       result = tdkTestObj.getResult()
                                                       if result == "SUCCESS":
