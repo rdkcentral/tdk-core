@@ -20,7 +20,7 @@
 import os
 import json
 import configparser
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 from SSHUtility import *
 import importlib
 
