@@ -28,7 +28,7 @@ TELEMETRY_VERSION = "2.0.1"
 TELEMETRY_UPLOAD_URL = "https://xconf.rdkcentral.com/logTelemetryServer/logupload.php"
 
 #Reporting Interval for Telemetry 2.0 Report
-REPORTING_INTERVAL = 180
+REPORTING_INTERVAL = 30
 
 #Timeout for Report Generation
-ACTIVATION_TIMEOUT = 1800
+ACTIVATION_TIMEOUT = 150

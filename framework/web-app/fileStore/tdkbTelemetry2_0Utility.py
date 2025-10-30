@@ -387,10 +387,11 @@ def checkProcessRestarted(tdkTestObj_Sys_ExeCmd,processname):
                 sleep(300);
                 retryCount = retryCount + 1;
     return  actualresult,pid;
+
 ################################################################################
 # A utility function to create Report Profiles json body
 #
-# Syntax       : createReportProfilesJSON(numProfiles,profileType,scenario="default")
+# Syntax       : createReportProfilesJSON(numProfiles,profileType,scenario)
 # Parameter    : numProfiles,profileType,scenario
 # Return Value : return the JSON body with requested number of profiles
 ################################################################################
@@ -406,11 +407,7 @@ def createReportProfilesJSON(numProfiles, profileType, scenario = "default"):
         {"type": "dataModel", "name": "UPTIME", "reference": "Device.DeviceInfo.UpTime", "use": "absolute"},
     ]
 
-    # Validate input
-    if numProfiles not in [1, 2]:
-        return {"profiles": []}
-
-    #attach time stamp to profilename to avoid conflict
+    #Attach time stamp to profilename to avoid conflict
     time_stamp =  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     #Reporting Interval and Activation TimeOut
@@ -428,8 +425,10 @@ def createReportProfilesJSON(numProfiles, profileType, scenario = "default"):
         reporting_interval = 90
         activation_timeout = 60
     elif scenario == "invalid_upload_url":
+        #Invalid upload URL
         t2_upload_url = "http://dummy_url.com/upload"
     elif scenario == "invalid_msgpack":
+        #Returning JSON body without mandatory fields for MsgPack
         profiles_out = {"profiles": [{"name": "Invalid_JSON"}]}
         return profiles_out
 
@@ -444,7 +443,7 @@ def createReportProfilesJSON(numProfiles, profileType, scenario = "default"):
             "params": base_params_wifi
         }
     ]
-
+    # Add SelfHeal profile if numProfiles is 2
     if numProfiles == 2:
         profiles_spec.append({
             "name": f"SelfHeal_{profileType}_{time_stamp}",
@@ -482,18 +481,14 @@ def createReportProfilesJSON(numProfiles, profileType, scenario = "default"):
             }
         }
         profiles_out.append(profile_entry)
-        #Print buffer size of profile created
-    profile_json_str = json.dumps(profiles_out)
-    print(f"Profile JSON body size: {len(profile_json_str.encode('utf-8'))} bytes")
     return {"profiles": profiles_out}
-
 
 ################################################################################
 # A utility function to convert JSON body to Base64 encoded string
 #
 # Syntax       : JsontoMsgPackBase64(jsonBody)
 # Parameter    : jsonBody
-# Return Value : return the Base64 encoded string
+# Return Value : return the Base64 encoded msgpack string
 ################################################################################
 def JsontoMsgPackBase64(jsonBody):
     msgpack_bytes = msgpack.packb(jsonBody)
@@ -523,26 +518,27 @@ def isProfileFileExist(tdktestObj, profile_names):
 ################################################################################
 # A utility function to Set and Validate Report Profiles
 #
-# Syntax       : SetReportProfiles(obj,profileValue,profileType,numProfiles,step)
-# Parameter    : obj,profileValue,profileType,numProfiles,step
-# Return Value : flag - success/failure status, initial_report_profiles, param_name, step
+# Syntax       : SetReportProfiles(wifiobj,profileValue,profileType,numProfiles,step)
+# Parameter    : wifiobj,profileValue,profileType,numProfiles,step
+# Return Value : return flag - success/failure status, initial_report_profiles, param_name, step
 ################################################################################
 def SetReportProfiles(wifiobj, profileValue, profileType, numProfiles, step):
-    if profileType == "JSON":
-        param_name = "Device.X_RDKCENTRAL-COM_T2.ReportProfiles"
-    elif profileType == "MsgPack":
-        param_name = "Device.X_RDKCENTRAL-COM_T2.ReportProfilesMsgPack"
-
-    profileMode = "single profile" if numProfiles == 1 else "multiple profiles"
-    if numProfiles == -1:
-        profileMode = "invalid" + profileMode
 
     expectedresult = "SUCCESS"
     flag = 0
     initial_report_profiles = ""
     set_report_profiles = ""
+
+    #Determine parameter name based on profile type
+    if profileType == "JSON":
+        param_name = "Device.X_RDKCENTRAL-COM_T2.ReportProfiles"
+    elif profileType == "MsgPack":
+        param_name = "Device.X_RDKCENTRAL-COM_T2.ReportProfilesMsgPack"
+
+    #Determine profile mode based on number of profiles
+    profileMode = "single profile" if numProfiles == 1 else "multiple profiles"
+
     #Get initial value of DM
-    step += 1
     print(f"\nTEST STEP {step}: Get the initial value of {param_name}")
     print(f"EXPECTED RESULT {step}: Should get the initial value of {param_name}")
     tdkTestObj = wifiobj.createTestStep("WIFIAgent_Get_LargeValue")
@@ -551,11 +547,11 @@ def SetReportProfiles(wifiobj, profileValue, profileType, numProfiles, step):
     actualresult = tdkTestObj.getResult()
     details = tdkTestObj.getResultDetails().strip().replace("\\n", "")
     initial_report_profiles = extract_report_profile(details, profileType)
-
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"ACTUAL RESULT {step}: Successfully got the initial value of {param_name}. Details : {initial_report_profiles}")
         print("[TEST EXECUTION RESULT] : SUCCESS")
+
         #Set DM with profile value
         step += 1
         print(f"\nTEST STEP {step}: Set {param_name} with {profileMode} in {profileType} Format")
@@ -568,13 +564,12 @@ def SetReportProfiles(wifiobj, profileValue, profileType, numProfiles, step):
         tdkTestObj.executeTestCase(expectedresult)
         actualresult = tdkTestObj.getResult()
         details = tdkTestObj.getResultDetails().strip().replace("\\n", "")
-
         if expectedresult in actualresult and "success" in details.lower():
             tdkTestObj.setResultStatus("SUCCESS")
             print(f"ACTUAL RESULT {step}: Successfully set {param_name} with {profileMode} in {profileType} Format. Details : {details}")
             print("[TEST EXECUTION RESULT] : SUCCESS")
 
-            # #Validate set value
+            # Validate the set value
             step += 1
             print(f"\nTEST STEP {step}: Validate the set value of {param_name}")
             print(f"EXPECTED RESULT {step}: Should get the set value of {param_name}")
@@ -602,14 +597,14 @@ def SetReportProfiles(wifiobj, profileValue, profileType, numProfiles, step):
         print(f"ACTUAL RESULT {step}: Failed to get the initial value of {param_name}. Details : {details}")
         print("[TEST EXECUTION RESULT] : FAILURE")
     return flag, initial_report_profiles, param_name, step
+
 ################################################################################
 # A utility function to check if the cJSON report is generated in telemetry2.0 logs
 #
 # Syntax       : checkReportGenerated(tdktestObj,profile_names)
 # Parameter    : tdktestObj,profile_names
-# Return Value : log_check - return True if all reports are generated, False otherwise, details
+# Return Value : log_check - True[all reports generated]/False[any not generated], details
 ################################################################################
-
 def checkReportGenerated(tdktestObj, profile_names):
     log_check = True
     for profile in profile_names:
@@ -630,7 +625,7 @@ def checkReportGenerated(tdktestObj, profile_names):
 #
 # Syntax       : checkReportUpload(tdktestObj,profile_names)
 # Parameter    : tdktestObj,profile_names
-# Return Value : return True if reports are uploaded successfully, False otherwise
+# Return Value : upload_check - True if reports are uploaded successfully, False otherwise
 ################################################################################
 def checkReportUpload(tdktestObj, profile_names):
     cmd = f"grep -i 'Report Sent Successfully over HTTP : 200' /rdklogs/logs/telemetry2_0.txt.0 | wc -l"
@@ -648,7 +643,7 @@ def checkReportUpload(tdktestObj, profile_names):
 #
 # Syntax       : extract_report_profile(details, profileType)
 # Parameter    : details, profileType
-# Return Value : return the report profile value
+# Return Value : report_profiles - the report profile value
 #################################################################################
 def extract_report_profile(details, profileType):
     report_profiles = ""
