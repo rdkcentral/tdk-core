@@ -22,7 +22,6 @@ import re
 from SSHUtility import *
 import SSHUtility
 import requests
-import json
 import time
 import os
 import subprocess
