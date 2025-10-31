@@ -392,19 +392,23 @@ def checkProcessRestarted(tdkTestObj_Sys_ExeCmd,processname):
 # A utility function to create Report Profiles json body
 #
 # Syntax       : createReportProfilesJSON(numProfiles,profileType,scenario)
-# Parameter    : numProfiles,profileType,scenario
-# Return Value : return the JSON body with requested number of profiles
+# Parameter    : numProfiles - The number of profiles to create
+#                profileType - The type of profile (JSON/MsgPack)
+#                scenario - The scenario for which the profiles are created
+# Return Value : {"profiles": profiles_out} - The JSON body with requested number of profiles
 ################################################################################
 def createReportProfilesJSON(numProfiles, profileType, scenario = "default"):
     # Base parameters
     base_params_wifi = [
         {"type": "dataModel", "reference": "Profile.Name"},
         {"type": "dataModel", "reference": "Device.WiFi.Radio.1.Stats.X_COMCAST-COM_NoiseFloor"},
+        {"type": "dataModel", "name": "UPTIME", "reference": "Device.DeviceInfo.UpTime", "use": "absolute"}
+
     ]
 
     base_params_selfheal = [
         {"type": "dataModel", "reference": "Profile.Name"},
-        {"type": "dataModel", "name": "UPTIME", "reference": "Device.DeviceInfo.UpTime", "use": "absolute"},
+        {"type": "dataModel", "name": "UPTIME", "reference": "Device.DeviceInfo.UpTime", "use": "absolute"}
     ]
 
     #Attach time stamp to profilename to avoid conflict
@@ -487,8 +491,8 @@ def createReportProfilesJSON(numProfiles, profileType, scenario = "default"):
 # A utility function to convert JSON body to Base64 encoded string
 #
 # Syntax       : JsontoMsgPackBase64(jsonBody)
-# Parameter    : jsonBody
-# Return Value : return the Base64 encoded msgpack string
+# Parameter    : jsonBody - The JSON body to be converted
+# Return Value : base64_str - The Base64 encoded msgpack string
 ################################################################################
 def JsontoMsgPackBase64(jsonBody):
     msgpack_bytes = msgpack.packb(jsonBody)
@@ -499,8 +503,9 @@ def JsontoMsgPackBase64(jsonBody):
 # A utility function to check if the Report Profile files are created in /nvram/.t2reportprofiles/
 #
 # Syntax       : isProfileFileExist(tdktestObj,profile_names)
-# Parameter    : tdktestObj,profile_names
-# Return Value : return True if all profiles exist, False otherwise
+# Parameter    : tdktestObj - Object
+#                profile_names - List of profile names to check
+# Return Value : profile_check - True if all profiles exist, False otherwise
 ################################################################################
 def isProfileFileExist(tdktestObj, profile_names):
     profile_check = True
@@ -519,8 +524,15 @@ def isProfileFileExist(tdktestObj, profile_names):
 # A utility function to Set and Validate Report Profiles
 #
 # Syntax       : SetReportProfiles(wifiobj,profileValue,profileType,numProfiles,step)
-# Parameter    : wifiobj,profileValue,profileType,numProfiles,step
-# Return Value : return flag - success/failure status, initial_report_profiles, param_name, step
+# Parameter    : wifiobj - Object
+#                profileValue - Value to set for the profile
+#                profileType - Type of the profile (JSON/MsgPack)
+#                numProfiles - Number of profiles to set
+#                step - Current test step
+# Return Value : flag - 1[success]/0[failure]
+#                initial_report_profiles - Initial Report Profiles value
+#                param_name - Parameter name used
+#                step - Updated test step
 ################################################################################
 def SetReportProfiles(wifiobj, profileValue, profileType, numProfiles, step):
 
@@ -602,8 +614,10 @@ def SetReportProfiles(wifiobj, profileValue, profileType, numProfiles, step):
 # A utility function to check if the cJSON report is generated in telemetry2.0 logs
 #
 # Syntax       : checkReportGenerated(tdktestObj,profile_names)
-# Parameter    : tdktestObj,profile_names
-# Return Value : log_check - True[all reports generated]/False[any not generated], details
+# Parameter    : tdktestObj - Object
+#               profile_names - List of profile names to check
+# Return Value : log_check - True[all reports generated]/False[any not generated]
+#                details - cJSON Report details
 ################################################################################
 def checkReportGenerated(tdktestObj, profile_names):
     log_check = True
@@ -624,7 +638,8 @@ def checkReportGenerated(tdktestObj, profile_names):
 # A utility function to check if the Report is uploaded successfully
 #
 # Syntax       : checkReportUpload(tdktestObj,profile_names)
-# Parameter    : tdktestObj,profile_names
+# Parameter    : tdktestObj - Object
+#               profile_names - List of profile names to check
 # Return Value : upload_check - True if reports are uploaded successfully, False otherwise
 ################################################################################
 def checkReportUpload(tdktestObj, profile_names):
@@ -642,7 +657,8 @@ def checkReportUpload(tdktestObj, profile_names):
 # A utility function to extract report profile value from the response details
 #
 # Syntax       : extract_report_profile(details, profileType)
-# Parameter    : details, profileType
+# Parameter    : details - Get Response details
+#                profileType - Type of the profile (JSON/MsgPack)
 # Return Value : report_profiles - the report profile value
 #################################################################################
 def extract_report_profile(details, profileType):
