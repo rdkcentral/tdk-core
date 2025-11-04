@@ -540,7 +540,7 @@ def SetReportProfiles(wifiobj, profileValue, profileType, numProfiles, step):
     flag = 0
     initial_report_profiles = ""
     set_report_profiles = ""
-
+    param_name = ""
     #Determine parameter name based on profile type
     if profileType == "JSON":
         param_name = "Device.X_RDKCENTRAL-COM_T2.ReportProfiles"
