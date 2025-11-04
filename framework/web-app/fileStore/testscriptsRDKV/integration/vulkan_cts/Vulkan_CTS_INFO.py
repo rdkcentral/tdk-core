@@ -20,6 +20,7 @@
 
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib; 
+import Vulkan_CTSVariables
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("vulkan_cts","1",standAlone=True)
@@ -36,8 +37,6 @@ print("[LIB LOAD STATUS]  :  %s" %result);
 expectedresult = "SUCCESS"
 
 info_filename = "dEQP-VK.info"
-qpa_folder_path = "/tmp/usb/vulkan-cts/results"
-result_dir = "/opt/tomcat/webapps/tdkservice/fileStore"
 qpa_file_name = "info.qpa"
 
 if expectedresult in result.upper():
@@ -47,6 +46,9 @@ if expectedresult in result.upper():
     details = tdkTestObj.getResultDetails()
     
     print ("Vulkan CTS Info : %s" %details)
+
+    qpa_folder_path= Vulkan_CTSVariables.qpa_folder_path
+    result_dir = Vulkan_CTSVariables.result_dir
 
     tdkTestObj = obj.createTestStep('copy_file')
     tdkTestObj.addParameter("qpa_folder_path", qpa_folder_path)
