@@ -37,32 +37,8 @@ def check_unit_status(obj, unit_name):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print("Command output: %s" % details)
-    if "Loaded: loaded" in details or "Active: active" in details:
-        actualresult = "SUCCESS"
-    else:
-        actualresult = "FAILURE"
-    return tdkTestObj, actualresult, details
-########## End of function ##########
-
-# check_service_unit_status
-# Syntax : check_service_unit_status(obj, unit_name)
-# Description : Function to check the status of a systemd service unit
-# Parameters : obj - module object
-# unit_name - name of the service unit (e.g., coredump-upload.service)
-# Return Value: tdkTestObj - test object
-# actualresult - SUCCESS/FAILURE
-# details - output from systemctl status
-def check_service_unit_status(obj, unit_name):
-    command = f"systemctl status {unit_name} | grep 'Loaded: loaded'"
-    print("Command : %s" % command)
-    tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    print("Full command output: %s" % details)  # Debug print
-    # For service units, check if it's loaded (can be in any state)
     if "Loaded: loaded" in details:
         actualresult = "SUCCESS"
-    elif "UPLOAD" in details or "coredump-upload.service" in details:
-        actualresult = "SUCCESS"  # Fallback for partial output
     else:
         actualresult = "FAILURE"
     return tdkTestObj, actualresult, details
@@ -175,27 +151,6 @@ def get_triggered_by(obj, unit_name):
     return tdkTestObj, actualresult, triggered_by
 ########## End of function ##########
 
-# check_successful_execution_logs
-# Syntax : check_successful_execution_logs(obj, unit_name, log_pattern)
-# Description : Function to check for successful execution logs in service status
-# Parameters : obj - module object
-# unit_name - name of the unit (service)
-# log_pattern - pattern to grep (e.g., "Finished UPLOAD")
-# Return Value: tdkTestObj - test object
-# actualresult - SUCCESS/FAILURE
-# details - matched logs
-def check_successful_execution_logs(obj, unit_name, log_pattern):
-    command = f"systemctl status {unit_name} | grep '{log_pattern}'"
-    print("Command : %s" % command)
-    tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    if log_pattern in details:
-        actualresult = "SUCCESS"
-    else:
-        actualresult = "FAILURE"
-    return tdkTestObj, actualresult, details
-########## End of function ##########
-
 # set_ulimit_core_unlimited
 # Syntax : set_ulimit_core_unlimited(obj)
 # Description : Function to set core dump size to unlimited
@@ -203,9 +158,16 @@ def check_successful_execution_logs(obj, unit_name, log_pattern):
 # Return Value: tdkTestObj - test object
 # actualresult - SUCCESS/FAILURE
 # details - verification output
+# initial_value - initial ulimit value before change
 def set_ulimit_core_unlimited(obj):
-    command_set = ULIMIT_CMD
+    # Get initial value
     tdkTestObj = obj.createTestStep('ExecuteCmd')
+    command_get_initial = "ulimit -c"
+    actualresult_initial, initial_value = doSysutilExecuteCommand(tdkTestObj, command_get_initial)
+    initial_value = initial_value.strip()
+    print("Initial ulimit -c value: %s" % initial_value)
+
+    command_set = ULIMIT_CMD
     actualresult_set, details_set = doSysutilExecuteCommand(tdkTestObj, command_set)
 
     command_verify = "ulimit -c"
@@ -214,69 +176,140 @@ def set_ulimit_core_unlimited(obj):
 
     if details_verify == "unlimited":
         actualresult = "SUCCESS"
-        details = details_verify
     else:
         actualresult = "FAILURE"
-        details = details_verify
+    details = details_verify
+    return tdkTestObj, actualresult, details, initial_value
+########## End of function ##########
+
+# revert_ulimit_core
+# Syntax : revert_ulimit_core(obj, initial_value)
+# Description : Function to revert core dump size to initial value
+# Parameters : obj - module object
+# initial_value - initial ulimit value to revert to
+# Return Value: tdkTestObj - test object
+# actualresult - SUCCESS/FAILURE
+# details - verification output
+def revert_ulimit_core(obj, initial_value):
+    command_revert = f"ulimit -c {initial_value}"
+    print("Command : %s" % command_revert)
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult_revert, details_revert = doSysutilExecuteCommand(tdkTestObj, command_revert)
+
+    command_verify = "ulimit -c"
+    actualresult_verify, details_verify = doSysutilExecuteCommand(tdkTestObj, command_verify)
+    details_verify = details_verify.strip()
+
+    if details_verify == initial_value:
+        actualresult = "SUCCESS"
+    else:
+        actualresult = "FAILURE"
+    details = details_verify
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
-# check_directory_empty
-# Syntax : check_directory_empty(obj, dir_path)
-# Description : Function to check if a directory is empty
+# check_directory_filecount
+# Syntax : check_directory_filecount(obj, dir_path)
+# Description : Function to get the count of .dmp files in a directory
 # Parameters : obj - module object
 # dir_path - path to the directory
 # Return Value: tdkTestObj - test object
-# actualresult - SUCCESS if empty / FAILURE if not
-# details - ls output
-def check_directory_empty(obj, dir_path):
-    command = f"ls {dir_path}"
+# actualresult - SUCCESS/FAILURE
+# count - number of .dmp files
+def check_directory_filecount(obj, dir_path):
+    command = f"ls {dir_path} | grep -i .dmp | wc -l"
     print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    details = details.strip()
-    if details == "":
+    count = details.strip()
+    if count.isdigit():
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    return tdkTestObj, actualresult, details
+        count = "0"
+    return tdkTestObj, actualresult, count
 ########## End of function ##########
 
 # verify_minidump_file_created
-# Syntax : verify_minidump_file_created(obj, dir_path=MINIDUMPS_DIR)
-# Description : Function to verify if a .dmp or .tgz file is created in the directory
+# Syntax : verify_minidump_file_created(obj, initial_count, dir_path=MINIDUMPS_DIR)
+# Description : Function to verify if a .dmp file is created in the directory
 # Parameters : obj - module object
+# initial_count - initial count of .dmp files
 # dir_path - path to check (default /minidumps)
 # Return Value: tdkTestObj - test object
 # actualresult - SUCCESS/FAILURE
-# filename - name of the created file (if any)
-def verify_minidump_file_created(obj, dir_path=MINIDUMPS_DIR):
-    command = f"ls {dir_path} | grep -E '\\.dmp|\\.tgz'"
+# filename - name of the newly created file (if any)
+def verify_minidump_file_created(obj, initial_count, dir_path=MINIDUMPS_DIR):
+    command = f"ls {dir_path} | grep -i .dmp | wc -l"
     print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    filename = details.strip()
-    if filename != "":
+    current_count = details.strip()
+
+    if current_count.isdigit() and int(current_count) > int(initial_count):
         actualresult = "SUCCESS"
+        # Get the filename
+        command_filename = f"ls {dir_path} | grep -i .dmp"
+        actualresult_fn, filename = doSysutilExecuteCommand(tdkTestObj, command_filename)
+        filename = filename.strip()
     else:
         actualresult = "FAILURE"
+        filename = ""
+
     return tdkTestObj, actualresult, filename
 ########## End of function ##########
 
-# delete_minidump_files
-# Syntax : delete_minidump_files(obj, dir_path=MINIDUMPS_DIR)
-# Description : Function to delete minidump files after test
+# verify_process_restart
+# Syntax : verify_process_restart(obj, process_name, old_pid, max_retry=6)
+# Description : Function to verify if a process restarted with new PID
 # Parameters : obj - module object
-# dir_path - path to minidumps
+# process_name - name of the process
+# old_pid - old PID before crash
+# max_retry - maximum retry count (default 6)
 # Return Value: tdkTestObj - test object
 # actualresult - SUCCESS/FAILURE
-# details - rm output
-def delete_minidump_files(obj, dir_path=MINIDUMPS_DIR):
-    command = f"rm -f {dir_path}/*"
-    print("Command : %s" % command)
+# new_pid - new PID after restart
+def verify_process_restart(obj, process_name, old_pid, max_retry=6):
+    query = "sh %s/tdk_platform_utility.sh checkProcess %s" % (TDK_PATH, process_name)
+    print("Command: %s" % query)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    return tdkTestObj, actualresult, details
+    tdkTestObj.addParameter("command", query)
+    print("Check for every 10 secs whether the process is up")
+    retryCount = 0
+    new_pid = ""
+    expectedresult = "SUCCESS"
+
+    while retryCount < max_retry:
+        tdkTestObj.executeTestCase("SUCCESS")
+        actualresult = tdkTestObj.getResult()
+        new_pid = tdkTestObj.getResultDetails().strip().replace("\\n", "")
+        if expectedresult in actualresult and new_pid:
+            break
+        else:
+            sleep(10)
+            retryCount = retryCount + 1
+
+    if not new_pid:
+        print("Retry Again: Check for every 5 mins whether the process is up")
+        retryCount = 0
+        while retryCount < max_retry:
+            tdkTestObj.executeTestCase("SUCCESS")
+            actualresult = tdkTestObj.getResult()
+            new_pid = tdkTestObj.getResultDetails().strip().replace("\\n", "")
+            if expectedresult in actualresult and new_pid:
+                break
+            else:
+                sleep(300)
+                retryCount = retryCount + 1
+
+    if new_pid and new_pid != old_pid:
+        actualresult = "SUCCESS"
+    elif new_pid == old_pid:
+        actualresult = "FAILURE"
+    else:
+        actualresult = "FAILURE"
+
+    return tdkTestObj, actualresult, new_pid
 ########## End of function ##########
 
 # verify_log_pattern
@@ -299,4 +332,3 @@ def verify_log_pattern(obj, log_file, pattern):
         actualresult = "FAILURE"
     return tdkTestObj, actualresult, details
 ########## End of function ##########
-
