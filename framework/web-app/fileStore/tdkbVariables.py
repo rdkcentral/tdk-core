@@ -30,3 +30,7 @@ DNS_SERVER_IP=""
 BTM_CLIENT_CAPABILITY=""
 #Give the Port Number to which LAN client is connected
 LAN_PORT_Number=""
+#This is test value used in security mode SET operaton,but not a real secret
+SAE_PASS="asdf@1234"
+#This is used in security mode SET operation
+ENCRYPTION_MODE="AES"
