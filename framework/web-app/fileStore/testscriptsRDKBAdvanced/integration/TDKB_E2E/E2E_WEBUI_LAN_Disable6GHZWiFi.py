@@ -21,9 +21,7 @@
 import tdklib
 import time
 import tdkbE2EUtility
-from tdkbE2EUtility import *
 import tdkbWEBUIUtility
-from tdkbWEBUIUtility import *
 
 # Test component to be tested
 obj = tdklib.TDKScriptingLibrary("tdkb_e2e", "1")
@@ -45,9 +43,9 @@ if "SUCCESS" in loadmodulestatus.upper():
     exit_flag = 0
 
     # Parse the device configuration file
-    print(f"TEST STEP {step}: Parse the device configuration file")
+    print(f"\nTEST STEP {step}: Parse the device configuration file")
     print(f"EXPECTED RESULT {step}: Device configuration file should be parsed successfully")
-    status = parseDeviceConfig(obj)
+    status = tdkbE2EUtility.parseDeviceConfig(obj)
 
     if expectedresult in status:
         obj.setLoadModuleStatus("SUCCESS")
@@ -58,9 +56,9 @@ if "SUCCESS" in loadmodulestatus.upper():
         wifiEnable = f"Device.WiFi.SSID.{tdkbE2EUtility.ssid_6ghz_index}.Enable"
         paramList = [wifiEnable]
 
-        print(f"TEST STEP {step}: Get the current WiFi enable status for 6GHz")
+        print(f"\nTEST STEP {step}: Get the current WiFi enable status for 6GHz")
         print(f"EXPECTED RESULT {step}: Should retrieve the current WiFi enable status")
-        tdkTestObj, status, orgValue = getMultipleParameterValues(obj, paramList)
+        tdkTestObj, status, orgValue = tdkbE2EUtility.getMultipleParameterValues(obj, paramList)
 
         if expectedresult in status:
             tdkTestObj.setResultStatus("SUCCESS")
@@ -73,10 +71,10 @@ if "SUCCESS" in loadmodulestatus.upper():
                 setParamList = f"{wifiEnable}|true|bool"
 
                 step += 1
-                print(f"TEST STEP {step}: Set the WiFi enable status to true")
+                print(f"\nTEST STEP {step}: Set the WiFi enable status to true")
                 print(f"EXPECTED RESULT {step}: Should set the WiFi enable status to true")
 
-                tdkTestObj, actualresult, details = setMultipleParameterValues(obj, setParamList)
+                tdkTestObj, actualresult, details = tdkbE2EUtility.setMultipleParameterValues(obj, setParamList)
                 if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS")
                     print(f"ACTUAL RESULT {step}: SET operation success{details}")
@@ -84,10 +82,10 @@ if "SUCCESS" in loadmodulestatus.upper():
 
                     newParamList = [wifiEnable]
                     step += 1
-                    print(f"TEST STEP {step}: Verify if the WiFi enable status is updated to true")
+                    print(f"\nTEST STEP {step}: Verify if the WiFi enable status is updated to true")
                     print(f"EXPECTED RESULT {step}: The WiFi enable status should be true")
 
-                    tdkTestObj, status, newValues = getMultipleParameterValues(obj, newParamList)
+                    tdkTestObj, status, newValues = tdkbE2EUtility.getMultipleParameterValues(obj, newParamList)
 
                     if expectedresult in status and setValuesList == newValues:
                         tdkTestObj.setResultStatus("SUCCESS")
@@ -109,9 +107,9 @@ if "SUCCESS" in loadmodulestatus.upper():
 
             if exit_flag != 1:
                 step += 1
-                print(f"TEST STEP {step}: Get the IP address of the LAN client after connecting to it")
+                print(f"\nTEST STEP {step}: Get the IP address of the LAN client after connecting to it")
                 print(f"EXPECTED RESULT {step}: Should retrieve valid LAN client IP address")
-                lanIP = getLanIPAddress(tdkbE2EUtility.lan_interface)
+                lanIP = tdkbE2EUtility.getLanIPAddress(tdkbE2EUtility.lan_interface)
 
                 if lanIP:
                     tdkTestObj.setResultStatus("SUCCESS")
@@ -119,11 +117,11 @@ if "SUCCESS" in loadmodulestatus.upper():
                     print(f"[TEST EXECUTION RESULT] : SUCCESS")
 
                     step += 1
-                    print(f"TEST STEP {step}: Get the current LAN IP address (gateway) DHCP range")
+                    print(f"\nTEST STEP {step}: Get the current LAN IP address (gateway) DHCP range")
                     print(f"EXPECTED RESULT {step}: Should retrieve valid LAN gateway IP address")
 
                     param = "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress"
-                    tdkTestObj, status, curIPAddress = getParameterValue(obj, param)
+                    tdkTestObj, status, curIPAddress = tdkbE2EUtility.getParameterValue(obj, param)
                     print(f"ACTUAL RESULT {step}: Current LAN Gateway IP is {curIPAddress}")
 
                     if expectedresult in status and curIPAddress:
@@ -131,20 +129,20 @@ if "SUCCESS" in loadmodulestatus.upper():
                         print(f"[TEST EXECUTION RESULT] : SUCCESS")
 
                         step += 1
-                        print(f"TEST STEP {step}: Check if LAN IP is in the same DHCP range")
+                        print(f"\nTEST STEP {step}: Check if LAN IP is in the same DHCP range")
                         print(f"EXPECTED RESULT {step}: LAN client IP should be in same DHCP range")
 
-                        status = checkIpRange(curIPAddress, lanIP)
+                        status = tdkbE2EUtility.checkIpRange(curIPAddress, lanIP)
                         if expectedresult in status:
                             tdkTestObj.setResultStatus("SUCCESS")
                             print(f"ACTUAL RESULT {step}: LAN IP is in the same DHCP range")
                             print(f"[TEST EXECUTION RESULT] : SUCCESS")
 
                             step += 1
-                            print(f"TEST STEP {step}: Start Selenium Grid and perform WiFi disable operation in Web UI")
+                            print(f"\nTEST STEP {step}: Start Selenium Grid and perform WiFi disable operation in Web UI")
                             print(f"EXPECTED RESULT {step}: Selenium grid should start and WiFi should be disabled successfully in UI")
 
-                            driver, status = startSeleniumGrid(tdkTestObj, "LAN", tdkbE2EUtility.grid_url)
+                            driver, status = tdkbWEBUIUtility.startSeleniumGrid(tdkTestObj, "LAN", tdkbE2EUtility.grid_url)
                             if status == "SUCCESS":
                                 try:
                                     time.sleep(10)
@@ -160,10 +158,10 @@ if "SUCCESS" in loadmodulestatus.upper():
                                     print(f"[TEST EXECUTION RESULT] : SUCCESS")
 
                                     step += 1
-                                    print(f"TEST STEP {step}: Check if 6GHz SSID is visible in WiFi client list")
+                                    print(f"\nTEST STEP {step}: Check if 6GHz SSID is visible in WiFi client list")
                                     print(f"EXPECTED RESULT {step}: SSID should not be broadcasted after disabling 6GHz WiFi")
 
-                                    status = wlanIsSSIDAvailable(tdkbE2EUtility.ssid_6ghz_name)
+                                    status = tdkbE2EUtility.wlanIsSSIDAvailable(tdkbE2EUtility.ssid_6ghz_name)
                                     if expectedresult not in status:
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         print(f"ACTUAL RESULT {step}: SSID {tdkbE2EUtility.ssid_6ghz_name} is not broadcasted")
@@ -182,7 +180,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                                 print(f"[TEST EXECUTION RESULT] : FAILURE")
 
                             step += 1
-                            print(f"TEST STEP {step}: Kill Selenium Hub and Node post execution")
+                            print(f"\nTEST STEP {step}: Kill Selenium Hub and Node post execution")
                             print(f"EXPECTED RESULT {step}: Selenium Hub and Node should stop successfully")
 
                             status = tdkbWEBUIUtility.kill_hub_node("LAN")
@@ -208,11 +206,11 @@ if "SUCCESS" in loadmodulestatus.upper():
                     print(f"[TEST EXECUTION RESULT] : FAILURE")
 
                 step += 1
-                print(f"TEST STEP {step}: Revert WiFi enable status to original value")
+                print(f"\nTEST STEP {step}: Revert WiFi enable status to original value")
                 print(f"EXPECTED RESULT {step}: Should revert WiFi enable status to {orgValue[0]}")
 
                 revertParamList = f"{wifiEnable}|{orgValue[0]}|bool"
-                tdkTestObj, actualresult, details = setMultipleParameterValues(obj, revertParamList)
+                tdkTestObj, actualresult, details = tdkbE2EUtility.setMultipleParameterValues(obj, revertParamList)
                 if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS")
                     print(f"ACTUAL RESULT {step}: {details}")

@@ -21,9 +21,8 @@
 import tdklib
 import time
 import tdkbE2EUtility
-from tdkbE2EUtility import *
 import tdkutility
-from tdkutility import *
+import tdkbVariables
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1")
@@ -31,7 +30,7 @@ obj1 = tdklib.TDKScriptingLibrary("advancedconfig","RDKB")
 wifi_obj = tdklib.TDKScriptingLibrary("wifiagent","1")
 
 #IP and Port of box, No need to change,
-#This will be replaced with correspoing Box Ip and port while executing script
+#This will be replaced with corresponding Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'E2E_ParentalControl_ManagedDevices_6GHZ_AllowAll_Block_WLAN')
@@ -51,14 +50,13 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
     obj1.setLoadModuleStatus("SUCCESS")
     wifi_obj.setLoadModuleStatus("SUCCESS")
     expectedresult = "SUCCESS"
-    finalStatus = "FAILURE"
     exit_flag = 0
     sm_flag = 0
     step = 0
 
     #Parse the device configuration file
     step += 1
-    print(f"TEST STEP {step}: Parse the device configuration file")
+    print(f"\nTEST STEP {step}: Parse the device configuration file")
     print(f"EXPECTED RESULT {step}: Should parse the device configuration file successfully")
     status = tdkbE2EUtility.parseDeviceConfig(obj)
     if expectedresult in status:
@@ -78,7 +76,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
         tdkTestObj,status,orgValue = tdkbE2EUtility.getMultipleParameterValues(obj,paramList)
 
         step += 1
-        print(f"TEST STEP {step}: Get the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
+        print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
         print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
         if expectedresult in status:
             tdkTestObj.setResultStatus("SUCCESS")
@@ -104,11 +102,9 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     step += 1
                     print(f"\nTEST STEP {step}: Set security mode to WPA3-Personal")
                     print(f"EXPECTED RESULT {step}: Should set security mode to WPA3-Personal")
-                    SAE_Pass = "asdf@1234"  # test values not real secrets
-                    Encryption_Mode = "AES"
                     config_SET = {
-                        f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_6ghz_index}.Security.SAEPassphrase": SAE_Pass,
-                        f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_6ghz_index}.Security.X_CISCO_COM_EncryptionMethod": Encryption_Mode
+                        f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_6ghz_index}.Security.SAEPassphrase": tdkbVariables.SAE_PASS,
+                        f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_6ghz_index}.Security.X_CISCO_COM_EncryptionMethod": tdkbVariables.ENCRYPTION_MODE
                     }
                     tdkTestObj, actualresult = tdkutility.setSecurityModeEnabledConfig(wifi_obj, "WPA3-Personal", tdkbE2EUtility.ssid_6ghz_index, config_SET, initial_secMode)
                     details = tdkTestObj.getResultDetails()
@@ -127,18 +123,13 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                         paramName = f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_6ghz_index}.Security.ModeEnabled"
                         tdkTestObj,actualresult,sec_mode = tdkutility.wifi_GetParam(wifi_obj,paramName)
 
-                        if expectedresult in actualresult and details != "":
+                        if expectedresult in actualresult and sec_mode == "WPA3-Personal":
                             tdkTestObj.setResultStatus("SUCCESS")
                             print(f"ACTUAL RESULT {step}: Security Mode: {sec_mode}")
                             print("TEST EXECUTION RESULT : SUCCESS")
-
-                            if sec_mode != "WPA3-Personal":
-                                tdkTestObj.setResultStatus("FAILURE")
-                                print("Security mode is not WPA3-Personal")
-                                exit_flag = 1
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print(f"ACTUAL RESULT {step}: Get operation failed.")
+                            print(f"ACTUAL RESULT {step}: Get operation failed or security mode is not reflected in GET.")
                             print("TEST EXECUTION RESULT : FAILURE")
                             exit_flag = 1
                     else:
@@ -176,7 +167,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                 tdkTestObj,actualresult1,details = tdkbE2EUtility.setMultipleParameterValues(obj,setParamList1)
 
                 step += 1
-                print(f"TEST STEP {step}: Set the ssid,keypassphrase,managedDeviceEnable and allowAll")
+                print(f"\nTEST STEP {step}: Set the ssid,keypassphrase,managedDeviceEnable and allowAll")
                 print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase,managedDeviceEnable and allowAll")
                 if expectedresult in actualresult and expectedresult in actualresult1:
                     tdkTestObj.setResultStatus("SUCCESS")
@@ -188,16 +179,18 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     tdkTestObj,status,newValues = tdkbE2EUtility.getMultipleParameterValues(obj,newParamList)
 
                     step += 1
-                    print(f"TEST STEP {step}: Get the current ssid,keypassphrase,managedDeviceEnable and allowAll")
+                    print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,managedDeviceEnable and allowAll")
                     print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,managedDeviceEnable and allowAll")
                     if expectedresult in status and setValuesList == newValues:
                         tdkTestObj.setResultStatus("SUCCESS")
                         print(f"ACTUAL RESULT {step}: The parameter values after SET opetation: {newValues}")
                         print(f"[TEST EXECUTION RESULT] : SUCCESS")
 
+                        time.sleep(60)
+
                         #Connect to the wifi ssid from wlan client
                         step += 1
-                        print(f"TEST STEP {step}: From wlan client, Connect to the wifi ssid")
+                        print(f"\nTEST STEP {step}: From wlan client, Connect to the wifi ssid")
                         print(f"EXPECTED RESULT {step}: Wlan client should connect to wifi successfully")
                         status = tdkbE2EUtility.wlanConnectWifiSsid(tdkbE2EUtility.ssid_6ghz_name,tdkbE2EUtility.ssid_6ghz_pwd,tdkbE2EUtility.wlan_6ghz_interface)
                         if expectedresult in status:
@@ -207,7 +200,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                             #Get WLAN client IP after connecting
                             step += 1
-                            print(f"TEST STEP {step}: Get the IP address of the wlan client after connecting to wifi")
+                            print(f"\nTEST STEP {step}: Get the IP address of the wlan client after connecting to wifi")
                             print(f"EXPECTED RESULT {step}: Should retrieve the wlan client IP")
                             wlanIP = tdkbE2EUtility.getWlanIPAddress(tdkbE2EUtility.wlan_6ghz_interface)
                             if wlanIP:
@@ -217,7 +210,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                 # Get the current LAN IP address DHCP range
                                 step += 1
-                                print(f"TEST STEP {step}: Get the current LAN IP address DHCP range")
+                                print(f"\nTEST STEP {step}: Get the current LAN IP address DHCP range")
                                 print(f"EXPECTED RESULT {step}: Should retrieve LAN IP range")
                                 param = "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress"
                                 tdkTestObj,status,curIPAddress = tdkbE2EUtility.getParameterValue(obj,param)
@@ -229,7 +222,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                     # Check whether wlan ip address is in same DHCP range
                                     step += 1
-                                    print(f"TEST STEP {step}: Check whether wlan ip address is in same DHCP range")
+                                    print(f"\nTEST STEP {step}: Check whether wlan ip address is in same DHCP range")
                                     print(f"EXPECTED RESULT {step}: wlan IP should be in LAN DHCP range")
                                     status = tdkbE2EUtility.checkIpRange(curIPAddress,wlanIP)
                                     if expectedresult in status:
@@ -238,12 +231,12 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                         print("[TEST EXECUTION RESULT] : SUCCESS")
 
                                         step += 1
-                                        print(f"TEST STEP {step}: Get the MAC address of the wlan client")
+                                        print(f"\nTEST STEP {step}: Get the MAC address of the wlan client")
                                         print(f"EXPECTED RESULT {step}: Should retrieve the wlan client MAC")
                                         MAC = tdkbE2EUtility.getWlanMACAddress(tdkbE2EUtility.wlan_6ghz_interface)
 
                                         step += 1
-                                        print(f"TEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
+                                        print(f"\nTEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
                                         print(f"EXPECTED RESULT {step}: WLAN client should disconnect successfully")
                                         status = tdkbE2EUtility.wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_6ghz_interface)
                                         if expectedresult in status:
@@ -260,7 +253,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                                 # add new rule
                                                 step += 1
-                                                print(f"TEST STEP {step}: Adding new rule for device blocking")
+                                                print(f"\nTEST STEP {step}: Adding new rule for device blocking")
                                                 print(f"EXPECTED RESULT {step}: Should add new rule")
                                                 if expectedresult in actualresult:
                                                     tdkTestObj.setResultStatus("SUCCESS")
@@ -293,7 +286,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                                         # set blockType, description, mac, alwaysBlock
                                                         step += 1
-                                                        print(f"TEST STEP {step}: Set the blockType,description,mac and alwaysBlock")
+                                                        print(f"\nTEST STEP {step}: Set the blockType,description,mac and alwaysBlock")
                                                         print(f"EXPECTED RESULT {step}: Should set the blockType,description,mac and alwaysBlock")
                                                         if expectedresult in actualresult:
                                                             tdkTestObj.setResultStatus("SUCCESS")
@@ -306,7 +299,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                                             #verify newly set block values
                                                             step += 1
-                                                            print(f"TEST STEP {step}: Get the current blockType,description,mac and alwaysBlock")
+                                                            print(f"\nTEST STEP {step}: Get the current blockType,description,mac and alwaysBlock")
                                                             print(f"EXPECTED RESULT {step}: Should retrieve the current blockType,description,mac and alwaysBlock")
                                                             if expectedresult in status and setValuesList == newValues:
                                                                 tdkTestObj.setResultStatus("SUCCESS")
@@ -318,7 +311,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                                                 #Connect to the wifi ssid from wlan client
                                                                 step += 1
-                                                                print(f"TEST STEP {step}: From wlan client, Connect to the wifi ssid")
+                                                                print(f"\nTEST STEP {step}: From wlan client, Connect to the wifi ssid")
                                                                 print(f"EXPECTED RESULT {step}: Wlan client should connect to wifi successfully")
                                                                 status = tdkbE2EUtility.wlanConnectWifiSsid(tdkbE2EUtility.ssid_6ghz_name,tdkbE2EUtility.ssid_6ghz_pwd,tdkbE2EUtility.wlan_6ghz_interface)
                                                                 if expectedresult in status:
@@ -327,7 +320,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                                     print("[TEST EXECUTION RESULT] : SUCCESS")
 
                                                                     step += 1
-                                                                    print(f"TEST STEP {step}: Get the IP address of the wlan client after connecting to wifi")
+                                                                    print(f"\nTEST STEP {step}: Get the IP address of the wlan client after connecting to wifi")
                                                                     print(f"EXPECTED RESULT {step}: Should retrieve the wlan client IP")
                                                                     wlanIP = tdkbE2EUtility.getWlanIPAddress(tdkbE2EUtility.wlan_6ghz_interface)
                                                                     if wlanIP:
@@ -337,7 +330,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                                                         # Check whether wlan ip address is in same DHCP range
                                                                         step += 1
-                                                                        print(f"TEST STEP {step}: Check whether wlan ip address is in same DHCP range")
+                                                                        print(f"\nTEST STEP {step}: Check whether wlan ip address is in same DHCP range")
                                                                         print(f"EXPECTED RESULT {step}: wlan IP should be in LAN DHCP range")
                                                                         status = tdkbE2EUtility.checkIpRange(curIPAddress,wlanIP)
                                                                         if expectedresult in status:
@@ -347,7 +340,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                                                             #add static route
                                                                             step += 1
-                                                                            print(f"TEST STEP {step}: Add static route to reach WAN from WLAN client")
+                                                                            print(f"\nTEST STEP {step}: Add static route to reach WAN from WLAN client")
                                                                             print(f"EXPECTED RESULT {step}: Should add static route successfully")
                                                                             status = tdkbE2EUtility.addStaticRoute(tdkbE2EUtility.website_url, curIPAddress,tdkbE2EUtility.wlan_6ghz_interface)
                                                                             if expectedresult in status:
@@ -357,7 +350,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                                                                 # wget to WAN to validate blocking
                                                                                 step += 1
-                                                                                print(f"TEST STEP {step}: Verify if HTTP connection from WLAN to WAN is blocked using wget")
+                                                                                print(f"\nTEST STEP {step}: Verify if HTTP connection from WLAN to WAN is blocked using wget")
                                                                                 print(f"EXPECTED RESULT {step}: HTTP connection should be blocked")
                                                                                 status = tdkbE2EUtility.parentalCntrlWgetToWAN("WGET_HTTP", wlanIP, curIPAddress,tdkbE2EUtility.website_url)
                                                                                 if expectedresult not in status:
@@ -375,7 +368,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                                                             #delete the added route
                                                                             step += 1
-                                                                            print(f"TEST STEP {step}: Delete the static route")
+                                                                            print(f"\nTEST STEP {step}: Delete the static route")
                                                                             print(f"EXPECTED RESULT {step}: Should delete the static route")
                                                                             status = tdkbE2EUtility.delStaticRoute(tdkbE2EUtility.website_url, curIPAddress,tdkbE2EUtility.wlan_6ghz_interface)
                                                                             if expectedresult in status:
@@ -389,12 +382,11 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                                                             #Disconnect wifi client
                                                                             step += 1
-                                                                            print(f"TEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
+                                                                            print(f"\nTEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
                                                                             print(f"EXPECTED RESULT {step}: WLAN client should disconnect from SSID")
                                                                             status = tdkbE2EUtility.wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_6ghz_interface)
                                                                             if expectedresult in status:
                                                                                 tdkTestObj.setResultStatus("SUCCESS")
-                                                                                finalStatus = "SUCCESS"
                                                                                 print(f"ACTUAL RESULT {step}: Disconnect from WIFI SSID: SUCCESS")
                                                                                 print("[TEST EXECUTION RESULT] : SUCCESS")
                                                                             else:
@@ -429,7 +421,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                         actualresult = tdkTestObj.getResult()
                                                         details = tdkTestObj.getResultDetails()
                                                         step += 1
-                                                        print(f"TEST STEP {step}: Deleting the added rule")
+                                                        print(f"\nTEST STEP {step}: Deleting the added rule")
                                                         print(f"EXPECTED RESULT {step}: Should delete the added rule")
                                                         if expectedresult in actualresult:
                                                             tdkTestObj.setResultStatus("SUCCESS")
@@ -490,7 +482,6 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     tdkTestObj, actualresult = tdkutility.setSecurityModeEnabledConfig(wifi_obj, initial_secMode, tdkbE2EUtility.ssid_6ghz_index, initial_config, sec_mode)
                     details = tdkTestObj.getResultDetails()
 
-                    step += 1
                     print(f"\nTEST STEP {step} : Revert Security Mode to initial security mode : {initial_secMode}")
                     print(f"EXPECTED RESULT {step} : Reverting to initial security mode should be success")
 
@@ -527,9 +518,9 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                 tdkTestObj,actualresult1,details = tdkbE2EUtility.setMultipleParameterValues(obj,revertParamList1)
 
                 step += 1
-                print(f"TEST STEP {step}: Revert wifi parameters to original values")
+                print(f"\nTEST STEP {step}: Revert wifi parameters to original values")
                 print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase,managedDeviceEnable and allowAll")
-                if expectedresult in actualresult and expectedresult in actualresult1 and expectedresult in finalStatus:
+                if expectedresult in actualresult and expectedresult in actualresult1:
                     tdkTestObj.setResultStatus("SUCCESS")
                     print(f"ACTUAL RESULT {step}: Revert operation success. Details:{details}")
                     print(f"[TEST EXECUTION RESULT] : SUCCESS")
@@ -539,7 +530,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     print(f"ACTUAL RESULT {step}: Revert operation failed. Details: {details}")
                     print(f"[TEST EXECUTION RESULT] : FAILURE")
             else:
-                print("Not proceding further due to security mode change failure")
+                print("Not proceeding further due to security mode change failure")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE")

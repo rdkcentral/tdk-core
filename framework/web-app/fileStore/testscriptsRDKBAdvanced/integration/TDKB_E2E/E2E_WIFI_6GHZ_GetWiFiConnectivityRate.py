@@ -21,9 +21,8 @@
 import tdklib
 import time
 import tdkbE2EUtility
-from tdkbE2EUtility import *
 import tdkutility
-from tdkutility import *
+import tdkbVariables
 
 # Test component to be tested
 obj = tdklib.TDKScriptingLibrary("tdkb_e2e", "1")
@@ -47,7 +46,6 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
     obj.setLoadModuleStatus("SUCCESS")
     wifi_obj.setLoadModuleStatus("SUCCESS")
     expectedresult = "SUCCESS"
-    finalStatus = "FAILURE"
     MAX_COUNT = 10
     count = 1
     numberOfSuccessConnections = 0
@@ -82,7 +80,6 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
             tdkTestObj.setResultStatus("SUCCESS")
             print(f"ACTUAL RESULT {step}: Retrieved values are {orgValue}")
             print(f"[TEST EXECUTION RESULT] : SUCCESS")
-            step += 1
 
             initial_secMode = orgValue[2]
 
@@ -103,11 +100,9 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     step += 1
                     print(f"\nTEST STEP {step}: Set security mode to WPA3-Personal")
                     print(f"EXPECTED RESULT {step}: Should set security mode to WPA3-Personal")
-                    SAE_Pass = "asdf@1234"  # test values not real secrets
-                    Encryption_Mode = "AES"
                     config_SET = {
-                        f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_6ghz_index}.Security.SAEPassphrase": SAE_Pass,
-                        f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_6ghz_index}.Security.X_CISCO_COM_EncryptionMethod": Encryption_Mode
+                        f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_6ghz_index}.Security.SAEPassphrase": tdkbVariables.SAE_PASS,
+                        f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_6ghz_index}.Security.X_CISCO_COM_EncryptionMethod": tdkbVariables.ENCRYPTION_MODE
                     }
                     tdkTestObj, actualresult = tdkutility.setSecurityModeEnabledConfig(wifi_obj, "WPA3-Personal", tdkbE2EUtility.ssid_6ghz_index, config_SET, initial_secMode)
                     details = tdkTestObj.getResultDetails()
@@ -126,18 +121,13 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                         paramName = f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_6ghz_index}.Security.ModeEnabled"
                         tdkTestObj,actualresult,sec_mode = tdkutility.wifi_GetParam(wifi_obj,paramName)
 
-                        if expectedresult in actualresult:
+                        if expectedresult in actualresult and sec_mode == "WPA3-Personal":
                             tdkTestObj.setResultStatus("SUCCESS")
                             print(f"ACTUAL RESULT {step}: Security Mode: {sec_mode}")
                             print("TEST EXECUTION RESULT : SUCCESS")
-
-                            if sec_mode != "WPA3-Personal":
-                                tdkTestObj.setResultStatus("FAILURE")
-                                print("Security mode is not WPA3-Personal")
-                                exit_flag = 1
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print(f"ACTUAL RESULT {step}: Get operation failed.")
+                            print(f"ACTUAL RESULT {step}: Get operation failed or security mode is not reflected in GET.")
                             print("TEST EXECUTION RESULT : FAILURE")
                             exit_flag = 1
                     else:
@@ -165,6 +155,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                 setParamList = list1 + list2
                 setParamList = "|".join(map(str, setParamList))
 
+                step += 1
                 print(f"\nTEST STEP {step}: Set the ssid and keypassphrase")
                 print(f"EXPECTED RESULT {step}: Should set the ssid and keypassphrase successfully")
 
@@ -199,7 +190,6 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                             tdkTestObj.setResultStatus("SUCCESS")
                             print(f"ACTUAL RESULT {step}: Successfully retrieved LAN IP Address {curIPAddress}")
                             print(f"[TEST EXECUTION RESULT] : SUCCESS")
-                            step += 1
 
                             print("Waiting for the changes to reflect in client device...")
                             time.sleep(60)
@@ -209,15 +199,15 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                 print(f"\n####################### COUNT NUMBER: {count} ###############################\n")
 
                                 #connect to wlan client to wifi ssid
-                                print(f"TEST STEP {count}: Connect to the wifi ssid from WLAN client")
+                                print(f"\nTEST STEP {count}: Connect to the wifi ssid from WLAN client")
                                 print(f"EXPECTED RESULT {count}: Wlan client should connect to the wifi ssid")
                                 status = tdkbE2EUtility.wlanConnectWifiSsid(tdkbE2EUtility.ssid_6ghz_name,tdkbE2EUtility.ssid_6ghz_pwd,tdkbE2EUtility.wlan_6ghz_interface)
                                 if expectedresult in status:
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    print(f"ACTUAL RESULT {step}: WLAN client connected successfully")
+                                    print(f"ACTUAL RESULT {count}: WLAN client connected successfully")
                                     print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                                    print(f"TEST STEP {count}: Get the IP address of the WLAN client after connecting to wifi")
+                                    print(f"\nTEST STEP {count}: Get the IP address of the WLAN client after connecting to wifi")
                                     print(f"EXPECTED RESULT {count}: Should retrieve a valid IP address for the wlan client")
                                     wlanIP = tdkbE2EUtility.getWlanIPAddress(tdkbE2EUtility.wlan_6ghz_interface)
                                     if wlanIP:
@@ -225,7 +215,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                         print(f"ACTUAL RESULT {count}: WLAN client IP is {wlanIP}")
                                         print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                                        print(f"TEST STEP {count}: Check whether WLAN IP address is in same DHCP range")
+                                        print(f"\nTEST STEP {count}: Check whether WLAN IP address is in same DHCP range")
                                         print(f"EXPECTED RESULT {count}: WLAN IP should be in same DHCP range as LAN")
                                         status = tdkbE2EUtility.checkIpRange(curIPAddress, wlanIP)
                                         if expectedresult in status:
@@ -233,7 +223,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                             print(f"ACTUAL RESULT {count}: WLAN IP is in same DHCP range")
                                             print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                                            print(f"TEST STEP {count}: Disconnect from the wifi ssid from WLAN client")
+                                            print(f"\nTEST STEP {count}: Disconnect from the wifi ssid from WLAN client")
                                             print(f"EXPECTED RESULT {count}: Wlan client should disconnect successfully")
                                             status = tdkbE2EUtility.wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_6ghz_interface)
                                             if expectedresult in status:
@@ -261,7 +251,13 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                             print(f"Number of successful connections: {numberOfSuccessConnections}")
                             if numberOfSuccessConnections == 10:
-                                finalStatus = "SUCCESS"
+                                print("All connections were successful")
+                                tdkTestObj.setResultStatus("SUCCESS")
+                                print("[TEST EXECUTION RESULT] : SUCCESS")
+                            else:
+                                print("All connections were not successful")
+                                tdkTestObj.setResultStatus("FAILURE")
+                                print("[TEST EXECUTION RESULT] : FAILURE")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
                             print(f"ACTUAL RESULT {step}: Failed to retrieve LAN IP Address")
@@ -282,7 +278,6 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     tdkTestObj, actualresult = tdkutility.setSecurityModeEnabledConfig(wifi_obj, initial_secMode, tdkbE2EUtility.ssid_6ghz_index, initial_config, sec_mode)
                     details = tdkTestObj.getResultDetails()
 
-                    step += 1
                     print(f"\nTEST STEP {step} : Revert Security Mode to initial security mode : {initial_secMode}")
                     print(f"EXPECTED RESULT {step} : Reverting to initial security mode should be success")
 
@@ -314,7 +309,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                 # Revert the values to original
                 tdkTestObj, actualresult, details = tdkbE2EUtility.setMultipleParameterValues(obj, revertParamList)
-                if expectedresult in actualresult and expectedresult in finalStatus:
+                if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS")
                     print(f"ACTUAL RESULT {step}: Revert operation success. Details: {details}")
                     print(f"[TEST EXECUTION RESULT] : SUCCESS")
