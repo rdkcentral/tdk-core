@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2022 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
+
 '''
 <?xml version='1.0' encoding='utf-8'?>
 <xml>
@@ -129,6 +130,8 @@ if expectedResult in result.upper():
         pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,webkit_instance)
     else:
         pre_requisite_status = "FAILURE"
+        print("Test Not Applicable as resolution could not be set. Please verify if the resolution is supported by the DUT and the connected source.\n")
+        obj.setAsNotApplicable();
 
     if pre_requisite_status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS");
@@ -211,8 +214,11 @@ if expectedResult in result.upper():
             tdkTestObj.setResultStatus("FAILURE");
 
     else:
-        print("Pre conditions are not met\n")
-        tdkTestObj.setResultStatus("FAILURE");
+        if res_pre_requisite_status:
+            print("Pre conditions are not met\n")
+            tdkTestObj.setResultStatus("FAILURE");
+        else:
+            tdkTestObj.setResultStatus("N/A");
     obj.unloadModule("rdkv_media");
 else:
     obj.setLoadModuleStatus("FAILURE");
