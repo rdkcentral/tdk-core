@@ -394,7 +394,7 @@ def checkProcessRestarted(tdkTestObj_Sys_ExeCmd,processname):
 # Syntax       : createReportProfilesJSON(numProfiles,profileType,scenario)
 # Parameter    : numProfiles - The number of profiles to create
 #                profileType - The type of profile (JSON/MsgPack)
-#                scenario - The scenario for which the profiles are created
+#                scenario - The scenario for which the profiles are created[Acceptable Values : default/invalid_interval/invalid_timeout/invalid_upload_url/invalid_msgpack]
 # Return Value : {"profiles": profiles_out} - The JSON body with requested number of profiles
 ################################################################################
 def createReportProfilesJSON(numProfiles, profileType, scenario = "default"):
