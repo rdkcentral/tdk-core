@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2016 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,20 +17,27 @@
 # limitations under the License.
 ##########################################################################
 
-#------------------------------------------------------------------------------
-# Export all TDKB variables
-#------------------------------------------------------------------------------
+#The values are populated for test purposes and can be populated by the user as required.
 
-TDK_PATH="/usr/ccsp/tdk/"
-XDNS_DEFAULT_IPV4=""
-XDNS_DEFAULT_IPV6=""
-TEL_CONFIG_URL=""
-DNS_SERVER_IP=""
-#if your wifi client has BTM capability, give value as "TRUE", otherwise as "FALSE"
-BTM_CLIENT_CAPABILITY=""
-#Give the Port Number to which LAN client is connected
-LAN_PORT_Number=""
-#This is test value used in security mode SET operaton,but not a real secret
-SAE_PASS="asdf@1234"
-#This is used in security mode SET operation
-ENCRYPTION_MODE="AES"
+#Telemetry 2.0 Configurations
+TELEMETRY_ENABLE = "true"
+TELEMETRY_CONFIG_URL = "https://xconf.rdkcentral.com/loguploader/getT2Settings"
+TELEMETRY_VERSION = "2.0.1"
+
+#Telemetry Log Upload Location
+TELEMETRY_UPLOAD_URL = "https://xconf.rdkcentral.com/logTelemetryServer/logupload.php"
+
+#Reporting Interval for Telemetry 2.0 Report
+REPORTING_INTERVAL = 30
+
+#Timeout for Report Generation
+ACTIVATION_TIMEOUT = 150
+
+#REPORT PROFILES LOCATION
+PROFILE_PATH = "/nvram/.t2reportprofiles"
+
+#CACHED REPORT LOCATION
+CACHED_REPORT_PATH = "/nvram/.t2cachedmessages"
+
+#TELEMETRY LOG LOCATION
+TELEMETRY_LOG_PATH = "/rdklogs/logs/telemetry2_0.txt.0"

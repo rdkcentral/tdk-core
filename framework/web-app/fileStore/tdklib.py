@@ -266,8 +266,18 @@ class PrimitiveTestCase:
             self.tcpClient = self.getSocketInstance(self.ip)
             self.tcpClient.connect((self.ip, self.parentTestCase.portValue))
             self.tcpClient.send(self.jsonMsgValue.encode())
-            t1 = time.time();
-            self.result = self.tcpClient.recv(1048).decode()
+            t1 = time.time()
+            timeout = 30  # Timeout in seconds
+            self.result = self.tcpClient.recv(1048)
+            while True:
+                if b"\"}}" not in self.result:
+                    if time.time() - t1 > timeout:
+                        print("Timeout reached. Exiting receiver loop!!!")
+                        break
+                    self.result += self.tcpClient.recv(4192)
+                else:
+                    break
+            self.result = self.result.decode()
             self.tcpClient.close()
             t2 = time.time();
             # TODO check if required            self.executionName=executionName
