@@ -789,7 +789,7 @@ def wifiDisconnect(wlanInterface):
         if status == "SUCCESS":
             if wlan_os_type == "UBUNTU":
                 status = getConnectedSsidName(wlanInterface)
-                if ssid_2ghz_name in status or ssid_5ghz_name in status:
+                if ssid_2ghz_name in status or ssid_5ghz_name in status or ssid_6ghz_name in status:
                     command="sudo sh %s wifi_ssid_disconnect %s" %(wlan_script,wlanInterface)
                     status = executeCommand(command)
                 else:
@@ -1182,6 +1182,8 @@ def getSecurityMode(ssidName):
                 security_mode = "WPA-Personal"
             elif status == "--" or status == "":
                 security_mode = "Open"
+            elif status == "OWE":
+                security_mode = "Enhanced-Open"
             else:
                 security_mode = "Invalid security mode"
 
