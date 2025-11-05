@@ -511,12 +511,12 @@ def isProfileFileExist(tdktestObj, profile_names):
     profile_check = True
     expectedresult = "SUCCESS"
     for profile in profile_names:
-        file_path = f"/nvram/.t2reportprofiles/{profile}"
+        file_path = f"{PROFILE_PATH}/{profile}"
         actualresult, details = isFilePresent(tdktestObj, file_path)
         if expectedresult in actualresult and profile in details:
-            print(f"Profile {profile} is created in /nvram/.t2reportprofiles/")
+            print(f"Profile {profile} is created in {PROFILE_PATH}.")
         else:
-            print(f"Profile {profile} is NOT created in /nvram/.t2reportprofiles/")
+            print(f"Profile {profile} is NOT created in {PROFILE_PATH}.")
             profile_check = False
     return profile_check
 
@@ -541,6 +541,7 @@ def SetReportProfiles(wifiobj, profileValue, profileType, numProfiles, step):
     initial_report_profiles = ""
     set_report_profiles = ""
     param_name = ""
+
     #Determine parameter name based on profile type
     if profileType == "JSON":
         param_name = "Device.X_RDKCENTRAL-COM_T2.ReportProfiles"
@@ -622,7 +623,7 @@ def SetReportProfiles(wifiobj, profileValue, profileType, numProfiles, step):
 def checkReportGenerated(tdktestObj, profile_names):
     log_check = True
     for profile in profile_names:
-        cmd = f"grep -i '{profile}' /rdklogs/logs/telemetry2_0.txt.0 | grep -i 'cJSON'"
+        cmd = f"grep -i '{profile}' {TELEMETRY_LOG_PATH} | grep -i 'cJSON'"
         print(f"Command : {cmd}")
         expectedresult = "SUCCESS"
         actualresult, details = doSysutilExecuteCommand(tdktestObj, cmd)
@@ -643,7 +644,7 @@ def checkReportGenerated(tdktestObj, profile_names):
 # Return Value : upload_check - True if reports are uploaded successfully, False otherwise
 ################################################################################
 def checkReportUpload(tdktestObj, profile_names):
-    cmd = f"grep -i 'Report Sent Successfully over HTTP : 200' /rdklogs/logs/telemetry2_0.txt.0 | wc -l"
+    cmd = f"grep -i 'Report Sent Successfully over HTTP : 200' {TELEMETRY_LOG_PATH} | wc -l"
     print(f"Command : {cmd}")
     expectedresult = "SUCCESS"
     actualresult, details = doSysutilExecuteCommand(tdktestObj, cmd)
@@ -673,3 +674,35 @@ def extract_report_profile(details, profileType):
     else:
         print(f"VALUE: not found in the response. Details : {details}")
     return report_profiles
+
+#################################################################################
+# A utility function to clear the telemetry logs present in the device
+#
+# Syntax       : removeTelemetry2_0Log(tdkTestObj, step)
+# Parameter    : tdkTestObj - sysutil object
+#                step - Tests step count
+# Return Value : rm_t2_flag - status of log removal[True/False].
+#################################################################################
+
+def removeTelemetry2_0Log(tdkTestObj, step):
+    expectedresult = "SUCCESS"
+    rm_t2_flag = True
+    cmd = f"> {TELEMETRY_LOG_PATH}"
+    print(f"\nCommand : {cmd}")
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, cmd)
+    print(f"\nTEST STEP {step}: Clear the  log file - {TELEMETRY_LOG_PATH}")
+    print(f"EXPECTED RESULT {step}: Should clear the log file successfully")
+    if expectedresult in actualresult and details == "":
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"Cleared the log file - {TELEMETRY_LOG_PATH} successfully.")
+        print("[TEST EXECUTION RESULT] : SUCCESS")
+    else:
+        rm_t2_flag = False
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"ACTUAL RESULT {step}: Failed to clear the log file - {TELEMETRY_LOG_PATH}")
+        print("[TEST EXECUTION RESULT] : FAILURE")
+    return rm_t2_flag
+
+
+
+

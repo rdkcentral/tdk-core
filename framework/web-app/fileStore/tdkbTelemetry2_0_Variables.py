@@ -32,3 +32,12 @@ REPORTING_INTERVAL = 30
 
 #Timeout for Report Generation
 ACTIVATION_TIMEOUT = 150
+
+#REPORT PROFILES LOCATION
+PROFILE_PATH = "/nvram/.t2reportprofiles"
+
+#CACHED REPORT LOCATION
+CACHED_REPORT_PATH = "/nvram/.t2cachedmessages"
+
+#TELEMETRY LOG LOCATION
+TELEMETRY_LOG_PATH = "/rdklogs/logs/telemetry2_0.txt.0"
