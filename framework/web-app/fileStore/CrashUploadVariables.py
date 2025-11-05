@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2016 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,21 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
+COREDUMP_PATH_UNIT = "coredump-upload.path"
+COREDUMP_SERVICE_UNIT = "coredump-upload.service"
+MINIDUMPS_DIR = "/minidumps"
+RDKLOGS_DIR = "/rdklogs/logs"
+CORE_LOG_TXT = "/rdklogs/logs/core_log.txt"
+CRASH_PORTAL_DM_PARAM = "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.CrashPortal"
+DEFAULT_CRASH_PORTAL_URL = "https://ssr.ccp.xcal.tv/cgi-bin/upload_dump.cgi"
+LOCAL_SERVER_PORT = ""
+LOCAL_SERVER_IP = ""
+LOCAL_UPLOAD_URL = f"http://{LOCAL_SERVER_IP}:{LOCAL_SERVER_PORT}/upload"
+NON_CCSP_PROCESS = "fwupgrademanager"
+CCSP_PROCESS = "CcspLMLite"
+WAN_MANAGER_PROCESS = "wanmanager"
+ULIMIT_CMD = "ulimit -c unlimited"
 
-#------------------------------------------------------------------------------
-# Export all TDKB variables
-#------------------------------------------------------------------------------
-
-TDK_PATH="/usr/ccsp/tdk/"
-XDNS_DEFAULT_IPV4=""
-XDNS_DEFAULT_IPV6=""
-TEL_CONFIG_URL=""
-DNS_SERVER_IP=""
-#if your wifi client has BTM capability, give value as "TRUE", otherwise as "FALSE"
-BTM_CLIENT_CAPABILITY=""
-#Give the Port Number to which LAN client is connected
-LAN_PORT_Number=""
-#This is test value used in security mode SET operaton,but not a real secret
-SAE_PASS="asdf@1234"
-#This is used in security mode SET operation
-ENCRYPTION_MODE="AES"
