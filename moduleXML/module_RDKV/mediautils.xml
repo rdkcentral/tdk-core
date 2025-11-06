@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>0179cc68-1f74-4e2f-affa-ce8c166f8070</moduleId>
+        <!-- Module name -->
+        <moduleName>mediautils</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="a04dea8f-f006-4ebb-bfc1-1e0f8ad1024f" name="TestMgr_MediaUtils_AudioCapture_Close">
+                <parameters>
+                    <parameter id="226ae45e-cb3b-4e04-8050-49810e138c21" parameterName="paramHandle" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="766d22d3-df34-44d1-a385-50318b6de443" name="TestMgr_MediaUtils_ExecuteCmd">
+                <parameters>
+                    <parameter id="e2804019-13a7-458a-ae69-87ba2fd538b0" parameterName="command" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="7f66b505-f6cf-41f0-ac04-416013b113cb" name="TestMgr_MediaUtils_Get_CurrentSettings">
+                <parameters/>
+            </function>
+            <function id="db260068-13cd-4f72-9b62-bd2a5a8b78c7" name="TestMgr_MediaUtils_AudioCaptureStart">
+                <parameters>
+                    <parameter id="8b641962-5d3e-4807-b2d4-505b73daa95c" parameterName="paramHandle" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8ca45a01-ed3f-40f4-ba0f-9afa56d2262a" parameterName="paramFifosize" parameterType="STRING" range="A-Z"/>
+                    <parameter id="93cd3759-b708-4b47-9fa1-16f35037ecbc" parameterName="paramBufferReady" parameterType="STRING" range="A-Z"/>
+                    <parameter id="869e602d-1707-47ac-a301-ff8e5fc24e2e" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="41649e8d-6016-4e0e-9e80-644ad0d9b879" name="TestMgr_MediaUtils_Get_Status">
+                <parameters>
+                    <parameter id="a10cda39-5ee8-4950-9bf3-825770b18974" parameterName="paramhandle" parameterType="INTEGER" range="-1-15"/>
+                    <parameter id="52df6626-f3de-4025-a71a-6b35637b48f7" parameterName="IsHandleInvalid" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="8af723db-0658-4365-8d71-52f4698b7337" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="23508e26-f64f-447a-af3a-4f46fc411b04" name="TestMgr_MediaUtils_AudioCaptureStop">
+                <parameters>
+                    <parameter id="58255a49-87cf-4c2a-b325-a1af102b4b11" parameterName="paramHandle" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="98926558-f7e7-42ad-bb37-f86586bd6d21" name="TestMgr_MediaUtils_AudioCapture_Open">
+                <parameters/>
+            </function>
+            <function id="6aa221c5-5127-47d7-b54f-da3ccfd650db" name="TestMgr_MediaUtils_Get_Current_Settings">
+                <parameters>
+                    <parameter id="ad55b33c-ff01-448d-ab50-9a821fa14167" parameterName="paramHandle" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e39ab56b-a21a-402c-b471-bd4ebf01b1c9" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="e15735b1-1fb9-49f1-8de5-e65c68a4caa2" name="TestMgr_MediaUtils_Get_DefaultSettings">
+                <parameters>
+                    <parameter id="4594398b-28dc-4a24-b864-1a4c9515eef2" parameterName="Isnullparamcheck" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>27b040df-1c15-4b4c-b423-bf229bcb449c</id>
+                <name>MediaUtils_AudioCapture_Open</name>
+                <funName>TestMgr_MediaUtils_AudioCapture_Open</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>49c43151-db36-47e7-bfc5-1bc90865cc5b</id>
+                <name>MediaUtils_AudioCaptureStart</name>
+                <funName>TestMgr_MediaUtils_AudioCaptureStart</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>04739bb9-4893-42b7-9906-e2169cc70c70</id>
+                        <parameterName>paramBufferReady</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2f9ffb4a-bc43-44a2-a95b-187eecf5db2d</id>
+                        <parameterName>paramHandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3707ecbc-8abf-4832-9fa4-eca3abdf087b</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8f589d9d-cd72-41d7-90f2-ba26de6532ad</id>
+                        <parameterName>paramFifosize</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9fe4b156-0770-4b5c-9119-503470834d2f</id>
+                <name>MediaUtils_Get_Status</name>
+                <funName>TestMgr_MediaUtils_Get_Status</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>14f3b30d-ca2a-40b9-a06d-984b02698ef5</id>
+                        <parameterName>IsHandleInvalid</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>18ef2d33-0feb-4f2f-8e18-64e79e2665b8</id>
+                        <parameterName>paramhandle</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-1-15</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>499f2ba8-e9c0-45dd-9782-ca9734fb00e5</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>accb6bdc-609e-4f1c-b799-5d4f3689c06f</id>
+                <name>MediaUtils_AudioCaptureStop</name>
+                <funName>TestMgr_MediaUtils_AudioCaptureStop</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8ebe9132-56ca-4814-8fd8-4e50a4d0c3da</id>
+                        <parameterName>paramHandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e1d10591-3fa6-4cea-b26a-aa3dfa857fe9</id>
+                <name>MediaUtils_AudioCapture_Close</name>
+                <funName>TestMgr_MediaUtils_AudioCapture_Close</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d7a042d2-16ba-4577-a949-04c6c4ec51c5</id>
+                        <parameterName>paramHandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>ABC</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e6acf59e-7d82-4981-bbcf-47c2f7201d8d</id>
+                <name>MediaUtils_Get_Current_Settings</name>
+                <funName>TestMgr_MediaUtils_Get_Current_Settings</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0998a57b-1123-4dc0-b23d-098686a9090b</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>23066fc9-dcd7-4fcc-8492-451ac75dcd0f</id>
+                        <parameterName>paramHandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e90a1be0-b81d-4bd5-af58-0b34953aeaeb</id>
+                <name>MediaUtils_Get_DefaultSettings</name>
+                <funName>TestMgr_MediaUtils_Get_DefaultSettings</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1c526854-ca2c-4e75-92ad-a416f3b4cc4c</id>
+                        <parameterName>Isnullparamcheck</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fb61a8df-afba-4953-8e09-2f06dd87e53c</id>
+                <name>MediaUtils_ExecuteCmd</name>
+                <funName>TestMgr_MediaUtils_ExecuteCmd</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9c675898-1dbb-4963-98e0-6558863fdf53</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>NULL</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>54f6e965-83d6-41be-8c92-f7eb308d4b7e</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_profiling</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Certification</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="34df9c4d-77cb-4413-bfb4-9e5e98d78dee" name="rdkv_profiling_smem_execute">
+                <parameters>
+                    <parameter id="69cdcbf6-90fa-440b-a04d-a9c7065a6465" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                    <parameter id="b09d66ee-af8b-4d34-bcbb-bafdf22dd81f" parameterName="realPath" parameterType="STRING" range="a-z"/>
+                    <parameter id="fe5b9b48-fa9e-47f6-bdf2-e4ea84bd8e84" parameterName="deviceIP" parameterType="STRING" range="0-9"/>
+                    <parameter id="22c279af-3e67-41fb-873f-e362fdda9abe" parameterName="execId" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="ab981477-2357-46cd-8fcc-895ecbe1f4f1" parameterName="execResultId" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="c618182e-ebf5-4367-bc77-4be3b58e0f73" parameterName="logPath" parameterType="STRING" range="a-z"/>
+                    <parameter id="03cf07ec-f3c9-4e5e-a3e7-a1b35e5835a9" parameterName="execDeviceId" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="fc15120c-8d7f-4a11-9ca0-36a6c65539bb" name="rdkv_profiling_pmap_execute">
+                <parameters>
+                    <parameter id="72a4c25a-b23e-44d0-b909-bdf24821a8bb" parameterName="execDeviceId" parameterType="STRING" range="a-z"/>
+                    <parameter id="e305eeec-e95a-4ff0-94e2-7dae1a8a5399" parameterName="execId" parameterType="STRING" range="a-z"/>
+                    <parameter id="ef00e948-85cc-4631-b386-42563def13a6" parameterName="logPath" parameterType="STRING" range="a-z"/>
+                    <parameter id="4b9d0986-9d21-421d-be60-57c7b8ef1c80" parameterName="execResultId" parameterType="STRING" range="a-z"/>
+                    <parameter id="548b2418-ff25-4885-ada8-f799b551290f" parameterName="realPath" parameterType="STRING" range="a-z"/>
+                    <parameter id="ae4818b8-0b9f-4e07-8a9b-7bb6cfb4c0b9" parameterName="deviceIP" parameterType="STRING" range="a-z"/>
+                    <parameter id="37a72542-22cd-482e-8b3e-ef76a7eebec5" parameterName="processes" parameterType="STRING" range="a-z"/>
+                    <parameter id="c6b2e95f-86c1-4cb3-925d-45c1e80730ca" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="5229748b-1549-4ceb-b8be-c5b0c633ed3f" name="rdkv_profiling_systemd_bootchart_execute">
+                <parameters>
+                    <parameter id="84de38c2-e2c9-4881-bcb1-081918544332" parameterName="execDeviceId" parameterType="STRING" range="a-z"/>
+                    <parameter id="a402635e-e134-4892-b03c-d8ce562aef26" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                    <parameter id="323aa84a-0ed7-49c9-9b65-f9da03c3fda2" parameterName="deviceIP" parameterType="STRING" range="a-z"/>
+                    <parameter id="48ce7d20-eefc-49a5-b805-c7f6d4ada886" parameterName="execResultId" parameterType="STRING" range="a-z"/>
+                    <parameter id="99846e00-6cd7-4d2e-8667-1e3103f9dabe" parameterName="realPath" parameterType="STRING" range="a-z"/>
+                    <parameter id="2cb713c7-f283-4568-8a24-3282634ce927" parameterName="logPath" parameterType="STRING" range="a-z"/>
+                    <parameter id="119729e6-7c9d-4c31-b8c3-7a4459976a4a" parameterName="execId" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="cb87c913-524e-4368-80dc-1f5022376fd3" name="rdkv_profiling_systemd_analyze_execute">
+                <parameters>
+                    <parameter id="786bc1ee-6620-4a93-9c4c-37b650c9a60f" parameterName="execResultId" parameterType="STRING" range="a-z"/>
+                    <parameter id="448ddeef-4a78-45a2-b6a3-9e49202b5960" parameterName="execDeviceId" parameterType="STRING" range="a-z"/>
+                    <parameter id="d7c4bdb1-0a3d-402a-b0a6-1671f1097f8c" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                    <parameter id="91f6ffec-23ec-4bdd-a1e6-40cd60e96811" parameterName="logPath" parameterType="STRING" range="a-z"/>
+                    <parameter id="195e3949-e968-492c-b657-822c129b5eb5" parameterName="realPath" parameterType="STRING" range="a-z"/>
+                    <parameter id="c40f7407-4651-45f0-bff6-946e58c65b13" parameterName="execId" parameterType="STRING" range="a-z"/>
+                    <parameter id="911a8a28-e374-4221-af87-7cf0760d1435" parameterName="deviceIP" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="7620266c-2a57-48ad-bdf0-0c43330452a7" name="rdkv_profiling_collectd_check_process_metrics">
+                <parameters>
+                    <parameter id="aba7bdce-b31b-4310-b059-1191293a8606" parameterName="fromDateString" parameterType="STRING" range="a-z"/>
+                    <parameter id="b3baefcd-3779-4a05-9fae-a20983debefe" parameterName="thresholdCheck" parameterType="STRING" range="a-z"/>
+                    <parameter id="3fb77b92-2d79-4b28-bceb-65c3636498fe" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                    <parameter id="f5ebc498-1208-4892-a08b-6dfe4104d711" parameterName="processName" parameterType="STRING" range="a-z"/>
+                    <parameter id="cc0e73b9-4ba1-4ad0-a8ef-1cf238662b66" parameterName="toDateString" parameterType="STRING" range="a-z"/>
+                    <parameter id="485c0528-a284-4558-9a55-e0a6650ce075" parameterName="resultId" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="708f60f8-3a9a-4f37-822d-205690b25f01" parameterName="tmUrl" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="51e62e8d-7fdf-4150-b801-d8ae5fd9d0c8" name="rdkv_profiling_collectd_check_system_CPU">
+                <parameters>
+                    <parameter id="e0fed049-feb1-4279-91a3-0eb655a3f449" parameterName="toDateString" parameterType="STRING" range="a-z"/>
+                    <parameter id="bbf960ac-6d28-4b97-b563-7cbe8608c1fd" parameterName="tmUrl" parameterType="STRING" range="a-z"/>
+                    <parameter id="89d27b78-1b34-4d3f-bff4-4002cc06472e" parameterName="resultId" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="5b290391-da7b-4bf0-9de7-590f60cee19f" parameterName="thresholdCheck" parameterType="STRING" range="a-z"/>
+                    <parameter id="0f50785e-d913-477b-9baf-c12d33deeba4" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                    <parameter id="5f91cb40-aa87-4eb9-bef7-c81c3a6595fb" parameterName="fromDateString" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="5b8542dd-fc86-4703-a1a9-4b9d05c75906" name="rdkv_profiling_collectd_check_process_usedSHR">
+                <parameters>
+                    <parameter id="d7559de3-d652-470d-aadc-5763477c9a19" parameterName="processName" parameterType="STRING" range="a-z"/>
+                    <parameter id="ff1b1de8-c713-42b4-b85a-bfc566e9e65a" parameterName="resultId" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="5c4ba57e-935d-4b7d-b795-1e54e3fbb2bc" parameterName="fromDateString" parameterType="STRING" range="a-z"/>
+                    <parameter id="13ce8c69-1cee-4f10-b1f1-19987e5fdf8f" parameterName="tmUrl" parameterType="STRING" range="a-z"/>
+                    <parameter id="9a523c61-9aea-4d70-940d-65a57327b462" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                    <parameter id="356fe4b5-005c-4d31-9c8d-7e9181f1e91d" parameterName="thresholdCheck" parameterType="STRING" range="a-z"/>
+                    <parameter id="63c9780f-5e35-4785-b599-6f557f719c8f" parameterName="toDateString" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="dc382622-4c62-44eb-9dd4-1912e5ec7a73" name="rdkv_profiling_get_alerts">
+                <parameters>
+                    <parameter id="35c2d1c1-878f-4e72-9b83-f5bf75efa3f0" parameterName="resultId" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="0823b155-7424-4f9b-a3bd-c43d4aac74b8" parameterName="tmUrl" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="f1c949dd-d741-421b-a2f7-65a57a27fb3c" name="rdkv_profiling_collectd_check_system_loadavg">
+                <parameters>
+                    <parameter id="b554c5bb-61b1-422f-abb2-0b0212664808" parameterName="thresholdCheck" parameterType="STRING" range="a-z"/>
+                    <parameter id="e03e8e15-6438-4800-9a2f-50028ce9e839" parameterName="toDateString" parameterType="STRING" range="a-z"/>
+                    <parameter id="b3c45631-5955-4cac-afa9-ae5b838bc50a" parameterName="tmUrl" parameterType="STRING" range="a-z"/>
+                    <parameter id="d5ce1ca3-6999-45ce-854c-35e682c26538" parameterName="fromDateString" parameterType="STRING" range="a-z"/>
+                    <parameter id="55fef9b4-9096-4d42-84e8-f67c4de098db" parameterName="resultId" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="faa2aa80-4c45-4786-bb8f-c4d743a0d637" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="5ee3172c-6066-4c88-b2b0-c4012c871a4e" name="rdkv_profiling_lmbench">
+                <parameters>
+                    <parameter id="bb9af2b7-747a-4ed0-a48f-7b2412b7f63a" parameterName="execId" parameterType="STRING" range="a-z"/>
+                    <parameter id="c4ea415f-3c0a-441f-8804-993db9edb3d2" parameterName="realPath" parameterType="STRING" range="a-z"/>
+                    <parameter id="10747c35-d90a-4176-ac48-0632a2a1197b" parameterName="execDeviceId" parameterType="STRING" range="a-z"/>
+                    <parameter id="e34bd08d-d617-448c-8034-11da8a59549b" parameterName="deviceIP" parameterType="STRING" range="a-z"/>
+                    <parameter id="dcda8519-9362-43b5-a884-686446437fde" parameterName="logPath" parameterType="STRING" range="a-z"/>
+                    <parameter id="6ab7a9cb-bdea-492e-97c2-2af7baae6550" parameterName="execResultId" parameterType="STRING" range="a-z"/>
+                    <parameter id="f1354782-a774-4c05-84f4-147615902125" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="e6b986d1-045e-4abf-96e4-c0245d2a2063" name="rdkv_profiling_collectd_check_system_memory">
+                <parameters>
+                    <parameter id="94ce90be-e376-474f-9e40-7747ba2d902a" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                    <parameter id="92376dc1-6f99-41fe-b9ee-f167c2df34c7" parameterName="thresholdCheck" parameterType="STRING" range="a-z"/>
+                    <parameter id="17e9dc9e-d63e-463e-be04-2bc379feff14" parameterName="fromDateString" parameterType="STRING" range="a-z"/>
+                    <parameter id="358425dc-2466-47ea-957a-8fc1a61a57d0" parameterName="tmUrl" parameterType="STRING" range="a-z"/>
+                    <parameter id="86de9087-780e-470f-878b-f94f480519e2" parameterName="resultId" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="bfb0e058-29d2-4681-a27e-95e39f355559" parameterName="toDateString" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="4522b80d-e576-4631-ab28-8efd7beb7756" name="rdkv_profiling_collectd_check_process_usedCPU">
+                <parameters>
+                    <parameter id="5fe16008-225b-4012-8c15-1646c32db997" parameterName="deviceConfig" parameterType="STRING" range="a-z"/>
+                    <parameter id="065d02eb-b77d-4633-b7cf-65e5caaffd51" parameterName="thresholdCheck" parameterType="STRING" range="a-z"/>
+                    <parameter id="2e6187ea-946d-4903-9682-b18f77caa9d5" parameterName="processName" parameterType="STRING" range="a-z"/>
+                    <parameter id="f25a8728-b71e-4ae7-9495-4d6497fc860e" parameterName="resultId" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="9188c090-c5a4-4282-bdbe-42d253755ec3" parameterName="fromDateString" parameterType="STRING" range="a-z"/>
+                    <parameter id="9ec26907-55c2-4850-a494-71c391d7e24e" parameterName="tmUrl" parameterType="STRING" range="a-z"/>
+                    <parameter id="5e80f0ca-bff2-443b-b217-126dee87c521" parameterName="toDateString" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0977c771-9f4f-4aac-a055-1520317c187d</id>
+                <name>rdkv_profiling_pmap_execute</name>
+                <funName>rdkv_profiling_pmap_execute</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1a581de4-4b92-4043-a741-907ce3e02758</id>
+                        <parameterName>deviceIP</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1f53e145-f161-4dee-93f4-d8e86a242b85</id>
+                        <parameterName>realPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>59dadc3a-42ab-4c0f-9a90-f5abb9eed1ef</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7eb31b79-b805-4ee5-a199-173ac8ef7313</id>
+                        <parameterName>execId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>819efd7e-7812-4b43-ae26-7dae5bfdc44e</id>
+                        <parameterName>processes</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c92a2d0a-704f-40b0-8805-014e2992b3bd</id>
+                        <parameterName>execResultId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cf64c01d-db01-46e2-8130-ac7ec42fb277</id>
+                        <parameterName>logPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>efbe13c2-ff69-44a6-863e-06edaa589da7</id>
+                        <parameterName>execDeviceId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0b42fa66-2476-48ba-b55a-18d7dc01bff8</id>
+                <name>rdkv_profiling_systemd_bootchart_execute</name>
+                <funName>rdkv_profiling_systemd_bootchart_execute</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2da726f4-7db9-4744-ba60-ae3e07b461be</id>
+                        <parameterName>execResultId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>453020d7-b96e-4de3-8d3f-bfc6f26b81c4</id>
+                        <parameterName>realPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4d65e3cb-152d-406f-8e68-bc9cdfe3b16f</id>
+                        <parameterName>execDeviceId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4fc9fc43-352b-4a39-ad46-c9d72f8f163d</id>
+                        <parameterName>deviceIP</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ad37ab20-51a0-42d6-8c78-ab238479c3ca</id>
+                        <parameterName>logPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b2d0c78b-097b-4156-bbab-7936f3f4da44</id>
+                        <parameterName>execId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b589fd29-450d-411e-a1d2-f2da54fa34b0</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>18871f89-7030-4df6-acc8-ba331e71563c</id>
+                <name>rdkv_profiling_get_alerts</name>
+                <funName>rdkv_profiling_get_alerts</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>42d63699-1d08-454c-95dc-8f48ac56dfd0</id>
+                        <parameterName>tmUrl</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bb0c6614-e702-4c36-8e6a-4111d5d5cb66</id>
+                        <parameterName>resultId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>212f352e-15b0-46d3-994d-9cc623490882</id>
+                <name>rdkv_profiling_lmbench</name>
+                <funName>rdkv_profiling_lmbench</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>41fe4ceb-7dda-4d5c-9f4e-6859cfb45cec</id>
+                        <parameterName>logPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>648160ab-f02f-4088-b54b-7aa72e306528</id>
+                        <parameterName>deviceIP</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7d085075-d089-43bc-a5dd-f25a0b736be6</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8241e66f-cb73-4c37-8058-b724f6a48e72</id>
+                        <parameterName>execDeviceId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d6df782d-3d8a-49f5-82a5-e378de6791bb</id>
+                        <parameterName>realPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>de42c69c-8dde-4b06-b9a1-cb4224b747f1</id>
+                        <parameterName>execId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ff97b63e-e7dc-468c-a3e4-f5ed94504e50</id>
+                        <parameterName>execResultId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>554b7faf-dae6-4e22-ad32-49be09b6e274</id>
+                <name>rdkv_profiling_collectd_check_system_loadavg</name>
+                <funName>rdkv_profiling_collectd_check_system_loadavg</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>14214ba0-b0e2-4363-8459-69f3082e6b7b</id>
+                        <parameterName>resultId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6798b452-b622-47c1-a44a-676838817308</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8a3738b4-3a05-420f-8b6e-b0a861118e73</id>
+                        <parameterName>fromDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>aeaa6a89-299d-4118-8110-387b0c8143b9</id>
+                        <parameterName>toDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b87e2a0a-61a2-47c6-9d7f-034182e9d717</id>
+                        <parameterName>thresholdCheck</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>true</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d571d2fd-0651-4ed4-8a4a-93b3e8806bc6</id>
+                        <parameterName>tmUrl</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>664ed8a2-49b2-414c-a560-316ce675ab16</id>
+                <name>rdkv_profiling_systemd_analyze_execute</name>
+                <funName>rdkv_profiling_systemd_analyze_execute</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>18aec469-45ba-4b69-903b-057f15d7c2d8</id>
+                        <parameterName>logPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3824da01-bc65-47a8-b0c1-8dc6a90498f6</id>
+                        <parameterName>execDeviceId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>47fc5585-51db-4eba-8813-bff6cb1130e1</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7fff59f6-dd4b-4c09-9059-2842a59a68a7</id>
+                        <parameterName>deviceIP</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c5c0104a-5bca-42eb-8b06-85ca262b8b1b</id>
+                        <parameterName>execId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e22d4f9d-3b10-4667-9c08-2ae490fc2c37</id>
+                        <parameterName>execResultId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fcff92b7-93ca-47b0-a45d-f03c22718357</id>
+                        <parameterName>realPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>96123209-6b30-4eae-b32d-b5078835dc52</id>
+                <name>rdkv_profiling_collectd_check_system_memory</name>
+                <funName>rdkv_profiling_collectd_check_system_memory</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>662b069e-3803-4893-9528-67dc69dec8cb</id>
+                        <parameterName>tmUrl</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6c11aee4-57b1-47d6-8130-d482d6376291</id>
+                        <parameterName>toDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b7f5a4ed-6516-4ec3-a473-1059e5c109b2</id>
+                        <parameterName>fromDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bda75b5c-a725-46c9-8916-e0d27d8e0672</id>
+                        <parameterName>thresholdCheck</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>true</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e9df8373-8f82-4b09-a943-8a29778cdce9</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f039f1e8-b753-4107-87a2-54cca52655ab</id>
+                        <parameterName>resultId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>acb286d4-f649-4a31-b040-a3379ec72dbe</id>
+                <name>rdkv_profiling_collectd_check_process_metrics</name>
+                <funName>rdkv_profiling_collectd_check_process_metrics</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>48823319-955b-4365-bea9-cb8893aa10e2</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>84985421-d5e3-4178-9adf-a4266bba26ed</id>
+                        <parameterName>toDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a21f814c-a83d-45c8-8212-29ff2ee6731e</id>
+                        <parameterName>resultId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ad3cecec-3fcd-42df-8296-49bd852577f5</id>
+                        <parameterName>fromDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c14e3792-8056-415e-80ef-28d5d94a92e8</id>
+                        <parameterName>thresholdCheck</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>true</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ec707f1e-f9dc-47cc-a965-12e343d5862c</id>
+                        <parameterName>tmUrl</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f6b5854d-088a-4163-9536-c5d843552f76</id>
+                        <parameterName>processName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c0e930b3-063d-4b40-ae41-7de220f54b14</id>
+                <name>rdkv_profiling_collectd_check_process_usedCPU</name>
+                <funName>rdkv_profiling_collectd_check_process_usedCPU</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3bb0e354-899d-4513-b6ca-e9b9d3670198</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3f64f3b8-90b0-446e-86f0-3a062d6e7d69</id>
+                        <parameterName>fromDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4006d80b-4e39-4579-bfcc-664629e2f4e0</id>
+                        <parameterName>tmUrl</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6700c0f3-7b2e-4889-bfb4-cc17343d47b7</id>
+                        <parameterName>thresholdCheck</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>true</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>77d6a2ee-d96c-4d56-92c3-4f3f96a60531</id>
+                        <parameterName>resultId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9b38f6da-2bdc-41ea-a41c-9d11c1591841</id>
+                        <parameterName>toDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ed7edf51-9530-4cef-895d-244a63c4214e</id>
+                        <parameterName>processName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>da01cd09-0715-4897-a24a-9400ca874d37</id>
+                <name>rdkv_profiling_smem_execute</name>
+                <funName>rdkv_profiling_smem_execute</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>08162903-a0e1-4c16-b7b0-84fd98241e85</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4df8b2bb-c3a5-4ad8-8f43-67b54cce4be6</id>
+                        <parameterName>execDeviceId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5778d173-1e61-48bf-a772-033c16159679</id>
+                        <parameterName>execId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>77e44fc0-a32b-4544-8168-072aee7196ba</id>
+                        <parameterName>execResultId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7dd61d35-c0a4-4679-94de-50547ac195a3</id>
+                        <parameterName>deviceIP</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b40c0dd6-5265-4547-b55c-efbf5f06936d</id>
+                        <parameterName>logPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fbc5e8e2-9896-44a4-98cd-c1a0f2e7e553</id>
+                        <parameterName>realPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>de2e3158-df14-4334-ba47-6812d8590995</id>
+                <name>rdkv_profiling_collectd_check_system_CPU</name>
+                <funName>rdkv_profiling_collectd_check_system_CPU</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2b11d24e-f701-459d-9f53-49cd1dab0fb5</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4a2e72f4-480e-4615-bf38-7ab4c0c0ea82</id>
+                        <parameterName>resultId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6f7e1c6e-0fa7-4423-bb05-868f499752d2</id>
+                        <parameterName>fromDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8930f9b9-3e91-45c5-ab16-e84aad5b1f0c</id>
+                        <parameterName>tmUrl</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c324182b-0c6c-4518-90fd-92bba296c5fd</id>
+                        <parameterName>thresholdCheck</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>true</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fc9cc15b-0a42-4b44-8241-84d6ce85f1bf</id>
+                        <parameterName>toDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e07e3804-4cc8-42d9-816b-229f48d95c61</id>
+                <name>rdkv_profiling_collectd_check_process_usedSHR</name>
+                <funName>rdkv_profiling_collectd_check_process_usedSHR</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2c960d6b-fdb9-4d02-b2cb-bd27c4120f76</id>
+                        <parameterName>processName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>38adc15e-c65a-4c13-bf6c-cd6330a9ba13</id>
+                        <parameterName>fromDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5d8852f0-7921-40e6-a4db-e4d86580ef5e</id>
+                        <parameterName>toDateString</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>60922abc-fed5-4371-903f-adbf7e985d4e</id>
+                        <parameterName>tmUrl</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7b398e33-7e68-4eaf-bb28-eb728b836308</id>
+                        <parameterName>thresholdCheck</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value>false</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9518fc4e-045f-4852-86c4-45f4ebd0524f</id>
+                        <parameterName>resultId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e5634551-25b0-407f-bcc9-8803a6917022</id>
+                        <parameterName>deviceConfig</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

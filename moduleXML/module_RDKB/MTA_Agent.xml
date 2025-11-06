@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>75d31a07-2518-489e-bc6d-49bea35faaa9</moduleId>
+        <!-- Module name -->
+        <moduleName>MTA_Agent</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="6a6694db-74e3-45b3-80fc-ddbf22313097" name="MTA_agent_Init">
+                <parameters/>
+            </function>
+            <function id="73c866ea-d75a-4fca-9c2e-040cc922a6b5" name="MTA_agent_GetParameterNames">
+                <parameters>
+                    <parameter id="2dabdca4-ba00-4c2c-985d-03da4952be57" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e3515ea4-9f06-4129-bd3d-806bbb2effa5" parameterName="ParamList" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8eef61a8-3f0e-4a57-bdf3-0b60b8c1b868" name="MTA_agent_SetParameterValues">
+                <parameters>
+                    <parameter id="0846b3a4-7099-41f3-957a-10546fd5f715" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="132c3e45-53e3-4938-8c98-fba32c938536" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="624aa286-2a44-4ce9-b45f-30524dba1df6" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="701bfc0a-4d0f-48f8-8b37-89c82e9a6061" name="MTA_agent_SetParameterAttr">
+                <parameters>
+                    <parameter id="de0e1dc8-fe46-4d11-9e1b-c41cab02fbc8" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8404a8e6-bb3e-4ccc-84bf-2ee17126ef3e" parameterName="AccessControl" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a96c64de-598f-4bdd-960e-24389909c370" parameterName="Notify" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e0d43d06-1b02-42e7-8a37-0ba10d88fd9e" name="MTA_agent_AddTbl">
+                <parameters>
+                    <parameter id="269b754d-a86c-4a5f-be1b-3666e4c99b8e" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ae030c88-afe7-4d1a-bcd5-0d6f32d43053" name="MTA_agent_SetSessionId">
+                <parameters>
+                    <parameter id="7227e59e-7257-4aaf-9683-421081421360" parameterName="override" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="aae587fa-5a06-44ec-a72e-25d18512ea7d" parameterName="pathname" parameterType="STRING" range="A-Z"/>
+                    <parameter id="fd18af8e-3125-4e37-99d5-bf216c36e35f" parameterName="sessionId" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="ffa03e8c-0684-47f5-8bf0-cbe47088b8e1" parameterName="priority" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="331b5701-2fbb-4f08-88bc-576d28042d8d" name="MTA_agent_GetParameterNames_NextLevel">
+                <parameters>
+                    <parameter id="26e187eb-39bc-494f-aed3-3b14c7afc9ca" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="cc34f920-71a1-4e04-8960-a3376bcfef5e" name="MTA_agent_GetParameterAttr">
+                <parameters>
+                    <parameter id="a9f9035a-040b-46df-a70a-4bce9da2e6bc" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e265f81f-619a-4744-9c7e-e507410ae3bd" name="MTA_agent_Terminate">
+                <parameters/>
+            </function>
+            <function id="b5099131-3b52-4cc4-b893-78489f3e6400" name="MTA_agent_DelTble">
+                <parameters>
+                    <parameter id="5f892a02-d4ba-417e-8bba-38dd37dceaca" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9a45b9f7-e8b3-491f-aead-17e3bc6cc6a0" name="MTA_agent_GetParameterValues">
+                <parameters>
+                    <parameter id="aeffc309-de16-4ff6-81e6-c50b6485694c" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c195fd6d-70b9-4955-9e6a-56ae92547d31" name="MTA_agent_GetHealth">
+                <parameters>
+                    <parameter id="024e9e37-19c7-4fec-9863-0fdfb31b2086" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="dc0c2939-f444-486b-8cd7-ec9ae12aa61a" name="MTA_agent_Commit">
+                <parameters>
+                    <parameter id="23b6ecfd-7493-46df-b3d7-eeb6491bb278" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="479cb325-0f8c-4746-ad9a-e5ace405226d" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="1fa861c4-c7d3-4d94-935a-8e722c13eb29" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>005039df-d6cb-4c4a-9fd9-d561f0a22d03</id>
+                <name>MTA_agent_GetParameterValues</name>
+                <funName>MTA_agent_GetParameterValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7a54a4ee-5975-4213-ad14-8d29909f67ca</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0d48170b-f540-4a77-a2a8-533310821416</id>
+                <name>MTA_agent_GetParameterNames_NextLevel</name>
+                <funName>MTA_agent_GetParameterNames_NextLevel</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3393f9a4-65da-4e5f-b136-af67d9488546</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>12eddef8-f4e4-4be2-a99f-1a3f84ebd713</id>
+                <name>MTA_agent_AddTbl</name>
+                <funName>MTA_agent_AddTbl</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e9159ab9-181a-45aa-a645-413a2c18fd93</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>49c0b3a7-e239-4fa7-8ff7-ae8cba76a98e</id>
+                <name>MTA_agent_DelTble</name>
+                <funName>MTA_agent_DelTble</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3aa5abcc-0fb0-40d1-aff4-29c33bc943e1</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>53c27ccf-63c7-4e7c-af15-beca3668b0e8</id>
+                <name>MTA_agent_Terminate</name>
+                <funName>MTA_agent_Terminate</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>5440ce1e-e820-4097-a2aa-22a1a7a2b8a8</id>
+                <name>MTA_agent_GetParameterNames</name>
+                <funName>MTA_agent_GetParameterNames</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3f634938-c03e-49b4-aa2e-e1906d835b4c</id>
+                        <parameterName>ParamList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>81890e2f-a81c-4635-827a-6220171baa8f</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>596b443f-b75d-4542-bf76-2772d51a5294</id>
+                <name>MTA_agent_GetParameterAttr</name>
+                <funName>MTA_agent_GetParameterAttr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d71bdd80-0026-41f3-b34b-2944408e0f37</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8d02a4fb-1c78-4e37-8908-47b624049e62</id>
+                <name>MTA_agent_GetHealth</name>
+                <funName>MTA_agent_GetHealth</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9995b211-fbe5-4906-98e5-ead5e83e5d52</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>90540fbd-e6f5-43df-9d16-de367aff06ef</id>
+                <name>MTA_agent_SetSessionId</name>
+                <funName>MTA_agent_SetSessionId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>56558e83-c49d-4acf-a04f-bb3216535dfb</id>
+                        <parameterName>priority</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7f181a0f-c044-4aad-9c81-04c7325734a6</id>
+                        <parameterName>sessionId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a6119f0f-e50e-4181-af30-78f731066a15</id>
+                        <parameterName>override</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b330e395-081b-4103-ae57-598c989253f1</id>
+                        <parameterName>pathname</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Device.X_CISCO_COM_MTA.</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9b28998f-3d7a-4cf5-b7f6-bbeda77e7edb</id>
+                <name>MTA_agent_Commit</name>
+                <funName>MTA_agent_Commit</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>38f59a0c-a15b-428f-b755-4993572cb533</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>95181df7-dbff-45de-a507-62459470e152</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cbd6809d-1eae-4563-a47a-46c5e7a2a855</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a6c565e7-a18d-49ce-a383-6f32a89fa48b</id>
+                <name>MTA_agent_SetParameterValues</name>
+                <funName>MTA_agent_SetParameterValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1225921a-cf02-419b-91b0-8d60e72ecaa4</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3bed88cc-1554-4ccf-8a28-9c93328d5c68</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e4db90c2-9663-4bd5-850e-1cb97732145f</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>af44eca5-903f-4e37-9b28-d2456f616e10</id>
+                <name>MTA_agent_SetParameterAttr</name>
+                <funName>MTA_agent_SetParameterAttr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4c4fd932-fd83-4cff-b2d3-364226eebf24</id>
+                        <parameterName>AccessControl</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5177d8ea-e984-4c98-998b-9d64aee45770</id>
+                        <parameterName>Notify</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a50c272c-3192-4785-8b82-131ba6e87625</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c3768679-9d18-4f0e-b32c-315f58be2c27</id>
+                <name>MTA_agent_Init</name>
+                <funName>MTA_agent_Init</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

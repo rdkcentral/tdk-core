@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>d52ae447-4eba-4646-a9e9-60379dc6b92b</moduleId>
+        <!-- Module name -->
+        <moduleName>bluetoothhal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="903ee0da-da5a-4e0f-866e-2011a891cc12" name="TestMgr_BluetoothHal_GetAdapterAddr">
+                <parameters>
+                    <parameter id="f0e7e952-83a6-4821-b5dc-7408ed7412d1" parameterName="adapter_number" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="0dc73245-be1b-4b8d-b818-6f1dae1eea6e" name="TestMgr_BluetoothHal_DisableAdapter">
+                <parameters/>
+            </function>
+            <function id="57c76230-410d-40cb-8898-c5fa6826d2f3" name="TestMgr_BluetoothHal_GetAdapter">
+                <parameters/>
+            </function>
+            <function id="73ae0f41-355a-4048-ab5b-fba90134edf2" name="TestMgr_BluetoothHal_SetAdapterName">
+                <parameters>
+                    <parameter id="93cd3f11-1562-4215-af1c-1d29bdfe74d9" parameterName="adapter_path" parameterType="STRING" range="A-Z"/>
+                    <parameter id="838fcb88-84a2-43ee-b071-d1bdc11be73d" parameterName="adapter_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="32714986-3558-4333-bcea-5ed03af53adf" name="TestMgr_BluetoothHal_ConnectDevice">
+                <parameters>
+                    <parameter id="49f18828-0255-42ca-a656-9c9868541224" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                    <parameter id="9e11efea-c583-42e8-b3a5-027b6beccbb5" parameterName="device_type" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="f62cc951-bd31-4b53-9fe9-2ccf8ff29798" name="TestMgr_BluetoothHal_GetAdapters">
+                <parameters/>
+            </function>
+            <function id="863806fe-5233-4175-9214-799581f9a7e1" name="TestMgr_BluetoothHal_GetListOfAdapters">
+                <parameters/>
+            </function>
+            <function id="6cad1fef-76bc-4575-9ea3-e5cb0ec3e46b" name="TestMgr_BluetoothHal_FindService">
+                <parameters>
+                    <parameter id="4b5ea9fa-8f52-43ca-9729-0d9063e82c58" parameterName="uuid" parameterType="STRING" range="A-Z"/>
+                    <parameter id="46b61c0a-79d5-4c1d-bdf4-921f35e113dd" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                    <parameter id="75ce9c6f-1024-4c37-b36f-08d78574dc4a" parameterName="xml_data" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="68ca6e72-e7a0-429a-bafb-8dfb0e27f56b" name="TestMgr_BluetoothHal_GetDeviceConnected">
+                <parameters>
+                    <parameter id="8a4b4463-d892-46b5-a727-6bb932440da6" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b7f73218-d628-4c0a-96d4-98b1cbd0aaa0" parameterName="device_type" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="99329bb8-7aea-4f90-be8c-20a2b9ecffa7" name="TestMgr_BluetoothHal_GetDeviceDisconnected">
+                <parameters>
+                    <parameter id="f8b09d80-dc97-4a3d-b6b9-460ef2ae1388" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                    <parameter id="eb9441e2-e696-4b11-82e5-fc7319014f0b" parameterName="device_type" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="c31da0fd-885a-4e58-bb68-9010f47d5658" name="TestMgr_BluetoothHal_GetDeviceTypeClass">
+                <parameters>
+                    <parameter id="9c35f1dd-5a0a-4b7a-94ae-f7624ad39c29" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c56c9422-e1a7-4722-b868-beaeaca33b1e" parameterName="device_type" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="19219596-2a63-4538-9a21-973e8d03f2cb" name="TestMgr_BluetoothHal_IsDeviceConnectable">
+                <parameters>
+                    <parameter id="3b2ada4a-593b-4075-80c3-4d3ead2654e0" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="7c6ce1c8-059a-42c8-b9a7-7900b349fc51" name="TestMgr_BluetoothHal_GetListOfPairedDevices">
+                <parameters/>
+            </function>
+            <function id="2dd5250b-b004-4ed2-8144-f7bf9fb25c30" name="TestMgr_BluetoothHal_GetListOfScannedDevices">
+                <parameters>
+                    <parameter id="136b3e04-92fe-478e-b57c-8fcbe46a43f8" parameterName="DeviceName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a760308f-9ae9-4045-bb42-5d447cbeb9a9" parameterName="get_Address_and_Path" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="eb0ccbed-1f1c-42b2-a09e-6f5969d3a666" name="TestMgr_BluetoothHal_SetAdapterDiscoverableTimeout">
+                <parameters>
+                    <parameter id="e72b03f8-a079-4907-941e-047e75edfabe" parameterName="timeout" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="79a78494-8e38-40a1-9eba-8bde1b438fb8" parameterName="adapter_path" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a8abbe4e-a193-4a51-a03e-d3b00024e268" name="TestMgr_BluetoothHal_DisconnectDevice">
+                <parameters>
+                    <parameter id="beeaa020-6a81-43f1-916c-b202b3bdb4c2" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d4c5677f-6cd7-4124-9449-4c3b361037d0" parameterName="device_type" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="86aac04f-3ec5-4ad0-9c7b-d6c0c65f9528" name="TestMgr_BluetoothHal_EnableAdapter">
+                <parameters/>
+            </function>
+            <function id="03e5b91b-901d-4d5c-9ea6-c02cabd72dca" name="TestMgr_BluetoothHal_SetAdapterPower">
+                <parameters>
+                    <parameter id="5d14dd01-8ef4-4e76-a651-309e6effbb5c" parameterName="power_status" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="917a57ad-9d64-41db-9476-fb940c7f709a" parameterName="adapter_path" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8f6f4c50-16f5-40a3-8cea-58169974abe4" name="TestMgr_BluetoothHal_GetAdapterDiscoverableStatus">
+                <parameters>
+                    <parameter id="6b977958-5dc0-4b76-b38d-3d6459b3afbc" parameterName="adapter_path" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ba053c44-6c95-4cc7-8db6-698f72e45fd1" name="TestMgr_BluetoothHal_StopDiscovery">
+                <parameters>
+                    <parameter id="a6f4157f-b0c6-4e88-9a00-a11f74bb18eb" parameterName="device_type" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="3de4c7e3-c5b2-4864-803a-416ab1698859" parameterName="adapter_path" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a2c55f68-2c8a-481c-9c68-47e6ae6bc460" name="TestMgr_BluetoothHal_SetAdapter">
+                <parameters>
+                    <parameter id="94ada6bd-3f0c-4791-b444-5a2516b89413" parameterName="adapter_number" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="1da9d39e-5fb4-4474-a1f2-7774d0f4b0e8" name="TestMgr_BluetoothHal_GetSupportedServices">
+                <parameters>
+                    <parameter id="2aba3b3c-fa9a-48a0-a471-5003d71a37a0" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="59799514-73ff-40bb-846e-90f7cd482215" name="TestMgr_BluetoothHal_RegisterAgent">
+                <parameters>
+                    <parameter id="d8401abf-2f0d-4089-b99c-5786740f828a" parameterName="capabilities" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="d94a0092-c54e-42f1-8faa-187e6a713c66" name="TestMgr_BluetoothHal_SetAdapterDiscoverable">
+                <parameters>
+                    <parameter id="5759de16-2397-4d50-81fa-b0efee173299" parameterName="adapter_path" parameterType="STRING" range="A-Z"/>
+                    <parameter id="527533bf-bde4-4c39-8a8a-cc0bee83a059" parameterName="discoverable_status" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="64dce7e2-01cb-416a-b774-79bece26616a" name="TestMgr_BluetoothHal_PairDevice">
+                <parameters>
+                    <parameter id="6c7b0d5b-beb9-43f4-8ecb-ec8f6a5e7885" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="04c4b769-0b4e-4aef-972b-4f0954a92a7f" name="TestMgr_BluetoothHal_StartDiscovery">
+                <parameters>
+                    <parameter id="2292e616-95da-4476-8ff8-3d9188ff835e" parameterName="device_type" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="345923c9-33ea-4786-8f46-2dde9f11ccd2" parameterName="adapter_path" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d5f01bc4-5419-4667-a70c-03bca3fd7817" parameterName="timeout" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="81d496d2-9936-4bb3-929b-f68bbf7cb136" name="TestMgr_BluetoothHal_GetVersionInfo">
+                <parameters/>
+            </function>
+            <function id="61818073-ac51-4d75-8f66-04f44ca3aee4" name="TestMgr_BluetoothHal_UnregisterAgent">
+                <parameters/>
+            </function>
+            <function id="6fc330c7-5883-4223-91e5-588396f84375" name="TestMgr_BluetoothHal_GetAdapterPower">
+                <parameters>
+                    <parameter id="7358f4c7-da80-4f46-abfd-471b5b50567d" parameterName="adapter_path" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="842475a6-e818-407a-ae25-c5d9e7786856" name="TestMgr_BluetoothHal_GetAdapterName">
+                <parameters>
+                    <parameter id="2eafd2d0-8829-4850-b716-3962f24aa7c0" parameterName="adapter_path" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d7511536-27b3-42d5-a9cb-82ea50cdd96c" name="TestMgr_BluetoothHal_FindDevice">
+                <parameters>
+                    <parameter id="3c57b734-49e7-48c3-b1d0-ec28f49c0404" parameterName="device_index" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="a32a4b3d-43dd-4ce8-9a3b-c3666695612a" name="TestMgr_BluetoothHal_UnPairDevice">
+                <parameters>
+                    <parameter id="7e4318a9-d112-4410-8f51-521b44c5e2a7" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>02fc2085-7523-41c3-a221-6d11af1decc2</id>
+                <name>BluetoothHal_SetAdapterDiscoverableTimeout</name>
+                <funName>TestMgr_BluetoothHal_SetAdapterDiscoverableTimeout</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2fce7047-08a1-4e5a-b4a9-e29d669fbfa7</id>
+                        <parameterName>timeout</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>487e0f61-748e-4fc7-8efc-a03b7fc1c948</id>
+                        <parameterName>adapter_path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>12b0f3f0-0aa9-4c8c-bdbd-ad9a772571cc</id>
+                <name>BluetoothHal_SetAdapterDiscoverable</name>
+                <funName>TestMgr_BluetoothHal_SetAdapterDiscoverable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c8564e41-ab33-46e9-ac0f-704c56363836</id>
+                        <parameterName>discoverable_status</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e4b41120-45dc-49b5-8e6d-a577d1e4e75c</id>
+                        <parameterName>adapter_path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1776922e-616e-46e8-933b-601e7dc1662f</id>
+                <name>BluetoothHal_GetAdapterDiscoverableStatus</name>
+                <funName>TestMgr_BluetoothHal_GetAdapterDiscoverableStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>75a2e96a-a815-4a6e-a9ff-157b808bb3a0</id>
+                        <parameterName>adapter_path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>22234e99-9c02-4701-b4f3-532551a456da</id>
+                <name>BluetoothHal_UnPairDevice</name>
+                <funName>TestMgr_BluetoothHal_UnPairDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e0b88459-373c-40e5-b1ed-58a24f6aa167</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>29ce3627-ed2a-47c7-9a1e-5041c82f987d</id>
+                <name>BluetoothHal_IsDeviceConnectable</name>
+                <funName>TestMgr_BluetoothHal_IsDeviceConnectable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ceda78d0-73ef-4238-a8d4-84048a469a3f</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>317e5d62-acbe-4301-acab-09065b827cf2</id>
+                <name>BluetoothHal_FindDevice</name>
+                <funName>TestMgr_BluetoothHal_FindDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>20c6271b-b49e-4192-b204-ec0fe25da36d</id>
+                        <parameterName>device_index</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3eb48549-837a-43a1-8020-3708c48a93b9</id>
+                <name>BluetoothHal_GetAdapter</name>
+                <funName>TestMgr_BluetoothHal_GetAdapter</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4163d3f0-0514-43f6-93c6-8c89e49d056f</id>
+                <name>BluetoothHal_StopDiscovery</name>
+                <funName>TestMgr_BluetoothHal_StopDiscovery</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7e00303e-de13-4889-8742-839f42702c2f</id>
+                        <parameterName>device_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b968c29d-7de4-45b9-9599-13c8d7ad401a</id>
+                        <parameterName>adapter_path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4442d68f-268f-472f-a18c-46b8371e3cc1</id>
+                <name>BluetoothHal_GetDeviceDisconnected</name>
+                <funName>TestMgr_BluetoothHal_GetDeviceDisconnected</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0385663f-8976-4467-969d-eb8326a87015</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b5bd26a5-872a-4dbd-9be7-b628871ba53d</id>
+                        <parameterName>device_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>500aa64b-e6e8-4cb9-b6f9-77e26cef404e</id>
+                <name>BluetoothHal_GetAdapterName</name>
+                <funName>TestMgr_BluetoothHal_GetAdapterName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>773505ad-1c61-4cc9-833f-df71d965a3e0</id>
+                        <parameterName>adapter_path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>58d57a1d-b349-45ee-a605-21d7650fbe31</id>
+                <name>BluetoothHal_GetAdapterAddr</name>
+                <funName>TestMgr_BluetoothHal_GetAdapterAddr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6e2b2796-bd5c-4339-bfa0-cf18e2410cc0</id>
+                        <parameterName>adapter_number</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>59f8e2ef-34dd-4ee9-86c6-7736d725b34d</id>
+                <name>BluetoothHal_GetAdapters</name>
+                <funName>TestMgr_BluetoothHal_GetAdapters</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>5ada02df-272c-4141-974c-3f54ab8e487a</id>
+                <name>BluetoothHal_GetListOfPairedDevices</name>
+                <funName>TestMgr_BluetoothHal_GetListOfPairedDevices</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>5c45dc3c-06f6-4b83-acc0-1ff025f50883</id>
+                <name>BluetoothHal_RegisterAgent</name>
+                <funName>TestMgr_BluetoothHal_RegisterAgent</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>78d5b35c-302f-41e4-8fed-f39bb3cbe579</id>
+                        <parameterName>capabilities</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5ecf8bbc-fb1d-464a-8b49-83bab2ad7dff</id>
+                <name>BluetoothHal_GetDeviceConnected</name>
+                <funName>TestMgr_BluetoothHal_GetDeviceConnected</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>90d009e7-ec56-4843-bf1f-a162d0a51965</id>
+                        <parameterName>device_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a599073f-19f6-4721-a079-87f44c61a1bc</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5f3cdc76-ac00-40ea-bc91-3e0d977647ea</id>
+                <name>BluetoothHal_GetSupportedServices</name>
+                <funName>TestMgr_BluetoothHal_GetSupportedServices</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ef6ef055-f174-4e44-b931-c9c7acbedad9</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>60908c5b-0fe1-4f1c-9ee2-d8764cc85190</id>
+                <name>BluetoothHal_StartDiscovery</name>
+                <funName>TestMgr_BluetoothHal_StartDiscovery</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8091d981-1cb0-4247-865f-5f831acb3aa1</id>
+                        <parameterName>adapter_path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a5c3c29b-8a2b-47c1-87ec-ec4331f7f046</id>
+                        <parameterName>timeout</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c9dcf674-35eb-4953-86c6-ae5a945da08a</id>
+                        <parameterName>device_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8027431f-53de-4189-99c9-01e61817982b</id>
+                <name>BluetoothHal_EnableAdapter</name>
+                <funName>TestMgr_BluetoothHal_EnableAdapter</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>82ba7632-44f9-48cd-b5ef-64f7f0e45499</id>
+                <name>BluetoothHal_GetAdapterPower</name>
+                <funName>TestMgr_BluetoothHal_GetAdapterPower</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6cbe71cd-dd2c-4050-9b30-412b55a264bc</id>
+                        <parameterName>adapter_path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8dcda233-8496-4206-9070-479122e69fb3</id>
+                <name>BluetoothHal_PairDevice</name>
+                <funName>TestMgr_BluetoothHal_PairDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0e6661bd-3622-4874-9998-d132a3e338ac</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9c9c9e73-6c4b-4348-9fc9-5e722bdad61c</id>
+                <name>BluetoothHal_DisconnectDevice</name>
+                <funName>TestMgr_BluetoothHal_DisconnectDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>965ddf0e-0bc0-4968-bf7a-0d41a86ff8ba</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a150d3c2-0057-476d-9e75-33e967febefc</id>
+                        <parameterName>device_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a343b9f8-083a-4361-81fc-79e7ef59d3c9</id>
+                <name>BluetoothHal_FindService</name>
+                <funName>TestMgr_BluetoothHal_FindService</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0c7eb27a-d6ce-4eb0-bc28-36d5f688e97f</id>
+                        <parameterName>xml_data</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a7de3794-f4f4-4613-85bf-e90643e65b3b</id>
+                        <parameterName>uuid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f89cb4d7-c343-4eff-8517-1669095f4516</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a6f760ab-269c-42a5-90be-d0b1a96d082f</id>
+                <name>BluetoothHal_UnregisterAgent</name>
+                <funName>TestMgr_BluetoothHal_UnregisterAgent</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a96b7524-c345-4042-a46a-d12686aeed71</id>
+                <name>BluetoothHal_GetListOfScannedDevices</name>
+                <funName>TestMgr_BluetoothHal_GetListOfScannedDevices</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>289f7a09-3b57-4226-9ae0-c133d4b961ca</id>
+                        <parameterName>DeviceName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6ec1403c-afe9-41bf-b37d-6e555f3d4e87</id>
+                        <parameterName>get_Address_and_Path</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bee8538a-6f7a-423e-8b96-f942669c71f3</id>
+                <name>BluetoothHal_DisableAdapter</name>
+                <funName>TestMgr_BluetoothHal_DisableAdapter</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c18c840c-e70f-4c45-821e-2c2779103a75</id>
+                <name>BluetoothHal_GetListOfAdapters</name>
+                <funName>TestMgr_BluetoothHal_GetListOfAdapters</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>cafecdf6-51ce-423f-8828-ee1388961e47</id>
+                <name>BluetoothHal_SetAdapterPower</name>
+                <funName>TestMgr_BluetoothHal_SetAdapterPower</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>48a34107-9ab9-4d02-a458-deb011ba4e96</id>
+                        <parameterName>adapter_path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b11f43fe-1507-455d-beb5-0ee5a94274ca</id>
+                        <parameterName>power_status</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cd10588b-b9ee-4d08-bdaf-8b5dea8a7e50</id>
+                <name>BluetoothHal_SetAdapterName</name>
+                <funName>TestMgr_BluetoothHal_SetAdapterName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7accb4d2-63bc-4df8-84dc-a76cc7723f3b</id>
+                        <parameterName>adapter_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>89f0ddba-2c09-4e57-bcc7-f232f15ac4ff</id>
+                        <parameterName>adapter_path</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d686fcf3-5f1e-482b-bd12-fc4692b02a06</id>
+                <name>BluetoothHal_SetAdapter</name>
+                <funName>TestMgr_BluetoothHal_SetAdapter</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e4d6042c-5e1f-4f21-bad4-8481b7bdd174</id>
+                        <parameterName>adapter_number</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>dcc7eaee-3a77-447f-bffa-43a979862bc9</id>
+                <name>BluetoothHal_GetDeviceTypeClass</name>
+                <funName>TestMgr_BluetoothHal_GetDeviceTypeClass</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3a1d7efc-94ef-43ba-ad32-ca84f76eb12e</id>
+                        <parameterName>device_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c08f307e-450e-4813-8538-781c8e9880b6</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f9cb943c-c7ea-42fa-b56e-1de78e4c17bd</id>
+                <name>BluetoothHal_GetVersionInfo</name>
+                <funName>TestMgr_BluetoothHal_GetVersionInfo</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f9ea8c5f-a920-4030-9f23-4983df4f50d1</id>
+                <name>BluetoothHal_ConnectDevice</name>
+                <funName>TestMgr_BluetoothHal_ConnectDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>65ac36c9-d74f-4572-909f-f8bd09e8960a</id>
+                        <parameterName>device_type</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ca7e233d-0e89-4332-bd14-35ca98469b29</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

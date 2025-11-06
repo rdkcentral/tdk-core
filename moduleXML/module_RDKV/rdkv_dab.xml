@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>7ab9f37f-c4ff-4166-9ea6-2cb49f749ca7</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_dab</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="90179c71-0c82-4a06-be2e-000b4e48ff9e" name="validate_device_info_with_rdk">
+                <parameters>
+                    <parameter id="6a1686ec-06af-47fb-bfbd-1c777631ed38" parameterName="dab_response" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="15059ebc-d542-4837-9792-727520202172" name="validate_get_dab_with_rdk">
+                <parameters>
+                    <parameter id="b51631b1-f92a-4113-9357-31eb38b2ae47" parameterName="dab_response" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="adf90d31-ac77-49c3-a58c-cfc25c879ed6" name="revert_settings">
+                <parameters>
+                    <parameter id="b3426c67-20e0-4e14-8f0b-fbbdcdf89d1d" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                    <parameter id="443c41e9-9b2c-48e9-a181-e7b914cceafa" parameterName="initial_settings" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b5a83a50-b155-4cf8-a9df-27da6bf1a95e" parameterName="changed_settings" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="eb19d5b2-03b3-4d25-81cb-152c9d936d21" name="validate_set_dab_with_rdk">
+                <parameters>
+                    <parameter id="f379c7d1-9e23-43d0-a5a6-a2f92ed3b018" parameterName="dab_response" parameterType="STRING" range="A-Z"/>
+                    <parameter id="573bf0f9-d9aa-47b7-aeb1-9e35e972c2f9" parameterName="changed_settings" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="41a657cf-21cb-4ebb-a2e5-b9aa1c3e7f80" name="validate_settingslist_dab_with_rdk">
+                <parameters>
+                    <parameter id="650b8d83-9b0d-4861-b844-00ac2c4567d2" parameterName="dab_response" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="148e4d72-cb9c-401f-ae81-c95e822b0289" name="dab_save_png">
+                <parameters>
+                    <parameter id="63a65e3d-168b-4771-b163-029b55238aee" parameterName="encoded_data" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2dabde11-fc0c-49e4-aabf-80c289ed0a1e" name="setup_mqtt_client">
+                <parameters>
+                    <parameter id="441f5f2d-7f46-4e82-b293-1d2376519a76" parameterName="broker_address" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4e570857-db71-4d85-ad96-9443ed4d46a6" name="perform_operation">
+                <parameters>
+                    <parameter id="6cf28586-ce44-47af-9b8f-0b32f0204fd6" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                    <parameter id="91a3e4cb-6b31-4131-949d-2570e092a485" parameterName="operation_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a7b869b8-22f9-4b6e-bddf-ec1e3ba1b167" parameterName="message_override" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d8a48ce3-2806-476d-b304-0beef23be020" name="set_and_validate_dab_settings">
+                <parameters>
+                    <parameter id="6603707b-ef0d-413d-8149-445ce79548f8" parameterName="device_id" parameterType="STRING" range="A-Z"/>
+                    <parameter id="bfc0b850-7469-4349-bcda-dc4990461586" parameterName="rdk_set_dab_validations" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ab5e1412-262c-445c-8b33-7fe61327709f" parameterName="operation_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5498edda-c0f6-4a90-9263-deecef4b78b9" parameterName="settings_to_change" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>14f8206e-76f7-425d-b779-0ce3d6024f56</id>
+                <name>validate_set_dab_with_rdk</name>
+                <funName>validate_set_dab_with_rdk</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>adcbca5e-ba19-44ac-8e32-ffa05c3caf4d</id>
+                        <parameterName>changed_settings</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>db9b09c6-6350-4cb7-a858-6472648c0eee</id>
+                        <parameterName>dab_response</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2faaf243-ac80-4cfd-b91c-0faac210d44d</id>
+                <name>validate_get_dab_with_rdk</name>
+                <funName>validate_get_dab_with_rdk</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>256fbf8f-3c3a-450a-9d08-45ef4f21947c</id>
+                        <parameterName>dab_response</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>30e14b60-829f-48a1-a8ea-236d339345e7</id>
+                <name>dab_save_png</name>
+                <funName>dab_save_png</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>84a4ef3c-fada-43e3-9254-128ab57b6a6c</id>
+                        <parameterName>encoded_data</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>86554e67-1637-4485-be83-5102f4141264</id>
+                <name>setup_mqtt_client</name>
+                <funName>setup_mqtt_client</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9cea79f1-e13c-4099-9d78-505178970464</id>
+                        <parameterName>broker_address</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>966df0de-a56d-4e9e-a20a-f7f148c034a6</id>
+                <name>revert_settings</name>
+                <funName>revert_settings</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b8e9be4b-b096-4946-b995-9abe1a5a0314</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cee387a4-8d69-4249-aa64-2c653d4d5232</id>
+                        <parameterName>changed_settings</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d92b7950-4ce0-43e2-b34d-c83d0f8a0a09</id>
+                        <parameterName>initial_settings</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c42313ed-414b-48d9-9435-9b7538e36c1a</id>
+                <name>set_and_validate_dab_settings</name>
+                <funName>set_and_validate_dab_settings</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0f6f68be-1c47-43e4-b640-9de79c199f5e</id>
+                        <parameterName>settings_to_change</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>37284c50-27a4-4119-8cf4-853fa123b17b</id>
+                        <parameterName>operation_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>None</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4c538b08-45f9-4b70-8be0-a338fbbccd25</id>
+                        <parameterName>rdk_set_dab_validations</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>648eb98d-595e-4bd1-8161-9dc557862430</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e16fcc1a-0550-4cbb-910b-0ccf8b920455</id>
+                <name>perform_operation</name>
+                <funName>perform_operation</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>08e88807-b63d-485a-a23c-d2171e74357e</id>
+                        <parameterName>device_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c11f8d02-e309-4fc6-aa3e-bc6465f68bb5</id>
+                        <parameterName>message_override</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>None</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c16cb967-78e1-4679-ba4f-76cadcf54563</id>
+                        <parameterName>operation_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>eae8e00c-15db-4d81-b484-bbb9190ff168</id>
+                <name>validate_settingslist_dab_with_rdk</name>
+                <funName>validate_settingslist_dab_with_rdk</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>dba5ddef-9dfb-472a-a7f5-c83040d8fe46</id>
+                        <parameterName>dab_response</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ff9e5636-6899-4e45-8c00-503fed559280</id>
+                <name>validate_device_info_with_rdk</name>
+                <funName>validate_device_info_with_rdk</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6ebf014d-9f64-41d8-87c5-3ce6bb826da6</id>
+                        <parameterName>dab_response</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

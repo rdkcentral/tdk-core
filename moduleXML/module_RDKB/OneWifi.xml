@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>abefc226-9b25-4a4b-a862-5a8d416b597a</moduleId>
+        <!-- Module name -->
+        <moduleName>OneWifi</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="79b51276-3099-45c8-9e50-304c3b1fe6ae" name="onewifi_DoNothing">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>ea3ed5c3-285c-421a-8664-b7ca5d275d24</id>
+                <name>onewifi_DoNothing</name>
+                <funName>onewifi_DoNothing</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

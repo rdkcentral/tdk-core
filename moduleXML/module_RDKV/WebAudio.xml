@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>28555950-94b8-447f-801a-fd7570e9b22c</moduleId>
+        <!-- Module name -->
+        <moduleName>WebAudio</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="ca938dfc-6389-440b-8a8f-223c9391221a" name="webaudio_getSSHParams">
+                <parameters/>
+            </function>
+            <function id="00625d1a-3090-4081-89b2-6b829970ac81" name="webaudio_setPluginStatus">
+                <parameters>
+                    <parameter id="774911b8-25f0-4b5f-9e75-ce1c84e924dc" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                    <parameter id="91412a1d-b63a-4c9c-8355-f59cfd1a652f" parameterName="uri" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8c28563e-002c-4088-b207-9f3e2096c41f" parameterName="status" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5baba9b8-02c1-4b95-a1b5-2c971a0269ae" name="webaudio_getPluginStatus">
+                <parameters>
+                    <parameter id="524d54ec-515c-43a5-bb48-8cf317d5fde1" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="47889174-060d-4c63-94e1-91e795adf099" name="webaudio_setValue">
+                <parameters>
+                    <parameter id="5f581091-a9fc-432d-a4ee-2b4e187115da" parameterName="method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="981e8cf9-6efe-44ed-9bb7-f64a27506b2f" parameterName="value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0b80681b-f95e-48d2-961d-51d4cbfe7ce4" name="webaudio_getLogs_webinspectpage">
+                <parameters>
+                    <parameter id="020702ed-4985-4193-80f1-74cb1072262c" parameterName="browser" parameterType="STRING" range="A-Z"/>
+                    <parameter id="71fdbeee-d0e9-4276-bcc3-24cba862e42b" parameterName="obj" parameterType="STRING" range="A-Z"/>
+                    <parameter id="163799f9-a4a0-4469-a483-4ab23eaf39ca" parameterName="url" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b7e93460-d83a-493c-9a78-a64ae4cc2804" name="webaudio_prerequisite">
+                <parameters>
+                    <parameter id="9b34dc3c-5b05-4244-9fb1-79e2aaf4b522" parameterName="VariableList" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0b82b38f-a4dd-40dc-9723-0e1880a731be" name="webaudio_getValue">
+                <parameters>
+                    <parameter id="84ab1bb2-f921-41be-9333-1782277aa918" parameterName="method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d811f172-49ca-45d3-8987-92a8ca9b62ab" name="webaudio_getRequiredLog">
+                <parameters>
+                    <parameter id="6163b75c-e113-481a-83cd-63a32d2fc8a5" parameterName="command" parameterType="STRING" range="A-Z"/>
+                    <parameter id="576ac2f4-1421-4106-bbee-42e15eb9e077" parameterName="credentials" parameterType="STRING" range="A-Z"/>
+                    <parameter id="585fece0-fbf1-4182-b6a4-b11895f7578f" parameterName="ssh_method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0b0112a6-f052-4178-9366-e3b24876ab15</id>
+                <name>webaudio_getPluginStatus</name>
+                <funName>webaudio_getPluginStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>177bb2bf-3593-4135-b074-feb02285f8d5</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>329a4028-b818-429a-9dd1-02301324c73e</id>
+                <name>webaudio_setPluginStatus</name>
+                <funName>webaudio_setPluginStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8229e7ba-2fe9-41cb-9e96-e0d15356488e</id>
+                        <parameterName>plugin</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a693147f-cec6-4744-b015-169ee06d9dda</id>
+                        <parameterName>status</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f925d1df-097b-4535-9797-7ab28e00c1c0</id>
+                        <parameterName>uri</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>43be8f79-d2cb-4163-bfde-78b945e0fa9c</id>
+                <name>webaudio_getValue</name>
+                <funName>webaudio_getValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d363a74e-a7f4-4f85-9b4b-3292dcb623b7</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>86d99bb4-480d-423e-9c5f-b938f0977828</id>
+                <name>webaudio_getLogs_webinspectpage</name>
+                <funName>webaudio_getLogs_webinspectpage</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>250094b7-eb0c-4df3-9bae-08adb80190a9</id>
+                        <parameterName>browser</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>58ec25fd-98e0-4c7c-b190-153fe2f1cc93</id>
+                        <parameterName>url</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>62e6347d-7eb3-41e2-b30f-3154dd989c0e</id>
+                        <parameterName>obj</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b581eca0-7b5d-408c-8346-b4abb2fdf68b</id>
+                <name>webaudio_prerequisite</name>
+                <funName>webaudio_prerequisite</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5c3bee42-ab9e-48d3-8d3c-8abe17c55c87</id>
+                        <parameterName>VariableList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c6118580-f9d8-4449-91ff-97b7a1cc27a2</id>
+                <name>webaudio_getSSHParams</name>
+                <funName>webaudio_getSSHParams</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ccdc5de5-af12-459c-893e-83245aa7074a</id>
+                <name>webaudio_setValue</name>
+                <funName>webaudio_setValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5512e896-d015-4284-bbc0-b92e49b68ede</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>94ad49a5-0613-45e6-b93e-c7a293e144bf</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d6bca4ff-05c7-445f-be1c-8db7dd8d9044</id>
+                <name>webaudio_getRequiredLog</name>
+                <funName>webaudio_getRequiredLog</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a64fe4db-802b-43ef-a85d-876d9aba9323</id>
+                        <parameterName>ssh_method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a925921c-6389-4645-8763-56d16102bc4d</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f14dfef2-491b-4dd3-89e6-95ee71482ac6</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

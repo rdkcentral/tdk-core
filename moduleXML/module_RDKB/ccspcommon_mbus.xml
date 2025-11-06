@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>d23c47e7-cd7a-4adc-980f-b046af7beaff</moduleId>
+        <!-- Module name -->
+        <moduleName>ccspcommon_mbus</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>0</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="54bd9fc5-a0a8-49c6-bca7-99b891d15c91" name="CCSPMBUS_GetRegisteredComponents">
+                <parameters/>
+            </function>
+            <function id="11f9bebf-f6e4-4cc3-9015-fd35198b1d2f" name="CCSPMBUS_BusCheck">
+                <parameters/>
+            </function>
+            <function id="9d0de443-dfb4-4082-b5d1-cb60b38d9616" name="CCSPMBUS_IsSystemReady">
+                <parameters/>
+            </function>
+            <function id="2138a508-359c-4ca6-b105-69fa3387b849" name="CCSPMBUS_RegisterEvent">
+                <parameters>
+                    <parameter id="6aa22897-a7d9-4003-8b8e-3fcd443bbf55" parameterName="eventName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="53c43cf9-239b-449a-a183-64f65f0ea1b9" name="CCSPMBUS_RegisterPath">
+                <parameters/>
+            </function>
+            <function id="ee958440-429d-498d-961d-aae33af1a0b6" name="CCSPMBUS_LoadDmXml">
+                <parameters>
+                    <parameter id="01627fea-42de-4ab7-b9fe-e2ee7f4dc0b0" parameterName="xmlfileName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f58e3853-cf73-4074-8929-2dcd14631d15" name="CCSPMBUS_SendSignal">
+                <parameters/>
+            </function>
+            <function id="65a66730-883f-4a31-9b8c-fcc3c24eeebb" name="CCSPMBUS_Exit">
+                <parameters/>
+            </function>
+            <function id="3070bd39-9aba-487e-bb4b-4e0e8f179280" name="CCSPMBUS_DumpComponentRegistry">
+                <parameters/>
+            </function>
+            <function id="b280dcb2-29f6-42a6-93e1-aa84f6615c07" name="CCSPMBUS_Init">
+                <parameters>
+                    <parameter id="c73db131-6cb3-4bdd-8214-6341318996bd" parameterName="cfgfileName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3ea8b116-6f97-40b2-8107-720a9032bc0b" name="CCSPMBUS_UnRegisterNamespace">
+                <parameters/>
+            </function>
+            <function id="778f4a88-aa9b-4a8c-9ffb-6951acc7c3b7" name="CCSPMBUS_UnRegisterEvent">
+                <parameters>
+                    <parameter id="1b643152-1fed-424f-9170-af91b7b27b15" parameterName="eventName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="82d83368-e4a4-44d6-8107-0ce11e6ac245" name="CCSPMBUS_UnloadCfg">
+                <parameters/>
+            </function>
+            <function id="addd987a-6840-450b-a83f-eae6c16478d7" name="CCSPMBUS_DiskComponentSupportingDynamicTbl">
+                <parameters/>
+            </function>
+            <function id="c3d5a7b2-23ea-4e86-b8cd-f71b8adbad16" name="CCSPMBUS_LoadCfg">
+                <parameters>
+                    <parameter id="bbc82a3f-635c-4d90-9de0-202b8728ec5c" parameterName="cmpCfgFile" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9eb6281a-43fc-46d3-9e84-b6a52eb2b365" name="CCSPMBUS_GetHealth">
+                <parameters>
+                    <parameter id="830348f9-184e-4ba5-af91-2ca9c2ee6726" parameterName="cmpId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ed2879d1-1819-466a-b891-5ea855299e61" parameterName="cmpPath" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c9ea7c24-1e01-4ecc-861b-8b248fc3f533" name="CCSPMBUS_GetMaxMemory">
+                <parameters/>
+            </function>
+            <function id="c8cd26d3-553b-4e39-a82c-db6901be5c56" name="CCSPMBUS_QueryStatus">
+                <parameters/>
+            </function>
+            <function id="6d50a127-7513-4b04-8105-c3089debbab3" name="CCSPMBUS_CheckNamespaceDataType">
+                <parameters/>
+            </function>
+            <function id="d649a2f3-f3b8-4f90-9ddc-12693395e68c" name="CCSPMBUS_InformEndSession">
+                <parameters/>
+            </function>
+            <function id="f10fdcb1-f24d-4f1b-93ba-4e8086b688da" name="CCSPMBUS_RegisterBase">
+                <parameters/>
+            </function>
+            <function id="af5037da-8182-488c-be9d-ae174767d84f" name="CCSPMBUS_DiskNamespaceSupportedByComponent">
+                <parameters/>
+            </function>
+            <function id="b083879e-020e-46e2-a15c-1cbfbbb5c6f0" name="CCSPMBUS_UnRegisterComponent">
+                <parameters/>
+            </function>
+            <function id="01ba383e-9cff-49ee-81b9-11d880a7e45e" name="CCSPMBUS_RegisterCapabilities">
+                <parameters/>
+            </function>
+            <function id="95a864bb-c93c-457a-bf45-dbf16ac0d3cf" name="CCSPMBUS_GetAllocMemory">
+                <parameters/>
+            </function>
+            <function id="f3ac93f4-8f06-4127-bc2f-b81707e1beb2" name="CCSPMBUS_ReqSessionId">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>074acd1a-352f-4a3f-b085-3b46f74e2255</id>
+                <name>CCSPMBUS_UnRegisterNamespace</name>
+                <funName>CCSPMBUS_UnRegisterNamespace</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>0a5397ae-1708-49f5-bce4-e4c65660fcf7</id>
+                <name>CCSPMBUS_GetAllocMemory</name>
+                <funName>CCSPMBUS_GetAllocMemory</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>1c1c2b7b-8399-4529-b1c7-27cc23f27197</id>
+                <name>CCSPMBUS_Exit</name>
+                <funName>CCSPMBUS_Exit</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>2211472d-cf4c-46bd-8316-ea991a784411</id>
+                <name>CCSPMBUS_LoadDmXml</name>
+                <funName>CCSPMBUS_LoadDmXml</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6f72ee0a-ce9a-4300-acad-3a01c8ae92ea</id>
+                        <parameterName>xmlfileName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>46b54dac-e70c-4942-81dc-a5c99abdc3d6</id>
+                <name>CCSPMBUS_UnRegisterComponent</name>
+                <funName>CCSPMBUS_UnRegisterComponent</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4ef5ec98-a2eb-469f-913a-3b7b154f4a5c</id>
+                <name>CCSPMBUS_UnRegisterEvent</name>
+                <funName>CCSPMBUS_UnRegisterEvent</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a56a5825-4df1-4ff4-acbc-4f1fea97c50c</id>
+                        <parameterName>eventName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>587eb6b9-ce4c-4dd1-a22f-8c9dae08ccc0</id>
+                <name>CCSPMBUS_SendSignal</name>
+                <funName>CCSPMBUS_SendSignal</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>663961da-fac7-4f5a-b2bd-e5101727780c</id>
+                <name>CCSPMBUS_IsSystemReady</name>
+                <funName>CCSPMBUS_IsSystemReady</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>66fe0170-c6fe-49fa-a4cd-6ac50a7cf547</id>
+                <name>CCSPMBUS_GetMaxMemory</name>
+                <funName>CCSPMBUS_GetMaxMemory</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>67b8c943-7636-40e4-80cf-b3865f86e02f</id>
+                <name>CCSPMBUS_CheckNamespaceDataType</name>
+                <funName>CCSPMBUS_CheckNamespaceDataType</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>69f09538-dcca-47a7-81e4-334e076ac0cb</id>
+                <name>CCSPMBUS_GetRegisteredComponents</name>
+                <funName>CCSPMBUS_GetRegisteredComponents</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6ef13b6f-0f49-45d6-a1f6-880fd96094be</id>
+                <name>CCSPMBUS_RegisterPath</name>
+                <funName>CCSPMBUS_RegisterPath</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9544cf59-33cd-418a-aab1-5e4fa4dc7ae3</id>
+                <name>CCSPMBUS_ReqSessionId</name>
+                <funName>CCSPMBUS_ReqSessionId</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9f3577ab-e7cc-4d99-b9ce-897aa1cb3632</id>
+                <name>CCSPMBUS_LoadCfg</name>
+                <funName>CCSPMBUS_LoadCfg</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c3849bcb-44e6-4425-bfd1-11c2e0dad134</id>
+                        <parameterName>cmpCfgFile</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a1b6f285-b8a8-46d9-a71e-c25488daccf6</id>
+                <name>CCSPMBUS_DiskComponentSupportingDynamicTbl</name>
+                <funName>CCSPMBUS_DiskComponentSupportingDynamicTbl</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a6c53367-f36b-426b-a232-b317dff0e501</id>
+                <name>CCSPMBUS_DiskNamespaceSupportedByComponent</name>
+                <funName>CCSPMBUS_DiskNamespaceSupportedByComponent</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ba14ae83-288c-40a0-b669-ae99f122c375</id>
+                <name>CCSPMBUS_Init</name>
+                <funName>CCSPMBUS_Init</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>16a9a222-1375-4dc2-b4c7-190818d3c89e</id>
+                        <parameterName>cfgfileName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bab9eefe-4d6a-451d-b5f7-11c62ac251ce</id>
+                <name>CCSPMBUS_DumpComponentRegistry</name>
+                <funName>CCSPMBUS_DumpComponentRegistry</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ccfc875f-bbda-4dd5-abed-d3c24aecec62</id>
+                <name>CCSPMBUS_UnloadCfg</name>
+                <funName>CCSPMBUS_UnloadCfg</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>dc54524f-72cb-41d8-8242-b04206f50734</id>
+                <name>CCSPMBUS_InformEndSession</name>
+                <funName>CCSPMBUS_InformEndSession</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e2dc432a-d0d0-4ae5-909e-17a103a1279d</id>
+                <name>CCSPMBUS_GetHealth</name>
+                <funName>CCSPMBUS_GetHealth</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6756b7a6-c748-4335-bfd0-08640aa25b93</id>
+                        <parameterName>cmpPath</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9d8302e5-b9a5-4178-9163-76997f939b75</id>
+                        <parameterName>cmpId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e4e25294-a6eb-48b6-8c7a-9d2412728fae</id>
+                <name>CCSPMBUS_BusCheck</name>
+                <funName>CCSPMBUS_BusCheck</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e6af26b1-ebdb-4d90-8a7d-3aba8d6339d5</id>
+                <name>CCSPMBUS_RegisterCapabilities</name>
+                <funName>CCSPMBUS_RegisterCapabilities</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f18c472a-001b-4844-9d6d-49843d888693</id>
+                <name>CCSPMBUS_RegisterEvent</name>
+                <funName>CCSPMBUS_RegisterEvent</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>34db3118-045d-4b44-8145-14c47a85d6f1</id>
+                        <parameterName>eventName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5e2c559f-88e9-4648-9310-9a1f9dd3c78e</id>
+                        <parameterName>eventName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f808b1c4-f3fe-4d65-8d4d-cb4c11461731</id>
+                <name>CCSPMBUS_QueryStatus</name>
+                <funName>CCSPMBUS_QueryStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f83898cc-aa47-41c2-a7d3-bb8ae523635b</id>
+                <name>CCSPMBUS_RegisterBase</name>
+                <funName>CCSPMBUS_RegisterBase</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

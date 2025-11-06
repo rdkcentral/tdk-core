@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>42ede967-7112-443b-925a-5b6494e9b968</moduleId>
+        <!-- Module name -->
+        <moduleName>LMLite</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="d6076194-8a01-442e-af93-7dd9f78a2463" name="LMLiteStub_Set_Get">
+                <parameters>
+                    <parameter id="d80ac07c-746b-4807-ab0a-c61340dc7b9e" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="53c5fe41-45a1-49a5-ac00-63232196f21b" parameterName="ParamType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="79142555-0e5b-448a-97c2-425012f128bf" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fb4e520a-579e-4b08-9998-99e7a8cc384d" name="LMLiteStub_Set">
+                <parameters>
+                    <parameter id="07de23de-beee-4220-94f7-0da221d3b399" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c043f25a-2a86-40a3-b245-99e3f71679bc" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2f452890-ff69-487c-a9e1-bf2c1709aeac" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c0d9527b-920b-420c-a890-ec867593f241" name="LMLiteStub_GetAllHosts">
+                <parameters/>
+            </function>
+            <function id="25cc2dfb-fddc-4b7a-bad6-00d4d1b111ca" name="LMLiteStub_Get">
+                <parameters>
+                    <parameter id="7723eb98-7e4c-43a1-a227-a0751b7b7f0b" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f4f34592-871e-4166-b5b4-a05ab8c6659f" name="LMLiteStub_GetOnlineDevice">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>a9b45798-1edd-43d7-ae29-8416f0d5fe85</id>
+                <name>LMLiteStub_Get</name>
+                <funName>LMLiteStub_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8e3af29a-2b6f-4f89-b206-f28b725f0c57</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d659d281-d74f-450b-84ee-7edfcc3f58e7</id>
+                <name>LMLiteStub_Set</name>
+                <funName>LMLiteStub_Set</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3375d8a7-08f9-4411-9272-95d14bf29856</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a9f5b592-2cc4-45ef-84ea-6f9005d02424</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b751cc41-6fd8-4d00-b959-452fc307e49b</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>deec2b2c-63ac-4728-90c0-976b7f32efca</id>
+                <name>LMLiteStub_Set_Get</name>
+                <funName>LMLiteStub_Set_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>42dc1124-2496-4404-a2f2-eeb78ef08fe0</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4724ee48-d8c9-43f9-b2e8-e3cefb74fa8e</id>
+                        <parameterName>ParamType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e3aaba4c-8146-4586-a239-8c4289785dad</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

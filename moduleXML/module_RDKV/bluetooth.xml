@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>0b671a3a-ea9d-49d5-ae7b-c1bfed4637b5</moduleId>
+        <!-- Module name -->
+        <moduleName>bluetooth</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="3ac87d02-d73c-46b8-b2b8-807f4a515db9" name="TestMgr_Bluetooth_DisconnectFromDevice">
+                <parameters>
+                    <parameter id="d5590918-3d4a-474b-a0aa-dd9a32fea8bb" parameterName="devicehandle" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="eb3e67b5-4aef-4750-ad94-5f025795c30e" name="TestMgr_Bluetooth_SendRequest">
+                <parameters/>
+            </function>
+            <function id="298ee3d0-ff27-4ebf-b054-fe1899779a0b" name="TestMgr_Bluetooth_GetAdapterName">
+                <parameters/>
+            </function>
+            <function id="7cd66ddc-9ff1-4e2f-835d-94171b6152d8" name="TestMgr_Bluetooth_ResetAdapter">
+                <parameters/>
+            </function>
+            <function id="4034491d-727b-4a1d-9ab4-622c8d65a555" name="TestMgr_Bluetooth_ConnectToDevice">
+                <parameters>
+                    <parameter id="ec64de43-a2db-4869-ac88-28057bad6622" parameterName="devicetype" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="08ccd31c-ce10-46a2-98fe-b3c564957c0d" parameterName="devicehandle" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="520c737f-06e3-445c-9712-5fb95cebaff6" name="TestMgr_Bluetooth_StopDeviceDiscovery">
+                <parameters>
+                    <parameter id="c3125b07-e3a0-4589-b2ca-384f2fc78a3c" parameterName="devicetype" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="8479fee9-1bbd-415c-a6fe-090b0a6d6a64" name="TestMgr_Bluetooth_IsAudioStreamingOut">
+                <parameters/>
+            </function>
+            <function id="6934765c-6a51-45a5-87be-8a8da03fe8c5" name="TestMgr_Bluetooth_GetAdapterPowerStatus">
+                <parameters/>
+            </function>
+            <function id="b387efaa-c5ea-4faa-ac76-d197499bdfc0" name="TestMgr_Bluetooth_UnpairDevice">
+                <parameters>
+                    <parameter id="48e7dbb4-561b-49d5-9fcc-eaebf70cd616" parameterName="devicehandle" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="5521ae8c-85ed-46dc-a37b-91d53fbcecb2" name="TestMgr_Bluetooth_SetAdapterDiscoverable">
+                <parameters>
+                    <parameter id="e4d53661-198b-4593-bff3-6636e6354259" parameterName="discoverablestatus" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="05eb33bd-c0ca-4eb3-a2f5-03e6fe4e0d05" parameterName="timeout" parameterType="INTEGER" range="1-1000"/>
+                </parameters>
+            </function>
+            <function id="bbf19b35-bcf3-45f3-ad71-76d076b5b355" name="TestMgr_Bluetooth_StartDeviceDiscovery">
+                <parameters>
+                    <parameter id="01c6fa82-c42f-4985-9dce-21367089259b" parameterName="devicetype" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="5158c306-6905-49e1-b00f-6042fdc9b369" name="TestMgr_Bluetooth_GetPairedDevices">
+                <parameters/>
+            </function>
+            <function id="a708b82f-f572-4d2f-8b93-0fb2ac99f79d" name="TestMgr_Bluetooth_GetDeviceProperties">
+                <parameters>
+                    <parameter id="5c74ffcd-12d3-4a59-bc00-9c9be16319b2" parameterName="devicehandle" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="526565d4-c002-4b9e-b6db-5fd99f2f75b1" name="TestMgr_Bluetooth_SetAdapterPowerStatus">
+                <parameters>
+                    <parameter id="7cfdfecb-4e7c-4d07-8325-9fcbf2a202bb" parameterName="powerstatus" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="cf380e94-d70f-4921-8b99-88ed8147d957" name="TestMgr_Bluetooth_IsAdapterDiscoverable">
+                <parameters/>
+            </function>
+            <function id="8c3372ad-18e5-460a-a50b-13bfe72d5e7b" name="TestMgr_Bluetooth_GetDiscoveredDevices">
+                <parameters/>
+            </function>
+            <function id="337b5439-e1bc-4c3e-87a4-d87ce70ed324" name="TestMgr_Bluetooth_SetAdapterName">
+                <parameters>
+                    <parameter id="cd476db0-7722-4bd1-bbf0-e593921e637a" parameterName="name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e35c4944-2665-4860-9865-fe99b899545a" name="TestMgr_Bluetooth_StopAudioStreamingOut">
+                <parameters>
+                    <parameter id="e0259998-9e21-4093-a67f-7c3a653da21d" parameterName="devicehandle" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="e5f85456-06b0-47ce-9308-5cc334c478f0" name="TestMgr_Bluetooth_GetConnectedDevices">
+                <parameters/>
+            </function>
+            <function id="61adb1b0-6dc2-4ec8-9d3a-a0d35886a7c5" name="TestMgr_Bluetooth_PairDevice">
+                <parameters>
+                    <parameter id="1bed8a82-3631-4cdd-9c6f-0e170835e9ce" parameterName="devicehandle" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="326fff19-6e32-4acf-8339-0de914474450" name="TestMgr_Bluetooth_GetNumberOfAdapters">
+                <parameters/>
+            </function>
+            <function id="415db07a-466b-4e95-8a2d-662a7565a3a6" name="TestMgr_Bluetooth_StartAudioStreamingOut">
+                <parameters>
+                    <parameter id="7a5b5997-9c7f-48e3-9b2e-fa404680adb1" parameterName="devicetype" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="762ebf1f-e4a0-4421-b8ee-e156b8f27d05" parameterName="devicehandle" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>1e8492bd-f161-4692-bcbe-5e7ddba919d3</id>
+                <name>Bluetooth_GetDeviceProperties</name>
+                <funName>TestMgr_Bluetooth_GetDeviceProperties</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>674bc828-74a6-4c17-bd7d-0358e67ba912</id>
+                        <parameterName>devicehandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>23f729cd-56eb-4bd2-8542-1fec4abdb883</id>
+                <name>Bluetooth_PairDevice</name>
+                <funName>TestMgr_Bluetooth_PairDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>02d17ffc-8058-4ab3-a44e-8448411448cc</id>
+                        <parameterName>devicehandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>244236b1-ad04-4275-909f-426e0090909e</id>
+                <name>Bluetooth_IsAudioStreamingOut</name>
+                <funName>TestMgr_Bluetooth_IsAudioStreamingOut</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>3684ae1f-5f34-4bd2-8c05-b5141c2f19f5</id>
+                <name>Bluetooth_IsAdapterDiscoverable</name>
+                <funName>TestMgr_Bluetooth_IsAdapterDiscoverable</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>3a10342e-367f-4fed-b3b4-e3fcb215ca83</id>
+                <name>Bluetooth_StartAudioStreamingOut</name>
+                <funName>TestMgr_Bluetooth_StartAudioStreamingOut</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a906155c-9a1c-4622-a6ba-2bbf7edc31cc</id>
+                        <parameterName>devicetype</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d0cd6a9e-65ab-463c-b8df-4377ef474cd2</id>
+                        <parameterName>devicehandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3d3b1066-f74d-478d-954c-b2111866b559</id>
+                <name>Bluetooth_GetDiscoveredDevices</name>
+                <funName>TestMgr_Bluetooth_GetDiscoveredDevices</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>3f9f55ed-3c97-45f1-bf08-d4e5ed28a1b0</id>
+                <name>Bluetooth_GetConnectedDevices</name>
+                <funName>TestMgr_Bluetooth_GetConnectedDevices</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6173597b-3668-4dd7-9f70-65623068cd5b</id>
+                <name>Bluetooth_UnpairDevice</name>
+                <funName>TestMgr_Bluetooth_UnpairDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c3f35f2f-41d5-4c7d-a951-f45c646d54f9</id>
+                        <parameterName>devicehandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6f0498fa-3db4-424f-b31c-d963c7b45782</id>
+                <name>Bluetooth_StopDeviceDiscovery</name>
+                <funName>TestMgr_Bluetooth_StopDeviceDiscovery</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c8b0259d-0fe6-490e-aecc-332226050d63</id>
+                        <parameterName>devicetype</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>73602c75-7653-4467-8365-e8e5bbd361dd</id>
+                <name>Bluetooth_GetAdapterName</name>
+                <funName>TestMgr_Bluetooth_GetAdapterName</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>767f6bf1-2cdf-4705-a77a-ac2ed6c4cf3f</id>
+                <name>Bluetooth_ResetAdapter</name>
+                <funName>TestMgr_Bluetooth_ResetAdapter</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9319730f-45fb-4826-8535-f904e23d93de</id>
+                <name>Bluetooth_SetAdapterDiscoverable</name>
+                <funName>TestMgr_Bluetooth_SetAdapterDiscoverable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>83ab914c-6911-45e6-8f4c-fc9f44df1a00</id>
+                        <parameterName>timeout</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-1000</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>963c6cf6-79ec-4ec0-b1f1-e65986ebf12d</id>
+                        <parameterName>discoverablestatus</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a826edea-fc22-42ff-a67a-e4887dceddc2</id>
+                <name>Bluetooth_GetAdapterPowerStatus</name>
+                <funName>TestMgr_Bluetooth_GetAdapterPowerStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ad96e766-c2d8-4602-b3b7-1c42c28db065</id>
+                <name>Bluetooth_SetAdapterName</name>
+                <funName>TestMgr_Bluetooth_SetAdapterName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>922374ab-9212-433b-8478-b08a4005f8d4</id>
+                        <parameterName>name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>aeb4aeaa-2b50-4f59-8615-2b8891d9128f</id>
+                <name>Bluetooth_DisconnectFromDevice</name>
+                <funName>TestMgr_Bluetooth_DisconnectFromDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>97848abf-59ba-4d2c-b066-36b6d8e3a67c</id>
+                        <parameterName>devicehandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b80131b3-1148-4cbd-b6df-d0189ae97ac9</id>
+                <name>Bluetooth_GetPairedDevices</name>
+                <funName>TestMgr_Bluetooth_GetPairedDevices</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>be4787c9-ac12-4d6e-972f-f0f2fcc39f85</id>
+                <name>Bluetooth_StartDeviceDiscovery</name>
+                <funName>TestMgr_Bluetooth_StartDeviceDiscovery</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ea19b1b7-f00e-48da-9baa-d5d9233cd25d</id>
+                        <parameterName>devicetype</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d825f888-1f59-4969-b5ab-33c1fbcfd741</id>
+                <name>Bluetooth_SetAdapterPowerStatus</name>
+                <funName>TestMgr_Bluetooth_SetAdapterPowerStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7462061a-8835-414d-b3e9-5ee78acaf77b</id>
+                        <parameterName>powerstatus</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>eb4d2059-683a-46be-90a1-28e585aefb1e</id>
+                <name>Bluetooth_ConnectToDevice</name>
+                <funName>TestMgr_Bluetooth_ConnectToDevice</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0ae26b0a-a639-4ecb-b764-b92c7160e9ec</id>
+                        <parameterName>devicetype</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f9f4be60-03ae-469a-aa48-94981f376ba5</id>
+                        <parameterName>devicehandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>eca81c8a-1884-49a1-91e0-07de06bfbc5f</id>
+                <name>Bluetooth_StopAudioStreamingOut</name>
+                <funName>TestMgr_Bluetooth_StopAudioStreamingOut</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>31d866d2-c905-45b7-b33c-8028d9b37948</id>
+                        <parameterName>devicehandle</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f19f5202-2f1a-495a-9693-d9dd99fa726e</id>
+                <name>Bluetooth_SendRequest</name>
+                <funName>TestMgr_Bluetooth_SendRequest</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f5bff376-d75d-4330-b5f0-eb732bd30ee4</id>
+                <name>Bluetooth_GetNumberOfAdapters</name>
+                <funName>TestMgr_Bluetooth_GetNumberOfAdapters</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

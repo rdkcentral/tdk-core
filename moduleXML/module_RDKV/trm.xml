@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>65022785-1ef7-47af-b913-bb193fdc7be9</moduleId>
+        <!-- Module name -->
+        <moduleName>trm</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="52ddf72f-02e2-4dec-86d2-a8bf41476a0e" name="TestMgr_TRM_GetMaxTuners">
+                <parameters/>
+            </function>
+            <function id="3d74682e-e06a-4775-aeba-a2f19299f446" name="TestMgr_TRM_TunerReserveAllForRecord">
+                <parameters>
+                    <parameter id="01009476-ee7d-4524-a129-788255c7d336" parameterName="recordingId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="41fde347-6550-4724-9340-0f1fd311b59d" parameterName="duration" parameterType="DOUBLE" range="0-1000000"/>
+                    <parameter id="ed58f3b3-2985-471e-bb31-0f1d67dbcd97" parameterName="locator" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="389097cf-dc2d-43c4-9f57-6c6aa91b8db4" name="TestMgr_TRM_TunerReserveAllForLive">
+                <parameters>
+                    <parameter id="7137505b-eda5-43df-acd9-067acb65e3e7" parameterName="locator" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b03466ab-cbef-4167-a34f-7c1a839db692" parameterName="duration" parameterType="DOUBLE" range="0-1000000"/>
+                </parameters>
+            </function>
+            <function id="a578dbcf-32a2-4fdd-bb7b-89f31885f414" name="TestMgr_TRM_TunerReserveForRecord">
+                <parameters>
+                    <parameter id="bdeb5f68-58cc-44cd-87ff-881e3ba98892" parameterName="recordingId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="3d13d8ee-e432-4be9-8d39-8d94db6ba16e" parameterName="deviceNo" parameterType="INTEGER" range="0-5"/>
+                    <parameter id="d5517051-4df3-4fc5-a995-615a57ab6c6d" parameterName="selectOnConflict" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="f0f27a59-9628-4912-9c49-018782e0c5a5" parameterName="token" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b40cdc5b-3d7d-4343-85d3-da52c9615edb" parameterName="duration" parameterType="DOUBLE" range="0-1000000"/>
+                    <parameter id="00412d7f-ae25-43bf-803e-88b08b48b5bf" parameterName="hot" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="ef50ffa7-3ca8-47e5-84fb-3abec9003298" parameterName="locator" parameterType="STRING" range="A-Z"/>
+                    <parameter id="31dadc1a-ff3b-4118-87a0-c271fc4dca8f" parameterName="startTime" parameterType="DOUBLE" range="0-1000000"/>
+                </parameters>
+            </function>
+            <function id="f71ec591-7a5d-4c09-8637-73ae6886b56b" name="TestMgr_TRM_CancelLive">
+                <parameters>
+                    <parameter id="7341ead2-3517-4079-a56b-79bcfaac364d" parameterName="duration" parameterType="DOUBLE" range="0-1000000"/>
+                    <parameter id="cdcb9270-228c-4814-ae2c-1cb4ac2e4e45" parameterName="locator" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="71c9b067-96b1-44f7-85e6-a89906940f69" name="TestMgr_TRM_ReleaseTunerReservation">
+                <parameters>
+                    <parameter id="351ac9f6-d54e-4348-b180-b8108923ce2b" parameterName="deviceNo" parameterType="INTEGER" range="0-5"/>
+                    <parameter id="e14968b3-8ce9-4671-a12d-c5a2a50e518f" parameterName="duration" parameterType="DOUBLE" range="0-1000000"/>
+                    <parameter id="dc16857d-5fb1-46f5-8d3e-9bc961307606" parameterName="locator" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a1a5d5f4-3278-43af-9426-1185a8118075" parameterName="activity" parameterType="INTEGER" range="1-2"/>
+                </parameters>
+            </function>
+            <function id="d1515da5-2996-4c64-bb0c-03f80bbb4988" name="TestMgr_TRM_TunerReserveForLive">
+                <parameters>
+                    <parameter id="119258ec-4279-4cbe-bded-b070cd62d0a5" parameterName="locator" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4ab218df-132c-4bf2-ab86-d23379e37648" parameterName="deviceNo" parameterType="INTEGER" range="0-5"/>
+                    <parameter id="dec6092d-f2d4-4f1d-8776-fd6f91f59a2e" parameterName="duration" parameterType="DOUBLE" range="0-1000000"/>
+                    <parameter id="3867272a-7960-4d2f-ad93-15362c9bc748" parameterName="startTime" parameterType="DOUBLE" range="0-1000000"/>
+                    <parameter id="876452dd-79c4-4765-8cac-1722b69028dd" parameterName="selectOnConflict" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="17467b8a-6343-4af3-9995-9471debc1b14" parameterName="token" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="859c8c68-cb85-4ced-add5-145ece67258a" name="TestMgr_TRM_TunerReserveForHyBrid">
+                <parameters>
+                    <parameter id="7fcc232c-f24a-45fb-8058-5d231184d75b" parameterName="recordingId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e82be2fc-23ab-49de-b8b1-c0c49c785d7f" parameterName="locator" parameterType="STRING" range="A-Z"/>
+                    <parameter id="da381495-0fcc-4350-a7ec-c8eb97386c69" parameterName="duration" parameterType="DOUBLE" range="0-1000000"/>
+                </parameters>
+            </function>
+            <function id="525fdde0-b50c-4821-a2a1-97a4c4f2ddbd" name="TestMgr_TRM_CancelRecording">
+                <parameters>
+                    <parameter id="956ce820-d73f-4d83-9479-34c0ea80468c" parameterName="locator" parameterType="STRING" range="A-Z"/>
+                    <parameter id="3e3f1177-c112-4b44-b68f-7c4aac5eb152" parameterName="duration" parameterType="DOUBLE" range="0-1000000"/>
+                    <parameter id="f7cc26ea-ef21-41cf-a43c-400301ffd55d" parameterName="recordingId" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="27a0fe67-d311-4f0d-b3e9-a5501952835c" name="TestMgr_TRM_GetVersion">
+                <parameters/>
+            </function>
+            <function id="da03a8bd-5df1-4f22-aca4-bf70806a7c0b" name="TestMgr_TRM_GetAllReservations">
+                <parameters>
+                    <parameter id="5cb4b2e0-31a2-46d3-b609-51cb3dbc2064" parameterName="deviceNo" parameterType="INTEGER" range="0-5"/>
+                </parameters>
+            </function>
+            <function id="8027dfc6-c706-468f-a3a0-58c09d927061" name="TestMgr_TRM_GetAllTunerStates">
+                <parameters/>
+            </function>
+            <function id="bfef269a-42e2-4d9e-8ea2-871a54df7743" name="TestMgr_TRM_ValidateTunerReservation">
+                <parameters>
+                    <parameter id="8ecf1126-1abd-4848-a337-369b6cdbf3fa" parameterName="deviceNo" parameterType="INTEGER" range="0-5"/>
+                    <parameter id="9b7a9de5-efba-4a1a-b846-b174eb34da6a" parameterName="activity" parameterType="INTEGER" range="1-2"/>
+                    <parameter id="e79f819d-6b28-48ee-9c68-be8237d76e89" parameterName="duration" parameterType="DOUBLE" range="0-1000000"/>
+                    <parameter id="460c50da-4f2f-4ec2-89e7-7c23c84d233a" parameterName="locator" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c7ce4fac-eb25-4dbb-912d-cd3029923490" name="TestMgr_TRM_GetAllTunerIds">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>16aa6cbc-2280-4e79-b113-d564df6702ea</id>
+                <name>TRM_ReleaseTunerReservation</name>
+                <funName>TestMgr_TRM_ReleaseTunerReservation</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>47964b52-bfdd-4ea0-b3d1-731150a833ba</id>
+                        <parameterName>duration</parameterName>
+                        <parameterType>DOUBLE</parameterType>
+                        <range>0-1000000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9a9e1d68-7feb-420d-886e-fdcdadaf4180</id>
+                        <parameterName>deviceNo</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-5</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e22c0137-67c3-4a90-b86b-5e444d3078af</id>
+                        <parameterName>activity</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-2</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fbb84f99-4382-42c3-aa28-28b0a68e1a4d</id>
+                        <parameterName>locator</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>276ccb24-14b6-4ab5-9e67-d69f25f96817</id>
+                <name>TRM_GetMaxTuners</name>
+                <funName>TestMgr_TRM_GetMaxTuners</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>294f43d2-cb98-463b-ba56-20c1c2b9ee32</id>
+                <name>TRM_GetAllReservations</name>
+                <funName>TestMgr_TRM_GetAllReservations</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>44a8e251-c02b-4bf9-8b8f-49354f8194f5</id>
+                        <parameterName>deviceNo</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-5</range>
+                        <value>-1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3dd5d0cb-6a0d-4a72-b55f-e73a805ea43d</id>
+                <name>TRM_CancelRecording</name>
+                <funName>TestMgr_TRM_CancelRecording</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1994f2f7-336e-4a35-a863-1b07aa488bb3</id>
+                        <parameterName>locator</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6245564a-12e4-4b41-b0dd-e3979edc0103</id>
+                        <parameterName>recordingId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8e3495f6-04fb-4e9f-9a2a-7f59059756f1</id>
+                        <parameterName>duration</parameterName>
+                        <parameterType>DOUBLE</parameterType>
+                        <range>0-1000000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>499496a2-6228-4f2f-9aa4-b8d89e2feec8</id>
+                <name>TRM_GetVersion</name>
+                <funName>TestMgr_TRM_GetVersion</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4c1474cb-177c-4d2e-b885-ee2b0e4a8e66</id>
+                <name>TRM_GetAllTunerIds</name>
+                <funName>TestMgr_TRM_GetAllTunerIds</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>66c21eee-c852-4616-a42c-297de6f7bb4b</id>
+                <name>TRM_TunerReserveForRecord</name>
+                <funName>TestMgr_TRM_TunerReserveForRecord</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>209e4bbb-a21d-436a-bb9b-e52b10d258b5</id>
+                        <parameterName>selectOnConflict</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>39ab312d-be13-4e88-923f-895859127c7c</id>
+                        <parameterName>deviceNo</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-5</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>5581e9f4-827c-457c-96f9-be12054a2721</id>
+                        <parameterName>locator</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>ocap://0xCNN</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>618c511f-9551-4fe7-a98e-2d8cc4816716</id>
+                        <parameterName>recordingId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>CNN</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>665d0dfb-9d04-4cb8-8c54-66871a748ce0</id>
+                        <parameterName>token</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b30094c4-c6d5-41c1-a58b-b77e960f1635</id>
+                        <parameterName>duration</parameterName>
+                        <parameterType>DOUBLE</parameterType>
+                        <range>0-1000000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c85dea92-75de-42a6-8ab2-4f823375472f</id>
+                        <parameterName>hot</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fcf57a83-9f4c-45f4-9010-212105545ca0</id>
+                        <parameterName>startTime</parameterName>
+                        <parameterType>DOUBLE</parameterType>
+                        <range>0-1000000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>68905ac3-b3a9-4393-b8d9-a6aa96547833</id>
+                <name>TRM_TunerReserveForLive</name>
+                <funName>TestMgr_TRM_TunerReserveForLive</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>164c6f86-9abf-4618-8fd8-5f49acbea2f0</id>
+                        <parameterName>deviceNo</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-5</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>170c8d6e-a2ca-453d-a3b4-a35245b77896</id>
+                        <parameterName>startTime</parameterName>
+                        <parameterType>DOUBLE</parameterType>
+                        <range>0-1000000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3757e5ae-de0d-4544-af55-d988dab1f283</id>
+                        <parameterName>locator</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>ocap://0xCNN</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6042446d-1387-4228-b6a2-889238106abf</id>
+                        <parameterName>token</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b9c2a144-b232-412d-a48e-7f80e57d15b6</id>
+                        <parameterName>duration</parameterName>
+                        <parameterType>DOUBLE</parameterType>
+                        <range>0-1000000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e973a22b-621b-4ce4-8be1-0b6229f69f02</id>
+                        <parameterName>selectOnConflict</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7353bf1e-982b-4b10-8e04-31719f354e83</id>
+                <name>TRM_GetAllTunerStates</name>
+                <funName>TestMgr_TRM_GetAllTunerStates</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>73c26efc-d0d7-443a-ac17-f516f8022bb0</id>
+                <name>TRM_ValidateTunerReservation</name>
+                <funName>TestMgr_TRM_ValidateTunerReservation</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>041baf59-474a-4de9-8a35-f3f6186b95ed</id>
+                        <parameterName>activity</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-2</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1104441a-5294-44f7-a72c-021c7f454a49</id>
+                        <parameterName>locator</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3ae7a86f-b372-48c9-8cfa-d6b4ce64083c</id>
+                        <parameterName>deviceNo</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-5</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9f5ffc86-a790-4326-997f-d73ba7b42de9</id>
+                        <parameterName>duration</parameterName>
+                        <parameterType>DOUBLE</parameterType>
+                        <range>0-1000000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>fa51d708-4b48-4bd4-8dca-44ba90dd9beb</moduleId>
+        <!-- Module name -->
+        <moduleName>mso_mgmt_hal</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="f12f910b-208d-45ed-834a-f749205f0be2" name="mso_mgmt_hal_MsoValidatePwd">
+                <parameters>
+                    <parameter id="03ae9c0e-bc0c-4afd-a00e-412e2546a83f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e050f95c-4bff-41af-b2dc-59bc946de297" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5d100424-2394-413a-8f42-78277fad61d2" name="mso_mgmt_hal_SetMsoPodSeed">
+                <parameters>
+                    <parameter id="19891084-3888-4228-bdf0-6ed93b43f5c7" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="40823e03-4dfa-4c48-9fbc-acfe5deefff6" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="197fed80-1192-4aaa-b13e-0ed47139e26f" name="mso_mgmt_hal_GetMsoPodSeed">
+                <parameters>
+                    <parameter id="d39dddcc-f9d8-48bd-b372-35bb80d281d0" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>129a5ed9-ffaf-43fa-aa32-dcf6d262d192</id>
+                <name>mso_mgmt_hal_MsoValidatePwd</name>
+                <funName>mso_mgmt_hal_MsoValidatePwd</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>03f11aa2-152d-4df5-ae1e-d49e3f32ebd1</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8a8ea0ed-4182-413b-8fdb-c82b7acb236f</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ab830946-9fc7-4a7a-9e17-b70522be01c6</id>
+                <name>mso_mgmt_hal_SetMsoPodSeed</name>
+                <funName>mso_mgmt_hal_SetMsoPodSeed</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4ef2f528-4bcd-47d9-89fb-1ed6e5e7992f</id>
+                        <parameterName>paramValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>beb93b28-e21d-4cd7-a897-0ce0f758d0d5</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ca96409d-c891-4400-adcc-b7dc6a0b9c82</id>
+                <name>mso_mgmt_hal_GetMsoPodSeed</name>
+                <funName>mso_mgmt_hal_GetMsoPodSeed</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>19a319fd-3e10-4471-91f2-6415826582cc</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

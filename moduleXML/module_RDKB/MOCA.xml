@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>82d3da7a-0b5b-4f16-954d-88a4b5c15cef</moduleId>
+        <!-- Module name -->
+        <moduleName>MOCA</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="4d19bcc5-d440-4b1b-ad32-606b4b9f691d" name="Mocastub_Get">
+                <parameters>
+                    <parameter id="d777bf8c-1213-4c22-82f3-2c26d6bb1016" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d32658b6-db1d-41e6-9066-8eb8275080e1" name="Mocastub_SetOnly">
+                <parameters>
+                    <parameter id="1d0552c5-1864-4d57-8be1-3ddb30098ced" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="26e30574-03f1-47ee-8d65-1a5cc50f33d4" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ca037b6c-cfd5-4559-b175-f18e53d8ed96" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="89fddba3-babd-44d3-9f7b-434394e6fc0b" name="Mocastub_SetKeypassphrase">
+                <parameters>
+                    <parameter id="8ab1fc11-967a-48a0-bb8d-aa5ba532135c" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e7e0d589-b3a7-4fa7-b896-d3eb4a126bda" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="acb41f04-d0e1-4507-a348-a88c831e04a2" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9260bb01-9145-4c9e-9b23-a0b83e065314" name="Mocastub_Set">
+                <parameters>
+                    <parameter id="5a84161c-1ca3-4265-a818-99a5671eac61" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="1bdfc3d4-5d6a-4c87-aeeb-d0102d295912" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="83b628e6-fb16-4aef-887a-65ddbb94b49b" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>0862705d-b3d8-4901-a931-2fd3eb65c76a</id>
+                <name>Mocastub_Get</name>
+                <funName>Mocastub_Get</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>fe807e93-4af9-4a04-92b4-3d21c9816d87</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0c8e7b8d-fada-4dba-888f-8ee7c820c5c5</id>
+                <name>Mocastub_SetKeypassphrase</name>
+                <funName>Mocastub_SetKeypassphrase</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>05280970-1cca-4d36-9212-80fece9ecefe</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1d444e7a-a564-4235-9cf1-e584c5a873bb</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>99ab1594-6eb4-4618-baf7-d6fedcf41a06</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>87524097-a9b1-42e5-af93-f6fe8e81c686</id>
+                <name>Mocastub_SetOnly</name>
+                <funName>Mocastub_SetOnly</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1c1b27fa-29c1-4725-b1b1-c6cb164e8268</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2adb6aab-ea88-4d99-b858-32e837a3e03f</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e5c70842-d1ae-482a-b6e2-a4c608cb38b6</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b399e3a7-80f9-4c07-b15f-d23fc6317bdd</id>
+                <name>Mocastub_Set</name>
+                <funName>Mocastub_Set</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>625a378e-6551-4361-9124-0abf9d128870</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a49e2f0a-0240-49cb-8d2d-1dd9f469dc13</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f7236019-3ac6-4e76-89c9-9a7d8937f2db</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

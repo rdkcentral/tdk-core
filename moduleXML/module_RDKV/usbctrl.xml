@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>ec1dcde8-11d9-4a46-a080-7a62f44481f9</moduleId>
+        <!-- Module name -->
+        <moduleName>usbctrl</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="e68e0ae6-6064-40eb-918a-7fac01fc822c" name="TestMgr_USBCtrl_Init">
+                <parameters/>
+            </function>
+            <function id="ba7ee70d-df2f-4e57-877d-d079445e844a" name="TestMgr_USBCtrl_Term">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>3d63c870-e318-4956-96dc-f609194e14cf</id>
+                <name>USBCtrl_Init</name>
+                <funName>TestMgr_USBCtrl_Init</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6a4bf772-322c-4719-899f-c3b8c8ef51f6</id>
+                <name>USBCtrl_Term</name>
+                <funName>TestMgr_USBCtrl_Term</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

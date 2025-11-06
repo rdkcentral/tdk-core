@@ -1,0 +1,1909 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>1f91e422-4521-4f5f-b227-3f2a48eb399e</moduleId>
+        <!-- Module name -->
+        <moduleName>devicesettings</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>3</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/opt/logs/ocapri_log.txt]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[/opt/logs/uimgr_log.txt]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="b6350d87-80c1-460a-ae8e-a3177f65fe3b" name="TestMgr_DS_VOPCONFIG_getPortFromName">
+                <parameters>
+                    <parameter id="7167be40-7508-4c0d-a296-4a9665001779" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="81d71877-005d-418e-8d70-a8a0fb62dc07" name="TestMgr_DS_VDCONFIG_getDefaultDFC">
+                <parameters/>
+            </function>
+            <function id="8e0c0f40-5dde-4f58-9acc-5721a7dfc098" name="TestMgr_DS_AOP_setStereoAuto">
+                <parameters>
+                    <parameter id="70770b78-122b-4b02-808a-c1017e747d00" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="41bf0968-06c3-414a-8b18-6d4de60e4538" parameterName="autoMode" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="bab77b0f-f2dc-4119-9fef-fdf608fd7f5d" name="TestMgr_DS_VOP_getAspectRatio">
+                <parameters>
+                    <parameter id="55e03c21-c4aa-445a-a9e1-c5d25630bb7c" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ee465650-d34e-419d-b756-aca24208e2c5" name="TestMgr_DS_HOST_getVideoDevices">
+                <parameters/>
+            </function>
+            <function id="9b472904-ddee-4814-882b-e6a490014dad" name="TestMgr_DS_VOPCONFIG_getFrameRate">
+                <parameters>
+                    <parameter id="e9a0959c-6781-4bf3-b5db-c08fc4dc4303" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0308bab4-42a3-45b3-b06b-7430204eaaec" name="TestMgr_DS_AOPCONFIG_release">
+                <parameters/>
+            </function>
+            <function id="d9847305-bcf2-4c29-8918-ac41e7d77199" name="TestMgr_DS_HOST_addPowerModeListener">
+                <parameters/>
+            </function>
+            <function id="e34d9d33-8499-4e1e-94fc-987adb26c6f7" name="TestMgr_DS_FP_setBlink">
+                <parameters>
+                    <parameter id="cc5941b1-b6c5-48d6-8105-8702f2f577d5" parameterName="indicator_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="fc1dc326-5e7f-42d6-bbd8-fc6d479a79ec" parameterName="blink_interval" parameterType="INTEGER" range="1-10"/>
+                    <parameter id="4d253b40-edb8-4cf0-a17b-806c22007de6" parameterName="blink_iteration" parameterType="STRING" range="1-10"/>
+                </parameters>
+            </function>
+            <function id="6f4f02a3-c225-4531-b1c4-500354f7c0b0" name="TestMgr_DS_FP_setState">
+                <parameters>
+                    <parameter id="4ac94f76-e4b4-409c-b51c-69bad6dc2e9e" parameterName="indicator_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a8dcd070-d485-427f-82fa-b95a7d0b6899" parameterName="state" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="6a6977d5-1eb9-49c7-a3fb-9ba8e3911b23" name="TestMgr_DS_VDCONFIG_getDFCs">
+                <parameters/>
+            </function>
+            <function id="76f0849d-3075-4251-bc37-f9c23c463b71" name="TestMgr_DS_AOPCONFIG_load">
+                <parameters/>
+            </function>
+            <function id="cb98cf19-c742-42ef-98d9-9adf1d5167b6" name="TestMgr_DS_FP_enableDisplay">
+                <parameters>
+                    <parameter id="9a5c516e-5b2e-411b-99cf-ea8f640227ae" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="c41db342-4533-4707-a102-23bea7722d9d" name="TestMgr_DS_VOP_getEDIDBytes">
+                <parameters>
+                    <parameter id="644253cc-0828-4317-9ffa-a773a5bf062c" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fa95466f-ebeb-4de5-a1ea-9d5ef999656f" name="TestMgr_DS_AOP_getSupportedStereoModes">
+                <parameters>
+                    <parameter id="ddf12573-4a5f-443f-99e9-5df931faf704" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e097c0f0-7c3a-4afe-b747-3099ada71b3b" name="TestMgr_DS_FP_setColor">
+                <parameters>
+                    <parameter id="40df18ba-ad9a-4707-a98c-6f8de0648c04" parameterName="color" parameterType="INTEGER" range="0-4"/>
+                    <parameter id="410b165e-8ff4-4481-a68f-3673a0562a78" parameterName="indicator_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="47c6df30-7ccf-4aa1-89a9-33e04636e705" name="TestMgr_DS_VOPCONFIG_getSupportedTypes">
+                <parameters/>
+            </function>
+            <function id="74d1179c-4888-4abb-9d9c-8c099059a682" name="TestMgr_DS_AOP_loopThru">
+                <parameters>
+                    <parameter id="d87dd710-74e6-4c15-9c0c-c677877b6843" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="749e09bc-35eb-488c-b1ab-525a112161d9" parameterName="loop_thru" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="865ed801-b112-4f4e-beb0-c179ebcb1023" name="TestMgr_DS_HOST_removeDisplayConnectionListener">
+                <parameters/>
+            </function>
+            <function id="48e69ee4-9f56-454e-a79d-9d0ca63d5b4d" name="TestMgr_DS_VOPCONFIG_getPortType">
+                <parameters>
+                    <parameter id="684bf4ce-d1b8-43f0-84c6-b62d3a437e61" parameterName="port_id" parameterType="INTEGER" range="0-1000"/>
+                </parameters>
+            </function>
+            <function id="218ca8aa-af95-40af-9e32-d5b7a2225f96" name="TestMgr_DS_AOP_setLevel">
+                <parameters>
+                    <parameter id="5f6c48fa-5b87-43a0-babc-2ead7c9e45f6" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ce601830-511c-4fa6-9286-d977949c33b2" parameterName="audio_level" parameterType="FLOAT" range="1-10"/>
+                </parameters>
+            </function>
+            <function id="c34c4111-5542-4871-b60b-269548d1d9de" name="TestMgr_DS_VD_setPlatformDFC">
+                <parameters/>
+            </function>
+            <function id="326850e4-a13e-41e5-b341-be6a4f0e6486" name="TestMgr_DS_FP_getIndicatorFromName">
+                <parameters>
+                    <parameter id="7fa154e5-0952-476d-ab0a-8e0c0b9cbecf" parameterName="indicator_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="58b67f32-379f-4346-8ef0-bfae9c75e6ed" parameterName="fp_indicator" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d74b0896-27bf-4166-b7f2-706b70d4d445" name="TestMgr_DS_AOP_setStereoMode">
+                <parameters>
+                    <parameter id="2105f8b7-19e4-46d7-91ca-6ce5e4ec4470" parameterName="persist" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="4ef73649-98c8-427f-9199-9aea634a7af1" parameterName="get_only" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="a3e95a33-a0ec-4311-bce2-9901d2cb7eea" parameterName="stereo_mode" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5bc6c93b-ace4-471a-9a19-38cbc6255821" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="af008ff8-462a-47d1-9ffd-120b1f996147" name="TestMgr_DS_AOP_getSupportedEncodings">
+                <parameters>
+                    <parameter id="0fb2093e-5c12-4c59-ac76-9fa606c3abe5" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c54403a8-904b-4bc0-86a5-ecabd5ba9e84" name="TestMgr_DS_VOPTYPE_enableHDCP">
+                <parameters>
+                    <parameter id="0ee261a7-08f2-4104-9e36-b49a30e78f8d" parameterName="useMfrKey" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="5a746877-19da-4595-a3a4-47c792dbfd9a" parameterName="hdcpKey" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ca7582b8-ba8c-4df1-9e36-4e8ca69c7430" parameterName="keySize" parameterType="INTEGER" range="0-10000"/>
+                    <parameter id="40ee7f4e-9358-4413-ba4a-f773a7337580" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="34581982-5090-4223-b8de-89d2f3441342" parameterName="protectContent" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="abca9154-f2e9-4d3d-b56b-9794b6d21fd8" name="TestMgr_DS_FP_getIndicators">
+                <parameters/>
+            </function>
+            <function id="5d3bdf79-9a8b-41ee-b8e8-3997b0a8599b" name="TestMgr_DS_AOP_setCompression">
+                <parameters>
+                    <parameter id="7dcdf495-23c6-4a47-91b3-37928a74fd9e" parameterName="get_only" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="14bd9c8a-379d-43f1-b8c9-990ca190f670" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d8bdf295-652c-429e-8fb3-3b0334c853b4" parameterName="compression_format" parameterType="INTEGER" range="-10-20"/>
+                </parameters>
+            </function>
+            <function id="418cdaad-021d-4820-8904-5e9cf741d0cd" name="TestMgr_DS_VR_isInterlaced">
+                <parameters>
+                    <parameter id="982eb918-7539-4480-8442-c1f81e5cec5d" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="46a52c37-d19e-4ccb-a825-b1fc374ff546" name="TestMgr_DS_VDCONFIG_getDevices">
+                <parameters/>
+            </function>
+            <function id="b4d59b2a-369a-4e1a-9da1-e3f5fa3f0bcd" name="TestMgr_DS_AOP_getStereoAuto">
+                <parameters>
+                    <parameter id="d5bb4234-a2c5-4395-af78-2ff823386877" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a9fc6ab0-c25a-4893-84e1-f57d9fb9523a" name="TestMgr_DS_VOP_isContentProtected">
+                <parameters>
+                    <parameter id="74a65203-649e-40f4-97cc-0266b26ffda7" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2c012fb3-be3f-4227-855c-84539ecd7c70" name="TestMgr_DS_AOPCONFIG_getPortFromName">
+                <parameters>
+                    <parameter id="077c58fc-dbb3-4768-ae1e-29525c1988d7" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="115f6c05-c11f-47e9-ad52-6fd338e4627c" name="TestMgr_DS_HOST_getVideoOutputPortFromId">
+                <parameters>
+                    <parameter id="86413770-b747-4114-b4fa-346a67415cdd" parameterName="port_id" parameterType="INTEGER" range="0-255"/>
+                </parameters>
+            </function>
+            <function id="6c6a24f5-051f-4b75-b2be-466a9db10417" name="TestMgr_DS_VD_getHDRCapabilities">
+                <parameters/>
+            </function>
+            <function id="761f6ea2-227b-4e27-ae45-152bf3f1120d" name="TestMgr_DS_HOST_Resolutions">
+                <parameters>
+                    <parameter id="e71ca712-f903-4423-8897-2daf1bff9538" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8bfe5fda-f3af-4a61-8875-fbf1b2a8e9ca" name="TestMgr_DS_VD_getSupportedDFCs">
+                <parameters/>
+            </function>
+            <function id="570de97a-96c4-4976-b8be-47e26dad39cb" name="TestMgr_DS_VOP_setResolution">
+                <parameters>
+                    <parameter id="b48f6aa6-6e53-4c80-bf06-9efb46e26e87" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="84fff5d4-a350-4c0a-8abe-b38494539daf" parameterName="get_only" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="70d5e645-72ba-43d7-97ac-4b3345378f19" parameterName="resolution" parameterType="STRING" range="A-Z &amp; 0-9"/>
+                </parameters>
+            </function>
+            <function id="e3363ae9-fb1d-40d4-999b-41627d162fc2" name="TestMgr_DS_VOPTYPE_setRestrictedResolution">
+                <parameters>
+                    <parameter id="7d68eff4-e3a2-4ed9-bd59-16a3357e6369" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="360b97cc-9abc-4a12-a3b1-c3435f6fa8f7" parameterName="resolution" parameterType="INTEGER" range="0-1000"/>
+                </parameters>
+            </function>
+            <function id="60297860-2795-4abf-817c-9c3327d8f8d9" name="TestMgr_DS_FP_getIndicatorFromId">
+                <parameters>
+                    <parameter id="61912527-351d-4c76-9263-a1b7a6e4fd09" parameterName="indicator_id" parameterType="INTEGER" range="0-255"/>
+                </parameters>
+            </function>
+            <function id="20a683a4-0165-4960-b31b-059224967670" name="TestMgr_DS_ReInitializeAudioOutputPort">
+                <parameters>
+                    <parameter id="d7b7fb19-2645-443a-8b82-891a8c7d37d4" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="423b7166-add3-4556-9b29-cad292561214" name="TestMgr_DS_managerDeinitialize">
+                <parameters/>
+            </function>
+            <function id="dda66fca-ad03-489c-b989-4385dd5e2c2c" name="TestMgr_DS_FP_getTextDisplayFromId">
+                <parameters>
+                    <parameter id="c7941ece-802d-4e68-9e05-3855d52799de" parameterName="text_id" parameterType="INTEGER" range="0-255"/>
+                </parameters>
+            </function>
+            <function id="981bec47-d8cc-4148-96b5-6dba4f92e62a" name="TestMgr_DS_VOPTYPE_isHDCPSupported">
+                <parameters>
+                    <parameter id="b2a6e4fe-d493-4869-a674-b42fbd49c5fb" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b4cff4be-b201-4504-8262-ba8d11d54bdb" name="TestMgr_DS_HOST_getAudioOutputPortFromId">
+                <parameters>
+                    <parameter id="93a9a2cd-2f94-4682-ac5a-7dcdc681cb32" parameterName="port_id" parameterType="INTEGER" range="0-255"/>
+                </parameters>
+            </function>
+            <function id="a9057c79-d9fe-49ca-a3d5-cc105ed4d436" name="TestMgr_DS_VD_setDFC">
+                <parameters>
+                    <parameter id="02c81804-77c8-4254-99d0-4069481989ac" parameterName="zoom_setting" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fcdac842-e9b8-4248-a840-83ab0ef13ccf" name="TestMgr_DS_FP_FP_getSupportedColors">
+                <parameters>
+                    <parameter id="a1842540-626d-44c3-909c-f21104acf4bd" parameterName="indicator_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2ee61821-55f4-4fa7-832e-5ddef5aa3795" name="TestMgr_DS_HOST_removePowerModeListener">
+                <parameters/>
+            </function>
+            <function id="7a97ebdd-5722-4643-8d3d-43427ead59bb" name="TestMgr_DS_VOPCONFIG_getPortFromId">
+                <parameters>
+                    <parameter id="023a0cde-ecc8-4413-9e63-652563e82b61" parameterName="port_id" parameterType="INTEGER" range="0-1000"/>
+                </parameters>
+            </function>
+            <function id="0f86fe49-4700-4be6-a610-457383f74016" name="TestMgr_DS_HOST_setVersion">
+                <parameters>
+                    <parameter id="ba7731ee-e0d5-40cc-b467-97ab56f1d459" parameterName="versionNo" parameterType="INTEGER" range="0-255"/>
+                </parameters>
+            </function>
+            <function id="7e10b9a8-6911-42f5-9532-378ad24112d3" name="TestMgr_DS_HOST_getVideoOutputPorts">
+                <parameters/>
+            </function>
+            <function id="be9f2d32-a120-40cc-a738-f94c622a793f" name="TestMgr_DS_AOP_mutedStatus">
+                <parameters>
+                    <parameter id="bb5241de-e8f4-4bae-b238-711dde7c1658" parameterName="mute_status" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="e9454b5e-3105-4e0a-b184-fd47451bedc9" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3c9e5155-f619-40b5-87fa-5202614347f2" name="TestMgr_DS_FP_getBrightnessLevels">
+                <parameters>
+                    <parameter id="d82d3a6b-2975-476e-9b49-092ab3e48a9b" parameterName="indicator_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="43e1741a-94f8-4dfe-b4f0-041b4cf3ca59" name="TestMgr_DS_AOP_setEncoding">
+                <parameters>
+                    <parameter id="b3a6f6a0-d993-4411-8784-708c88bb8b9c" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="166d8881-ca10-4be4-9d59-3f3ae495a3ef" parameterName="encoding_format" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f52c4d96-dd44-4187-816c-88b8d537d09e" name="TestMgr_DS_VOP_isDisplayConnected">
+                <parameters>
+                    <parameter id="2c8f80f0-6e0e-49f1-95ec-ba7f240b38c2" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="893449c5-0215-4ee8-ad0a-67d83019283a" name="TestMgr_DS_VOP_getHDCPStatus">
+                <parameters>
+                    <parameter id="880e543e-80c9-48fa-9e84-9a76101344f0" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5ff5a3bc-4957-46de-970c-060ad4aa06d6" name="TestMgr_DS_VOPCONFIG_getSSMode">
+                <parameters>
+                    <parameter id="4171a1c9-2c42-406d-874e-cf35de6b57ec" parameterName="ss_id" parameterType="INTEGER" range="0-1000"/>
+                </parameters>
+            </function>
+            <function id="106df84f-49d2-4e74-ada7-5a811b296a43" name="TestMgr_DS_VOP_getDisplayDetails">
+                <parameters>
+                    <parameter id="b4948007-b32c-4ca1-8d4d-b4f33bbf0a41" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="49b56912-423d-499b-b62a-194bf9aab45c" name="TestMgr_DS_AOP_setDB">
+                <parameters>
+                    <parameter id="22224bf2-0cde-40ec-ae08-793f7cda33b2" parameterName="db_level" parameterType="FLOAT" range="1-100"/>
+                    <parameter id="4ccad99f-19c5-4f0f-8cc3-b66658cfad40" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="1eb24c4e-9407-4d9c-8861-a56207bee6fc" name="TestMgr_DS_FP_getTextBrightnessLevels">
+                <parameters/>
+            </function>
+            <function id="0aaf369f-96ae-49c7-9d6b-cca2e32e71af" name="TestMgr_DS_FP_setBrightness">
+                <parameters>
+                    <parameter id="fb7383e8-2377-44c0-b28c-4435cf655b47" parameterName="brightness" parameterType="INTEGER" range="1-100"/>
+                    <parameter id="10ca7a16-b499-4047-ace3-3f9a89c867cc" parameterName="text" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e12e2aa1-cfa7-4367-94cc-3f5e157b52f5" parameterName="get_only" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="3ddec0cd-6186-4835-9bad-2752b1aa9cd6" parameterName="persist" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="bef54f30-e0d7-408a-b377-b4cde8c21c48" parameterName="indicator_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="cfbde4a9-2f26-422a-9b04-44d189467aa5" name="TestMgr_DS_VOPTYPE_DTCPSupport">
+                <parameters>
+                    <parameter id="d8fb4652-a9a2-42b5-aff0-c04686bed39e" parameterName="port_id" parameterType="INTEGER" range="0"/>
+                </parameters>
+            </function>
+            <function id="749a59af-e796-407c-9ae6-e1c2a55f92c4" name="TestMgr_DS_HOST_getHostEDID">
+                <parameters/>
+            </function>
+            <function id="7aecf69a-beaf-49d9-978d-6339ed02e19f" name="TestMgr_DS_HOST_getVideoOutputPortFromName">
+                <parameters>
+                    <parameter id="6dd6d529-17c9-425a-b194-85414356c46c" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="216188f7-8399-4454-a75b-44923bea048d" name="TestMgr_DS_VOPTYPE_HDCPSupport">
+                <parameters>
+                    <parameter id="0cb1a879-b9d9-4956-827a-747aac925ea5" parameterName="port_id" parameterType="INTEGER" range="0"/>
+                </parameters>
+            </function>
+            <function id="c03a24eb-7257-4c24-80af-c3be9e724154" name="TestMgr_DS_FP_getTextDisplays">
+                <parameters/>
+            </function>
+            <function id="1374fe08-7cce-4cd2-831f-cbd3b2ab2877" name="TestMgr_DS_FP_getColorMode">
+                <parameters>
+                    <parameter id="24323e8e-2f64-4f7e-9643-93fc1c6fb042" parameterName="indicator_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4d4f3739-8dd1-47b9-aad6-acb2c7b4f4c7" name="TestMgr_DS_managerInitialize">
+                <parameters/>
+            </function>
+            <function id="182708ba-c48a-409b-a1a5-994fabfa02ac" name="TestMgr_DS_VOPCONFIG_getPixelResolution">
+                <parameters>
+                    <parameter id="f1662349-deef-4886-97f7-407c8c200311" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3c029d35-4bd3-4f43-8c1f-51d7f6e9b4ed" name="TestMgr_DS_AOPCONFIG_getPortType">
+                <parameters>
+                    <parameter id="cb056b6e-61e2-4708-9bc1-78adc18cd84e" parameterName="port_id" parameterType="INTEGER" range="0-255"/>
+                </parameters>
+            </function>
+            <function id="aa7395dc-9afa-4913-b3ab-12f4158ed6ba" name="TestMgr_DS_VOPTYPE_getRestrictedResolution">
+                <parameters>
+                    <parameter id="d842065e-0afa-4e73-b08e-176c8e290e60" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a5157984-b6cb-426b-bb6f-bd3413e4a0dd" name="TestMgr_DS_VOPCONFIG_getVideoResolution">
+                <parameters>
+                    <parameter id="204a239c-4608-484d-aaa6-071f5d295274" parameterName="port_id" parameterType="INTEGER" range="0-1000"/>
+                </parameters>
+            </function>
+            <function id="b199ea1b-9961-4568-9294-95fcad70c8a6" name="TestMgr_DS_AOP_getSupportedCompressions">
+                <parameters>
+                    <parameter id="c3985cd5-fce5-4ebe-b8f2-8d1fa29cf553" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a78bf18b-4550-45da-baa6-ae5e3da1ac25" name="TestMgr_DS_FP_setTimeForamt">
+                <parameters>
+                    <parameter id="4fae4e16-3f16-4551-87ef-8605e43d9a7c" parameterName="time_format" parameterType="INTEGER" range="0-2"/>
+                    <parameter id="4a6164e9-ff80-4431-8555-06b3ffe03452" parameterName="text" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e604c5a6-0ca7-4198-863e-232f9532d90c" name="TestMgr_DS_HOST_getAudioOutputPortFromName">
+                <parameters>
+                    <parameter id="3847a7c6-3659-4714-b01b-243c02a03b06" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="03dc134e-033c-45d5-8592-d115f73414ad" name="TestMgr_DS_HOST_addDisplayConnectionListener">
+                <parameters/>
+            </function>
+            <function id="8ca516d4-47c7-4de5-920f-7f0b7b6bc319" name="TestMgr_DS_AOPCONFIG_getPorts">
+                <parameters/>
+            </function>
+            <function id="dea17f13-a468-4663-8295-ae0150009e8d" name="TestMgr_DS_AOPCONFIG_getPortFromId">
+                <parameters>
+                    <parameter id="e49a5bcf-08ff-47cf-91c4-d836da04a087" parameterName="port_id" parameterType="INTEGER" range="0-255"/>
+                </parameters>
+            </function>
+            <function id="daed44ab-071e-44f0-95be-c2a3f274c215" name="TestMgr_DS_HOST_getCPUTemperature">
+                <parameters/>
+            </function>
+            <function id="1d9e4d3f-f8ca-4110-a5a3-a092607697d3" name="TestMgr_DS_VOPTYPE_getPorts">
+                <parameters>
+                    <parameter id="aecf2509-4f5a-4c6f-b6d6-23f233a6e042" parameterName="port_id" parameterType="INTEGER" range="0-1000"/>
+                </parameters>
+            </function>
+            <function id="f98f4512-bfc5-4e3d-9705-1a5ffbe3e2c2" name="TestMgr_DS_AOPCONFIG_getSupportedTypes">
+                <parameters/>
+            </function>
+            <function id="ad951d8d-5ba8-43e0-9bbb-6598d234ced2" name="TestMgr_DS_HOST_getAvailableSleepModes">
+                <parameters/>
+            </function>
+            <function id="0e410320-5151-474a-8c5f-e9555fb2d293" name="TestMgr_DS_HOST_getPreferredSleepMode">
+                <parameters/>
+            </function>
+            <function id="ff38c43f-1434-4ca4-8b7c-c3a0501353c7" name="TestMgr_DS_FP_setText">
+                <parameters>
+                    <parameter id="2b113bbc-8200-474e-834d-cd56081289d5" parameterName="text_display" parameterType="STRING" range="A-Z"/>
+                    <parameter id="faa43309-2cf5-499b-8b50-9dcc987adde2" parameterName="text" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5ac97f2e-87dc-410f-a2db-fd1ffdef9c73" name="TestMgr_DS_FP_getTextDisplayFromName">
+                <parameters>
+                    <parameter id="7c640ada-6055-47ea-aa07-fb7b20770baa" parameterName="text_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c23fd964-ffe7-4ca5-9e7b-5843b2404e76" name="TestMgr_DS_VOP_setEnable">
+                <parameters>
+                    <parameter id="a61108b5-dca1-4d28-816b-3a5186e968ee" parameterName="enable" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="4ef48f43-1cd5-4347-9ee3-0afd51b4e768" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="db503576-e3d7-48b3-a1d0-1a48ab829174" name="TestMgr_DS_HOST_setPowerMode">
+                <parameters>
+                    <parameter id="1c764860-d4b0-47e8-9c30-4dda8b95325a" parameterName="new_power_state" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="90e0fef7-8e05-4c98-b88d-ab94b19c1f89" name="TestMgr_DS_AOP_getOptimalLevel">
+                <parameters>
+                    <parameter id="d33055dd-2614-4138-b746-2210ffd031f0" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="12c56c43-282f-49d3-be4f-18d98881373a" name="TestMgr_DS_AOP_getGain">
+                <parameters>
+                    <parameter id="8e4ebe45-f069-414a-865e-0e4470c73bd5" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b8b82ef4-bec6-45fe-a1b2-7248884e9b4f" name="TestMgr_DS_FP_setTime">
+                <parameters>
+                    <parameter id="d00ba43f-110f-454b-8a3a-2025e7dd5efa" parameterName="time_mins" parameterType="INTEGER" range="1-60"/>
+                    <parameter id="3c3338e9-59c4-43d6-b99f-1d21c8471f06" parameterName="time_hrs" parameterType="INTEGER" range="1-24"/>
+                    <parameter id="b5d6732d-244a-48af-82f9-85ee0a3dc8f5" parameterName="text" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b8113dc4-d9d5-441d-bc37-4b9e4d9e12b4" name="TestMgr_DS_VOP_setDisplayConnected">
+                <parameters>
+                    <parameter id="d731aea0-e161-4ca5-91dd-59475976351b" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="601dcd1e-5e83-46ed-ba3b-8bc724328836" parameterName="connected" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="ebdd4987-c117-411c-a895-2f2d51d2ac3e" name="TestMgr_DS_FP_setScroll">
+                <parameters>
+                    <parameter id="d6861760-7ef4-4ee5-923f-4267ead7568f" parameterName="viteration" parameterType="INTEGER" range="1-10"/>
+                    <parameter id="7ac70933-20d0-428c-be9e-b80606e8696f" parameterName="hiteration" parameterType="INTEGER" range="1-10"/>
+                    <parameter id="014dd57c-3b02-4bb8-a988-f98168c2a713" parameterName="text" parameterType="STRING" range="A-Z"/>
+                    <parameter id="096a8e17-d58e-482c-98f0-1d35585b1746" parameterName="hold_duration" parameterType="INTEGER" range="1-10"/>
+                </parameters>
+            </function>
+            <function id="525eb331-e5f3-470c-94c9-e8079be895d2" name="TestMgr_DS_VOPTYPE_isDynamicResolutionSupported">
+                <parameters>
+                    <parameter id="26cbd8ef-75fd-470e-896b-f2395cd6da80" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="7597f7d9-c7e6-438d-8343-eb3328860414" name="TestMgr_DS_FP_setTextBrightness">
+                <parameters>
+                    <parameter id="a7715517-7bad-497e-9c61-5c32dc85551e" parameterName="brightness" parameterType="INTEGER" range="0-255"/>
+                </parameters>
+            </function>
+            <function id="062f1c34-3746-48f2-99c3-9a23ee055df2" name="TestMgr_DS_HOST_setPreferredSleepMode">
+                <parameters>
+                    <parameter id="516526c9-0f87-40d1-9e1b-3985aef112f4" parameterName="sleepMode" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c6ebe58c-9f96-4538-8e0b-9441b493c3b2" name="TestMgr_DS_VOP_hasSurround">
+                <parameters>
+                    <parameter id="98ea819b-96d9-47ec-92d8-c939fc29ff62" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="806ef393-9497-4328-bf63-004057127259" name="TestMgr_DS_VOP_isActive">
+                <parameters>
+                    <parameter id="acb30f67-c89a-47ca-a9ad-840f62a98a67" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9f241a9e-f8fc-4bd3-9e79-977255045b72" name="TestMgr_DS_FP_getTextBrightness">
+                <parameters/>
+            </function>
+            <function id="69a34913-3438-40ef-b139-008f9d28c6bf" name="TestMgr_DS_FP_getColors">
+                <parameters/>
+            </function>
+            <function id="54e439fa-faeb-4456-92b2-2061144ff798" name="TestMgr_DS_VOP_getDefaultResolution">
+                <parameters>
+                    <parameter id="17bbb287-2a59-47b2-9394-b2b71223254b" parameterName="port_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="642ba083-fa2d-4016-a745-e0a165a7ed5a" name="TestMgr_DS_FP_getTextColorMode">
+                <parameters/>
+            </function>
+            <function id="c5119c10-4f8e-4ed5-adff-f4c752098bf7" name="TestMgr_DS_HOST_getAudioOutputPorts">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>02b222eb-224e-4ad0-ae40-8ffd7d277eb3</id>
+                <name>DS_SetScroll</name>
+                <funName>TestMgr_DS_FP_setScroll</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1a3fc945-3aa9-4710-8c72-50ed4fda1ec2</id>
+                        <parameterName>text</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Text</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>785708f6-bdca-4061-b00c-d76256e9cb5f</id>
+                        <parameterName>hiteration</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-10</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d4e53ca1-063d-439a-8bcb-675da7b95d63</id>
+                        <parameterName>hold_duration</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-10</range>
+                        <value>2</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e539b4ee-9eef-4ea8-b258-6d5cc0a06e6e</id>
+                        <parameterName>viteration</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-10</range>
+                        <value>3</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>03707566-3c98-4aa5-bd0d-d4ae7ed028ee</id>
+                <name>DS_HOST_getAvailableSleepModes</name>
+                <funName>TestMgr_DS_HOST_getAvailableSleepModes</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>092437a4-96bc-43c7-960c-edb5377fbd3b</id>
+                <name>DS_AOP_getOptimalLevel</name>
+                <funName>TestMgr_DS_AOP_getOptimalLevel</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>09fe0274-0102-4e8a-b43f-f1fbb6480bd8</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>0d0aed6e-98d7-4c47-96d0-a7f0b1e0c9a6</id>
+                <name>DS_VD_setPlatformDFC</name>
+                <funName>TestMgr_DS_VD_setPlatformDFC</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>138984fd-6e52-4dbb-a1c0-48170694cd86</id>
+                <name>DS_AOPCONFIG_load</name>
+                <funName>TestMgr_DS_AOPCONFIG_load</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>18432181-5842-47ae-a671-b3cc250077cd</id>
+                <name>DS_GetCPUTemperature</name>
+                <funName>TestMgr_DS_HOST_getCPUTemperature</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>22fce6d8-e01d-426b-bb1c-3d470c52d708</id>
+                <name>DS_AOPCONFIG_getPorts</name>
+                <funName>TestMgr_DS_AOPCONFIG_getPorts</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>2524f9ed-b41d-42e1-8a75-e3062d7859d6</id>
+                <name>DS_SetTime</name>
+                <funName>TestMgr_DS_FP_setTime</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7a7a698a-b4ce-426b-9e98-6fc20185e0e7</id>
+                        <parameterName>time_hrs</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-24</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>98a5148c-d679-44fe-91a4-8a6e2813f6d6</id>
+                        <parameterName>text</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Text</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dbea5e9d-1610-4496-bedf-faba6981cb08</id>
+                        <parameterName>time_mins</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-60</range>
+                        <value>2</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>25ac39a3-b242-41fc-8949-0892683c2cd3</id>
+                <name>DS_Resolution</name>
+                <funName>TestMgr_DS_HOST_Resolutions</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d2cf6bab-8733-4629-ba0b-5f42b9672831</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>276c4f3c-5f95-4185-b9d1-c35755d355bd</id>
+                <name>DS_VOP_isActive</name>
+                <funName>TestMgr_DS_VOP_isActive</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5ccb2819-c33a-422b-8d11-9791286c2d79</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2eeafc81-eb21-485f-afcd-9274f1124fbc</id>
+                <name>DS_SetColor</name>
+                <funName>TestMgr_DS_FP_setColor</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ff2d9ea1-f1ee-4aed-866d-d3515c708809</id>
+                        <parameterName>indicator_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Power</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ffb350c4-76bd-4e2c-af2e-3fcaae4849d4</id>
+                        <parameterName>color</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-4</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2ef79343-a1d0-4678-a4a4-d25924c2526d</id>
+                <name>DS_SetEnable</name>
+                <funName>TestMgr_DS_VOP_setEnable</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6f1214c7-634d-49fc-8555-fb818ee7c490</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c98cd4b0-1eda-4ae2-b0ac-ff8d8b6f8e50</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>30207356-9849-4464-9945-95b193b7d9e3</id>
+                <name>DS_AOPCONFIG_release</name>
+                <funName>TestMgr_DS_AOPCONFIG_release</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>322bb783-074a-4bf4-9b61-b88587646816</id>
+                <name>DS_FP_getTextColorMode</name>
+                <funName>TestMgr_DS_FP_getTextColorMode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>355393c4-4f3f-4737-b5e6-02923ff1000e</id>
+                <name>DS_FP_enableDisplay</name>
+                <funName>TestMgr_DS_FP_enableDisplay</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7939de0f-5e40-4afd-b79a-983869b712f2</id>
+                        <parameterName>enable</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3b65ba48-6d09-4587-a7cc-f23fba17ce57</id>
+                <name>DS_VDCONFIG_getDFCs</name>
+                <funName>TestMgr_DS_VDCONFIG_getDFCs</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>3cc6b305-c325-4cdb-b2bf-2d8fc720e5f1</id>
+                <name>DS_VOP_setDisplayConnected</name>
+                <funName>TestMgr_DS_VOP_setDisplayConnected</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7faac58f-fdec-43c2-a0f4-c44889b7882a</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ba6fff20-9cea-48ef-9f18-444e62cec998</id>
+                        <parameterName>connected</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>40fff0ff-065d-490f-810d-ccc386efe7e9</id>
+                <name>DS_VOPCONFIG_getVideoResolution</name>
+                <funName>TestMgr_DS_VOPCONFIG_getVideoResolution</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1644467b-eafb-4406-9273-dd47e1608d7a</id>
+                        <parameterName>port_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>435fa1fb-c822-4894-b374-b05091ba57ce</id>
+                <name>DS_AOPCONFIG_getPortFromName</name>
+                <funName>TestMgr_DS_AOPCONFIG_getPortFromName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5b516015-7eb5-4aa9-b7a3-72aff81c512d</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>IDLR</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4480eae7-1928-463a-bc89-7a372d14ce84</id>
+                <name>DS_VideOutputPort_getSupportedTypes</name>
+                <funName>TestMgr_DS_VOPCONFIG_getSupportedTypes</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>44aadfaa-19e7-44a1-a3a6-c9cb9457b2d6</id>
+                <name>DS_VideoOutputPort_getPortType</name>
+                <funName>TestMgr_DS_VOPCONFIG_getPortType</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5418b332-6a67-4128-b52b-a9a63945e8ac</id>
+                        <parameterName>port_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>44db57a4-39f0-41f4-b071-2a396081d009</id>
+                <name>DS_AOP_setStereoAuto</name>
+                <funName>TestMgr_DS_AOP_setStereoAuto</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>022e61d4-0df7-40df-97ca-ab97683f638e</id>
+                        <parameterName>autoMode</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>1de5151b-5c28-41d4-a606-e983493037ab</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>460f01ac-2c6d-4385-b7ec-17e1b162477d</id>
+                <name>DS_SetDFC</name>
+                <funName>TestMgr_DS_VD_setDFC</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ed399c3f-cafb-482c-9073-08aa69ad3933</id>
+                        <parameterName>zoom_setting</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Full</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4c552770-5cde-4b31-a76b-d6ce6278b8e2</id>
+                <name>DS_ManagerDeInitialize</name>
+                <funName>TestMgr_DS_managerDeinitialize</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4c820ad3-6a24-4e64-b185-d79212b13e00</id>
+                <name>DS_AOPCONFIG_getSupportedTypes</name>
+                <funName>TestMgr_DS_AOPCONFIG_getSupportedTypes</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4d01c74c-6ef2-4bdc-af22-bbe1137ebb1a</id>
+                <name>DS_HOST_getAudioOutputPortFromName</name>
+                <funName>TestMgr_DS_HOST_getAudioOutputPortFromName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>cf35b598-5d58-4656-941b-362db0b7eb82</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>SPDIF0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4d92ee03-5940-4f9a-8619-441e9e39479c</id>
+                <name>DS_LoopThru</name>
+                <funName>TestMgr_DS_AOP_loopThru</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8cf1707f-ab57-4a6a-a1ce-109abc1bbc08</id>
+                        <parameterName>loop_thru</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b36791c6-51e2-461d-a6c0-2b687520979c</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>54991a18-4f0e-4500-b7be-0d3e965866ca</id>
+                <name>DS_AddPowerModeListener</name>
+                <funName>TestMgr_DS_HOST_addPowerModeListener</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>54d36d49-0674-400d-9970-c6165591fb3c</id>
+                <name>DS_HOST_getVideoOutputPortFromName</name>
+                <funName>TestMgr_DS_HOST_getVideoOutputPortFromName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9b3478f6-f873-4b1b-92c0-e694d5ca5ef4</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>56139c61-bc2f-483f-bde0-31092722eb75</id>
+                <name>DS_SetPowerMode</name>
+                <funName>TestMgr_DS_HOST_setPowerMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a9c55dd0-ff67-414d-8953-6389b3be7366</id>
+                        <parameterName>new_power_state</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5a9f1d83-2ded-47ec-bb10-f5e549c3069c</id>
+                <name>DS_SetCompression</name>
+                <funName>TestMgr_DS_AOP_setCompression</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8acfb764-454a-43a8-95ac-374b5e59b8f3</id>
+                        <parameterName>compression_format</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>-10-20</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e37d1b05-e41e-46a8-bb7f-528e6e889ac7</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e81d6a60-a6a2-41b5-b51b-53d52b7b90f2</id>
+                        <parameterName>get_only</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5c1b7e1c-e579-4593-8c83-8c3c20093b55</id>
+                <name>DS_AOP_getStereoAuto</name>
+                <funName>TestMgr_DS_AOP_getStereoAuto</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>95ec5dc4-efbf-49d6-8c31-0dcd458a4476</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5c4ca0be-86f5-4c73-865b-329c11356662</id>
+                <name>DS_FP_getTextBrightness</name>
+                <funName>TestMgr_DS_FP_getTextBrightness</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>65b44096-2a0f-498b-b808-3de43409607f</id>
+                <name>DS_HOST_setPreferredSleepMode</name>
+                <funName>TestMgr_DS_HOST_setPreferredSleepMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3dc940ee-1278-40ad-ad29-5a367cc12453</id>
+                        <parameterName>sleepMode</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>LIGHT_SLEEP</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>695b4941-c663-4c23-b400-8c141c688a5c</id>
+                <name>DS_VR_isInterlaced</name>
+                <funName>TestMgr_DS_VR_isInterlaced</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ec64e149-35ba-4ef0-bc8b-b8c31fa907ae</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6bf890c8-ae04-4079-911a-272ec8967f21</id>
+                <name>DS_HOST_getPreferredSleepMode</name>
+                <funName>TestMgr_DS_HOST_getPreferredSleepMode</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>6dc88579-4865-48b7-8455-945d6a196c8d</id>
+                <name>DS_ReInitializeAudioPort</name>
+                <funName>TestMgr_DS_ReInitializeAudioOutputPort</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4912244d-3ee6-48de-8cf5-5f5d9dfa8b51</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6dd7a30b-3e8a-4499-8b53-20033ac48d9c</id>
+                <name>DS_FPCONFIG_getIndicatorFromId</name>
+                <funName>TestMgr_DS_FP_getIndicatorFromId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f3e08d71-c344-43d6-8bf2-f52b1d06212c</id>
+                        <parameterName>indicator_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-255</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6dfc4ed4-fd83-4839-9d0a-dee710df882a</id>
+                <name>DS_VOPTYPE_setRestrictedResolution</name>
+                <funName>TestMgr_DS_VOPTYPE_setRestrictedResolution</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6e1102f4-a9d3-4f24-8669-3818c3bf0177</id>
+                        <parameterName>resolution</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ca1fcf85-53a0-4636-ae64-be12787485ad</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6ece3623-6776-491f-a546-3e6343a295b0</id>
+                <name>DS_VOP_hasSurround</name>
+                <funName>TestMgr_DS_VOP_hasSurround</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>390cb111-abd0-4aa2-9c76-9cf6ffecadac</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>70a43428-13b2-47f3-8e8b-364fd951e79f</id>
+                <name>DS_ManagerInitialize</name>
+                <funName>TestMgr_DS_managerInitialize</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>71ec2d8a-f501-47bb-9995-85ee84763b70</id>
+                <name>DS_GetSupportedEncodings</name>
+                <funName>TestMgr_DS_AOP_getSupportedEncodings</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2a31a777-a841-461f-8ae0-9ad7f82cb34c</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7252fc5a-f1db-46fe-aac1-15d718bfeca4</id>
+                <name>DS_VOPTYPE_getRestrictedResolution</name>
+                <funName>TestMgr_DS_VOPTYPE_getRestrictedResolution</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f28b99fb-985b-49f5-a736-1b49fd0015ff</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>730579fa-001a-49ed-bd26-08d325a071e5</id>
+                <name>DS_VOPCONFIG_getSSMode</name>
+                <funName>TestMgr_DS_VOPCONFIG_getSSMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>79704cd6-3a91-45c5-84ba-07980f8a2328</id>
+                        <parameterName>ss_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7333f26b-70b0-442b-ad81-7be3ade2c62a</id>
+                <name>DS_GetHDCPStatus</name>
+                <funName>TestMgr_DS_VOP_getHDCPStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ab632700-d8dd-4316-8d30-c2f1b14bfbfe</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>73ff3712-4cda-4cd2-810b-1c253b3ed19d</id>
+                <name>DS_AOPCONFIG_getPortType</name>
+                <funName>TestMgr_DS_AOPCONFIG_getPortType</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ae3e1d85-4047-4994-9ca8-ed7b0a443e54</id>
+                        <parameterName>port_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-255</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>75ca495e-66e6-4a7c-91c1-2c9ecd98e9ea</id>
+                <name>DS_EnableHDCP</name>
+                <funName>TestMgr_DS_VOPTYPE_enableHDCP</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>38152fb1-13d9-4ef5-94af-4d93d1c2539f</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>4cf175a7-26d3-4336-a726-bc3f1ff7bc14</id>
+                        <parameterName>keySize</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>650cdb21-f68d-4455-8780-c99cb3587e0d</id>
+                        <parameterName>hdcpKey</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a6e4cd9f-2466-4227-91e2-0e97b7913864</id>
+                        <parameterName>useMfrKey</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>da56683d-4200-4ebb-8d33-e97b75482d0f</id>
+                        <parameterName>protectContent</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>77d4f715-6bdb-4f03-8d7d-dbc44f288644</id>
+                <name>DS_MuteStatus</name>
+                <funName>TestMgr_DS_AOP_mutedStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>993db8d3-a9dd-48ab-8733-663417c52bbc</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e04cf243-c8f6-47b6-8634-b9e6881cb859</id>
+                        <parameterName>mute_status</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7cd9a983-8bd9-4e6d-bbd0-9e60f491d3d9</id>
+                <name>DS_RemovePowerModeListener</name>
+                <funName>TestMgr_DS_HOST_removePowerModeListener</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>7f5f60a2-c7b0-4284-b938-010b858edd8b</id>
+                <name>DS_IsDisplayConnectedStatus</name>
+                <funName>TestMgr_DS_VOP_isDisplayConnected</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>14ef5f62-9895-4231-9906-b17584aeac67</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>82a8ef02-a40d-4211-a8d4-ea96773f1f24</id>
+                <name>DS_VD_getHDRCapabilities</name>
+                <funName>TestMgr_DS_VD_getHDRCapabilities</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>83da71d5-9190-46bf-8bfd-3b7930983326</id>
+                <name>DS_VideoOutputPort_getPortFromName</name>
+                <funName>TestMgr_DS_VOPCONFIG_getPortFromName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0430fc3a-199d-40db-a105-ac5013778e02</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>85211e1d-989e-4728-90d5-561608a28f74</id>
+                <name>DS_FP_getColors</name>
+                <funName>TestMgr_DS_FP_getColors</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>8928f1b9-23c4-4286-ab60-e9491f934db4</id>
+                <name>DS_AddDisplayConnectionListener</name>
+                <funName>TestMgr_DS_HOST_addDisplayConnectionListener</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>8c4798c9-6360-4e98-acae-4a04fe70f84e</id>
+                <name>DS_VDCONFIG_getDevices</name>
+                <funName>TestMgr_DS_VDCONFIG_getDevices</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>8d125073-770b-4f88-9439-56bfcd7fbcc9</id>
+                <name>DS_AOPCONFIG_getPortFromId</name>
+                <funName>TestMgr_DS_AOPCONFIG_getPortFromId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b123c466-3144-41e7-947b-c1ff84872229</id>
+                        <parameterName>port_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-255</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8d5b26b2-00e1-4d82-8016-8b784ff818d4</id>
+                <name>DS_SetBlink</name>
+                <funName>TestMgr_DS_FP_setBlink</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>03ac7c2d-25ec-4abd-8122-965612020601</id>
+                        <parameterName>blink_iteration</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>1-10</range>
+                        <value>2</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>96fe0cf9-a12d-4a6e-914a-9d3356bbeeb5</id>
+                        <parameterName>indicator_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Power</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dca8473b-8524-4fc3-8ef4-f449311d7344</id>
+                        <parameterName>blink_interval</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-10</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>914cba4a-e300-4212-b21f-192269adb834</id>
+                <name>DS_Host_setVersion</name>
+                <funName>TestMgr_DS_HOST_setVersion</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>eca565bf-1bd9-413c-a20f-f97bf7f7699e</id>
+                        <parameterName>versionNo</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-255</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>91b04ba8-5c25-4387-af87-0b93dadbb692</id>
+                <name>DS_IsContentProtected</name>
+                <funName>TestMgr_DS_VOP_isContentProtected</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c2e97633-8032-49ee-a2ff-a51fdde3d555</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>96571648-5008-4674-84cd-145513d72761</id>
+                <name>DS_VD_getSupportedDFCs</name>
+                <funName>TestMgr_DS_VD_getSupportedDFCs</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>96a6cbe0-7f2d-4844-b374-ebeb2ca48681</id>
+                <name>DS_FPCONFIG_getIndicatorFromName</name>
+                <funName>TestMgr_DS_FP_getIndicatorFromName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>a855e0a2-a718-4f53-ad19-a503182ef3e1</id>
+                        <parameterName>indicator_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Message</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>97be37c9-0224-4d59-a63d-34eaada40322</id>
+                <name>DS_VDCONFIG_getDefaultDFC</name>
+                <funName>TestMgr_DS_VDCONFIG_getDefaultDFC</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>9896a88f-8b5b-4613-8ca6-35295219c147</id>
+                <name>DS_SetBrightness</name>
+                <funName>TestMgr_DS_FP_setBrightness</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>45750a65-55c9-4b4c-9061-66a347bc49c2</id>
+                        <parameterName>brightness</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>1-100</range>
+                        <value>100</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>85f1a35c-263c-4d64-93aa-9670a5956868</id>
+                        <parameterName>get_only</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b5aabf67-af97-433a-8d0e-400264188483</id>
+                        <parameterName>indicator_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e2536c43-8d35-42fd-a14c-4e8bcc194515</id>
+                        <parameterName>text</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9a500c14-f8ce-492e-8302-106cd71cb506</id>
+                <name>DS_SetAudioLevel</name>
+                <funName>TestMgr_DS_AOP_setLevel</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>248375ab-6294-4838-a848-fc46f2083557</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bca59b6d-1366-497e-aeff-aa195f28fa4b</id>
+                        <parameterName>audio_level</parameterName>
+                        <parameterType>FLOAT</parameterType>
+                        <range>1-10</range>
+                        <value>2.12</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9c56e06b-dc67-4d53-998c-f7c56eba8dcf</id>
+                <name>DS_GetSupportedStereoModes</name>
+                <funName>TestMgr_DS_AOP_getSupportedStereoModes</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>755e9506-5ea3-488d-9a33-f7d7b772a818</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9ff2a970-1edc-41a6-9fe2-19747f9f28eb</id>
+                <name>DS_HOST_getHostEDID</name>
+                <funName>TestMgr_DS_HOST_getHostEDID</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a45a2988-5232-45ce-8a74-a4ac34d9207e</id>
+                <name>DS_GetTextDisplays</name>
+                <funName>TestMgr_DS_FP_getTextDisplays</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a9fc567c-007f-4d08-9b0b-290187c6f388</id>
+                <name>DS_GetIndicators</name>
+                <funName>TestMgr_DS_FP_getIndicators</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ac946e53-b9bc-4b97-aed0-92ab2ed25985</id>
+                <name>DS_GetAspectRatio</name>
+                <funName>TestMgr_DS_VOP_getAspectRatio</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>44762f0b-4c91-49f9-a7cd-4601c736d9ec</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ae7435b3-0ce9-44ac-b7c2-730229e9156f</id>
+                <name>DS_SetEncoding</name>
+                <funName>TestMgr_DS_AOP_setEncoding</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0833f3bc-de83-48e8-a53e-fa397ea48b44</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>64cf0951-6f55-403d-afb1-b058e167d912</id>
+                        <parameterName>encoding_format</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>AC3</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>aefce88e-c90c-499c-a8b1-1edb69200412</id>
+                <name>DS_SetText</name>
+                <funName>TestMgr_DS_FP_setText</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4e00cdb7-9d53-473f-b6a1-d2927e00e6ba</id>
+                        <parameterName>text</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Text</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d026fb67-21f7-422a-9786-bd6916097de0</id>
+                        <parameterName>text_display</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>hello</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>af0584b3-00cb-4879-ade6-c39b987562c0</id>
+                <name>DS_VideoOutputPort_getPortFromId</name>
+                <funName>TestMgr_DS_VOPCONFIG_getPortFromId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>34597cb4-6668-4e79-a1d9-adcc19946406</id>
+                        <parameterName>port_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b071103d-e243-491c-a9bc-148e86bc6dcd</id>
+                <name>DS_SetStereoMode</name>
+                <funName>TestMgr_DS_AOP_setStereoMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2b24169e-bbcc-4b4e-af6a-95b507533457</id>
+                        <parameterName>persist</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>2ec80115-e79c-4aec-8857-b7a55a92ac38</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6a67656a-a79f-4b1e-acbb-d2cc934a9488</id>
+                        <parameterName>stereo_mode</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>SURROUND</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>acd9c860-87c5-4ffa-9483-c717873a1419</id>
+                        <parameterName>get_only</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b0cb1923-fb04-4c8f-b795-0c738c2ad0ff</id>
+                <name>DS_FP_getBrightnessLevels</name>
+                <funName>TestMgr_DS_FP_getBrightnessLevels</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0c5ce605-2e3f-4e9b-98bb-dabcc50b7fb3</id>
+                        <parameterName>indicator_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Message</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b71fddaa-5489-46d8-b27f-d1eb6a77c485</id>
+                <name>DS_VOP_getDefaultResolution</name>
+                <funName>TestMgr_DS_VOP_getDefaultResolution</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f12cb58e-de09-42f4-81f3-d9a1883a067f</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>bab4b7bb-ccbd-44fa-83d1-28808092b3dc</id>
+                <name>DS_RemoveDisplayConnectionListener</name>
+                <funName>TestMgr_DS_HOST_removeDisplayConnectionListener</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c0519d39-de0b-40df-85dd-cfd4b9551598</id>
+                <name>DS_FPCONFIG_getTextDisplayFromName</name>
+                <funName>TestMgr_DS_FP_getTextDisplayFromName</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>78de5a3f-d299-4812-9e59-e35866b45913</id>
+                        <parameterName>text_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Text</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c37e561a-8142-41ea-8b61-9c9793544504</id>
+                <name>DS_IsHDCPSupported</name>
+                <funName>TestMgr_DS_VOPTYPE_isHDCPSupported</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>416bca08-47d1-43d4-861a-e7f8cd1d0667</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c74d256a-ca57-4472-8d04-8a714502291f</id>
+                <name>DS_VOPCONFIG_getPixelResolution</name>
+                <funName>TestMgr_DS_VOPCONFIG_getPixelResolution</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c9d5bbb6-e4d5-4dc7-a66d-1029786527b7</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c87f9c6b-6b4b-484b-a135-99bec8aec08a</id>
+                <name>DS_HOST_getAudioOutputPortFromId</name>
+                <funName>TestMgr_DS_HOST_getAudioOutputPortFromId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e844f348-25d0-4472-9308-ee7105ea19e1</id>
+                        <parameterName>port_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-255</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cf6a4faf-7c1d-4d3d-8ed2-07cdb5e5212a</id>
+                <name>DS_SetResolution</name>
+                <funName>TestMgr_DS_VOP_setResolution</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>341e18ee-c3e7-4ad7-8386-9c4ebcc515fd</id>
+                        <parameterName>get_only</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3773ea90-62d7-45af-a5dc-f2a42002333e</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>509b63db-50f3-4856-9f83-9d9a8edc69fe</id>
+                        <parameterName>resolution</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z &amp; 0-9</range>
+                        <value>1080i</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>cff45ddd-017c-44fa-b88d-cfa30e62e453</id>
+                <name>DS_VOPTYPE_getPorts</name>
+                <funName>TestMgr_DS_VOPTYPE_getPorts</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>444dd224-171a-4563-8f95-2d02deb4b1de</id>
+                        <parameterName>port_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1000</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d03c2829-6c09-460c-9e32-eec1995d1963</id>
+                <name>DS_HOST_getVideoOutputPortFromId</name>
+                <funName>TestMgr_DS_HOST_getVideoOutputPortFromId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>876c54af-60d8-437f-aad7-6c9037812a56</id>
+                        <parameterName>port_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-255</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d51549e0-f930-4112-8672-68fd594f5711</id>
+                <name>DS_SetState</name>
+                <funName>TestMgr_DS_FP_setState</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f460ebf5-9ded-4af5-9d96-a0898002c1f4</id>
+                        <parameterName>indicator_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Power</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>fe43d7b8-48ef-480e-b9bc-4edfb2a3a642</id>
+                        <parameterName>state</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d7c54d41-9848-4915-8da6-90316b5ef41b</id>
+                <name>DS_SetTimeFormat</name>
+                <funName>TestMgr_DS_FP_setTimeForamt</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9fd0248b-d40b-4375-a634-92177795c23d</id>
+                        <parameterName>time_format</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-2</range>
+                        <value>1</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>af0b25a9-c43e-4082-bc9d-4b408839ade7</id>
+                        <parameterName>text</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Text</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>db9d82b0-8d20-4bba-a3dc-b3b59231de8f</id>
+                <name>DS_FP_getTextBrightnessLevels</name>
+                <funName>TestMgr_DS_FP_getTextBrightnessLevels</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e00f2b25-83ff-4113-bc2d-6ad0080787f5</id>
+                <name>DS_VOPCONFIG_getFrameRate</name>
+                <funName>TestMgr_DS_VOPCONFIG_getFrameRate</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2b343a68-c2d8-4d6c-bd5b-0c485f9babd9</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e0b1bd51-766b-4300-8089-1acc32bbda0b</id>
+                <name>DS_DisplayDetails</name>
+                <funName>TestMgr_DS_VOP_getDisplayDetails</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b0cb754f-9157-4127-8ed2-bcbfe0e91b33</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e178884d-111d-4a01-8694-5c03d9f514b4</id>
+                <name>DS_GetSupportedColors</name>
+                <funName>TestMgr_DS_FP_FP_getSupportedColors</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>afeb68d4-9d86-495e-a06d-2f6a8aa53441</id>
+                        <parameterName>indicator_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Power</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e1b32491-940f-48e7-b368-6d57260cf538</id>
+                <name>DS_FP_setTextBrightness</name>
+                <funName>TestMgr_DS_FP_setTextBrightness</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6e857e68-c7be-417d-9ff9-2320a7b6ab6a</id>
+                        <parameterName>brightness</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-255</range>
+                        <value>10</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e53e5c27-1909-4b2a-90cb-694d9afac4f4</id>
+                <name>DS_IsDynamicResolutionSupport</name>
+                <funName>TestMgr_DS_VOPTYPE_isDynamicResolutionSupported</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0c82f946-cee2-40d5-9467-d3fa21a2f58c</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e70b3a26-a655-46bf-8790-6701c2046078</id>
+                <name>DS_SetAudioDB</name>
+                <funName>TestMgr_DS_AOP_setDB</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>89e3f340-84d0-4b6f-bc4b-3442c467325c</id>
+                        <parameterName>db_level</parameterName>
+                        <parameterType>FLOAT</parameterType>
+                        <range>1-100</range>
+                        <value>5</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f8271437-3149-4aa0-bd39-0dea4d883fc0</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e72371f7-c1ac-4648-b660-bccb88a1a974</id>
+                <name>DS_FP_getColorMode</name>
+                <funName>TestMgr_DS_FP_getColorMode</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>bf2e04da-78b7-405b-ba76-de5d8de5ad52</id>
+                        <parameterName>indicator_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Remote</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e8a888d7-778a-40fb-9176-54e3f0854d73</id>
+                <name>DS_HOST_getVideoDevices</name>
+                <funName>TestMgr_DS_HOST_getVideoDevices</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ec14f5eb-d75d-49e2-9e88-ed5cfd0260df</id>
+                <name>DS_AOP_getGain</name>
+                <funName>TestMgr_DS_AOP_getGain</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6cf8fe3e-3280-44fd-b329-b8b950ae0487</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f2d47433-0c0a-48ba-aa2d-22f57c3e8339</id>
+                <name>DS_FPCONFIG_getTextDisplayFromId</name>
+                <funName>TestMgr_DS_FP_getTextDisplayFromId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3eaf42dd-c31e-4cbc-86aa-c91facf8cbda</id>
+                        <parameterName>text_id</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-255</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f66bd0af-1d53-4777-bbc9-1d08f2a676d0</id>
+                <name>DS_VOP_getEDIDBytes</name>
+                <funName>TestMgr_DS_VOP_getEDIDBytes</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>36f7bd69-3358-40ac-bc16-9414f71c83e9</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fc6c8da7-893b-4124-b625-51eb0405c04c</id>
+                <name>DS_GetSupportedCompressions</name>
+                <funName>TestMgr_DS_AOP_getSupportedCompressions</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>87ed9fdb-1e4e-4739-8d28-0710a2e17b13</id>
+                        <parameterName>port_name</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>HDMI0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fd447068-e6a8-40db-99ef-b395f6234aa8</id>
+                <name>DS_HOST_getVideoOutputPorts</name>
+                <funName>TestMgr_DS_HOST_getVideoOutputPorts</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>fe675da5-3cb0-43a1-a96c-4c27bde8440c</id>
+                <name>DS_HOST_getAudioOutputPorts</name>
+                <funName>TestMgr_DS_HOST_getAudioOutputPorts</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

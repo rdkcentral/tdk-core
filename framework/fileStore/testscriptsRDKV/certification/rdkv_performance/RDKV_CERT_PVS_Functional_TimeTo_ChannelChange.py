@@ -1,0 +1,347 @@
+##########################################################################
+# If not stated otherwise in this file or this component's Licenses.txt
+# file the following copyright and licenses apply:
+#
+# Copyright 2020 RDK Management
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##########################################################################
+'''
+<?xml version='1.0' encoding='utf-8'?>
+<xml>
+  <id></id>
+  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
+  <version>6</version>
+  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
+  <name>RDKV_CERT_PVS_Functional_TimeTo_ChannelChange</name>
+  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
+  <primitive_test_id> </primitive_test_id>
+  <!-- Do not change primitive_test_id if you are editing an existing script. -->
+  <primitive_test_name>rdkservice_getValue</primitive_test_name>
+  <!--  -->
+  <primitive_test_version>1</primitive_test_version>
+  <!--  -->
+  <status>FREE</status>
+  <!--  -->
+  <synopsis>The script is to get the time taken for channel change.</synopsis>
+  <!--  -->
+  <groups_id />
+  <!--  -->
+  <execution_time>10</execution_time>
+  <!--  -->
+  <long_duration>false</long_duration>
+  <!--  -->
+  <advanced_script>false</advanced_script>
+  <!-- execution_time is the time out time for test execution -->
+  <remarks></remarks>
+  <!-- Reason for skipping the tests if marked to skip -->
+  <skip>false</skip>
+  <!--  -->
+  <box_types>
+    <box_type>RPI-Client</box_type>
+    <!--  -->
+    <box_type>RPI-HYB</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
+    <!--  -->
+  </box_types>
+  <rdk_versions>
+    <rdk_version>RDK2.0</rdk_version>
+    <!--  -->
+  </rdk_versions>
+  <test_cases>
+    <test_case_id>RDKV_PERFORMANCE_10</test_case_id>
+    <test_objective>The objective of the script is to get the time taken for channel change.</test_objective>
+    <test_type>Positive</test_type>
+    <test_setup>RPI, Accelerator</test_setup>
+    <pre_requisite>1. Wpeframework process should be up and running in the device.</pre_requisite>
+    <api_or_interface_used>None</api_or_interface_used>
+    <input_parameters>channel_change_url : string,
+webinspect_port: string</input_parameters>
+    <automation_approch>1. As pre requisite, disable all the other plugins and enable webkitinstance only.
+2. Get the current URL
+3. Load the application to change channels for 5 times.
+4.Validate the channel change using logs from wpeframework logs.
+5. Get the time taken for each channel change.
+6. Calculate the average time taken for channel change using the above data.
+7. Revert all values
+</automation_approch>
+    <expected_output>The channel change must happen within expected  range of ms.</expected_output>
+    <priority>High</priority>
+    <test_stub_interface>rdkv_performance</test_stub_interface>
+    <test_script>RDKV_CERT_PVS_Functional_TimeTo_ChannelChange</test_script>
+    <skipped>No</skipped>
+    <release_version>M83</release_version>
+    <remarks></remarks>
+  </test_cases>
+  <script_tags />
+</xml>
+'''
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
+from BrowserPerformanceUtility import *
+import BrowserPerformanceUtility
+from rdkv_performancelib import *
+import rdkv_performancelib
+import PerformanceTestVariables
+from web_socket_util import *
+from rdkv_stabilitylib import *
+import MediaValidationVariables
+from StabilityTestUtility import *
+#Test component to be tested
+obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
+#IP and Port of box, No need to change,
+#This will be replaced with corresponding DUT Ip and port while executing script
+ip = <ipaddress>
+port = <port>
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_ChannelChange');
+#The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
+#configured as "Yes".
+pre_requisite_reboot(obj,"yes")
+webkit_console_socket = None
+channel_change_count = 1
+max_channel_change_count = 5
+#Execution summary variable
+Summ_list=[]
+#Get the result of connection with test component and DUT
+result =obj.getLoadModuleResult();
+print("[LIB LOAD STATUS]  :  %s" %result);
+obj.setLoadModuleStatus(result);
+expectedResult = "SUCCESS"
+if expectedResult in result.upper():
+    #Take the channel change URL and replace TM-IP with actual TestManager IP
+    channel_change_url = PerformanceTestVariables.channel_change_url
+    tm_url = obj.url.split("/")[2]
+    channel_change_url=channel_change_url.replace("TM-IP",tm_url)
+    #Write the TestManager IP and stream path to the channels.js file
+    #where the user can configure their own channels for the test.
+    filename = obj.realpath+"fileStore/lightning-apps/channels.js"
+    basepath = MediaValidationVariables.test_streams_base_path.replace("http:","")
+    conf_file, status = get_configfile_name(obj);
+    with open(filename, 'r') as the_file:
+        buf = the_file.readlines()
+        line_to_add = 'var basepath = "'+basepath+'"\n'
+        if line_to_add in buf:
+            print("The stream path is already configured")
+        else:
+            print("Configuring the stream path for channel change test")
+            with open(filename, 'w') as out_file:
+                for line in buf:
+                    #To add the line after license header
+                    if line == "*/\n":
+                        line = "*/\n"+line_to_add
+                    out_file.write(line)
+    print("Check Pre conditions")
+    #No need to revert any values if the pre conditions are already set.
+    webkit_instance = PerformanceTestVariables.webkit_instance
+    set_method = webkit_instance+'.1.url'
+    if webkit_instance in "WebKitBrowser":
+        webinspect_port = PerformanceTestVariables.webinspect_port
+    elif webkit_instance in "LightningApp":
+        webinspect_port = PerformanceTestVariables.lightning_app_webinspect_port
+    else:
+        webinspect_port = PerformanceTestVariables.html_app_webinspect_port
+    revert="NO"
+    plugins_list = ["Cobalt",webkit_instance]
+    plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated"}
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
+    curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
+    time.sleep(20)
+    status = "SUCCESS"
+    if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
+        print("\n Error while getting plugin status")
+        status = "FAILURE"
+    elif curr_plugins_status_dict != plugin_status_needed:
+        revert = "YES"
+        status = set_plugins_status(obj,plugin_status_needed)
+        new_plugins_status = get_plugins_status(obj,plugins_list)
+        if new_plugins_status != plugin_status_needed:
+            status = "FAILURE"
+    tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+    tdkTestObj.addParameter("realpath",obj.realpath)
+    tdkTestObj.addParameter("deviceIP",obj.IP)
+    tdkTestObj.executeTestCase(expectedResult)
+    result = tdkTestObj.getResult()
+    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+    if status == "SUCCESS" and expectedResult in result and ssh_param_dict != {}:
+        tdkTestObj.setResultStatus("SUCCESS")
+        print("\nPre conditions for the test are set successfully")
+        print("\nGet the URL ")
+        tdkTestObj = obj.createTestStep('rdkservice_getValue');
+        tdkTestObj.addParameter("method",set_method);
+        tdkTestObj.executeTestCase(expectedResult);
+        current_url = tdkTestObj.getResultDetails();
+        result = tdkTestObj.getResult()
+        if current_url != None and expectedResult in result:
+            tdkTestObj.setResultStatus("SUCCESS");
+            time.sleep(60)
+            print("Current URL:",current_url)
+            print("\nSet Channel change test URL")
+            tdkTestObj = obj.createTestStep('rdkservice_setValue');
+            tdkTestObj.addParameter("method",set_method);
+            current_system_time = str(datetime.now()).split()[1]
+            tdkTestObj.addParameter("value",channel_change_url);
+            tdkTestObj.executeTestCase(expectedResult);
+            result = tdkTestObj.getResult();
+            if expectedResult in result:
+                print("\nValidate if the URL is set successfully or not")
+                tdkTestObj = obj.createTestStep('rdkservice_getValue');
+                tdkTestObj.addParameter("method",set_method);
+                tdkTestObj.executeTestCase(expectedResult);
+                new_url = tdkTestObj.getResultDetails();
+                result = tdkTestObj.getResult()
+                if new_url == channel_change_url and expectedResult in result:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("URL(",new_url,") is set successfully")
+                    max_count = 0
+                    total_time = 0
+                    time.sleep(60)
+                    print("\n checking for Tuning log")
+                    command = 'cat /opt/logs/wpeframework.log | grep -nr "Tuning to channel" | tail -1'
+                    print("COMMAND : %s" %(command))
+                    #Primitive test case which associated to this Script
+                    tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
+                    #Add the parameters to ssh to the DUT and execute the command
+                    tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                    tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                    tdkTestObj.addParameter("command",command)
+                    #Execute the test case in DUT
+                    tdkTestObj.executeTestCase(expectedResult);
+                    result = tdkTestObj.getResult()
+                    output = tdkTestObj.getResultDetails()
+                    output = output[output.find('\n'):]
+                    print("Tuning to channel logs from wpelogs:")
+                    print(output)
+                    if "Tuning to channel" in output and expectedResult in result:
+                        print("Tuning logs are present in wpelogs")
+                        tuning_time = getTimeStampFromString(output)
+                        if (current_system_time < tuning_time):
+                            print("checking for playing log")
+                            command = 'cat /opt/logs/wpeframework.log | grep -nr Playing | head -n1'
+                            print("COMMAND : %s" %(command))
+                            #Primitive test case which associated to this Script
+                            tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
+                            #Add the parameters to ssh to the DUT and execute the command
+                            tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                            tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                            tdkTestObj.addParameter("command",command)
+                            #Execute the test case in DUT
+                            tdkTestObj.executeTestCase(expectedResult);
+                            result = tdkTestObj.getResult()
+                            output = tdkTestObj.getResultDetails()
+                            output = output[output.find('\n'):]
+                            print("Playing logs from wpelogs:")
+                            print(output)
+                            if "Playing" in output and expectedResult in result:
+                                print("Playing logs are present in wpelogs")
+                                playing_time = getTimeStampFromString(output)
+                                if (tuning_time < playing_time):
+                                    print("\n Not able to play the content after tuning the channel".format(max_channel_change_count))
+                                    tdkTestObj.setResultStatus("FAILURE")
+                                else:
+                                    print("\nchecking time taken for channel change")
+                                    #checking for time taken print
+                                    command = 'cat /opt/logs/wpeframework.log | grep -nr "channel change:"'
+                                    print("COMMAND : %s" %(command))
+                                    #Primitive test case which associated to this Script
+                                    tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
+                                    #Add the parameters to ssh to the DUT and execute the command
+                                    tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                                    tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                    tdkTestObj.addParameter("command",command)
+                                    #Execute the test case in DUT
+                                    tdkTestObj.executeTestCase(expectedResult);
+                                    result = tdkTestObj.getResult()
+                                    output = tdkTestObj.getResultDetails()
+                                    if expectedResult in result:
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                        for count in range(0,max_channel_change_count):
+                                            time_taken = int(output.split('\n')[count+1].split('channel change:')[1].split(' ')[1])
+                                            print("Time taken for channel change {} :".format(count + 1),time_taken)
+                                            total_time += time_taken
+                                            result = "SUCCESS"
+                                    else:
+                                        print("Channel change logs are not present in wpelogs")
+                                        tdkTestObj.setResultStatus("FAILURE")
+                            else:
+                                print("\n Playing logs not present in wpelogs")
+                                tdkTestObj.setResultStatus("FAILURE")
+                        else:
+                            print("Error in getting the tuning time")
+                            tdkTestObj.setResultStatus("FAILURE")
+                    else:
+                        print("Tuning logs are not present in wpelogs")
+                        tdkTestObj.setResultStatus("FAILURE")
+                        result = "FAILURE"
+                    if result == "SUCCESS":
+                        print("\nSuccessfully completed {} channel changes\n".format(max_channel_change_count))
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        avg_time = total_time/5
+                        print("\nAverage time taken for channel change: {} ms\n".format(avg_time))
+                        conf_file,result = getConfigFileName(tdkTestObj.realpath)
+                        result1, channelchange_time_threshold_value = getDeviceConfigKeyValue(conf_file,"CHANNEL_CHANGE_TIME_THRESHOLD_VALUE")
+                        Summ_list.append('CHANNEL_CHANGE_TIME_THRESHOLD_VALUE :{}ms'.format(channelchange_time_threshold_value))
+                        result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                        Summ_list.append('THRESHOLD_OFFSET :{}'.format(offset))
+                        Summ_list.append('Time taken to channel change :{}ms'.format(avg_time))
+                        if all(value != "" for value in (channelchange_time_threshold_value,offset)):
+                            print("\n Threshold value for time taken to channel change: {} ms".format(channelchange_time_threshold_value))
+                            if 0 < int(avg_time) < (int(channelchange_time_threshold_value) + int(offset)):
+                                tdkTestObj.setResultStatus("SUCCESS");
+                                print("\n The channel change time is within the expected limit\n")
+                            else:
+                                tdkTestObj.setResultStatus("FAILURE");
+                                print("\n The channel change time is not within the expected limit \n")
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE");
+                            print("Failed to get the threshold value from config file")
+                    else:
+                        print("Channel change didn't happen. Unable to fetch the logs")
+                        time.sleep(30)
+                        #Set the URL back to previous
+                        tdkTestObj = obj.createTestStep('rdkservice_setValue');
+                        tdkTestObj.addParameter("method",set_method);
+                        tdkTestObj.addParameter("value",current_url);
+                        tdkTestObj.executeTestCase(expectedResult);
+                        result = tdkTestObj.getResult();
+                        if result == "SUCCESS":
+                            print("URL is reverted successfully")
+                            tdkTestObj.setResultStatus("SUCCESS");
+                        else:
+                            print("Failed to revert the URL")
+                            tdkTestObj.setResultStatus("FAILURE");
+                else:
+                    print("Failed to load the URL:{}, Current URL:{}".format(channel_change_url,new_url))
+                    tdkTestObj.setResultStatus("FAILURE");
+            else:
+                tdkTestObj.setResultStatus("FAILURE");
+                print("Failed to set the URL")
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("Unable to get the current URL loaded in webkit")
+    else:
+        print("Pre conditions are not met")
+        obj.setLoadModuleStatus("FAILURE")
+    #Revert the values
+    if revert=="YES":
+        print("Revert the values before exiting")
+        status = set_plugins_status(obj,curr_plugins_status_dict)
+    getSummary(Summ_list,obj)
+    obj.unloadModule("rdkv_performance");
+else:
+    obj.setLoadModuleStatus("FAILURE");
+    print("Failed to load module")

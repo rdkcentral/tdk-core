@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>622a20e7-9c49-4b1e-860a-8c5327fc4ac0</moduleId>
+        <!-- Module name -->
+        <moduleName>kernel_testing</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>E2E</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="9dc6bdee-b198-45c4-8eb4-e9cab85328e0" name="kernel_donothing">
+                <parameters/>
+            </function>
+            <function id="028f9ec2-6d04-4d82-8a9a-ec2ebad348b8" name="kernel_test_execute">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>f5da4c27-2485-4242-9ee6-0d6809478adf</id>
+                <name>kernel_test_execute</name>
+                <funName>kernel_test_execute</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

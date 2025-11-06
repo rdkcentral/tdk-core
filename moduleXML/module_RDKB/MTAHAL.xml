@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>6c100866-1216-487f-8055-37afaeb0d523</moduleId>
+        <!-- Module name -->
+        <moduleName>MTAHAL</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="72863e23-d8a4-4386-86c2-bbe78be4befb" name="MTAHAL_InitDB">
+                <parameters/>
+            </function>
+            <function id="cc0f6568-e582-4f9f-8931-2aed821dafe0" name="MTAHAL_GetConfigFileStatus">
+                <parameters/>
+            </function>
+            <function id="62c2ca35-c09f-41a9-9863-a451662cbcfd" name="MTAHAL_GetMtaLog">
+                <parameters/>
+            </function>
+            <function id="9db2d9cb-9692-49cf-a3ea-ccd765a33f0b" name="MTAHAL_start_provisioning">
+                <parameters>
+                    <parameter id="8637ef7f-fa58-45c6-917d-de865ac271f0" parameterName="dhcpOption122Suboption2" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4c054951-b9cd-4299-9615-244252591026" parameterName="mtaIPMode" parameterType="STRING" range="A-Z"/>
+                    <parameter id="27261653-d2e7-4310-8c3f-90c306b5878a" parameterName="dhcpOption122Suboption1" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5f03cba6-3e75-4d70-a70e-62e04f04bc51" parameterName="dhcpOption2171CccV6DssID1" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ee5325ce-9785-4a4a-b04c-e27d22abc098" parameterName="dhcpOption2171CccV6DssID2" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0d9154fb-e42a-481b-8f76-90ac94f2ad41" name="MTAHAL_GetServiceFlow">
+                <parameters/>
+            </function>
+            <function id="9eb55a78-f581-4974-9e24-1e09c37b5882" name="MTAHAL_devResetNow">
+                <parameters/>
+            </function>
+            <function id="ffcb5c85-5050-4cc0-98a9-5fb24c9d8dda" name="MTAHAL_SetParamUlongValue">
+                <parameters>
+                    <parameter id="6d07be1f-08b9-4525-8118-8835c23478af" parameterName="value" parameterType="INTEGER" range="0-7"/>
+                    <parameter id="f39dfaf8-2892-45ab-8938-5a6e8d8a4a1c" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ce48f7e6-91a5-46f5-acc7-229efa962f81" name="MTAHAL_GetCALLP">
+                <parameters>
+                    <parameter id="d7668ac3-ae07-4b72-999e-b08a7439125f" parameterName="value" parameterType="INTEGER" range="0-7"/>
+                </parameters>
+            </function>
+            <function id="cf2d7d10-c75d-428b-a171-31698fe17034" name="MTAHAL_GetParamUlongValue">
+                <parameters>
+                    <parameter id="11a2d24e-3e88-424b-b9d8-06854fd57a6b" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ac03668a-ab31-4413-8b33-f43cc7ab9c8e" parameterName="flag" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="bbcaaa54-d829-4c3a-b199-387964af4d2b" name="MTAHAL_GetLineTableGetEntry">
+                <parameters>
+                    <parameter id="2e5a3c7f-4e76-451c-9f56-83281771ea63" parameterName="value" parameterType="INTEGER" range="0-7"/>
+                </parameters>
+            </function>
+            <function id="34018f68-045a-4f8e-bafc-f4308433021d" name="MTAHAL_TriggerDiagnostics">
+                <parameters>
+                    <parameter id="850f4a09-9133-45c6-9d71-923640804bc3" parameterName="value" parameterType="INTEGER" range="0-7"/>
+                </parameters>
+            </function>
+            <function id="8bd88ae1-e2eb-4931-9860-7e5c700600c9" name="MTAHAL_GetMtaProvisioningStatus">
+                <parameters>
+                    <parameter id="a7d7d72a-1479-4799-921f-c2a7d69d3956" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="e04285a4-8dc5-477a-ba16-ff687f72dd18" name="MTAHAL_GetParamCharValue">
+                <parameters>
+                    <parameter id="3f7618dc-14db-4d77-ba11-68ab1a51768c" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c8e3d5c9-0f5b-4a20-967e-1f154a2e16cd" parameterName="flag" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="1f69b896-f183-40f3-b34d-f18721280cdf" name="MTAHAL_GetDSXLogs">
+                <parameters/>
+            </function>
+            <function id="f79a6fca-868e-4755-9e1e-0d547851574d" name="MTAHAL_LineRegisterStatus_callback_register">
+                <parameters/>
+            </function>
+            <function id="bf8b0ba8-fb36-425c-84e8-5d985cb75d5f" name="MTAHAL_GetDhcpStatus">
+                <parameters/>
+            </function>
+            <function id="6c14a73b-9655-40ac-b6f6-99b93d9d12a8" name="MTAHAL_GetLineRegisterStatus">
+                <parameters/>
+            </function>
+            <function id="0647731b-697e-4aad-9dca-a1c76c70f01e" name="MTAHAL_GetDHCPInfo">
+                <parameters/>
+            </function>
+            <function id="d6f3ccc2-ca26-4165-b139-f6194407dbf1" name="MTAHAL_getMtaOperationalStatus">
+                <parameters>
+                    <parameter id="2afc5740-5149-4d78-bbfd-160dd48063f3" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="7171a370-a0f2-422d-a206-37853162107a" name="MTAHAL_GetCalls">
+                <parameters>
+                    <parameter id="168951c5-3c73-4825-9a02-3a35623dc4ec" parameterName="value" parameterType="INTEGER" range="0-7"/>
+                </parameters>
+            </function>
+            <function id="dea3310c-3a4e-4570-a119-98382219a889" name="MTAHAL_GetHandsets">
+                <parameters>
+                    <parameter id="df0ad2c5-1c97-4500-bc70-af190d55eb44" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>04dfe290-9cd9-4ea0-ba99-07fa747a764c</id>
+                <name>MTAHAL_InitDB</name>
+                <funName>MTAHAL_InitDB</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>100e8462-af15-43c0-85c8-84f2b9c942fc</id>
+                <name>MTAHAL_GetCALLP</name>
+                <funName>MTAHAL_GetCALLP</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7af68264-712d-4897-a0db-83ede6c1a727</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-7</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>14da5176-12ba-4a5d-95d2-0b2d9e18a5fd</id>
+                <name>MTAHAL_GetHandsets</name>
+                <funName>MTAHAL_GetHandsets</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b4999e57-c72c-427b-b7f3-f758fe3d371d</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>22eabd0c-1ca8-4739-b836-5d0516895194</id>
+                <name>MTAHAL_GetLineTableGetEntry</name>
+                <funName>MTAHAL_GetLineTableGetEntry</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c77c4c1d-9b8e-4bcf-8887-2bffcaef6abd</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-7</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>254bd916-793e-4736-837b-b78f83bd3f68</id>
+                <name>MTAHAL_GetDSXLogs</name>
+                <funName>MTAHAL_GetDSXLogs</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>29851a37-d559-466a-a461-b1fb8e58de90</id>
+                <name>MTAHAL_devResetNow</name>
+                <funName>MTAHAL_devResetNow</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>2f2b60e4-e642-4d7c-8f7b-058252e5a8d9</id>
+                <name>MTAHAL_getMtaOperationalStatus</name>
+                <funName>MTAHAL_getMtaOperationalStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>020635a0-df68-4bc8-8689-256f0ce4de05</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>42ff1f83-77d6-4e81-9cba-a163952c118f</id>
+                <name>MTAHAL_GetMtaLog</name>
+                <funName>MTAHAL_GetMtaLog</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4e158caf-d662-4e1f-86ee-fe8af9214e9d</id>
+                <name>MTAHAL_GetLineRegisterStatus</name>
+                <funName>MTAHAL_GetLineRegisterStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>51172279-0e5c-45ba-8b6b-a5628ef09337</id>
+                <name>MTAHAL_GetParamCharValue</name>
+                <funName>MTAHAL_GetParamCharValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9554b753-463e-429f-9e0a-fe2e0df2fa3e</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>  </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e280c735-4529-4104-a778-9c1b8282cf53</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>61a3c84a-3428-4c82-a8e9-7a6638251788</id>
+                <name>MTAHAL_TriggerDiagnostics</name>
+                <funName>MTAHAL_TriggerDiagnostics</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5ad1c5aa-516b-437c-b4f4-f294c32ebbee</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-7</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7b488e35-93fa-4c75-90d7-ec0d051ac51a</id>
+                <name>MTAHAL_LineRegisterStatus_callback_register</name>
+                <funName>MTAHAL_LineRegisterStatus_callback_register</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>83f8b10c-ef3e-44d6-9f9a-e85afdce80ed</id>
+                <name>MTAHAL_GetDhcpStatus</name>
+                <funName>MTAHAL_GetDhcpStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a64a069b-4b42-4dad-8c34-0c99883ca91b</id>
+                <name>MTAHAL_GetParamUlongValue</name>
+                <funName>MTAHAL_GetParamUlongValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>57ca9225-cd53-4e71-90f6-6d313cf02424</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value> </value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9dbb6f35-4ef4-4381-b265-fad2d47e52b4</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a96f7edc-2eb9-4ce9-a5d7-cc6323681998</id>
+                <name>MTAHAL_GetServiceFlow</name>
+                <funName>MTAHAL_GetServiceFlow</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b3ed55e0-075a-442d-989e-429056f9f16f</id>
+                <name>MTAHAL_GetCalls</name>
+                <funName>MTAHAL_GetCalls</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>74e130c7-6a4e-4f57-b0f4-4dab26679b5c</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-7</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c13b78fa-9c45-49e3-85df-5db34976ddfc</id>
+                <name>MTAHAL_GetDHCPInfo</name>
+                <funName>MTAHAL_GetDHCPInfo</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f8d80a31-66c4-45d3-8d6d-4774d9e13535</id>
+                <name>MTAHAL_GetMtaProvisioningStatus</name>
+                <funName>MTAHAL_GetMtaProvisioningStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c08d52cb-e5a7-4803-9c09-ea29152d07bb</id>
+                        <parameterName>flag</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fdd187c1-a9a8-43e8-baf8-c1b94cc1dcf7</id>
+                <name>MTAHAL_SetParamUlongValue</name>
+                <funName>MTAHAL_SetParamUlongValue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3983ac7f-1943-4323-aeb7-628be4d6be1b</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>91e115f7-8219-4e8b-a50e-706973e54a5a</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-7</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fe5faade-41d1-4bda-8b97-8328b86a5d7f</id>
+                <name>MTAHAL_GetConfigFileStatus</name>
+                <funName>MTAHAL_GetConfigFileStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ffa4889f-2af8-44ae-a5ca-81b2552a48f2</id>
+                <name>MTAHAL_start_provisioning</name>
+                <funName>MTAHAL_start_provisioning</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>226b4ee5-3968-4c63-b8f0-697b2c6c9bf9</id>
+                        <parameterName>dhcpOption122Suboption1</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>26d949b7-1937-4456-978f-61a1a1602f6a</id>
+                        <parameterName>dhcpOption2171CccV6DssID1</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>881eedfb-496a-4c1b-9518-61ef1d3eb11b</id>
+                        <parameterName>mtaIPMode</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9ab4bd58-c9a8-4e75-a7a2-bdf072d4ccd0</id>
+                        <parameterName>dhcpOption2171CccV6DssID2</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cf0ef70f-42e8-42fc-956e-8ce80cf4d953</id>
+                        <parameterName>dhcpOption122Suboption2</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>3009f163-f6e9-40c1-9d9b-9b108eb12a63</moduleId>
+        <!-- Module name -->
+        <moduleName>TR069Pa</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="0b3a3562-d40c-4e51-97fd-8e736c07f0f2" name="TR069Agent_Init">
+                <parameters/>
+            </function>
+            <function id="a7f54481-b7d5-4984-8cfc-b300f7a82849" name="TR069Agent_Terminate">
+                <parameters/>
+            </function>
+            <function id="89d9baa7-0645-4f76-bd76-be5570aba7f9" name="TR069Agent_GetParameterNames">
+                <parameters>
+                    <parameter id="58fe281d-72b5-4572-b795-f4c141be879f" parameterName="ParamList" parameterType="STRING" range="A-Z"/>
+                    <parameter id="07e98ed3-5c3a-4e9a-8575-ff3767632fc9" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="271ed749-e39a-41d9-a0b6-d9120eb706e2" name="TR069Agent_SetParameterValues">
+                <parameters>
+                    <parameter id="ed425bcd-9966-4f71-9690-d96511b33037" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c84f7657-e32d-49a9-a6b3-df5cf94247f6" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="85600fe3-df27-469c-b346-a48912a56f9b" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d9d86a99-dcca-45af-bd5c-e9e130331898" name="TR069Agent_GetParameterAttr">
+                <parameters>
+                    <parameter id="3811a7bb-a03e-4c6a-95ef-7622397b714a" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0be3bda5-ca4c-4c3c-896c-d789a2a434cf" name="TR069Agent_GetParameterValues">
+                <parameters>
+                    <parameter id="146cdb8f-d791-45c8-bc07-ad4e56e1d217" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a4d051aa-f339-460d-b67d-58ff106578c4" name="TR069Agent_SetParameterAttr">
+                <parameters>
+                    <parameter id="3cc87254-8765-4f7b-9698-ba267e2341dc" parameterName="Notify" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a2954522-0240-4151-813f-197cbcf6a786" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5fe98a44-5986-4f46-8190-5c3c2e01c094" parameterName="AccessControl" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>39266739-618b-44c8-8ee5-8ce34851086a</id>
+                <name>TR069Agent_GetParameterValues</name>
+                <funName>TR069Agent_GetParameterValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>838f31ea-6cde-471d-98b2-66b9a2ddb4e1</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>545fcb3e-3542-4192-9e6d-d89fbab49d97</id>
+                <name>TR069Agent_GetParameterAttr</name>
+                <funName>TR069Agent_GetParameterAttr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>848902d9-689a-4be2-bdb0-6b1278a0de55</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9b56079f-432b-41cf-b1a7-1407308f4d34</id>
+                <name>TR069Agent_Init</name>
+                <funName>TR069Agent_Init</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a3bad16c-688c-4d6c-94b2-0f82cc0192a6</id>
+                <name>TR069Agent_SetParameterAttr</name>
+                <funName>TR069Agent_SetParameterAttr</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9cf6d301-a132-456e-8e27-b0a0d432d556</id>
+                        <parameterName>Notify</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b92123c8-b6e4-4408-85a0-0a86e3d68fa4</id>
+                        <parameterName>AccessControl</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c4712fe6-a7fe-450b-ab06-a5a4d6aa9b1d</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>aa42171d-7852-4860-b587-986319bc90d6</id>
+                <name>TR069Agent_GetParameterNames</name>
+                <funName>TR069Agent_GetParameterNames</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6bcda4c0-2647-480f-983c-76a84e0d4d1c</id>
+                        <parameterName>ParamList</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bf36048c-43a1-4880-bdd9-f6b369c7b3d7</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>de02d513-37f7-48f3-9d04-03313d256309</id>
+                <name>TR069Agent_SetParameterValues</name>
+                <funName>TR069Agent_SetParameterValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3c62ab90-0ee5-47b1-85e0-531a0be8057c</id>
+                        <parameterName>ParamValue</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>8ce80167-e41d-4df1-bad8-20a0f53be17e</id>
+                        <parameterName>Type</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d6b162a4-747e-4c27-952e-5339e8a83ad2</id>
+                        <parameterName>ParamName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>A</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e5e4ad77-81cb-4973-8005-6bac17b36457</id>
+                <name>TR069Agent_Terminate</name>
+                <funName>TR069Agent_Terminate</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

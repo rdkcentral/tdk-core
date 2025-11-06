@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>de19110d-73c4-4389-bc10-0d23f416fbbd</moduleId>
+        <!-- Module name -->
+        <moduleName>CosaCM</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="9910afb0-5350-4c71-a4ab-8db14503cd03" name="CosaCM_GetStatus">
+                <parameters>
+                    <parameter id="b08a0b27-0142-4ae0-ac22-5b0ad2e8cb8b" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="751fe710-2020-4277-a1a3-0a4586105d94" parameterName="Value" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="24783d27-ec43-438b-9cac-5847baf50c6e" name="CosaCM_SetLoopDiagnosticsStart">
+                <parameters>
+                    <parameter id="acee9149-cf3d-4bb6-a736-06d2eaa17ea4" parameterName="boolValue" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="c35bf453-173e-47bf-b278-068a4c3365db" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="f3f49bb7-65a9-450b-950a-31e1b3cb15c2" name="CosaCM_GetTelephonyTftpStatus">
+                <parameters>
+                    <parameter id="e03f912a-d340-449c-a2b0-2cc90fcdbe8c" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="98e35abb-778d-4d25-9a90-45337e09d0cf" parameterName="Value" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="f4719c7d-fe57-46f4-9a0d-0004f6dc1469" name="COSACM_GetCMCertStatus">
+                <parameters/>
+            </function>
+            <function id="d4650b3f-7b8a-4918-9754-10d929361ca0" name="CosaCM_GetUpstreamChannelId">
+                <parameters>
+                    <parameter id="27f24a86-4413-4270-b626-1000f21d7fd4" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="d2c4a9bf-2895-4118-954e-ce7c8dcf5da5" name="CosaCM_GetIPv6DHCPInfo">
+                <parameters>
+                    <parameter id="e2fa68f2-1a6a-412f-bf9a-91af50db34d4" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="1786a677-ce37-4a67-a529-b7822871008f" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="d4d388ac-aec6-4a5f-b3e5-5182c40c6009" name="CMHal_GetCharValues">
+                <parameters>
+                    <parameter id="79b8a495-30b0-4ce6-8fff-31d4305ba1a3" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fcd7147f-8900-4126-8899-2e0e14dbcdc5" name="CosaCM_GetLoopDiagnosticsStart">
+                <parameters>
+                    <parameter id="f473c359-d470-4017-9d86-40e0ef534a9b" parameterName="boolValue" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="1ee3ed15-aa85-4952-88d5-a6a869c72363" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="fa99fa37-ef89-4af0-ba2d-9274104dfb0a" name="COSACM_GetCPEList">
+                <parameters/>
+            </function>
+            <function id="09315afd-936d-4707-95af-4587314dcb27" name="COSACM_GetMDDIPOverride_ArgMemory_unalloc">
+                <parameters/>
+            </function>
+            <function id="cae96998-d629-4843-875c-390867f3d840" name="CosaCM_GetStartDSFrequency">
+                <parameters>
+                    <parameter id="d8148211-3967-4021-bd1f-8ab3cb83c751" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="ced98515-4b69-432f-a140-8fd5e464fa8a" name="COSACM_GetDownstreamChannel">
+                <parameters>
+                    <parameter id="03875ab2-18c6-4625-b61b-58968fad5800" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="9de2b80f-2918-4c98-811a-cbf25cbcd1ab" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="f6688f2f-0835-4cef-956c-4566dce86d45" name="COSACM_GetDHCPInfo">
+                <parameters>
+                    <parameter id="07915394-7b68-4848-90ec-59c13478982e" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="75df599e-4054-4163-9a69-f3c1283cbadf" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="5a9ad5cd-f033-4698-b063-19b971f5124c" name="COSACM_GetCPEList_InvalidArg">
+                <parameters/>
+            </function>
+            <function id="9c61bfac-4480-48ba-9b07-7c9189529b23" name="COSACM_CableModemRemove">
+                <parameters>
+                    <parameter id="1a5c0a57-539f-4982-9e43-ecc8fc3a7b12" parameterName="handleType" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="6ec6027a-2571-4edf-b2af-c37de9c89144" name="COSACM_GetUpstreamChannel">
+                <parameters>
+                    <parameter id="ded03a23-659c-4c17-9489-63af23b71999" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="f39641aa-af4a-4445-b3a1-8b35a567bd82" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="3f006b6d-fd13-43e7-b381-b3fc3b5ab957" name="COSACM_GetDOCSISInfo">
+                <parameters>
+                    <parameter id="e22d15a0-0537-4542-a674-e02e257d2509" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="07d63072-649e-4ada-81e9-4ce1d72e39cd" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="e74cc7e1-a51f-4a14-8163-da09e1347800" name="COSACM_CableModemInitialize">
+                <parameters>
+                    <parameter id="550e00d9-9c1f-49a6-9182-f98a5f30fbfa" parameterName="handleType" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="b6c91112-c39b-469c-98ea-e046608a6e36" name="COSACM_GetCMErrorCodewords_InvalidArg">
+                <parameters/>
+            </function>
+            <function id="cdf0bdc3-e444-4fe2-8f58-01c03a611ff5" name="CMHal_GetUlongValues">
+                <parameters>
+                    <parameter id="eac3d4d8-c309-45f6-9bad-32d7e5ee4201" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="dd1f35d1-bdb2-4af4-8a0e-3786f3c1c651" name="COSACM_GetCMCert_ArgMemory_unalloc">
+                <parameters/>
+            </function>
+            <function id="2a4477d5-3423-4dde-af6d-2548526ccf34" name="CosaCM_GetTelephonyRegistrationStatus">
+                <parameters>
+                    <parameter id="74c6f459-1f3d-42ff-ab38-498b5e6244d9" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="466c6ca5-3c7c-4499-b84e-6b1922b1dedf" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="fc70474a-a216-4347-a8d1-d006c9691f44" name="COSACM_SetLog">
+                <parameters>
+                    <parameter id="570eaf1d-2ba1-45e8-8299-77fbb44c3686" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="aac5239e-ce0f-4e4b-865f-82b3220b3c83" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="e926bb45-1d7f-4092-9a00-ec08e58efbe7" name="COSACM_SetMDDIPOverride">
+                <parameters>
+                    <parameter id="ee98ef26-b55d-417d-8ec6-9c7fbd070792" parameterName="valueType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="bfb64b8b-8fb9-4a14-8771-00a640d0a01d" parameterName="value" parameterType="STRING" range="A-Z"/>
+                    <parameter id="1019639c-7f87-4c1f-ab9d-081f7a1095f2" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="219f9922-1ac1-4713-a369-20071485197d" name="COSACM_SetMDDIPOverride_ArgMemory_unalloc">
+                <parameters/>
+            </function>
+            <function id="46a8b058-7ad0-4dce-b996-814210fbbd33" name="COSACM_GetDocsisLog">
+                <parameters>
+                    <parameter id="6392fda6-afee-4015-b369-cbc4126fa62f" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="001c2913-329a-4076-b6cb-2de3d7572522" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="73caa947-50fa-4949-9edd-44b159c8c94a" name="CosaCM_GetTelephonyDHCPStatus">
+                <parameters>
+                    <parameter id="9ba6b8e6-1124-46b9-a62c-c7407ebb06ac" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="62e255c4-4988-4c81-b113-7eccb963b9dc" parameterName="Value" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="21ae61ec-663a-480c-a524-aa0824b68d24" name="CosaCM_GetProvType">
+                <parameters>
+                    <parameter id="8b5ff10b-7366-4746-9fae-0c82743cec57" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="625fc4ec-cbc1-4ff3-af6e-544e0c198b4a" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="bd7e61f5-983e-4708-a284-d97fbeb8ba6c" name="COSACM_GetCMErrorCodewords">
+                <parameters>
+                    <parameter id="bb4bd271-3c31-4e95-894b-33cfa44c7283" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="d9720094-00ce-4240-8749-3d6030fb9747" name="COSACM_CableModemCreate">
+                <parameters/>
+            </function>
+            <function id="481d808b-65ab-4416-a600-a144fec8ad94" name="COSACM_GetMDDIPOverride">
+                <parameters/>
+            </function>
+            <function id="36bfd045-8036-4f49-b6f1-89e9cd4d5f34" name="CosaCM_GetLoopDiagnosticsDetails">
+                <parameters>
+                    <parameter id="9df7659f-ff0c-4a5c-938b-7a53d55101c6" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="4ff83430-0205-4c12-b4cf-b4da4af90b79" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="4eb8919a-91d7-43f6-a34e-cdd6078e820d" name="COSACM_GetMarket_ArgMemory_unalloc">
+                <parameters/>
+            </function>
+            <function id="c882fe7e-c654-41f5-8750-d12b6b3bd8c5" name="CosaCM_SetUpstreamChannelId">
+                <parameters>
+                    <parameter id="909ab8c2-5250-4491-be0c-b15169f525a2" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="fe6c27d9-3e3a-40e2-834e-edee87fbe07d" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="f3bb8939-d0a8-406a-97cb-7f73e3693c76" parameterName="channelId" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="1bd89e5a-4926-4ad9-aa79-9c02f78d8f7f" name="COSACM_GetLog">
+                <parameters>
+                    <parameter id="bc8a5650-e010-4f18-a5c1-996cbc651b85" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="54ca1da5-b5cb-43b4-b1d0-4e046f652d78" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="7f21776b-cdb8-4fbf-b870-fa1d758288e0" name="CosaCM_SetStartDSFrequency">
+                <parameters>
+                    <parameter id="0740eecb-a6cf-4c55-b1da-bacdb26ae072" parameterName="frequency" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="a4095b1d-9606-43ee-973b-3c9e723e8482" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="ac7c988a-4ebf-4468-a9c7-3f48a0647479" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f2e99b1f-6ce6-4621-afbb-c7f2e876bc32" name="COSACM_GetCMCert">
+                <parameters/>
+            </function>
+            <function id="7baf9f57-a7f7-44f4-8555-a59fe7f4743f" name="COSACM_GetCMCertStatus_InvalidArg">
+                <parameters/>
+            </function>
+            <function id="3424f775-0481-4e4f-b97c-695eb3eb3765" name="CMHal_GetStructValues">
+                <parameters>
+                    <parameter id="55c7b08c-7dcc-4eb6-8b32-83afda7d38aa" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9094c205-fcff-4309-983f-04856020c941" name="CosaCM_GetResetCount">
+                <parameters>
+                    <parameter id="522d07bc-4eae-4d03-906f-6030218ae67d" parameterName="handleType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="4fbf3d44-900f-4c3e-8f30-c341583f2cb5" parameterName="bufferType" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="839ec923-f47e-4f0b-a374-63e75951b6fb" parameterName="resetType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b1e2f991-bd4e-473d-b3eb-db31d1debe17" name="COSACM_GetMarket">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>02729b48-4018-4c0e-8cd1-5b4258ba684a</id>
+                <name>CosaCM_GetLoopDiagnosticsDetails</name>
+                <funName>CosaCM_GetLoopDiagnosticsDetails</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>944c2590-097a-4fe2-b4d1-d89beee60fc1</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>cff463ca-a99c-4671-80dc-42f29fd00723</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>04cfdede-44b9-4b91-ae1b-1e2159043de4</id>
+                <name>CosaCM_GetResetCount</name>
+                <funName>CosaCM_GetResetCount</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3078fbf0-7fbc-437c-9ccb-bc7f084c5e77</id>
+                        <parameterName>resetType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>CMResetCount</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9c2e0a8d-5631-4a6b-9004-bc5c957cc760</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b3d714a6-9323-4821-834c-be862edeaf44</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>07050765-68d7-4399-ac77-2c1b86d12349</id>
+                <name>COSACM_CableModemRemove</name>
+                <funName>COSACM_CableModemRemove</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>be6a3c64-b265-4f9c-aafd-9f104ac6c05d</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>09ebe0c8-80f6-4359-9971-fc6996ffbe36</id>
+                <name>CMHal_GetStructValues</name>
+                <funName>CMHal_GetStructValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b0b2922c-4ee4-4b9b-ac4b-86a409871606</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>13901ceb-a86e-4231-ac01-6938041effce</id>
+                <name>COSACM_GetMarket</name>
+                <funName>COSACM_GetMarket</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>14bff897-9efa-46b4-b2a9-87eafa58e052</id>
+                <name>CosaCM_SetUpstreamChannelId</name>
+                <funName>CosaCM_SetUpstreamChannelId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>38269c99-f0de-490e-8baf-e099ef4ec244</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>40178502-5b36-4128-a32b-44cdb518a55d</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a94d6b13-15ec-4210-a989-2f4d0bc09c33</id>
+                        <parameterName>channelId</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1db0236a-c301-45d0-8508-e6574190b7c3</id>
+                <name>COSACM_GetCMCertStatus_InvalidArg</name>
+                <funName>COSACM_GetCMCertStatus_InvalidArg</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>1e0167e8-b82a-41c8-8302-646439e02a51</id>
+                <name>CosaCM_SetLoopDiagnosticsStart</name>
+                <funName>CosaCM_SetLoopDiagnosticsStart</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>854a2df0-057e-4a52-8901-24566393c356</id>
+                        <parameterName>boolValue</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>85e33103-b7dd-4561-9a50-ae2ff53c5f9a</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>2a5a8ee0-d8ac-487c-a242-cd85e8c9385a</id>
+                <name>CosaCM_GetUpstreamChannelId</name>
+                <funName>CosaCM_GetUpstreamChannelId</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ed4a59ad-1a76-4aa7-b2cf-045b16b6e646</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3e13f3ec-8366-4210-a442-0c12c46ad75f</id>
+                <name>CMHal_GetCharValues</name>
+                <funName>CMHal_GetCharValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>934e2cdd-c2d5-4172-bf58-9f4cab2fe237</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>50618c1c-cf43-4db4-8a0c-af339a2d5b2a</id>
+                <name>COSACM_GetCPEList</name>
+                <funName>COSACM_GetCPEList</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>58eec5ec-2f78-4be0-9761-e84bf5e9f7bd</id>
+                <name>COSACM_GetLog</name>
+                <funName>COSACM_GetLog</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>9adde78a-14db-473f-ae31-b4399aaaf48d</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b09fff41-3728-4925-8a46-e436e4742da2</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>591ecaf8-fa0c-428f-a71f-5767af7e3a9e</id>
+                <name>CosaCM_GetStatus</name>
+                <funName>CosaCM_GetStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2003937d-b234-4430-ae0e-71162ffff6fc</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>afb27dd8-8ff6-4d72-bf2b-f3aca5182183</id>
+                        <parameterName>Value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5b4e88a9-f82d-40a9-9ef7-b02de9e3a297</id>
+                <name>COSACM_GetDHCPInfo</name>
+                <funName>COSACM_GetDHCPInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>18f01ecb-9535-469a-b47f-f8433e5ec6f2</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>81606c9f-d716-41f8-83b3-a752e0b875d0</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5d91a005-d84a-4656-a92b-0ff0ea75637f</id>
+                <name>COSACM_CableModemInitialize</name>
+                <funName>COSACM_CableModemInitialize</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f42aba1d-46e5-433e-92ae-7aec8fd8b8f4</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5e74f2da-c87e-4b1f-a7b2-fcfc0290c5f5</id>
+                <name>CMHal_GetUlongValues</name>
+                <funName>CMHal_GetUlongValues</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4ad2ec09-48b6-4862-94fa-c9707fcf864d</id>
+                        <parameterName>paramName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>null</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7b7f1804-c2a6-4414-b47b-a70305fb800d</id>
+                <name>CosaCM_SetStartDSFrequency</name>
+                <funName>CosaCM_SetStartDSFrequency</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1b76e377-8753-440e-aa53-82f0b8b3c579</id>
+                        <parameterName>paramType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>a</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ded930f3-c8c7-4311-8efa-9461e72311c9</id>
+                        <parameterName>frequency</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>eedec1c5-9f83-4f99-9fa4-5dac27cf8270</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7e9381ab-0696-4e2a-82e4-e45eacc19562</id>
+                <name>COSACM_GetDownstreamChannel</name>
+                <funName>COSACM_GetDownstreamChannel</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6da051df-d7d5-40aa-a6ee-03e3aab647d0</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c301c0e5-fffd-477e-91ba-12e57c811d9e</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>87f81a9f-a428-4f78-87f3-d2a68ef1d5b9</id>
+                <name>COSACM_SetLog</name>
+                <funName>COSACM_SetLog</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3b718447-9db8-47a6-abe6-7938963bc937</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b2889ae2-43ba-462b-a8f5-b661603607f6</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>890e8bc8-5d17-45d5-a774-dc10a348a415</id>
+                <name>COSACM_SetMDDIPOverride_ArgMemory_unalloc</name>
+                <funName>COSACM_SetMDDIPOverride_ArgMemory_unalloc</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>94f7a65e-d495-4bab-94b1-9cae517aa07a</id>
+                <name>COSACM_GetMarket_ArgMemory_unalloc</name>
+                <funName>COSACM_GetMarket_ArgMemory_unalloc</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>99b4af41-e189-4ce2-a8f5-21b27cc96cfd</id>
+                <name>COSACM_GetDocsisLog</name>
+                <funName>COSACM_GetDocsisLog</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>45c7a678-a969-4787-b381-14196c5d3333</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>df47e3f5-098e-47af-ad0e-1060e4d3e356</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9e4cd4dc-830d-46ce-a5b6-2820d22d961a</id>
+                <name>COSACM_CableModemCreate</name>
+                <funName>COSACM_CableModemCreate</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>a0136f54-f0c5-4083-80ae-2bfb8151d950</id>
+                <name>CosaCM_GetProvType</name>
+                <funName>CosaCM_GetProvType</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>0d9ffa52-ce02-44e7-8e6c-a6780731ea74</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>7088042c-0075-49b9-9e96-f1ea504577a2</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ae4dfd59-e1e7-49b1-b485-1b835956b617</id>
+                <name>COSACM_GetCMCert_ArgMemory_unalloc</name>
+                <funName>COSACM_GetCMCert_ArgMemory_unalloc</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b2a24f5a-b473-4c90-bd66-0bed58c92f50</id>
+                <name>CosaCM_GetIPv6DHCPInfo</name>
+                <funName>CosaCM_GetIPv6DHCPInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>81a3aa0a-4e75-4c73-9478-d21c04b1287c</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dfba99c4-38a2-4796-b95f-c24fbff9fbd4</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ba6407dc-9e51-4f52-9901-c8d5cdfb2f2f</id>
+                <name>COSACM_GetCMCert</name>
+                <funName>COSACM_GetCMCert</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c2987139-4866-425b-87c1-dcbc76cc210d</id>
+                <name>COSACM_GetCMErrorCodewords_InvalidArg</name>
+                <funName>COSACM_GetCMErrorCodewords_InvalidArg</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>c2f3ce70-8dcc-4e03-8a8e-dfab55759679</id>
+                <name>CosaCM_GetTelephonyTftpStatus</name>
+                <funName>CosaCM_GetTelephonyTftpStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1bd1b0e8-b760-4475-9e17-63a96e2ff1c9</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c32253b0-1ada-4c9f-a820-7ead8f18271a</id>
+                <name>CosaCM_GetTelephonyDHCPStatus</name>
+                <funName>CosaCM_GetTelephonyDHCPStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>98fec5db-5541-434f-8a2d-ca81ec5ecda2</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c4526b52-321b-4aca-a463-a1ce2e82e285</id>
+                <name>COSACM_GetUpstreamChannel</name>
+                <funName>COSACM_GetUpstreamChannel</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b3116a9a-4f1a-469e-b318-ecdb7b709706</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>bf6f39c2-86b4-4803-80bd-45ea5d633acf</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c5e2d2e1-62e5-43c7-acf4-126b9d936bb1</id>
+                <name>COSACM_GetMDDIPOverride_ArgMemory_unalloc</name>
+                <funName>COSACM_GetMDDIPOverride_ArgMemory_unalloc</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>caeeeba9-2fed-4941-9d2c-5fed60ca465a</id>
+                <name>CosaCM_GetStartDSFrequency</name>
+                <funName>CosaCM_GetStartDSFrequency</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c8051d70-7334-445c-ac85-93029df92f05</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d1cb456d-06f1-47be-991e-df60f18bb5c6</id>
+                <name>COSACM_GetCPEList_InvalidArg</name>
+                <funName>COSACM_GetCPEList_InvalidArg</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>d1de8b14-9c10-411a-a7b3-8bf1d62292ae</id>
+                <name>CosaCM_SetMDDIPOverride</name>
+                <funName>COSACM_SetMDDIPOverride</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>772481ab-481b-4ea2-b918-820a831fa72c</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>eeb29103-1835-4771-8462-fc715af73b94</id>
+                        <parameterName>valueType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d73ad4a2-8c53-4fe5-a16f-d63692e09830</id>
+                <name>COSACM_GetCMErrorCodewords</name>
+                <funName>COSACM_GetCMErrorCodewords</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e53771f0-021a-428a-9591-4f93a17a7206</id>
+                <name>CosaCM_GetTelephonyRegistrationStatus</name>
+                <funName>CosaCM_GetTelephonyRegistrationStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>73bbeecb-b087-4a3e-b289-de7484a3bde2</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c72fa009-7487-4b6b-80b1-2605e008415d</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>ec3a3d1f-f627-4510-9d7d-9845e9f592f0</id>
+                <name>COSACM_GetMDDIPOverride</name>
+                <funName>COSACM_GetMDDIPOverride</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>f25d9055-a4ce-498c-957c-7d72b460b6b5</id>
+                <name>COSACM_GetDOCSISInfo</name>
+                <funName>COSACM_GetDOCSISInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>3192a1f3-257d-4545-802b-c6ac043924c4</id>
+                        <parameterName>bufferType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>3851d440-7cba-4be5-a1e7-1e59e970ffc7</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f4cde134-71c4-44c8-82b4-bfd7493c7b21</id>
+                <name>CosaCM_GetLoopDiagnosticsStart</name>
+                <funName>CosaCM_GetLoopDiagnosticsStart</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>349effdb-d789-43e6-9843-35b05d4a6fae</id>
+                        <parameterName>handleType</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-9</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>586ba83b-3056-45f2-8493-d003d3f79a48</id>
+                        <parameterName>boolValue</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-1</range>
+                        <value>0</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fcff172b-b313-4079-93ed-f8e807425218</id>
+                <name>COSACM_GetCMCertStatus</name>
+                <funName>COSACM_GetCMCertStatus</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>
