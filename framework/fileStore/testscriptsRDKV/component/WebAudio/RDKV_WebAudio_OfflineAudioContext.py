@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
   <primitive_test_name>webaudio_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To get the OfflineAudioContext details from the device browser</synopsis>
+  <synopsis>To validates behavior and constraints of OfflineAudioContext and OfflineAudioCompletionEvent in Web Audio API</synopsis>
   <groups_id/>
   <execution_time>20</execution_time>
   <long_duration>false</long_duration>
@@ -33,9 +33,7 @@
   <remarks/>
   <skip>false</skip>
   <box_types>
-    <box_type>RDKTV</box_type>
     <box_type>RPI-Client</box_type>
-    <box_type>RPI-HYB</box_type>
     <box_type>Video_Accelerator</box_type>
   </box_types>
   <rdk_versions>
@@ -43,21 +41,21 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>WebAudio_43</test_case_id>
-    <test_objective>To get the OfflineAudioContext details from the device browser</test_objective>
+    <test_objective>To ensure OfflineAudioContext reports correct length even on failed buffer construction, enforces single start restriction, correctly handles suspension with invalid buffers, and OfflineAudioCompletionEvent is constructed with proper properties</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI,Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebAudioVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>WebAudio</api_or_interface_used>
-    <input_parameters>bad-buffer-length.html,offlineaudiocontext-can-only-render-once.html,offlineaudiocontext-leak.html,offlineaudiocontext-leak-after-rendering.html,offlineaudiocontext-leak-while-suspended.html,OfflineAudioCompletionEvent-constructor.html,OfflineAudioContext-bad-buffer-suspend-crash.html,offlineaudiocontext-length.html,offlineaudiocontext-restriction.html,OfflineAudioContext-bad-buffer-crash.html,offlineaudiocontext-leak-after-rendering-with-nodes.html</input_parameters>
+    <input_parameters>bad-buffer-length.html,offlineaudiocontext-can-only-render-once.html,OfflineAudioCompletionEvent-constructor.html,OfflineAudioContext-bad-buffer-suspend-crash.html,offlineaudiocontext-length.html,offlineaudiocontext-restriction.html,OfflineAudioContext-bad-buffer-crash.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>The browser should be able to get the OfflineAudioContext details</expected_output>
+    <expected_output>OfflineAudioContext length matches requested value, starting it twice throws InvalidStateError, creating OfflineAudioCompletionEvent with valid buffer succeeds with correct type, bubbles, cancelable, composed, length, duration, and sampleRate, suspension with invalid buffer does not crash and rejects rendering promise, all assertions pass</expected_output>
     <priority>High</priority>
     <test_stub_interface>WebAudio</test_stub_interface>
     <test_script>RDKV_WebAudio_OfflineAudioContext</test_script>
     <skipped>No</skipped>
-    <release_version>M126</release_version>
+    <release_version>M143</release_version>
     <remarks>None</remarks>
   </test_cases>
 </xml>
@@ -86,17 +84,13 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebAudioVariables.browser_instance
-webaudio_test_url = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/bad-buffer-length.html'
-webaudio_test_url2 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/offlineaudiocontext-can-only-render-once.html'
-webaudio_test_url3 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/offlineaudiocontext-leak.html'
-webaudio_test_url4 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/offlineaudiocontext-leak-after-rendering.html'
-webaudio_test_url5 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/offlineaudiocontext-leak-while-suspended.html'
-webaudio_test_url6 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/OfflineAudioCompletionEvent-constructor.html'
-webaudio_test_url7 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/OfflineAudioContext-bad-buffer-suspend-crash.html'
-webaudio_test_url8 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/OfflineAudioContext-bad-buffer-crash.html'
-webaudio_test_url9 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/offlineaudiocontext-leak-after-rendering-with-nodes.html'
-webaudio_test_url10 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/offlineaudiocontext-length.html'
-webaudio_test_url11 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/offlineaudiocontext-restriction.html'
+webaudio_test_url = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/OfflineAudioContext/bad-buffer-length.html'
+webaudio_test_url2 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/OfflineAudioContext/offlineaudiocontext-can-only-render-once.html'
+webaudio_test_url3 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/OfflineAudioCompletionEvent-constructor.html'
+webaudio_test_url4 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/OfflineAudioContext-bad-buffer-suspend-crash.html'
+webaudio_test_url5 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/OfflineAudioContext-bad-buffer-crash.html'
+webaudio_test_url6 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/offlineaudiocontext-length.html'
+webaudio_test_url7 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/offlineaudiocontext-restriction.html'
 browser_method = browser+".1.url"
 log_check_method = WebAudioVariables.log_check_method
 current_url=''
@@ -132,7 +126,7 @@ def process_webinspect_logs(log_filename, webinspect_logs,status_dict):
         tdkTestObj.setResultStatus("FAILURE")
         status_dict[log_filename] = "FAILURE"
 
-#Common function for Geting Logs
+#Function for parsing the logs
 def get_webinspect_logs(test_url, log_check_method, grep_line, log_filename,status_dict):
     if log_check_method == "WebinspectPageLogs":
         print("\n Script is directly taking the browser webinspect page console logs to validate the webaudio")
@@ -145,7 +139,7 @@ def get_webinspect_logs(test_url, log_check_method, grep_line, log_filename,stat
     if webinspect_logs != "":
         process_webinspect_logs(log_filename, webinspect_logs,status_dict)
     else:
-        print("Failed to get the logs from " + log_check_method)
+        print("FAILURE: Failed to fetch the logs from Html test App \n")
         tdkTestObj.setResultStatus("FAILURE")
         status_dict[log_filename] = "FAILURE"
 
@@ -194,7 +188,7 @@ if expectedResult in result.upper():
                 else:
                     print("FAILURE : Failed to launch ", browser, " in device \n")
                     tdkTestObj.setResultStatus("FAILURE")
-                    obj.unloadModule("webaudio_test");
+                    obj.unloadModule("webaudio");
                     exit()
 
             files_info = [
@@ -204,11 +198,7 @@ if expectedResult in result.upper():
                 {"tail_num": 8,"url": webaudio_test_url4},
                 {"tail_num": 8,"url": webaudio_test_url5},
                 {"tail_num": 8,"url": webaudio_test_url6},
-                {"tail_num": 8,"url": webaudio_test_url7},
-                {"tail_num": 8,"url": webaudio_test_url8},
-                {"tail_num": 8,"url": webaudio_test_url9},
-                {"tail_num": 8,"url": webaudio_test_url10},
-                {"tail_num": 8,"url": webaudio_test_url11}
+                {"tail_num": 8,"url": webaudio_test_url7}
             ]
 
             for file_info in files_info:
