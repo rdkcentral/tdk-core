@@ -20,14 +20,21 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
   <version>2</version>
-  <name>RDKV_Webkit_Media_MediaMP4</name>
+  <name>RDKV_Webkit_MediaFragments_MissingTime</name>
   <primitive_test_id/>
   <primitive_test_name>webkit_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To validates Media Source Extensions behavior for appending init and media segments with SourceBuffer in sequence mode</synopsis>
+  <synopsis>
+    TC0011: To verify that a media fragment request with 't=3' plays from time 3 to the end of the media.
+    TC0012: To verify that an invalid media fragment request with missing end time ('t=3,') is properly ignored.
+    TC0014: To verify that a media fragment request with a start time beyond the duration of the resource ('t=15') is handled correctly.
+    TC0015: To verify that a media fragment request with a missing start time ('t=,7') is interpreted correctly as requesting media from the start (0) to the specified end time (7).
+    TC0017: To verify that a media fragment request with a missing start time ('t=,15') is interpreted correctly as requesting media from the start (0) to the specified end time.
+    TC0072: To verify that the media fragment t=3. correctly requests playback from 3 seconds to the end of the media.
+  </synopsis>
   <groups_id/>
-  <execution_time>10</execution_time>
+  <execution_time>30</execution_time>
   <long_duration>false</long_duration>
   <advanced_script>false</advanced_script>
   <remarks/>
@@ -40,20 +47,27 @@
     <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>Media_02</test_case_id>
-    <test_objective>To ensure SourceBuffer correctly handles timestampOffset, buffered ranges, and sequence mode when multiple media segments are appended</test_objective>
+    <test_case_id>Mediafragments_08</test_case_id>
+    <test_objective>
+      TC0011: To ensure that the media starts at time 3 and ends correctly within the requested fragment.
+      TC0012: To check that when a media fragment with invalid syntax ('t=3,') is provided, the fragment is ignored, and the media starts from the beginning.
+      TC0014: To check that when a media fragment request starts beyond the end of the resource, the UA seeks to the end of the media or sends an out-of-range HTTP request if the duration is unknown.
+      TC0015: To check that the media is requested from the start (0) to the given end time (7), and that playback functions as expected without errors.
+      TC0017: To check that the media is requested from the start (0) to the given end time (15), and that playback functions as expected without errors.
+      TC0072: To ensure that the user agent treats the fragment t=3. as equivalent to t=a,e and requests playback from 3 seconds to the end of the media, starting at 3 seconds and pausing near the end.
+    </test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI, Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebkitVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>webkit</api_or_interface_used>
-    <input_parameters>media-mp4-h264-sequence-mode.html</input_parameters>
+    <input_parameters>TC0011.html, TC0012.html, TC0014.html, TC0015.html, TC0017.html, TC0072.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>TimestampOffset updates correctly, buffered ranges reflect appended segments, and sequence mode properly advances the playback timeline with all assertions passing</expected_output>
+    <expected_output>The browser should be able to get the MediaFragments details</expected_output>
     <priority>High</priority>
     <test_stub_interface>webkit</test_stub_interface>
-    <test_script>RDKV_Webkit_Media_MediaMP4</test_script>
+    <test_script>RDKV_Webkit_MediaFragments_MissingTime</test_script>
     <skipped>No</skipped>
     <release_version>M143</release_version>
     <remarks>None</remarks>
@@ -74,7 +88,7 @@ obj = tdklib.TDKScriptingLibrary("webkit","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Webkit_Media_MediaMP4');
+obj.configureTestCase(ip,port,'RDKV_Webkit_MediaFragments_MissingTime');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -83,7 +97,12 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebkitVariables.browser_instance
-webkit_test_url = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-source/media-mp4-h264-sequence-mode.html'
+webkit_test_url = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-fragments/TC0011.html'
+webkit_test_url2 = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-fragments/TC0012.html'
+webkit_test_url3 = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-fragments/TC0014.html'
+webkit_test_url4 = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-fragments/TC0015.html'
+webkit_test_url5 = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-fragments/TC0017.html'
+webkit_test_url6 = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-fragments/TC0072.html'
 browser_method = browser+".1.url"
 log_check_method = WebkitVariables.log_check_method
 current_url=''
@@ -184,11 +203,27 @@ if expectedResult in result.upper():
                     obj.unloadModule("webkit");
                     exit()
 
-            print("Processing media-mp4-h264-sequence-mode.html file")
-            grep_line = "media-mp4-h264-sequence-mode | tail -3 | tr -d '\\n'"
-            log_filename = "media-mp4-h264-sequence-mode"
-            get_webinspect_logs(webkit_test_url,log_check_method, grep_line, log_filename,status_dict)
+            files_info = [
+                {"tail_num": 3,"url": webkit_test_url},
+                {"tail_num": 3,"url": webkit_test_url2},
+                {"tail_num": 3,"url": webkit_test_url3},
+                {"tail_num": 3,"url": webkit_test_url4},
+                {"tail_num": 3,"url": webkit_test_url5},
+                {"tail_num": 3,"url": webkit_test_url6}
+            ]
 
+            for file_info in files_info:
+                filename =file_info["url"].split("/")[-1]
+                tail_num = file_info["tail_num"]
+                log_filename = filename.replace(".html","")
+                url = file_info["url"]
+                print(f"Processing {filename} file")
+                grep_line = f"{filename} | tail -{tail_num} | tr -d '\\n'"
+                try:
+                    get_webinspect_logs(url, log_check_method, grep_line, log_filename,status_dict)
+                except Exception as e:
+                    print(f"Error processing {filename}: {e}")
+                    status_dict[log_filename] = "FAILURE"
             print("\n Revert everything before exiting the script")
             if current_url !='':
                 tdkTestObj = obj.createTestStep('webkit_setPluginStatus')
@@ -218,8 +253,8 @@ if expectedResult in result.upper():
         tdkTestObj.setResultStatus("FAILURE")
 
 print("############## Execution Summary #######################")
-if "media-mp4-h264-sequence-mode" in status_dict:
-    print(f"media-mp4-h264-sequence-mode: {status_dict['media-mp4-h264-sequence-mode']}")
+for log_filename, status in status_dict.items():
+    print(f"{log_filename}: {status}")
 
 obj.unloadModule("webkit");
 

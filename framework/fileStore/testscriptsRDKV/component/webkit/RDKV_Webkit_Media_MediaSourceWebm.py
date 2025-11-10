@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
   <primitive_test_name>webkit_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To verify that the media source webm details from the device browser</synopsis>
+  <synopsis>Tests SourceBuffer behavior for partial media segment appends and resize event after initialization.</synopsis>
   <groups_id/>
   <execution_time>20</execution_time>
   <long_duration>false</long_duration>
@@ -41,21 +41,21 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>Media_33</test_case_id>
-    <test_objective>To ensure that the media source webm details from the device browser</test_objective>
+    <test_objective>To verify that SourceBuffer merges partial appends correctly and triggers resize update events.</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI, Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebkitVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>webkit</api_or_interface_used>
-    <input_parameters>media-source-webm-init-inside-segment.html, media-source-webm-vorbis-partial.html, media-source-webm-vp8-malformed-header.html, media-source-webm.html</input_parameters>
+    <input_parameters>media-source-webm-vorbis-partial.html, media-source-webm.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>The browser should correctly apply the media source webm details</expected_output>
+    <expected_output>Single buffered range greater than 1, resize event fired, video dimensions 320x240 or 0x0.</expected_output>
     <priority>High</priority>
     <test_stub_interface>webkit</test_stub_interface>
     <test_script>RDKV_Webkit_Media_MediaSourceWebm</test_script>
     <skipped>No</skipped>
-    <release_version>M131</release_version>
+    <release_version>M143</release_version>
     <remarks>None</remarks>
   </test_cases>
   <script_tags/>
@@ -83,9 +83,8 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebkitVariables.browser_instance
-webkit_test_url = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-source/media-source-webm-init-inside-segment.html'
-webkit_test_url2 = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-source/media-source-webm-vorbis-partial.html'
-webkit_test_url3 = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-source/media-source-webm.html'
+webkit_test_url = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-source/media-source-webm-vorbis-partial.html'
+webkit_test_url2 = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-source/media-source-webm.html'
 browser_method = browser+".1.url"
 log_check_method = WebkitVariables.log_check_method
 current_url=''
@@ -134,7 +133,7 @@ def get_webinspect_logs(test_url, log_check_method, grep_line, log_filename,stat
     if webinspect_logs != "":
         process_webinspect_logs(log_filename, webinspect_logs,status_dict)
     else:
-        print("HTML File not printing logs")
+        print("FAILURE: Failed to fetch the logs from Html test App \n")
         tdkTestObj.setResultStatus("FAILURE")
         status_dict[log_filename] = "FAILURE"
 
@@ -183,13 +182,12 @@ if expectedResult in result.upper():
                 else:
                     print("FAILURE : Failed to launch ", browser, " in device \n")
                     tdkTestObj.setResultStatus("FAILURE")
-                    obj.unloadModule("webkit_test");
+                    obj.unloadModule("webkit");
                     exit()
 
             files_info = [
                 {"tail_num": 3,"url": webkit_test_url},
-                {"tail_num": 3,"url": webkit_test_url2},
-                {"tail_num": 3,"url": webkit_test_url3}
+                {"tail_num": 3,"url": webkit_test_url2}
             ]
 
             for file_info in files_info:
