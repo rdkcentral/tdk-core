@@ -388,7 +388,7 @@
 
         <testStep testStepId="1" name="Check_Get_MaintenanceActivity_Status_API_Response" method="MaintenanceManager_Get_MaintenanceActivity_Status" PluginOnStep="yes">
                 <resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
                      <arguments value="deactivate_check_error_message"/>
                 </resultGeneration>
         </testStep>
@@ -423,7 +423,7 @@
 
         <testStep testStepId="1" name="Check_Get_Maintenance_StartTime_API_Response" method="MaintenanceManager_Get_Maintenance_StartTime" PluginOnStep="yes">
                 <resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
                      <arguments value="deactivate_check_error_message"/>
 	     	</resultGeneration>
 	</testStep>
@@ -494,7 +494,7 @@
 	
 	<testStep testStepId="1" name="Check_Stop_Maintenance_API_Response" method="MaintenanceManager_Stop_Maintenance" PluginOnStep="yes">
             <resultGeneration useMethodTag="controller_check_error_message">
-                <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
                 <arguments value="deactivate_check_error_message"/>
             </resultGeneration>
         </testStep>
