@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
   <version>1</version>
-  <name>RDKV_WebAudio_PeriodicwaveExceptions</name>
+  <name>RDKV_WebAudio_PeriodicwaveContexts</name>
   <primitive_test_id/>
   <primitive_test_name>webaudio_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To get the periodicwave-exceptions details from the device browser</synopsis>
+  <synopsis>To validates signal-to-noise ratio and waveform fidelity for audio processing</synopsis>
   <groups_id/>
   <execution_time>10</execution_time>
   <long_duration>false</long_duration>
@@ -33,31 +33,29 @@
   <remarks/>
   <skip>false</skip>
   <box_types>
-    <box_type>RDKTV</box_type>
     <box_type>RPI-Client</box_type>
-    <box_type>RPI-HYB</box_type>
     <box_type>Video_Accelerator</box_type>
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>WebAudio_73</test_case_id>
-    <test_objective>To get the periodicwave-exceptions details from the device browser</test_objective>
+    <test_case_id>WebAudio_72</test_case_id>
+    <test_objective>To ensure processed audio maintains high SNR and minimal deviation from expected waveform</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI,Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebAudioVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>WebAudio</api_or_interface_used>
-    <input_parameters>periodicwave-exceptions.html</input_parameters>
+    <input_parameters>periodicwave-contexts.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>The browser should be able to get the periodicwave-exceptions details</expected_output>
+    <expected_output>SNR greater than or equal to 80, maximum difference less than or equal to 4.06, all assertions pass</expected_output>
     <priority>High</priority>
     <test_stub_interface>WebAudio</test_stub_interface>
-    <test_script>RDKV_WebAudio_PeriodicwaveExceptions</test_script>
+    <test_script>RDKV_WebAudio_PeriodicwaveContexts</test_script>
     <skipped>No</skipped>
-    <release_version>M131</release_version>
+    <release_version>M143</release_version>
     <remarks>None</remarks>
   </test_cases>
 </xml>
@@ -77,7 +75,7 @@ obj = tdklib.TDKScriptingLibrary("WebAudio","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_WebAudio_PeriodicwaveExceptions');
+obj.configureTestCase(ip,port,'RDKV_WebAudio_PeriodicwaveContexts');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -86,7 +84,7 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebAudioVariables.browser_instance
-webaudio_test_url = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/periodicwave-exceptions.html'
+webaudio_test_url = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/PeriodicWave/periodicwave-contexts.html'
 browser_method = browser+".1.url"
 log_check_method = WebAudioVariables.log_check_method
 current_url=''
@@ -122,7 +120,7 @@ def process_webinspect_logs(log_filename, webinspect_logs,status_dict):
         tdkTestObj.setResultStatus("FAILURE")
         status_dict[log_filename] = "FAILURE"
 
-#Common function for Geting Logs
+#Function for parsing the logs
 def get_webinspect_logs(test_url, log_check_method, grep_line, log_filename,status_dict):
     if log_check_method == "WebinspectPageLogs":
         print("\n Script is directly taking the browser webinspect page console logs to validate the webaudio")
@@ -184,12 +182,12 @@ if expectedResult in result.upper():
                 else:
                     print("FAILURE : Failed to launch ", browser, " in device \n")
                     tdkTestObj.setResultStatus("FAILURE")
-                    obj.unloadModule("webaudio_test");
+                    obj.unloadModule("webaudio");
                     exit()
             
-            print("Processing periodicwave-exceptions.html file")
-            grep_line = "periodicwave-exceptions.html | tail -10 | tr -d '\\n'"
-            log_filename = "periodicwave-exceptions"
+            print("Processing periodicwave-contexts.html file")
+            grep_line = "periodicwave-contexts | tail -10 | tr -d '\\n'"
+            log_filename = "periodicwave-contexts"
             get_webinspect_logs(webaudio_test_url,log_check_method, grep_line, log_filename,status_dict)
 
             print("\n Revert everything before exiting the script")
@@ -221,8 +219,8 @@ if expectedResult in result.upper():
         tdkTestObj.setResultStatus("FAILURE")
 
 print("############## Execution Summary #######################")
-if "periodicwave-exceptions" in status_dict:
-    print(f"periodicwave-exceptions: {status_dict['periodicwave-exceptions']}")
+if "periodicwave-contexts" in status_dict:
+    print(f"periodicwave-contexts: {status_dict['periodicwave-contexts']}")
 
 obj.unloadModule("WebAudio");
 
