@@ -20,14 +20,14 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
   <version>2</version>
-  <name>RDKV_Webkit_Media_MediaMP4</name>
+  <name>RDKV_Webkit_Media_Track_TrackWebvttTcDegenerateCues</name>
   <primitive_test_id/>
   <primitive_test_name>webkit_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To validates Media Source Extensions behavior for appending init and media segments with SourceBuffer in sequence mode</synopsis>
+  <synopsis>To tests that cues without separating blank lines are parsed correctly.</synopsis>
   <groups_id/>
-  <execution_time>10</execution_time>
+  <execution_time>20</execution_time>
   <long_duration>false</long_duration>
   <advanced_script>false</advanced_script>
   <remarks/>
@@ -40,20 +40,20 @@
     <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>Media_02</test_case_id>
-    <test_objective>To ensure SourceBuffer correctly handles timestampOffset, buffered ranges, and sequence mode when multiple media segments are appended</test_objective>
+    <test_case_id>Track_29</test_case_id>
+    <test_objective>To verify that degenerate cues without blank line separators are recognized and maintain their start and end times even if the text is empty.</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI, Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebkitVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>webkit</api_or_interface_used>
-    <input_parameters>media-mp4-h264-sequence-mode.html</input_parameters>
+    <input_parameters>track-webvtt-tc032-degenerate-cues.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>TimestampOffset updates correctly, buffered ranges reflect appended segments, and sequence mode properly advances the playback timeline with all assertions passing</expected_output>
+    <expected_output>Cues have the correct length, start and end times, and contain empty text.</expected_output>
     <priority>High</priority>
     <test_stub_interface>webkit</test_stub_interface>
-    <test_script>RDKV_Webkit_Media_MediaMP4</test_script>
+    <test_script>RDKV_Webkit_Media_Track_TrackWebvttTcDegenerateCues</test_script>
     <skipped>No</skipped>
     <release_version>M143</release_version>
     <remarks>None</remarks>
@@ -74,7 +74,7 @@ obj = tdklib.TDKScriptingLibrary("webkit","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Webkit_Media_MediaMP4');
+obj.configureTestCase(ip,port,'RDKV_Webkit_Media_Track_TrackWebvttTcDegenerateCues');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -83,7 +83,7 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebkitVariables.browser_instance
-webkit_test_url = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-source/media-mp4-h264-sequence-mode.html'
+webkit_test_url = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/track/track-webvtt-tc032-degenerate-cues.html'
 browser_method = browser+".1.url"
 log_check_method = WebkitVariables.log_check_method
 current_url=''
@@ -184,9 +184,9 @@ if expectedResult in result.upper():
                     obj.unloadModule("webkit");
                     exit()
 
-            print("Processing media-mp4-h264-sequence-mode.html file")
-            grep_line = "media-mp4-h264-sequence-mode | tail -3 | tr -d '\\n'"
-            log_filename = "media-mp4-h264-sequence-mode"
+            print("Processing track-webvtt-tc032-degenerate-cues.html file")
+            grep_line = "track-webvtt-tc032-degenerate-cues | tail -3 | tr -d '\\n'"
+            log_filename = "track-webvtt-tc032-degenerate-cues"
             get_webinspect_logs(webkit_test_url,log_check_method, grep_line, log_filename,status_dict)
 
             print("\n Revert everything before exiting the script")
@@ -218,8 +218,8 @@ if expectedResult in result.upper():
         tdkTestObj.setResultStatus("FAILURE")
 
 print("############## Execution Summary #######################")
-if "media-mp4-h264-sequence-mode" in status_dict:
-    print(f"media-mp4-h264-sequence-mode: {status_dict['media-mp4-h264-sequence-mode']}")
+if "track-webvtt-tc032-degenerate-cues" in status_dict:
+    print(f"track-webvtt-tc032-degenerate-cues: {status_dict['track-webvtt-tc032-degenerate-cues']}")
 
 obj.unloadModule("webkit");
 
