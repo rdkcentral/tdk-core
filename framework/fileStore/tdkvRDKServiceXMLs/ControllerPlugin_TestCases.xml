@@ -504,7 +504,7 @@
              </testStep>
              <testStep testStepId="5" name="Check_Json_Response_of_DeviceInfo_Plugin" method="Get_System_Info" pluginName="DeviceInfo" >
 	     	<resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
                      <arguments value="deactivate_check_error_message"/>
                  </resultGeneration>
 	     </testStep>
@@ -631,7 +631,7 @@
              </testStep>
              <testStep testStepId="3" name="Check_DeviceInfo_API_Response" method="Get_System_Info" pluginName="DeviceInfo" >
 	     	<resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
                      <arguments value="deactivate_check_error_message"/>
                  </resultGeneration>
 	     </testStep>

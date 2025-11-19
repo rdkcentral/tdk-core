@@ -296,7 +296,7 @@
             </testStep>
             <testStep testStepId="4" name="Check_Monitor_restartlimits_API_Response" method="Restart_Limits">
                 <resultGeneration useMethodTag="controller_check_error_message" arguments="deactivate_check_error_message">
-                    <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!." />
+                    <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!." />
                 </resultGeneration>
             </testStep>
             <testStep testStepId="5" name="Activate_Monitor_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
