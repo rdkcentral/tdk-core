@@ -111,7 +111,7 @@ if expectedResult in result.upper():
     if connect_status == "SUCCESS" and status == "SUCCESS":
         #get the connected SSID
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-        tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.getConnectedSSID")
+        tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetConnectedSSID")
         tdkTestObj.addParameter("reqValue","ssid")
         tdkTestObj.executeTestCase(expectedResult)
         result = tdkTestObj.getResult()
@@ -165,7 +165,7 @@ if expectedResult in result.upper():
                             if wifi_activated:
                                 #get the connected SSID
                                 tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-                                tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.getConnectedSSID")
+                                tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetConnectedSSID")
                                 tdkTestObj.addParameter("reqValue","ssid")
                                 tdkTestObj.executeTestCase(expectedResult)
                                 result = tdkTestObj.getResult()
