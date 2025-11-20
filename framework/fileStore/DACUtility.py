@@ -445,7 +445,7 @@ def usppa_install_bundle(obj, bundle_url):
     print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    if "Started successfully" in details or "started successfully" in details:
+    if "Started successfully" in details:
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
@@ -466,7 +466,7 @@ def usppa_uninstall_bundle(obj, du_param):
     print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    if "Started successfully" in details or "started successfully" in details:
+    if "Started successfully" in details:
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
