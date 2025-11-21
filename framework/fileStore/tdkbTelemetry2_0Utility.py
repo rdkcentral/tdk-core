@@ -500,7 +500,7 @@ def JsontoMsgPackBase64(jsonBody):
     return base64_str
 
 ################################################################################
-# A utility function to check if the Report Profile files are created in /nvram/.t2reportprofiles/
+# A utility function to check if the Report Profile files are created in the designated profile directory
 #
 # Syntax       : isProfileFileExist(tdktestObj,profile_names)
 # Parameter    : tdktestObj - Object
@@ -648,7 +648,8 @@ def checkReportUpload(tdktestObj, profile_names):
     print(f"Command : {cmd}")
     expectedresult = "SUCCESS"
     actualresult, details = doSysutilExecuteCommand(tdktestObj, cmd)
-    if expectedresult in actualresult and int(details) >= len(profile_names):
+    print(f"Command Output: {details}")
+    if expectedresult in actualresult and int(details) == len(profile_names):
         upload_check = True
     else:
         upload_check = False
