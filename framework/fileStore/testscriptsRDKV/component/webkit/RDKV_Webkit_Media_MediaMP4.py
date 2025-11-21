@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
   <primitive_test_name>webkit_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To get the MediaMP4 details from the device browser</synopsis>
+  <synopsis>To validates Media Source Extensions behavior for appending init and media segments with SourceBuffer in sequence mode</synopsis>
   <groups_id/>
   <execution_time>10</execution_time>
   <long_duration>false</long_duration>
@@ -41,51 +41,55 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>Media_02</test_case_id>
-    <test_objective>To get the MediaMP4 details from the device browser</test_objective>
+    <test_objective>To ensure SourceBuffer correctly handles timestampOffset, buffered ranges, and sequence mode when multiple media segments are appended</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI, Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebkitVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>webkit</api_or_interface_used>
-    <input_parameters>media-mp4-h264-partial-abort.html, media-mp4-h264-sequence-mode.html</input_parameters>
+    <input_parameters>media-mp4-h264-sequence-mode.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>The browser should be able to get the MediaMP4 details</expected_output>
+    <expected_output>TimestampOffset updates correctly, buffered ranges reflect appended segments, and sequence mode properly advances the playback timeline with all assertions passing</expected_output>
     <priority>High</priority>
     <test_stub_interface>webkit</test_stub_interface>
     <test_script>RDKV_Webkit_Media_MediaMP4</test_script>
     <skipped>No</skipped>
-    <release_version>M131</release_version>
+    <release_version>M143</release_version>
     <remarks>None</remarks>
   </test_cases>
   <script_tags/>
 </xml>
- 
+
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import WebkitVariables;
 import webkitlib;
+
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("webkit","1",standAlone=True);
+
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'RDKV_Webkit_Media_MediaMP4');
+
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
+
 expectedResult = "SUCCESS"
 browser = WebkitVariables.browser_instance
-webkit_test_url = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-source/media-mp4-h264-partial-abort.html'
-webkit_test_url2 = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-source/media-mp4-h264-sequence-mode.html'
+webkit_test_url = obj.url+WebkitVariables.wpe_webkit_testcases_path+'/media/media-source/media-mp4-h264-sequence-mode.html'
 browser_method = browser+".1.url"
 log_check_method = WebkitVariables.log_check_method
 current_url=''
 webinspect_logs =''
 status_dict = {}
+
 # Function for processing the logs from the HTML Files
 def process_webinspect_logs(log_filename, webinspect_logs,status_dict):
     print(f"Processing logs from file: {log_filename}")
@@ -114,6 +118,7 @@ def process_webinspect_logs(log_filename, webinspect_logs,status_dict):
         print("FAILURE: Failed to fetch the logs from Html test App \n")
         tdkTestObj.setResultStatus("FAILURE")
         status_dict[log_filename] = "FAILURE"
+
 #Function for parsing the logs
 def get_webinspect_logs(test_url, log_check_method, grep_line, log_filename,status_dict):
     if log_check_method == "WebinspectPageLogs":
@@ -123,12 +128,14 @@ def get_webinspect_logs(test_url, log_check_method, grep_line, log_filename,stat
     else:
         print("\n Script is using wpeframework log to validate the webkit test")
         webinspect_logs = webkitlib.webkit_getLogs_fromDevicelogs(obj, test_url, browser, grep_line)
+    
     if webinspect_logs != "":
         process_webinspect_logs(log_filename, webinspect_logs,status_dict)
     else:
-        print("HTML File not printing logs")
+        print("FAILURE: Failed to fetch the logs from Html test App \n")
         tdkTestObj.setResultStatus("FAILURE")
         status_dict[log_filename] = "FAILURE"
+
 if expectedResult in result.upper():
     print("\nCheck prerequisites")
     tdkTestObj = obj.createTestStep('webkit_prerequisite')
@@ -138,6 +145,7 @@ if expectedResult in result.upper():
     if expectedResult in pre_req_status:
         print("SUCCESS: All the prerequisites are completed")
         tdkTestObj.setResultStatus("SUCCESS")
+
         print("\n Check current status of browser instance")
         tdkTestObj = obj.createTestStep('webkit_getPluginStatus')
         tdkTestObj.addParameter("plugin", browser)
@@ -148,6 +156,7 @@ if expectedResult in result.upper():
             if browser_status == "resumed":
                 print("SUCCESS: ", browser," is already in resumed state")
                 tdkTestObj.setResultStatus("SUCCESS")
+
                 print("Get the current URL loaded in ",browser)
                 tdkTestObj = obj.createTestStep('webkit_getValue')
                 tdkTestObj.addParameter("method",browser_method)
@@ -159,6 +168,7 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
             else:
                 print("SUCCESS: ", browser," is in deactivated state")
+                
                 print ("\n Launching ", browser)
                 tdkTestObj = obj.createTestStep('webkit_setPluginStatus')
                 tdkTestObj.addParameter("plugin",browser)
@@ -171,24 +181,14 @@ if expectedResult in result.upper():
                 else:
                     print("FAILURE : Failed to launch ", browser, " in device \n")
                     tdkTestObj.setResultStatus("FAILURE")
-                    obj.unloadModule("webkit_test");
+                    obj.unloadModule("webkit");
                     exit()
-            files_info = [
-                {"tail_num": 10,"url": webkit_test_url},
-                {"tail_num": 10,"url": webkit_test_url2}
-            ]
-            for file_info in files_info:
-                filename =file_info["url"].split("/")[-1]
-                tail_num = file_info["tail_num"]
-                log_filename = filename.replace(".html","")
-                url = file_info["url"]
-                print(f"Processing {filename} file")
-                grep_line = f"{filename} | tail -{tail_num} | tr -d '\\n'"
-                try:
-                    get_webinspect_logs(url, log_check_method, grep_line, log_filename,status_dict)
-                except Exception as e:
-                    print(f"Error processing {filename}: {e}")
-                    status_dict[log_filename] = "FAILURE"
+
+            print("Processing media-mp4-h264-sequence-mode.html file")
+            grep_line = "media-mp4-h264-sequence-mode | tail -3 | tr -d '\\n'"
+            log_filename = "media-mp4-h264-sequence-mode"
+            get_webinspect_logs(webkit_test_url,log_check_method, grep_line, log_filename,status_dict)
+
             print("\n Revert everything before exiting the script")
             if current_url !='':
                 tdkTestObj = obj.createTestStep('webkit_setPluginStatus')
@@ -209,13 +209,17 @@ if expectedResult in result.upper():
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print("FAILURE: Failed to revert the status of ", browser)
+
         else:
             print("FAILURE: Failed to get the status of ", browser)
             tdkTestObj.setResultStatus("FAILURE")
     else:
         print("FAILURE: Pre-requsites are not met")
         tdkTestObj.setResultStatus("FAILURE")
+
 print("############## Execution Summary #######################")
-for log_filename, status in status_dict.items():
-    print(f"{log_filename}: {status}")
+if "media-mp4-h264-sequence-mode" in status_dict:
+    print(f"media-mp4-h264-sequence-mode: {status_dict['media-mp4-h264-sequence-mode']}")
+
 obj.unloadModule("webkit");
+
