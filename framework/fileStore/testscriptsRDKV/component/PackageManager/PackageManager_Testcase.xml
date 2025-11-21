@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2021 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+        
+Notes 
+- This XML uses config keys so values are injected at runtime from the TDK harness or a config file.
+        Example INI (put in the harness config area or pass keys via your runner):
+
+                [package_manager]
+                PACKAGE_ID = com.example.package
+                PACKAGE_VERSION = 1.0.0
+                PACKAGE_URL = http://example.com/package.pkg
+                PACKAGE_ADDITIONAL_METADATA = {}
+                LOCK_REASON = Launch
+                CONFIG_KEY = exampleKey
+                CONFIG_VALUE = exampleValue
+
+- The XML uses useConfigFile="true" and key="..." to instruct the harness to substitute these values.
+- For dynamic flows, capture plugin returns with saveResult and reuse them via useMethodTag.
+        
+-->
+<TestPlugin pluginName="PackageManagerRDKEMS" pluginVersion="1">
+
+    <!-- INSTALL PACKAGE (values sourced from harness config) -->
+    <testStep stepId="1" name="Install" method="org.rdk.PackageManagerRDKEMS.install" saveResult="true">
+        <param tag="packageId" useConfigFile="true" key="PACKAGE_ID" />
+        <param tag="version" useConfigFile="true" key="PACKAGE_VERSION" />
+        <param tag="fileLocator" useConfigFile="true" key="PACKAGE_URL" />
+        <param tag="additionalMetadata" useConfigFile="true" key="PACKAGE_ADDITIONAL_METADATA" />
+        <resultGeneration useMethodTag="install_result" />
+    </testStep>
+
+    <!-- LIST PACKAGES -->
+    <testStep stepId="2" name="List_Packages" method="org.rdk.PackageManagerRDKEMS.listPackages" saveResult="true">
+        <resultGeneration useMethodTag="listpackages_result" />
+    </testStep>
+
+    <!-- CONFIG PACKAGE MANAGER -->
+    <testStep stepId="3" name="Config" method="org.rdk.PackageManagerRDKEMS.config">
+        <param tag="key" useConfigFile="true" key="CONFIG_KEY" />
+        <param tag="value" useConfigFile="true" key="CONFIG_VALUE" />
+    </testStep>
+
+    <!-- PACKAGE STATE: include version -->
+    <testStep stepId="4" name="Package_State" method="org.rdk.PackageManagerRDKEMS.packageState">
+        <param tag="packageId" useConfigFile="true" key="PACKAGE_ID" />
+        <param tag="version" useConfigFile="true" key="PACKAGE_VERSION" />
+    </testStep>
+
+    <!-- LOCK PACKAGE -->
+    <testStep stepId="5" name="Lock" method="org.rdk.PackageManagerRDKEMS.lock">
+        <param tag="packageId" useConfigFile="true" key="PACKAGE_ID" />
+        <param tag="version" useConfigFile="true" key="PACKAGE_VERSION" />
+        <param tag="lockReason" useConfigFile="true" key="LOCK_REASON" />
+    </testStep>
+
+    <!-- UNLOCK PACKAGE -->
+    <testStep stepId="6" name="Unlock" method="org.rdk.PackageManagerRDKEMS.unlock">
+        <param tag="packageId" useConfigFile="true" key="PACKAGE_ID" />
+        <param tag="version" useConfigFile="true" key="PACKAGE_VERSION" />
+    </testStep>
+
+    <!-- GET LOCKED INFO -->
+    <testStep stepId="7" name="Get_Locked_Info" method="org.rdk.PackageManagerRDKEMS.getLockedInfo">
+        <param tag="packageId" useConfigFile="true" key="PACKAGE_ID" />
+        <param tag="version" useConfigFile="true" key="PACKAGE_VERSION" />
+        <resultGeneration useMethodTag="get_locked_info" />
+    </testStep>
+
+     <!-- UNINSTALL PACKAGE -->
+    <testStep stepId="8" name="Uninstall" method="org.rdk.PackageManagerRDKEMS.uninstall" saveResult="true">
+        <param tag="packageId" useConfigFile="true" key="PACKAGE_ID" />
+        <param tag="version" useConfigFile="true" key="PACKAGE_VERSION" />
+        <resultGeneration useMethodTag="uninstall_result" />
+    </testStep>
+
+    <!-- EVENT: onAppInstallationStatus -> listen for install/uninstall outcomes -->
+    <testStep stepId="9" name="On_App_Installation_Status" event="onAppInstallationStatus" action="eventListener" delay="15">
+        <resultGeneration useMethodTag="onAppInstallationStatus_event" />
+    </testStep>
+
+</TestPlugin>
