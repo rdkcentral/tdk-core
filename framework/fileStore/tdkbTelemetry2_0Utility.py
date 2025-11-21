@@ -648,7 +648,8 @@ def checkReportUpload(tdktestObj, profile_names):
     print(f"Command : {cmd}")
     expectedresult = "SUCCESS"
     actualresult, details = doSysutilExecuteCommand(tdktestObj, cmd)
-    if expectedresult in actualresult and int(details) >= len(profile_names):
+    print(f"Command Output: {details}")
+    if expectedresult in actualresult and int(details) == len(profile_names):
         upload_check = True
     else:
         upload_check = False
