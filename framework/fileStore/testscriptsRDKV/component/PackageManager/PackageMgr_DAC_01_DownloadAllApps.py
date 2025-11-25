@@ -71,12 +71,7 @@
 
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
-import sys
-import os
-
-# Add current directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from dac_utils import (
+from ai2_0_utils import (
     fetch_dac_config,
     list_dac_packages,
     build_download_url,
@@ -89,7 +84,7 @@ from dac_utils import (
 )
 
 # Test component to be tested
-obj = tdklib.TDKScriptingLibrary("rdkservices", "1")
+obj = tdklib.TDKScriptingLibrary("rdkservices", "1", standAlone=True)
 
 # IP and Port of box, No need to change,
 # This will be replaced with corresponding Box IP and port while executing script

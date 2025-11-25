@@ -70,11 +70,8 @@
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import sys
-import os
 
-# Add current directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from dac_utils import (
+from ai2_0_utils import (
     fetch_dac_config,
     list_dac_packages,
     list_installed_packages,

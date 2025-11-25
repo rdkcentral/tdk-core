@@ -77,12 +77,9 @@ org.rdk.AppManager.1.launchApp</api_or_interface_used>
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import sys
-import os
 import time
 
-# Add current directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from dac_utils import (
+from ai2_0_utils import (
     fetch_dac_config,
     list_dac_packages,
     get_device_info_from_json,
