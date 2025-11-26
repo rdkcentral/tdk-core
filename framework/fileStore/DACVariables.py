@@ -37,9 +37,10 @@ LOCAL_FILE_SERVER_PORT = ""  # To be configured based on test environment
 BUNDLE_DOWNLOAD_URL = f"http://{LOCAL_FILE_SERVER_IP}:{LOCAL_FILE_SERVER_PORT}/{OCI_BUNDLE_NAME}"
 BUNDLE_DOWNLOAD_URL_2 = f"http://{LOCAL_FILE_SERVER_IP}:{LOCAL_FILE_SERVER_PORT}/{OCI_BUNDLE_NAME_2}"
 IPERF3_BINARY_PATH = "/usr/bin/iperf3"
+CRUN_ROOT_DIR = "/var/run/rdk/crun"
 IPERF3_SERVER_CONTAINER = "iperf_server"
 IPERF3_CLIENT_CONTAINER = "test_client"
-CONTAINER_IP = "10.0.0.1"
+GATEWAY_IP = "10.0.0.1"
 
 # USP-PA and DSM Parameters
 DESTINATION_DIR = "/root/destination"

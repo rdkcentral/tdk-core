@@ -59,7 +59,7 @@ def check_service_enabled(obj, service_name):
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     details = details.strip()
     print("Command output: %s" % details)
-    if details == "enabled":
+    if details == EXPECTED_ENABLED_STATE:
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
@@ -80,7 +80,7 @@ def get_service_active_state(obj, service_name):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, state = doSysutilExecuteCommand(tdkTestObj, command)
     print("Full active state output: %s" % state)
-    if "Active: active (running)" in state:
+    if EXPECTED_ACTIVE_STATE in state:
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
@@ -387,25 +387,37 @@ def remove_directory(obj, dir_path):
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
-# verify_no_containers
-# Syntax : verify_no_containers(obj)
-# Description : Function to verify no containers are running
+# verify_containers_removed
+# Syntax : verify_containers_removed(obj, container_names)
+# Description : Function to verify specific containers are no longer running
 # Parameters : obj - module object
+#              container_names - list of container names to verify are removed
 # Return Value: tdkTestObj - test object
 #               actualresult - SUCCESS/FAILURE
 #               details - command output
-def verify_no_containers(obj):
-    command = "DobbyTool list"
-    print("Command : %s" % command)
+def verify_containers_removed(obj, container_names):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-
-    if "no containers" in details:
+    all_removed = True
+    details = ""
+    
+    for container_name in container_names:
+        command = f"DobbyTool list | grep '{container_name}'"
+        print("Command : %s" % command)
+        actualresult_check, details_check = doSysutilExecuteCommand(tdkTestObj, command)
+        
+        # If grep finds the container, it means it still exists
+        if container_name in details_check:
+            details += f"{container_name}: still present\n"
+            all_removed = False
+        else:
+            details += f"{container_name}: removed\n"
+    
+    if all_removed:
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
     
-    return tdkTestObj, actualresult, details
+    return tdkTestObj, actualresult, details.strip()
 ########## End of function ##########
 
 # execute_iperf_test
@@ -419,7 +431,7 @@ def verify_no_containers(obj):
 #               actualresult - SUCCESS/FAILURE
 #               details - command output
 def execute_iperf_test(obj, container_name, target_ip, duration=5):
-    command = f"crun --root=/var/run/rdk/crun/ exec {container_name} /usr/bin/iperf3 -c {target_ip} -t {duration}"
+    command = f"crun --root={CRUN_ROOT_DIR} exec {container_name} {IPERF3_BINARY_PATH} -c {target_ip} -t {duration}"
     print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
