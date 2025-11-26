@@ -753,6 +753,33 @@ video_src_url_corrupt_I_P_B_initial_h264_aac = test_corrupted_streams_base_path 
 video_src_url_corrupt_I_P_B_middle_h264_aac = test_corrupted_streams_base_path + "TDK_Asset_Corrupt_Sunrise_H264_AAC_MP4/Corrupt_I_P_B_Frame/Corrupt_I_P_B_Frame_Middle_Segment/Corrupt_I_P_B_Frame_Middle_Segment.mp4"
 video_src_url_corrupt_I_P_B_end_h264_aac = test_corrupted_streams_base_path + "TDK_Asset_Corrupt_Sunrise_H264_AAC_MP4/Corrupt_I_P_B_Frame/Corrupt_I_P_B_Frame_End_Segment/Corrupt_I_P_B_Frame_End_Segment.mp4"
 
+#-------------------------------------------------------------
+#        corrupted AV FORMATS AAMP Player AV1-AAC codec
+#------------------------------------------------------------
+video_src_url_corrupted_av1_aac_I_complete_dash = test_corrupted_streams_base_path + "av1_aac/I/complete/complete.mpd"
+video_src_url_corrupted_av1_aac_I_complete_hls = test_corrupted_streams_base_path + "av1_aac/I/complete/complete.m3u8"
+video_src_url_corrupted_av1_aac_I_initial_dash = test_corrupted_streams_base_path + "av1_aac/I/init/init.mpd"
+video_src_url_corrupted_av1_aac_I_initial_hls = test_corrupted_streams_base_path + "av1_aac/I/init/init.m3u8"
+video_src_url_corrupted_av1_aac_I_mid_dash  =  test_corrupted_streams_base_path + "av1_aac/I/mid/mid.mpd"
+video_src_url_corrupted_av1_aac_I_mid_hls  =  test_corrupted_streams_base_path + "av1_aac/I/mid/mid.m3u8"
+video_src_url_corrupted_av1_aac_I_end_dash  =  test_corrupted_streams_base_path + "av1_aac/I/end/end.mpd"
+video_src_url_corrupted_av1_aac_I_end_hls  =  test_corrupted_streams_base_path + "av1_aac/I/end/end.m3u8"
+video_src_url_corrupted_av1_aac_P_complete_dash = test_corrupted_streams_base_path + "av1_aac/P/complete/complete.mpd"
+video_src_url_corrupted_av1_aac_P_complete_hls = test_corrupted_streams_base_path + "av1_aac/P/complete/complete.m3u8"
+video_src_url_corrupted_av1_aac_P_init_dash  =  test_corrupted_streams_base_path + "av1_aac/P/init/init.mpd"
+video_src_url_corrupted_av1_aac_P_init_hls  =  test_corrupted_streams_base_path + "av1_aac/P/init/init.m3u8"
+video_src_url_corrupted_av1_aac_P_mid_dash  =  test_corrupted_streams_base_path + "av1_aac/P/mid/mid.mpd"
+video_src_url_corrupted_av1_aac_P_mid_hls  =  test_corrupted_streams_base_path + "av1_aac/P/mid/mid.m3u8"
+video_src_url_corrupted_av1_aac_P_end_dash  =  test_corrupted_streams_base_path + "av1_aac/P/end/end.mpd"
+video_src_url_corrupted_av1_aac_P_end_hls  =  test_corrupted_streams_base_path + "av1_aac/P/end/end.m3u8"
+video_src_url_corrupted_av1_aac_IP_complete_dash = test_corrupted_streams_base_path + "av1_aac/IP/complete/complete.mpd"
+video_src_url_corrupted_av1_aac_IP_complete_hls = test_corrupted_streams_base_path + "av1_aac/IP/complete/complete.m3u8"
+video_src_url_corrupted_av1_aac_IP_init_dash  =  test_corrupted_streams_base_path + "av1_aac/IP/init/init.mpd"
+video_src_url_corrupted_av1_aac_IP_init_hls  =  test_corrupted_streams_base_path + "av1_aac/IP/init/init.m3u8"
+video_src_url_corrupted_av1_aac_IP_mid_dash  =  test_corrupted_streams_base_path + "av1_aac/IP/mid/mid.mpd"
+video_src_url_corrupted_av1_aac_IP_mid_hls  =  test_corrupted_streams_base_path + "av1_aac/IP/mid/mid.m3u8"
+video_src_url_corrupted_av1_aac_IP_end_dash  =  test_corrupted_streams_base_path + "av1_aac/IP/end/end.mpd"
+video_src_url_corrupted_av1_aac_IP_end_hls  =  test_corrupted_streams_base_path + "av1_aac/IP/end/end.m3u8"
 
 #****************************************************************
 #       Video Streaming Of HTML Player
