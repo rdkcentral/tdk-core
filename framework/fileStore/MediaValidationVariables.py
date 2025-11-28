@@ -753,6 +753,15 @@ video_src_url_corrupt_I_P_B_initial_h264_aac = test_corrupted_streams_base_path 
 video_src_url_corrupt_I_P_B_middle_h264_aac = test_corrupted_streams_base_path + "TDK_Asset_Corrupt_Sunrise_H264_AAC_MP4/Corrupt_I_P_B_Frame/Corrupt_I_P_B_Frame_Middle_Segment/Corrupt_I_P_B_Frame_Middle_Segment.mp4"
 video_src_url_corrupt_I_P_B_end_h264_aac = test_corrupted_streams_base_path + "TDK_Asset_Corrupt_Sunrise_H264_AAC_MP4/Corrupt_I_P_B_Frame/Corrupt_I_P_B_Frame_End_Segment/Corrupt_I_P_B_Frame_End_Segment.mp4"
 
+#*********************************************************************
+# AD Insertion URLs
+#*********************************************************************
+
+video_src_url_ad_same_dash = test_corrupted_streams_base_path + "ad_same_dash/same.mpd"
+video_src_url_ad_diff_dash = test_corrupted_streams_base_path + "ad_diff_dash/diff.mpd"
+video_src_url_ad_diff_hls = test_corrupted_streams_base_path + "ad_HLS_diff/hls_diff.m3u8"
+video_src_url_ad_same_hls= test_corrupted_streams_base_path + "ad_HLS/hls_same.m3u8"
+
 #-------------------------------------------------------------
 #        corrupted AV FORMATS AAMP Player AV1-AAC codec
 #------------------------------------------------------------
