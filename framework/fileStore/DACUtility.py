@@ -102,7 +102,7 @@ def verify_process_exists(obj, process_name):
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     pid = details.strip()
     print("Process PID: %s" % pid)
-    
+
     if pid and pid.isdigit():
         actualresult = "SUCCESS"
     else:
@@ -126,15 +126,15 @@ def check_binary_exists(obj, binary_name):
     actualresult, path = doSysutilExecuteCommand(tdkTestObj, command)
     path = path.strip()
     print("Binary path: %s" % path)
-    
+
     if path and binary_name in path:
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
         path = ""
-    
+
     return tdkTestObj, actualresult, path
-########## End of function ##########
+[O########## End of function ##########
 
 # create_directory
 # Syntax : create_directory(obj, dir_path)
@@ -149,16 +149,16 @@ def create_directory(obj, dir_path):
     print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    
+
     # Verify directory was created
     verify_command = f"ls -d {dir_path}"
     actualresult_verify, details_verify = doSysutilExecuteCommand(tdkTestObj, verify_command)
-    
+
     if dir_path in details_verify:
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -186,7 +186,7 @@ def download_file(obj, url, destination):
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -204,7 +204,7 @@ def extract_tar_bundle(obj, tar_file, extract_dir):
     print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    
+
     # Verify extraction by checking if config.json and rootfs directory exist
     config_path = f"{extract_dir}/config.json"
     rootfs_path = f"{extract_dir}/rootfs"
@@ -215,7 +215,7 @@ def extract_tar_bundle(obj, tar_file, extract_dir):
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -244,7 +244,7 @@ def verify_bundle_structure(obj, bundle_dir, expected_files):
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details.strip()
 ########## End of function ##########
 
@@ -267,7 +267,7 @@ def start_dobby_container(obj, container_name, bundle_path, command_args):
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -284,7 +284,7 @@ def list_dobby_containers(obj):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     actualresult = "SUCCESS"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -305,7 +305,7 @@ def verify_container_running(obj, container_name):
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -358,7 +358,7 @@ def stop_dobby_container(obj, container_name):
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -383,7 +383,7 @@ def remove_directory(obj, dir_path):
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -399,49 +399,25 @@ def verify_containers_removed(obj, container_names):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     all_removed = True
     details = ""
-    
+
     for container_name in container_names:
         command = f"DobbyTool list | grep '{container_name}'"
         print("Command : %s" % command)
         actualresult_check, details_check = doSysutilExecuteCommand(tdkTestObj, command)
-        
+
         # If grep finds the container, it means it still exists
         if container_name in details_check:
             details += f"{container_name}: still present\n"
             all_removed = False
         else:
             details += f"{container_name}: removed\n"
-    
+
     if all_removed:
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details.strip()
-########## End of function ##########
-
-# execute_iperf_test
-# Syntax : execute_iperf_test(obj, container_name, target_ip, duration=5)
-# Description : Function to execute iperf3 test inside container
-# Parameters : obj - module object
-#              container_name - name of the container
-#              target_ip - target IP address
-#              duration - test duration in seconds (default 5)
-# Return Value: tdkTestObj - test object
-#               actualresult - SUCCESS/FAILURE
-#               details - command output
-def execute_iperf_test(obj, container_name, target_ip, duration=5):
-    command = f"crun --root={CRUN_ROOT_DIR} exec {container_name} {IPERF3_BINARY_PATH} -c {target_ip} -t {duration}"
-    print("Command : %s" % command)
-    tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-
-    if "iperf Done" in details:
-        actualresult = "SUCCESS"
-    else:
-        actualresult = "FAILURE"
-    
-    return tdkTestObj, actualresult, details
 ########## End of function ##########
 
 # usppa_install_bundle
@@ -461,7 +437,7 @@ def usppa_install_bundle(obj, bundle_url):
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -482,7 +458,7 @@ def usppa_uninstall_bundle(obj, du_param):
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -500,12 +476,12 @@ def usppa_set_eu_state(obj, eu_param, state):
     print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    
+
     if "completed successfully" in details:
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -522,19 +498,19 @@ def verify_directory_contents(obj, dir_path, expected_items):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     all_found = True
     details = ""
-    
+
     for item in expected_items:
         item_path = f"{dir_path}/{item}"
         actualresult_check, details_check = isFilePresent(tdkTestObj, item_path)
         details += f"{item}: {actualresult_check}\n"
-        
+
         if actualresult_check != "SUCCESS":
             all_found = False
-    
+
     if all_found:
         actualresult = "SUCCESS"
     else:
         actualresult = "FAILURE"
-    
+
     return tdkTestObj, actualresult, details.strip()
 ########## End of function ##########
