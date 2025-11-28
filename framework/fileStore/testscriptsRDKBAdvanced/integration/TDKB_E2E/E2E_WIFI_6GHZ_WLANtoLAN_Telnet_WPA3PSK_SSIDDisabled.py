@@ -274,7 +274,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus2.uppe
                                                         #Wait for the changes to reflect in client device
                                                         time.sleep(60)
 
-                                                        #Send telnet request to WLAN client from LAN clinet
+                                                        #Send telnet request to WLAN client from LAN client
                                                         step += 1
                                                         print(f"\nTEST STEP {step}: Check Telnet traffic from LAN to WLAN Client")
                                                         print(f"EXPECTED RESULT {step}: Telnet traffic should not be successful between LAN and WLAN client")

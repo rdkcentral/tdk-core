@@ -17,7 +17,7 @@
 # limitations under the License.
 ##########################################################################
 
-def find_wlan_client(tdkTestObj, host_entries_count):
+def find_wlan_client(host_entries_count):
 
     host_entries_count = int(host_entries_count)
     for i in range(1, host_entries_count + 1):
@@ -37,7 +37,7 @@ def find_wlan_client(tdkTestObj, host_entries_count):
             else:
                 print(f"Device.Hosts.Host.{i} is not using Wifi, continuing to check other devices.")
         else:
-            tdkTestObj.setResultStatus("SUCCESS")
+            tdkTestObj.setResultStatus("FAILURE")
             print("Failed to fetch Layer1Interface for the current host entry")
 
     print("No WLAN connection found.")
@@ -66,7 +66,7 @@ loadmodulestatus =obj.getLoadModuleResult()
 loadmodulestatus1 = obj1.getLoadModuleResult()
 print(f"[LIB LOAD STATUS]  : {loadmodulestatus} [LIB1 LOAD STATUS] : {loadmodulestatus1}")
 
-if "SUCCESS" in loadmodulestatus.upper() and loadmodulestatus1.upper():
+if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper():
     obj.setLoadModuleStatus("SUCCESS")
     obj1.setLoadModuleStatus("SUCCESS")
     expectedresult = "SUCCESS"
@@ -97,7 +97,7 @@ if "SUCCESS" in loadmodulestatus.upper() and loadmodulestatus1.upper():
 
         if expectedresult in status:
             tdkTestObj.setResultStatus("SUCCESS")
-            print(f"ACTUAL RESULT {step}: {step}")
+            print(f"ACTUAL RESULT {step}: Current values: {orgValue}")
             print("[TEST EXECUTION RESULT] : SUCCESS")
 
             # Set ssid, Keypassphrase and ssidEnable for 6ghz"
@@ -200,7 +200,7 @@ if "SUCCESS" in loadmodulestatus.upper() and loadmodulestatus1.upper():
                                                 print("[TEST EXECUTION RESULT] : SUCCESS")
 
                                                 # Get index of WLan client from host table
-                                                index = find_wlan_client(obj,host_entries_count)
+                                                index = find_wlan_client(host_entries_count)
 
                                                 if int(index) >0:
                                                     # Get the value of AddressSource value
@@ -219,8 +219,6 @@ if "SUCCESS" in loadmodulestatus.upper() and loadmodulestatus1.upper():
                                                         step  += 1
                                                         print(f"TEST STEP {step} : Get Mac address and Host name of WLAN client")
                                                         print(f"EXPECTED RESULT {step}: should get mac address and host name of WLAN client")
-                                                        status_MAC = "SUCCESS"
-                                                        status_Host = "SUCCESS"
                                                         param_mac = f"Device.Hosts.Host.{index}.PhysAddress"
                                                         param_host = f"Device.Hosts.Host.{index}.HostName"
 
@@ -418,7 +416,7 @@ if "SUCCESS" in loadmodulestatus.upper() and loadmodulestatus1.upper():
                 print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print(f"ACTUAL RESULT {step}: {orgValue}")
+            print(f"ACTUAL RESULT {step}: GET operation failure")
             print("[TEST EXECUTION RESULT] : FAILURE")
     else:
         obj.setLoadModuleStatus("FAILURE")

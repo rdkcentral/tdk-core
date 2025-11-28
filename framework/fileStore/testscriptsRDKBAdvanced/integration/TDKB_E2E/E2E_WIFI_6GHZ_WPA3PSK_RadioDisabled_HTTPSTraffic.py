@@ -295,7 +295,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus2.uppe
                                                         #Wait for the changes to reflect in client device
                                                         time.sleep(60);
 
-                                                        #Send http request to WLAN client from LAN clinet
+                                                        #Send http request to WLAN client from LAN client
                                                         step += 1
                                                         print(f"TEST STEP {step}: Connect to LAN Client and send HTTPS Request to WLAN Client")
                                                         print(f"EXPECTED RESULT {step}: HTTPS traffic should not be successful between LAN and WLAN client")
