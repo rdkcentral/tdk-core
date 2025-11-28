@@ -777,3 +777,92 @@ video_src_url_corrupt_I_P_B_end_h264_aac = test_corrupted_streams_base_path + "T
 
 video_src_url_delay_dash = delay_stream_base_path + "TDK_Clear_Stream.mpd"
 video_src_url_delay_hls = delay_stream_base_path + "TDK_Clear_Stream.m3u8"
+
+#*********************************************************************
+# AD Insertion URLs
+#*********************************************************************
+
+video_src_url_ad_same_dash = test_corrupted_streams_base_path + "ad_same_dash/same.mpd"
+video_src_url_ad_diff_dash = test_corrupted_streams_base_path + "ad_diff_dash/diff.mpd"
+video_src_url_ad_diff_hls = test_corrupted_streams_base_path + "ad_HLS_diff/hls_diff.m3u8"
+video_src_url_ad_same_hls= test_corrupted_streams_base_path + "ad_HLS/hls_same.m3u8"
+
+#-------------------------------------------------------------
+#        corrupted AV FORMATS AAMP Player AV1-AAC codec
+#------------------------------------------------------------
+video_src_url_corrupted_av1_aac_I_complete_dash = test_corrupted_streams_base_path + "av1_aac/I/complete/complete.mpd"
+video_src_url_corrupted_av1_aac_I_complete_hls = test_corrupted_streams_base_path + "av1_aac/I/complete/complete.m3u8"
+video_src_url_corrupted_av1_aac_I_initial_dash = test_corrupted_streams_base_path + "av1_aac/I/init/init.mpd"
+video_src_url_corrupted_av1_aac_I_initial_hls = test_corrupted_streams_base_path + "av1_aac/I/init/init.m3u8"
+video_src_url_corrupted_av1_aac_I_mid_dash  =  test_corrupted_streams_base_path + "av1_aac/I/mid/mid.mpd"
+video_src_url_corrupted_av1_aac_I_mid_hls  =  test_corrupted_streams_base_path + "av1_aac/I/mid/mid.m3u8"
+video_src_url_corrupted_av1_aac_I_end_dash  =  test_corrupted_streams_base_path + "av1_aac/I/end/end.mpd"
+video_src_url_corrupted_av1_aac_I_end_hls  =  test_corrupted_streams_base_path + "av1_aac/I/end/end.m3u8"
+video_src_url_corrupted_av1_aac_P_complete_dash = test_corrupted_streams_base_path + "av1_aac/P/complete/complete.mpd"
+video_src_url_corrupted_av1_aac_P_complete_hls = test_corrupted_streams_base_path + "av1_aac/P/complete/complete.m3u8"
+video_src_url_corrupted_av1_aac_P_init_dash  =  test_corrupted_streams_base_path + "av1_aac/P/init/init.mpd"
+video_src_url_corrupted_av1_aac_P_init_hls  =  test_corrupted_streams_base_path + "av1_aac/P/init/init.m3u8"
+video_src_url_corrupted_av1_aac_P_mid_dash  =  test_corrupted_streams_base_path + "av1_aac/P/mid/mid.mpd"
+video_src_url_corrupted_av1_aac_P_mid_hls  =  test_corrupted_streams_base_path + "av1_aac/P/mid/mid.m3u8"
+video_src_url_corrupted_av1_aac_P_end_dash  =  test_corrupted_streams_base_path + "av1_aac/P/end/end.mpd"
+video_src_url_corrupted_av1_aac_P_end_hls  =  test_corrupted_streams_base_path + "av1_aac/P/end/end.m3u8"
+video_src_url_corrupted_av1_aac_IP_complete_dash = test_corrupted_streams_base_path + "av1_aac/IP/complete/complete.mpd"
+video_src_url_corrupted_av1_aac_IP_complete_hls = test_corrupted_streams_base_path + "av1_aac/IP/complete/complete.m3u8"
+video_src_url_corrupted_av1_aac_IP_init_dash  =  test_corrupted_streams_base_path + "av1_aac/IP/init/init.mpd"
+video_src_url_corrupted_av1_aac_IP_init_hls  =  test_corrupted_streams_base_path + "av1_aac/IP/init/init.m3u8"
+video_src_url_corrupted_av1_aac_IP_mid_dash  =  test_corrupted_streams_base_path + "av1_aac/IP/mid/mid.mpd"
+video_src_url_corrupted_av1_aac_IP_mid_hls  =  test_corrupted_streams_base_path + "av1_aac/IP/mid/mid.m3u8"
+video_src_url_corrupted_av1_aac_IP_end_dash  =  test_corrupted_streams_base_path + "av1_aac/IP/end/end.mpd"
+video_src_url_corrupted_av1_aac_IP_end_hls  =  test_corrupted_streams_base_path + "av1_aac/IP/end/end.m3u8"
+
+#****************************************************************
+#       Video Streaming Of HTML Player
+#****************************************************************
+
+video_src_url_h264_mp3     = test_streams_base_path + "TDK_Asset_Sunrise_H264_MP3.mp4"
+video_src_url_aac_h265     = test_streams_base_path + "TDK_Asset_Sunrise_AAC_H265.mp4"
+video_src_url_ac3_h265     = test_streams_base_path + "TDK_Asset_Sunrise_AC3_H265.mp4"
+video_src_url_av1_opus     = test_streams_base_path + "TDK_Asset_Sunrise_AV1_Opus.webm"
+video_src_url_h264_ac3     = test_streams_base_path + "TDK_Asset_Sunrise_H264_AC3.mp4"
+video_src_url_vorbis_vp8   = test_streams_base_path + "TDK_Asset_Sunrise_VORBIS_VP8.webm"
+video_src_url_vorbis_vp9   = test_streams_base_path + "TDK_Asset_Sunrise_VORBIS_VP9.webm"
+video_src_url_av1_vorbis   = test_streams_base_path + "TDK_Asset_Sunrise_AV1_VORBIS.webm"
+
+#Resolution-based stream variants
+video_src_url_h264_mp3_480p     = test_streams_base_path + "TDK_Asset_Sunrise_H264_MP3_480p.mp4"
+video_src_url_aac_h265_480p     = test_streams_base_path + "TDK_Asset_Sunrise_AAC_H265_480p.mp4"
+video_src_url_ac3_h265_480p     = test_streams_base_path + "TDK_Asset_Sunrise_AC3_H265_480p.mp4"
+video_src_url_h264_ac3_480p     = test_streams_base_path + "TDK_Asset_Sunrise_H264_AC3_480p.mp4"
+video_src_url_aac_h264_480p     = test_streams_base_path + "TDK_Asset_Sunrise_AAC_H264_480p.mp4"
+video_src_url_vp8_opus_480p     = test_streams_base_path + "TDK_Asset_Sunrise_VP8_Opus_480p.webm"
+video_src_url_vp9_opus_480p     = test_streams_base_path + "TDK_Asset_Sunrise_VP9_Opus_480p.webm"
+video_src_url_vorbis_vp8_480p   = test_streams_base_path + "TDK_Asset_Sunrise_VORBIS_VP8_480p.webm"
+video_src_url_vorbis_vp9_480p   = test_streams_base_path + "TDK_Asset_Sunrise_VORBIS_VP9_480p.webm"
+video_src_url_av1_opus_480p     = test_streams_base_path + "TDK_Asset_Sunrise_AV1_Opus_480p.webm"
+video_src_url_h264_mp3_720p     = test_streams_base_path + "TDK_Asset_Sunrise_H264_MP3_720p.mp4"
+video_src_url_aac_h265_720p     = test_streams_base_path + "TDK_Asset_Sunrise_AAC_H265_720p.mp4"
+video_src_url_ac3_h265_720p     = test_streams_base_path + "TDK_Asset_Sunrise_AC3_H265_720p.mp4"
+video_src_url_h264_ac3_720p     = test_streams_base_path + "TDK_Asset_Sunrise_H264_AC3_720p.mp4"
+video_src_url_aac_h264_720p     = test_streams_base_path + "TDK_Asset_Sunrise_AAC_H264_720p.mp4"
+video_src_url_vp8_opus_720p     = test_streams_base_path + "TDK_Asset_Sunrise_VP8_Opus_720p.webm"
+video_src_url_vp9_opus_720p     = test_streams_base_path + "TDK_Asset_Sunrise_VP9_Opus_720p.webm"
+video_src_url_vorbis_vp8_720p   = test_streams_base_path + "TDK_Asset_Sunrise_VORBIS_VP8_720p.webm"
+video_src_url_vorbis_vp9_720p   = test_streams_base_path + "TDK_Asset_Sunrise_VORBIS_VP9_720p.webm"
+video_src_url_h264_mp3_2160p     = test_streams_base_path + "TDK_Asset_Sunrise_H264_MP3_2160p.mp4"
+video_src_url_aac_h265_2160p     = test_streams_base_path + "TDK_Asset_Sunrise_AAC_H265_2160p.mp4"
+video_src_url_ac3_h265_2160p     = test_streams_base_path + "TDK_Asset_Sunrise_AC3_H265_2160p.mp4"
+video_src_url_h264_ac3_2160p     = test_streams_base_path + "TDK_Asset_Sunrise_H264_AC3_2160p.mp4"
+video_src_url_aac_h264_2160p     = test_streams_base_path + "TDK_Asset_Sunrise_AAC_H264_2160p.mp4"
+video_src_url_vp8_opus_2160p     = test_streams_base_path + "TDK_Asset_Sunrise_VP8_Opus_2160p.webm"
+video_src_url_vp9_opus_2160p     = test_streams_base_path + "TDK_Asset_Sunrise_VP9_Opus_2160p.webm"
+video_src_url_vorbis_vp8_2160p   = test_streams_base_path + "TDK_Asset_Sunrise_VORBIS_VP8_2160p.webm"
+video_src_url_vorbis_vp9_2160p   = test_streams_base_path + "TDK_Asset_Sunrise_VORBIS_VP9_2160p.webm"
+video_src_url_av1_aac_480p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_AAC_480p.mp4"
+video_src_url_av1_aac_720p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_AAC_720p.mp4"
+video_src_url_av1_aac_1080p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_AAC_1080p.mp4"
+video_src_url_av1_aac_2160p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_AAC_2160p.mp4"
+video_src_url_av1_opus_720p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_Opus_720p.webm"
+video_src_url_av1_opus_2160p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_Opus_2160p.webm"
+video_src_url_av1_vorbis_480p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_VORBIS_480p.webm"
+video_src_url_av1_vorbis_1080p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_VORBIS_1080p.webm"
+video_src_url_av1_vorbis_2160p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_VORBIS_2160p.webm"
