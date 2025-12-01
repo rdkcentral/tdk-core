@@ -179,7 +179,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                         print("[TEST EXECUTION RESULT] : FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print(f"ACTUAL RESULT {step}: GET operation failed/ values are not updated after SET")
+                    print(f"ACTUAL RESULT {step}: GET operation failed or values are not updated after SET. Current values: {newValues}")
                     print("[TEST EXECUTION RESULT] : FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
