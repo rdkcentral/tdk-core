@@ -278,7 +278,7 @@ def getMacAddress(obj):
     return tdkTestObj, actualresult, estbMAC
 ########## End of function ##########
 # getXCONFServer_CreateConfigCmd
-# Syntax : getXCONFServer_CreateConfigCmd(obj, FirmwareVersion, FirmwareFilename, action
+# Syntax : getXCONFServer_CreateConfigCmd(obj, FirmwareVersion, FirmwareFilename, action)
 # Description : Function to construct curl commands for XConf server configuration
 # Parameters : obj - module object
 #              FirmwareVersion - Target Image name without suffix
@@ -465,7 +465,7 @@ def getPartitionCount(obj, step):
     # Initialize partition_count to 0
     expectedresult = "SUCCESS"
     # Command to the number of partitions in the device
-    command = "ls /dev/mmcblk0p* | wc -l"
+    command = "ls {PARTITION_PATH} | wc -l"
     print(f"Command: {command}")
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)

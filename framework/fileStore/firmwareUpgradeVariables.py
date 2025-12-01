@@ -66,3 +66,6 @@ dest_path = "/rdklogs"
 # Xconf Server Firmware Download Location
 xconf_firmware_location = "/extblock/httpimage/imagedwnld"
 
+# Partition path for getting partition count
+PARTITION_PATH = "/dev/mmcblk0p*"
+
