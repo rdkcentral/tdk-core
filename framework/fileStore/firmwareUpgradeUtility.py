@@ -18,9 +18,9 @@
 ##########################################################################
 #
 #
-# ------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # module imports
-# ------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 from firmwareUpgradeVariables import *
 from tdkutility import *
 from tdkbVariables import *
@@ -37,14 +37,12 @@ from urllib.parse import urlparse
 #               actualresult_all - List of actual results for each variable fetched
 #               config_values - Dictionary of variable names and their corresponding values
 
-
 def GetPlatformProperties(obj, config_keys):
     config_values = {}
     actualresult_all = []
     for key in config_keys:
         command = "sh %s/tdk_utility.sh parseConfigFile %s" % (TDK_PATH, key)
-        tdkTestObj, actualresult, config_values[key] = get_config_values(
-            obj, command)
+        tdkTestObj, actualresult, config_values[key] = get_config_values(obj, command)
         actualresult_all.append(actualresult)
     return tdkTestObj, actualresult_all, config_values
 ########## End of function ##########
@@ -60,8 +58,7 @@ def GetPlatformProperties(obj, config_keys):
 
 def getCurrentFirmware(obj, step):
     expectedresult = "SUCCESS"
-    tdkTestObj, actualresult, value = GetPlatformProperties(
-        obj, ["FW_NAME_SUFFIX"])
+    tdkTestObj, actualresult, value = GetPlatformProperties(obj, ["FW_NAME_SUFFIX"])
     suffix = value["FW_NAME_SUFFIX"]
     # get details of the current firmware in the device
 
@@ -70,14 +67,14 @@ def getCurrentFirmware(obj, step):
         print("Fetched FW_NAME_SUFFIX from the tdk_platform.properties successfully.")
 
         query = 'cat /version.txt | grep -i imagename | cut -c 11- | tr "\n" " "'
-        print("Query: %s" % query)
+        print("Query: %s" %query)
 
         tdkTestObj = obj.createTestStep('ExecuteCmd')
         actualresult, details = doSysutilExecuteCommand(tdkTestObj, query)
 
-        print("TEST STEP %d: Fetch device's current firmware name" % step)
-        print("EXPECTED RESULT %d: Should fetch device's current firmware name" % step)
-        print("ACTUAL RESULT %d: Image name %s " % (step, details))
+        print("TEST STEP %d: Fetch device's current firmware name" %step)
+        print("EXPECTED RESULT %d: Should fetch device's current firmware name" %step)
+        print("ACTUAL RESULT %d: Image name %s " %(step, details))
         if expectedresult in actualresult:
             tdkTestObj.setResultStatus("SUCCESS")
             print("[TEST EXECUTION RESULT] : SUCCESS\n")
@@ -105,8 +102,7 @@ def getCurrentFirmware(obj, step):
 
 def getFirmwareDetailsFromServer(obj, step):
     config_keys = ["DEVICETYPE", "FW_NAME_SUFFIX"]
-    tdkTestObj, actual_result_all, config_values = GetPlatformProperties(
-        obj, config_keys)
+    tdkTestObj, actual_result_all, config_values = GetPlatformProperties(obj, config_keys)
 
     platform = config_values["DEVICETYPE"]
     suffix = config_values["FW_NAME_SUFFIX"]
@@ -119,24 +115,22 @@ def getFirmwareDetailsFromServer(obj, step):
         FirmwareVersion = globals()[TARGET_FIRMWARE_UPGRADE]
         FirmwareFilename = FirmwareVersion + suffix
         query = f"curl -I {FIRMWARE_LOCATION}{FirmwareFilename}  2>/dev/null | head -n 1"
-        print("Query: %s" % query)
+        print("Query: %s" %query)
         # check target image in HTTP server deployed
         expectedresult = "SUCCESS"
         tdkTestObj = obj.createTestStep('ExecuteCmd')
         actualresult, details = doSysutilExecuteCommand(tdkTestObj, query)
 
-        print("TEST STEP %d: Check whether the target image is available in HTTP server" % step)
-        print("EXPECTED RESULT %d: Should get the target image filename from HTTP server" % step)
+        print("TEST STEP %d: Check whether the target image is available in HTTP server" %step)
+        print("EXPECTED RESULT %d: Should get the target image filename from HTTP server" %step)
         if expectedresult in actualresult and "200 OK" in details:
             tdkTestObj.setResultStatus("SUCCESS")
-            print("ACTUAL RESULT %d: Image %s is available in the server." %
-                  (step, FirmwareFilename))
+            print("ACTUAL RESULT %d: Image %s is available in the server." %(step, FirmwareFilename))
             print("[TEST EXECUTION RESULT] : SUCCESS\n")
             return (FirmwareVersion, FirmwareFilename)
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("ACTUAL RESULT %d: The %s file is not found in the server" %
-                  (step, FirmwareFilename))
+            print("ACTUAL RESULT %d: The %s file is not found in the server" %(step, FirmwareFilename))
             print("[TEST EXECUTION RESULT] : FAILURE\n")
             return (None, None)
     else:
@@ -154,31 +148,27 @@ def getFirmwareDetailsFromServer(obj, step):
 
 
 def getFWUpgradeConfig(obj, step):
-    fw_params = ["Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadURL",
-                 "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareToDownload", "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow"]
+    fw_params = ["Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadURL","Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareToDownload", "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow"]
     flag = 0
     getResult = [None] * 3
     fw_values = [None] * 3
 
     for index in range(3):
-        print("\nGetting the value of %s" % fw_params[index])
+        print("\nGetting the value of %s" %fw_params[index])
         tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Get')
-        getResult[index], fw_values[index] = getTR181Value(
-            tdkTestObj, fw_params[index])
+        getResult[index], fw_values[index] = getTR181Value(tdkTestObj, fw_params[index])
 
     details = dict(zip(fw_params, fw_values))
-    print("\nTEST STEP %d : Get the FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadNow values" % step)
-    print("EXPECTED RESULT %d: Should get the values successfully." % step)
+    print("\nTEST STEP %d : Get the FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadNow values" %step)
+    print("EXPECTED RESULT %d: Should get the values successfully." %step)
     if "FAILURE" not in getResult:
         tdkTestObj.setResultStatus("SUCCESS")
-        print("ACTUAL RESULT %d: Successfully retrieved the values.\nRetrieved Values : %s" % (
-            step, details))
+        print("ACTUAL RESULT %d: Successfully retrieved the values.\nRetrieved Values : %s" %(step, details))
         print("[TEST EXECUTION RESULT] : SUCCESS\n")
         flag = 1
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print("ACTUAL RESULT %d: Failed to get the values.\nDetails : %s" %
-              (step, details))
+        print("ACTUAL RESULT %d: Failed to get the values.\nDetails : %s" %(step, details))
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     return flag, details
 ########## End of function ##########
@@ -194,8 +184,7 @@ def getFWUpgradeConfig(obj, step):
 
 
 def setFWUpgradeConfig(obj, step, FirmwareFilename, FirmwareLocation=FIRMWARE_LOCATION):
-    fw_params = ["Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadURL",
-                 "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareToDownload", "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow"]
+    fw_params = ["Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadURL","Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareToDownload", "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow"]
     fw_values = [FirmwareLocation, FirmwareFilename, "true"]
     fw_datatypes = ["string", "string", "boolean"]
     flag = 0
@@ -203,26 +192,24 @@ def setFWUpgradeConfig(obj, step, FirmwareFilename, FirmwareLocation=FIRMWARE_LO
     details = [None] * 3
 
     for index in range(3):
-        print("\nSetting %s to %s" % (fw_params[index], fw_values[index]))
+        print("\nSetting %s to %s" %(fw_params[index], fw_values[index]))
         if index == 2:
             tdkTestObj = obj.createTestStep('TDKB_TR181Stub_SetOnly')
         else:
             tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Set')
 
-        setResult[index], details[index] = setTR181Value(
-            tdkTestObj, fw_params[index], fw_values[index], fw_datatypes[index])
+        setResult[index], details[index] = setTR181Value(tdkTestObj, fw_params[index], fw_values[index], fw_datatypes[index])
 
-    print("TEST STEP %d : Set the FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadNow values" % step)
-    print("EXPECTED RESULT %d: The values must be set successfully" % step)
+    print("TEST STEP %d : Set the FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadNow values" %step)
+    print("EXPECTED RESULT %d: The values must be set successfully" %step)
     if "FAILURE" not in setResult:
         tdkTestObj.setResultStatus("SUCCESS")
-        print("ACTUAL RESULT %d: Successfully set the FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadNow. Details : %s" % (step, details))
+        print("ACTUAL RESULT %d: Successfully set the FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadNow. Details : %s" %(step, details))
         print("[TEST EXECUTION RESULT] : SUCCESS\n")
         flag = 1
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print("ACTUAL RESULT %d: Failed to set th values. Details : %s" %
-              (step, details))
+        print("ACTUAL RESULT %d: Failed to set th values. Details : %s" %(step, details))
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     return flag
 ########## End of function ##########
@@ -240,27 +227,26 @@ def getErouterIP(obj, step):
     expectedresult = "SUCCESS"
     ip = ""
     interface = ""
-    print("TEST STEP %d: Fetch INTERFACE from the tdk_platform.properties" % step)
-    print("EXPECTED RESULT %d: Should fetch INTERFACE from the tdk_platform.properties" % step)
+    print("TEST STEP %d: Fetch INTERFACE from the tdk_platform.properties" %step)
+    print("EXPECTED RESULT %d: Should fetch INTERFACE from the tdk_platform.properties" %step)
     tdkTestObj, actualresult, value = GetPlatformProperties(obj, ["INTERFACE"])
     interface = value["INTERFACE"]
     if expectedresult in actualresult and interface != "":
         tdkTestObj.setResultStatus("SUCCESS")
-        print("ACTUAL RESULT %d: Fetched INTERFACE from the tdk_platform.properties successfully. INTERFACE is %s " % (
-            step, interface))
+        print("ACTUAL RESULT %d: Fetched INTERFACE from the tdk_platform.properties successfully. INTERFACE is %s " %(step, interface))
         print("[TEST EXECUTION RESULT] : SUCCESS\n")
 
         query = f"ifconfig {interface} | grep 'inet addr' | awk '{{print $2}}' | cut -d: -f2"
-        print("Query: %s" % query)
+        print("Query: %s" %query)
 
         tdkTestObj = obj.createTestStep('ExecuteCmd')
         actualresult, details = doSysutilExecuteCommand(tdkTestObj, query)
         ip = details.strip()
 
         step += 1
-        print("TEST STEP %d: Get erouter IP" % step)
-        print("EXPECTED RESULT %d: Should get the erouter IP " % step)
-        print("ACTUAL RESULT %d: erouter IP obtained is %s " % (step, details))
+        print("TEST STEP %d: Get erouter IP" %step)
+        print("EXPECTED RESULT %d: Should get the erouter IP " %step)
+        print("ACTUAL RESULT %d: erouter IP obtained is %s " %(step, details))
         if expectedresult in actualresult and ip != "":
             tdkTestObj.setResultStatus("SUCCESS")
             print("[TEST EXECUTION RESULT] : SUCCESS\n")
@@ -269,8 +255,7 @@ def getErouterIP(obj, step):
             print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print("ACTUAL RESULT %d: Failed to fetch INTERFACE from the tdk_platform.properties. INTERFACE is %s" % (
-            step, interface))
+        print("ACTUAL RESULT %d: Failed to fetch INTERFACE from the tdk_platform.properties. INTERFACE is %s" %(step, interface))
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     return ip, step
 
@@ -286,7 +271,7 @@ def getErouterIP(obj, step):
 
 def getMacAddress(obj):
     estbMAC = ""
-    query = "sh %s/tdk_platform_utility.sh getCMMACAddress" % TDK_PATH
+    query = "sh %s/tdk_platform_utility.sh getCMMACAddress" %TDK_PATH
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, query)
     estbMAC = details.strip()
@@ -467,69 +452,14 @@ def getXCONFServer_DeleteConfigCmd():
         f"{XCONF_URL}/delete/models/{SUPPORTED_MODEL_ID}"
     ]
     return [build_curl(endpoint, "DELETE") for endpoint in delete_endpoints]
+
 ########## End of function #########
-
-# checkFirmwareDownloadTrigger
-# Syntax       : checkFirmwareDownloadTrigger(obj, FirmwareFilename, step)
-# Description : Function to check whether firmware download is triggered in the device from Xconf server
-# Parameters   : obj - module object
-#                FirmwareFilename - Target Image name
-#                FIW_UPGRADE_SERVICE - Name of the firmware upgrade service
-#                step - test step number
-# Return Value : True if download is triggered, else False
-
-
-def checkFirmwareDownloadTrigger(obj, FirmwareFilename, FW_UPGRADE_SERVICE, step):
-    expectedresult = "SUCCESS"
-    query = f"ls {xconf_firmware_location} | grep {FirmwareFilename}"
-    print(f"Command: {query}")
-
-    tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, query)
-
-    print(
-        f"TEST STEP {step}: Check whether the firmware download is triggered in the device")
-    print(
-        f"EXPECTED RESULT {step}: The firmware download should be triggered in the device")
-    if expectedresult in actualresult and FirmwareFilename in details.strip():
-        tdkTestObj.setResultStatus("SUCCESS")
-        print(
-            f"ACTUAL RESULT {step}: The firmware download is triggered in the device. Details : {details.strip()}")
-        print("[TEST EXECUTION RESULT] : SUCCESS\n")
-        return True
-    else:
-        print(
-            f"The firmware download is not triggered in the device. Details : {details.strip()}")
-        print(
-            f"Attempting to restart the service {FW_UPGRADE_SERVICE} and check again...")
-        # Restart the firmware upgrade service and check again
-        restart_cmd = f"systemctl restart {FW_UPGRADE_SERVICE}"
-        print(f"Restarting the service {FW_UPGRADE_SERVICE}")
-
-        actualresult, details = doSysutilExecuteCommand(
-            tdkTestObj, restart_cmd)
-        sleep(40)
-        actualresult, details = doSysutilExecuteCommand(tdkTestObj, query)
-        if expectedresult in actualresult and FirmwareFilename in details.strip():
-            tdkTestObj.setResultStatus("SUCCESS")
-            print(
-                f"ACTUAL RESULT {step}: The firmware download is triggered in the device after restarting the service. Details : {details.strip()}")
-            print("[TEST EXECUTION RESULT] : SUCCESS\n")
-            return True
-        else:
-            tdkTestObj.setResultStatus("FAILURE")
-            print(
-                f"ACTUAL RESULT {step}: The firmware download is not triggered in the device even after restarting the service. Details : {details.strip()}")
-            print("[TEST EXECUTION RESULT] : FAILURE\n")
-            return False
-########## End of function ##########
 # getPartitionCount
 # Syntax       : getPartitionCount(obj, step)
 # Description : Function to check the number of partitions in the device
 # Parameters   : obj - module object
 #                step - test step number
 # Return Value : partition_count - Number of required partitions if successful, else -1
-
 
 def getPartitionCount(obj, step):
     # Initialize partition_count to 0
@@ -541,20 +471,18 @@ def getPartitionCount(obj, step):
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
 
     print(f"TEST STEP {step}: Check the number of partitions in the device")
-    print(
-        f"EXPECTED RESULT {step}: Should get the number of partitions in the device")
+    print(f"EXPECTED RESULT {step}: Should get the number of partitions in the device")
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS")
-        print(
-            f"ACTUAL RESULT {step}: The number of partitions in the device is : {details.strip()}")
+        print(f"ACTUAL RESULT {step}: The number of partitions in the device is : {details.strip()}")
         print("[TEST EXECUTION RESULT] : SUCCESS\n")
         partition_count = int(details.strip())
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print(
-            f"ACTUAL RESULT {step}: Failed to get the number of partitions in the device. Details : {details.strip()}")
+        print(f"ACTUAL RESULT {step}: Failed to get the number of partitions in the device. Details : {details.strip()}")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
         partition_count = -1
     return partition_count
 ########## End of function ##########
+
 

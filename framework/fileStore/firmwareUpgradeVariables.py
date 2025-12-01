@@ -47,10 +47,6 @@ MAC_LIST_ID = f"TDKB_CURL_MACLIST_{timestamp}"
 
 SUPPORTED_MODEL_ID = f"RPI_TDKB_TEST_{timestamp}"
 
-DEFINE_PROPERTIES_ID = f"TDKB_CURL_FWRULE_{timestamp}"
-
-DEFINE_PROPERTIES_TYPE = "com.comcast.xconf.firmware.DefinePropertiesAction"
-
 #Username of DUT
 username = "root"
 
