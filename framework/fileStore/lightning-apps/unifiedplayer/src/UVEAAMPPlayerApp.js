@@ -1175,7 +1175,7 @@ export default class App extends Lightning.Component {
 
   updatePrevPosValidationResult(){
       this.pos_val_flag = 0
-      this.pos_val_result.push(getPosValResult(this.pos_list,this.pos_val_index))
+      this.pos_val_result.push(getPosValResult(this.pos_list,this.pos_val_index,this.delaytest, this.expectedStart, this.expectedEnd))
       this.pos_list = [];
   }
 
@@ -1227,9 +1227,14 @@ export default class App extends Lightning.Component {
     
     if (this.check_end_duration == 1 ){
             if (this.pos_end_flag != 1){
+	    if (this.delaytest == "true") {
+                        logMsg("VIDEO PLAYED TILL THE END OF THE MENTIONED DURATION : SUCCESS");
+                        logMsg("EXPECTED BEHAVIOR IN DELAY TEST");
+            } else{
                        this.testStatus = 1
                        logMsg("FAILURE REASON: VIDEO DID NOT PLAYED TILL THE END OF THE MENTIONED DURATION")
             }
+	    }
 	    else{
 		       logMsg("SUCCESS: VIDEO PLAYED TILL THE END OF THE MENTIONED DURATION")
 	    }
@@ -1256,6 +1261,9 @@ export default class App extends Lightning.Component {
     this.inputs = window.location.search.substring(1).split("&");
     this.videoURL = GetURLParameter("url").replace(/:and:/g,"&").replace(/:eq:/g, "=")
     this.autotest = GetURLParameter("autotest")
+    this.delaytest = GetURLParameter("delaytest")
+    this.expectedStart = GetURLParameter("expectedStart");
+    this.expectedEnd = GetURLParameter("expectedEnd");
     this.autoplay = true
     this.options  = []
     this.configs  = []

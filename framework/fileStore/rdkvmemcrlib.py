@@ -520,7 +520,7 @@ def memcr_restart_wpeframework_service():
         output = memcr_executeInDUT(sshMethod,credentials,command)
         output = str(output).split("\n")[1]
         output = output.replace("s","").strip()
-        if int(output) <= 30:
+        if 25 <= int(output) <= 30:
             print("SUCCESS : Successfully restarted wpeframework service with the delay of "+output+" seconds\n")
         else:
             print("FAILURE : Failed to restart wpeframework service with the delay of "+output+" seconds\n")
