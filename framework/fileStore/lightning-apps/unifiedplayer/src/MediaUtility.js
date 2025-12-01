@@ -98,7 +98,7 @@
 
 
   // Method to perform video progress position validation
-  export function getPosValResult(pos_list,pos_index,live_test_flag = 0){
+  export function getPosValResult(pos_list,pos_index,live_test_flag = 0,delaytest, expectedStart, expectedEnd){
     var pos_val_status = "SUCCESS"
     var critical_mismatch_flag = false
     var vid_pos_list = []
@@ -106,6 +106,12 @@
     var mismatch = ""
     var pos_mismatch_count = 0
     var pos_mismatch_list = []
+    var expectedStartInt = parseInt(expectedStart, 10);
+    var expectedEndInt = parseInt(expectedEnd, 10);
+    var expectedDiff = expectedEndInt - expectedStartInt;
+    let validSkip = false;
+    var lastPos = Math.floor(parseFloat(pos_list[pos_list.length - 1]));
+    const firstPos = Math.floor(parseFloat(pos_list[0]));
     if (pos_list.length > 1){
         if (pos_index != 0){
             // removing video progress pos duplicates
@@ -159,10 +165,40 @@
             }
             // If the pos diff is not as expected for more than max threshold limit
             // consider pos validation status as failure
-            if (pos_mismatch_count > 3 || critical_mismatch_flag == true){
+	    if (delaytest === undefined && (pos_mismatch_count > 3 || critical_mismatch_flag == true)){
                 logMsg(pos_mismatch_list)
                 logMsg("Failure Reason: Video Progress position difference is not as expected")
                 pos_val_status = "FAILURE"
+            }
+	    if (delaytest === "true" ){
+               if (firstPos === expectedStartInt && lastPos === expectedEndInt) {
+	       validSkip = true;
+        }
+        //Handles the middle video segment
+        if (!validSkip && (pos_mismatch_count > 3 || critical_mismatch_flag == true)){
+        pos_mismatch_list = [...new Set(pos_mismatch_list)];
+        logMsg(pos_mismatch_list)
+        for (let mismatch of pos_mismatch_list) {
+        const match = mismatch.match(/Pos:(\d+)-(\d+),diff=(\d+)/)
+        if (match) {
+        const endPos = parseInt(match[1], 10);
+        const startPos = parseInt(match[2], 10);
+        const Posdiff = parseInt(match[3], 10);
+        if (startPos === expectedStartInt && endPos === expectedEndInt && Posdiff === expectedDiff) {
+        validSkip = true;
+        logMsg("Valid skip detected in middle segment, matching expected positions and diff");
+        break;
+        }
+         }
+	  }
+           }
+	    if (validSkip) {
+	    pos_val_status = "SUCCESS";
+            logMsg("Expected behaviour: Video Progress position difference is as expected");
+            } else {
+            pos_val_status = "FAILURE";
+            logMsg("Failure Reason: Video Progress position difference is not as expected")
+            }
             }
         }else{
             pos_val_status = "FAILURE"
