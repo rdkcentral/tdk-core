@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>b9e3d0f2-6c4e-5a8f-0b3c-2d7f9e1a4b5c</moduleId>
+        <!-- Module name -->
+        <moduleName>packagemanager</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>15</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="c0f1e2d3-7a5b-6c8d-1e2f-3a4b5c6d7e8f" name="TestMgr_PackageManager_Install">
+                <parameters>
+                    <parameter id="d1e2f3a4-8b6c-7d9e-2f3a-4b5c6d7e8f9a" parameterName="packageId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e2f3a4b5-9c7d-8e0f-3a4b-5c6d7e8f9a0b" parameterName="version" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f3a4b5c6-0d8e-9f1a-4b5c-6d7e8f9a0b1c" parameterName="fileLocator" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a4b5c6d7-1e9f-0a2b-5c6d-7e8f9a0b1c2d" parameterName="additionalMetadata" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b5c6d7e8-2f0a-1b3c-6d7e-8f9a0b1c2d3e" name="TestMgr_PackageManager_ListPackages">
+                <parameters/>
+            </function>
+            <function id="c6d7e8f9-3a1b-2c4d-7e8f-9a0b1c2d3e4f" name="TestMgr_PackageManager_Config">
+                <parameters>
+                    <parameter id="d7e8f9a0-4b2c-3d5e-8f9a-0b1c2d3e4f5a" parameterName="key" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e8f9a0b1-5c3d-4e6f-9a0b-1c2d3e4f5a6b" parameterName="value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f9a0b1c2-6d4e-5f7a-0b1c-2d3e4f5a6b7c" name="TestMgr_PackageManager_PackageState">
+                <parameters>
+                    <parameter id="a0b1c2d3-7e5f-6a8b-1c2d-3e4f5a6b7c8d" parameterName="packageId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b1c2d3e4-8f6a-7b9c-2d3e-4f5a6b7c8d9e" parameterName="version" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c2d3e4f5-9a7b-8c0d-3e4f-5a6b7c8d9e0f" name="TestMgr_PackageManager_Lock">
+                <parameters>
+                    <parameter id="d3e4f5a6-0b8c-9d1e-4f5a-6b7c8d9e0f1a" parameterName="packageId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e4f5a6b7-1c9d-0e2f-5a6b-7c8d9e0f1a2b" parameterName="version" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f5a6b7c8-2d0e-1f3a-6b7c-8d9e0f1a2b3c" parameterName="reason" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a6b7c8d9-3e1f-2a4b-7c8d-9e0f1a2b3c4d" parameterName="owner" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b7c8d9e0-4f2a-3b5c-8d9e-0f1a2b3c4d5e" name="TestMgr_PackageManager_Unlock">
+                <parameters>
+                    <parameter id="c8d9e0f1-5a3b-4c6d-9e0f-1a2b3c4d5e6f" parameterName="packageId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d9e0f1a2-6b4c-5d7e-0f1a-2b3c4d5e6f7a" parameterName="version" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e0f1a2b3-7c5d-6e8f-1a2b-3c4d5e6f7a8b" parameterName="owner" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f1a2b3c4-8d6e-7f9a-2b3c-4d5e6f7a8b9c" name="TestMgr_PackageManager_GetLockedInfo">
+                <parameters>
+                    <parameter id="a2b3c4d5-9e7f-8a0b-3c4d-5e6f7a8b9c0d" parameterName="packageId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b3c4d5e6-0f8a-9b1c-4d5e-6f7a8b9c0d1e" parameterName="version" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c4d5e6f7-1a9b-0c2d-5e6f-7a8b9c0d1e2f" name="TestMgr_PackageManager_Uninstall">
+                <parameters>
+                    <parameter id="d5e6f7a8-2b0c-1d3e-6f7a-8b9c0d1e2f3a" parameterName="packageId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e6f7a8b9-3c1d-2e4f-7a8b-9c0d1e2f3a4b" parameterName="version" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f7a8b9c0-4d2e-3f5a-8b9c-0d1e2f3a4b5c" parameterName="uninstallType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a8b9c0d1-5e3f-4a6b-9c0d-1e2f3a4b5c6d" name="TestMgr_PackageManager_Download">
+                <parameters>
+                    <parameter id="b9c0d1e2-6f4a-5b7c-0d1e-2f3a4b5c6d7e" parameterName="packageId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c0d1e2f3-7a5b-6c8d-1e2f-3a4b5c6d7e8f" parameterName="version" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d1e2f3a4-8b6c-7d9e-2f3a-4b5c6d7e8f9a" parameterName="fileLocator" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>e2f3a4b5-9c7d-8e0f-3a4b-5c6d7e8f9a0b</id>
+                <name>PackageManager_Install</name>
+                <funName>TestMgr_PackageManager_Install</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f3a4b5c6-0d8e-9f1a-4b5c-6d7e8f9a0b1c</id>
+                        <parameterName>packageId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a4b5c6d7-1e9f-0a2b-5c6d-7e8f9a0b1c2d</id>
+                        <parameterName>version</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b5c6d7e8-2f0a-1b3c-6d7e-8f9a0b1c2d3e</id>
+                        <parameterName>fileLocator</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c6d7e8f9-3a1b-2c4d-7e8f-9a0b1c2d3e4f</id>
+                        <parameterName>additionalMetadata</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d7e8f9a0-4b2c-3d5e-8f9a-0b1c2d3e4f5a</id>
+                <name>PackageManager_ListPackages</name>
+                <funName>TestMgr_PackageManager_ListPackages</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>e8f9a0b1-5c3d-4e6f-9a0b-1c2d3e4f5a6b</id>
+                <name>PackageManager_Config</name>
+                <funName>TestMgr_PackageManager_Config</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f9a0b1c2-6d4e-5f7a-0b1c-2d3e4f5a6b7c</id>
+                        <parameterName>key</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a0b1c2d3-7e5f-6a8b-1c2d-3e4f5a6b7c8d</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b1c2d3e4-8f6a-7b9c-2d3e-4f5a6b7c8d9e</id>
+                <name>PackageManager_PackageState</name>
+                <funName>TestMgr_PackageManager_PackageState</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c2d3e4f5-9a7b-8c0d-3e4f-5a6b7c8d9e0f</id>
+                        <parameterName>packageId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d3e4f5a6-0b8c-9d1e-4f5a-6b7c8d9e0f1a</id>
+                        <parameterName>version</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e4f5a6b7-1c9d-0e2f-5a6b-7c8d9e0f1a2b</id>
+                <name>PackageManager_Lock</name>
+                <funName>TestMgr_PackageManager_Lock</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f5a6b7c8-2d0e-1f3a-6b7c-8d9e0f1a2b3c</id>
+                        <parameterName>packageId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a6b7c8d9-3e1f-2a4b-7c8d-9e0f1a2b3c4d</id>
+                        <parameterName>version</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b7c8d9e0-4f2a-3b5c-8d9e-0f1a2b3c4d5e</id>
+                        <parameterName>reason</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c8d9e0f1-5a3b-4c6d-9e0f-1a2b3c4d5e6f</id>
+                        <parameterName>owner</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d9e0f1a2-6b4c-5d7e-0f1a-2b3c4d5e6f7a</id>
+                <name>PackageManager_Unlock</name>
+                <funName>TestMgr_PackageManager_Unlock</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>e0f1a2b3-7c5d-6e8f-1a2b-3c4d5e6f7a8b</id>
+                        <parameterName>packageId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f1a2b3c4-8d6e-7f9a-2b3c-4d5e6f7a8b9c</id>
+                        <parameterName>version</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a2b3c4d5-9e7f-8a0b-3c4d-5e6f7a8b9c0d</id>
+                        <parameterName>owner</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b3c4d5e6-0f8a-9b1c-4d5e-6f7a8b9c0d1e</id>
+                <name>PackageManager_GetLockedInfo</name>
+                <funName>TestMgr_PackageManager_GetLockedInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c4d5e6f7-1a9b-0c2d-5e6f-7a8b9c0d1e2f</id>
+                        <parameterName>packageId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>d5e6f7a8-2b0c-1d3e-6f7a-8b9c0d1e2f3a</id>
+                        <parameterName>version</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e6f7a8b9-3c1d-2e4f-7a8b-9c0d1e2f3a4b</id>
+                <name>PackageManager_Uninstall</name>
+                <funName>TestMgr_PackageManager_Uninstall</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f7a8b9c0-4d2e-3f5a-8b9c-0d1e2f3a4b5c</id>
+                        <parameterName>packageId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a8b9c0d1-5e3f-4a6b-9c0d-1e2f3a4b5c6d</id>
+                        <parameterName>version</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b9c0d1e2-6f4a-5b7c-0d1e-2f3a4b5c6d7e</id>
+                        <parameterName>uninstallType</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>c0d1e2f3-7a5b-6c8d-1e2f-3a4b5c6d7e8f</id>
+                <name>PackageManager_Download</name>
+                <funName>TestMgr_PackageManager_Download</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>d1e2f3a4-8b6c-7d9e-2f3a-4b5c6d7e8f9a</id>
+                        <parameterName>packageId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>e2f3a4b5-9c7d-8e0f-3a4b-5c6d7e8f9a0b</id>
+                        <parameterName>version</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f3a4b5c6-0d8e-9f1a-4b5c-6d7e8f9a0b1c</id>
+                        <parameterName>fileLocator</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

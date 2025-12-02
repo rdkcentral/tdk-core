@@ -80,17 +80,20 @@ from ai2_0_utils import (
     get_device_info_from_json,
     check_and_activate_ai2_managers,
     create_tdk_test_step,
-    set_test_step_status
+    set_test_step_status,
+    configure_test_case_standalone
 )
 
 # Test component to be tested
-obj = tdklib.TDKScriptingLibrary("rdkservices", "1")
+obj = tdklib.TDKScriptingLibrary("rdkservices", "1", standAlone=True)
 
 # IP and Port of box, No need to change,
 # This will be replaced with corresponding Box IP and port while executing script
-ip = "<ipaddress>"
-port = "<port>"
-obj.configureTestCase(ip, port, 'PackageMgr_DAC_04_LaunchApps')
+ip = <ipaddress>
+port = <port>
+
+# Configure test case using helper function
+configure_test_case_standalone(obj, ip, port, 'PackageMgr_DAC_04_LaunchApps')
 
 # Get the result of connection with test component and DUT
 loadmodulestatus = obj.getLoadModuleResult()
