@@ -34,12 +34,80 @@ from typing import Any, Dict, List, Optional, Tuple
 DEFAULT_DAC_CONFIG_URL = "https://dac.config.dev.fireboltconnect.com/configuration/cpe.json"
 DEFAULT_JSONRPC_URL = "http://127.0.0.1:9998/jsonrpc"
 
+# TDK Configuration Defaults
+DEFAULT_TM_URL = "http://localhost:8080/rdk-test-tool"
+DEFAULT_TM_PATH = "/opt/tdk/"
+DEFAULT_LOG_PATH = "/opt/tdk/logs/"
+DEFAULT_LOG_TRANSFER_PORT = 69
+DEFAULT_STATUS_PORT = 8088
+
 # Package Manager RPC Methods
 PM_DOWNLOAD_METHOD = "org.rdk.PackageManagerRDKEMS.1.download"
 PM_INSTALL_METHOD = "org.rdk.PackageManagerRDKEMS.install"
 PM_LIST_METHOD = "org.rdk.PackageManagerRDKEMS.1.listPackages"
 PM_UNINSTALL_METHOD = "org.rdk.PackageManagerRDKEMS.uninstall"
 APP_MANAGER_LAUNCH_METHOD = "org.rdk.AppManager.1.launchApp"
+
+
+def configure_tdk_test_case(tdk_obj, device_ip: str, device_port: int, test_case_name: str,
+                          tm_url: str = DEFAULT_TM_URL, tm_path: str = DEFAULT_TM_PATH, 
+                          log_path: str = DEFAULT_LOG_PATH, exec_id: int = 1, 
+                          exec_device_id: int = 1, exec_res_id: int = 1, 
+                          test_case_id: int = 1, device_id: int = 1,
+                          log_transfer_port: int = DEFAULT_LOG_TRANSFER_PORT,
+                          status_port: int = DEFAULT_STATUS_PORT,
+                          performance_benchmarking: str = 'false',
+                          performance_diagnosis: str = 'false',
+                          script_suite_enabled: str = 'false') -> str:
+    """
+    Configure TDK test case with all required parameters.
+    
+    Args:
+        tdk_obj: TDK scripting library object
+        device_ip: Device IP address
+        device_port: Device port number
+        test_case_name: Name of the test case for execution
+        tm_url: Test Manager URL (optional)
+        tm_path: Test Manager path (optional)
+        log_path: Log file path (optional)
+        exec_id: Execution ID (optional)
+        exec_device_id: Device execution ID (optional)
+        exec_res_id: Result ID (optional)
+        test_case_id: Test case ID (optional)
+        device_id: Device ID (optional)
+        log_transfer_port: TFTP log transfer port (optional)
+        status_port: Status monitoring port (optional)
+        performance_benchmarking: Enable performance benchmarking (optional)
+        performance_diagnosis: Enable performance diagnosis (optional)
+        script_suite_enabled: Enable script suite (optional)
+        
+    Returns:
+        Result status from getLoadModuleResult()
+    """
+    # Configure the test case with all required parameters
+    tdk_obj.configureTestCase(
+        tm_url,                    # url
+        tm_path,                   # path  
+        log_path,                  # logpath
+        exec_id,                   # execId
+        exec_device_id,            # execDeviceId
+        exec_res_id,               # execResId
+        device_ip,                 # deviceIp
+        device_port,               # devicePort
+        log_transfer_port,         # logTransferPort
+        status_port,               # statusPort
+        test_case_id,              # testcaseID
+        device_id,                 # deviceId
+        performance_benchmarking,  # performanceBenchMarkingEnabled
+        performance_diagnosis,     # performanceSystemDiagnosisEnabled
+        script_suite_enabled,      # scriptSuiteEnabled
+        test_case_name             # executionName
+    )
+    
+    # Get the result of connection with test component and DUT
+    result = tdk_obj.getLoadModuleResult()
+    print(f"[LIB LOAD STATUS]: {result}")
+    return result
 
 
 def create_tdk_test_step(tdk_obj, step_name: str, step_description: str = "") -> Any:

@@ -76,7 +76,7 @@ from ai2_0_utils import (
     fetch_dac_config,
     list_dac_packages,
     get_device_info_from_json,
-    configure_test_case_standalone
+    configure_tdk_test_case
 )
 
 # Test component to be tested
@@ -88,13 +88,9 @@ ip = <ipaddress>
 port = <port>
 
 # Configure test case using helper function
-configure_test_case_standalone(obj, ip, port, 'StorageMgr_AI2_03_DeleteStorage')
+result = configure_tdk_test_case(obj, ip, port, 'StorageMgr_AI2_03_DeleteStorage')
 
-# Get the result of connection with test component and DUT
-loadmodulestatus = obj.getLoadModuleResult()
-print("[LIB LOAD STATUS]  :  %s" % loadmodulestatus)
-
-if "SUCCESS" in loadmodulestatus.upper():
+if "SUCCESS" in result.upper():
     obj.setLoadModuleStatus("SUCCESS")
     expectedResult = "SUCCESS"
     

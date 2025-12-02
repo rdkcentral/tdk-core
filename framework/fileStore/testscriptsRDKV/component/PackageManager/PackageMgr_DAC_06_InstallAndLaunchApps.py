@@ -93,22 +93,21 @@ from ai2_0_utils import (
     delete_downloaded_packages,
     create_tdk_test_step,
     set_test_step_status
+    configure_tdk_test_case
 )
 
 # Test component to be tested
-obj = tdklib.TDKScriptingLibrary("rdkservices", "1")
+obj = tdklib.TDKScriptingLibrary("rdkservices", "1", standAlone=True)
 
 # IP and Port of box, No need to change,
 # This will be replaced with corresponding Box IP and port while executing script
-ip = "<ipaddress>"
-port = "<port>"
-obj.configureTestCase(ip, port, 'PackageMgr_DAC_06_InstallAndLaunchApps')
+ip = <ipaddress>
+port = <port>
 
-# Get the result of connection with test component and DUT
-loadmodulestatus = obj.getLoadModuleResult()
-print("[LIB LOAD STATUS]  :  %s" % loadmodulestatus)
+# Configure test case using helper function
+result = configure_tdk_test_case(obj, ip, port, 'PackageMgr_DAC_06_InstallAndLaunchApps')
 
-if "SUCCESS" in loadmodulestatus.upper():
+if "SUCCESS" in result.upper():
     obj.setLoadModuleStatus("SUCCESS")
     expectedResult = "SUCCESS"
     
