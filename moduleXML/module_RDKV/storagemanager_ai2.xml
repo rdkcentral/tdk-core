@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>a8f2c9e1-5b3d-4e7f-9a2b-1c6d8e4f0a3b</moduleId>
+        <!-- Module name -->
+        <moduleName>storagemanager</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>15</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d" name="TestMgr_StorageManager_CreateStorage">
+                <parameters>
+                    <parameter id="2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e" parameterName="appId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f" parameterName="size" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a" name="TestMgr_StorageManager_GetStorage">
+                <parameters>
+                    <parameter id="5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b" parameterName="appId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c" parameterName="userId" parameterType="STRING" range="A-Z"/>
+                    <parameter id="7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d" parameterName="groupId" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e" name="TestMgr_StorageManager_DeleteStorage">
+                <parameters>
+                    <parameter id="9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f" parameterName="appId" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a" name="TestMgr_StorageManager_Clear">
+                <parameters>
+                    <parameter id="1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b" parameterName="appId" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c" name="TestMgr_StorageManager_ClearAll">
+                <parameters>
+                    <parameter id="3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d" parameterName="exemptionAppIds" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e</id>
+                <name>StorageManager_CreateStorage</name>
+                <funName>TestMgr_StorageManager_CreateStorage</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f</id>
+                        <parameterName>appId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a</id>
+                        <parameterName>size</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b</id>
+                <name>StorageManager_GetStorage</name>
+                <funName>TestMgr_StorageManager_GetStorage</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c</id>
+                        <parameterName>appId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d</id>
+                        <parameterName>userId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e</id>
+                        <parameterName>groupId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>1c2d3e4f-5a6b-7c8d-9e0f-1a2b3c4d5e6f</id>
+                <name>StorageManager_DeleteStorage</name>
+                <funName>TestMgr_StorageManager_DeleteStorage</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>2d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a</id>
+                        <parameterName>appId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a8b</id>
+                <name>StorageManager_Clear</name>
+                <funName>TestMgr_StorageManager_Clear</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>4f5a6b7c-8d9e-0f1a-2b3c-4d5e6f7a8b9c</id>
+                        <parameterName>appId</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5a6b7c8d-9e0f-1a2b-3c4d-5e6f7a8b9c0d</id>
+                <name>StorageManager_ClearAll</name>
+                <funName>TestMgr_StorageManager_ClearAll</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6b7c8d9e-0f1a-2b3c-4d5e-6f7a8b9c0d1e</id>
+                        <parameterName>exemptionAppIds</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

@@ -85,7 +85,9 @@ obj = tdklib.TDKScriptingLibrary("rdkservices", "1", standAlone=True)
 # This will be replaced with corresponding Box IP and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip, port, 'StorageMgr_AI2_02_GetStorage')
+
+# Configure test case using helper function
+configure_test_case_standalone(obj, ip, port, 'StorageMgr_AI2_02_GetStorage')
 
 # Get the result of connection with test component and DUT
 loadmodulestatus = obj.getLoadModuleResult()

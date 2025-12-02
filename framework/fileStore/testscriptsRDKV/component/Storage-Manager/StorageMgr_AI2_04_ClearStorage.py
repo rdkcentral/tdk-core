@@ -76,7 +76,8 @@ from ai2_0_utils import (
     jsonrpc_call,
     fetch_dac_config,
     list_dac_packages,
-    get_device_info_from_json
+    get_device_info_from_json,
+    configure_test_case_standalone
 )
 
 # Test component to be tested
@@ -86,7 +87,9 @@ obj = tdklib.TDKScriptingLibrary("rdkservices", "1", standAlone=True)
 # This will be replaced with corresponding Box IP and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip, port, 'StorageMgr_AI2_04_ClearStorage')
+
+# Configure test case using helper function
+configure_test_case_standalone(obj, ip, port, 'StorageMgr_AI2_04_ClearStorage')
 
 # Get the result of connection with test component and DUT
 loadmodulestatus = obj.getLoadModuleResult()

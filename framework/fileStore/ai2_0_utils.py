@@ -634,3 +634,33 @@ def cleanup_all_test_artifacts(package_ids: List[str], download_ids: Optional[Li
     print("="*80)
     
     return results
+
+
+def configure_test_case_standalone(obj, ip, port, test_case_name):
+    """
+    Configure TDK test case for standalone execution with all required parameters
+    
+    Args:
+        obj: TDKScriptingLibrary object
+        ip: Device IP address
+        port: Device port
+        test_case_name: Name of the test case
+    """
+    obj.configureTestCase(
+        url="http://localhost:8080/rdk-test-tool",           # url
+        path="/tmp/tdk/",                                     # path
+        logpath="/tmp/tdk/logs/",                            # logpath
+        execId=1,                                            # execId
+        execDeviceId=1,                                      # execDeviceId
+        execResId=1,                                         # execResId
+        deviceIp=ip,                                         # deviceIp
+        devicePort=port,                                     # devicePort
+        logTransferPort=69,                                  # logTransferPort
+        statusPort=8088,                                     # statusPort
+        testcaseID=test_case_name,                           # testcaseID
+        deviceId=1,                                          # deviceId
+        performanceBenchMarkingEnabled="false",             # performanceBenchMarkingEnabled
+        performanceSystemDiagnosisEnabled="false",          # performanceSystemDiagnosisEnabled
+        scriptSuiteEnabled="false",                         # scriptSuiteEnabled
+        executionName=test_case_name                         # executionName
+    )
