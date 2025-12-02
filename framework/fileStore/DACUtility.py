@@ -134,7 +134,7 @@ def check_binary_exists(obj, binary_name):
         path = ""
 
     return tdkTestObj, actualresult, path
-[O########## End of function ##########
+########## End of function ##########
 
 # create_directory
 # Syntax : create_directory(obj, dir_path)
