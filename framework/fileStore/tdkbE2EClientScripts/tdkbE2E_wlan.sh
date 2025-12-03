@@ -74,14 +74,14 @@ get_wlan_subnet_mask()
 # Get the current SSID name of the WIFI connected
 get_connected_ssid_name()
 {
-        value="$(nmcli device |grep $var2| awk '{ print $4 }')"
+        value="$(nmcli device |grep $var2| awk '{ print $4 }' | grep -Ev "^--$|^$")"
         echo "OUTPUT:$value"
 }
 
 # Get the current channel number of the WIFI connected
 get_channel_number()
 {
-        value="$(nmcli device wifi list |grep $var2| awk '{ print $4 }')"
+        value="$(nmcli device wifi list |grep $var2| awk '{ print $5 }')"
         echo "OUTPUT:$value"
 }
 

@@ -1799,49 +1799,60 @@ def getSecurityModeEnabledConfig(obj, mode, index):
 
 def setSecurityModeEnabledConfig(obj, modeToSet, index, config, currMode = ""):
 
-    paramName = f"Device.WiFi.AccessPoint.{index}.Security.ModeEnabled"
-    paramValue = modeToSet
-    paramType = "string"
-    tdkTestObj, actualresult = wifi_SetParam(obj, paramName, paramValue, paramType)
+    paramNames = [f"Device.WiFi.AccessPoint.{index}.Security.ModeEnabled"]
+    paramValues = [modeToSet]
+    paramTypes  = ["string"]
+    expectedresult = "SUCCESS"
 
-    paramNames = []
+    if "Personal" in modeToSet and "Personal" not in currMode:
 
-    if actualresult == "SUCCESS":
-        if "Personal" in modeToSet and "Personal" not in currMode:
-            if "WPA3" not in modeToSet:
-                # Set the keypassphrase and Encryption method
-                paramNames = [
-                    f"Device.WiFi.AccessPoint.{index}.Security.KeyPassphrase",
-                    f"Device.WiFi.AccessPoint.{index}.Security.X_CISCO_COM_EncryptionMethod"
-                ]
-            else:
-                # Set the SAE passphrase and Encryption method
-                paramNames = [
-                    f"Device.WiFi.AccessPoint.{index}.Security.SAEPassphrase",
-                    f"Device.WiFi.AccessPoint.{index}.Security.X_CISCO_COM_EncryptionMethod"
-                ]
-
-            # Perform SET operation
-            tdkTestObj = obj.createTestStep("WIFIAgent_SetMultiple")
-            paramList = ("%s|%s|string|%s|%s|string|" %(paramNames[0], config[paramNames[0]], paramNames[1], config[paramNames[1]]))
-            tdkTestObj.addParameter("paramList", paramList)
-            tdkTestObj.executeTestCase(expectedresult)
-            actualresult = tdkTestObj.getResult()
-
-        elif "Enterprise" in modeToSet and "Enterprise" not in currMode:
-            # Set the radius server, port and radius secret
-            paramNames = [
-                f"Device.WiFi.AccessPoint.{index}.Security.RadiusServerIPAddr",
-                f"Device.WiFi.AccessPoint.{index}.Security.RadiusServerPort",
-                f"Device.WiFi.AccessPoint.{index}.Security.RadiusSecret"
+        if "WPA3" not in modeToSet:
+            extraParams = [
+                f"Device.WiFi.AccessPoint.{index}.Security.KeyPassphrase",
+                f"Device.WiFi.AccessPoint.{index}.Security.X_CISCO_COM_EncryptionMethod"
+            ]
+        else:
+            extraParams = [
+                f"Device.WiFi.AccessPoint.{index}.Security.SAEPassphrase",
+                f"Device.WiFi.AccessPoint.{index}.Security.X_CISCO_COM_EncryptionMethod"
             ]
 
-            # Perform SET operation
-            RADIUS_SECRET = "Aa12345678"
-            tdkTestObj = obj.createTestStep("WIFIAgent_SetMultiple")
-            paramList = ("%s|%s|string|%s|%s|unsignedint|%s|%s|string|" %(paramNames[0], config[paramNames[0]], paramNames[1], config[paramNames[1]], paramNames[2], RADIUS_SECRET))
-            tdkTestObj.addParameter("paramList", paramList)
-            tdkTestObj.executeTestCase(expectedresult)
-            actualresult = tdkTestObj.getResult()
+        for p in extraParams:
+            paramNames.append(p)
+            paramValues.append(config[p])
+            paramTypes.append("string")
+
+    elif "Enterprise" in modeToSet and "Enterprise" not in currMode:
+
+        RADIUS_SECRET = "Aa12345678"
+
+        extraParams = [
+            f"Device.WiFi.AccessPoint.{index}.Security.RadiusServerIPAddr",
+            f"Device.WiFi.AccessPoint.{index}.Security.RadiusServerPort",
+            f"Device.WiFi.AccessPoint.{index}.Security.RadiusSecret"
+        ]
+
+        extraValues = [
+            config[extraParams[0]],
+            config[extraParams[1]],
+            RADIUS_SECRET
+        ]
+
+        extraTypes = ["string", "unsignedint", "string"]
+
+        paramNames.extend(extraParams)
+        paramValues.extend(extraValues)
+        paramTypes.extend(extraTypes)
+
+    paramList = ""
+    for name, value, ptype in zip(paramNames, paramValues, paramTypes):
+        paramList += f"{name}|{value}|{ptype}|"
+
+    print(f"PARAMLIST: {paramList}")
+    tdkTestObj = obj.createTestStep("WIFIAgent_SetMultiple")
+    tdkTestObj.addParameter("paramList", paramList)
+
+    tdkTestObj.executeTestCase(expectedresult)
+    actualresult = tdkTestObj.getResult()
 
     return tdkTestObj, actualresult

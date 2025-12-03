@@ -1577,7 +1577,7 @@
             </testStep>
             <testStep testStepId="4" name="Check_Bluetooth_Connect_API_Response" method="Connect">
 	    	 <resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
                      <arguments value="deactivate_check_error_message"/>
                  </resultGeneration>
 	    </testStep>
