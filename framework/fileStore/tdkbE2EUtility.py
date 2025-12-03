@@ -1603,7 +1603,7 @@ def ftpToClient(dest, network_ip, source="LAN"):
 
                 status = executeCommand(command)
 
-                if "230 Login successful" in status or "230 User logged in" in status:
+                if "230 User" in status and "logged in." in status or "230 Login successful." in status:
                     status = "SUCCESS"
                 else:
                     status = "FAILURE"
