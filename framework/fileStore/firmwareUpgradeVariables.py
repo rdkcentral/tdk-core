@@ -63,7 +63,7 @@ tdk_package = ""
 #Destination of Package Installation Files in DUT
 dest_path = "/rdklogs"
 
-# Xconf Server Firmware Download Location
+# Xconf Server Firmware Download Location in DUT
 xconf_firmware_location = "/extblock/httpimage/imagedwnld"
 
 # Partition path for getting partition count

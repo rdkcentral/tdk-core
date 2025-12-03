@@ -278,7 +278,7 @@ def getMacAddress(obj):
     return tdkTestObj, actualresult, estbMAC
 ########## End of function ##########
 # getXCONFServer_CreateConfigCmd
-# Syntax : getXCONFServer_CreateConfigCmd(obj, FirmwareVersion, FirmwareFilename, action)
+# Syntax : getXCONFServer_CreateConfigCmd(obj, FirmwareVersion, FirmwareFilename, action, step, scenario)
 # Description : Function to construct curl commands for XConf server configuration
 # Parameters : obj - module object
 #              FirmwareVersion - Target Image name without suffix
@@ -353,36 +353,31 @@ def getXCONFServer_CreateConfigCmd(obj, FirmwareVersion, FirmwareFilename, actio
                 "firmwareConfig": {"id": FWCONFIG_ID}
             }
 
-            Curl_CMD = []
+            Curl_CMD = {}
 
             if action == "POST":
                 # 1. Model addition
                 XCONF_SERVER_URL = XCONF_URL + "/updates/models"
-                Curl_CMD.append(build_curl(
-                    XCONF_SERVER_URL, "POST", model_data))
+                Curl_CMD["Model"] = build_curl(XCONF_SERVER_URL, "POST", model_data)
                 # 2. MAC list addition
                 XCONF_SERVER_URL = XCONF_URL + "/updates/nsLists?applicationType=stb"
-                Curl_CMD.append(build_curl(
-                    XCONF_SERVER_URL, "POST", mac_list_data))
+                Curl_CMD["MAC List"] = build_curl(XCONF_SERVER_URL, "POST", mac_list_data)
                 # 3. Firmware config
                 XCONF_SERVER_URL = XCONF_URL + "/updates/firmwares?applicationType=stb"
-                Curl_CMD.append(build_curl(
-                    XCONF_SERVER_URL, "POST", config_data))
+                Curl_CMD["Firmware Config"] = build_curl(XCONF_SERVER_URL, "POST", config_data)
                 # 4. Firmware rule
                 XCONF_SERVER_URL = XCONF_URL + "/updates/rules/macs?applicationType=stb"
-                Curl_CMD.append(build_curl(
-                    XCONF_SERVER_URL, "POST", mac_rule_data))
+                Curl_CMD["Firmware Rule"] = build_curl(XCONF_SERVER_URL, "POST", mac_rule_data)
 
             elif action == "PUT":
                 XCONF_SERVER_URL = XCONF_URL + "/updates/firmwares?applicationType=stb"
-                Curl_CMD.append(build_curl(
-                    XCONF_SERVER_URL, "PUT", config_data))
+                Curl_CMD["Modified Firmware Config"] = build_curl(XCONF_SERVER_URL, "PUT", config_data)
 
             parsed_url = urlparse(XCONF_URL)
             XCONF_BASE_URL = f"{parsed_url.scheme}://{parsed_url.netloc}"
 
             XCONF_SERVER_URL = XCONF_BASE_URL + "/xconf/swu/stb?eStbMac=" + estbMAC
-            Curl_CMD.append(f"curl -X GET {XCONF_SERVER_URL}")
+            Curl_CMD["Get Config"] = f"curl -X GET {XCONF_SERVER_URL}"
 
             return Curl_CMD
         else:
@@ -465,7 +460,7 @@ def getPartitionCount(obj, step):
     # Initialize partition_count to 0
     expectedresult = "SUCCESS"
     # Command to the number of partitions in the device
-    command = "ls {PARTITION_PATH} | wc -l"
+    command = f"ls {PARTITION_PATH} | wc -l"
     print(f"Command: {command}")
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
