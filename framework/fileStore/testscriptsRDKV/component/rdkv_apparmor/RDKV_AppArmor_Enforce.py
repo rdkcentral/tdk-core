@@ -108,7 +108,7 @@ if expectedResult in result.upper():
     configValues = obtainCredentials(obj,configKeyList)
     AppArmor_Profiles = configValues["AppArmor_Profiles"]
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-    print("\To nEnsure Apparmor service is running")
+    print("To Ensure Apparmor service is running")
     command = 'systemctl status apparmor.service | grep active | grep -v inactive'
     print("COMMAND : %s" %(command))
 
