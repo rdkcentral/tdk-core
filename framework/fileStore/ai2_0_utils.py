@@ -463,8 +463,10 @@ def check_plugin_status(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL
         Dict containing plugin status information
     """
     method = f"Controller.1.status@{plugin_name}"
-    result = jsonrpc_call(method, {}, jsonrpc_url)
-    return result if result else {}
+    response = jsonrpc_call(method, {}, jsonrpc_url)
+    # Extract the result from the JSON-RPC response
+    result = response.get('result', {}) if response else {}
+    return result if isinstance(result, dict) else {}
 
 
 def activate_plugin(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL) -> bool:
@@ -481,17 +483,20 @@ def activate_plugin(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL) ->
     try:
         method = "Controller.1.activate"
         params = {"callsign": plugin_name}
-        result = jsonrpc_call(method, params, jsonrpc_url)
+        response = jsonrpc_call(method, params, jsonrpc_url)
         
         # Wait a moment for activation to complete
         import time
         time.sleep(2)
         
-        # Verify activation
+        # Verify activation by checking status
         status = check_plugin_status(plugin_name, jsonrpc_url)
-        return status.get('state') == 'activated'
+        state = status.get('state', 'unknown')
+        
+        # Consider both 'activated' and 'resumed' as successful states
+        return state in ['activated', 'resumed']
     except Exception as e:
-        print(f"Error activating {plugin_name}: {str(e)}")
+        print(f"  Error activating {plugin_name}: {str(e)}")
         return False
 
 

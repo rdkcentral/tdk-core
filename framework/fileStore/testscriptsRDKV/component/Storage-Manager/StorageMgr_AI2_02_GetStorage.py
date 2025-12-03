@@ -108,13 +108,13 @@ if "SUCCESS" in result.upper():
         
         # Check if Storage Manager is activated
         try:
-            status_result = jsonrpc_call("Controller.1.status@org.rdk.StorageManager", {}, jsonrpc_url)
+            status_result = jsonrpc_call("Controller.1.status@org.rdk.StorageManager.1", {}, jsonrpc_url)
             current_state = status_result.get('result', [{}])[0].get('state', 'unknown')
             print(f"Storage Manager state: {current_state}")
             
             if current_state != 'activated':
                 print("Activating Storage Manager...")
-                activate_result = jsonrpc_call("Controller.1.activate", {"callsign": "org.rdk.StorageManager"}, jsonrpc_url)
+                activate_result = jsonrpc_call("Controller.1.activate", {"callsign": "org.rdk.StorageManager.1"}, jsonrpc_url)
                 import time
                 time.sleep(2)
                 print("✓ Storage Manager activated")
@@ -176,8 +176,15 @@ if "SUCCESS" in result.upper():
             print(f"\n[{idx}/{len(test_apps)}] Creating storage for {app_name} ({app_id})...")
             
             try:
-                params = {'appId': app_id, 'size': size}
-                result = jsonrpc_call("org.rdk.StorageManager.createStorage", params, jsonrpc_url)
+                params = {
+                    'appId': app_id,
+                    'namespace': 'data',
+                    'accessControl': {
+                        'readOnly': False,
+                        'maxSize': size * 1024
+                    }
+                }
+                result = jsonrpc_call("org.rdk.StorageManager.1.createStorage", params, jsonrpc_url)
                 path = result.get('result', {}).get('path', '')
                 
                 if path:
@@ -210,11 +217,10 @@ if "SUCCESS" in result.upper():
                 # Call getStorage
                 params = {
                     'appId': app_id,
-                    'userId': user_id,
-                    'groupId': group_id
+                    'namespace': 'data'
                 }
                 
-                result = jsonrpc_call("org.rdk.StorageManager.getStorage", params, jsonrpc_url)
+                result = jsonrpc_call("org.rdk.StorageManager.1.getStorage", params, jsonrpc_url)
                 
                 # Extract response
                 response = result.get('result', {})
@@ -264,7 +270,7 @@ if "SUCCESS" in result.upper():
         for app_id in created_apps:
             print(f"  Deleting storage for {app_id}...")
             try:
-                delete_result = jsonrpc_call("org.rdk.StorageManager.deleteStorage", {'appId': app_id}, jsonrpc_url)
+                delete_result = jsonrpc_call("org.rdk.StorageManager.1.deleteStorage", {'appId': app_id, 'namespace': 'data'}, jsonrpc_url)
                 error = delete_result.get('result', {}).get('error', '')
                 if not error:
                     print(f"    ✓ Deleted successfully")
@@ -302,7 +308,7 @@ if "SUCCESS" in result.upper():
             print("\nAttempting cleanup...")
             for app_id in created_apps:
                 try:
-                    jsonrpc_call("org.rdk.StorageManager.deleteStorage", {'appId': app_id}, jsonrpc_url)
+                    jsonrpc_call("org.rdk.StorageManager.1.deleteStorage", {'appId': app_id, 'namespace': 'data'}, jsonrpc_url)
                 except:
                     pass
     
