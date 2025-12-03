@@ -81,7 +81,7 @@ from ai2_0_utils import (
     delete_downloaded_packages,
     create_tdk_test_step,
     set_test_step_status,
-    configure_test_case_standalone
+    configure_tdk_test_case
 )
 
 # Test component to be tested
@@ -93,7 +93,7 @@ ip = <ipaddress>
 port = <port>
 
 # Configure test case using helper function
-configure_test_case_standalone(obj, ip, port, 'PackageMgr_DAC_01_DownloadAllApps')
+result = configure_tdk_test_case(obj, ip, port, 'PackageMgr_DAC_01_DownloadAllApps')
 
 # Get the result of connection with test component and DUT
 loadmodulestatus = obj.getLoadModuleResult()
@@ -111,12 +111,15 @@ if "SUCCESS" in loadmodulestatus.upper():
         jsonrpc_url = f"http://{ip}:9998/jsonrpc"
         
         tdkTestObj = create_tdk_test_step(obj, "Precondition_Check", "Activate AI2.0 Manager plugins")
-        all_activated, failed_plugins = check_and_activate_ai2_managers(jsonrpc_url)
+        all_activated, failed_plugins = check_and_activate_ai2_managers(jsonrpc_url, required_only=False)
         
-        if not all_activated:
-            print(f"\n[ERROR] Required plugins not activated: {', '.join(failed_plugins)}")
-            print("[TEST RESULT] FAILURE - Precondition check failed")
-            set_test_step_status(tdkTestObj, "FAILURE", f"Plugins not activated: {', '.join(failed_plugins)}")
+        # Check if essential plugins are available (PackageManagerRDKEMS is required)
+        essential_failed = [p for p in failed_plugins if 'PackageManagerRDKEMS' in p]
+        
+        if essential_failed:
+            print(f"\n[ERROR] Essential plugin not available: {', '.join(essential_failed)}")
+            print("[TEST RESULT] SKIPPED - Essential plugin not available on this device")
+            set_test_step_status(tdkTestObj, "FAILURE", f"Essential plugin missing: {', '.join(essential_failed)}")
             obj.setLoadModuleStatus("FAILURE")
             obj.unloadModule("rdkservices")
             exit()

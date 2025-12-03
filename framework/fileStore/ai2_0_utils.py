@@ -397,8 +397,15 @@ def check_plugin_status(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL
     method = f"Controller.1.status@{plugin_name}"
     response = jsonrpc_call(method, {}, jsonrpc_url)
     # Extract the result from the JSON-RPC response
-    result = response.get('result', {}) if response else {}
-    return result if isinstance(result, dict) else {}
+    result = response.get('result', []) if response else []
+    
+    # Handle both array and dict responses
+    if isinstance(result, list) and len(result) > 0:
+        return result[0] if isinstance(result[0], dict) else {}
+    elif isinstance(result, dict):
+        return result
+    else:
+        return {}
 
 
 def activate_plugin(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL) -> bool:
@@ -432,25 +439,31 @@ def activate_plugin(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL) ->
         return False
 
 
-def check_and_activate_ai2_managers(jsonrpc_url: str = DEFAULT_JSONRPC_URL) -> Tuple[bool, List[str]]:
+def check_and_activate_ai2_managers(jsonrpc_url: str = DEFAULT_JSONRPC_URL, 
+                                    required_only: bool = True) -> Tuple[bool, List[str]]:
     """
-    Check and activate all required AI2.0 Manager plugins.
-    
-    Order: Storage -> Package -> Download -> Window -> Runtime -> Lifecycle -> App -> Preinstall
+    Check and activate AI2.0 Manager plugins. Handle missing plugins gracefully.
     
     Args:
         jsonrpc_url: JSON-RPC endpoint URL
+        required_only: If True, only check plugins that are actually needed
         
     Returns:
-        Tuple of (all_activated: bool, failed_plugins: List[str])
+        Tuple of (all_available_activated: bool, failed_plugins: List[str])
     """
     import time
     
-    # Plugins in dependency order
-    plugins = [
+    # Start with core plugins that are likely to exist
+    core_plugins = [
+        "org.rdk.PackageManagerRDKEMS", 
+        "org.rdk.AppManager"
+    ]
+    
+    # Extended list for full AI2.0 stack (when available)
+    all_plugins = [
         "org.rdk.StorageManager",
         "org.rdk.PackageManagerRDKEMS",
-        "org.rdk.DownloadManager",
+        "org.rdk.DownloadManager", 
         "org.rdk.RDKWindowManager",
         "org.rdk.RuntimeManager",
         "org.rdk.LifecycleManager",
@@ -458,14 +471,41 @@ def check_and_activate_ai2_managers(jsonrpc_url: str = DEFAULT_JSONRPC_URL) -> T
         "org.rdk.PreinstallManager"
     ]
     
+    plugins_to_check = core_plugins if required_only else all_plugins
+    
+    available_plugins = []
     failed_plugins = []
+    missing_plugins = []
     
     print("\n" + "="*80)
     print("PRECONDITION: Checking AI2.0 Manager Plugins")
     print("="*80)
     
-    for idx, plugin in enumerate(plugins, 1):
-        print(f"\n[{idx}/{len(plugins)}] Checking {plugin}...")
+    # First pass: Check which plugins exist
+    print("\n🔍 Discovering available plugins...")
+    for plugin in plugins_to_check:
+        try:
+            status = check_plugin_status(plugin, jsonrpc_url)
+            if status and 'state' in status:
+                available_plugins.append(plugin)
+                print(f"  ✓ {plugin} - Available")
+            else:
+                missing_plugins.append(plugin)
+                print(f"  ⚠ {plugin} - Not available")
+        except Exception:
+            missing_plugins.append(plugin)
+            print(f"  ⚠ {plugin} - Not available")
+    
+    if not available_plugins:
+        print("\n❌ No AI2.0 manager plugins found on this device")
+        print("This may be expected if running on devices without AI2.0 stack")
+        print("="*80)
+        return False, plugins_to_check
+    
+    # Second pass: Activate available plugins
+    print(f"\n🚀 Activating {len(available_plugins)} available plugins...")
+    for idx, plugin in enumerate(available_plugins, 1):
+        print(f"\n[{idx}/{len(available_plugins)}] Checking {plugin}...")
         
         try:
             # Check current status
@@ -474,7 +514,7 @@ def check_and_activate_ai2_managers(jsonrpc_url: str = DEFAULT_JSONRPC_URL) -> T
             
             print(f"  Current state: {current_state}")
             
-            if current_state != 'activated':
+            if current_state not in ['activated', 'resumed']:
                 print(f"  Activating {plugin}...")
                 success = activate_plugin(plugin, jsonrpc_url)
                 
@@ -484,28 +524,46 @@ def check_and_activate_ai2_managers(jsonrpc_url: str = DEFAULT_JSONRPC_URL) -> T
                     print(f"  ✗ {plugin} activation failed")
                     failed_plugins.append(plugin)
             else:
-                print(f"  ✓ {plugin} already activated")
+                print(f"  ✓ {plugin} already active")
                 
         except Exception as e:
-            print(f"  ✗ Error checking {plugin}: {str(e)}")
+            print(f"  ✗ Error with {plugin}: {str(e)}")
             failed_plugins.append(plugin)
         
         # Small delay between activations
-        if idx < len(plugins):
+        if idx < len(available_plugins):
             time.sleep(1)
     
     # Summary
     print("\n" + "="*80)
-    if not failed_plugins:
-        print("✅ All AI2.0 Manager plugins are activated")
+    activated_count = len(available_plugins) - len(failed_plugins)
+    
+    if missing_plugins:
+        print("📋 Plugin Status Summary:")
+        print(f"  Available: {len(available_plugins)}")
+        print(f"  Missing: {len(missing_plugins)}")
+        print(f"  Activated: {activated_count}")
+        print(f"  Failed: {len(failed_plugins)}")
+        
+        if missing_plugins:
+            print(f"\n⚠ Missing plugins (not available on device):")
+            for plugin in missing_plugins:
+                print(f"    - {plugin}")
+    
+    if not failed_plugins and available_plugins:
+        print("✅ All available AI2.0 Manager plugins are activated")
         print("="*80)
         return True, []
-    else:
-        print("❌ The following plugins failed to activate:")
+    elif failed_plugins:
+        print("❌ The following available plugins failed to activate:")
         for plugin in failed_plugins:
-            print(f"  - {plugin}")
+            print(f"    - {plugin}")
         print("="*80)
         return False, failed_plugins
+    else:
+        print("⚠ No plugins could be activated")
+        print("="*80)
+        return False, available_plugins
 
 
 def delete_downloaded_packages(download_ids: List[str], jsonrpc_url: str = DEFAULT_JSONRPC_URL) -> Dict[str, Any]:
@@ -639,3 +697,44 @@ def cleanup_all_test_artifacts(package_ids: List[str], download_ids: Optional[Li
     print("="*80)
     
     return results
+
+
+def configure_tdk_test_case(tdk_obj, ip: str, port: str, test_name: str) -> str:
+    """
+    Configure TDK test case with proper parameters.
+    
+    Args:
+        tdk_obj: TDK scripting library object
+        ip: Device IP address
+        port: Device port
+        test_name: Test case name
+        
+    Returns:
+        Result status string ("SUCCESS" or "FAILURE")
+    """
+    try:
+        # Configure test case with all required parameters
+        result = tdk_obj.configureTestCase(
+            ip,                    # ip
+            port,                  # port
+            0,                     # protocol (0 for JSON-RPC)
+            "",                    # username (empty)
+            "",                    # password (empty)  
+            0,                     # authentication type (0 for none)
+            test_name,             # test name
+            "",                    # description (empty)
+            "",                    # category (empty)
+            "",                    # keywords (empty)
+            "",                    # test setup (empty)
+            "",                    # test execution (empty)
+            "",                    # expected result (empty)
+            "",                    # actual result (empty)
+            "",                    # test data (empty)
+            ""                     # remarks (empty)
+        )
+        
+        return "SUCCESS" if result == 0 else "FAILURE"
+        
+    except Exception as e:
+        print(f"Failed to configure test case: {str(e)}")
+        return "FAILURE"

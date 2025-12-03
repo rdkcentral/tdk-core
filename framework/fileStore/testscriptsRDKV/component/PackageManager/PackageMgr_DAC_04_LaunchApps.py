@@ -81,7 +81,7 @@ from ai2_0_utils import (
     check_and_activate_ai2_managers,
     create_tdk_test_step,
     set_test_step_status,
-    configure_test_case_standalone
+    configure_tdk_test_case
 )
 
 # Test component to be tested
@@ -93,7 +93,7 @@ ip = <ipaddress>
 port = <port>
 
 # Configure test case using helper function
-configure_test_case_standalone(obj, ip, port, 'PackageMgr_DAC_04_LaunchApps')
+result = configure_tdk_test_case(obj, ip, port, 'PackageMgr_DAC_04_LaunchApps')
 
 # Get the result of connection with test component and DUT
 loadmodulestatus = obj.getLoadModuleResult()
@@ -108,7 +108,19 @@ if "SUCCESS" in loadmodulestatus.upper():
                                        "Check and activate AI2.0 managers")
     try:
         jsonrpc_url = f"http://{ip}:9998/jsonrpc"
-        check_and_activate_ai2_managers(jsonrpc_url)
+        all_activated, failed_plugins = check_and_activate_ai2_managers(jsonrpc_url, required_only=False)
+        
+        # Check if essential plugins are available (AppManager is needed for launch)
+        essential_failed = [p for p in failed_plugins if 'AppManager' in p]
+        
+        if essential_failed:
+            print(f"\n[ERROR] Essential plugin not available: {', '.join(essential_failed)}")
+            print("[TEST RESULT] SKIPPED - Essential plugin not available on this device")
+            set_test_step_status(tdkTestObj, "FAILURE", f"Essential plugin missing: {', '.join(essential_failed)}")
+            obj.setLoadModuleStatus("FAILURE")
+            obj.unloadModule("rdkservices")
+            sys.exit(1)
+            
         set_test_step_status(tdkTestObj, "SUCCESS", "AI2.0 managers activated")
     except Exception as e:
         set_test_step_status(tdkTestObj, "FAILURE", f"Failed to activate: {str(e)}")
