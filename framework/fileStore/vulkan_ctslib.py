@@ -294,17 +294,17 @@ def report_generation(result_dir):
 
     print(f"[INFO] Generating Excel report using {result_dir}")
     try:
-        # Resolve an absolute path to excel_report_generator.py next to this module (fallback to libObj.realpath if available)
-        script_path = os.path.join(os.path.dirname(__file__), "excel_report_generator.py")
+        # Resolve an absolute path to vulkan_report_generator.py next to this module (fallback to libObj.realpath if available)
+        script_path = os.path.join(os.path.dirname(__file__), "vulkan_report_generator.py")
         if not os.path.exists(script_path):
             fallback_base = getattr(globals().get('libObj', object()), 'realpath', '')
             if fallback_base:
-                candidate = os.path.join(fallback_base, "excel_report_generator.py")
+                candidate = os.path.join(fallback_base, "vulkan_report_generator.py")
                 if os.path.exists(candidate):
                     script_path = candidate
 
         if not os.path.exists(script_path):
-            raise FileNotFoundError(f"excel_report_generator.py not found at {script_path}")
+            raise FileNotFoundError(f"vulkan_report_generator.py not found at {script_path}")
 
         subprocess.run(["python3", script_path, result_dir, excel_output], check=True)
         print(f"[SUCCESS] Excel report generated: {excel_output}")

@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
   <primitive_test_name>webaudio_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To get the Biquad Tail-Time  details from the device browser</synopsis>
+  <synopsis>To validates audio biquad filters including peaking, allpass, bandpass, highpass, highshelf, lowshelf, and notch types with various root configurations, and checks filter behavior and console warnings.</synopsis>
   <groups_id/>
   <execution_time>20</execution_time>
   <long_duration>false</long_duration>
@@ -33,17 +33,15 @@
   <remarks/>
   <skip>false</skip>
   <box_types>
-    <box_type>RDKTV</box_type>
     <box_type>RPI-Client</box_type>
-    <box_type>RPI-HYB</box_type>
     <box_type>Video_Accelerator</box_type>
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>WebAudio_68</test_case_id>
-    <test_objective>To get the Biquad Tail-Time details from the device browser</test_objective>
+    <test_case_id>WebAudio_146</test_case_id>
+    <test_objective>To ensure all filters produce non-zero outputs during active intervals, decay correctly to zero afterward, maintain stability across complex, real distinct, and repeated roots, and verify properties like detune.automationRate and output stability including detection of non-finite values.</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI,Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
@@ -52,12 +50,12 @@ All the variables in WebAudioVariables.py must be filled.</pre_requisite>
     <input_parameters>biquad-829349.html,tail-time-allpass.html,tail-time-bandpass.html,tail-time-highpass.html,tail-time-highshelf.html,tail-time-lowpass.html,tail-time-lowshelf.html,tail-time-notch.html,tail-time-peaking.html,unstable-filter-warning.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>The browser should be able to get the Biquad Tail-Time details</expected_output>
+    <expected_output>Outputs are non-zero during active intervals and reach zero after the filter response ends, detune.automationRate equals a-rate, at least one non-finite output is detected where applicable, all assertions pass for all filter types and root configurations</expected_output>
     <priority>High</priority>
     <test_stub_interface>WebAudio</test_stub_interface>
     <test_script>RDKV_WebAudio_BiquadFilter</test_script>
     <skipped>No</skipped>
-    <release_version>M131</release_version>
+    <release_version>M143</release_version>
     <remarks>None</remarks>
   </test_cases>
 </xml>
@@ -86,16 +84,16 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebAudioVariables.browser_instance
-webaudio_test_url = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/biquad-829349.html'
-webaudio_test_url2 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/tail-time-allpass.html'
-webaudio_test_url3 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/tail-time-bandpass.html'
-webaudio_test_url4 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/tail-time-highpass.html'
-webaudio_test_url5 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/tail-time-highshelf.html'
-webaudio_test_url6 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/tail-time-lowpass.html'
-webaudio_test_url7 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/tail-time-lowshelf.html'
-webaudio_test_url8 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/tail-time-notch.html'
-webaudio_test_url9 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/tail-time-peaking.html'
-webaudio_test_url10 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/unstable-filter-warning.html'
+webaudio_test_url = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/BiquadFilter/biquad-829349.html'
+webaudio_test_url2 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/BiquadFilter/tail-time-allpass.html'
+webaudio_test_url3 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/BiquadFilter/tail-time-bandpass.html'
+webaudio_test_url4 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/BiquadFilter/tail-time-highpass.html'
+webaudio_test_url5 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/BiquadFilter/tail-time-highshelf.html'
+webaudio_test_url6 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/BiquadFilter/tail-time-lowpass.html'
+webaudio_test_url7 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/BiquadFilter/tail-time-lowshelf.html'
+webaudio_test_url8 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/BiquadFilter/tail-time-notch.html'
+webaudio_test_url9 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/BiquadFilter/tail-time-peaking.html'
+webaudio_test_url10 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/BiquadFilter/unstable-filter-warning.html'
 browser_method = browser+".1.url"
 log_check_method = WebAudioVariables.log_check_method
 current_url=''
@@ -131,7 +129,7 @@ def process_webinspect_logs(log_filename, webinspect_logs,status_dict):
         tdkTestObj.setResultStatus("FAILURE")
         status_dict[log_filename] = "FAILURE"
 
-#Common function for Geting Logs
+#Function for parsing the logs
 def get_webinspect_logs(test_url, log_check_method, grep_line, log_filename,status_dict):
     if log_check_method == "WebinspectPageLogs":
         print("\n Script is directly taking the browser webinspect page console logs to validate the webaudio")
@@ -193,7 +191,7 @@ if expectedResult in result.upper():
                 else:
                     print("FAILURE : Failed to launch ", browser, " in device \n")
                     tdkTestObj.setResultStatus("FAILURE")
-                    obj.unloadModule("webaudio_test");
+                    obj.unloadModule("webaudio");
                     exit()
 
             files_info = [

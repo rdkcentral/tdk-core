@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
   <primitive_test_name>webaudio_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To get the ctor-periodicwave.html details from the device browser</synopsis>
+  <synopsis>To validates construction and behavior of PeriodicWave objects and OscillatorNode output using real, imaginary, and combined harmonic data</synopsis>
   <groups_id/>
   <execution_time>10</execution_time>
   <long_duration>false</long_duration>
@@ -33,9 +33,7 @@
   <remarks/>
   <skip>false</skip>
   <box_types>
-    <box_type>RDKTV</box_type>
     <box_type>RPI-Client</box_type>
-    <box_type>RPI-HYB</box_type>
     <box_type>Video_Accelerator</box_type>
   </box_types>
   <rdk_versions>
@@ -43,21 +41,21 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>WebAudio_73</test_case_id>
-    <test_objective>To get the ctor-periodicwave.html details from the device browser</test_objective>
+    <test_objective>To ensure PeriodicWave constructor enforces argument requirements, supports real, imag, and combined options, handles normalization correctly, and produces oscillator outputs matching expected waveforms</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI,Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebAudioVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>WebAudio</api_or_interface_used>
-    <input_parameters>ctor-periodicwave.html.html</input_parameters>
+    <input_parameters>ctor-periodicwave.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>The browser should be able to get the ctor-periodicwave.html details</expected_output>
+    <expected_output>Invalid constructor calls throw TypeError, valid constructions succeed with correct instance type, oscillator output matches expected arrays with element-wise tolerance, all assertions pass</expected_output>
     <priority>High</priority>
     <test_stub_interface>WebAudio</test_stub_interface>
     <test_script>RDKV_WebAudio_PeriodicWave</test_script>
     <skipped>No</skipped>
-    <release_version>M131</release_version>
+    <release_version>M143</release_version>
     <remarks>None</remarks>
   </test_cases>
 </xml>
@@ -86,7 +84,7 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebAudioVariables.browser_instance
-webaudio_test_url = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/ctor-periodicwave.html.html'
+webaudio_test_url = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/PeriodicWave/ctor-periodicwave.html'
 browser_method = browser+".1.url"
 log_check_method = WebAudioVariables.log_check_method
 current_url=''
@@ -122,7 +120,7 @@ def process_webinspect_logs(log_filename, webinspect_logs,status_dict):
         tdkTestObj.setResultStatus("FAILURE")
         status_dict[log_filename] = "FAILURE"
 
-#Common function for Geting Logs
+#Function for parsing the logs
 def get_webinspect_logs(test_url, log_check_method, grep_line, log_filename,status_dict):
     if log_check_method == "WebinspectPageLogs":
         print("\n Script is directly taking the browser webinspect page console logs to validate the webaudio")
@@ -184,12 +182,12 @@ if expectedResult in result.upper():
                 else:
                     print("FAILURE : Failed to launch ", browser, " in device \n")
                     tdkTestObj.setResultStatus("FAILURE")
-                    obj.unloadModule("webaudio_test");
+                    obj.unloadModule("webaudio");
                     exit()
             
-            print("Processing ctor-periodicwave.html.html file")
-            grep_line = "ctor-periodicwave.html.html | tail -10 | tr -d '\\n'"
-            log_filename = "ctor-periodicwave.html"
+            print("Processing ctor-periodicwave.html file")
+            grep_line = "ctor-periodicwave | tail -10 | tr -d '\\n'"
+            log_filename = "ctor-periodicwave"
             get_webinspect_logs(webaudio_test_url,log_check_method, grep_line, log_filename,status_dict)
 
             print("\n Revert everything before exiting the script")
@@ -221,7 +219,7 @@ if expectedResult in result.upper():
         tdkTestObj.setResultStatus("FAILURE")
 
 print("############## Execution Summary #######################")
-if "ctor-periodicwave.html" in status_dict:
-    print(f"ctor-periodicwave.html: {status_dict['ctor-periodicwave.html']}")
+if "ctor-periodicwave" in status_dict:
+    print(f"ctor-periodicwave: {status_dict['ctor-periodicwave']}")
 
 obj.unloadModule("WebAudio");

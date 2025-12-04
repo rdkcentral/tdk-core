@@ -4,7 +4,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2021 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,417 +23,1055 @@
     * This sample application loads the video and performs basic playback operations
     * Video URL should be provided at the run time.
 -->
-<html>
-<style>
+<html lang="en">
 
-.disp {
-    position : absolute;
-    color    : Green;
-    font-family: bold;
-}
-
-</style>
 <head>
-  <title>HTML-PLAYER</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Video Player</title>
+    <style>
+        /* ---------- Body & Fonts ---------- */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #303030;
+            color: #e0e0e0;
+        }
+
+        /* ---------- Header / Status Bar ---------- */
+        .disp {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background-color: #1f1f1f;
+            color: #cfcfcf;
+            font-weight: bold;
+            box-sizing: border-box;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .disp>div {
+            flex: 1 1 30%;
+            text-align: center;
+            margin: 0.25rem 0;
+        }
+
+        .disp .title {
+            color: #aaffaa;
+            font-size: 1rem;
+        }
+
+        .disp #eventStatus {
+            color: #FFD700;
+            /* default yellow for events */
+            font-size: 0.95rem;
+        }
+
+        .disp #vidTime {
+            color: #7CFC00;
+            /* default green for time */
+            font-size: 0.95rem;
+        }
+
+        /* ---------- Video Container ---------- */
+        #vid-container {
+            display: flex;
+            justify-content: center;
+            margin: 1rem auto;
+            padding: 0 1rem;
+            max-width: 100%;
+        }
+
+        video#vid {
+            width: 100%;
+            max-width: 1920px;
+            height: auto;
+            aspect-ratio: 16/9;
+            background-color: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        /* ---------- Status Colors ---------- */
+        .green {
+            color: #7CFC00;
+        }
+
+        .warn {
+            color: #FFD700;
+        }
+
+        .err {
+            color: #FF6A6A;
+        }
+
+        /* ---------- Responsive Adjustments ---------- */
+        @media (max-width: 768px) {
+            .disp>div {
+                flex-basis: 100%;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
-<body width="1920" height="1080" bgcolor="#303030" onload="vidLoad();">
-<table class="disp" width="100%">
-    <tr>
-    <td width="30%"><h1 align="center" >HTML VIDEO PLAYER</h1></td>
-    <td width="50%"><h1 align="center"  id="eventStatus" ></h1></td>
-        <td width="30%"><h1 align="center"  id="vidTime"></h1></td>
-        </tr>
-</table>
-    <video id="vid" width="1920" height="1080" controls autoplay>
-        <source src="" type="video/mp4">
+
+<body>
+    <main>
+        <!-- Header / Event Status -->
+        <div class="disp">
+            <div class="title">
+                <h1>HTML VIDEO PLAYER</h1>
+            </div>
+            <div id="eventStatus"></div>
+            <div id="vidTime"></div>
+        </div>
+
+        <!-- Video Player -->
+        <div id="vid-container">
+            <video id="vid" controls autoplay>
+                <source src="" type="video/mp4">
                 <source src="" type="video/ogg">
                 <source src="" type="video/webm">
-        Browser does not support HTML5 video.
-    </video>
+                <p>Your browser does not support HTML5 video.</p>
+            </video>
+        </div>
+    </main>
+    <script>
+        /*
+           Implements: play/pause/seekpos/seekfwd/seekbwd/setPlaybackRate/volume/mute/unmute
+        */
 
+        /* ------------------------
+           Globals & state
+           ------------------------ */
+        const videoEl = document.getElementById('vid');
+        const eventStatus = document.getElementById('eventStatus');
+        const vidTime = document.getElementById('vidTime');
 
-<script>
+        let message = "";
+        let message1 = "";
+        let message2 = "";
+        let inputs = window.location.search.substring(1).split("&");
+        let videoURL = "";
+        let expectedEvents = [];
+        let observedEvents = [];
+        let seekInterval = 10;
+        let options = [];
+        let expectedPos = "";
+        let observedPos = "";
+        let expectedRate = 0;
+        let expectedRates = [];
+        let observedRate = 0;
+        let observedRates = [];
+        let expectedVolume = "";
+        let expectedMute = "";
+        let observedMute = "";
+        let pos_val_result = [];
+        let pos_zero_index_flag = 0;
+        let pos_list = [];
+        let pos_val_flag = 0;
+        let pos_val_index = 1;
+        let eventFlowFlag = 1;
+        let errorFlag = 0;
+        let initFlag = 0;
+        let playbackSpeeds = [1, 2, 3, 4];
+        let playbackRateIndex = playbackSpeeds.indexOf(1);
+        let progressEventMsg = "";
+        let progressLogger = null;
+        let firstPlayHandled = false;
+        const SEEK_TOLERANCE = { lower: 2, upper: 7 }; //like [exp-2, exp+7]
+        const interval = 1000;
+        let checkInterval = 3000;
+        const validationState = { initialPosCheckDone: false };
 
-// GLOBAL VARIABLES
-var inputs = "";
-var videoURL = "";
-var eventMsg;
-var eventInfo;
-var message = "";
-var expectedEvents = [];
-var observedEvents = [];
-var interval       = 1000;
-var checkInterval  = 3000
-var expectedPos    = 0
-var observedPos    = 0
-var expectedRate   = 0
-var observedRate   = 0
-var expectedMute   = ""
-var observedMute   = ""
-var initFlag  = 0;
-var errorFlag = 0;
-var eventFlowFlag = 1;
-var progressLogger= null;
-var videoEl = document.getElementById("vid");
+        inputs.forEach(item => {
+            if (item.split("=")[0] == "drmconfigs") {
+                var drm_configs = GetURLParameter("drmconfigs")
+                if (drm_configs != "") {
+                    configs = GetURLParameter("drmconfigs").split(",");
+                }
+            }
+            else if (item.split("=")[0] == "options") {
+                options = GetURLParameter("options").split(",");
+            }
+        });
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//VIDEO OPERATIONS
-function Play(){
-    expectedEvents = ["play"]
-    logMsg("Expected Event: " + expectedEvents)
-    videoEl.playbackRate = 1
-    videoEl.play(videoURL)
-}
-function Pause() {
-    expectedEvents = ["paused"]
-    logMsg("Expected Event: " + expectedEvents)
-    videoEl.pause()
-  }
-function Close(){
-    videoEl.removeAttribute('src')
-    videoEl.load()
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//VIDEO EVENTS
-videoEl.onerror = function() {
-    errorFlag = 1;
-    eventInfo   = "[Event]: Video Player Error";
-    document.getElementById("eventStatus").innerHTML = eventInfo;
-    logMsg(eventInfo);
-}
-videoEl.onloadedmetadata = function() {
-    eventInfo   = "[Event]: Video Player loaded MetaData";
-    document.getElementById("eventStatus").innerHTML = eventInfo;
-    logMsg(eventInfo);
-}
-videoEl.onloadeddata  = function() {
-    eventInfo   = "[Event]: Video Player loaded Data"
-    document.getElementById("eventStatus").innerHTML = eventInfo;
-    logMsg(eventInfo);
-}
-videoEl.onloadstart = function() {
-    eventInfo   = "[Event]: Video Player load Start";
-    document.getElementById("eventStatus").innerHTML = eventInfo;
-    logMsg(eventInfo);
-}
-videoEl.ondurationchange = function() {
-    eventInfo   = "[Event]: Video Player Duration Change"
-    document.getElementById("eventStatus").innerHTML = eventInfo;
-    logMsg(eventInfo);
-}
-videoEl.onvolumechange = function() {
-    observedEvents.push("volumechange")
-    observedMute = videoEl.muted
-    eventInfo    = "[Event]: Video Player Volumechange, Mute Status: " + videoEl.muted;
-        document.getElementById("eventStatus").innerHTML = eventInfo;
-    checkAndLogEvents("volumechange",eventInfo)
-}
-videoEl.ontimeupdate = function() {
-    var currentTime = videoEl.currentTime
-    var duration = videoEl.duration
-    var timerMsg = currentTime.toFixed(2) + "/" + duration.toFixed(2)
-    eventMsg = "Video Progressing "  + timerMsg
-    document.getElementById("vidTime").innerHTML = "Pos: " + timerMsg;
-};
-videoEl.onpause = function() {
-    observedEvents.push("paused")
-    eventInfo   = "[Event]: Video Player Paused";
-    document.getElementById("eventStatus").innerHTML = eventInfo;
-    checkAndLogEvents("paused",eventInfo)
-};
-videoEl.onplay = function() {
-    observedEvents.push("play")
-    eventInfo   = "[Event]: Video Player Play ";
-    document.getElementById("eventStatus").innerHTML = eventInfo;
-    checkAndLogEvents("play",eventInfo)
-}
-videoEl.onplaying = function() {
-    eventInfo   = "[Event]: Video Player Playing ";
-    document.getElementById("eventStatus").innerHTML = eventInfo;
-    logMsg(eventInfo)
-    if ( initFlag == 0 ){
-        logMsg("******************* VIDEO STARTED PLAYING !!! *******************")
-        logMsg("VIDEO LOOP: "     + videoEl.loop)
-        logMsg("VIDEO AUTOPLAY: " + videoEl.autoplay)
-        logMsg("VIDEO DURATION: " + videoEl.duration.toFixed(4))
-        checkAndStartAutoTesting()
-        initFlag = 1 //inited
-        progressLogger = setInterval(()=>{
-            dispProgressLog()
-        },1000);
-    }
-}
-videoEl.onended = function() {
-    eventInfo   = "[Event]: Video Player Ended";
-    document.getElementById("eventStatus").innerHTML = eventInfo;
-    logMsg(eventInfo);
-};
+        options.forEach(item => {
+            if (item.includes("seekInterval")) {
+                seekInterval = parseInt(item.split('(')[1].split(')')[0]);
+            }
+            else if (item.includes("checkInterval")) {
+                checkInterval = parseInt(item.split('(')[1].split(')')[0]) * 1000;
+            }
+        });
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//VIDEO LOAD AND TESTING
-//Sample URL: http://<TM_IP>/test_app.html?url=<mp4_url_stream>&operations=close(30)
-function vidLoad() {
-    inputs = window.location.search.substring(1).split("&");
-    videoURL = GetURLParameter("url").replace(/:and:/g,"&").replace(/:eq:/g, "=")
-    logMsg("URL : " + videoURL);
-    videoEl.src = videoURL;
-}
-
-function  checkAndStartAutoTesting(){
-    var operationsStr = GetURLParameter("operations")
-    var operations = getVideoOperations(operationsStr)
-    logMsg("********************** STARTING AUTO TEST ***********************")
-    performOperations(operations)
-  }
-
-function GetURLParameter(sParam){
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++)
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam)
-        {
-            return sParameterName[1];
+        // To display Events & Video position in UI
+        function dispUIMessage(msg) {
+            eventStatus.textContent = msg;
         }
-    }
-  }
+        function dispUIVideoPosition(msg) {
+            vidTime.textContent = msg;
+        }
 
-// Method to parse the operations from the URL parameter
-function getVideoOperations(operationsStr){
-      var operations = operationsStr.split(',');
-      var repeatpos  = []
-      var alloperations = ""
-      for (var i = 0; i < operations.length; i++){
-          if ( operations[i].includes("repeat") )
-            repeatpos.push(i)
-      }
-      if (repeatpos.length > 0 ){
-          var i,j,t,temp
-          for (var n = 0; n < repeatpos.length; n++){
-              if (n == 0)
-                  i = 0
-              else
-                  i = parseInt(repeatpos[n-1]) + 1
-              j = parseInt(repeatpos[n])
-              t = parseInt(operations[repeatpos[n]].split("(")[1].split(")")[0]);
-              temp = ""
-              for (var k = 0; k < t; k++){
-                  if (temp != "")
-                      temp += ","
-                  temp = temp + operations.slice(i,j)
-              }
-              if (alloperations!= "")
-                  alloperations += ","
-              alloperations += temp
-          }
-          temp = ""
-          i = parseInt(repeatpos[repeatpos.length - 1])
-          j = parseInt(operations.length -1)
-          if ( i != j ){
-              if ( i+1 != j )
-                  temp = temp + operations.slice(i+1,j+1)
-              else
-                  temp = temp + operations[j]
-              alloperations = alloperations + "," + temp
-          }
-          operations = alloperations.split(",")
-      }
-      return operations
-  }
+        /* ------------------------
+           LOGGING
+           ------------------------ */
+        function logMsg(msg) {
+            const logging = GetURLParameter("logging");
+            const inputs1 = window.location.search.substring(1).split("&");
+            const player = GetURLParameter("player");
+            const options1 = [];
+            inputs1.forEach(item => {
+                if (item.split("=")[0] === "options") {
+                    options1.push(GetURLParameter("options").split(","));
+                }
+            });
+            const log_msg = "[ " + dispTime() + " ] [" + player + "] " + msg;
+            console.log(log_msg);
+            if (logging === "REST_API") {
+                if (msg.includes("TEST RESULT")) {
+                    pushAppLogs(log_msg);
+                } else if (msg.includes("Video PlayBack Failed")) {
+                    pushAppLogs(log_msg);
+                } else {
+                    captureAppLogs(log_msg);
+                }
+            }
+        }
 
-// Function to set the video operations
-// Video play,pause,close operations are supported
-function  performOperations(operations){
-      var actionInterval = 0
-      var duration = 0, position = 0
-      logMsg("Setting up the operations...")
-      for (var i = 0; i < operations.length; i++)
-      {
-          var action = operations[i].split('(')[0];
-          if ( action == "seekpos" ){
-              duration = parseInt(operations[i].split('(')[1].split(')')[0].split(":")[0]);
-              position = parseInt(operations[i].split('(')[1].split(')')[0].split(":")[1]);
-          }else{
-              duration = parseInt(operations[i].split('(')[1].split(')')[0]);
-          }
-          if ( action == "playtillend" )
-              actionInterval = actionInterval + (interval*parseInt(vidDuration)) + 60000;
-          else
-              actionInterval = actionInterval + (interval*duration)
-          //logMsg("setting " + action + " at " + actionInterval + " th sec")
-            if (action == "pause"){
-                setTimeout(()=> {
-                    clearEvents()
-                    Pause()
-                },actionInterval);
+        function logEventMsg(observedEvents, msg) {
+            const logging = GetURLParameter("logging");
+            const log_msg =
+                "*****************************************************************\n" +
+                "Observed Event: " + observedEvents + "\n" +
+                "Event Details : " + "[ " + dispTime() + " ] " + msg + "\n" +
+                "*****************************************************************";
+            console.log(log_msg);
+            if (logging === "REST_API") {
+                pushAppLogs(log_msg);
             }
-            else if (action == "play"){
-                setTimeout(()=> {
-                    clearEvents()
-                    Play()
-                },actionInterval);
+        }
+
+        function dispTime() {
+            const now = new Date();
+            let h = now.getUTCHours();
+            let m = now.getUTCMinutes();
+            let s = now.getUTCSeconds();
+            let ms = now.getUTCMilliseconds();
+
+            if (h < 10) h = "0" + h;
+            if (m < 10) m = "0" + m;
+            if (s < 10) s = "0" + s;
+            if (ms < 10) ms = "00" + ms;
+            else if (ms < 100) ms = "0" + ms;
+
+            return h + ":" + m + ":" + s + ":" + ms;
+        }
+
+        /* ------------------------
+           Utility: URL parameter parsing
+           ------------------------ */
+        function GetURLParameter(sParam) {
+            const sPageURL = window.location.search.substring(1);
+            const sURLVariables = sPageURL.split('&');
+            for (let i = 0; i < sURLVariables.length; i++) {
+                const sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1];
+                }
             }
-            else if (action == "close"){
-                setTimeout(()=> {
+        }
+
+        /* ------------------------
+           Basic operations 
+           ------------------------ */
+
+        function load(url, autoplay = true) {
+            videoURL = url.replace(/:and:/g, "&").replace(/:eq:/g, "=");
+            logMsg("URL Info: " + videoURL);
+
+            // Update video src
+            videoEl.src = videoURL;
+
+            // Update source element
+            const sourceEl = videoEl.querySelector('source');
+            if (sourceEl) sourceEl.src = videoURL;
+
+            videoEl.load(); // reload the video with new source
+            if (autoplay) videoEl.autoplay = true;
+        }
+
+        function play() {
+            expectedEvents.push("play");
+            logMsg("Expected Event: " + expectedEvents);
+            videoEl.playbackRate = 1;
+            // Use promise to ensure play request success
+            const playPromise = videoEl.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    logMsg("Video play request successful");
+                }).catch(err => {
+                    eventFlowFlag = 0;
+                    logMsg("Video play request failed: " + err);
+                });
+            }
+        }
+
+        function pause() {
+            expectedEvents.push("pause");
+            logMsg("Expected Event: " + expectedEvents);
+            pos_zero_index_flag = 1
+            videoEl.pause();
+        }
+
+        function closePlayer() {
+            videoEl.removeAttribute('src');
+            videoEl.autoplay = false;
+            videoEl.load();
+            logMsg("Closed player");
+        }
+
+        // Methods to change video position
+        function seek(timeSec, keepPause = false) {
+            videoEl.currentTime = Math.max(0, Math.min(timeSec, videoEl.duration));
+        }
+        function seekfwd(pos) {
+            expectedEvents.push("seeking");
+            expectedEvents.push("seeked");
+            expectedPos = Math.floor(getPosition() + pos)
+            logMsg("Expected Event: " + expectedEvents)
+            logMsg("Expected Pos  : [ " + (expectedPos - 2) + " - " + (expectedPos + 7) + " ]")
+            seek(expectedPos)
+        }
+        function seekbwd(pos) {
+            expectedEvents.push("seeking");
+            expectedEvents.push("seeked");
+            expectedPos = Math.floor(getPosition() - pos)
+            logMsg("Expected Event: " + expectedEvents)
+            logMsg("Expected Pos  : [ " + (expectedPos - 2) + " - " + (expectedPos + 7) + " ]")
+            seek(expectedPos)
+        }
+
+        function getPosition() { return Number(videoEl.currentTime.toFixed(2)); }
+        function getDuration() { return Number(videoEl.duration ? videoEl.duration.toFixed(2) : 0); }
+
+        function playNow() {
+            playbackRateIndex = playbackSpeeds.indexOf(1);
+            var rate = playbackSpeeds[playbackRateIndex];
+            setPlaybackRate(rate);
+        }
+
+        /* playback rate */
+        function setPlaybackRate(rate) {
+            if (isNaN(rate) || rate === 0) { logMsg("Invalid rate"); return; }
+            playbackRateIndex = playbackSpeeds.indexOf(rate);
+            rate = playbackSpeeds[playbackRateIndex];
+            expectedEvents.push("ratechange");
+            expectedRate = rate;
+            expectedRates.push(rate)
+            logMsg("Expected Event: " + expectedEvents);
+            logMsg("Expected Rate: " + rate);
+            videoEl.playbackRate = rate;
+        }
+
+        function getRate() { return videoEl.playbackRate; }
+
+        /* volume */
+        function setVolume(level) {
+            if (isNaN(level) || level < 0 || level > 1) {
+                logMsg("Invalid volume");
+                return;
+            }
+            if (videoEl.muted) {
+                videoEl.muted = false;
+                logMsg("Video unmuted before setting volume");
+            }
+            // Only trigger event if value changes
+            if (videoEl.volume !== level) {
+                expectedVolume = level;
+                expectedEvents.push("volumechange");
+                logMsg("Expected Event: " + expectedEvents + " set volume to " + level);
+                videoEl.volume = level;
+            } else {
+                logMsg("Volume already at " + level + ", no change needed");
+            }
+        }
+
+
+        function getVolume() { return videoEl.volume; }
+
+        function mute() {
+            expectedEvents.push("volumechange");
+            expectedMute = true;
+            logMsg("Mute requested");
+            videoEl.muted = true;
+        }
+
+        function unmute() {
+            expectedEvents.push("volumechange");
+            expectedMute = false;
+            logMsg("Unmute requested");
+            videoEl.muted = false;
+        }
+
+        /* ------------------------
+           Event handlers & validation
+           ------------------------ */
+
+        videoEl.addEventListener('loadedmetadata', (e) => {
+            const info = "[Event]: Video Player loaded MetaData";
+            dispUIMessage(info);
+            logMsg("Event: loadedmetadata duration=" + videoEl.duration);
+        });
+
+        videoEl.addEventListener('loadeddata', (e) => {
+            const info = "[Event]: Video Player loaded Data";
+            dispUIMessage(info);
+            logMsg("Event: loadeddata");
+        });
+
+        videoEl.addEventListener('loadstart', (e) => {
+            const info = "[Event]: Video Player load Start";
+            dispUIMessage(info);
+            logMsg("Event: loadstart");
+        });
+
+        videoEl.addEventListener('durationchange', (e) => {
+            const info = "[Event]: Video Player Duration Change";
+            dispUIMessage(info);
+            logMsg("Event: durationchange");
+        });
+
+        videoEl.addEventListener('play', (e) => {
+            // Skip the first autoplay 'play' event
+            if (!firstPlayHandled && !expectedEvents.includes("play")) {
+                firstPlayHandled = true;
+                const info = "[Event]: Video Player Play";
+                dispUIMessage(info);
+                checkAndLogEvents("play", info);
+                updatePosValidationInfo(1);
+                return;
+            }
+            observedEvents.push("play");
+            const info = "[Event]: Video Player Play";
+            dispUIMessage(info);
+            checkAndLogEvents("play", info);
+            updatePosValidationInfo(1);
+        });
+
+        videoEl.addEventListener('playing', (e) => {
+            const info = "[Event]: Video Player Playing";
+            dispUIMessage(info);
+            logMsg(info);
+            if (initFlag === 0) {
+                logMsg("******************* VIDEO STARTED PLAYING !!! *******************");
+                logMsg("VIDEO LOOP: " + videoEl.loop)
+                logMsg("VIDEO AUTOPLAY: " + videoEl.autoplay);
+                logMsg("VIDEO DURATION: " + (videoEl.duration ? videoEl.duration.toFixed(4) : "unknown"));
+                checkAndStartAutoTesting();
+                initFlag = 1;
+                if (progressLogger) clearInterval(progressLogger);
+                progressLogger = setInterval(dispProgressLog, 1000);
+            }
+            pos_val_flag = 1;
+        });
+
+        videoEl.addEventListener('pause', (e) => {
+            observedEvents.push("pause");
+            const info = "[Event]: Video Player Paused";
+            dispUIMessage(info);
+            checkAndLogEvents("pause", info);
+            // Enable video progress pos validation with pos diff 0
+            if (pos_zero_index_flag) {
+                pos_zero_index_flag = 0
+                updatePosValidationInfo(0)
+            }
+        });
+
+        videoEl.addEventListener('ended', (e) => {
+            observedEvents.push("ended");
+            const info = "[Event]: Video Player Ended";
+            dispUIMessage(info);
+            logMsg(info);
+        });
+
+        videoEl.addEventListener('seeking', (e) => {
+            observedEvents.push("seeking");
+            const info = "[Event]: Video Player Seeking";
+            dispUIMessage(info);
+            checkAndLogEvents("seeking", info);
+        });
+
+        videoEl.addEventListener('seeked', (e) => {
+            observedEvents.push("seeked");
+            observedPos = Math.round(videoEl.currentTime);
+            const duration = videoEl.duration || 0;
+            const info = `Video Player Seeked ${observedPos}/${duration.toFixed(2)}`;
+            dispUIMessage(info);
+            checkAndLogEvents("seeked", info);
+            updatePosValidationInfo(1);
+
+            // Defer validation: allow video to progress after seek
+            if (expectedPos !== "") {
+                setTimeout(() => {
+                    // Fallback: record one position if none yet
+                    if (pos_list.length < 1) {
+                        pos_list.push(Number(videoEl.currentTime.toFixed(2)));
+                    }
+                    if (pos_list.length < 2) {
+                        logMsg("video seek operation failure");
+                        logMsg("Failure Reason: insufficient playback data after seek");
+                        pos_val_result.push('FAILURE');
+                        return;
+                    }
+                    const lastPos = parseFloat(pos_list[pos_list.length - 1]);
+                    const expTime = parseInt(expectedPos);
+                    const inRange = lastPos >= (expTime - SEEK_TOLERANCE.lower) &&
+                        lastPos <= (expTime + SEEK_TOLERANCE.upper);
+                    if (inRange) {
+                        logMsg(`video seek operation success (settled at ${lastPos})`);
+                    } else {
+                        pos_val_result.push('FAILURE');
+                        logMsg("video seek operation failure");
+                        logMsg(`Failure Reason: final playback pos ${lastPos} not within expected range`);
+                    }
+                }, 4000);
+            }
+            if (expectedPos !== "") {
+                const expTime = parseInt(expectedPos);
+            }
+        });
+
+        /* rate change */
+        videoEl.addEventListener('ratechange', (e) => {
+            observedEvents.push("ratechange");
+            const rate = videoEl.playbackRate;
+            observedRates.push(rate);
+            observedRate = rate;
+            const info = "Video Player Rate Change to " + observedRate;
+            dispUIMessage(info);
+            checkAndLogEvents("ratechange", info)
+            updatePosValidationInfo(rate)
+            if (parseInt(observedRate) > 0) {
+                var rate_index = parseInt(observedRate)
+                updatePosValidationInfo(rate_index)
+            }
+        });
+
+        /* volume change */
+        videoEl.addEventListener('volumechange', (e) => {
+            observedEvents.push("volumechange");
+            observedMute = videoEl.muted;
+            const info = "Video Player Volume Change, Mute Status: " + observedMute;
+            const isExpected = expectedEvents.includes("volumechange");
+            checkAndLogEvents("volumechange", info)
+            if (isExpected) {
+                updatePosValidationInfo(1);
+            } else {
+                logMsg("[Warning] Unexpected volumechange event detected skipping validation update.");
+            }
+        });
+
+        /* error */
+        videoEl.addEventListener('error', (e) => {
+            errorFlag = 1;
+            const err = videoEl.error;
+            let errorMsg = "[ERROR]: ";
+            if (!err) errorMsg += "Unknown error";
+            else {
+                switch (err.code) {
+                    case MediaError.MEDIA_ERR_ABORTED: errorMsg += "Media playback aborted by user."; break;
+                    case MediaError.MEDIA_ERR_NETWORK: errorMsg += "Network error occurred."; break;
+                    case MediaError.MEDIA_ERR_DECODE: errorMsg += "Decoding error - possibly unsupported codec."; break;
+                    case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED: errorMsg += "Media source format not supported."; break;
+                    default: errorMsg += "Video Player Error"; break;
+                }
+            }
+            dispUIMessage(errorMsg);
+            logMsg(errorMsg);
+        });
+
+        /* ------------------------
+           Validation & event flow helpers
+           ------------------------ */
+        function checkAndLogEvents(checkevent, msg) {
+            if (expectedEvents.includes(checkevent)) {
+                logEventMsg(observedEvents, msg);
+            } else {
+                logMsg(msg);
+            }
+        }
+
+        /* Loop validation helper */
+        function validateLoop(expected) {
+            if (videoEl.loop === expected) {
+                logMsg("Loop operation SUCCESS - loop is " + (expected ? "ON" : "OFF"));
+            } else {
+                eventFlowFlag = 0;
+                logMsg("Loop operation FAILURE - expected " + (expected ? "ON" : "OFF") + ", got " + videoEl.loop);
+            }
+        }
+
+        /* checks expected vs observed and additional checks per event type */
+        function updateEventFlowFlag() {
+            let Status = "SUCCESS";
+            const missingEvents = expectedEvents.filter(e => !observedEvents.includes(e));
+            const extraEvents = observedEvents.filter(e => !expectedEvents.includes(e));
+            if (missingEvents.length > 0 || extraEvents.length > 0) {
+                eventFlowFlag = 0;
+                Status = "FAILURE";
+                if (missingEvents.length) logMsg("Failure Reason:- Missing events: " + missingEvents.join(", "));
+                if (extraEvents.length) logMsg("Failure Reason:- Unexpected events: " + extraEvents.join(", "));
+            } else {
+                if (expectedEvents.includes("pause")) {
+                    if (!videoEl.paused) {
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                        logMsg("video pause operation failure - player not paused");
+                    } else logMsg("video pause operation success");
+                } else if (expectedEvents.includes("play")) {
+                    if (videoEl.paused) {
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                        logMsg("video play operation failure - still paused");
+                    } else logMsg("video play operation success");
+                } else if (expectedEvents.includes("ended")) {
+                    if (!videoEl.ended) {
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                        logMsg("video playtillend operation failure - video did not reach end");
+                    } else {
+                        logMsg("video playtillend operation success - video reached end");
+                    }
+                } else if (expectedEvents.includes("volumechange")) {
+                    if (expectedVolume !== "") {
+                        if (Math.abs(videoEl.volume - expectedVolume) < 0.05) {
+                            logMsg("Set volume operation success - volume set to " + videoEl.volume);
+                        } else {
+                            eventFlowFlag = 0;
+                            logMsg("Set volume operation failure - expected " + expectedVolume + ", got " + videoEl.volume);
+                        }
+                        expectedVolume = "";
+                    }
+                    if (expectedMute !== "") {
+                        const currMute = observedMute;
+                        if (expectedMute === true) {
+                            if (currMute) {
+                                logMsg("[PASS] Mute operation success - video is muted");
+                            } else {
+                                eventFlowFlag = 0;
+                                logMsg("[FAIL] Mute operation failure - video not muted");
+                            }
+                        } else if (expectedMute === false) {
+                            if (!currMute) {
+                                logMsg("[PASS] Unmute operation success - video is unmuted");
+                            } else {
+                                eventFlowFlag = 0;
+                                logMsg("[FAIL] Unmute operation failure - video still muted");
+                            }
+                        }
+                    }
+                }
+                else if (expectedEvents.includes("seeking")) {
+                    var currTime = parseInt(observedPos);
+                    var expTime1 = parseInt(expectedPos);
+                    if (currTime >= (expTime1 - SEEK_TOLERANCE.lower) && currTime <= (expTime1 + SEEK_TOLERANCE.upper)) {
+                        logMsg("video seek operation success");
+                    } else {
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                        logMsg("video seek operation failure");
+                        logMsg("Failure Reason: Seeked pos is not within expected range");
+                    }
+                }
+                else if (expectedEvents.includes("ratechange")) {
+                    const allRatesMatched = expectedRates.every(e => observedRates.includes(e));
+                    const expectedRateMatched = observedRates.includes(expectedRate);
+
+                    if (allRatesMatched && expectedRateMatched) {
+                        logMsg("video rate change operation success");
+                    } else {
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                        logMsg("video rate change operation failure");
+                        logMsg("Failure Reason: Playback rate is not as expected");
+                    }
+                }
+            }
+            logMsg("Test step status: " + Status);
+        }
+
+        /* ------------------------
+           Pos validation accumulation (pos_list / pos_val_result)
+           ------------------------ */
+        function updatePosValidationInfo(index) {
+            if (!pos_val_flag) {
+                pos_val_flag = 1;
+                pos_val_index = index;
+                logMsg("Video pos index set as " + pos_val_index + ", capturing video progress positions ...");
+            }
+        }
+        function updatePrevPosValidationResult() {
+            pos_val_flag = 0;
+            const result = getPosValResult(pos_list, pos_val_index);
+            pos_val_result.push(result);
+            pos_list = [];
+        }
+
+        function dispProgressLog() {
+            const currentTime = videoEl.currentTime;
+            const duration = getDuration();
+            progressEventMsg = "Video Progressing " + currentTime.toFixed(2) + "/" + duration.toFixed(2);
+            logMsg(progressEventMsg);
+            message2 = "Pos: " + currentTime.toFixed(2) + "/" + duration.toFixed(2);
+            dispUIVideoPosition(message2);
+            if (pos_val_flag === 1) {
+                pos_list.push(currentTime.toFixed(2));
+            }
+        }
+
+        function getPosValResult(pos_list, pos_index, live_test_flag = 0) {
+            var pos_val_status = "SUCCESS";
+            var critical_mismatch_flag = false;
+            var vid_pos_list = [];
+            var pos_diff = 0;
+            var mismatch = "";
+            var pos_mismatch_count = 0;
+            var pos_mismatch_list = [];
+
+            if (pos_list.length > 1) {
+                if (pos_index != 0) {
+                    // removing video progress pos duplicates
+                    // for video operations except pause
+                    pos_list.forEach((pos) => {
+                        if (!vid_pos_list.includes(parseInt(pos)))
+                            vid_pos_list.push(parseInt(pos));
+                    });
+                } else {
+                    // keeping video progress pos duplicates as such
+                    // for video pause operation
+                    pos_list.forEach((pos) => {
+                        vid_pos_list.push(parseInt(pos));
+                    });
+                }
+
+                if (vid_pos_list.length > 1) {
+                    if (!validationState.initialPosCheckDone && live_test_flag == 0) {
+                        if (vid_pos_list[0] > 3) {
+                            mismatch = "Pos:" + "0" + "-" + vid_pos_list[0] + ",diff=" + vid_pos_list[0];
+                            pos_mismatch_list.push(mismatch);
+                            critical_mismatch_flag = true;
+                        }
+                        validationState.initialPosCheckDone = true;
+                    }
+
+                    for (var i = 0; i < vid_pos_list.length - 1; i++) {
+                        // finding the diff of curr pos and prev pos values
+                        pos_diff = vid_pos_list[i + 1] - vid_pos_list[i];
+
+                        if (pos_index != 0) {
+                            // for video operations except pause
+                            if (pos_diff < 0 || pos_diff >= (pos_index + 3)) {
+                                critical_mismatch_flag = true;
+                                pos_mismatch_count += 1;
+                                mismatch = "Pos:" + vid_pos_list[i + 1] + "-" + vid_pos_list[i] + ",diff=" + pos_diff;
+                                pos_mismatch_list.push(mismatch);
+                            }
+                            // check whether pos diff is >= to the required diff
+                            if (!(pos_diff == pos_index)) {
+                                pos_mismatch_count += 1;
+                                mismatch = "Pos:" + vid_pos_list[i + 1] + "-" + vid_pos_list[i] + ",diff=" + pos_diff;
+                                pos_mismatch_list.push(mismatch);
+                            }
+                        } else {
+                            // for video pause operation
+                            if (!(pos_diff == pos_index)) {
+                                pos_mismatch_count += 1;
+                                mismatch = "Pos:" + vid_pos_list[i + 1] + "-" + vid_pos_list[i] + ",diff=" + pos_diff;
+                                pos_mismatch_list.push(mismatch);
+                            }
+                        }
+                    }
+
+                    // If the pos diff is not as expected for more than max threshold limit
+                    // consider pos validation status as failure
+                    if (pos_mismatch_count > 3 || critical_mismatch_flag == true) {
+                        logMsg(pos_mismatch_list);
+                        logMsg("Failure Reason: Video Progress position difference is not as expected");
+                        pos_val_status = "FAILURE";
+                    }
+                } else {
+                    pos_val_status = "FAILURE";
+                }
+            } else {
+                pos_val_status = "FAILURE";
+            }
+
+            logMsg("Video Progress position validation status: " + pos_val_status);
+            return pos_val_status;
+        }
+
+        /* ------------------------
+           Auto test runner (operations from URL)
+           ------------------------ */
+
+        function getVideoOperations(operationsStr) {
+            var operations = operationsStr.split(',');
+            var repeatpos = []
+            var alloperations = ""
+            for (var i = 0; i < operations.length; i++) {
+                if (operations[i].includes("repeat"))
+                    repeatpos.push(i)
+            }
+            if (repeatpos.length > 0) {
+                var i, j, t, temp
+                for (var n = 0; n < repeatpos.length; n++) {
+                    if (n == 0)
+                        i = 0
+                    else
+                        i = parseInt(repeatpos[n - 1]) + 1
+                    j = parseInt(repeatpos[n])
+                    t = parseInt(operations[repeatpos[n]].split("(")[1].split(")")[0]);
+                    temp = ""
+                    for (var k = 0; k < t; k++) {
+                        if (temp != "")
+                            temp += ","
+                        temp = temp + operations.slice(i, j)
+                    }
+                    if (alloperations != "")
+                        alloperations += ","
+                    alloperations += temp
+                }
+                temp = ""
+                i = parseInt(repeatpos[repeatpos.length - 1])
+                j = parseInt(operations.length - 1)
+                if (i != j) {
+                    if (i + 1 != j)
+                        temp = temp + operations.slice(i + 1, j + 1)
+                    else
+                        temp = temp + operations[j]
+                    alloperations = alloperations + "," + temp
+                }
+                operations = alloperations.split(",")
+            }
+            return operations
+        }
+
+        function clearEvents() {
+            observedEvents = [];
+            expectedEvents = [];
+            updatePrevPosValidationResult();
+        }
+
+        function parseOperation(op) {
+            const match = op.match(/(\w+)\(([^)]*)\)/);
+            return match ? { action: match[1], params: match[2].split(':') } : { action: op, params: [] };
+        }
+
+        function performOperations(operations) {
+            let actionInterval = 0
+            let duration = 0, position = 0
+            logMsg("Setting up the operations...")
+            for (var i = 0; i < operations.length; i++) {
+                var action = operations[i].split('(')[0];
+                const op = operations[i];
+                const param = op.includes('(') ? op.split('(')[1].split(')')[0] : '';
+                if (action == "seekpos") {
+                    duration = parseInt(operations[i].split('(')[1].split(')')[0].split(":")[0]);
+                    position = parseInt(operations[i].split('(')[1].split(')')[0].split(":")[1]);
+                    logMsg(`Seekpos requested with Duration=${duration}s, Position=${position}s`);
+                    setTimeout(() => {
+                        clearEvents();
+                        seek(position);
+                    }, actionInterval);
+                }
+                else {
+                    duration = parseInt(operations[i].split('(')[1].split(')')[0]);
+                }
+                if (action == "playtillend")
+                    actionInterval = actionInterval + (interval * parseInt(vidDuration)) + 60000;
+                else
+                    actionInterval = actionInterval + (interval * duration)
+                //logMsg("setting " + action + " at " + actionInterval + " th sec")
+                if (action == "pause") {
+                    setTimeout(() => {
+                        clearEvents()
+                        pause()
+                    }, actionInterval);
+                }
+                else if (action == "play") {
+                    setTimeout(() => {
+                        clearEvents()
+                        play()
+                    }, actionInterval);
+                }
+                else if (action == "playnow") {
+                    setTimeout(() => {
+                        clearEvents()
+                        playNow()
+                    }, actionInterval);
+                }
+                else if (action == "close") {
+                    setTimeout(() => {
+                        updatePrevPosValidationResult()
+                        logMsg("**************** Going to close ****************")
+                        clearInterval(progressLogger);
+                        closePlayer()
+                    }, actionInterval);
+                }
+                else if (action == "seekfwd") {
+                    setTimeout(() => {
+                        clearEvents()
+                        seekfwd(seekInterval)
+                    }, actionInterval);
+                }
+                else if (action == "seekbwd") {
+                    setTimeout(() => {
+                        clearEvents()
+                        seekbwd(seekInterval)
+                    }, actionInterval);
+                }
+                else if (action == "fastfwd2x" || action == "fastfwd3x" || action == "fastfwd4x") {
+                    if (action == "fastfwd2x") {
+                        setTimeout(() => {
+                            clearEvents()
+                            setPlaybackRate(2)
+                        }, actionInterval);
+                    } else if (action == "fastfwd3x") {
+                        setTimeout(() => {
+                            clearEvents()
+                            setPlaybackRate(3)
+                        }, actionInterval);
+                    } else if (action == "fastfwd4x") {
+                        setTimeout(() => {
+                            clearEvents()
+                            setPlaybackRate(4)
+                        }, actionInterval);
+                    }
+                }
+                else if (action == "mute") {
+                    setTimeout(() => {
+                        clearEvents()
+                        mute()
+                    }, actionInterval);
+                }
+                else if (action == "unmute") {
+                    setTimeout(() => {
+                        clearEvents()
+                        unmute()
+                    }, actionInterval);
+                }
+                else if (action == "setvolume") {
+                    setTimeout(() => {
+                        clearEvents()
+                        setVolume(parseFloat(param));
+                    }, 10000);
+                }
+                if (action != "close") {
+                    setTimeout(() => {
+                        updateEventFlowFlag()
+                    }, actionInterval + checkInterval);
+                }
+            }
+            if (!operations.find(o => o.includes("close"))) {
+                setTimeout(() => {
+                    updatePrevPosValidationResult()
                     logMsg("**************** Going to close ****************")
-                    Close()
-                },actionInterval);
+                    clearInterval(progressLogger);
+                    closePlayer()
+                }, (actionInterval + 10000));
             }
-            if (action != "close"){
-                setTimeout(()=> {
-                    updateEventFlowFlag();
-                },actionInterval+checkInterval);
-            }
-      }
-      if (! operations.find(o=> o.includes("close"))){
-          setTimeout(()=> {
-            logMsg("**************** Going to close ****************")
-            Close()
-          },(actionInterval+10000));
-      }
-      setTimeout(()=> {
-        dispTestResult()
-      },(actionInterval+15000));
-      console.log("\n");
-
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//EVENTS VALIDATION
-function  checkAndLogEvents(checkevent,msg){
-    if ( expectedEvents.includes(checkevent) ){
-        logEventMsg(observedEvents,msg)
-    }else{
-        logMsg(msg)
-    }
-  }
-function  clearEvents(){
-      observedEvents = []
-      expectedEvents = []
-  }
-
-function updateEventFlowFlag(){
-     var Status = "SUCCESS"
-      if( ! expectedEvents.every(e=> observedEvents.indexOf(e) >= 0)){
-          eventFlowFlag = 0
-          Status = "FAILURE"
-      }
-      logMsg("Test step status: " + Status)
-      clearEvents();
-  }
-function  dispProgressLog(){
-      if(eventMsg != "")
-          logMsg(eventMsg)
-  }
-
-function  dispTestResult(){
-    clearInterval(progressLogger);
-    if (eventFlowFlag == 1 && errorFlag == 0)
-        logMsg("TEST RESULT: SUCCESS")
-    else{
-        logMsg("eventFlowFlag: " + eventFlowFlag + " errorFlag: " + errorFlag)
-        logMsg("TEST RESULT: FAILURE")
-    }
-  }
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// COMMUNICATING WITH TM
-// Method to store the app logs and send them to TM
-function captureAppLogs(msg){
-    if (message.length < 300) {
-        //console.log("msg_append")
-        message = message + "\n" + msg
-    }else{
-        //console.log("msg_out")
-        sendLog(message)
-        message = ""+ msg
-    }
-    return;
-}
-
-// Method to send the logs to TM
-function pushAppLogs(msg){
-      if(message.length > 0){
-          sendLog(message)
-          message = "";
-      }
-      sendLog(msg);
-}
-
-// Method to send the logs to TM via REST API
-function sendLog(msg){
-    var tmURL    = window.location.href.split("fileStore")[0];
-    let restURL  = tmURL  + 'execution/createFileAndWrite?'
-    const execID = GetURLParameter('execID')
-    const devID  = GetURLParameter('execDevId')
-    const resID  = GetURLParameter('resultId')
-    //console.log("URL: " +restURL)
-    fetch(restURL + new URLSearchParams({execId: execID,
-                                     execDevId: devID,
-                                     resultId: resID,
-                                     test: msg
-    }))
-    .then(response => {
-                console.log('Response from Test Manager: '+ JSON.stringify(response))
-     })
-     .catch(error => {
-                console.log('Error while connecting to Test Manager: '+ error)
-    });
-    return;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//LOGGING
-function logMsg(msg) {
-    var logging = GetURLParameter("logging")
-    var log_msg = "[ " + dispTime() + " ] " + msg
-    console.log(log_msg)
-    if(logging == "REST_API"){
-        if(msg.includes("TEST RESULT")){
-            pushAppLogs(log_msg)
-        }else{
-            captureAppLogs(log_msg)
+            setTimeout(() => {
+                dispTestResult()
+            }, (actionInterval + 15000));
+            // console.log("\n");
         }
-    }
-}
-function logEventMsg(observedEvents,msg){
-    var logging = GetURLParameter("logging")
-    var log_msg = "*****************************************************************\n" +
-                  "Observed Event: " + observedEvents    + "\n"  +
-                  "Event Details : " + "[ " + dispTime() + " ] " + msg  + "\n" +
-                  "*****************************************************************";
-    console.log(log_msg)
-    if(logging == "REST_API"){
-        pushAppLogs(log_msg)
-    }
 
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//TIMER
-function dispTime() {
-    var now = new Date();
-    var h  = now.getUTCHours()
-    var m  = now.getUTCMinutes()
-    var s  = now.getUTCSeconds()
-    var ms = now.getUTCMilliseconds()
-    if (h < 10)
-      h = "0" + h
-    if (m < 10)
-      m = "0" + m
-    if (s < 10)
-      s = "0" + s
-    if (ms < 10)
-      ms = "00" + ms
-    else if (ms < 100)
-      ms = "0" + ms
-    return h + ":" + m + ":" + s + ":" + ms;
-  }
-</script>
+        function checkAndStartAutoTesting() {
+            const operationsStr = GetURLParameter("operations");
+            if (!operationsStr) { logMsg("No auto operations provided"); return; }
+            const operations = getVideoOperations(operationsStr);
+            logMsg("********************** STARTING AUTO TEST ***********************");
+            performOperations(operations);
+        }
+
+        /* ------------------------
+           Test result and reporting
+           ------------------------ */
+
+        function dispTestResult() {
+            clearInterval(progressLogger);
+            logMsg("**************** TEST STATUS ****************");
+            logMsg("OVERALL VIDEO PLAYBACK ERROR EVENT STATUS : " + (errorFlag ? "TRUE" : "FALSE"));
+            logMsg("OVERALL VIDEO PROGRESS POSITION VALIDATION STATUS : " + (pos_val_result.includes("FAILURE") ? "FAILURE" : "SUCCESS"));
+            logMsg("OVERALL VIDEO OPERATIONS EVENTS VALIDATION STATUS : " + (eventFlowFlag ? "SUCCESS" : "FAILURE"));
+            if (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE")) {
+                logMsg("TEST RESULT: SUCCESS");
+            } else {
+                logMsg("TEST RESULT: FAILURE");
+            }
+        }
+
+        /* ------------------------
+           COMMUNICATING WITH TM
+           Stores app logs and send them to TM in batches
+           ------------------------ */
+        // Method to store the app logs and send them to TM
+        function captureAppLogs(msg) {
+            if (message.length < 300) {
+                message = message + "\n" + msg;
+            } else {
+                sendLog(message);
+                message = "" + msg;
+            }
+        }
+
+        // Method to push the app logs
+        function pushAppLogs(msg) {
+            if (message.length > 0) {
+                sendLog(message);
+                message = "";
+            }
+            sendLog(msg);
+        }
+
+        // Method to send logs to TM via REST API
+        function sendLog(msg) {
+            const tmURL = GetURLParameter('tmUrl');
+            const restURL = tmURL + 'execution/createFileAndWrite?';
+            const execID = GetURLParameter('execID');
+            const devID = GetURLParameter('execDevId');
+            const resID = GetURLParameter('resultId');
+
+            fetch(restURL + new URLSearchParams({
+                execId: execID,
+                execDevId: devID,
+                resultId: resID,
+                test: msg
+            }))
+                .then(response => {
+                    console.log('Response from Test Manager: ' + JSON.stringify(response));
+                })
+                .catch(error => {
+                    console.log('Error while connecting to Test Manager: ' + error);
+                });
+        }
+
+        /* ------------------------
+           Init - load url from query and attach UI
+           ------------------------ */
+        window.addEventListener('load', () => {
+            const url = GetURLParameter('url');
+            if (url) load(url, true);
+            window.HTMLPlayer = {
+                load, play, pause, seek, seekfwd, seekbwd, setPlaybackRate, getRate, setVolume, getVolume, mute, unmute,
+                getPosition, getDuration, dispTestResult, updatePrevPosValidationResult
+            };
+            logMsg("HTML player ready. API object: window.HTMLPlayer");
+        });
+    </script>
 </body>
+
 </html>
-
-

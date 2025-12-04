@@ -1436,3 +1436,79 @@ def destroyPlugin(obj,plugin):
         print("Unable to Destroy %s plugin " %(plugin))
         tdkTestObj.setResultStatus("FAILURE")
         return "FAILURE"
+
+def stop_nginx():
+    """Stops Nginx running in the Nginx container via SSH."""
+    try:
+        command = "ssh root@{} /nginx_delay_build/sbin/nginx -s stop".format(NGINX_CONTAINER_IP)
+        subprocess.call(command, shell=True)
+        print("\n Nginx stopped successfully.")
+    except subprocess.CalledProcessError as e:
+        print("\n Error stopping Nginx:", e)
+        
+def check_and_start_nginx():
+    """Checks if Nginx is running in the Nginx container and starts it if needed."""
+    try:
+        # Check if Nginx is running and exclude grep process
+        check_command = "ssh root@{} ps -ax | grep '[n]ginx'".format(NGINX_CONTAINER_IP)
+        process = subprocess.Popen(check_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        # Decode the byte output to string
+        stdout = stdout.decode('utf-8')
+        stderr = stderr.decode('utf-8')
+        if process.returncode == 0:
+            # If output contains defunct processes, it means Nginx is in a zombie state
+            if "<defunct>" in stdout:
+                print("\n Nginx is in a defunct (zombie) state. Restarting...")
+                restart_nginx()
+            else:
+                print("\n Nginx is already running.")
+        else:
+            print("\n Nginx is not running. Starting Nginx...")
+            start_command = "ssh root@{} /nginx_delay_build/sbin/nginx".format(NGINX_CONTAINER_IP)
+            subprocess.call(start_command, shell=True)
+            print("\n Nginx started successfully.")
+    except Exception as e:
+        print("\n Error checking/starting Nginx: {}".format(e))
+
+def restart_nginx():
+    """Stops and restarts Nginx in the Nginx container."""
+    try:
+        print("\n Stopping existing Nginx processes...")
+        stop_command = "ssh root@{} pkill -9 nginx".format(NGINX_CONTAINER_IP)
+        subprocess.call(stop_command, shell=True)
+        time.sleep(2)
+        print("\n Restarting Nginx...")
+        start_command = "ssh root@{} /nginx_delay_build/sbin/nginx".format(NGINX_CONTAINER_IP)
+        subprocess.call(start_command, shell=True)
+        print("\n Nginx restarted successfully.")
+    except Exception as e:
+        print("\n Error restarting Nginx: {}".format(e))
+        
+def generate_nginx_config(template_path, local_destination, remote_destination, nginx_container_ip, chunk_pattern, delay_value):
+    """
+    Generate an Nginx configuration file and copy it to the Nginx container.
+    :param template_path: Path to the Nginx template file on the TDK container.
+    :param local_destination: Path to save the updated config file in the TDK container.
+    :param remote_destination: Path where the config file should be stored in the Nginx container.
+    :param nginx_container_ip: IP address of the Nginx container.
+    :param chunk_pattern: Regex pattern representing the video/audio chunks to apply delay on.
+    :param delay_value: Delay duration (in seconds) to inject for the selected chunk_pattern.
+    """
+    try:
+        # Read the template file
+        with open(template_path, 'r') as template_file:
+            config_content = template_file.read()
+        # Replace placeholders with actual values
+        config_content = config_content.replace("{{chunk_pattern}}", chunk_pattern)
+        config_content = config_content.replace("{{delay_value}}", delay_value)
+        # Write the updated configuration to the local destination
+        with open(local_destination, 'w') as dest_file:
+            dest_file.write(config_content)
+        print("Updated Nginx configuration saved to: {}".format(local_destination))
+        # Copy the file to the Nginx container using scp
+        scp_command = "scp {} root@{}:{}".format(local_destination, nginx_container_ip, remote_destination)
+        process = subprocess.Popen(scp_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("Configuration file successfully copied to Nginx container at {}".format(remote_destination))
+    except Exception as e:
+        print("Error updating or copying Nginx configuration: {}".format(e))
