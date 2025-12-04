@@ -81,7 +81,8 @@ from ai2_0_utils import (
     delete_downloaded_packages,
     create_tdk_test_step,
     set_test_step_status,
-    configure_tdk_test_case
+    configure_tdk_test_case,
+    safe_unload_module
 )
 
 # Test component to be tested
@@ -93,7 +94,7 @@ ip = <ipaddress>
 port = <port>
 
 # Configure test case using helper function
-result = configure_tdk_test_case(obj, ip, port, 'PackageMgr_DAC_01_DownloadAllApps')
+configure_tdk_test_case(obj, ip, port, 'PackageMgr_DAC_01_DownloadAllApps')
 
 # Get the result of connection with test component and DUT
 loadmodulestatus = obj.getLoadModuleResult()
@@ -121,7 +122,7 @@ if "SUCCESS" in loadmodulestatus.upper():
             print("[TEST RESULT] SKIPPED - Essential plugin not available on this device")
             set_test_step_status(tdkTestObj, "FAILURE", f"Essential plugin missing: {', '.join(essential_failed)}")
             obj.setLoadModuleStatus("FAILURE")
-            obj.unloadModule("rdkservices")
+            safe_unload_module(obj, "rdkservices")
             exit()
         
         set_test_step_status(tdkTestObj, "SUCCESS", "All AI2.0 Manager plugins activated")
@@ -259,7 +260,7 @@ if "SUCCESS" in loadmodulestatus.upper():
             except:
                 pass
     
-    obj.unloadModule("rdkservices")
+    safe_unload_module(obj, "rdkservices")
 else:
     print("[ERROR] Failed to load rdkservices module")
     obj.setLoadModuleStatus("FAILURE")
