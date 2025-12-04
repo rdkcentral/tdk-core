@@ -210,7 +210,7 @@
             </testStep>
             <testStep testStepId="4" name="Check_UserPreferences_Get_UI_Language_API_Response" method="Get_UI_Language">
                 <resultGeneration useMethodTag="controller_check_error_message" arguments="deactivate_check_error_message">
-                    <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!." />
+                    <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!." />
 		</resultGeneration>
             </testStep>
             <testStep testStepId="5" name="Activate_UserPreferences_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">

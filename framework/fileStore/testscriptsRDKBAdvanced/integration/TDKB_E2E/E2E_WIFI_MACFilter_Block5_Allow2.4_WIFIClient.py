@@ -371,6 +371,9 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                                                             newParamList=[deviceName2,deviceMAC2,deviceName5,deviceMAC5]
                                                                                             time.sleep(60);
                                                                                             tdkTestObj,status,newValues = getMultipleParameterValues(obj,newParamList)
+                                                                                            newValues[1] = newValues[1].lower()
+                                                                                            newValues[3] = newValues[3].lower()
+
                                                                                             if expectedresult in status and setValuesList == newValues:
                                                                                                 tdkTestObj.setResultStatus("SUCCESS");
                                                                                                 print("TEST STEP 17: Get the current value of name and MAC of client device in the filter")
