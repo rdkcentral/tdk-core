@@ -75,7 +75,7 @@ def set_test_step_status(tdkTestObj, status: str, details: str = ""):
     tdkTestObj.setResultStatus(status)
 
 
-def fetch_dac_config(config_url: str = DEFAULT_DAC_CONFIG_URL) -> Tuple[str, str, str]:
+def fetch_dac_config(config_url: str = DEFAULT_DAC_CONFIG_URL, timeout: int = 30) -> Tuple[str, str, str]:
     """
     Fetch DAC catalog configuration.
     
@@ -83,7 +83,7 @@ def fetch_dac_config(config_url: str = DEFAULT_DAC_CONFIG_URL) -> Tuple[str, str
         Tuple of (catalog_url, username, password)
     """
     try:
-        resp = requests.get(config_url, timeout=30)
+        resp = requests.get(config_url, timeout=timeout)
         resp.raise_for_status()
         cfg = resp.json()
         
@@ -98,7 +98,7 @@ def fetch_dac_config(config_url: str = DEFAULT_DAC_CONFIG_URL) -> Tuple[str, str
 
 
 def list_dac_packages(catalog_url: str, username: str, password: str, 
-                      platform_name: str, firmware_ver: str) -> List[Dict[str, Any]]:
+                      platform_name: str, firmware_ver: str, timeout: int = 30) -> List[Dict[str, Any]]:
     """
     List packages from DAC catalog for given platform and firmware version.
     
@@ -138,7 +138,7 @@ def list_dac_packages(catalog_url: str, username: str, password: str,
 
 
 def get_app_details(catalog_url: str, username: str, password: str,
-                    package_id: str, platform_name: str, firmware_ver: str) -> Dict[str, Any]:
+                    package_id: str, platform_name: str, firmware_ver: str, timeout: int = 30) -> Dict[str, Any]:
     """
     Get detailed information for a specific application.
     
@@ -178,7 +178,7 @@ def build_download_url(catalog_url: str, package_id: str, version: str,
 
 
 def jsonrpc_call(method: str, params: Optional[Dict[str, Any]] = None, 
-                 url: str = DEFAULT_JSONRPC_URL, request_id: int = 1) -> Dict[str, Any]:
+                 url: str = DEFAULT_JSONRPC_URL, request_id: int = 1, timeout: int = 60) -> Dict[str, Any]:
     """
     Make a JSON-RPC call to WPEFramework.
     
@@ -204,7 +204,7 @@ def jsonrpc_call(method: str, params: Optional[Dict[str, Any]] = None,
         payload['params'] = params
     
     try:
-        resp = requests.post(url, json=payload, timeout=60)
+        resp = requests.post(url, json=payload, timeout=timeout)
         resp.raise_for_status()
         data = resp.json()
         
@@ -359,7 +359,7 @@ def verify_package_installed(package_id: str, jsonrpc_url: str = DEFAULT_JSONRPC
         return False
 
 
-def get_device_info_from_json(json_path: str = "/etc/WPEFramework/plugins/PackageManagerRDKEMS.json") -> Tuple[str, str]:
+def get_device_info_from_json(json_path: str = None) -> Tuple[str, str]:
     """
     Read device platform and firmware information from PackageManager config.
     
@@ -367,6 +367,23 @@ def get_device_info_from_json(json_path: str = "/etc/WPEFramework/plugins/Packag
         Tuple of (firmware_version, platform_name)
     """
     import os
+    
+    # Determine default config path if not provided
+    if json_path is None:
+        # Try common locations for PackageManager config
+        possible_paths = [
+            "/etc/WPEFramework/plugins/PackageManagerRDKEMS.json",
+            "/opt/WPEFramework/share/WPEFramework/PackageManagerRDKEMS.json",
+            "./PackageManagerRDKEMS.json"
+        ]
+        
+        for path in possible_paths:
+            if os.path.exists(path):
+                json_path = path
+                break
+        
+        if json_path is None:
+            raise FileNotFoundError(f"Config file not found in any of these locations: {possible_paths}")
     
     if not os.path.exists(json_path):
         raise FileNotFoundError(f"Config file not found: {json_path}")
@@ -408,7 +425,7 @@ def check_plugin_status(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL
         return {}
 
 
-def activate_plugin(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL) -> bool:
+def activate_plugin(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL, wait_time: int = 2) -> bool:
     """
     Activate a Thunder plugin.
     
@@ -426,7 +443,7 @@ def activate_plugin(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL) ->
         
         # Wait a moment for activation to complete
         import time
-        time.sleep(2)
+        time.sleep(wait_time)
         
         # Verify activation by checking status
         status = check_plugin_status(plugin_name, jsonrpc_url)
@@ -440,7 +457,7 @@ def activate_plugin(plugin_name: str, jsonrpc_url: str = DEFAULT_JSONRPC_URL) ->
 
 
 def check_and_activate_ai2_managers(jsonrpc_url: str = DEFAULT_JSONRPC_URL, 
-                                    required_only: bool = True) -> Tuple[bool, List[str]]:
+                                    required_only: bool = True, activation_delay: int = 1) -> Tuple[bool, List[str]]:
     """
     Check and activate AI2.0 Manager plugins. Handle missing plugins gracefully.
     
@@ -532,7 +549,7 @@ def check_and_activate_ai2_managers(jsonrpc_url: str = DEFAULT_JSONRPC_URL,
         
         # Small delay between activations
         if idx < len(available_plugins):
-            time.sleep(1)
+            time.sleep(activation_delay)
     
     # Summary
     print("\n" + "="*80)
@@ -619,7 +636,7 @@ def delete_downloaded_packages(download_ids: List[str], jsonrpc_url: str = DEFAU
 
 
 def cleanup_all_test_artifacts(package_ids: List[str], download_ids: Optional[List[str]] = None, 
-                                jsonrpc_url: str = DEFAULT_JSONRPC_URL) -> Dict[str, Any]:
+                                jsonrpc_url: str = DEFAULT_JSONRPC_URL, verification_delay: int = 2) -> Dict[str, Any]:
     """
     Complete cleanup of all test artifacts including packages and downloads.
     
@@ -653,7 +670,7 @@ def cleanup_all_test_artifacts(package_ids: List[str], download_ids: Optional[Li
                 
                 # Verify uninstallation
                 import time
-                time.sleep(2)
+                time.sleep(verification_delay)
                 is_installed = verify_package_installed(pkg_id, jsonrpc_url)
                 
                 if not is_installed:
@@ -739,3 +756,53 @@ def safe_unload_module(obj, module_name: str) -> None:
             print(f"Unload Module Status : Error - {str(e)}")
     except Exception as e:
         print(f"Unload Module Status : Error - {str(e)}")
+
+
+def test_tdk_agent_connectivity(ip: str, port: int = 8087) -> bool:
+    """
+    Test connectivity to TDK Agent without requiring execution IDs.
+    
+    Args:
+        ip: Device IP address
+        port: TDK Agent port
+        
+    Returns:
+        True if TDK Agent is accessible, False otherwise
+    """
+    import socket
+    import requests
+    
+    print(f"Testing TDK Agent connectivity at {ip}:{port}...")
+    
+    # Test 1: Socket connectivity
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(socket_timeout)
+        result = sock.connect_ex((ip, port))
+        sock.close()
+        
+        if result == 0:
+            print(f"[PASS] Socket connection successful to {ip}:{port}")
+        else:
+            print(f"[FAIL] Socket connection failed to {ip}:{port}")
+            return False
+    except Exception as e:
+        print(f"[FAIL] Socket test failed: {str(e)}")
+        return False
+    
+    # Test 2: HTTP connectivity (basic TDK Agent endpoint)
+    try:
+        base_url = f"http://{ip}:{port}"
+        response = requests.get(f"{base_url}/", timeout=http_timeout)
+        print(f"[PASS] HTTP connection successful - Status: {response.status_code}")
+        print(f"[INFO] TDK Agent URL: {base_url}")
+        return True
+    except requests.exceptions.ConnectionError:
+        print(f"[FAIL] HTTP connection failed - TDK Agent not responding at {base_url}")
+        return False
+    except requests.exceptions.Timeout:
+        print(f"[FAIL] HTTP connection timeout - TDK Agent slow/unresponsive at {base_url}")
+        return False
+    except Exception as e:
+        print(f"[FAIL] HTTP test failed: {str(e)}")
+        return False
