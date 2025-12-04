@@ -106,6 +106,8 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
+    disk_space_usage_hibernate=None
+    disk_space_usage_restore=None
     max_mem_limit = 90.0
     print("Check Pre conditions")
     event_listener = None

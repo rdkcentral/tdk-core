@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@
 # limitations under the License.
 #########################################################################
 
-#Configurable Path for Accessibility Test Cases
+#Configurable Path for Webkit Test Cases
 wpe_webkit_testcases_path = ""
 
-#Browser instance to be used for Accessibility testing. (HtmlApp/LightningApp/WebKitBrowser)
+#Browser instance to be used for Webkit testing. (HtmlApp/LightningApp/WebKitBrowser)
 browser_instance="HtmlApp"
 
 #Port number for the Web inspect page of the selected browser instance(10004/10002/9224)
@@ -29,5 +29,5 @@ webinspect_port="10001"
 #Path of chromedriver executable is stored in test manager. Please add : before path.( :/home/tdk/)
 chromedriver_path=""
 
-#Mention how the script should validate the Accessibility logs. (WebinspectPageLogs/WpeframeworkLogs)
+#Mention how the script should validate the Webkit logs. (WebinspectPageLogs/WpeframeworkLogs)
 log_check_method="WebinspectPageLogs"
