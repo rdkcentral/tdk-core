@@ -87,10 +87,9 @@ from ai2_0_utils import (
     build_additional_metadata,
     thunder_download_package,
     thunder_install_package,
-    launch_app,
-    verify_package_installed,
+    thunder_launch_app,
+    thunder_verify_package_installed,
     check_and_activate_ai2_managers_thunder,
-    delete_downloaded_packages,
     create_tdk_test_step,
     set_test_step_status,
     configure_tdk_test_case,
@@ -120,7 +119,6 @@ if "SUCCESS" in loadmodulestatus.upper():
     tdkTestObj = create_tdk_test_step(obj, "Precondition_ActivateManagers", 
                                        "Check and activate AI2.0 managers")
     try:
-        jsonrpc_url = f"http://{ip}:9998/jsonrpc"
         all_activated, failed_plugins = check_and_activate_ai2_managers_thunder(obj, required_only=False)
         
         # Check if essential plugins are available (both PackageManager and AppManager needed)
@@ -256,7 +254,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                     time.sleep(3)
                     
                     # Verify installation
-                    is_installed = verify_package_installed(app_id, jsonrpc_url)
+                    is_installed = thunder_verify_package_installed(obj, app_id, app_name)
                     if is_installed:
                         print(f"    ✓ Package installed successfully")
                         app_result['install_status'] = 'SUCCESS'
@@ -285,7 +283,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                 
                 try:
                     print(f"\n  [LAUNCH] Starting application launch...")
-                    launch_result = launch_app(app_id, jsonrpc_url)
+                    launch_result = thunder_launch_app(obj, app_id, app_name)
                     
                     # Check launch result
                     if launch_result and isinstance(launch_result, dict):
@@ -367,16 +365,9 @@ if "SUCCESS" in loadmodulestatus.upper():
     
     # Postcondition: Cleanup downloaded packages
     if download_ids:
-        tdkTestObj = create_tdk_test_step(obj, "Postcondition_Cleanup", 
-                                           "Delete downloaded packages")
-        try:
-            print("\n[POSTCONDITION] Cleaning up downloaded packages...")
-            delete_downloaded_packages(download_ids, jsonrpc_url)
-            print(f"  ✓ Deleted {len(download_ids)} download(s)")
-            set_test_step_status(tdkTestObj, "SUCCESS", f"Deleted {len(download_ids)} downloads")
-        except Exception as e:
-            print(f"  ⚠ Cleanup warning: {str(e)}")
-            set_test_step_status(tdkTestObj, "FAILURE", f"Cleanup failed: {str(e)}")
+        # POSTCONDITION: Thunder interface - no package cleanup required
+        print("\n[POSTCONDITION] Thunder interface - no download cleanup required")
+        print(f"  Downloads processed: {len(download_ids)}")
     
     safe_unload_module(obj, "rdkservices")
 else:

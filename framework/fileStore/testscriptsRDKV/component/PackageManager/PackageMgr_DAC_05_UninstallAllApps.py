@@ -75,9 +75,9 @@ import time
 from ai2_0_utils import (
     fetch_dac_config,
     list_dac_packages,
-    list_installed_packages,
+    thunder_list_installed_packages,
     thunder_uninstall_package,
-    verify_package_installed,
+    thunder_verify_package_installed,
     get_device_info_from_json,
     check_and_activate_ai2_managers_thunder,
     create_tdk_test_step,
@@ -109,7 +109,6 @@ if "SUCCESS" in loadmodulestatus.upper():
     tdkTestObj = create_tdk_test_step(obj, "Precondition_ActivateManagers", 
                                        "Check and activate AI2.0 managers")
     try:
-        jsonrpc_url = f"http://{ip}:9998/jsonrpc"
         all_activated, failed_plugins = check_and_activate_ai2_managers_thunder(obj, required_only=False)
         
         # Check if essential plugins are available (PackageManagerRDKEMS is required)
@@ -176,8 +175,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                                            "List installed packages on device")
         try:
             print("\n[STEP 4] Listing installed packages on device...")
-            jsonrpc_url = f"http://{ip}:9998/jsonrpc"
-            installed_packages = list_installed_packages(jsonrpc_url)
+            installed_packages = thunder_list_installed_packages(obj)
             
             # Filter to only DAC applications
             dac_installed = [pkg for pkg in installed_packages if pkg.get('packageId') in dac_app_dict]
@@ -215,7 +213,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                     time.sleep(2)
                     
                     # Verify package is no longer installed
-                    is_still_installed = verify_package_installed(app_id, jsonrpc_url)
+                    is_still_installed = thunder_verify_package_installed(obj, app_id, app_name)
                     
                     if not is_still_installed:
                         print(f"    ✓ Package removed successfully")
@@ -250,7 +248,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                                                "Verify all DAC packages removed")
             try:
                 print("\n[STEP 6] Final verification...")
-                final_installed = list_installed_packages(jsonrpc_url)
+                final_installed = thunder_list_installed_packages(obj)
                 remaining_dac = [pkg for pkg in final_installed if pkg.get('packageId') in dac_app_dict]
                 
                 print(f"  Remaining DAC applications: {len(remaining_dac)}")

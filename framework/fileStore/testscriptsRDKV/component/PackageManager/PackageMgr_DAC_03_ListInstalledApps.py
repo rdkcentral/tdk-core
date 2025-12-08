@@ -74,7 +74,7 @@ import sys
 from ai2_0_utils import (
     fetch_dac_config,
     list_dac_packages,
-    list_installed_packages,
+    thunder_list_installed_packages,
     get_device_info_from_json,
     check_and_activate_ai2_managers_thunder,
     create_tdk_test_step,
@@ -106,7 +106,6 @@ if "SUCCESS" in loadmodulestatus.upper():
     tdkTestObj = create_tdk_test_step(obj, "Precondition_ActivateManagers", 
                                        "Check and activate AI2.0 managers")
     try:
-        jsonrpc_url = f"http://{ip}:9998/jsonrpc"
         all_activated, failed_plugins = check_and_activate_ai2_managers_thunder(obj, required_only=False)
         
         # Check if essential plugins are available (PackageManagerRDKEMS is required)
@@ -171,8 +170,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                                            "List installed packages on device")
         try:
             print("\n[STEP 4] Listing installed packages on device...")
-            jsonrpc_url = f"http://{ip}:9998/jsonrpc"
-            installed_packages = list_installed_packages(jsonrpc_url)
+            installed_packages = thunder_list_installed_packages(obj)
             installed_ids = {pkg.get('packageId') for pkg in installed_packages}
             print(f"  Total installed packages: {len(installed_packages)}")
             set_test_step_status(tdkTestObj, "SUCCESS", f"Found {len(installed_packages)} installed packages")

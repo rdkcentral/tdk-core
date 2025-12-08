@@ -176,46 +176,8 @@ def build_download_url(catalog_url: str, package_id: str, version: str,
     return f"{catalog_url}/bundles/{package_id}/{version}/{platform_name}/{firmware_ver}"
 
 
-def jsonrpc_call(method: str, params: Optional[Dict[str, Any]] = None, 
-                 url: str = DEFAULT_JSONRPC_URL, request_id: int = 1, timeout: int = 60) -> Dict[str, Any]:
-    """
-    Make a JSON-RPC call to WPEFramework.
-    
-    Args:
-        method: RPC method name
-        params: Method parameters (optional)
-        url: JSON-RPC endpoint URL
-        request_id: Request ID
-    
-    Returns:
-        Response dictionary
-    
-    Raises:
-        Exception: If RPC call fails or returns error
-    """
-    payload = {
-        'jsonrpc': '2.0',
-        'id': request_id,
-        'method': method,
-    }
-    
-    if params is not None:
-        payload['params'] = params
-    
-    try:
-        resp = requests.post(url, json=payload, timeout=timeout)
-        resp.raise_for_status()
-        data = resp.json()
-        
-        if 'error' in data:
-            error_msg = data['error']
-            if isinstance(error_msg, dict):
-                error_msg = f"Code: {error_msg.get('code')}, Message: {error_msg.get('message')}"
-            raise Exception(f"JSON-RPC error for {method}: {error_msg}")
-        
-        return data
-    except requests.exceptions.RequestException as e:
-        raise Exception(f"JSON-RPC request failed: {str(e)}")
+# JSON-RPC function removed - Thunder interface doesn't require direct JSON-RPC calls
+# Use Thunder RdkService_Test primitive instead
 
 
 def build_additional_metadata(app_data: Dict[str, Any]) -> List[Dict[str, str]]:
@@ -898,3 +860,201 @@ def thunder_uninstall_package(tdk_obj, app_id: str, app_name: str = "") -> bool:
     except Exception as e:
         print(f"    ✗ Uninstall error for {app_name or app_id}: {str(e)}")
         return False
+
+
+def configure_tdk_test_case(tdk_obj, ip: str, port: int, test_name: str) -> None:
+    """
+    Configure TDK test case with IP and port.
+    
+    Args:
+        tdk_obj: TDK scripting library object
+        ip: Device IP address
+        port: Device port
+        test_name: Test case name
+    """
+    tdk_obj.configureTestCase(ip, port, test_name)
+
+
+def list_installed_packages(jsonrpc_url: str = None) -> List[Dict[str, Any]]:
+    """
+    Legacy function for listing installed packages via JSON-RPC.
+    Note: This function is deprecated for Thunder interface.
+    For Thunder mode, use thunder_list_installed_packages() instead.
+    
+    Args:
+        jsonrpc_url: JSON-RPC URL (ignored in Thunder mode)
+        
+    Returns:
+        Empty list (Thunder mode requires TDK object)
+    """
+    print("⚠ list_installed_packages: Legacy function - requires Thunder interface conversion")
+    print("   Use thunder_list_installed_packages(tdk_obj) for Thunder mode")
+    return []
+
+
+def launch_app(app_id: str, jsonrpc_url: str = None) -> bool:
+    """
+    Legacy function for launching apps via JSON-RPC.
+    Note: This function is deprecated for Thunder interface.
+    For Thunder mode, use thunder_launch_app() instead.
+    
+    Args:
+        app_id: Application ID to launch
+        jsonrpc_url: JSON-RPC URL (ignored in Thunder mode)
+        
+    Returns:
+        False (Thunder mode requires TDK object)
+    """
+    print(f"⚠ launch_app({app_id}): Legacy function - requires Thunder interface conversion")
+    print("   Use thunder_launch_app(tdk_obj, app_id) for Thunder mode")
+    return False
+
+
+def verify_package_installed(app_id: str, jsonrpc_url: str = None) -> bool:
+    """
+    Legacy function for verifying package installation via JSON-RPC.
+    Note: This function is deprecated for Thunder interface.
+    For Thunder mode, use thunder_verify_package_installed() instead.
+    
+    Args:
+        app_id: Application ID to verify
+        jsonrpc_url: JSON-RPC URL (ignored in Thunder mode)
+        
+    Returns:
+        False (Thunder mode requires TDK object)
+    """
+    print(f"⚠ verify_package_installed({app_id}): Legacy function - requires Thunder interface conversion")
+    print("   Use thunder_verify_package_installed(tdk_obj, app_id) for Thunder mode")
+    return False
+
+
+def verify_package_installed(app_id: str, jsonrpc_url: str = None) -> bool:
+    """
+    Legacy function for verifying package installation via JSON-RPC.
+    Note: This function is deprecated for Thunder interface.
+    
+    Args:
+        app_id: Application ID to verify
+        jsonrpc_url: JSON-RPC URL (ignored in Thunder mode)
+        
+    Returns:
+        False (Thunder mode uses direct plugin calls)
+    """
+    print(f"⚠ verify_package_installed({app_id}): Legacy function - use Thunder PackageManager directly")
+    return False
+
+
+def thunder_list_installed_packages(tdk_obj) -> List[Dict[str, Any]]:
+    """
+    List installed packages using Thunder PackageManagerRDKEMS via TDK.
+    
+    Args:
+        tdk_obj: TDK scripting library object
+        
+    Returns:
+        List of installed packages
+    """
+    import json
+    
+    try:
+        tdkTestObj = tdk_obj.createTestStep('RdkService_Test')
+        tdkTestObj.addParameter("xml_name", "PackageManagerRDKEMS")
+        tdkTestObj.addParameter("request_type", "listPackages")
+        tdkTestObj.addParameter("params", json.dumps({}))
+        tdkTestObj.executeTestCase("SUCCESS")
+        result = tdkTestObj.getResult()
+        
+        if "SUCCESS" in result:
+            result_details = tdkTestObj.getResultDetails()
+            try:
+                response_data = json.loads(result_details)
+                packages = response_data.get('result', {}).get('packages', [])
+                
+                print(f"    ✓ Found {len(packages)} installed packages")
+                tdkTestObj.setResultStatus("SUCCESS")
+                return packages
+            except json.JSONDecodeError:
+                print(f"    ✗ Failed to parse package list response")
+                tdkTestObj.setResultStatus("FAILURE")
+                return []
+        else:
+            print(f"    ✗ Failed to list packages - Thunder execution failed")
+            tdkTestObj.setResultStatus("FAILURE")
+            return []
+            
+    except Exception as e:
+        print(f"    ✗ List packages error: {str(e)}")
+        return []
+
+
+def thunder_launch_app(tdk_obj, app_id: str, app_name: str = "") -> bool:
+    """
+    Launch an application using Thunder AppManager via TDK.
+    
+    Args:
+        tdk_obj: TDK scripting library object
+        app_id: Application ID to launch
+        app_name: Application name for logging
+        
+    Returns:
+        True if successful, False if failed
+    """
+    import json
+    
+    try:
+        tdkTestObj = tdk_obj.createTestStep('RdkService_Test')
+        tdkTestObj.addParameter("xml_name", "AppManager")
+        tdkTestObj.addParameter("request_type", "launch")
+        tdkTestObj.addParameter("params", json.dumps({"applicationId": app_id}))
+        tdkTestObj.executeTestCase("SUCCESS")
+        result = tdkTestObj.getResult()
+        
+        if "SUCCESS" in result:
+            result_details = tdkTestObj.getResultDetails()
+            try:
+                response_data = json.loads(result_details)
+                if response_data.get('success', False):
+                    print(f"    ✓ Launch successful for {app_name or app_id}")
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    return True
+                else:
+                    error_msg = response_data.get('error', 'Unknown launch error')
+                    print(f"    ✗ Launch failed for {app_name or app_id}: {error_msg}")
+                    tdkTestObj.setResultStatus("FAILURE")
+                    return False
+            except json.JSONDecodeError:
+                print(f"    ✗ Launch failed for {app_name or app_id} - Invalid response format")
+                tdkTestObj.setResultStatus("FAILURE")
+                return False
+        else:
+            print(f"    ✗ Launch failed for {app_name or app_id} - Thunder execution failed")
+            tdkTestObj.setResultStatus("FAILURE")
+            return False
+            
+    except Exception as e:
+        print(f"    ✗ Launch error for {app_name or app_id}: {str(e)}")
+        return False
+
+
+def thunder_verify_package_installed(tdk_obj, app_id: str, app_name: str = "") -> bool:
+    """
+    Verify if a package is installed using Thunder PackageManagerRDKEMS via TDK.
+    
+    Args:
+        tdk_obj: TDK scripting library object
+        app_id: Application ID to verify
+        app_name: Application name for logging
+        
+    Returns:
+        True if installed, False if not installed
+    """
+    packages = thunder_list_installed_packages(tdk_obj)
+    
+    for package in packages:
+        if package.get('packageId') == app_id:
+            install_state = package.get('installState', 'unknown')
+            print(f"    ✓ Package {app_name or app_id} is installed (state: {install_state})")
+            return True
+    
+    print(f"    ✗ Package {app_name or app_id} is not installed")
+    return False
