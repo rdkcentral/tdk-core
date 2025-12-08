@@ -82,7 +82,6 @@ from ai2_0_utils import (
     build_additional_metadata,
     get_device_info_from_json,
     check_and_activate_ai2_managers_thunder,
-    cleanup_all_test_artifacts,
     create_tdk_test_step,
     set_test_step_status,
     configure_tdk_test_case,
@@ -114,7 +113,6 @@ if "SUCCESS" in loadmodulestatus.upper():
     
     try:
         # PRECONDITION: Check and activate AI2.0 Manager plugins
-        jsonrpc_url = f"http://{ip}:9998/jsonrpc"
         all_activated, failed_plugins = check_and_activate_ai2_managers_thunder(obj, required_only=False)
         
         # Check if essential plugins are available (PackageManagerRDKEMS is required)
@@ -244,20 +242,14 @@ if "SUCCESS" in loadmodulestatus.upper():
                 print("\n[TEST RESULT] FAILURE - No applications installed")
                 obj.setLoadModuleStatus("FAILURE")
             
-            # POSTCONDITION: Cleanup all test artifacts
-            if installed_package_ids or download_ids:
-                cleanup_all_test_artifacts(installed_package_ids, download_ids, jsonrpc_url)
+            # POSTCONDITION: Test artifacts cleanup not needed for Thunder interface
+            print("\n[TEST CLEANUP] Thunder interface - no cleanup required")
     
     except Exception as e:
         print(f"\n[ERROR] Test execution failed: {str(e)}")
         obj.setLoadModuleStatus("FAILURE")
         
-        # Cleanup on error
-        if installed_package_ids or download_ids:
-            try:
-                cleanup_all_test_artifacts(installed_package_ids, download_ids, jsonrpc_url)
-            except:
-                pass
+        # Thunder interface - no cleanup needed
     
     safe_unload_module(obj, "rdkservices")
 else:

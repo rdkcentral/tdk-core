@@ -80,6 +80,7 @@ from ai2_0_utils import (
     fetch_dac_config,
     list_dac_packages,
     build_download_url,
+    thunder_download_package,
     get_device_info_from_json,
     safe_unload_module
 )
@@ -174,56 +175,25 @@ if "SUCCESS" in loadmodulestatus.upper():
                     print(f"    Download URL: {download_url}")
                     
                     # Download using Thunder PackageManagerRDKEMS
-                    tdkTestObj = obj.createTestStep('RdkService_Test')
-                    tdkTestObj.addParameter("xml_name", "PackageManagerRDKEMS")
-                    tdkTestObj.addParameter("request_type", "download")
-                    tdkTestObj.addParameter("params", json.dumps({"url": download_url}))
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResult()
+                    download_id = thunder_download_package(obj, download_url, app_name)
                     
-                    if "SUCCESS" in result:
-                        result_details = tdkTestObj.getResultDetails()
-                        try:
-                            response_data = json.loads(result_details)
-                            download_id = response_data.get('result', {}).get('downloadId')
-                            
-                            if download_id:
-                                print(f"    ✓ Download successful - ID: {download_id}")
-                                download_count += 1
-                                download_results.append({
-                                    'app_id': app_id,
-                                    'app_name': app_name,
-                                    'status': 'SUCCESS',
-                                    'download_id': download_id
-                                })
-                                tdkTestObj.setResultStatus("SUCCESS")
-                            else:
-                                print(f"    ✗ Download failed - No download ID returned")
-                                download_results.append({
-                                    'app_id': app_id,
-                                    'app_name': app_name,
-                                    'status': 'FAILURE',
-                                    'error': 'No download ID'
-                                })
-                                tdkTestObj.setResultStatus("FAILURE")
-                        except json.JSONDecodeError:
-                            print(f"    ✗ Download failed - Invalid response format")
-                            download_results.append({
-                                'app_id': app_id,
-                                'app_name': app_name,
-                                'status': 'FAILURE',
-                                'error': 'Invalid response'
-                            })
-                            tdkTestObj.setResultStatus("FAILURE")
+                    if download_id:
+                        print(f"    ✓ Download successful - ID: {download_id}")
+                        download_count += 1
+                        download_results.append({
+                            'app_id': app_id,
+                            'app_name': app_name,
+                            'status': 'SUCCESS',
+                            'download_id': download_id
+                        })
                     else:
-                        print(f"    ✗ Download failed")
+                        print(f"    ✗ Download failed - No download ID returned")
                         download_results.append({
                             'app_id': app_id,
                             'app_name': app_name,
                             'status': 'FAILURE',
-                            'error': 'Thunder execution failed'
+                            'error': 'No download ID'
                         })
-                        tdkTestObj.setResultStatus("FAILURE")
                         
                 except Exception as e:
                     print(f"    ✗ Error: {str(e)}")
@@ -233,9 +203,6 @@ if "SUCCESS" in loadmodulestatus.upper():
                         'status': 'FAILURE',
                         'error': str(e)
                     })
-                    # Create a failure test step
-                    tdkTestObj = obj.createTestStep('RdkService_Test')
-                    tdkTestObj.setResultStatus("FAILURE")
             
             # Summary
             print("\n" + "="*80)
