@@ -138,7 +138,7 @@ validate_tcp_server_output()
 #To get the throughput from server
 validate_tcp_server_output_throughput()
 {
-        serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
+        serverOutput="$(cat $var2 | grep Mbits/sec | awk '{print $(NF-1)}')"
         size="$(cat $var2 | grep bits/sec | cut -d ' ' -f 12)"
         echo "OUTPUT:$serverOutput $size"
         deleteTmpFile="$(sudo rm $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"

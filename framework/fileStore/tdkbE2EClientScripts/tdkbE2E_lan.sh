@@ -223,9 +223,15 @@ tcp_get_client_throughput()
 # To set the TCP server in listening mode
 tcp_init_server()
 {
+        # Remove old file if exists
+        rm -f "$var2"
+
+        # Create new file with proper permissions
+        touch "$var2"
+        chmod 666 "$var2"
+
         #If server port is provided as input
         if [ -n $var4 ]; then
-            rm -rf $var2
             iperf -s -B $var3 -i 1 -p $var4 > $var2 &
         #If server port is not provided take default port
         else
@@ -243,7 +249,7 @@ tcp_request()
         bindStatus="$(cat $var4 | grep "bind failed:" && echo "FAILURE" || echo "SUCCESS")"
         echo "bindStatus:$bindStatus"
         if [ $bindStatus = "SUCCESS" ]; then
-                value="$(cat $var4 | grep bits/sec | cut -d ' ' -f 11)"
+                value="$(cat $var4 | grep Mbits/sec | awk '{print $(NF-1)}')"
                 echo "OUTPUT:$value"
         else
                 echo "OUTPUT:"
