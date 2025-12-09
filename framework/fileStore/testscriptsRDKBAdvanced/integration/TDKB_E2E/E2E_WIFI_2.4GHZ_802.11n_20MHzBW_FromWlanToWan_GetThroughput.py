@@ -194,7 +194,9 @@ if "SUCCESS" in loadmodulestatus.upper():
                                             throughput = float(bandwidth)*1000;
                                         elif "Kbits/sec" in serverOutput:
                                             throughput = float(bandwidth)*.001;
-                                        print(throughput);
+                                        else:
+                                            throughput = float(bandwidth)
+                                        print(f"Throughput: {throughput}")
                                         print(int(throughput));
                                         if int(throughput) <= 10:
                                             tdkTestObj.setResultStatus("SUCCESS");
