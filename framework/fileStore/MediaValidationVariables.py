@@ -867,3 +867,45 @@ video_src_url_av1_opus_2160p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_O
 video_src_url_av1_vorbis_480p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_VORBIS_480p.webm"
 video_src_url_av1_vorbis_1080p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_VORBIS_1080p.webm"
 video_src_url_av1_vorbis_2160p	= test_streams_base_path + "TDK_Asset_Sunrise_AV1_VORBIS_2160p.webm"
+
+#-------------------------------------------------------------
+#        corrupted AV FORMATS VP9 codec
+#------------------------------------------------------------
+
+video_src_url_corrupt_I_complete_VP9 = test_corrupted_streams_base_path + "VP9/I_mp4/Corrupt_Complete_I_VP9.webm"
+video_src_url_corrupt_I_end_VP9 = test_corrupted_streams_base_path + "VP9/I_mp4/Corrupt_End_I_VP9.webm"
+video_src_url_corrupt_I_middle_VP9 = test_corrupted_streams_base_path + "VP9/I_mp4/Corrupt_Middle_I_VP9.webm"
+video_src_url_corrupt_I_initial_VP9 = test_corrupted_streams_base_path + "VP9/I_mp4/Corrupt_Init_I_VP9.webm"
+video_src_url_corrupt_I_P_complete_VP9 = test_corrupted_streams_base_path + "VP9/IP-mp4/Corrupt_Complete_IP_VP9.webm"
+video_src_url_corrupt_I_P_End_VP9 = test_corrupted_streams_base_path + "VP9/IP-mp4/Corrupt_End_IP_VP9.webm"
+video_src_url_corrupt_I_P_Middle_VP9 = test_corrupted_streams_base_path + "VP9/IP-mp4/Corrupt_Middle_IP_VP9.webm"
+video_src_url_corrupt_I_P_initial_VP9 = test_corrupted_streams_base_path + "VP9/IP-mp4/Corrupt_Init_IP_VP9.webm"
+video_src_url_corrupt_P_complete_VP9 = test_corrupted_streams_base_path + "VP9/P_mp4/Corrupt_Complete_P_VP9.webm"
+video_src_url_corrupt_P_End_VP9 = test_corrupted_streams_base_path + "VP9/P_mp4/Corrupt_End_P_VP9.webm"
+video_src_url_corrupt_P_Middle_VP9 = test_corrupted_streams_base_path + "VP9/P_mp4/Corrupt_Middle_P_VP9.webm"
+video_src_url_corrupt_P_Initial_VP9 = test_corrupted_streams_base_path + "VP9/P_mp4/Corrupt_Init_P_VP9.webm"
+
+#-------------------------------------------------------------
+#        ADVANCED NEGATIVE SCENARIOS
+#------------------------------------------------------------
+
+video_src_url_corrupt_DAMAGE_THE_FTYP_BOX_hls = test_corrupted_streams_base_path + "advance_scenarios/DAMAGE_THE_FTYP_BOX/TDK_Clear_Stream.m3u8"
+video_src_url_corrupt_DAMAGE_THE_FTYP_BOX_dash = test_corrupted_streams_base_path + "advance_scenarios/DAMAGE_THE_FTYP_BOX/TDK_Clear_Stream.mpd"
+
+video_src_url_corrupt_DUPLICATE_TFHD_TFDT_BOXES_dash = test_corrupted_streams_base_path + "advance_scenarios/DUPLICATE_tfhd_tfdt_BOXES_INSIDE_MOOF/TDK_Clear_Stream.m3u8"
+video_src_url_corrupt_DUPLICATE_TFHD_TFDT_BOXES_hls = test_corrupted_streams_base_path + "advance_scenarios/DUPLICATE_tfhd_tfdt_BOXES_INSIDE_MOOF/TDK_Clear_Stream.mpd"
+
+video_src_url_corrupt_INCOMPLETE_HTTP_RESPONCE_hls = test_corrupted_streams_base_path + "advance_scenarios/INCOMPLETE_HTTP_RESPONCE_ASSET/TDK_Clear_Stream.m3u8"
+video_src_url_corrupt_INCOMPLETE_HTTP_RESPONCE_dash = test_corrupted_streams_base_path + "advance_scenarios/INCOMPLETE_HTTP_RESPONCE_ASSET/TDK_Clear_Stream.mpd"
+
+video_src_url_corrupt_TRUNCATE_AN_EARLY_MEDIA_SEGMENT_hls = test_corrupted_streams_base_path + "advance_scenarios/TRUNCATE_AN_EARLY_MEDIA_SEGMENT/TDK_Clear_Stream.m3u8"
+video_src_url_corrupt_TRUNCATE_AN_EARLY_MEDIA_SEGMENT_dash = test_corrupted_streams_base_path + "advance_scenarios/TRUNCATE_AN_EARLY_MEDIA_SEGMENT/TDK_Clear_Stream.mpd"
+
+video_src_url_corrupt_WRONG_CODEC_HEADER_hls = test_corrupted_streams_base_path + "advance_scenarios/WRONG_ELEMENTRY_STREAM/Replace_Codec_Header_with_Wrong_Codec/TDK_Clear_Stream.m3u8"
+video_src_url_corrupt_WRONG_CODEC_HEADER_dash = test_corrupted_streams_base_path + "advance_scenarios/WRONG_ELEMENTRY_STREAM/Replace_Codec_Header_with_Wrong_Codec/TDK_Clear_Stream.mpd"
+
+video_src_url_corrupt_INJECT_RANDOM_BYTES_VIDEO_hls = test_corrupted_streams_base_path + "advance_scenarios/WRONG_ELEMENTRY_STREAM/inject_random_byte/Video/TDK_Clear_Stream.m3u8"
+video_src_url_corrupt_INJECT_RANDOM_BYTES_VIDEO_dash = test_corrupted_streams_base_path + "advance_scenarios/WRONG_ELEMENTRY_STREAM/inject_random_byte/Video/TDK_Clear_Stream.mpd"
+
+audio_src_url_corrupt_INJECT_RANDOM_BYTES_hls = test_corrupted_streams_base_path + "advance_scenarios/WRONG_ELEMENTRY_STREAM/inject_random_byte/Audio/TDK_Clear_Stream.m3u8"
+audio_src_url_corrupt_INJECT_RANDOM_BYTES_dash = test_corrupted_streams_base_path + "advance_scenarios/WRONG_ELEMENTRY_STREAM/inject_random_byte/Audio/TDK_Clear_Stream.mpd"
