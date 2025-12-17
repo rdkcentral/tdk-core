@@ -81,20 +81,19 @@ from ai2_0_utils import (
     check_and_activate_ai2_managers_thunder,
     create_tdk_test_step,
     set_test_step_status,
-    configure_tdk_test_case,
-    safe_unload_module
+    safe_unload_module,
+    
 )
 
 # Test component to be tested
-obj = tdklib.TDKScriptingLibrary("rdkservices", "1", standAlone=True)
+obj = tdklib.TDKScriptingLibrary("PackageManager", "1", standAlone=True)
 
 # IP and Port of box, No need to change,
 # This will be replaced with corresponding Box IP and port while executing script
 ip = <ipaddress>
 port = <port>
 
-# Configure test case using helper function
-configure_tdk_test_case(obj, ip, port, 'PackageMgr_DAC_04_LaunchApps')
+obj.configureTestCase(ip,port,'PackageMgr_DAC_04_LaunchApps');
 
 # Get the result of connection with test component and DUT
 loadmodulestatus = obj.getLoadModuleResult()
@@ -118,14 +117,14 @@ if "SUCCESS" in loadmodulestatus.upper():
             print("[TEST RESULT] SKIPPED - Essential plugin not available on this device")
             set_test_step_status(tdkTestObj, "FAILURE", f"Essential plugin missing: {', '.join(essential_failed)}")
             obj.setLoadModuleStatus("FAILURE")
-            safe_unload_module(obj, "rdkservices")
+            safe_unload_module(obj, "PackageManager")
             sys.exit(1)
             
         set_test_step_status(tdkTestObj, "SUCCESS", "AI2.0 managers activated")
     except Exception as e:
         set_test_step_status(tdkTestObj, "FAILURE", f"Failed to activate: {str(e)}")
         obj.setLoadModuleStatus("FAILURE")
-        safe_unload_module(obj, "rdkservices")
+        safe_unload_module(obj, "PackageManager")
         sys.exit(1)
     
     launch_results = []
@@ -268,22 +267,19 @@ if "SUCCESS" in loadmodulestatus.upper():
                     if result['status'] == 'FAILURE':
                         print(f"  - {result['app_name']} ({result['app_id']}): {result.get('error', 'Unknown error')}")
             
-            # Set final status
+            # Final status (binary): treat partial as FAILURE
             if success_count == len(launch_results):
                 print("\n[TEST RESULT] SUCCESS - All applications launched successfully")
                 obj.setLoadModuleStatus("SUCCESS")
-            elif success_count > 0:
-                print("\n[TEST RESULT] PARTIAL SUCCESS - Some applications launched")
-                obj.setLoadModuleStatus("SUCCESS")
             else:
-                print("\n[TEST RESULT] FAILURE - No applications launched")
+                print("\n[TEST RESULT] FAILURE - Not all applications launched")
                 obj.setLoadModuleStatus("FAILURE")
     
     except Exception as e:
         print(f"\n[ERROR] Test execution failed: {str(e)}")
         obj.setLoadModuleStatus("FAILURE")
     
-    safe_unload_module(obj, "rdkservices")
+    safe_unload_module(obj, "PackageManager")
 else:
-    print("[ERROR] Failed to load rdkservices module")
+    print("[ERROR] Failed to load PackageManager module")
     obj.setLoadModuleStatus("FAILURE")
