@@ -2276,6 +2276,8 @@ def scpLogFromClientToTM(source, outputFile):
                 org_file = tm_logs_location+outputFile.split("/")[-1]
                 out = subprocess.Popen(['ls', org_file], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 stdout,stderr = out.communicate()
+                # Decode bytes to string for Python 3 compatibility
+                stdout = stdout.decode("utf-8")
                 print("ls stdout: ", stdout)
                 if out.returncode==0 and "No such file" not in stdout:
                 #Rename the log file in test manager by adding test execution details to file name
