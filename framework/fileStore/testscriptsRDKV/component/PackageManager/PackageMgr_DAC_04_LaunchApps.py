@@ -103,24 +103,24 @@ if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS")
     expectedResult = "SUCCESS"
     
-    # Precondition: Check and activate AI2.0 managers
+    # Precondition: Check and activate required AI2.0 managers
     tdkTestObj = create_tdk_test_step(obj, "Precondition_ActivateManagers", 
-                                       "Check and activate AI2.0 managers")
+                                       "Activate required AI2.0 managers")
     try:
-        all_activated, failed_plugins = check_and_activate_ai2_managers_thunder(obj, required_only=False)
+        # Use required_only=True to focus on core plugins (PackageManagerRDKEMS, AppManager)
+        all_activated, failed_plugins = check_and_activate_ai2_managers_thunder(obj, required_only=True)
         
-        # Check if essential plugins are available (AppManager is needed for launch)
-        essential_failed = [p for p in failed_plugins if 'AppManager' in p]
-        
-        if essential_failed:
-            print(f"\n[ERROR] Essential plugin not available: {', '.join(essential_failed)}")
-            print("[TEST RESULT] SKIPPED - Essential plugin not available on this device")
-            set_test_step_status(tdkTestObj, "FAILURE", f"Essential plugin missing: {', '.join(essential_failed)}")
+        if not all_activated:
+            error_msg = f"Failed to activate required plugins: {', '.join(failed_plugins)}"
+            print(f"\n[ERROR] {error_msg}")
+            print("[TEST RESULT] FAILURE - Required AI2.0 plugins could not be activated")
+            print("Required: PackageManagerRDKEMS (for listing packages), AppManager (for launching apps)")
+            set_test_step_status(tdkTestObj, "FAILURE", error_msg)
             obj.setLoadModuleStatus("FAILURE")
             safe_unload_module(obj, "PackageManager")
             sys.exit(1)
-            
-        set_test_step_status(tdkTestObj, "SUCCESS", "AI2.0 managers activated")
+        else:
+            set_test_step_status(tdkTestObj, "SUCCESS", "Required AI2.0 managers activated")
     except Exception as e:
         set_test_step_status(tdkTestObj, "FAILURE", f"Failed to activate: {str(e)}")
         obj.setLoadModuleStatus("FAILURE")

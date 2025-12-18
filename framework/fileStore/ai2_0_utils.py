@@ -363,26 +363,32 @@ def set_test_step_status(tdkTestObj, status: str, details: str = ""):
     """
     if details:
         print(f"  [TDK STEP] {status}: {details}")
-        try:
-            tdkTestObj.setResultDetails(details)
-        except Exception:
-            pass
-    tdkTestObj.setResultStatus(status)
+    
+    # Set the basic properties that TDK framework expects
+    try:
+        # For test steps created with create_tdk_test_step, we need to manually
+        # set the result field to avoid the "result not found" error
+        if not hasattr(tdkTestObj, 'result') or not tdkTestObj.result:
+            # Create a minimal valid result structure that TDK expects
+            tdkTestObj.result = f'{{"TDK__#@$00_result":"{status}","TDK__#@$00_details":"{details}"}}'
+            tdkTestObj.resultStr = status
+        tdkTestObj.setResultStatus(status)
+    except Exception as e:
+        print(f"Warning: Could not set TDK test step status: {e}")
 
-
-_THUNDER_PARAM_PROFILE: Optional[Dict[str, str]] = None
 
 def thunder_call(tdk_obj, callsign_short: str, request_type: str, params: Optional[Dict[str, Any]] = None, expectedresult: str = "SUCCESS") -> Tuple[bool, Any]:
     """
-    Generic Thunder call via TDK RdkService_Test with adaptive parameter detection.
+    Generic Thunder call via TDK primitives with automatic primitive selection.
 
-    Tries multiple parameter name profiles to accommodate primitive variants, caches the
-    working profile after the first success and reuses it for subsequent calls.
+    Uses appropriate TDK primitive based on the method call:
+    - rdkservice_getValue for method calls with no parameters (like listPackages)
+    - rdkservice_setValue for method calls with parameters
 
     Args:
         tdk_obj: TDK scripting library object
         callsign_short: Plugin short name (e.g., 'PackageManager' or 'PackageManagerRDKEMS')
-        request_type: Method name as expected by the primitive (e.g., 'config', 'delete')
+        request_type: Method name (e.g., 'listPackages', 'download', 'install')
         params: Dict to be JSON-encoded for the params argument
         expectedresult: TDK expected result string
 
@@ -390,60 +396,38 @@ def thunder_call(tdk_obj, callsign_short: str, request_type: str, params: Option
         (ok, response) where response is a dict on success or raw details/string on failure
     """
     import json as _json
-    global _THUNDER_PARAM_PROFILE
-
-    # Try 'method' first to avoid common primitive errors about 'request_type'
-    profiles: List[Dict[str, str]] = [
-        {"xml": "xml_name",   "method": "method",       "params": "params"},
-        {"xml": "xml_name",   "method": "method",       "params": "param"},
-        {"xml": "xml_name",   "method": "request_type", "params": "params"},
-        {"xml": "xml_name",   "method": "request_type", "params": "param"},
-        {"xml": "plugin_name","method": "method",       "params": "params"},
-        {"xml": "plugin_name","method": "request_type", "params": "params"},
-    ]
-
-    def _attempt(profile: Dict[str, str]) -> Tuple[bool, Any, str]:
-        t = tdk_obj.createTestStep('RdkService_Test')
-        t.addParameter(profile.get("xml", "xml_name"), callsign_short)
-        t.addParameter(profile.get("method", "request_type"), request_type)
-        if params is not None:
-            t.addParameter(profile.get("params", "params"), _json.dumps(params))
+    
+    # Build the full method name
+    full_callsign = callsign_short if '.' in callsign_short else f"org.rdk.{callsign_short}"
+    full_method = f"{full_callsign}.1.{request_type}"
+    
+    try:
+        # Choose primitive based on whether we have parameters
+        if params is None or len(params) == 0:
+            # Use rdkservice_getValue for calls without parameters
+            t = tdk_obj.createTestStep('rdkservice_getValue')
+            t.addParameter("method", full_method)
+        else:
+            # Use rdkservice_setValue for calls with parameters
+            t = tdk_obj.createTestStep('rdkservice_setValue')
+            t.addParameter("method", full_method)
+            t.addParameter("value", _json.dumps(params))
+        
         t.executeTestCase(expectedresult)
         res = (t.getResult() or '').upper()
         det = t.getResultDetails() or ''
+        
         if "SUCCESS" in res:
             try:
                 data = _json.loads(det)
+                return True, data
             except Exception:
-                data = {"raw": det}
-            return True, data, det
-        return False, det, det
-
-    # Use cached profile if available
-    if _THUNDER_PARAM_PROFILE is not None:
-        try:
-            ok, data, _ = _attempt(_THUNDER_PARAM_PROFILE)
-            if ok:
-                return True, data
-        except Exception as e:
-            pass  # fall through to probing
-
-    last_details = ''
-    for p in profiles:
-        try:
-            ok, data, det = _attempt(p)
-            last_details = det
-            if ok:
-                _THUNDER_PARAM_PROFILE = p
-                return True, data
-            # If parameter missing, try next profile
-            if isinstance(det, str) and "Parameter (" in det and ") not found" in det:
-                continue
-        except Exception as e:
-            last_details = str(e)
-            continue
-
-    return False, last_details
+                # If details aren't JSON, return as raw data
+                return True, {"raw": det, "details": det}
+        return False, det
+        
+    except Exception as e:
+        return False, str(e)
 
 
 # ---- TDK wrappers for service/process checks (thin wrappers around ExecuteCmd) ----
