@@ -85,27 +85,26 @@ from ai2_0_utils import (
     get_device_info_from_json,
     build_download_url,
     build_additional_metadata,
-    thunder_download_package,
-    thunder_install_package,
+    pm_download,
+    pm_install,
     thunder_launch_app,
     thunder_verify_package_installed,
     check_and_activate_ai2_managers_thunder,
     create_tdk_test_step,
     set_test_step_status,
-    configure_tdk_test_case,
-    safe_unload_module
+    safe_unload_module,
+    get_ai2_setting,
 )
 
 # Test component to be tested
-obj = tdklib.TDKScriptingLibrary("rdkservices", "1", standAlone=True)
+obj = tdklib.TDKScriptingLibrary("PackageManager", "1", standAlone=True)
 
 # IP and Port of box, No need to change,
 # This will be replaced with corresponding Box IP and port while executing script
 ip = <ipaddress>
 port = <port>
 
-# Configure test case using helper function
-configure_tdk_test_case(obj, ip, port, 'PackageMgr_DAC_06_InstallAndLaunchApps')
+obj.configureTestCase(ip,port,'PackageMgr_DAC_06_InstallAndLaunchApps');
 
 # Get the result of connection with test component and DUT
 loadmodulestatus = obj.getLoadModuleResult()
@@ -129,14 +128,14 @@ if "SUCCESS" in loadmodulestatus.upper():
             print("[TEST RESULT] SKIPPED - Essential plugin not available on this device")
             set_test_step_status(tdkTestObj, "FAILURE", f"Essential plugin missing: {', '.join(essential_failed)}")
             obj.setLoadModuleStatus("FAILURE")
-            safe_unload_module(obj, "rdkservices")
+            safe_unload_module(obj, "PackageManager")
             sys.exit(1)
             
         set_test_step_status(tdkTestObj, "SUCCESS", "AI2.0 managers activated")
     except Exception as e:
         set_test_step_status(tdkTestObj, "FAILURE", f"Failed to activate: {str(e)}")
         obj.setLoadModuleStatus("FAILURE")
-        safe_unload_module(obj, "rdkservices")
+        safe_unload_module(obj, "PackageManager")
         sys.exit(1)
     
     download_ids = []  # Track download IDs for cleanup
@@ -219,10 +218,18 @@ if "SUCCESS" in loadmodulestatus.upper():
                         catalog_url, app_id, app_version, platform_name, firmware_ver
                     )
                     print(f"    Download URL: {download_url}")
-                    
-                    download_id = thunder_download_package(obj, download_url, app_name)
-                    print(f"    ✓ Download ID: {download_id}")
-                    download_ids.append(download_id)
+
+                    rpc_port = get_ai2_setting('packageManager.jsonRpcPort', 9998)
+                    jsonrpc_url = f"http://{ip}:{rpc_port}/jsonrpc"
+
+                    # Simple helper drives preferJsonRpc + fallback
+                    download_id = pm_download(obj, ip, download_url, app_name)
+
+                    if download_id:
+                        print(f"    ✓ Download successful - ID: {download_id}")
+                        download_ids.append(download_id)
+                    else:
+                        raise Exception("Download failed - No download ID returned")
                     
                     app_result['download_status'] = 'SUCCESS'
                     app_result['download_id'] = download_id
@@ -246,8 +253,8 @@ if "SUCCESS" in loadmodulestatus.upper():
                 try:
                     print(f"\n  [INSTALL] Starting installation...")
                     additional_metadata = build_additional_metadata(app)
-                    install_result = thunder_install_package(obj, app_id, app_version, download_id, 
-                                                    additional_metadata, app_name)
+                    install_ok = pm_install(obj, ip, app_id, app_version, download_id, additional_metadata)
+                    install_result = install_ok
                     print(f"    ✓ Install command sent")
                     
                     # Small delay to allow installation to complete
@@ -348,15 +355,12 @@ if "SUCCESS" in loadmodulestatus.upper():
                 else:
                     print()
             
-            # Set final status
+            # Final status (binary): treat partial as FAILURE
             if launch_success == len(app_results):
                 print("\n[TEST RESULT] SUCCESS - All applications downloaded, installed, and launched")
                 obj.setLoadModuleStatus("SUCCESS")
-            elif launch_success > 0:
-                print(f"\n[TEST RESULT] PARTIAL SUCCESS - {launch_success}/{len(app_results)} applications fully processed")
-                obj.setLoadModuleStatus("SUCCESS")
             else:
-                print("\n[TEST RESULT] FAILURE - No applications successfully launched")
+                print(f"\n[TEST RESULT] FAILURE - Only {launch_success}/{len(app_results)} applications fully processed")
                 obj.setLoadModuleStatus("FAILURE")
     
     except Exception as e:
@@ -369,7 +373,7 @@ if "SUCCESS" in loadmodulestatus.upper():
         print("\n[POSTCONDITION] Thunder interface - no download cleanup required")
         print(f"  Downloads processed: {len(download_ids)}")
     
-    safe_unload_module(obj, "rdkservices")
+    safe_unload_module(obj, "PackageManager")
 else:
     print("[ERROR] Failed to load rdkservices module")
     obj.setLoadModuleStatus("FAILURE")

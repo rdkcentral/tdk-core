@@ -1,0 +1,27 @@
+{
+	"appstore-catalog": {
+		"url": "https://dac.dev.rdkinnovation.com",
+		"authentication": {
+			"user": "dac-cloud-rdkm-user",
+			"password": "wcE$:66[OkFbX-NrXvP*#F<HtR5z"
+		}
+	},
+	"dac": {
+		"configUrl": "https://dac.config.dev.fireboltconnect.com/configuration/cpe.json"
+	},
+	"thunder": {
+		"host": "127.0.0.1",
+		"port": 9998
+	},
+	"timeouts": {
+		"socket": 10,
+		"http": 30
+	},
+	"packageManager": {
+		"jsonRpcPort": 9998,
+		"preferJsonRpc": true,
+		"maxDownloads": 2,
+		"maxInstalls": 2,
+		"defaultAppVersion": "1.0.0"
+	}
+}
