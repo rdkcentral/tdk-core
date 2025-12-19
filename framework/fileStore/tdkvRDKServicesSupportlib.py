@@ -4416,6 +4416,14 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                     result = "FALSE"
                 else:
                     result = "TRUE"
+                    
+        elif tag == "network_check_wifi_interface_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            wifi_enabled_status = testStepResults[0].get("enabled")
+            if str(wifi_enabled_status).strip().lower() == "true":
+                result = "FALSE"
+            else:
+                result = "TRUE"
 
         # Cobalt Plugin Response result parser steps
         elif tag == "cobalt_check_state":

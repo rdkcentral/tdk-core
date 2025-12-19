@@ -482,6 +482,7 @@ def fetch_dac_config(config_url: str = DEFAULT_DAC_CONFIG_URL, timeout: int = 30
         resp = requests.get(config_url, timeout=timeout)
         resp.raise_for_status()
         cfg = resp.json()
+        
 
         catalog = cfg['appstore-catalog']
         url_val = catalog['url']
