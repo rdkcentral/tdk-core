@@ -45,14 +45,14 @@ def startSeleniumGrid(tdkTestObj,ClientType,GridUrl,LoginStatus = "LocalLogin"):
         Status = "FAILURE"
         driver = "Failed to initialize the webdriver"
         global profile;
-        print("Starting the Selenium Hub in TM machine")
+        print("Starting the Selenium Hub in client machine")
         #Kill selenium hub and node as a pre-requisite before starting new hub and node
         Prerequ_Status = kill_hub_node(ClientType)
         if "SUCCESS" in Prerequ_Status:
             print("Webui Pre-requisite success")
 
-            status = startHub()
-            if b"SUCCESS" in status:
+            status = startHub(ClientType)
+            if "SUCCESS" in status:
                 tdkTestObj.setResultStatus("SUCCESS");
                 print("SUCCESS: Selenium Hub started successfully\n")
 
@@ -96,7 +96,7 @@ def startSeleniumGrid(tdkTestObj,ClientType,GridUrl,LoginStatus = "LocalLogin"):
 #End of function
 #---------------------------------------------------------------------------------
 
-def startHub():
+def startHub(ClientType):
 
 # Syntax      : startHub()
 # Description : Function to start the selenium hub in TM machine
@@ -104,13 +104,15 @@ def startHub():
 # Return Value: SUCCESS/FAILURE
 
     try:
-        command = "sh %s start_hub %s %s %s" %(tdkbE2EUtility.start_hub_script,tdkbE2EUtility.webui_hub_selenium_path,tdkbE2EUtility.webui_logfile,tdkbE2EUtility.hub_machine_ip)
-        print(command)
-        output = subprocess.check_output(command,shell=True)
+        status = clientConnect(ClientType)
+        if status == "SUCCESS":
+            command = "sh %s start_hub %s %s %s" %(tdkbE2EUtility.start_hub_script,tdkbE2EUtility.webui_hub_selenium_path,tdkbE2EUtility.webui_logfile,tdkbE2EUtility.hub_machine_ip)
+            print(command)
+            status = executeCommand(command)
     except Exception as error:
         print("Got Exception at the function startHub()")
         print(error);
-        output = "Unable to start selenium hub in TM machine. Please check if any instances are already running."
+        output = "Unable to start selenium hub in client machine. Please check if any instances are already running."
     return output
 
 #---------------------------------------------------------------------------------
@@ -194,12 +196,13 @@ def kill_hub_node(clientType):
     elif clientType == "WAN":
         script = tdkbE2EUtility.wan_script;
     print("Killing hub")
-    p = subprocess.call([tdkbE2EUtility.start_hub_script, 'kill_selenium'])
-    print("Killing node")
     status = clientConnect(clientType)
     if status == "SUCCESS":
-        command = "source %s kill_selenium" %(script)
-        status = executeCommand(command)
+        hub_cmd = f"sh {tdkbE2EUtility.start_hub_script} kill_selenium"
+        status = executeCommand(hub_cmd)
+        print("Killing node")
+        node_cmd = "source %s kill_selenium" %(script)
+        status = executeCommand(node_cmd)
         return "SUCCESS"
     else:
         return "FAILURE"
