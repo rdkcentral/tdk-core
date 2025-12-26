@@ -194,22 +194,40 @@ get_wlan_mac()
 # To delete the saved wifi connection in the wlan client
 delete_saved_wifi_connections()
 {
-        ls_2ghz="$(find /etc/NetworkManager/system-connections/ | grep $var2*)"
-        ls_5ghz="$(find /etc/NetworkManager/system-connections/ | grep $var3*)"
+        ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+        ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
+        ls_6ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var4.nmconnection")"
 
-        if  echo $ls_2ghz | grep -q $var2 ; then
-                wifi_2ghz="$(rm /etc/NetworkManager/system-connections/$var2* && echo "SUCCESS" || echo "FAILURE")"
+        if echo "$ls_2ghz" | grep -q . ; then
+                wifi_2ghz="$(rm -f /etc/NetworkManager/system-connections/"$var2.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
+                wifi_2ghz_connection="$(nmcli connection delete "$var2" >/dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
         else
                 wifi_2ghz="SUCCESS"
+                wifi_2ghz_connection="SUCCESS"
         fi
 
-        if echo $ls_5ghz | grep -q $var3; then
-                wifi_5ghz="$(rm /etc/NetworkManager/system-connections/$var3* && echo "SUCCESS" || echo "FAILURE")"
+        if echo "$ls_5ghz" | grep -q . ; then
+                wifi_5ghz="$(rm -f /etc/NetworkManager/system-connections/"$var3.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
+                wifi_5ghz_connection="$(nmcli connection delete "$var3" >/dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
         else
                 wifi_5ghz="SUCCESS"
+                wifi_5ghz_connection="SUCCESS"
         fi
 
-        if [ $wifi_2ghz = "SUCCESS" ] && [ $wifi_5ghz = "SUCCESS" ]; then
+        if echo "$ls_6ghz" | grep -q . ; then
+                wifi_6ghz="$(rm -f /etc/NetworkManager/system-connections/"$var4.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
+                wifi_6ghz_connection="$(nmcli connection delete "$var4" >/dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+        else
+                wifi_6ghz="SUCCESS"
+                wifi_6ghz_connection="SUCCESS"
+        fi
+
+        if [ "$wifi_2ghz" = "SUCCESS" ] &&
+           [ "$wifi_5ghz" = "SUCCESS" ] &&
+           [ "$wifi_6ghz" = "SUCCESS" ] &&
+           [ "$wifi_2ghz_connection" = "SUCCESS" ] &&
+           [ "$wifi_5ghz_connection" = "SUCCESS" ] &&
+           [ "$wifi_6ghz_connection" = "SUCCESS" ]; then
                 echo "OUTPUT:SUCCESS"
         else
                 echo "OUTPUT:FAILURE"

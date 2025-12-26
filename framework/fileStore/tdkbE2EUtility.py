@@ -1702,7 +1702,7 @@ def deleteSavedWifiConnections():
         status = clientConnect("WLAN")
         if status == "SUCCESS":
             if wlan_os_type == "UBUNTU":
-                command="sudo sh %s delete_saved_wifi_connections %s %s" %(wlan_script,ssid_2ghz_name,ssid_5ghz_name)
+                command="sudo sh %s delete_saved_wifi_connections %s %s %s" %(wlan_script,ssid_2ghz_name,ssid_5ghz_name,ssid_6ghz_name)
                 status = executeCommand(command)
             else:
                 status = "Only UBUNTU platform supported!!!"
@@ -1714,15 +1714,6 @@ def deleteSavedWifiConnections():
         status = e;
 
     print("Delete saved wifi connections:%s" %status);
-
-    #Logic to delete the saved wifi connections using nmcli
-    res = subprocess.getstatusoutput("nmcli -t -f TYPE,UUID con")
-    lines = res[1].split('\n')
-
-    for line in lines:
-        parts = line.split(":")
-        if (parts[0] == "802-11-wireless"):
-            os.system("nmcli connection delete uuid "+ parts[1])
 
     return status;
 
