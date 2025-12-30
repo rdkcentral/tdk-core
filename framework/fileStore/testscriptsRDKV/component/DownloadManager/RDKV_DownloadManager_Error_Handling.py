@@ -34,10 +34,10 @@
   <remarks>Negative test cases for error conditions and edge cases</remarks>
   <skip>false</skip>
   <box_types>
-    <box_type>Hybrid-1</box_type>
-    <box_type>Emulator-HYB</box_type>
-    <box_type>RPI</box_type>
-    <box_type>RPI4</box_type>
+    <box_type>RDKTV</box_type>
+    <box_type>RPI-Client</box_type>
+    <box_type>RPI-HYB</box_type>
+    <box_type>Video_Accelerator</box_type>
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
