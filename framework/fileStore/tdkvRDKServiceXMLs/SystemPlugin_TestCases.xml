@@ -84,22 +84,23 @@
                 <resultGeneration useMethodTag="system_get_api_info"/>
             </testStep>
         </testCase>
-
-        <testCase testCaseId="SYS_05" testCaseName= "System_Get_Milestones" desc="Gets list of milestones">
+        
+        <!-- getMilestones method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
+        <!--testCase testCaseId="SYS_05" testCaseName= "System_Get_Milestones" desc="Gets list of milestones">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_System_Milestones" method="Get_Milestones">
                 <resultGeneration useMethodTag="system_get_api_info"/>
             </testStep>
-        </testCase>
+        </testCase-->
 
-        <testCase testCaseId="SYS_06" testCaseName= "System_Get_Device_XConf_Params" desc="Gets Xconf configuration parameters for the device">
+        <testCase testCaseId="SYS_05" testCaseName= "System_Get_Device_XConf_Params" desc="Gets Xconf configuration parameters for the device">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_XConf_Params" method="Get_XConf_Params">
                 <resultGeneration useMethodTag="system_get_xconf_info"/>
             </testStep>
         </testCase>
 
-        <testCase testCaseId="SYS_07" testCaseName= "System_Get_RFC_Config" desc="Gets RFC configurations">
+        <testCase testCaseId="SYS_06" testCaseName= "System_Get_RFC_Config" desc="Gets RFC configurations">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_System_RFC_Config" method="Get_RFC_Config">
                 <params>
@@ -109,7 +110,8 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="SYS_08" testCaseName="System_Toggle_GZ_Enabled_Status" desc="Toggle GZ enabled status" >
+        <!-- isGzEnabled method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
+        <!--testCase testCaseId="SYS_08" testCaseName="System_Toggle_GZ_Enabled_Status" desc="Toggle GZ enabled status" >
            <testCaseInfo testCaseType="setandget" revert="true" />
             <testStep testStepId="1" name="Get_GZ_Enable_Status" method="Get_GZ_Enable_Status" saveResult="true" revertGet="yes">
                 <resultGeneration useMethodTag="system_get_gz_enabled_status" />
@@ -125,9 +127,10 @@
                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_toggle_gz_enabled_status" />
                 </resultGeneration>
             </testStep>
-        </testCase>
-
-        <testCase testCaseId="SYS_09" testCaseName="System_SetAndGet_Cache_Key_Value" desc="Set and Get Cache Key" >
+        </testCase-->
+        
+        <!-- setCachedValue method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
+        <!--testCase testCaseId="SYS_09" testCaseName="System_SetAndGet_Cache_Key_Value" desc="Set and Get Cache Key" >
            <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Set_Cache_Value" method="Set_Cache_Value">
                 <params>
@@ -162,11 +165,12 @@
                 </params>
                 <resultGeneration useMethodTag="system_check_cache" expectedValues="False" />
             </testStep>
-        </testCase>
-
-        <testCase testCaseId="SYS_10" testCaseName="System_SetAndGet_Power_State" desc="Set and get device power state" >
+        </testCase-->
+        
+        <!-- getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this testcase is modified -->
+        <testCase testCaseId="SYS_07" testCaseName="System_SetAndGet_Power_State" desc="Set and get device power state" >
            <testCaseInfo testCaseType="setandget" revert="true" />
-            <testStep testStepId="1" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" saveResult="true">
+            <!--testStep testStepId="1" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" saveResult="true">
                 <resultGeneration useMethodTag="system_get_available_standby_modes" arguments="check_mode" expectedValues="LIGHT_SLEEP" />
             </testStep>
             <testStep testStepId="2" name="Get_Preferred_StandBy_Mode" method="Get_Preferred_StandBy_Mode" saveResult="true">
@@ -178,30 +182,51 @@
                   <param tag="standbyMode" value="LIGHT_SLEEP" />
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
-            </testStep>
-            <testStep testStepId="4" name="Get_Power_State" method="Get_Power_State" saveResult="true" revertGet="yes">
+            </testStep-->
+            <testStep testStepId="1" name="Get_Power_State" method="Get_Power_State" saveResult="true" revertGet="yes">
                 <resultGeneration useMethodTag="system_get_power_state"/>
             </testStep>
-            <testStep testStepId="5" name="Set_Power_State" method="Set_Power_State" revertSet="yes">
+            <testStep testStepId="2" name="Set_Power_State" method="Set_Power_State" revertSet="yes">
                 <params>
                   <param tag="standbyReason"  useDefault="true" />
-                  <param tag="powerState"   usePreviousResult="true" Id="4" useMethodTag="system_switch_power_state" revertParam="yes" />
+                  <param tag="powerState"   usePreviousResult="true" Id="1" useMethodTag="system_switch_power_state" revertParam="yes" />
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
-            <testStep testStepId="6" name="Power_State_changed_Event" event="Event_PowerState_Changed" action="eventListener" delay="30">
+            <testStep testStepId="3" name="Power_State_changed_Event" event="Event_PowerState_Changed" action="eventListener" delay="30">
               <resultGeneration useMethodTag="system_validate_power_mode" >
-                  <expectedValues usePreviousResult="true" Id="4" useMethodTag="system_switch_power_state" />
+                  <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_switch_power_state" />
               </resultGeneration>
             </testStep>
-            <testStep testStepId="7" name="Get_Power_State" method="Get_Power_State" revertFlag="yes">
+            <testStep testStepId="4" name="Get_Power_State" method="Get_Power_State" revertFlag="yes">
                 <resultGeneration useMethodTag="system_get_power_state">
-                    <expectedValues usePreviousResult="true" Id="4" useMethodTag="system_switch_power_state" />
+                    <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_switch_power_state" />
                 </resultGeneration>
             </testStep>
+
+            <testCasePostRequisite>
+              <postrequisite requisiteId="1" requisiteName="Reverting_PowerState_ON">
+                <testStep testStepId="1" name="Check_power_state" method="Get_Power_State" saveResult="true" pluginName="System">
+                  <resultGeneration useMethodTag="usbaccess_get_power_state"/>
+                </testStep>
+                <testStep testStepId="2" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="system_check_power_state_status"/>
+                  <params>
+                    <param tag="standbyReason" useDefault="true" />
+                    <param tag="powerState" value="ON"/>
+                  </params>
+                  <resultGeneration useMethodTag="system_check_set_operation" />
+                </testStep>
+                <testStep testStepId="3" name="Check_power_state" method="Get_Power_State" pluginName="System">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="system_check_power_state_status"/>
+                  <resultGeneration useMethodTag="usbaccess_get_power_state" expectedValues="ON" />
+                </testStep>
+              </postrequisite>
+            </testCasePostRequisite>
         </testCase>
 
-        <testCase testCaseId="SYS_11" testCaseName="System_SetAndGet_Preferred_StandBy_Mode" desc="Set and get preferred standby mode" >
+        <!-- getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
+        <!--testCase testCaseId="SYS_11" testCaseName="System_SetAndGet_Preferred_StandBy_Mode" desc="Set and get preferred standby mode" >
            <testCaseInfo testCaseType="loop" revert="true" />
             <testStep testStepId="1" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" saveResult="true" >
                 <resultGeneration useMethodTag="system_get_available_standby_modes" />
@@ -222,8 +247,8 @@
                   </resultGeneration>
               </subtestStep>
             </testStep>
-        </testCase>
-        <testCase testCaseId="SYS_12" testCaseName="System_SetAndGet_TimeZone_DST" desc="Set and get DST time zone" >
+        </testCase-->
+        <testCase testCaseId="SYS_08" testCaseName="System_SetAndGet_TimeZone_DST" desc="Set and get DST time zone" >
            <testCaseInfo testCaseType="direct"  />
             <testStep testStepId="1" name="Set_TimeZone_DST" method="Set_TimeZone_DST" >
                 <params>
@@ -247,42 +272,46 @@
             </testStep>
         </testCase-->
         
+        <!-- getLastDeepSleepReason ethod has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
         <!-- Test case 13 -->
-        <testCase testCaseId="SYS_13" testCaseName= "System_Get_Last_DeepSleep_Reason" desc="Retrieve the last deep sleep reason.">
+        <!--testCase testCaseId="SYS_13" testCaseName= "System_Get_Last_DeepSleep_Reason" desc="Retrieve the last deep sleep reason.">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="DeepSleep" />
             <testStep testStepId="1" name="Get_Last_DeepSleep_Reason" method="Get_Last_DeepSleep_Reason" >
               <resultGeneration useMethodTag="system_get_state_info"/>
             </testStep>
-        </testCase>
+        </testCase-->
 
-        <!-- Test case 14 -->
-        <testCase testCaseId="SYS_14" testCaseName= "System_Get_Core_Temperature" desc="Fetch the core temperature of the device.">
+        <!-- Test case 09 -->
+        <testCase testCaseId="SYS_09" testCaseName= "System_Get_Core_Temperature" desc="Fetch the core temperature of the device.">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="CoreTemperature" />
             <testStep testStepId="1" name="Get_Core_Temperature" method="Get_Core_Temperature" >
               <resultGeneration useMethodTag="system_validate_core_temperature"/>
             </testStep>
         </testCase>
-
+        
+        <!-- clearLastDeepSleepReason method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
         <!-- Test case 15 -->
-        <testCase testCaseId="SYS_15" testCaseName= "System_Clear_Last_DeepSleep_Reason" desc="Clear the last deep sleep reason.">
+        <!--testCase testCaseId="SYS_15" testCaseName= "System_Clear_Last_DeepSleep_Reason" desc="Clear the last deep sleep reason.">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="DeepSleep" />
             <testStep testStepId="1" name="Clear_Last_DeepSleep_Reason" method="Clear_Last_DeepSleep_Reason" >
               <resultGeneration useMethodTag="system_get_state_info"/>
             </testStep>
-        </testCase>
-
+        </testCase-->
+        
+        <!-- getMode method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
         <!-- Test case 16 -->
-        <testCase testCaseId="SYS_16" testCaseName= "System_Get_Mode" desc="Retrieve the currently set mode information.">
+        <!--testCase testCaseId="SYS_16" testCaseName= "System_Get_Mode" desc="Retrieve the currently set mode information.">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mode" method="Get_Mode" >
               <resultGeneration useMethodTag="system_validate_modes"  >
                 <expectedValues useDefault="true" />
               </resultGeneration>
             </testStep>
-        </testCase>
-
+        </testCase-->
+        
+        <!-- getPreviousRebootInfo method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
         <!-- Test case 17 -->
-        <testCase testCaseId="SYS_17" testCaseName= "System_Get_PreviousReboot_Info" desc="Retrieve basic information about a reboot">
+        <!--testCase testCaseId="SYS_17" testCaseName= "System_Get_PreviousReboot_Info" desc="Retrieve basic information about a reboot">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_reboot" method="Reboot" rebootStep="yes" >
               <resultGeneration useMethodTag="system_check_set_operation"  />
@@ -290,10 +319,11 @@
             <testStep testStepId="2" name="Get_PreviousReboot_Info" method="Get_PreviousReboot_Info" >
               <resultGeneration useMethodTag="system_get_state_info"  />
             </testStep>
-        </testCase>
+        </testCase-->
 
+        <!-- getPreviousRebootInfo2 method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
         <!-- Test case 18 -->
-        <testCase testCaseId="SYS_18" testCaseName= "System_Get_PreviousReboot_Info2" desc="Retrieve detailed information about a reboot">
+        <!--testCase testCaseId="SYS_18" testCaseName= "System_Get_PreviousReboot_Info2" desc="Retrieve detailed information about a reboot">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_reboot" method="Reboot" rebootStep="yes" >
               <resultGeneration useMethodTag="system_check_set_operation"  />
@@ -301,10 +331,11 @@
             <testStep testStepId="2" name="Get_PreviousReboot_Info2" method="Get_PreviousReboot_Info2" >
               <resultGeneration useMethodTag="system_get_state_info" arguments="rebootInfo" />
             </testStep>
-        </testCase>
-
+        </testCase-->
+        
+        <!-- getPreviousRebootReason method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
         <!-- Test case 19 -->
-        <testCase testCaseId="SYS_19" testCaseName= "System_Get_PreviousReboot_Reason" desc="Retrieve the last reboot reason.">
+        <!--testCase testCaseId="SYS_19" testCaseName= "System_Get_PreviousReboot_Reason" desc="Retrieve the last reboot reason.">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_reboot" method="Reboot" rebootStep="yes" >
               <resultGeneration useMethodTag="system_check_set_operation"  />
@@ -312,56 +343,59 @@
             <testStep testStepId="2" name="Get_PreviousReboot_Reason" method="Get_PreviousReboot_Reason" >
               <resultGeneration useMethodTag="system_get_state_info"  />
             </testStep>
-        </testCase>
+        </testCase-->
 
-        <!-- Test case 20 -->
-        <testCase testCaseId="SYS_20" testCaseName= "System_Get_Temperature_Thresholds" desc="Retrieves temperature threshold values.">
+        <!-- Test case 10 -->
+        <testCase testCaseId="SYS_10" testCaseName= "System_Get_Temperature_Thresholds" desc="Retrieves temperature threshold values.">
             <testCaseInfo testCaseType="direct"  configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="TemperatureThreshold"/>
             <testStep testStepId="1" name="Get_Temperature_Thresholds" method="Get_Temperature_Thresholds" >
               <resultGeneration useMethodTag="system_get_state_info"  arguments="temperatureThresholds" />
             </testStep>
         </testCase>
 
+        <!-- hasRebootBeenRequested has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
         <!-- Test case 21 -->
-        <testCase testCaseId="SYS_21" testCaseName= "System_Has_Reboot_BeenRequested" desc="Check whether a reboot has been requested.">
+        <!--testCase testCaseId="SYS_21" testCaseName= "System_Has_Reboot_BeenRequested" desc="Check whether a reboot has been requested.">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Has_Reboot_BeenRequested" method="Has_Reboot_BeenRequested" >
               <resultGeneration useMethodTag="system_validate_bool_result" arguments="rebootRequested">
                 <expectedValues useDefault="true"/>
               </resultGeneration>
             </testStep>
-        </testCase>
+        </testCase-->
 
+        <!-- queryMocaStatus method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
         <!-- Test case 22 -->
-        <testCase testCaseId="SYS_22" testCaseName= "System_Query_MocaStatus" desc="Check whether Moca is enabled">
+        <!--testCase testCaseId="SYS_22" testCaseName= "System_Query_MocaStatus" desc="Check whether Moca is enabled">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Query_MocaStatus" method="Query_MocaStatus" >
               <resultGeneration useMethodTag="system_validate_bool_result" arguments="mocaEnabled">
                 <expectedValues useDefault="true"/>
               </resultGeneration>
             </testStep>
-        </testCase>
+        </testCase-->
 
-        <!-- Test case 23 -->
-        <testCase testCaseId="SYS_23" testCaseName="System_SetAndGet_NORMAL_Mode" desc="Set and get STB mode to NORMAL" >
-           <testCaseInfo testCaseType="setandget" revert="true" />
-            <testStep testStepId="1" name="Get_STB_Mode" method="Get_Mode" saveResult="true" revertGet="yes">
+        <!-- Test case 11 -->
+        <!-- getMilestones method has been deprecated and removed from the system plugin documentation therefore, this testcase is modified -->
+        <testCase testCaseId="SYS_11" testCaseName="System_Set_NORMAL_Mode" desc="Set STB mode to NORMAL">
+           <testCaseInfo testCaseType="direct"/>
+            <!--testStep testStepId="1" name="Get_STB_Mode" method="Get_Mode" saveResult="true" revertGet="yes">
                 <resultGeneration useMethodTag="system_validate_modes"/>
-            </testStep>
-            <testStep testStepId="2" name="Set_STB_Mode_NORMAL" method="Set_Mode" revertSet="yes">
+            </testStep-->
+            <testStep testStepId="1" name="Set_STB_Mode_NORMAL" method="Set_Mode">
                 <params>
                   <param tag="duration"  useDefault="true" />
-                  <param tag="mode" useDefault="true" revertParam="yes" />
+                  <param tag="mode" useDefault="true"/>
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
-            <testStep testStepId="3" name="Get_STB_Mode" method="Get_Mode" revertFlag="yes" delay="5">
+            <!--testStep testStepId="3" name="Get_STB_Mode" method="Get_Mode" revertFlag="yes" delay="5">
                 <resultGeneration useMethodTag="system_validate_modes" expectedValues="NORMAL" />
-            </testStep>
+            </testStep-->
         </testCase>
 
-        <!-- Test case 24 -->
-        <testCase testCaseId="SYS_24" testCaseName= "System_GetMac_Address" desc="Get Mac Address">
+        <!-- Test case 12 -->
+        <testCase testCaseId="SYS_12" testCaseName= "System_GetMac_Address" desc="Get Mac Address">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_MacAddress" method="Get_MacAddress" >
                 <params>
@@ -376,8 +410,8 @@
             </testStep>
         </testCase>
 
-        <!-- Test case 25 -->
-	<testCase testCaseId="SYS_25" testCaseName= "System_SetAndGet_Temperature_Thresholds" desc="Set and get temperature thresholds">
+        <!-- Test case 13 -->
+	<testCase testCaseId="SYS_13" testCaseName= "System_SetAndGet_Temperature_Thresholds" desc="Set and get temperature thresholds">
             <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="TemperatureThreshold"/>
             <testStep testStepId="1" name="Get_Temperature_Thresholds" method="Get_Temperature_Thresholds" saveResult="true" revertGet="yes">
                 <resultGeneration useMethodTag="system_verify_thresholds_params"  />
@@ -407,7 +441,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="SYS_26" testCaseName= "System_Get_Image_Version" desc="Gets the image version">
+        <testCase testCaseId="SYS_14" testCaseName= "System_Get_Image_Version" desc="Gets the image version">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_Image_Version" method="Get_Device_Info">
                 <params>
@@ -416,7 +450,7 @@
                 <resultGeneration useMethodTag="system_get_api_info"/>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_27" testCaseName= "System_Get_model_number" desc="Gets the model number">
+       <testCase testCaseId="SYS_15" testCaseName= "System_Get_model_number" desc="Gets the model number">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_model_number" method="Get_Device_Info">
                 <params>
@@ -425,7 +459,7 @@
                 <resultGeneration useMethodTag="system_get_api_info"/>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_28" testCaseName= "System_Get_boxIP" desc="Gets the box IP">
+       <testCase testCaseId="SYS_16" testCaseName= "System_Get_boxIP" desc="Gets the box IP">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_boxIP" method="Get_Device_Info">
                 <params>
@@ -434,7 +468,7 @@
                 <resultGeneration useMethodTag="system_get_api_info"/>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_29" testCaseName= "System_Get_build_type" desc="Gets the build type">
+       <testCase testCaseId="SYS_17" testCaseName= "System_Get_build_type" desc="Gets the build type">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_build_type" method="Get_Device_Info">
                 <params>
@@ -443,7 +477,7 @@
                 <resultGeneration useMethodTag="system_get_api_info"/>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_30" testCaseName= "System_Get_eth_mac" desc="Gets eth mac of the device">
+       <testCase testCaseId="SYS_18" testCaseName= "System_Get_eth_mac" desc="Gets eth mac of the device">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_eth_mac" method="Get_Device_Info">
                 <params>
@@ -452,7 +486,7 @@
                 <resultGeneration useMethodTag="system_get_api_info"/>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_31" testCaseName= "System_Get_rf4ce_mac" desc="Gets the rf4ce mac of the device">
+       <testCase testCaseId="SYS_19" testCaseName= "System_Get_rf4ce_mac" desc="Gets the rf4ce mac of the device">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RF4CE_MAC" useMethodTag="system_check_feature_applicability" arguments="Enable"/>
             <testStep testStepId="1" name="Get_Device_rf4ce_mac" method="Get_Device_Info">
                 <params>
@@ -461,7 +495,7 @@
                 <resultGeneration useMethodTag="system_get_api_info"/>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_32" testCaseName= "System_Get_Bluetooth_mac" desc="Gets device bluetooth mac">
+       <testCase testCaseId="SYS_20" testCaseName= "System_Get_Bluetooth_mac" desc="Gets device bluetooth mac">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_Bluetooth_Mac" method="Get_Device_Info">
                 <params>
@@ -470,7 +504,7 @@
                 <resultGeneration useMethodTag="system_check_mac_address" arguments="bluetooth_mac" />
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_33" testCaseName= "System_Get_WiFi_Mac" desc="Gets device WiFi mac">
+       <testCase testCaseId="SYS_21" testCaseName= "System_Get_WiFi_Mac" desc="Gets device WiFi mac">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_WiFi_Mac" method="Get_Device_Info">
                 <params>
@@ -479,7 +513,7 @@
                 <resultGeneration useMethodTag="system_check_mac_address" arguments="wifi_mac" />
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_34" testCaseName="Check_Power_State_Before_Reboot" desc="Checks the powerstate before reboot" >
+       <testCase testCaseId="SYS_22" testCaseName="Check_Power_State_Before_Reboot" desc="Checks the powerstate before reboot" >
             <testCaseInfo testCaseType="direct" revert="true" />
             <testStep testStepId="1" name="Get_Power_State" method="Get_Power_State" saveResult="true" >
                 <resultGeneration useMethodTag="system_get_power_state"/>
@@ -493,32 +527,34 @@
                 </resultGeneration>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_35" testCaseName="System_Check_On_SystemMode_Changed" desc="Checks for the system mode changed event" >
-           <testCaseInfo testCaseType="direct" revert="true" />
-            <testStep testStepId="1" name="Get_STB_Mode" method="Get_Mode" >
+
+       <!-- getMode method has been deprecated and removed from the system plugin documentation therefore, this testcase is modified -->
+       <testCase testCaseId="SYS_23" testCaseName="System_Check_On_SystemMode_Changed" desc="Checks for the system mode changed event" >
+           <testCaseInfo testCaseType="direct"/>
+            <!--testStep testStepId="1" name="Get_STB_Mode" method="Get_Mode" >
                 <resultGeneration useMethodTag="system_validate_modes"/>
-            </testStep>
-            <testStep testStepId="2" name="Set_STB_Mode_WAREHOUSE" method="Set_Mode">
+            </testStep-->
+            <testStep testStepId="1" name="Set_STB_Mode_WAREHOUSE" method="Set_Mode">
                 <params>
                   <param tag="duration"  value="5" />
                   <param tag="mode" value="WAREHOUSE" />
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
-            <testStep testStepId="3" name="Get_STB_Mode" method="Get_Mode" >
+            <!--testStep testStepId="3" name="Get_STB_Mode" method="Get_Mode" >
                 <resultGeneration useMethodTag="system_validate_modes" expectedValues="WAREHOUSE" />
-            </testStep>
-            <testStep testStepId="4" name="Check_On_SystemMode_Changed_Event" event="Event_SystemMode_Changed" action="eventListener"  >
+            </testStep-->
+            <testStep testStepId="2" name="Check_On_SystemMode_Changed_Event" event="Event_SystemMode_Changed" action="eventListener">
               <resultGeneration useMethodTag="system_check_system_mode_change_event" expectedValues="WAREHOUSE"/>
             </testStep>
-            <testStep testStepId="5" name="Check_On_SystemMode_Changed_Event" event="Event_SystemMode_Changed" action="eventListener"  delay="5">
+            <testStep testStepId="3" name="Check_On_SystemMode_Changed_Event" event="Event_SystemMode_Changed" action="eventListener" delay="5">
               <resultGeneration useMethodTag="system_check_system_mode_change_event" expectedValues="NORMAL"/>
             </testStep>
-            <testStep testStepId="6" name="Get_STB_Mode" method="Get_Mode" >
+            <!--testStep testStepId="6" name="Get_STB_Mode" method="Get_Mode" >
                 <resultGeneration useMethodTag="system_validate_modes" expectedValues="NORMAL" />
-            </testStep>
+            </testStep-->
        </testCase>
-       <testCase testCaseId="SYS_36" testCaseName= "System_Check_Reboot_Reason_Event" desc="Retrieve basic information about a reboot">
+       <testCase testCaseId="SYS_24" testCaseName= "System_Check_Reboot_Reason_Event" desc="Retrieve basic information about a reboot">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_reboot" method="Reboot" closeConn="false" rebootStep="yes">
                <params>
@@ -530,7 +566,7 @@
               <resultGeneration useMethodTag="system_check_reboot_reason_event" expectedValues= "API Validation,SystemServices" />
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_37" testCaseName="Enable_And_Disable_Telemetry_OptOut_Status"  desc="Checks whether able to enable and disable the telemetry opt-out status">
+       <testCase testCaseId="SYS_25" testCaseName="Enable_And_Disable_Telemetry_OptOut_Status"  desc="Checks whether able to enable and disable the telemetry opt-out status">
             <testCaseInfo testCaseType="loop" revert="true"/>
             <testStep testStepId="1" name="Get_OptOut_Telemetry_Status" method="Get_OptOut_Telemetry_Status"  saveResult="true" revertGet="yes">
               <resultGeneration useMethodTag="system_check_telemetry_optout_status" />
@@ -550,7 +586,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="SYS_38" testCaseName= "System_Validate_Firmware_Upgrade" desc="Upgrades to specified firmware version" >
+       <testCase testCaseId="SYS_26" testCaseName= "System_Validate_Firmware_Upgrade" desc="Upgrades to specified firmware version" >
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="XCONF_SERVER_SUPPORT" useMethodTag="system_check_feature_applicability" arguments="yes" />
             <testStep testStepId="1" name="Check_Version_File" action="externalFnCall" >
              <resultGeneration useMethodTag="Check_Version_File"/>
@@ -667,8 +703,9 @@
              <resultGeneration useMethodTag="check_time_sync" />
             </testStep>
        </testCase>
-
-       <testCase testCaseId="SYS_39" testCaseName= "System_check_PreviousReboot_Info2_Custom_Reason" desc="Checks whether it returns custom reason provided in reboot API">
+       
+       <!-- getPreviousRebootInfo2 method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
+       <!--testCase testCaseId="SYS_39" testCaseName= "System_check_PreviousReboot_Info2_Custom_Reason" desc="Checks whether it returns custom reason provided in reboot API">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_reboot" method="Reboot" closeConn="false" rebootStep="yes" >
               <params>
@@ -679,7 +716,7 @@
             <testStep testStepId="2" name="Get_PreviousReboot_Info2" method="Get_PreviousReboot_Info2" >
               <resultGeneration useMethodTag="system_check_custom_reboot_reason" arguments="rebootInfo" expectedValues= "API_Validation" />
             </testStep>
-       </testCase>
+       </testCase-->
     
        <!--testCase testCaseId="SYS_40" testCaseName="System_Enable_Disable_Moca_Support" desc="check if able to toggle the Moca status" >
            <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="MocaSupport" />
@@ -699,7 +736,7 @@
             </testStep>
        </testCase-->
        
-       <testCase testCaseId="SYS_40" testCaseName= "System_SetAndGet_Over-Temperature_Grace_Interval" desc="Sets and gets the over-temperature grace interval">
+       <testCase testCaseId="SYS_27" testCaseName= "System_SetAndGet_Over-Temperature_Grace_Interval" desc="Sets and gets the over-temperature grace interval">
             <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="OverTemperatureGraceInterval" />
             <testStep testStepId="1" name="Get_Over-Temperature_Grace_Interval_Value" method="Get_Over-Temperature_Grace_Interval" saveResult="true" revertGet="yes">
                 <resultGeneration useMethodTag="system_verify_interval_value"  />
@@ -717,7 +754,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="SYS_41" testCaseName= "System_Check_Model_Number" desc="Checks the model number of the DUT">
+       <testCase testCaseId="SYS_28" testCaseName= "System_Check_Model_Number" desc="Checks the model number of the DUT">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
                     <resultGeneration useMethodTag="system_get_device_details_from_file" >
@@ -734,7 +771,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="SYS_42" testCaseName= "System_Check_Device_Mac_Address" desc="Checks the device MAC address">
+       <testCase testCaseId="SYS_29" testCaseName= "System_Check_Device_Mac_Address" desc="Checks the device MAC address">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
                     <resultGeneration useMethodTag="system_get_device_details_from_file" >
@@ -751,7 +788,7 @@
             </testStep>
        </testCase>
         
-       <testCase testCaseId="SYS_43" testCaseName= "System_Check_WebBrowser_Details" desc="Checks the webbrowser details">
+       <testCase testCaseId="SYS_30" testCaseName= "System_Check_WebBrowser_Details" desc="Checks the webbrowser details">
 	    <testCaseInfo testCaseType="direct"/>
 	    <testCasePreRequisite>
 		<prerequisite requisiteId="1" requisiteName="Activate_RDKShell_Plugin">
@@ -825,7 +862,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="SYS_44" testCaseName= "System_Check_Power_State_Management_Status" desc="Checks the power state management status">
+       <testCase testCaseId="SYS_31" testCaseName= "System_Check_Power_State_Management_Status" desc="Checks the power state management status">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Power_State_Is_Managed_By_Device" method="Get_Power_State_Is_Managed_By_Device">
                 <resultGeneration useMethodTag="system_validate_bool_result" arguments="powerStateManagedByDevice">
@@ -834,7 +871,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="SYS_45" testCaseName= "System_Check_Firmware_Upgrade_Status" desc="Checks the firmware upgrade status">
+       <testCase testCaseId="SYS_32" testCaseName= "System_Check_Firmware_Upgrade_Status" desc="Checks the firmware upgrade status">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_SWUpdate_File_Status" action="externalFnCall" saveResult="true">
                 <resultGeneration useMethodTag="system_check_swupdate_file_status" />
@@ -849,7 +886,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="SYS_46" testCaseName= "System_Check_Public_IP_Address" desc="Checks the public IP address">
+       <testCase testCaseId="SYS_33" testCaseName= "System_Check_Public_IP_Address" desc="Checks the public IP address">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Public_IP_Address" action="externalFnCall" saveResult="true">
                 <resultGeneration useMethodTag="system_check_public_ip_address" />
@@ -864,7 +901,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="SYS_47" testCaseName="System_Check_HDR_Capabilities" desc="Checks the HDR Capabilities of the device">
+       <testCase testCaseId="SYS_34" testCaseName="System_Check_HDR_Capabilities" desc="Checks the HDR Capabilities of the device">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
               <prerequisite requisiteId="1" requisiteName="Activate_DisplaySettings_Plugin">
@@ -901,7 +938,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="SYS_48" testCaseName= "SetAndGet_All_Time_Zones" desc="Set and get all the time zones">
+       <testCase testCaseId="SYS_35" testCaseName= "SetAndGet_All_Time_Zones" desc="Set and get all the time zones">
             <testCaseInfo testCaseType="loop" />
             <testStep testStepId="1" name="Get_Time_Zones" method="Get_Time_Zones" saveResult="true">
                     <resultGeneration useMethodTag="system_get_time_zones_list"/>
@@ -921,7 +958,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="SYS_49" testCaseName="System_Toggle_Network_Standby_Mode_Status" desc="Toggle Network Standby Mode Status" >
+       <testCase testCaseId="SYS_36" testCaseName="System_Toggle_Network_Standby_Mode_Status" desc="Toggle Network Standby Mode Status" >
            <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="NetworkStandbyMode"/>
             <testStep testStepId="1" name="Get_Network_Standby_Mode" method="Get_Network_Standby_Mode" saveResult="true" revertGet="yes">
                 <resultGeneration useMethodTag="system_get_network_standby_mode_status" />
@@ -944,9 +981,10 @@
             </testStep>
        </testCase>
        
-       <testCase testCaseId="SYS_50" testCaseName="Check_Power_State_Before_Reboot_On_Standby_State" desc="Checks the powerstate before reboot" >
+       <!-- getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this testcase is modified -->
+       <testCase testCaseId="SYS_37" testCaseName="Check_Power_State_Before_Reboot_On_Standby_State" desc="Checks the powerstate before reboot" >
             <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" saveResult="true">
+            <!--testStep testStepId="1" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" saveResult="true">
                 <resultGeneration useMethodTag="system_get_available_standby_modes" arguments="check_mode" expectedValues="LIGHT_SLEEP" />
             </testStep>
             <testStep testStepId="2" name="Get_Preferred_StandBy_Mode" method="Get_Preferred_StandBy_Mode" saveResult="true">
@@ -958,26 +996,26 @@
                   <param tag="standbyMode" value="LIGHT_SLEEP" />
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
-            </testStep>
-            <testStep testStepId="4" name="Get_Power_State" method="Get_Power_State"  >
+            </testStep-->
+            <testStep testStepId="1" name="Get_Power_State" method="Get_Power_State"  >
                 <resultGeneration useMethodTag="system_get_power_state"/>
             </testStep>
-            <testStep testStepId="5" name="Set_Power_State" method="Set_Power_State" >
+            <testStep testStepId="2" name="Set_Power_State" method="Set_Power_State" >
                 <params>
                   <param tag="standbyReason"  useDefault="true" />
                   <param tag="powerState"  value="STANDBY"/>
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
-            <testStep testStepId="6" name="Get_Power_State" method="Get_Power_State" saveResult="true" >
+            <testStep testStepId="3" name="Get_Power_State" method="Get_Power_State" saveResult="true" >
                 <resultGeneration useMethodTag="system_get_power_state" expectedValues="LIGHT_SLEEP,STANDBY" />
             </testStep>
-            <testStep testStepId="7" name="System_reboot" method="Reboot" rebootStep="yes" >
+            <testStep testStepId="4" name="System_reboot" method="Reboot" rebootStep="yes" >
               <resultGeneration useMethodTag="system_check_set_operation"  />
             </testStep>
-            <testStep testStepId="8" name="Get_Power_State_Before_Reboot" method="Get_Power_State_Before_Reboot" >
+            <testStep testStepId="5" name="Get_Power_State_Before_Reboot" method="Get_Power_State_Before_Reboot" >
                 <resultGeneration useMethodTag="system_validate_powerstate_before_reboot">
-                  <expectedValues usePreviousResult="true" Id="6" useMethodTag="system_get_powerstate_before_reboot"/>
+                  <expectedValues usePreviousResult="true" Id="3" useMethodTag="system_get_powerstate_before_reboot"/>
                 </resultGeneration>
             </testStep>
        <testCasePostRequisite>
@@ -996,7 +1034,7 @@
          </postrequisite>
        </testCasePostRequisite>
        </testCase>
-       <testCase testCaseId="SYS_51" testCaseName= "Check_Time_Zones_Persist_After_Reboot" desc="Checks whether time zone setting is persist after reboot">
+       <testCase testCaseId="SYS_38" testCaseName= "Check_Time_Zones_Persist_After_Reboot" desc="Checks whether time zone setting is persist after reboot">
             <testCaseInfo testCaseType="loop" />
             <testStep testStepId="1" name="Get_Time_Zones" method="Get_Time_Zones" saveResult="true">
                 <resultGeneration useMethodTag="system_get_time_zones_list"/>
@@ -1018,7 +1056,7 @@
                 </subtestStep>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_52" testCaseName="System_Reboot_And_Check_System_Uptime" desc="To reboot and check the system uptime">
+       <testCase testCaseId="SYS_39" testCaseName="System_Reboot_And_Check_System_Uptime" desc="To reboot and check the system uptime">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_System_Uptime" method="Get_System_Uptime">
                 <resultGeneration useMethodTag="system_get_api_info"/>
@@ -1032,7 +1070,7 @@
                     </resultGeneration>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_53" testCaseName="System_Check_On_TimeZoneDST_Changed_Event" desc="Checks whether time zone setting is persist after reboot">
+       <testCase testCaseId="SYS_40" testCaseName="System_Check_On_TimeZoneDST_Changed_Event" desc="Checks whether time zone setting is persist after reboot">
             <testCaseInfo testCaseType="loop" />
             <testStep testStepId="1" name="Get_Time_Zones" method="Get_Time_Zones" saveResult="true">
                 <resultGeneration useMethodTag="system_get_time_zones_list"/>
@@ -1100,7 +1138,7 @@
                 <resultGeneration useMethodTag="system_get_rfc_info" arguments="check_expected_value" expectedValues="true"/>
             </testStep>
        </testCase-->
-       <testCase testCaseId="SYS_54" testCaseName="System_Check_RFC_Status" desc="Checks whether the RFC value is correctly reflected using getRFCConfig">
+       <testCase testCaseId="SYS_41" testCaseName="System_Check_RFC_Status" desc="Checks whether the RFC value is correctly reflected using getRFCConfig">
             <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Check_RFC_Status"  action="externalFnCall" saveResult="true">
                     <resultGeneration useMethodTag="check_tr181_parameter">
@@ -1136,7 +1174,7 @@
                 <resultGeneration useMethodTag="system_get_rfc_info" arguments="check_expected_value" expectedValues="true"/>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_55" testCaseName="System_SetandGet_Friendly_Name" desc="Check whether able to set and get friendly name" >
+       <testCase testCaseId="SYS_42" testCaseName="System_SetandGet_Friendly_Name" desc="Check whether able to set and get friendly name" >
             <testCaseInfo testCaseType="setandget" revert="true"  />
             <testStep testStepId="1" name="Get_Friendly_Name" method="System_Get_Friendly_Name"  saveResult="true" revertGet="yes" >
                 <resultGeneration useMethodTag="system_check_friendly_name" />
@@ -1156,7 +1194,7 @@
                 </resultGeneration>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_56" testCaseName="System_Check_Friendly_Name_Persist" desc="Check friendly name is persisting on reboot" >
+       <testCase testCaseId="SYS_43" testCaseName="System_Check_Friendly_Name_Persist" desc="Check friendly name is persisting on reboot" >
             <testCaseInfo testCaseType="setandget" revert="true"  />
             <testStep testStepId="1" name="Get_Friendly_Name" method="System_Get_Friendly_Name"  saveResult="true" revertGet="yes" >
                 <resultGeneration useMethodTag="system_check_friendly_name" />
@@ -1174,7 +1212,7 @@
                 <resultGeneration useMethodTag="system_check_friendly_name" expectedValues="Test_Value" arguments="check_name"/>
             </testStep>
        </testCase>
-       <testCase testCaseId="SYS_57" testCaseName="System_Set_Invalid_TimeZone_DST" desc="Checks whether able to set invalid timezone" >
+       <testCase testCaseId="SYS_44" testCaseName="System_Set_Invalid_TimeZone_DST" desc="Checks whether able to set invalid timezone" >
            <testCaseInfo testCaseType="direct"  />
             <testStep testStepId="1" name="Set_TimeZone_DST" method="Set_TimeZone_DST" >
                 <params>
@@ -1184,8 +1222,8 @@
             </testStep>
         </testCase>
 	
-       <!-- Test case 58 -->
-       <testCase testCaseId="SYS_58" testCaseName= "System_Check_RFCList_with_Empty_Value" desc="Check RFC configurations list with empty value">
+       <!-- Test case 45 -->
+       <testCase testCaseId="SYS_45" testCaseName= "System_Check_RFCList_with_Empty_Value" desc="Check RFC configurations list with empty value">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_RFC_Config_List_Empty" method="Get_RFC_Config">
                 <params>
@@ -1195,8 +1233,8 @@
             </testStep>
        </testCase>		
 
-       <!-- Test case 59 -->
-       <testCase testCaseId="SYS_59" testCaseName= "System_Check_Device_Type" desc="Check the device type of the DUT with getPlatformConfiguration API">
+       <!-- Test case 46 -->
+       <testCase testCaseId="SYS_46" testCaseName= "System_Check_Device_Type" desc="Check the device type of the DUT with getPlatformConfiguration API">
             <testCaseInfo testCaseType="direct"/>
             <!--testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
                 <resultGeneration useMethodTag="system_get_device_details_from_file" >
@@ -1213,10 +1251,11 @@
             </testStep>
        </testCase>
 
-       <!-- Test case 60 -->
-       <testCase testCaseId="SYS_60" testCaseName="System_Check_Device_SSH_State_After_Reboot_On_Standby_State" desc="Check whether the box sshable or not in standbymode after reboot" >
+       <!-- Test case 47 -->
+       <!-- getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this testcase is modified -->
+       <testCase testCaseId="SYS_47" testCaseName="System_Check_Device_SSH_State_After_Reboot_On_Standby_State" desc="Check whether the box sshable or not in standbymode after reboot" >
             <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" saveResult="true">
+            <!--testStep testStepId="1" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" saveResult="true">
                 <resultGeneration useMethodTag="system_get_available_standby_modes" arguments="check_mode" expectedValues="LIGHT_SLEEP" />
             </testStep>
             <testStep testStepId="2" name="Get_Preferred_StandBy_Mode" method="Get_Preferred_StandBy_Mode" saveResult="true">
@@ -1228,24 +1267,24 @@
                   <param tag="standbyMode" value="LIGHT_SLEEP" />
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
-            </testStep>
-            <testStep testStepId="4" name="Get_Power_State" method="Get_Power_State"  >
+            </testStep-->
+            <testStep testStepId="1" name="Get_Power_State" method="Get_Power_State"  >
                 <resultGeneration useMethodTag="system_get_power_state"/>
             </testStep>
-            <testStep testStepId="5" name="Set_Power_State" method="Set_Power_State" >
+            <testStep testStepId="2" name="Set_Power_State" method="Set_Power_State" >
                 <params>
                   <param tag="standbyReason"  useDefault="true" />
                   <param tag="powerState"  value="STANDBY"/>
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
-            <testStep testStepId="6" name="Get_Power_State" method="Get_Power_State" saveResult="true" >
+            <testStep testStepId="3" name="Get_Power_State" method="Get_Power_State" saveResult="true" >
                 <resultGeneration useMethodTag="system_get_power_state" expectedValues="LIGHT_SLEEP,STANDBY" />
             </testStep>
-            <testStep testStepId="7" name="System_reboot" method="Reboot" rebootStep="yes" >
+            <testStep testStepId="4" name="System_reboot" method="Reboot" rebootStep="yes" >
               <resultGeneration useMethodTag="system_check_set_operation"  />
             </testStep>
-            <testStep testStepId="8" name="Check_Device_SSH_State" action="externalFnCall">
+            <testStep testStepId="5" name="Check_Device_SSH_State" action="externalFnCall">
               <resultGeneration useMethodTag="check_device_ssh_state"/>
             </testStep>
        <testCasePostRequisite>
@@ -1265,8 +1304,8 @@
        </testCasePostRequisite>
        </testCase>
 	
-       <!-- Test case 61 -->
-       <testCase testCaseId="SYS_61" testCaseName="System_Set_Invalid_Territory_And_Region" desc="Sets invalid territory and region">
+       <!-- Test case 48 -->
+       <testCase testCaseId="SYS_48" testCaseName="System_Set_Invalid_Territory_And_Region" desc="Sets invalid territory and region">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
               <params>
@@ -1277,8 +1316,8 @@
             </testStep>
         </testCase>
 
-	<!-- Test case 62 -->
-	<testCase testCaseId="SYS_62" testCaseName="System_Set_Empty_Territory_And_Region" desc="Sets empty territory and region">
+	<!-- Test case 49 -->
+	<testCase testCaseId="SYS_49" testCaseName="System_Set_Empty_Territory_And_Region" desc="Sets empty territory and region">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
               <params>
@@ -1289,8 +1328,8 @@
             </testStep>
         </testCase>
 	
-	<!-- Test case 63 -->
-	<testCase testCaseId="SYS_63" testCaseName="System_Set_Invalid_Territory_And_Valid_Region" desc="Sets invalid territory and valid region">
+	<!-- Test case 50 -->
+	<testCase testCaseId="SYS_50" testCaseName="System_Set_Invalid_Territory_And_Valid_Region" desc="Sets invalid territory and valid region">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
               <params>
@@ -1301,8 +1340,8 @@
             </testStep>
         </testCase>
 	
-	<!-- Test case 64 -->
-	<testCase testCaseId="SYS_64" testCaseName="System_Set_Empty_Territory_And_Valid_Region" desc="Sets empty territory and valid region">
+	<!-- Test case 51 -->
+	<testCase testCaseId="SYS_51" testCaseName="System_Set_Empty_Territory_And_Valid_Region" desc="Sets empty territory and valid region">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
               <params>
@@ -1313,8 +1352,8 @@
             </testStep>
         </testCase>
 
-	<!-- Test case 65 -->
-	<testCase testCaseId="SYS_65" testCaseName="System_Set_And_Get_Territory_Region" desc="Check whether able to set and get territory and region">
+	<!-- Test case 52 -->
+	<testCase testCaseId="SYS_52" testCaseName="System_Set_And_Get_Territory_Region" desc="Check whether able to set and get territory and region">
             <testCaseInfo testCaseType="loop"/>
 	    <testStep testStepId="1" name="Get_territory_And_region_Config_File" action="externalFnCall" saveResult="true">
                 <resultGeneration useMethodTag="Get_territory_And_region_Config_File">
@@ -1340,16 +1379,16 @@
             </testStep>
     	</testCase>
 
-	<!-- Test case 66 -->
-	<testCase testCaseId="SYS_66" testCaseName="System_Verify_Set_Territory_without_Params" desc="Verify that the setTerritory method returns an error when both territory and region are not provided">
+	<!-- Test case 53 -->
+	<testCase testCaseId="SYS_53" testCaseName="System_Verify_Set_Territory_without_Params" desc="Verify that the setTerritory method returns an error when both territory and region are not provided">
             <testCaseInfo testCaseType="direct"/>
 	    <testStep testStepId="1" name="System_Set_Only_Territory" method="System_Set_Territory">
               <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory name"/>
             </testStep>
 	</testCase>
 
-	<!-- Test case 67 -->
-	<testCase testCaseId="SYS_67" testCaseName="System_Set_Valid_Territory_And_Set_Invalid_Region" desc="Check whether able to set valid territory and invalid region to set territory API">
+	<!-- Test case 54 -->
+	<testCase testCaseId="SYS_54" testCaseName="System_Set_Valid_Territory_And_Set_Invalid_Region" desc="Check whether able to set valid territory and invalid region to set territory API">
             <testCaseInfo testCaseType="direct"/>
 	    <testStep testStepId="1" name="System_Set_Valid_Territory_And_Set_Invalid_Region" method="System_Set_Territory">
               <params>
@@ -1360,8 +1399,8 @@
             </testStep>
 	</testCase>
 
-	<!-- Test case 68 -->
-	<testCase testCaseId="SYS_68" testCaseName="System_Set_Valid_Territory_And_Set_Empty_Region" desc="Check whether able to set valid territory and empty region to set territory API">
+	<!-- Test case 55 -->
+	<testCase testCaseId="SYS_55" testCaseName="System_Set_Valid_Territory_And_Set_Empty_Region" desc="Check whether able to set valid territory and empty region to set territory API">
             <testCaseInfo testCaseType="direct"/>
 	    <testStep testStepId="1" name="System_Set_Valid_Territory_And_Set_Empty_Region" method="System_Set_Territory">
               <params>
@@ -1372,16 +1411,16 @@
             </testStep>
 	</testCase>
 
-	<!-- Test case 69 -->
-	<testCase testCaseId="SYS_69" testCaseName="System_Get_Mfg_Serial_Number" desc="Check whether able to get the manufacturing serial number">
+	<!-- Test case 56 -->
+	<testCase testCaseId="SYS_56" testCaseName="System_Get_Mfg_Serial_Number" desc="Check whether able to get the manufacturing serial number">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="System_Get_Mfg_Serial_Number" method="System_Get_Mfg_Serial_Number">
               <resultGeneration useMethodTag="system_check_mfg_serial_number"/>
             </testStep>
         </testCase>
 
-	<!-- Test case 70 -->
-	<testCase testCaseId="SYS_70" testCaseName="System_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+	<!-- Test case 57 -->
+	<testCase testCaseId="SYS_57" testCaseName="System_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
             <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -1437,7 +1476,8 @@
        </testCase>
 	   
 	<!-- Test case 71 -->
-    <testCase testCaseId="SYS_71" testCaseName="System_Deletes_Persistent_path_Invalid_CallSign" desc="Validate api with invalid callsign">
+  <!-- deletePersistentPath method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
+    <!--testCase testCaseId="SYS_71" testCaseName="System_Deletes_Persistent_path_Invalid_CallSign" desc="Validate api with invalid callsign">
                         <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Delete_Persistent_Path" method="Delete_Persistent_Path">
                           <params>
@@ -1446,10 +1486,11 @@
                           </params>
                           <resultGeneration useMethodTag="system_check_error_message" expectedValues="no service found" arguments="errorMessage" />
                         </testStep>
-        </testCase>
+        </testCase-->
 
 	<!-- Test case 72 -->
-	<testCase testCaseId="SYS_72" testCaseName="System_Deletes_Persistent_path_Empty_CallSign" desc="Validate api with empty callsign">
+  <!-- deletePersistentPath method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
+	<!--testCase testCaseId="SYS_72" testCaseName="System_Deletes_Persistent_path_Empty_CallSign" desc="Validate api with empty callsign">
 					<testCaseInfo testCaseType="direct"/>
 			<testStep testStepId="1" name="Delete_Persistent_Path" method="Delete_Persistent_Path">
 					  <params>
@@ -1458,10 +1499,11 @@
 					  </params>
 					  <resultGeneration useMethodTag="system_check_error_message" expectedValues="specified 'callsign' or 'type' is empty" arguments="errorMessage" />
 					</testStep>
-	</testCase>
+	</testCase-->
 
 	<!-- Test case 73 -->
-	<testCase testCaseId="SYS_73" testCaseName="System_Invalid_property_StateInfo" desc="Validate with invalid property">
+  <!-- getStateInfo method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out -->
+	<!--testCase testCaseId="SYS_73" testCaseName="System_Invalid_property_StateInfo" desc="Validate with invalid property">
 					<testCaseInfo testCaseType="direct"/>
 			<testStep testStepId="1" name="Get_State_Info" method="Get_State_Info">
 					  <params>
@@ -1469,10 +1511,10 @@
 					  </params>
 					  <resultGeneration useMethodTag="system_check_error_message" expectedValues="Unexpected error" arguments="errorMessage" />
 					</testStep>
-	</testCase>
+	</testCase-->
 
-	<!-- Test case 74 -->
-	<testCase testCaseId="SYS_74" testCaseName="System_Invalid_Set_Mode" desc="Validate by setting up invalid mode">
+	<!-- Test case 58 -->
+	<testCase testCaseId="SYS_58" testCaseName="System_Invalid_Set_Mode" desc="Validate by setting up invalid mode">
 					<testCaseInfo testCaseType="direct"/>
 			<testStep testStepId="1" name="Set_Mode" method="Set_Mode">
 					  <params>
@@ -1483,8 +1525,8 @@
 					</testStep>
 	</testCase>
 
-	<!-- Test case 75 -->
-        <testCase testCaseId="SYS_75" testCaseName="System_SetandGet_Empty_Friendly_Name" desc="Check whether able to set and get empty friendly name" >
+	<!-- Test case 59 -->
+        <testCase testCaseId="SYS_59" testCaseName="System_SetandGet_Empty_Friendly_Name" desc="Check whether able to set and get empty friendly name" >
 				<testCaseInfo testCaseType="setandget" revert="true"  />
 		<testStep testStepId="1" name="Get_Friendly_Name" method="System_Get_Friendly_Name"  saveResult="true" revertGet="yes" >
 						<resultGeneration useMethodTag="system_check_friendly_name" />
@@ -1511,8 +1553,8 @@
 				</testStep>
         </testCase>
 
-     <!-- Test case 76 -->
-        <testCase testCaseId="SYS_76" testCaseName="System_Invalid_Set_Power_State" desc="Validate by setting up invalid power state">
+     <!-- Test case 60 -->
+        <testCase testCaseId="SYS_60" testCaseName="System_Invalid_Set_Power_State" desc="Validate by setting up invalid power state">
             <testCaseInfo testCaseType="direct"/>
              <testStep testStepId="1" name="Set_Power_State" method="Set_Power_State">
                 <params>
@@ -1523,8 +1565,8 @@
             </testStep>
         </testCase>
 
-    <!-- Test case 77-->
-        <testCase testCaseId="SYS_77" testCaseName="System_Invalid_TimeZone_ErrorValidation" desc="Set and get Invalid DST time zone" >
+    <!-- Test case 61-->
+        <testCase testCaseId="SYS_61" testCaseName="System_Invalid_TimeZone_ErrorValidation" desc="Set and get Invalid DST time zone" >
            <testCaseInfo testCaseType="direct"  />
             <testStep testStepId="1" name="Set_TimeZone_DST" method="Set_TimeZone_DST" >
                 <params>
@@ -1534,8 +1576,8 @@
             </testStep>
         </testCase>
 
-    <!-- Test case 78-->
-        <testCase testCaseId="SYS_78" testCaseName="System_Invalid_Key_ErrorMessage" desc="Validate error message with invalid key in deviceInfo api" >
+    <!-- Test case 62-->
+        <testCase testCaseId="SYS_62" testCaseName="System_Invalid_Key_ErrorMessage" desc="Validate error message with invalid key in deviceInfo api" >
            <testCaseInfo testCaseType="direct"  />
             <testStep testStepId="1" name="Get_Device_Info" method="Get_Device_Info" >
                 <params>
