@@ -111,7 +111,7 @@ if expectedResult in result.upper():
     # moving it to the front, openning a socket connection to the webkit inspect page and
     # getting the details for proc validation from config file
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,webkit_instance)   
-    videoURL  = MediaValidationVariables.video_src_url_av1_P_end_hls
+    videoURL  = MediaValidationVariables.video_src_url_corrupted_av1_aac_P_end_hls
     if pre_requisite_status == "SUCCESS":
             print("The content is corrupted with P frame at end segment of the video")
             tdkTestObj.setResultStatus("SUCCESS");
