@@ -86,7 +86,7 @@ from ai2_0_utils import ensure_plugin_active, load_download_config
 
 # Load DownloadManager configuration with fallback defaults
 config = load_download_config()
-test_urls = config.get('testUrls', {})
+dm_urls = config.get('downloadManager', {})
 dl_timeouts = config.get('timeouts', {})
 dl_defaults = config.get('defaults', {})
 dl_methods = config.get('methods', {})
@@ -108,7 +108,7 @@ if "SUCCESS" in result.upper():
     obj.setLoadModuleStatus("SUCCESS")
     expectedResult = "SUCCESS"
     
-    print("Step 0: Activating Required Dependent Plugins")
+    print("Precondition: Activating Required Dependent Plugins")
     try:
         from ai2_0_utils import check_and_activate_ai2_managers
         print("Activating StorageManager and other required plugins...")
@@ -127,7 +127,10 @@ if "SUCCESS" in result.upper():
         print("Continuing with DownloadManager activation...")
     
     # Test data - using a larger file for meaningful pause/resume testing
-    test_url = test_urls.get('large', 'https://tools.rdkcentral.com:8443/images//lib32-middleware-test-image-RPI4-raspberrypi4-64-rdke-feature-RDKECOREMW-584-OTA.wic.tar.gz')
+    test_url = dm_urls.get('dm_test_url_large')
+    if not test_url:
+        print("WARNING: Large test URL not found in configuration, using fallback")
+        test_url = 'https://tools.rdkcentral.com:8443/images//lib32-middleware-test-image-RPI4-raspberrypi4-64-rdke-feature-RDKECOREMW-584-OTA.wic.tar.gz'
     download_id = None
     
     print("Step 1: Checking DownloadManager plugin status")

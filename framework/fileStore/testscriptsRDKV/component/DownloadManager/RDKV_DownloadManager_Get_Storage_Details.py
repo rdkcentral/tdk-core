@@ -101,7 +101,7 @@ if "SUCCESS" in result.upper():
     obj.setLoadModuleStatus("SUCCESS")
     expectedResult = "SUCCESS"
     
-    print("Step 0: Activating Required Dependent Plugins")
+    print("Precondition: Activating Required Dependent Plugins")
     try:
         from ai2_0_utils import check_and_activate_ai2_managers
         print("Activating StorageManager and other required plugins...")

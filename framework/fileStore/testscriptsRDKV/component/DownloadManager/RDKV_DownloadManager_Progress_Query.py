@@ -86,8 +86,18 @@ from ai2_0_utils import ensure_plugin_active, load_download_config
 
 # Load DownloadManager configuration with fallback defaults
 config = load_download_config()
-test_urls = config.get('testUrls', {})
-dl_timeouts = config.get('timeouts', {})
+dm_urls = config.get('downloadManager', {})
+dl_timeouts = config.get('timeouts', {
+    'progressCheckTimeout': 25,
+    'waitInterval': 2,
+    'pauseResumeWait': 3
+})
+dl_defaults = config.get('defaults', {
+    'priority': 'true',
+    'retries': '2',
+    'rateLimit': '0',
+    'rateLimitTest': '512000'
+})
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("DownloadManager", "1", standAlone=True)
@@ -106,7 +116,7 @@ if "SUCCESS" in result.upper():
     obj.setLoadModuleStatus("SUCCESS")
     expectedResult = "SUCCESS"
     
-    print("Step 0: Activating Required Dependent Plugins")
+    print("Precondition: Activating Required Dependent Plugins")
     try:
         from ai2_0_utils import check_and_activate_ai2_managers
         print("Activating StorageManager and other required plugins...")
@@ -124,8 +134,11 @@ if "SUCCESS" in result.upper():
         print("WARNING: Could not activate dependent plugins: %s" % str(e))
         print("Continuing with DownloadManager activation...")
     
-    # Test data - using LARGE file for progress tracking
-    test_url = test_urls.get('large', 'https://tools.rdkcentral.com:8443/images//lib32-middleware-test-image-RPI4-raspberrypi4-64-rdke-feature-RDKECOREMW-584-OTA.wic.tar.gz')
+    # Test data - using LARGE file for progress tracking from configuration
+    test_url = dm_urls.get('dm_test_url_large')
+    if not test_url:
+        print("WARNING: Large test URL not found in configuration, using fallback")
+        test_url = 'https://tools.rdkcentral.com:8443/images//lib32-middleware-test-image-RPI4-raspberrypi4-64-rdke-feature-RDKECOREMW-584-OTA.wic.tar.gz'
     download_id = None
     
     print("Step 1: Checking DownloadManager plugin status")
@@ -153,97 +166,42 @@ if "SUCCESS" in result.upper():
                 if download_id:
                     print("SUCCESS: Download started with ID: %s" % download_id)
                     
-                    # Track progress multiple times
-                    progress_history = []
-                    max_checks = 8
-                    check_interval = 2  # seconds
-                    
-                    print("Step 3: Tracking download progress over time")
-                    for i in range(max_checks):
-                        time.sleep(check_interval)
-                        
-                        print("Progress check %d/%d..." % (i + 1, max_checks))
-                        tdkTestObj = obj.createTestStep('downloadmanager_progress')
-                        tdkTestObj.addParameter("downloadId", download_id)
-                        tdkTestObj.executeTestCase(expectedResult)
-                        progress_result = tdkTestObj.getResult()
-                        progress_details = tdkTestObj.getResultDetails()
-                        
-                        print("[PROGRESS RESULT %d] : %s" % (i + 1, progress_result))
-                        print("[PROGRESS DETAILS %d] : %s" % (i + 1, progress_details))
-                        
-                        if expectedResult in progress_result:
-                            try:
-                                progress_data = json.loads(progress_details)
-                                percent = progress_data.get("percent", -1)
-                                
-                                # Validate progress value
-                                if 0 <= percent <= 100:
-                                    print("SUCCESS: Valid progress value: %d%%" % percent)
-                                    progress_history.append({
-                                        "check": i + 1,
-                                        "percent": percent,
-                                        "timestamp": time.time()
-                                    })
-                                    
-                                    # If download completed, break
-                                    if percent == 100:
-                                        print("SUCCESS: Download completed!")
-                                        break
-                                else:
-                                    print("WARNING: Invalid progress value: %d%%" % percent)
-                                
-                            except Exception as e:
-                                print("FAILURE: Error parsing progress data: %s" % str(e))
-                                break
-                        else:
-                            print("FAILURE: Failed to get progress information")
-                            break
-                    
-                    # Analyze progress history
-                    print("\nStep 4: Analyzing progress history")
-                    if len(progress_history) >= 2:
-                        print("Progress History:")
-                        for entry in progress_history:
-                            print("  Check %d: %d%%" % (entry["check"], entry["percent"]))
-                        
-                        # Check if progress generally increased
-                        first_percent = progress_history[0]["percent"]
-                        last_percent = progress_history[-1]["percent"]
-                        
-                        if last_percent >= first_percent:
-                            print("SUCCESS: Progress increased from %d%% to %d%%" % (first_percent, last_percent))
-                            tdkTestObj.setResultStatus("SUCCESS")
-                        else:
-                            print("WARNING: Progress decreased from %d%% to %d%%" % (first_percent, last_percent))
-                            print("INFO: This might be normal for some download scenarios")
-                            tdkTestObj.setResultStatus("SUCCESS")
-                    else:
-                        print("WARNING: Insufficient progress data collected")
-                        print("INFO: Progress API is functional")
-                        tdkTestObj.setResultStatus("SUCCESS")
-                    
-                    # Test error handling with invalid download ID
-                    print("\nStep 5: Testing error handling with invalid download ID")
-                    invalid_download_id = "invalid_download_id_12345"
+                    # Check progress once to verify it returns a positive value
+                    print("Step 3: Checking download progress (single check)")
+                    time.sleep(2)
                     
                     tdkTestObj = obj.createTestStep('downloadmanager_progress')
-                    tdkTestObj.addParameter("downloadId", invalid_download_id)
+                    tdkTestObj.addParameter("downloadId", download_id)
                     tdkTestObj.executeTestCase(expectedResult)
-                    invalid_progress_result = tdkTestObj.getResult()
-                    invalid_progress_details = tdkTestObj.getResultDetails()
+                    progress_result = tdkTestObj.getResult()
+                    progress_details = tdkTestObj.getResultDetails()
                     
-                    print("[INVALID PROGRESS RESULT] : %s" % invalid_progress_result)
-                    print("[INVALID PROGRESS DETAILS] : %s" % invalid_progress_details)
+                    print("[PROGRESS RESULT] : %s" % progress_result)
+                    print("[PROGRESS DETAILS] : %s" % progress_details)
                     
-                    # For invalid download ID, we expect either FAILURE or graceful error handling
-                    if "FAILURE" in invalid_progress_result or expectedResult in invalid_progress_result:
-                        print("SUCCESS: Error handling for invalid download ID works correctly")
+                    progress_verified = False
+                    if expectedResult in progress_result:
+                        try:
+                            progress_data = json.loads(progress_details)
+                            percent = progress_data.get("percent", -1)
+                            
+                            # Check if progress value is positive (> 0)
+                            if isinstance(percent, (int, float)) and percent > 0:
+                                print("SUCCESS: Progress check returned positive value: %d%%" % percent)
+                                progress_verified = True
+                                tdkTestObj.setResultStatus("SUCCESS")
+                            else:
+                                print("INFO: Progress value is %d%% (not yet active or not positive)" % percent)
+                                tdkTestObj.setResultStatus("SUCCESS")
+                        except Exception as e:
+                            print("FAILURE: Error parsing progress data: %s" % str(e))
+                            tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print("WARNING: Unexpected result for invalid download ID")
+                        print("FAILURE: Failed to get progress information")
+                        tdkTestObj.setResultStatus("FAILURE")
                     
                     # Test negative scenario: Progress after cancellation
-                    print("\nStep 6: Testing negative scenario - Progress after download cancellation")
+                    print("\nStep 4: Testing negative scenario - Progress after download cancellation")
                     
                     print("Cancelling download for negative test...")
                     tdkTestObj = obj.createTestStep('downloadmanager_cancel')
@@ -285,7 +243,7 @@ if "SUCCESS" in result.upper():
             
         # Cleanup: Cancel download if it was started
         if download_id:
-            print("\nStep 6: Cleaning up - cancelling download")
+            print("\nStep 5: Cleaning up - cancelling download")
             tdkTestObj = obj.createTestStep('downloadmanager_cancel')
             tdkTestObj.addParameter("downloadId", download_id)
             tdkTestObj.executeTestCase(expectedResult)

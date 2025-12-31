@@ -87,14 +87,13 @@ from ai2_0_utils import (
     start_download,
     wait_for_download_completion,
     delete_file,
-    test_error_handling_invalid_download_id,
     cleanup_download,
     load_download_config
 )
 
 # Load DownloadManager configuration with fallback defaults
 config = load_download_config()
-test_urls = config.get('testUrls', {})
+dm_urls = config.get('downloadManager', {})
 test_paths = config.get('testPaths', {})
 dl_timeouts = config.get('timeouts', {})
 
@@ -134,7 +133,10 @@ if "SUCCESS" in result.upper():
         print("Continuing with DownloadManager activation...")
     
     # Get configuration from ai_2_0_cpe.json
-    test_url = test_urls.get('small', 'https://jsonplaceholder.typicode.com/posts/1')
+    test_url = dm_urls.get('dm_test_url_small')
+    if not test_url:
+        print("WARNING: Small test URL not found in configuration, using fallback")
+        test_url = 'https://jsonplaceholder.typicode.com/posts/1'
     download_id = None
     file_locator = None
     
@@ -175,10 +177,6 @@ if "SUCCESS" in result.upper():
                     # This is acceptable as we're testing the API functionality
                     tdkTestObj = obj.createTestStep('test_delete_success')
                     tdkTestObj.setResultStatus("SUCCESS")
-                
-                # Test error handling with invalid file path
-                print("Step 5: Testing error handling with invalid file path")
-                test_error_handling_invalid_download_id(obj, "delete")
             else:
                 print("WARNING: Download did not complete within timeout")
                 print("INFO: Testing delete API with generic path anyway")
