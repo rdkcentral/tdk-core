@@ -621,7 +621,7 @@
     </testCase>
 
     <!-- Test case 24 -->
-    <!-- SetPrimaryInterface method method has been deprecated and removed from the networkmanager plugin documentation therefore, this testcase is commented out -->
+    <!-- SetPrimaryInterface method has been deprecated and removed from the networkmanager plugin documentation therefore, this testcase is commented out -->
     <!--testCase testCaseId="NM_24" testCaseName="NetworkManager_2.4GHz_Interface_Switch_Test"  desc="Check if the device can switch between ethernet and a 2.4GHz wifi network and vice versa">
     	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="IP_CHANGE_LIGHTNING_APP_SUPPORT" useMethodTag="wifi_check_feature_applicability" arguments="yes"/>
     	<testCasePreRequisite>
@@ -929,7 +929,7 @@
     </testCase> 
 
     <!-- Test case 27 -->
-    <!-- SetPrimaryInterface method method has been deprecated and removed from the networkmanager plugin documentation therefore, this testcase is commented out -->
+    <!-- SetPrimaryInterface method has been deprecated and removed from the networkmanager plugin documentation therefore, this testcase is commented out -->
     <!--testCase testCaseId="NM_27" testCaseName="NetworkManager_5GHz_Interface_Switch_Test"  desc="Check if the device can switch between ethernet and a 5GHz wifi network and vice versa">
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="IP_CHANGE_LIGHTNING_APP_SUPPORT" useMethodTag="wifi_check_feature_applicability" arguments="yes"/>
         <testCasePreRequisite>
@@ -1146,7 +1146,7 @@
     </testCase>
 
     <!-- Test case 32 -->
-    <!-- SetPrimaryInterface method method has been deprecated and removed from the networkmanager plugin documentation therefore, this testcase is commented out -->
+    <!-- SetPrimaryInterface method has been deprecated and removed from the networkmanager plugin documentation therefore, this testcase is commented out -->
     <!--testCase testCaseId="NM_32" testCaseName="NetworkManager_Set_Primary/Default_Interface_Twice" desc="check if the SetPrimaryInterface method successfully sets the primary interface when the interface is already set as primary" >
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Get_Device_Interfaces" method="NetworkManager_Get_Available_Interfaces" saveResult="true">
@@ -2921,7 +2921,7 @@
     </testCase>
 
     <!-- Test case 88 -->
-    <testCase testCaseId="NM_88" testCaseName="NetworkManager_Get_IPSettings_IPv4"  desc="Gets the IP setting for the given interface">
+    <testCase testCaseId="NM_88" testCaseName="NetworkManager_Get_IPSettings_IPv6"  desc="Gets the IP setting for the given interface">
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_IPV6_SUPPORT" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
         <testStep testStepId="1" name="Get_IPSettings" method="NetworkManager_Get_IPSettings">
                 <params>

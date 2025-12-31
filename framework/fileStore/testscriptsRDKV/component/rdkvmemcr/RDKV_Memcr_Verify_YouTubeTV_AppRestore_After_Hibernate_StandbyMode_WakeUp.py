@@ -423,7 +423,7 @@ if "SUCCESS" in result.upper():
                                                 tdkTestObj.setResultStatus("FAILURE")
                                                 print("FAILURE : "+method+" API call was unsuccessful\n")
                                             
-                                            #getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this testcase is commented out
+                                            #getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this teststep is commented out
                                             #else:
                                                 #tdkTestObj.setResultStatus("FAILURE")
                                                 #print("FAILURE : Device does not support light sleep mode\n")

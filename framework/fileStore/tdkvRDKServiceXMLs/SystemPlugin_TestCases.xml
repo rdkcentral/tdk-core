@@ -376,7 +376,7 @@
         </testCase-->
 
         <!-- Test case 11 -->
-        <!-- getMilestones method has been deprecated and removed from the system plugin documentation therefore, this testcase is modified -->
+        <!-- getMode method has been deprecated and removed from the system plugin documentation therefore, this testcase is modified -->
         <testCase testCaseId="SYS_11" testCaseName="System_Set_NORMAL_Mode" desc="Set STB mode to NORMAL">
            <testCaseInfo testCaseType="direct"/>
             <!--testStep testStepId="1" name="Get_STB_Mode" method="Get_Mode" saveResult="true" revertGet="yes">
