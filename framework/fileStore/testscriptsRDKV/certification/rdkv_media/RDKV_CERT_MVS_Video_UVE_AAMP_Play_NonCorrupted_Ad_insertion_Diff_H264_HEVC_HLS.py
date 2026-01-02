@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>2</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_CERT_MVS_Video_UVE_AAMP_Play_Corrupted_Ad_insertion_Diff_H264_HEVC_HLS</name>
+  <name>RDKV_CERT_MVS_Video_UVE_AAMP_Play_NonCorrupted_Ad_insertion_Diff_H264_HEVC_HLS</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -80,7 +80,7 @@ webinspect_port: string  video_src_url_ad_diff_hls: string</input_parameters>
     <expected_output>Player should handle corrupted main content gracefully and attempt recovery to continue playback.</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_media</test_stub_interface>
-    <test_script>RDKV_CERT_MVS_Video_UVE_AAMP_Play_Corrupted_Ad_insertion_Diff_H264_HEVC_HLS</test_script>
+    <test_script>RDKV_CERT_MVS_Video_UVE_AAMP_Play_NonCorrupted_Ad_insertion_Diff_H264_HEVC_HLS</test_script>
     <skipped>No</skipped>
     <release_version>M143</release_version>
     <remarks></remarks>
@@ -97,7 +97,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_media","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_MVS_Video_UVE_AAMP_Play_Corrupted_Ad_insertion_Diff_H264_HEVC_HLS')
+obj.configureTestCase(ip,port,'RDKV_CERT_MVS_Video_UVE_AAMP_Play_NonCorrupted_Ad_insertion_Diff_H264_HEVC_HLS')
 webkit_console_socket = None 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -111,7 +111,7 @@ if expectedResult in result.upper():
     # moving it to the front, openning a socket connection to the webkit inspect page and
     # getting the details for proc validation from config file
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,webkit_instance)   
-    videoURL  = MediaValidationVariables.video_src_url_diff_hls
+    videoURL  = MediaValidationVariables.video_src_url_ad_diff_hls
     if pre_requisite_status == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS");
             print("Pre conditions for the test are set successfully")

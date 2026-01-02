@@ -111,7 +111,7 @@ if expectedResult in result.upper():
     # moving it to the front, openning a socket connection to the webkit inspect page and
     # getting the details for proc validation from config file
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,webkit_instance)   
-    videoURL  = MediaValidationVariables.video_src_url_same_dash
+    videoURL  = MediaValidationVariables.video_src_url_ad_same_dash
     if pre_requisite_status == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS");
             print("Pre conditions for the test are set successfully")
