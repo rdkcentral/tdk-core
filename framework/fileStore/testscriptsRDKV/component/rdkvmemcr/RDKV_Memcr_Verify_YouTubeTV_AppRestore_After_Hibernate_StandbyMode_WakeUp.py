@@ -328,7 +328,8 @@ if "SUCCESS" in result.upper():
                                         print("SUCCESS : "+method+" API call was successful\n")
                                         if str(devicePowerState).strip() == "ON":
                                             tdkTestObj.setResultStatus("SUCCESS")
-
+                                           
+                                            ''' getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this teststep is commented out
                                             method = "org.rdk.System.1.getAvailableStandbyModes"
                                             tdkTestObj = obj.createTestStep('memcr_getValue')
                                             tdkTestObj.addParameter("method",method)
@@ -339,76 +340,73 @@ if "SUCCESS" in result.upper():
                                             success = result.get("success")
                                             if str(success).lower() == "true" and "LIGHT_SLEEP" in supportedStandbyModes:
                                                 tdkTestObj.setResultStatus("SUCCESS")
-                                                print("SUCCESS : Device supports light sleep mode\n")
+                                                print("SUCCESS : Device supports light sleep mode\n")'''
 
-                                                method = "org.rdk.System.1.setPowerState"
-                                                value = '{ "powerState": "LIGHT_SLEEP" }'
-                                                tdkTestObj = obj.createTestStep('memcr_setValue')
+                                            method = "org.rdk.System.1.setPowerState"
+                                            value = '{ "powerState": "LIGHT_SLEEP" }'
+                                            tdkTestObj = obj.createTestStep('memcr_setValue')
+                                            tdkTestObj.addParameter("method",method)
+                                            tdkTestObj.addParameter("value",value)
+                                            tdkTestObj.executeTestCase(expectedResult)
+                                            result = tdkTestObj.getResultDetails()
+                                            result = ast.literal_eval(result)
+                                            success = result.get("success")
+                                            if str(success).lower() == "true":
+                                                tdkTestObj.setResultStatus("SUCCESS")
+                                                print("SUCCESS : "+method+" API call was successful\n")
+
+                                                method = "org.rdk.System.1.getPowerState"
+                                                tdkTestObj = obj.createTestStep('memcr_getValue')
                                                 tdkTestObj.addParameter("method",method)
-                                                tdkTestObj.addParameter("value",value)
                                                 tdkTestObj.executeTestCase(expectedResult)
                                                 result = tdkTestObj.getResultDetails()
                                                 result = ast.literal_eval(result)
+                                                devicePowerState =  result.get("powerState")
                                                 success = result.get("success")
-                                                if str(success).lower() == "true":
+                                                if str(success).lower() == "true" and str(devicePowerState).strip() == "LIGHT_SLEEP" or "STANDBY":
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                     print("SUCCESS : "+method+" API call was successful\n")
+                                                    print("Device in lightsleep, wake up after 60 secs then restore the app")
 
-                                                    method = "org.rdk.System.1.getPowerState"
-                                                    tdkTestObj = obj.createTestStep('memcr_getValue')
+                                                    time.sleep(60)
+                                                    print("Device has completed 60 seconds in light sleep, return it to the 'Power ON'state")
+                                                    method = "org.rdk.System.1.setPowerState"
+                                                    value = '{ "powerState": "ON" }'
+                                                    tdkTestObj = obj.createTestStep('memcr_setValue')
                                                     tdkTestObj.addParameter("method",method)
+                                                    tdkTestObj.addParameter("value",value)
                                                     tdkTestObj.executeTestCase(expectedResult)
                                                     result = tdkTestObj.getResultDetails()
                                                     result = ast.literal_eval(result)
-                                                    devicePowerState =  result.get("powerState")
                                                     success = result.get("success")
-                                                    if str(success).lower() == "true" and str(devicePowerState).strip() == "LIGHT_SLEEP" or "STANDBY":
+                                                    if str(success).lower() == "true":
                                                         tdkTestObj.setResultStatus("SUCCESS")
                                                         print("SUCCESS : "+method+" API call was successful\n")
-                                                        print("Device in lightsleep, wake up after 60 secs then restore the app")
 
-                                                        time.sleep(60)
-                                                        print("Device has completed 60 seconds in light sleep, return it to the 'Power ON'state")
-                                                        method = "org.rdk.System.1.setPowerState"
-                                                        value = '{ "powerState": "ON" }'
-                                                        tdkTestObj = obj.createTestStep('memcr_setValue')
+                                                        method = "org.rdk.System.1.getPowerState"
+                                                        tdkTestObj = obj.createTestStep('memcr_getValue')
                                                         tdkTestObj.addParameter("method",method)
-                                                        tdkTestObj.addParameter("value",value)
                                                         tdkTestObj.executeTestCase(expectedResult)
                                                         result = tdkTestObj.getResultDetails()
                                                         result = ast.literal_eval(result)
+                                                        devicePowerState =  result.get("powerState")
                                                         success = result.get("success")
-                                                        if str(success).lower() == "true":
+                                                        if str(success).lower() == "true" and str(devicePowerState).strip() == "ON":
                                                             tdkTestObj.setResultStatus("SUCCESS")
                                                             print("SUCCESS : "+method+" API call was successful\n")
 
-                                                            method = "org.rdk.System.1.getPowerState"
-                                                            tdkTestObj = obj.createTestStep('memcr_getValue')
+                                                            method = "org.rdk.RDKShell.1.restore"
+                                                            value = '{ "callsign": "YouTubeTV" }'
+                                                            tdkTestObj = obj.createTestStep('memcr_setValue')
                                                             tdkTestObj.addParameter("method",method)
+                                                            tdkTestObj.addParameter("value",value)
                                                             tdkTestObj.executeTestCase(expectedResult)
                                                             result = tdkTestObj.getResultDetails()
                                                             result = ast.literal_eval(result)
-                                                            devicePowerState =  result.get("powerState")
                                                             success = result.get("success")
-                                                            if str(success).lower() == "true" and str(devicePowerState).strip() == "ON":
+                                                            if str(success).lower() == "true":
                                                                 tdkTestObj.setResultStatus("SUCCESS")
                                                                 print("SUCCESS : "+method+" API call was successful\n")
-
-                                                                method = "org.rdk.RDKShell.1.restore"
-                                                                value = '{ "callsign": "YouTubeTV" }'
-                                                                tdkTestObj = obj.createTestStep('memcr_setValue')
-                                                                tdkTestObj.addParameter("method",method)
-                                                                tdkTestObj.addParameter("value",value)
-                                                                tdkTestObj.executeTestCase(expectedResult)
-                                                                result = tdkTestObj.getResultDetails()
-                                                                result = ast.literal_eval(result)
-                                                                success = result.get("success")
-                                                                if str(success).lower() == "true":
-                                                                    tdkTestObj.setResultStatus("SUCCESS")
-                                                                    print("SUCCESS : "+method+" API call was successful\n")
-                                                                else:
-                                                                    tdkTestObj.setResultStatus("FAILURE")
-                                                                    print("FAILURE : "+method+" API call was unsuccessful\n")
                                                             else:
                                                                 tdkTestObj.setResultStatus("FAILURE")
                                                                 print("FAILURE : "+method+" API call was unsuccessful\n")
@@ -419,11 +417,16 @@ if "SUCCESS" in result.upper():
                                                         tdkTestObj.setResultStatus("FAILURE")
                                                         print("FAILURE : "+method+" API call was unsuccessful\n")
                                                 else:
-                                                    tdkTestObj.setResultStatus("FAILURE")
-                                                    print("FAILURE : "+method+" API call was unsuccessful\n")
+                                                        tdkTestObj.setResultStatus("FAILURE")
+                                                        print("FAILURE : "+method+" API call was unsuccessful\n")
                                             else:
                                                 tdkTestObj.setResultStatus("FAILURE")
-                                                print("FAILURE : Device does not support light sleep mode\n")
+                                                print("FAILURE : "+method+" API call was unsuccessful\n")
+                                            
+                                            #getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this teststep is commented out
+                                            #else:
+                                                #tdkTestObj.setResultStatus("FAILURE")
+                                                #print("FAILURE : Device does not support light sleep mode\n")
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")
                                             print("FAILURE : Device is in light sleep or standby mode instead of the 'Power On' state\n")
