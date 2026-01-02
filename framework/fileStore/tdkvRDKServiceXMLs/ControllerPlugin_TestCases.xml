@@ -566,7 +566,7 @@
             <params>
                <param tag="callsign" value="Controller" />
             </params>
-            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_PRIVILIGED_REQUEST,24"/>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="method invocation not allowed.,-32604"/>
          </testStep>
      </testCase>
      <testCase testCaseId="Controller_17" testCaseName="Activate_Deactivate_Controller_Plugin" desc="Activates/Deactivates the controller plugin and validates the error code">
@@ -575,13 +575,13 @@
             <params>
                <param tag="callsign" value="Controller" />
             </params>
-            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_PRIVILIGED_REQUEST,24"/>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="method invocation not allowed.,-32604"/>
          </testStep>
          <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin" >
             <params>
                <param tag="callsign" value="Controller" />
             </params>
-            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_PRIVILIGED_REQUEST,24"/>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="method invocation not allowed.,-32604"/>
          </testStep>
      </testCase>
      <testCase testCaseId="Controller_18" testCaseName="Check_Invalid_Environment_Variable_Response"  desc="Passes the invalid environment variable and validates the error code">

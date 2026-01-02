@@ -1078,7 +1078,7 @@
         </method>
         <method name="DisplayInfo_GetPortname" api="portname" type="property" desc="Get Video output port on the STB used for connection to TV"/>
         <method name="DisplayInfo_GetHDRFormatsTV" api="tvcapabilities" type="property" desc="Gets HDR formats supported by TV" >
-            <expectedValues>HdrOff,Hdr10,Hdr10Plus,HdrHlg,HdrDolbyvision,HdrTechnicolor</expectedValues>
+            <expectedValues>HdrOff,Hdr10,Hdr10Plus,HdrHlg,HdrDolbyvision,HdrTechnicolor,HdrSdr</expectedValues>
         </method>
         <method name="DisplayInfo_GetHDRFormatsSTB" api="stbcapabilities" type="property" desc="Gets HDR formats supported by STB" >
             <expectedValues>HdrOff,Hdr10,Hdr10Plus,HdrHlg,HdrDolbyvision,HdrTechnicolor</expectedValues>
