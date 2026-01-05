@@ -108,7 +108,9 @@ def startHub(ClientType):
         if status == "SUCCESS":
             command = "sh %s start_hub %s %s %s" %(tdkbE2EUtility.start_hub_script,tdkbE2EUtility.webui_hub_selenium_path,tdkbE2EUtility.webui_logfile,tdkbE2EUtility.hub_machine_ip)
             print(command)
-            status = executeCommand(command)
+            output = executeCommand(command)
+        else:
+            output = "Failed to connect to Client to start Hub"
     except Exception as error:
         print("Got Exception at the function startHub()")
         print(error);
