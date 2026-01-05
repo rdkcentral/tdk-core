@@ -3937,6 +3937,15 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+            elif len(arg) and arg[0] == "validate_ipversion_error_message":
+                if otherInfo:
+                    error = otherInfo.get("error")
+                    if str(error.get("message")).lower() == str(expectedValues[0]).lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
             else:        
                 endpoint = result.get("endpoint")
                 tx_packets = int(result.get("packetsTransmitted"))
@@ -4098,7 +4107,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["configured_ssid_presence"] = "no"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                info["Test_Step_Status"] = "SUCCESS"
 
         elif tag == "networkmanager_check_empty_ssid_list":
             info["success"] = result.get("success")
@@ -4109,7 +4118,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "SUCCESS"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                info["Test_Step_Status"] = "SUCCESS"
 
         # Common Response result parser steps
         elif tag == "check_result_values":

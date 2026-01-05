@@ -4120,6 +4120,7 @@
        </testCase>
 
        <!-- Test case 116 -->
+       <!-- getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this testcase is modified -->
        <testCase testCaseId="DS_116" testCaseName="DisplaySettings_Check_Display_Connected_Status_After_Light_Sleep_Internal0" desc="Verify that the getConnectedVideoDisplays method returns the TV connected status when the device in light sleep mode">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" >
@@ -4128,7 +4129,7 @@
             <testStep testStepId="2" name="Get_Power_State" method="Get_Power_State" pluginName="System" saveResult="true">
                 <resultGeneration useMethodTag="usbaccess_get_power_state"/>
             </testStep>
-            <testStep testStepId="3" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" pluginName="System">
+            <!--testStep testStepId="3" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" pluginName="System">
                 <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
                 <resultGeneration useMethodTag="system_get_available_standby_modes" arguments="check_mode" expectedValues="LIGHT_SLEEP" />
             </testStep>
@@ -4142,8 +4143,8 @@
                   <param tag="standbyMode" value="LIGHT_SLEEP" />
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
-            </testStep>
-            <testStep testStepId="6" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+            </testStep-->
+            <testStep testStepId="3" name="Set_Power_State" method="Set_Power_State" pluginName="System">
                 <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
                 <params>
                   <param tag="standbyReason"  useDefault="true" />
@@ -4151,11 +4152,11 @@
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
-            <testStep testStepId="7" name="Get_Power_State" method="Get_Power_State" pluginName="System">
+            <testStep testStepId="4" name="Get_Power_State" method="Get_Power_State" pluginName="System">
                 <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
                 <resultGeneration useMethodTag="usbaccess_get_power_state" expectedValues="STANDBY,LIGHT_SLEEP"/>
             </testStep>
-	    <testStep testStepId="8" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" >
+	    <testStep testStepId="5" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" >
                     <resultGeneration useMethodTag="display_connected_status">
 			    <arguments useConfigFile="true" key="TV_CONNECTION_STATUS_DURING_STANDBY"/>
                     </resultGeneration>
