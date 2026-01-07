@@ -141,7 +141,7 @@ if "SUCCESS" in result.upper():
             binaryPath = "cd " + basePath + " ; ./" + binaryName 
             executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, SkipTestCaseList)
             executePostRequisites()
-            failed_testCases = printTestSummary(executionSummary)
+            failed_testCases = printTestSummary(executionSummary, plugin_name)
         else:
             print("ERROR : NO TESTS FOUND")
             failed_testCases = "ERROR"
