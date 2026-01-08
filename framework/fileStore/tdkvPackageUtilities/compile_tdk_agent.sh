@@ -19,14 +19,14 @@
 ##########################################################################
 
 #meta layers
-SRC_META_RDK_VIDEO="https://code.rdkcentral.com/r/rdk/components/generic/rdk-oe/meta-rdk-video"
+SRC_META_RDK_VIDEO="https://github.com/rdkcentral/meta-rdk-video.git"
 
 #Git repositories
 SRC_CURL="https://curl.se/download/curl-7.82.0.tar.xz"
 SRC_JSONRPC="https://github.com/cinemast/libjson-rpc-cpp.git"
 SRC_JSONCPP="https://github.com/open-source-parsers/jsoncpp/archive/refs/tags/1.8.4.tar.gz"
 SRC_TINYXML2="https://github.com/leethomason/tinyxml2.git"
-SRC_TDK="https://code.rdkcentral.com/r/rdkv/tools/tdkv"
+SRC_TDK="https://github.com/rdkcentral/tdk-video.git"
 SRC_ZLIB="https://sourceforge.net/projects/libpng/files/zlib/1.2.11/zlib-1.2.11.tar.xz"
 
 #HAL source
@@ -60,6 +60,7 @@ SRC_RDKLOGGER="https://github.com/rdkcentral/rdk_logger.git"
 SRC_AAMP="https://github.com/rdkcentral/aamp.git"
 SRC_RFC="https://github.com/rdkcentral/rfc.git"
 SRC_WDMP_C="https://github.com/xmidt-org/wdmp-c.git"
+SRC_RFCAPI="https://github.com/rdkcentral/rfc.git"
 
 #Platformwise repositories
 SRC_RPI="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
@@ -74,7 +75,7 @@ DIR_JSONCPP="jsoncpp-1.8.4"
 DIR_TINYXML2="tinyxml2"
 DIR_XKBCOMMON="libxkbcommon-0.5.0"
 DIR_ZLIB="zlib-1.2.11"
-DIR_TDK="tdkv"
+DIR_TDK="tdk-video"
 
 ROOT_DIR=$PWD
 mkdir -p logs
@@ -750,6 +751,7 @@ compile_skeleton_libraries()
     COMPILE_SKELETON=false
     COMPILE_DUMMY_LIBS="WiFiHal PowerMgrHal DeepSleepHal DSHal IARMBus HdmiCec Bluetooth MfrHal WesterosHal Essos AudioCaptureMgr Graphics AAMP"
     COMPILE_DUMMY_LIBS="$COMPILE_DUMMY_LIBS common_utilities rdklogger DeviceSettings IARMBus libsyswrapper NetSrvMgr "
+    COMPILE_DUMMY_LIBS="rfcapi"
     if [[ $FNCS_PACKAGE == "TRUE" ]];then
 	COMPILE_DUMMY_LIBS="Graphics Essos DSHal"
     fi
@@ -1019,6 +1021,18 @@ compile_skeleton_libraries()
 	    make
 	    mv *.so* $SYSROOT/usr/lib/
 	fi
+	if [[ $COMPONENT == "rfcapi" ]];then
+	    echo "Compiling rfcapi"
+	    cd ${TDK_SOURCE_DIR}/RDK_Source
+	    git clone $SRC_RFCAPI rfcapi_source >> $LOG_FILE 2>&1
+	    cd rfcapi_source/
+	    git checkout $rfc_srcrev
+	    cp rfcapi/rfcapi.h $SYSROOT/usr/include/
+
+	    cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
+	    make RFCAPI_LIB_VERSION=${RFCAPI_LIB_VERSION} >> $LOG_FILE 2>&1
+	    mv *.so* $SYSROOT/usr/lib/
+	fi
     done
     rm -rf  ${TDK_SOURCE_DIR}/RDK_Source
 }
@@ -1091,6 +1105,14 @@ compile_tdkv()
 	git clone $SRC_WDMP_C wdmp-c_source >> $LOG_FILE 2>&1
 	cd wdmp-c_source/
 	git checkout f9f687b6b4b10c2b72341e792a64334f0a409848 >> $LOG_FILE 2>&1
+        git clone $SRC_META_RDK_VIDEO
+	if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
+	    cd meta-rdk-video
+            git checkout $MIDDDLEWARE_VERSION
+	    cd ..
+        fi
+	cp meta-rdk-video/recipes-support/wdmp-c/files/wdmp-c.patch .
+	patch -p1 < wdmp-c.patch
 	mkdir -p "$SYSROOT/usr/include/wdmp-c"
 	find . -type f -name "wdmp-c.h" -exec cp {} "$SYSROOT/usr/include/wdmp-c" \;
 	cd ..; rm -rf wdmp-c_source/
