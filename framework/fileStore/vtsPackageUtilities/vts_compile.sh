@@ -78,18 +78,30 @@ install_sdk()
 	
 }
 
-compile_ut_core()
+clone_ut_core()
 {
     echo "Compiling ut-core version: $UT_CORE_PROJECT_VERSION"
-    cd ${ROOT_DIR}/VTS_Source
-    git clone $SRC_UT_CORE  >> $LOG_FILE 2>&1
+    cd ${ROOT_DIR}/VTS_Source/
+    if [ ! -d ut-core ];then
+	git clone $SRC_UT_CORE  >> $LOG_FILE 2>&1
+    fi
     cd ./ut-core
     git checkout ${UT_CORE_PROJECT_VERSION}  >> $LOG_FILE 2>&1
-    echo "Patching ut_console.c into ut-core for fixing truncated testnames"
-    cp ${ROOT_DIR}/ut_console.c src/c_source/cunit_lgpl/ut_console.c 
-    ./build.sh TARGET=arm  >> $LOG_FILE 2>&1
-    cd ..
-    echo "ut-core compilation successfull"
+    if [ -f ${ROOT_DIR}/CUnit-2.1-3.tar.bz2 ];then
+	echo "CUnit-2.1-3.tar.bz2 is already downloaded copying the same"
+        mkdir -p framework
+	cp ${ROOT_DIR}/CUnit-2.1-3.tar.bz2 framework/
+	echo "Skipping downloading from build.sh"
+	sed -i '/sourceforge/d' build.sh
+    fi
+    if [[ $1 == "compile" ]];then
+	./build.sh TARGET=arm  >> $LOG_FILE 2>&1
+	cd ..
+	echo "ut-core compilation successfull"
+    else
+	cd ..
+	echo "Cloning ut-core successfull"
+    fi
 } 
 checkout_header()
 {
@@ -150,6 +162,10 @@ checkout_header()
 	rm -rf ut/ut-core
 	cp -r $ut_dir ut/
 	echo "Copied ut-core successfully"
+    else
+	cd ut/
+        clone_ut_core
+	cd ..
     fi
     TEST_PROJECT_NAME="${HAL_DIR/-halif-/-halif-test-}"
     echo -e "Compiling with $TEST_PROJECT_NAME : $HAL_TEST_VERSION" 
@@ -164,8 +180,9 @@ checkout_header()
     fi
     #Starting compilation
     echo -e "Starting compilation"
+    cd ${ROOT_DIR}/VTS_Source/$HAL_DIR
     ./build_ut.sh TARGET=arm >> $LOG_FILE 2>&1
-    compile_status=$(find . -iname hal_test)
+    compile_status=$(find . -iname hal_test* | grep "ut/bin")
     if [ ! -z "${compile_status}" ]; then
         TEST_VERSION=$(cd ut/; git describe --tags; cd ..)
 	echo "$TEST_PROJECT_NAME $TEST_VERSION  compilation successfull"
@@ -180,19 +197,21 @@ checkout_header()
 	fi
 
 	#Packaging
-	binary_path="$(dirname "$(find .  -type f -name hal_test | grep "ut/bin")")"
-	mv $binary_path/hal_test $binary_path/hal_test_$module
-	bin_name=hal_test_$module
+	binary_path="$(dirname "$(find .  -type f -name hal_test* | grep "ut/bin")")"
+	bin_name="$(find .  -type f -name hal_test* | grep "ut/bin")"
 	if $deleted_existed_binaries;then
 	    mv ut/run.sh $binary_path/run.sh
 	    deleted_existed_binaries=false
 	fi
-	#modifying run.sh to run hal_test_$module instead of hal_test
-	sed -i "s/hal_test/${bin_name}/g" $binary_path/run.sh
 	cd ..
-	binary_path="$(dirname "$(find .  -type f -name hal_test_$module)")"
-	mv $binary_path $module
-	tar -cjvf ${module}_vts_bin.tgz  $module 
+	cd $HAL_DIR/$binary_path; cd ..
+	if [ -d bin ];then
+            cp -r bin $module
+	else
+	    hal_dir_name="$(dirname "$(find .  -type f -name hal_test*)")"
+	    cp -r $hal_dir_name $module
+	fi
+	tar -cjvf ${module}_vts_bin.tgz  $module >> $LOG_FILE 2>&1
 	echo "$TEST_PROJECT_NAME package successfull"
     fi
 }
@@ -200,10 +219,16 @@ checkout_header()
 compile_vts()
 {
     MODULES="devicesettings powermanager deepsleep hdmicec rmfAudioCapture"
-    if [ ! -d ${ROOT_DIR}/VTS_Source/ut-core ];then
-        compile_ut_core
+    if [ -d ${ROOT_DIR}/VTS_Source/ut-core ];then
+	ut_core_lib="$(find ${ROOT_DIR}/VTS_Source/ut-core -iname libut_control*)"
     else
-	echo "ut-core already compiled in $ROOT_DIR/VTS_Source"
+	ut_core_lib=""
+    fi
+    echo "ut_core_lib = $ut_core_lib"
+    if [ $REUSE_UT_CORE == "true" ] && [ -z $ut_core_lib ];then
+        clone_ut_core compile
+    else
+        echo "ut-core already compiled in $ROOT_DIR/VTS_Source"
     fi
     mkdir -p VTS_Source
     cd VTS_Source

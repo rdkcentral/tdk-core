@@ -460,7 +460,13 @@
             logMsg("Expected Pos  : [ " + (expectedPos - 2) + " - " + (expectedPos + 7) + " ]")
             seek(expectedPos)
         }
-
+        function seekpos(pos) {
+            expectedEvents = ["seeking", "seeked"]
+            expectedPos = pos
+            logMsg("Expected Event: " + expectedEvents)
+            logMsg("Expected Pos  : [ " + (expectedPos).toFixed(2) + " - " + (expectedPos + 7).toFixed(2) + " ]")
+            videoEl.currentTime = pos
+        }
         function getPosition() { return Number(videoEl.currentTime.toFixed(2)); }
         function getDuration() { return Number(videoEl.duration ? videoEl.duration.toFixed(2) : 0); }
 
@@ -944,11 +950,6 @@
                 if (action == "seekpos") {
                     duration = parseInt(operations[i].split('(')[1].split(')')[0].split(":")[0]);
                     position = parseInt(operations[i].split('(')[1].split(')')[0].split(":")[1]);
-                    logMsg(`Seekpos requested with Duration=${duration}s, Position=${position}s`);
-                    setTimeout(() => {
-                        clearEvents();
-                        seek(position);
-                    }, actionInterval);
                 }
                 else {
                     duration = parseInt(operations[i].split('(')[1].split(')')[0]);
@@ -994,6 +995,12 @@
                     setTimeout(() => {
                         clearEvents()
                         seekbwd(seekInterval)
+                    }, actionInterval);
+                }
+                else if (action == "seekpos") {
+                    setTimeout(() => {
+                        clearEvents()
+                        seekpos(position)
                     }, actionInterval);
                 }
                 else if (action == "fastfwd2x" || action == "fastfwd3x" || action == "fastfwd4x") {

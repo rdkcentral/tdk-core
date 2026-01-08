@@ -29,7 +29,7 @@ SRC_PLATFORM_REALTEK=https://code.rdkcentral.com/r/collaboration/soc/realtek/rdk
 SRC_PLATFORM_AMLOGIC=https://code.rdkcentral.com/r/collaboration/soc/amlogic/rdk/tdk-video
 SRC_PLATFORM_BROADCOM=https://code.rdkcentral.com/r/collaboration/soc/broadcom/rdk/tdk-video
 
-MIDDLEWARE_VERSION=1.1.2-community
+MIDDLEWARE_VERSION=1.11.0
 
 #Choose from HYBRID, MEDIACLIENT
 DEVICE_TYPE=MEDIACLIENT
@@ -45,7 +45,7 @@ CONFIGURE_OPTIONS_HYBRID=" --enable-hybrid --enable-xupnp --enable-westeroshal -
 
 CONFIGURE_OPTIONS_HAL=" --enable-wifihal --enable-powermgrhal --enable-deepsleephal --enable-mfrhal --enable-tdkgraphics --enable-bluetoothhal --disable-defaultComponents --enable-mediautils --enable-westeroshal"
 
-CONFIGURE_OPTIONS_COMPONENTS=" --enable-rdkfwupdater --enable-netsrvmgr"
+CONFIGURE_OPTIONS_COMPONENTS=" --enable-rdkfwupdater"
 
 MFRHAL_LIB_NAME="-lRDKMfrLib"
 
@@ -105,5 +105,6 @@ LIBSYSWRAPPER_LIB_VERSION=0
 FWUTILS_LIB_VERSION=0
 PARSEJSON_LIB_VERSION=0
 DWNLUTILS_LIB_VERSION=0
+RFCAPI_LIB_VERSION=0
 
 TDK_REVISION="TDK_M139"

@@ -167,7 +167,8 @@
         </testCase>
 
 	<!-- Test case 06 -->
-	<testCase testCaseId="Miracast_06" testCaseName="MiracastService_Set_Logging_Level"  desc="Check whether it is possible to set different logging levels using miracastservice setLogging API">
+	<!-- setLogging API has been deprecated in the documentation, so the test case has been commented out -->
+	<!--testCase testCaseId="Miracast_06" testCaseName="MiracastService_Set_Logging_Level"  desc="Check whether it is possible to set different logging levels using miracastservice setLogging API">
 		<testCaseInfo testCaseType="loop"/>
 		<testStep testStepId="1" name="MiracastService_Set_Logging_Level" testStepType="loop">
 		<subtestStep testStepId="1" name="Set_Logging_Level" method="MiracastService_setLogging">
@@ -177,10 +178,11 @@
                   	<resultGeneration useMethodTag="success_status_validation" />
 		</subtestStep>
 		</testStep>
-	</testCase>
+	</testCase-->
 
 	<!-- Test case 07 -->
-        <testCase testCaseId="Miracast_07" testCaseName="MiracastPlayer_Set_Logging_Level"  desc="Check whether it is possible to set different logging levels using miracastplayer setLogging API">
+	<!-- setLogging API has been deprecated in the documentation, so the test case has been commented out -->
+	<!--testCase testCaseId="Miracast_07" testCaseName="MiracastPlayer_Set_Logging_Level"  desc="Check whether it is possible to set different logging levels using miracastplayer setLogging API">
                 <testCaseInfo testCaseType="loop"/>
 		<testStep testStepId="1" name="MiracastPlayer_Set_Logging_Level" testStepType="loop">
 		<subtestStep testStepId="1" name="Set_Logging_Level" method="MiracastPlayer_setLogging" pluginName="MiracastPlayer">
@@ -190,10 +192,10 @@
                         <resultGeneration useMethodTag="success_status_validation" />
 		</subtestStep>
 		</testStep>
-        </testCase>
+        </testCase-->
 
-	<!-- Test case 08 -->
-        <testCase testCaseId="Miracast_08" testCaseName="MiracastService_Set_VideoRectangle"  desc="Check if the device is able to successfully set the video rectangle">
+	<!-- Test case 06 -->
+        <testCase testCaseId="Miracast_06" testCaseName="MiracastService_Set_VideoRectangle"  desc="Check if the device is able to successfully set the video rectangle">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_VideoRectangle" method="MiracastPlayer_setVideoRectangle" pluginName="MiracastPlayer">
                         <params>
@@ -207,15 +209,16 @@
         </testCase>
 	
 	<!-- Test case 09 -->
-        <testCase testCaseId="Miracast_09" testCaseName="MiracastPlayer_Set_PlayerState_Without_Parameter"  desc="Check if the setPlayerState method returns an error when parameter is not provided">
+	<!-- setPlayerState API has been deprecated in the documentation, so the test case has been commented out -->
+        <!--testCase testCaseId="Miracast_09" testCaseName="MiracastPlayer_Set_PlayerState_Without_Parameter"  desc="Check if the setPlayerState method returns an error when parameter is not provided">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_PlayerState_Without_Parameter" method="MiracastPlayer_setPlayerState" pluginName="MiracastPlayer">
                         <resultGeneration useMethodTag="success_negative_status_validation"/>
                 </testStep>
-        </testCase>
+        </testCase-->
 
-	<!-- Test case 10 -->
-	<testCase testCaseId="Miracast_10" testCaseName="MiracastService_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+	<!-- Test case 07 -->
+	<testCase testCaseId="Miracast_07" testCaseName="MiracastService_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
 		<testCaseInfo testCaseType="direct" />
 		<testCasePreRequisite>
 		<prerequisite requisiteId="1" requisiteName="Activate_Plugin">

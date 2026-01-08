@@ -1512,3 +1512,39 @@ def generate_nginx_config(template_path, local_destination, remote_destination, 
         print("Configuration file successfully copied to Nginx container at {}".format(remote_destination))
     except Exception as e:
         print("Error updating or copying Nginx configuration: {}".format(e))
+
+def printDRMObservation(app_log_file, observe_duration=60):
+    if not os.path.exists(app_log_file):
+        print("[DRM OBSERVE] App log not found")
+        return
+
+    max_time = 0.0
+    encrypted_seen = False
+
+    with open(app_log_file, "r") as log:
+        for line in log:
+            if "Video Progressing" in line:
+                try:
+                    t = float(line.split("Video Progressing")[1]
+                              .split("/")[0].strip())
+                    max_time = max(max_time, t)
+                except:
+                    pass
+
+            if "Video Player Encrypted" in line:
+                encrypted_seen = True
+
+    print("--------------------------------------------------")
+    print("[DRM OBSERVE] Max playback time observed :", max_time)
+    print("[DRM OBSERVE] DRM detected by player     :", encrypted_seen)
+
+    if max_time >= observe_duration:
+        print("[DRM OBSERVE] Playback reached clear duration (expected)")
+    else:
+        print("[DRM OBSERVE] Playback did NOT reach clear duration")
+
+    print("[DRM OBSERVE] NOTE:")
+    print("  'Video Player Encrypted' indicates DRM presence")
+    print("  NOT actual encrypted segment playback")
+    print("--------------------------------------------------")
+

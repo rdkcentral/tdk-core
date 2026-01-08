@@ -235,7 +235,7 @@ class PrimitiveTestCase:
     # Parameters   : Nil
     # Return Value : Current UTC time
 
-        timeStamp = strftime("%m%d%H%M%Y", datetime.datetime.utcnow().timetuple())
+        timeStamp = strftime("%m%d%H%M%Y", datetime.datetime.now().timetuple())
         return timeStamp
 
     ########## End of Function ##########
