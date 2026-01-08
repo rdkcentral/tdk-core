@@ -933,34 +933,6 @@ def update_ut_player_config():
     with open(yml_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # Exact Broadcom block (spec as provided)
-    broadcom_block = (
-        "broadcom:\n"
-        "  gstreamer:\n"
-        "    prerequisites:\n"
-        "      - export WAYLAND_DISPLAY=wayland-0\n"
-        "      - export WESTEROS_SINK_USE_ESSRMGR=1\n"
-        "      - export AAMP_ENABLE_WESTEROS_SINK=1\n"
-        "      - export GST_ENABLE_SVP=1\n"
-        "      - export GST_VIRTUAL_DISP_WIDTH=1920\n"
-        "      - export GST_VIRTUAL_DISP_HEIGHT=1080\n"
-        "      - export GST_VIRTUAL_SD_DISP_WIDTH=1920\n"
-        "      - export GST_VIRTUAL_SD_DISP_HEIGHT=1080\n"
-        "      - export do_not_change_display=true\n"
-        "      - export SAGEBIN_PATH=/usr/bin/\n"
-        "      - export XDG_RUNTIME_DIR=/run\n"
-        "      - export LD_PRELOAD=libwayland-client.so.0:libwayland-egl.so.1:libnxclient.so:libsrai.so:liboemcrypto_tl.so:libwesteros_gl.so.0.0.0\n"
-        "      - export WESTEROS_DRM_CARD=/dev/dri/card1\n"
-        "      - export WESTEROS_GL_GRAPHICS_MAX_SIZE=1920x1080\n"
-        "      - export WESTEROS_GL_MODE=1920x1080x60\n"
-        "      - export WESTEROS_GL_USE_REFRESH_LOCK=1\n"
-        "      - export WESTEROS_GL_FPS=1\n"
-        "    play_command: gst-play-1.0\n"
-        "    stop_command: \"\\x03\" # CNTRL-C\n"
-        "    primary_mixer_input_config: \"\"\n"
-        "    secondary_mixer_input_config: \"\"\n"
-    )
-
     vendor_re = re.compile(rf"^\\n?{vendor}:\\s*\\n(?:[\\s\\S]*?)(?=^\\w+:|\\Z)", re.MULTILINE)
 
     if vendor == 'broadcom':
@@ -968,8 +940,9 @@ def update_ut_player_config():
         if re.search(existing_broadcom_re, content):
             print("✓ 'broadcom' block already present in utPlayerConfig.yml. No changes applied.")
         else:
-            content = content.rstrip() + "\n" + broadcom_block
-            print("✓ Appended 'broadcom' block to utPlayerConfig.yml.")
+            print("⚠ Add broadcom player config values before execution")
+            #content = content.rstrip() + "\n" + broadcom_block
+            #print("✓ Appended 'broadcom' block to utPlayerConfig.yml.")
     
     elif vendor in ('realtek', 'amlogic'):
         if re.search(vendor_re, content):
