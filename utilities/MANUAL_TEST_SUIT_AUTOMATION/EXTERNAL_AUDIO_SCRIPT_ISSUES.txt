@@ -1,0 +1,151 @@
+
+
+
+Critical defect in my script!!!!!!
+
+
+
+ISSUE - 1
+
+
+
+###################################################################################################################################################### 100.0%
+
+DiscoveredDevices list is not empty. Proceeding to pair External Bluetooth Speaker
+
+
+....................................................................DiscoveredDevices LIST...................................................................
+
+
+{"jsonrpc":"2.0","id":3,"result":{"discoveredDevices":[{"deviceID":"66730592121320","name":"CMF Watch Pro 2-31E8","deviceType":"UNKNOWN DEVICE","connected":false,"paired":false,"rawDeviceType":"2361092","rawBleDeviceType":"0"},{"deviceID":"274582612135438","name":"Seos","deviceType":"UNKNOWN DEVICE","connected":false,"paired":false,"rawDeviceType":"0","rawBleDeviceType":"0"},{"deviceID":"533332198340","name":"[TV] Samsung 7 Series (43)","deviceType":"UNKNOWN DEVICE","connected":false,"paired":false,"rawDeviceType":"0","rawBleDeviceType":"0"},{"deviceID":"44458284033648","name":"OnePlus Buds Pro 2","deviceType":"UNKNOWN DEVICE","connected":false,"paired":false,"rawDeviceType":"0","rawBleDeviceType":"0"},{"deviceID":"83774104652308","name":"MiTV-MOOQ3","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"17786566777093","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774104903484","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774104897610","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774100176491","name":"MiTV-MOOQ3","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"27415752740586","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"212101590266868","name":"TV","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"234023362287426","name":"realme 8","deviceType":"SMARTPHONE","connected":false,"paired":false,"rawDeviceType":"5898764","rawBleDeviceType":"0"},{"deviceID":"17786563348286","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774104897620","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"106528801072360","name":"26671-445189","deviceType":"LOUDSPEAKER","connected":false,"paired":false,"rawDeviceType":"2769164","rawBleDeviceType":"0"},{"deviceID":"70526358043172","name":"test tv","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"70526358341298","name":"test tv","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83720958867195","name":"TV","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"27415756258259","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"70526358616032","name":"test tv","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"163411684589145","name":"Creative Stage","deviceType":"WEARABLE HEADSET","connected":false,"paired":false,"rawDeviceType":"2360324","rawBleDeviceType":"0"},{"deviceID":"17786563276796","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"}],"success":true}}
+
+
+
+{"deviceID":"66730592121320","name":"CMF Watch Pro 2-31E8","deviceType":"UNKNOWN DEVICE","connected":false,"paired":false,"rawDeviceType":"2361092","rawBleDeviceType":"0"},{"deviceID":"274582612135438","name":"Seos","deviceType":"UNKNOWN DEVICE","connected":false,"paired":false,"rawDeviceType":"0","rawBleDeviceType":"0"},{"deviceID":"533332198340","name":"[TV
+
+.............................................................................................................................................................
+
+
+Checking for Creative Stage in DiscoveredDevices LIST....
+
+
+External Bluetooth Device Creative Stage not found retrying in 5sec
+
+
+
+root@ipstb-brcm972126ott:~#
+
+
+______________________________ISSUE_SCRIPT_________________________________________________________________
+
+
+discovered_devices=$(echo "$JSON_RESPONSE_5" | sed -n 's/.*"discoveredDevices":\[\([^]]*\)\].*/\1/p')
+
+
+
+_________________________ FIX ______________________________________
+
+
+discovered_devices=$(echo "$JSON_RESPONSE_5" | sed -n 's/.*"discoveredDevices":\(\[.*\]\),"success":true}}.*/\1/p')
+
+
+
+
+
+
+
+
+
+ISSUE - 2
+
+
+
+While target BT device discovered on multiple reties inside while loop the script is exiting by break after Passing the step. But after that it again goes to the outer condition of else and exiting there due to exit 1 in there. 
+
+
+
+__________________________________________________________________________________________
+
+Step 5          : Execute curl command to get discovered devices list
+
+
+curl -# --header Content-Type: application/json --request POST --data '{jsonrpc:2.0, id:3, method:org.rdk.Bluetooth.1.getDiscoveredDevices}' http://127.0.0.1:9998/jsonrpc
+
+###################################################################################################################################################### 100.0%
+
+DiscoveredDevices list is not empty. Proceeding to pair External Bluetooth Speaker
+
+
+..................................................................| DiscoveredDevices LIST |.................................................................
+
+
+[{"deviceID":"83774104652308","name":"MiTV-MOOQ3","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"111046560612254","name":"Androidtv_1","deviceType":"TABLET","connected":false,"paired":false,"rawDeviceType":"1704220","rawBleDeviceType":"0"},{"deviceID":"84427757475534","name":"[TV] Samsung 8 Series (43)","deviceType":"UNKNOWN DEVICE","connected":false,"paired":false,"rawDeviceType":"0","rawBleDeviceType":"0"},{"deviceID":"533332198340","name":"[TV] Samsung 7 Series (43)","deviceType":"UNKNOWN DEVICE","connected":false,"paired":false,"rawDeviceType":"0","rawBleDeviceType":"0"},{"deviceID":"27415754125840","name":"MiTV-MOOQ3","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"212101590266868","name":"TV","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"17786566777093","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774104903484","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"27415752740586","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774104897620","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774104897610","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"70526358616032","name":"test tv","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83720958867195","name":"TV","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774100176491","name":"MiTV-MOOQ3","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"70526358341298","name":"test tv","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"27415756258259","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"17786563348286","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"202481600781979","name":"raspberrypi","deviceType":"LOUDSPEAKER","connected":false,"paired":false,"rawDeviceType":"4981788","rawBleDeviceType":"0"},{"deviceID":"70526358043172","name":"test tv","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"17786563276796","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"111046560617598","name":"BRAVIA VU1","deviceType":"TABLET","connected":false,"paired":false,"rawDeviceType":"1704220","rawBleDeviceType":"0"}]
+
+.............................................................................................................................................................
+
+
+
+Checking for Creative Stage in DiscoveredDevices LIST....
+
+
+
+External Bluetooth Device Creative Stage not found retrying after 5sec
+
+
+###################################################################################################################################################### 100.0%
+###################################################################################################################################################### 100.0%
+
+DiscoveredDevices list is not empty. Proceeding to pair External Bluetooth Speaker
+
+
+..................................................................| DiscoveredDevices LIST |.................................................................
+
+
+[{"deviceID":"83774104652308","name":"MiTV-MOOQ3","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"111046560612254","name":"Androidtv_1","deviceType":"TABLET","connected":false,"paired":false,"rawDeviceType":"1704220","rawBleDeviceType":"0"},{"deviceID":"84427757475534","name":"[TV] Samsung 8 Series (43)","deviceType":"UNKNOWN DEVICE","connected":false,"paired":false,"rawDeviceType":"0","rawBleDeviceType":"0"},{"deviceID":"533332198340","name":"[TV] Samsung 7 Series (43)","deviceType":"UNKNOWN DEVICE","connected":false,"paired":false,"rawDeviceType":"0","rawBleDeviceType":"0"},{"deviceID":"27415754125840","name":"MiTV-MOOQ3","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"212101590266868","name":"TV","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"17786566777093","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774104903484","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"27415752740586","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774104897620","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774104897610","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"70526358616032","name":"test tv","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83720958867195","name":"TV","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"83774100176491","name":"MiTV-MOOQ3","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"70526358341298","name":"test tv","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"27415756258259","name":"MiTV-MOOQ0","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"17786563348286","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"202481600781979","name":"raspberrypi","deviceType":"LOUDSPEAKER","connected":false,"paired":false,"rawDeviceType":"4981788","rawBleDeviceType":"0"},{"deviceID":"70526358043172","name":"test tv","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"17786563276796","name":"MiTV-MOOQ1","deviceType":"TV","connected":false,"paired":false,"rawDeviceType":"2622524","rawBleDeviceType":"0"},{"deviceID":"111046560617598","name":"BRAVIA VU1","deviceType":"TABLET","connected":false,"paired":false,"rawDeviceType":"1704220","rawBleDeviceType":"0"},{"deviceID":"163411684589145","name":"Creative Stage","deviceType":"WEARABLE HEADSET","connected":false,"paired":false,"rawDeviceType":"2360324","rawBleDeviceType":"0"}]
+
+.............................................................................................................................................................
+
+
+
+Checking for Creative Stage in DiscoveredDevices LIST....
+
+
+External Bluetooth Device Creative Stage found
+
+External Bluetooth Device   :   Creative Stage
+External Bluetooth DeviceID :   163411684589145
+
+
+External BT device succesfully obtained from discovered devices list
+
+Step 5 status   :  PASS
+
+
+
+External Bluetooth Device "Creative Stage" not found after 3 retries in discovered_device list
+
+
+Step 5 status   :  FAIL
+
+
+Skipping remaining steps and marked as NT
+
+
+root@ipstb-brcm972126ott:~#
+
+
+
+So added an if condition While target BT device discovered on multiple retries inside while loop the script is exiting from the while loop by using break after Passing the step and now on the outer while loop the if condition will check and then move to next execution
+
+_________________________ FIX ______________________________________
+
+
+
+ if [ "$loop_exit" != 0 ]; then
+               echo -e "External Bluetooth Device \"$target_device_name\" not found after $max_scan_retries retries in discovered_device list\n\n"
+               echo -e "Step 5 status\t:  FAIL\n\n"
+               tc1_step5=FAIL
+               echo -e "Skipping remaining steps and marked as NT\n\n"
+               exit 1 
+   fi   
+
