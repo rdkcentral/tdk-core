@@ -59,7 +59,7 @@ preCon_POWER() {
     user_confirmation "$user_choice" "$query_power"
     local user_confirmation_fun_exit=$?
 
-    if [ "$user_confirmation_fun_exit" -eq 0 ] && [ "$set_and_get_powerState_exit" -eq 0 ]; then
+    if [ "$set_and_get_powerState_exit" -eq 0 ] && [ "$user_confirmation_fun_exit" -eq 0 ]; then
         printf "\n\nRDK UI is Visible and DUT is in %s state\n\n\n" "$power_powerState"
         return 0
     elif [ "$user_confirmation_fun_exit" -ne 0 ]; then
@@ -153,7 +153,7 @@ powerstate_RDKUI() {
     printf "\nStep %s\t\t: Perform Manual operation : Navigate to Settings/Other Settings/Energy Saver and select Light Sleep\n\n\n" "$step" 
     sleep 1
     local selection_Query="PLEASE SELECT LIGHT SLEEP FROM ENERGY SAVER TO PROCEED TEST!!!"
-    blink_HDMI_Query "$selection_Query"
+    blink_Query "$selection_Query"
 
     user_confirmation "$user_choice" "$query_RDKUI_powerstate"
     local user_confirmation_fun_exit=$?
@@ -176,7 +176,8 @@ get_Set_Powerstate_subFun() {
 
     local step="$1"
     local get_set_type="$2"
-    if [ "$get_set_type" = "0" ] 
+    local energy_state="$3"
+    if [ "$get_set_type" = "0" ]; then
         printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
         printf "\nStep %s\t\t: Execute Curl command to get the current Powerstate of DUT\n\n\n" "$step" 
         local curl_to_getPowerstate="curl --header \"Content-Type: application/json\" --request POST --data '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\":\"org.rdk.System.1.getPowerState\",\"params\":{}}' http://127.0.0.1:9998/jsonrpc"
@@ -188,7 +189,7 @@ get_Set_Powerstate_subFun() {
         if [ "$set_and_get_powerState_exit" -eq 0 ]; then
             return 0
         elif [ "$set_and_get_powerState_exit" -eq 90 ]; then
-            if [ "$step" = "4" ]; then 
+            if [ "$step" = "3" ]; then 
                 return 0
             else
                 return 1
@@ -198,11 +199,11 @@ get_Set_Powerstate_subFun() {
         fi
     else
         printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
-        printf "\nStep %s\t\t: Execute Curl command to set the current Powerstate of DUT to LIGHT SLEEP\n\n\n" "$step" 
-        local curl_to_setPowerstate="curl --header \"Content-Type: application/json\" --request POST --data '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\":\"org.rdk.System.1.setPowerState\",\"params\":{\"powerState\":\"LIGHT_SLEEP\", \"standbyReason\":\"For Testing\"}}' http://127.0.0.1:9998/jsonrpc"
+        printf "\nStep %s\t\t: Execute Curl command to set the current Powerstate of DUT to %s\n\n\n" "$step" "$energy_state" 
+        local curl_to_setPowerstate="curl --header \"Content-Type: application/json\" --request POST --data '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\":\"org.rdk.System.1.setPowerState\",\"params\":{\"powerState\":\"$energy_state\", \"standbyReason\":\"For Testing\"}}' http://127.0.0.1:9998/jsonrpc"
         printf "\n$curl_to_setPowerstate\n\n\n" 
         sleep 1
-        set_and_get_powerState "$get_set_type" "LIGHT_SLEEP"
+        set_and_get_powerState "$get_set_type" "$energy_state"
         local set_and_get_powerState_exit=$?
 
         if [ "$set_and_get_powerState_exit" -eq 0 ]; then
@@ -235,7 +236,7 @@ TC_POWER_MANUAL_01() {
             return 1
         fi
     elif [ "$step_num" = "2" ]; then
-        get_Set_Powerstate_subFun "$step_num" "1"
+        get_Set_Powerstate_subFun "$step_num" "1" "LIGHT_SLEEP"
         local get_Set_Powerstate_subFun_exit=$?
 
         if [ "$get_Set_Powerstate_subFun_exit" -eq 0 ]; then
@@ -255,7 +256,36 @@ TC_POWER_MANUAL_01() {
         else
             return 1
         fi
-    elif [ "$step_num" = "4" ]; then     
+    elif [ "$step_num" = "4" ]; then 
+        get_Set_Powerstate_subFun "$step_num" "1" "ON"
+        local get_Set_Powerstate_subFun_exit=$?
+
+        if [ "$get_Set_Powerstate_subFun_exit" -eq 0 ]; then
+            return 0
+        else
+            return 1
+        fi
+    elif [ "$step_num" = "5" ]; then  
+        get_Set_Powerstate_subFun "$step_num" "0"
+        local get_Set_Powerstate_subFun_exit=$?
+
+        user_confirmation "$user_choice" "$query_power"
+        local user_confirmation_fun_exit=$?
+
+        if [ "$get_Set_Powerstate_subFun_exit" -eq 0 ] && [ "$user_confirmation_fun_exit" -eq 0 ]; then
+            return 0
+        else
+            return 1
+        fi 
+    else
+        immediate_playback_start "$step_num" "YouTube"
+        local immediate_playback_start_exit=$?
+
+        if [ "$immediate_playback_start_exit" -eq 0 ]; then
+            return 0
+        else
+            return 1
+        fi          
     fi    
 
 }
@@ -283,21 +313,82 @@ tc_POWER_MANUAL_testsuite() {
     if [ "$preCon_POWER_fun_exit" -eq 0 ]; then
         sleep 1
         printf "\n\nPre-condition check success. Starting Testcase execution!\n\n\n"
-            
+
 
     #Step 1 code block for TC_POWER_MANUAL_01
 
+        if [[ "$TestcaseID" == "TC_POWER_MANUAL_01" ]]; then
+            execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_POWER_MANUAL_01"
+            sleep 1
+           
+    #Step 2 code block for TC_POWER_MANUAL_01
 
+            execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_POWER_MANUAL_01"
+            sleep 1
+          
+    #Step 3 code block for TC_POWER_MANUAL_01
 
+            execute_stepStatusUpdate_steps "3" "$testcase_prefix" "TC_POWER_MANUAL_01"
+            sleep 1 
+                      
+    #Step 4 code block for TC_POWER_MANUAL_01
+
+            execute_stepStatusUpdate_steps "4" "$testcase_prefix" "TC_POWER_MANUAL_01"
+            sleep 1
+                      
+    #Step 5 code block for TC_POWER_MANUAL_01
+
+            execute_stepStatusUpdate_steps "5" "$testcase_prefix" "TC_POWER_MANUAL_01"
+            sleep 1           
+                  
+    #Step 6 code block for TC_POWER_MANUAL_01
+
+            execute_stepStatusUpdate_steps "6" "$testcase_prefix" "TC_POWER_MANUAL_01"
+            sleep 1 
+            dynamic_current_step_finder "$testcase_prefix" "TC_POWER_MANUAL"
+        fi 
+
+        #TestCase execution Result dynamic updating Function     
+        dynamic_test_result_update "$current_step_num" "$TestcaseID" "${testcase_prefix}"
+
+        #Postcondition code block    
+        printf '\nExecuting Post-condition Steps for Testcase : %s\n\n\n' "$TestcaseID"
+        sleep 1
+        postCondition_Execution_POWER
+        local postCondition_Execution_POWER_exit=$?
+
+        if [ "$postCondition_Execution_POWER_exit" -eq 0 ]; then
+            printf '\nPost-condition Execution Success. Exiting Test Case : %s\n\n\n\n' "$TestcaseID"
+        else
+            printf '\nPost-condition Execution failed. Exiting Test Case : %s\n\n\n\n' "$TestcaseID"
+        fi
     else
-        printf "\n\nPre-condition check failure. Exiting IPv6 Automated Test!\n\n\n" 
+        printf "\n\nPre-condition check failure. Exiting POWER MANAGEMENT Automated Test!\n\n\n" 
     fi          
 
 }
+     
+
+
+#Function Definition for postCondition checking of POWERMANAGEMENT test
 
 
 
+postCondition_Execution_POWER() {
 
+    if [[ "$av_check_flag" == "2" ]]; then  
+        destroy_app "HtmlApp"
+    else
+        destroy_app "YouTube" 
+    fi       
+    local destroy_app_exit=$?
+    if [ "$destroy_app_exit" -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
+
+}
 
 
 

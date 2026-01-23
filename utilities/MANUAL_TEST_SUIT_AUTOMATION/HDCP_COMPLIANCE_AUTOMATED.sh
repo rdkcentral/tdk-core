@@ -37,28 +37,6 @@ preCon_HDCPCOMPLIANCE() {
 
 
 
-#Function defnition for HDMI connection/ disconnection animated print message
-
-
-
-blink_HDMI_Query() {
-
-    local msg="$1"
-    if [ -n "$msg" ]; then
-        for i in {1..10}; do
-            printf "\r%s" "$msg"
-            sleep 0.4
-            printf "\r%${#msg}s" " "   # clear line with spaces
-            sleep 0.2
-        done
-        printf "\r%s\n\n\n" "$msg"      # final static message 
-    else
-        printf "\n\nDEBUG : Empty query msg passed to function -> blink_HDMI_Query\n\n" 
-    fi       
-
-}
-
-
 
 #Function defnition for expected_HDCP_logsCheck for getting expected logs/prints from log files
 
@@ -149,7 +127,7 @@ hdmi_HotPlug_subFunc() {
     printf "\nStep %s\t\t: Perform Manual operation : Hotplug the HDMI cable from DUT\n\n\n" "$step" 
     sleep 1
     connection_Query="PLEASE DISCONNECT HDMI CABLE AND CONNECT IT BACK TO DUT TO PROCEED TEST!!!"
-    blink_HDMI_Query "$connection_Query"
+    blink_Query "$connection_Query"
 
     user_confirmation "$user_HDMI_choice" "$query_HDMI_hotplug"
     local user_confirmation_fun_exit=$?
@@ -281,7 +259,7 @@ TC_HDCPCOMPLIANCE_MANUAL_01() {
         printf "\nStep %s\t\t: Perform Manual operation : Disconnect HDMI cable from DUT\n\n\n" "$step_num" 
         sleep 1
         connection_Query="PLEASE DISCONNECT HDMI CABLE FROM DUT TO PROCEED TEST!!!"
-        blink_HDMI_Query "$connection_Query"
+        blink_Query "$connection_Query"
 
         user_confirmation "$user_HDMI_choice" "$query_HDMI_disconnected"
         local user_confirmation_fun_exit=$?
@@ -566,6 +544,62 @@ TC_HDCPCOMPLIANCE_MANUAL_06() {
 
 
 
+#Function defnition for testcase TC_HDCPCOMPLIANCE_MANUAL_07 
+
+
+
+TC_HDCPCOMPLIANCE_MANUAL_07() {
+
+    local step_num="$1"
+    local user_HDMI_choice="user_HDMI_choice"
+    local query_HDMI_playback=$(printf "\n\nIs AV stream playing continously with proper audio and video in TV [yes/no]: ")
+    if [ "$step_num" = "1" ]; then
+        hdmi_HotPlug_subFunc "$step_num"
+        local hotPlug_subFunc_exit=$?
+
+        if [ "$hotPlug_subFunc_exit" -eq 0 ]; then
+            return 0
+        else
+            return 1
+        fi
+    elif [ "$step_num" = "2" ]; then
+        immediate_playback_start "$step_num" "YouTube"
+        local immediate_playback_start_exit=$?
+
+        if [ "$immediate_playback_start_exit" -eq 0 ]; then
+            return 0
+        else
+            return 1
+        fi
+    elif [ "$step_num" = "3" ]; then
+        sleep 1
+        getHDCPStatus_keyval_subfun "$step_num" "isHDCPCompliant"
+        local getHDCPStatus_keyval_subfun_exit=$?
+
+        if [ "$getHDCPStatus_keyval_subfun_exit" -eq 0 ]; then
+            return 0
+        else
+            return 1
+        fi
+    else
+        printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
+        printf "\nStep %s\t\t: Verify whether AV playback is fine with proper Audio and video\n\n\n" "$step_num" 
+        sleep 1
+        user_confirmation "$user_HDMI_choice" "$query_HDMI_playback"
+        local user_confirmation_fun_exit=$?
+
+        if [ "$user_confirmation_fun_exit" -eq 0 ]; then
+            return 0
+        else
+            return 1
+        fi    
+    fi
+
+}
+
+
+
+
 #Function Definition for TestCase : tc_RDKSHELL_MANUAL_testsuite
 
 
@@ -739,7 +773,38 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
         sleep 1
         dynamic_current_step_finder "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL" 
     fi
+     
 
+#Step 1 code block for TC_HDCPCOMPLIANCE_MANUAL_07 
+
+
+    if [[ "$TestcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_07" ]]; then
+        execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_07"
+        sleep 1
+
+
+#Step 2 code block for TC_HDCPCOMPLIANCE_MANUAL_07         
+
+
+        execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_07"
+        sleep 1
+      
+
+#Step 3 code block for TC_HDCPCOMPLIANCE_MANUAL_07         
+
+
+        execute_stepStatusUpdate_steps "3" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_07"
+        sleep 1
+             
+
+#Step 4 code block for TC_HDCPCOMPLIANCE_MANUAL_07         
+
+
+        execute_stepStatusUpdate_steps "4" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_07"
+        sleep 1
+        dynamic_current_step_finder "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL" 
+    fi
+    
     #TestCase execution Result dynamic updating Function     
     dynamic_test_result_update "$current_step_num" "$TestcaseID" "${testcase_prefix}" 
 
@@ -774,7 +839,7 @@ postCondition_Execution_HDCP() {
     local query_HDMI_connected=$(printf "\n\nIs HDMI cable connected back to DUT and RDK UI is visible on TV [yes/no]: ")
     if [[ "$testcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_01" ]]; then
         connection_Query="PLEASE CONNECT HDMI CABLE BACK TO DUT!!!"
-        blink_HDMI_Query "$connection_Query"
+        blink_Query "$connection_Query"
 
         user_confirmation "$user_HDMI_choice" "$query_HDMI_connected"
         local user_confirmation_fun_exit=$?
@@ -784,7 +849,7 @@ postCondition_Execution_HDCP() {
         else
            return 1
         fi
-    elif [[ "$testcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_03" ]] || [[ "$testcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_04" ]] || [[ "$testcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_05" ]] || [[ "$testcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_06" ]]; then
+    elif [[ "$testcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_03" ]] || [[ "$testcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_04" ]] || [[ "$testcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_05" ]] || [[ "$testcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_06" ]] || [[ "$testcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_07" ]]; then
         if [[ "$av_check_flag" == "2" ]]; then  
             destroy_app "HtmlApp"
         else
@@ -824,8 +889,9 @@ while true; do
   printf '04. Run TestCase : TC_HDCPCOMPLIANCE_MANUAL_04        :\t[ Verify the HDCP protocol support ] \n\n'
   printf '05. Run TestCase : TC_HDCPCOMPLIANCE_MANUAL_05        :\t[ Verify the HDCP enabled status ] \n\n'
   printf '06. Run TestCase : TC_HDCPCOMPLIANCE_MANUAL_06        :\t[ Verify the device is supported, received and current HDCP version ] \n\n'
-  printf '07. Show TestCase Execution Results\n\n'
-  printf '08. Exit [ HDCP COMPLIANCE Automated Test ]\n\n'
+  printf '07. Run TestCase : TC_HDCPCOMPLIANCE_MANUAL_07        :\t[ Verify the HDCP Compliant enabled status ] \n\n'
+  printf '08. Show TestCase Execution Results\n\n'
+  printf '09. Exit [ HDCP COMPLIANCE Automated Test ]\n\n'
   printf "\n=============================================================================================================================================================\n\n\n";
 
 
@@ -858,11 +924,15 @@ while true; do
     6)
         exec_start "TC_HDCPCOMPLIANCE_MANUAL_06"
         tc_HDCPCOMPLIANCE_MANUAL_testsuite "tc6_step" "TC_HDCPCOMPLIANCE_MANUAL_06"
-        ;;                                 
+        ;; 
     7)
+        exec_start "TC_HDCPCOMPLIANCE_MANUAL_07"
+        tc_HDCPCOMPLIANCE_MANUAL_testsuite "tc7_step" "TC_HDCPCOMPLIANCE_MANUAL_07"
+        ;;                                     
+    8)
         testcase_result_display_menu "TC_HDCPCOMPLIANCE_MANUAL"  
         ;;       
-    8)   
+    9)   
         printf '\nExited HDCP COMPLIANCE Automated Test\n\n\n' 
         break
         ;; 

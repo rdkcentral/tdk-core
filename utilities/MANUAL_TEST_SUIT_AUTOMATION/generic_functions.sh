@@ -148,6 +148,7 @@ pre_condition_description() {
             $'\n\n\nTestcaseID : TC_HDCPCOMPLIANCE_MANUAL_04\n\n\nTestcase description : Verify whether the testing device is supporting HDCP protocol or not\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. TV should be connected with the HDMI port and source should be selected\n\t\t  3. RDK UI Home page should be visible on DUT prior to test\n\n\n'
             $'\n\n\nTestcaseID : TC_HDCPCOMPLIANCE_MANUAL_05\n\n\nTestcase description : Verify whether the testing device is HDCP enabled or not\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. TV should be connected with the HDMI port and source should be selected\n\t\t  3. RDK UI Home page should be visible on DUT prior to test\n\n\n'
             $'\n\n\nTestcaseID : TC_HDCPCOMPLIANCE_MANUAL_06\n\n\nTestcase description : Verify whether the testing device is supported, received and current HDCP version\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. TV should be connected with the HDMI port and source should be selected\n\t\t  3. RDK UI Home page should be visible on DUT prior to test\n\n\n'
+            $'\n\n\nTestcaseID : TC_HDCPCOMPLIANCE_MANUAL_07\n\n\nTestcase description : Verify whether the testing device is HDCP Compliant or not\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. TV should be connected with the HDMI port and source should be selected\n\t\t  3. RDK UI Home page should be visible on DUT prior to test\n\n\n'
             $'\n\n\nTestcaseID : TC_IPv6_MANUAL_01\n\n\nTestcase description : Verify the IP Settings when connected to an IPv6 supported SSID\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. DUT should be connected to a WiFi  SSID which supports IPV6\n\t\t  3. Ethernet should be disconnected after connecting to Wifi SSID\n\n\n'
             $'\n\n\nTestcaseID : TC_IPv6_MANUAL_02\n\n\nTestcase description : Verify the public IPv6 IP when connected to an IPv6 supported SSID and Ethernet is connected\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. DUT should be connected to a WiFi SSID which supports IPV6\n\t\t  3.  Ethernet should be in connected state always\n\n\n'
             $'\n\n\nTestcaseID : TC_IPv6_MANUAL_03\n\n\nTestcase description : Verify the public IPv6 IP when connected to an IPv6 supported SSID and Ethernet is disconnected\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. DUT should be connected to a WiFi SSID which supports IPV6\n\t\t  3. Ethernet should be disconnected after connecting to Wifi SSID\n\n\n'
@@ -155,6 +156,11 @@ pre_condition_description() {
             $'\n\n\nTestcaseID : TC_IPv6_MANUAL_05\n\n\nTestcase description : Verify the internet accessibility when connected to an IPv6 supported SSID and Ethernet is disconnected\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. DUT should be connected to a WiFi SSID which supports IPV6\n\t\t  3.  Ethernet should be disconnected after connecting to Wifi SSID\n\t\t  4. TV should be connected with the HDMI port and source should be selected\n\t\t  5. RDK UI Home page should be visible on DUT prior to test\n\n\n'
             $'\n\n\nTestcaseID : TC_IPv6_MANUAL_06\n\n\nTestcase description : Verify the trace API when connected to an IPv6 supported SSID and Ethernet is disconnected\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. DUT should be connected to a WiFi  SSID which supports IPV6\n\t\t  3. Ethernet should be disconnected after connecting to Wifi SSID\n\n\n'
             $'\n\n\nTestcaseID : TC_IPv6_MANUAL_07\n\n\nTestcase description : Verify the ping API when connected to an IPv6 supported SSID and Ethernet is disconnected\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. DUT should be connected to a WiFi  SSID which supports IPV6\n\t\t  3. Ethernet should be disconnected after connecting to Wifi SSID\n\n\n'
+            $'\n\n\nTestcaseID : TC_POWER_MANUAL_01\n\n\nTestcase description : Verify DUT can be set to LIGHT SLEEP and then wakeup with the help of RDK service APIs\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visible on DUT prior to test\n\t\t  3. Device should be connected to network\n\n\n'
+            $'\n\n\nTestcaseID : TC_SYSTEM_MANUAL_01\n\n\nTestcase description : Verify the SSH dropbear service and status\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t2. Device should be connected to either Wifi or etherent network\n\t\t  3. Device Should have a valid IP address to SSH\n\n\n'
+            $'\n\n\nTestcaseID : TC_SYSTEM_MANUAL_02\n\n\nTestcase description : Verify the running status of Wpe framework processes\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t2. Device should be connected to either Wifi or etherent network\n\n\n'
+            $'\n\n\nTestcaseID : TC_SYSTEM_MANUAL_03\n\n\nTestcase description : Verify the log rollover RDK functionality\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\n\n'
+
    )
     
    case "$test_case" in
@@ -192,13 +198,18 @@ pre_condition_description() {
    "TC_HDCPCOMPLIANCE_MANUAL_04")      printf "%s" "${pre_description_arr[31]}" ;;
    "TC_HDCPCOMPLIANCE_MANUAL_05")      printf "%s" "${pre_description_arr[32]}" ;;
    "TC_HDCPCOMPLIANCE_MANUAL_06")      printf "%s" "${pre_description_arr[33]}" ;;
-   "TC_IPv6_MANUAL_01")          printf "%s" "${pre_description_arr[34]}" ;;
-   "TC_IPv6_MANUAL_02")          printf "%s" "${pre_description_arr[35]}" ;;
-   "TC_IPv6_MANUAL_03")          printf "%s" "${pre_description_arr[36]}" ;;
-   "TC_IPv6_MANUAL_04")          printf "%s" "${pre_description_arr[37]}" ;;
-   "TC_IPv6_MANUAL_05")          printf "%s" "${pre_description_arr[38]}" ;;
-   "TC_IPv6_MANUAL_06")          printf "%s" "${pre_description_arr[39]}" ;;
-   "TC_IPv6_MANUAL_07")          printf "%s" "${pre_description_arr[40]}" ;;
+   "TC_HDCPCOMPLIANCE_MANUAL_07")      printf "%s" "${pre_description_arr[34]}" ;;
+   "TC_IPv6_MANUAL_01")          printf "%s" "${pre_description_arr[35]}" ;;
+   "TC_IPv6_MANUAL_02")          printf "%s" "${pre_description_arr[36]}" ;;
+   "TC_IPv6_MANUAL_03")          printf "%s" "${pre_description_arr[37]}" ;;
+   "TC_IPv6_MANUAL_04")          printf "%s" "${pre_description_arr[38]}" ;;
+   "TC_IPv6_MANUAL_05")          printf "%s" "${pre_description_arr[39]}" ;;
+   "TC_IPv6_MANUAL_06")          printf "%s" "${pre_description_arr[40]}" ;;
+   "TC_IPv6_MANUAL_07")          printf "%s" "${pre_description_arr[41]}" ;;
+   "TC_POWER_MANUAL_01")         printf "%s" "${pre_description_arr[42]}" ;;
+   "TC_SYSTEM_MANUAL_01")        printf "%s" "${pre_description_arr[43]}" ;;
+   "TC_SYSTEM_MANUAL_02")        printf "%s" "${pre_description_arr[44]}" ;; 
+   "TC_SYSTEM_MANUAL_03")        printf "%s" "${pre_description_arr[45]}" ;;   
    *) printf "\nInvalid Testcase ID !!\n" ;;
    esac
 
@@ -267,7 +278,7 @@ dynamic_current_step_finder(){
    elif [[ "$testcase_name" == "TC_HDCPCOMPLIANCE_MANUAL" ]]; then   
       case "$tc_prifix" in
       "tc1_step"|"tc2_step"|"tc4_step"|"tc5_step"|"tc6_step")  current_step_num=3 ;;
-      "tc3_step") current_step_num=4 ;;
+      "tc3_step"|"tc7_step") current_step_num=4 ;;
       *) printf "\nInvalid testCase step number. Unable to detect current step number!!!\n\n\n" ;;
       esac
    elif [[ "$testcase_name" == "TC_IPv6_MANUAL" ]]; then
@@ -276,6 +287,17 @@ dynamic_current_step_finder(){
       "tc4_step"|"tc5_step") current_step_num=2 ;;
       *) printf "\nInvalid testCase step number. Unable to detect current step number!!!\n\n\n" ;;
       esac
+   elif [[ "$testcase_name" == "TC_POWER_MANUAL" ]]; then 
+      case "$tc_prifix" in
+      "tc1_step") current_step_num=6 ;;
+      *) printf "\nInvalid testCase step number. Unable to detect current step number!!!\n\n\n" ;;
+      esac
+   elif [[ "$testcase_name" == "TC_SYSTEM_MANUAL" ]]; then 
+      case "$tc_prifix" in
+      "tc1_step"|"tc3_step") current_step_num=2 ;;
+      "tc2_step") current_step_num=1 ;;
+      *) printf "\nInvalid testCase step number. Unable to detect current step number!!!\n\n\n" ;;
+      esac   
    else
       printf "\nInvalid testCase name. Unable to detect current step number!!!\n\n\n"
    fi
@@ -1383,7 +1405,7 @@ execute_stepStatusUpdate_steps() {
       declare "${testcase_prefix}_num_${step_no}=${step_no}"
       local tc_dynamic_var_name="${testcase_prefix}_num_${step_no}"
       case "$step_func_name" in
-         "TC_MEMCR_MANUAL_01"|"TC_HDCPCOMPLIANCE_MANUAL_01"|"TC_HDCPCOMPLIANCE_MANUAL_02"|"TC_HDCPCOMPLIANCE_MANUAL_03"|"TC_HDCPCOMPLIANCE_MANUAL_04"|"TC_HDCPCOMPLIANCE_MANUAL_05"|"TC_HDCPCOMPLIANCE_MANUAL_06"|"TC_IPv6_MANUAL_01"|"TC_IPv6_MANUAL_02"|"TC_IPv6_MANUAL_03"|"TC_IPv6_MANUAL_06"|"TC_IPv6_MANUAL_07")
+         "TC_MEMCR_MANUAL_01"|"TC_HDCPCOMPLIANCE_MANUAL_01"|"TC_HDCPCOMPLIANCE_MANUAL_02"|"TC_HDCPCOMPLIANCE_MANUAL_03"|"TC_HDCPCOMPLIANCE_MANUAL_04"|"TC_HDCPCOMPLIANCE_MANUAL_05"|"TC_HDCPCOMPLIANCE_MANUAL_06"|"TC_IPv6_MANUAL_01"|"TC_IPv6_MANUAL_02"|"TC_IPv6_MANUAL_03"|"TC_IPv6_MANUAL_06"|"TC_IPv6_MANUAL_07"|"TC_POWER_MANUAL_01"|"TC_SYSTEM_MANUAL_01"|"TC_SYSTEM_MANUAL_02"|"TC_SYSTEM_MANUAL_03")
             "$step_func_name" "${!tc_dynamic_var_name}"
             ;;
          "TC_MEMCR_MANUAL_02_step2"|"TC_MEMCR_MANUAL_02_step4") 
@@ -1765,6 +1787,28 @@ get_JSON_KEY_values() {
 
 
 
+#Function defnition for animated print message
+
+
+
+blink_Query() {
+
+    local msg="$1"
+    if [ -n "$msg" ]; then
+        for i in {1..10}; do
+            printf "\r%s" "$msg"
+            sleep 0.4
+            printf "\r%${#msg}s" " "   # clear line with spaces
+            sleep 0.2
+        done
+        printf "\r%s\n\n\n" "$msg"      # final static message 
+    else
+        printf "\n\nDEBUG : Empty query msg passed to function -> blink_Query\n\n" 
+    fi       
+
+}
+
+
 
 #Function Definition for postcondition image formats postCondition_Execution_WebKitInst
 
@@ -2044,9 +2088,10 @@ testcase_result_display_menu() {
             printf '04. Test Execution Result : TC_HDCPCOMPLIANCE_MANUAL_04        :\t[ Verify the HDCP protocol support ] \n\n'
             printf '05. Test Execution Result : TC_HDCPCOMPLIANCE_MANUAL_05        :\t[ Verify the HDCP enabled status ] \n\n'
             printf '06. Test Execution Result : TC_HDCPCOMPLIANCE_MANUAL_06        :\t[ Verify the device is supported, received and current HDCP version ] \n\n'
-            printf '07. Overall TestSuite Execution Status\n\n'
-            printf '08. Delete all Test Execution reports\n\n'
-            printf '09. Return to the Main Menu\n\n'
+            printf '07. Test Execution Result : TC_HDCPCOMPLIANCE_MANUAL_07        :\t[ Verify the HDCP Compliant enabled status ] \n\n'
+            printf '08. Overall TestSuite Execution Status\n\n'
+            printf '09. Delete all Test Execution reports\n\n'
+            printf '10. Return to the Main Menu\n\n'
             printf "\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n"
 
             read -p "Enter an Option to proceed : " menu_choice_1_1
@@ -2069,14 +2114,17 @@ testcase_result_display_menu() {
                   ;;
                6)
                   trigger_from_Execution_Result_menu "TC_HDCPCOMPLIANCE_MANUAL_06" "tc6_step" "tc_HDCPCOMPLIANCE_MANUAL_testsuite"
-                  ;;       
+                  ;;
                7)
+                  trigger_from_Execution_Result_menu "TC_HDCPCOMPLIANCE_MANUAL_07" "tc7_step" "tc_HDCPCOMPLIANCE_MANUAL_testsuite"
+                  ;;          
+               8)
                   overall_testsuite_execution_status "TC_HDCPCOMPLIANCE_MANUAL_"
                   ;;
-               8)
+               9)
                   cleanup_testExecution_reports "TC_HDCPCOMPLIANCE_MANUAL_"
                   ;;    
-               9)
+               10)
                   printf '\n\nExiting TestCase Execution Results Menu.....\n\n\n' 
                   break
                   ;;  
@@ -2141,6 +2189,78 @@ testcase_result_display_menu() {
                   ;;      
             esac
             ;;
+         "TC_POWER_MANUAL") 
+            printf "\n"
+            printf '\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n'
+            printf "                                                   ******* TestCase Execution Results Menu :  %s *******                                                                    " "$testCase_ID"
+            printf '\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n'
+            printf '01. Test Execution Result : TC_POWER_MANUAL_01       :\t[ Verify DUT can be set to LIGHT SLEEP and then wakeup with the help of RDK service APIs ] \n\n'
+            printf '02. Overall TestSuite Execution Status\n\n'
+            printf '03. Delete all Test Execution reports\n\n'
+            printf '04. Return to the Main Menu\n\n'
+            printf "\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n"
+
+            read -p "Enter an Option to proceed : " menu_choice_1_1
+            printf '\n\n'
+            case "$menu_choice_1_1" in 
+               1)
+                  trigger_from_Execution_Result_menu "TC_POWER_MANUAL_01" "tc1_step" "tc_POWER_MANUAL_testsuite"
+                  ;;
+               2)
+                  overall_testsuite_execution_status "TC_POWER_MANUAL_"
+                  ;;
+               3)
+                  cleanup_testExecution_reports "TC_POWER_MANUAL_"
+                  ;;    
+               4)
+                  printf '\n\nExiting TestCase Execution Results Menu.....\n\n\n' 
+                  break
+                  ;;  
+               *)
+                  printf '\nInvalid option selected. Please Try Again !!!\n\n\n'
+                  ;;      
+            esac
+            ;;
+         "TC_SYSTEM_MANUAL") 
+            printf "\n"
+            printf '\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n'
+            printf "                                                   ******* TestCase Execution Results Menu :  %s *******                                                                    " "$testCase_ID"
+            printf '\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n'
+            printf '01. Test Execution Result : TC_POWER_MANUAL_01       :\t[ Verify the SSH connection and functionality via SSH loopback ] \n\n'
+            printf '02. Test Execution Result : TC_POWER_MANUAL_02       :\t[ Verify the running status of Wpe framework processes ] \n\n'
+            printf '03. Test Execution Result : TC_POWER_MANUAL_03       :\t[ Verify the log rollover RDK functionality ] \n\n'
+            printf '04. Overall TestSuite Execution Status\n\n'
+            printf '05. Delete all Test Execution reports\n\n'
+            printf '06. Return to the Main Menu\n\n'
+            printf "\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n"
+
+            read -p "Enter an Option to proceed : " menu_choice_1_1
+            printf '\n\n'
+            case "$menu_choice_1_1" in 
+               1)
+                  trigger_from_Execution_Result_menu "TC_SYSTEM_MANUAL_01" "tc1_step" "tc_SYSTEM_MANUAL_testsuite" 
+                  ;;
+               2)
+                  trigger_from_Execution_Result_menu "TC_SYSTEM_MANUAL_02" "tc2_step" "tc_SYSTEM_MANUAL_testsuite"
+                  ;;
+               3)
+                  trigger_from_Execution_Result_menu "TC_SYSTEM_MANUAL_03" "tc3_step" "tc_SYSTEM_MANUAL_testsuite"
+                  ;;      
+               4)
+                  overall_testsuite_execution_status "TC_SYSTEM_MANUAL_"
+                  ;;
+               5)
+                  cleanup_testExecution_reports "TC_SYSTEM_MANUAL_"
+                  ;;    
+               6)
+                  printf '\n\nExiting TestCase Execution Results Menu.....\n\n\n' 
+                  break
+                  ;;  
+               *)
+                  printf '\nInvalid option selected. Please Try Again !!!\n\n\n'
+                  ;;      
+            esac
+            ;;        
          *)
            printf "\nInvalid Testsuite ID :[ %s ] detected.|...Exiting...|\n\n\n"
            break
