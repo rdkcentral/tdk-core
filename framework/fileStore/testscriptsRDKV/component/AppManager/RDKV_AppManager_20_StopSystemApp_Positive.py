@@ -71,7 +71,6 @@ import sys
 from ai2_0_utils import (
     get_ai2_setting,
     thunder_is_plugin_active,
-    safe_unload_module,
 )
 
 obj = tdklib.TDKScriptingLibrary("AppManager", "1", standAlone=True)
@@ -87,34 +86,28 @@ print("[LIB LOAD STATUS] : %s" % loadmodulestatus)
 if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS")
 
-    try:
-        rpc_port = get_ai2_setting('appManager.jsonRpcPort', 9998)
-        jsonrpc_url = f"http://{ip}:{rpc_port}/jsonrpc"
+    rpc_port = get_ai2_setting('appManager.jsonRpcPort', 9998)
+    jsonrpc_url = f"http://{ip}:{rpc_port}/jsonrpc"
 
-        # Verify plugin is active
-        plugin_name = get_ai2_setting('appManager.testData.pluginName', 'org.rdk.AppManager')
-        if not thunder_is_plugin_active(plugin_name, jsonrpc_url=jsonrpc_url):
-            print("[ERROR] AppManager plugin is not active")
-            obj.setLoadModuleStatus("FAILURE")
-        else:
-            print("[SUCCESS] AppManager plugin is active")
-
-            # Test: stopSystemApp API - Positive
-            print("
-[TEST] stopSystemApp API - Positive scenarios")
-            
-            # TODO: Add specific test implementation for stopSystemApp
-            # Use thunder_call() to invoke the API
-            # Validate responses and error handling
-            
-            print("  [INFO] Test implementation pending - Framework ready")
-            obj.setLoadModuleStatus("SUCCESS")
-
-    except Exception as e:
-        print(f"[ERROR] Test execution failed: {str(e)}")
+    # Verify plugin is active
+    plugin_name = get_ai2_setting('appManager.testData.pluginName', 'org.rdk.AppManager')
+    if not thunder_is_plugin_active(plugin_name, jsonrpc_url=jsonrpc_url):
+        print("[ERROR] AppManager plugin is not active")
         obj.setLoadModuleStatus("FAILURE")
+    else:
+        print("[SUCCESS] AppManager plugin is active")
 
-    safe_unload_module(obj, "AppManager")
+        # Test: stopSystemApp API - Positive
+        print("[TEST] stopSystemApp API - Positive scenarios")
+
+        # TODO: Add specific test implementation for stopSystemApp
+        # Use thunder_call() to invoke the API
+        # Validate responses and error handling
+
+        print("[INFO] Test implementation pending - Framework ready")
+        obj.setLoadModuleStatus("SUCCESS")
+
+    obj.unloadModule("AppManager")
 else:
     print("[ERROR] Failed to load AppManager module")
     obj.setLoadModuleStatus("FAILURE")
