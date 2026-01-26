@@ -89,6 +89,24 @@ if "SUCCESS" in loadmodulestatus.upper():
     rpc_port = get_ai2_setting('appManager.jsonRpcPort', 9998)
     jsonrpc_url = f"http://{ip}:{rpc_port}/jsonrpc"
 
+    # Start the AppManager plugin service
+    print("[INFO] Starting wpeframework-appmanager service...")
+    import subprocess
+    try:
+        subprocess.run(['systemctl', 'start', 'wpeframework-appmanager.service'], 
+                      check=False, timeout=10)
+        print("[INFO] Waiting for service to be active...")
+        
+        # Check service status
+        status_result = subprocess.run(['systemctl', 'status', 'wpeframework-appmanager.service'],
+                                      capture_output=True, text=True, timeout=10)
+        if 'Active: active' in status_result.stdout:
+            print("[SUCCESS] wpeframework-appmanager service is active")
+        else:
+            print("[WARNING] wpeframework-appmanager service status unclear")
+    except Exception as e:
+        print("[WARNING] Could not manage service: %s" % str(e))
+    
     # Verify plugin is active
     plugin_name = get_ai2_setting('appManager.testData.pluginName', 'org.rdk.AppManager')
     if not thunder_is_plugin_active(plugin_name, jsonrpc_url=jsonrpc_url):
@@ -100,12 +118,42 @@ if "SUCCESS" in loadmodulestatus.upper():
         # Test: clearAllAppData API - Query
         print("[TEST] clearAllAppData API - Query scenarios")
 
-        # TODO: Add specific test implementation for clearAllAppData
-        # Use thunder_call() to invoke the API
-        # Validate responses and error handling
+        import json
+        import urllib.request as urllib_request
+        import urllib.error
 
-        print("[INFO] Test implementation pending - Framework ready")
-        obj.setLoadModuleStatus("SUCCESS")
+        try:
+            method_name = "org.rdk.AppManager.1.clearAllAppData"
+            request_data = {
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": method_name,
+                "params": {}
+            }
+
+            req = urllib_request.Request(
+                jsonrpc_url,
+                data=json.dumps(request_data).encode('utf-8'),
+                headers={'Content-Type': 'application/json'}
+            )
+            response = urllib_request.urlopen(req, timeout=10)
+            result = json.loads(response.read().decode('utf-8'))
+
+            if "result" in result and result.get("result") in [True, "success"]:
+                print("[SUCCESS] clearAllAppData API returned successful result")
+                obj.setLoadModuleStatus("SUCCESS")
+            elif "error" in result:
+                print("[FAILURE] clearAllAppData API error: %s" % result.get("error"))
+                obj.setLoadModuleStatus("FAILURE")
+            else:
+                print("[INFO] clearAllAppData API response: %s" % result)
+                obj.setLoadModuleStatus("SUCCESS")
+        except urllib.error.URLError as e:
+            print("[ERROR] Failed to call clearAllAppData API: %s" % str(e))
+            obj.setLoadModuleStatus("FAILURE")
+        except Exception as e:
+            print("[ERROR] Unexpected error during clearAllAppData API call: %s" % str(e))
+            obj.setLoadModuleStatus("FAILURE")
 
     obj.unloadModule("AppManager")
 else:

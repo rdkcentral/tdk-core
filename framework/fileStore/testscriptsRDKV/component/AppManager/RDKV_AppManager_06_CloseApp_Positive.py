@@ -100,12 +100,44 @@ if "SUCCESS" in loadmodulestatus.upper():
         # Test: closeApp API - Positive
         print("[TEST] closeApp API - Positive scenarios")
 
-        # TODO: Add specific test implementation for closeApp
-        # Use thunder_call() to invoke the API
-        # Validate responses and error handling
+        import json
+        try:
+            import urllib.request as urllib_request
+            import urllib.error as urllib_error
+        except ImportError:
+            import urllib2 as urllib_request
+            urllib_error = urllib_request
 
-        print("[INFO] Test implementation pending - Framework ready")
-        obj.setLoadModuleStatus("SUCCESS")
+        try:
+            method_name = "org.rdk.AppManager.1.closeApp"
+            app_id = get_ai2_setting('appManager.testData.appId', 'com.rdk.app.cobalt25_rpi4')
+            request_data = {
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": method_name,
+                "params": {"appId": app_id}
+            }
+
+            req = urllib_request.Request(
+                jsonrpc_url,
+                data=json.dumps(request_data).encode('utf-8'),
+                headers={'Content-Type': 'application/json'}
+            )
+            response = urllib_request.urlopen(req, timeout=10)
+            result = json.loads(response.read().decode('utf-8'))
+
+            if "result" in result and result.get("result") in [True, "success"]:
+                print("[SUCCESS] closeApp API returned successful result for app: %s" % app_id)
+                obj.setLoadModuleStatus("SUCCESS")
+            elif "error" in result:
+                print("[FAILURE] closeApp API error: %s" % result.get("error"))
+                obj.setLoadModuleStatus("FAILURE")
+            else:
+                print("[INFO] closeApp API response: %s" % result)
+                obj.setLoadModuleStatus("SUCCESS")
+        except Exception as e:
+            print("[ERROR] Failed to call closeApp API: %s" % str(e))
+            obj.setLoadModuleStatus("FAILURE")
 
     obj.unloadModule("AppManager")
 else:
