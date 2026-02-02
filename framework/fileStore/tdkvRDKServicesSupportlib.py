@@ -4148,6 +4148,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "error_negative_scenario_validation":
+            try:
+                info["otherInfo"] = otherInfo
+                message = otherInfo.get("error").get("message")
+                if str(message).lower() in [str(val).lower() for val in expectedValues]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
         # RemoteControl Response result parser steps
         elif tag == "check_api_version":
             info = checkAndGetAllResultInfo(result,result.get("success"))
