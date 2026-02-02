@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2025 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ from tdkbTelcoVoiceManagerVariables import *
 #               client2_user - SIP Client 2 username
 #               dialplan_context - Dialplan context - internal/external
 #               step - Test step number
-# Return Value : status - True/False based on call initiation success               
+# Return Value : status - True/False based on call initiation success
 def initiateCall(obj, client1_user, client2_user, dialplan_context, step):
     expectedresult = "SUCCESS"
     client_type = ""
@@ -62,7 +62,7 @@ def initiateCall(obj, client1_user, client2_user, dialplan_context, step):
 # Description : Function to hang up the call between two sip clients configured in asterisk server
 # Parameters  : obj - module object
 #               step - Test step number
-# Return Value : hangup_status - True/False based on call hangup success   
+# Return Value : hangup_status - True/False based on call hangup success
 def callHangup(obj, step):
     #Hang Up the call
     expectedresult = "SUCCESS"
@@ -192,7 +192,7 @@ def setTelcoOutboundConfigs(obj, value_list, step):
         print("[TEST EXECUTION RESULT] : FAILURE")
     return set_flag
 
-    
+
 # getLineStatus
 # Syntax      : getLineStatus(obj)
 # Description : Function to get the status of the line configured in asterisk server
