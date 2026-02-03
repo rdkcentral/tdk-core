@@ -33,13 +33,8 @@ from tdkbTelcoVoiceManagerVariables import *
 # Return Value : status - True/False based on call initiation success
 def initiateCall(obj, client1_user, client2_user, dialplan_context, step):
     expectedresult = "SUCCESS"
-    client_type = ""
-    if dialplan_context == "internal":
-        client_type = "inbound"
-    elif dialplan_context == "external":
-        client_type = "outbound"
 
-    print(f"\nTEST STEP {step}: Initiate an {client_type} call between the sip clients configured - {client1_user} to {client2_user}")
+    print(f"\nTEST STEP {step}: Initiate a call between the sip clients configured - {client1_user} to {client2_user}")
     print(f"EXPECTED RESULT {step}: The call should be initiated successfully.")
     command = f"asterisk -x 'channel originate PJSIP/{client1_user} extension {client2_user}@from-{dialplan_context}'"
     print(f"Command : {command}")
@@ -48,7 +43,7 @@ def initiateCall(obj, client1_user, client2_user, dialplan_context, step):
     if expectedresult in actualresult and details == "":
         status = True
         tdkTestObj.setResultStatus("SUCCESS")
-        print(f"ACTUAL RESULT {step}: The call is initiated successfully between the {client_type} SIP Clients")
+        print(f"ACTUAL RESULT {step}: The call is initiated successfully between the configured SIP Clients")
         print("[TEST EXECUTION RESULT] : SUCCESS")
     else:
         status = False
@@ -63,27 +58,35 @@ def initiateCall(obj, client1_user, client2_user, dialplan_context, step):
 # Parameters  : obj - module object
 #               step - Test step number
 # Return Value : hangup_status - True/False based on call hangup success
-def callHangup(obj, step):
+def callHangup(obj, step, prereq=False):
     #Hang Up the call
     expectedresult = "SUCCESS"
-    print(f"\nTEST STEP {step}: Hang up the call between the sip clients configured in asterisk server.")
+    if prereq:
+        #expected details can be empty or "Requested Hangup" based on whether there was an active call or not
+        expected_details = ["", "Requested Hangup"]
+    else:
+        expected_details = ["Requested Hangup"]
+
+    print(f"\nTEST STEP {step}: Hang up the call between the sip clients in asterisk server.")
     print(f"EXPECTED RESULT {step}: The call should be hung up successfully.")
     command = f"asterisk -x 'channel request hangup all'"
     print(f"Command : {command}")
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print(f"Hangup Details: {details}")
-    if expectedresult in actualresult and "Requested Hangup" in details:
+    if expectedresult in actualresult and any(item in details for item in expected_details):
         hangup_status = True
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"ACTUAL RESULT {step}: The call should be hung up successfully between the SIP Clients.")
         print("[TEST EXECUTION RESULT] : SUCCESS")
+        sleep(5)
     else:
         hangup_status = False
         tdkTestObj.setResultStatus("FAILURE")
         print(f"ACTUAL RESULT {step}: Failed to hang up the call.")
         print("[TEST EXECUTION RESULT] : FAILURE")
     return hangup_status
+
 
 # clientStatus
 # Syntax      : clientStatus(obj, client_username)
@@ -99,10 +102,7 @@ def clientStatus(obj, client_username):
     print(f"Command : {command}")
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    for state in ["In use", "Not in use", "Unavailable"]:
-        if state in details:
-            details = state
-            break
+    print(f"Command Output: {details}")
     return tdkTestObj, actualresult, details
 
 # GetActiveCallCount
@@ -118,6 +118,8 @@ def getActiveCallCount(obj):
     print(f"Command : {command}")
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, call_count = doSysutilExecuteCommand(tdkTestObj, command)
+    if call_count.strip().isdigit():
+        call_count = int(call_count.strip())
     return tdkTestObj, actualresult, call_count
 
 
@@ -166,22 +168,29 @@ def getTelcoOutboundConfigs(obj, step):
 def setTelcoOutboundConfigs(obj, value_list, step):
     set_flag = True
     expectedresult = "SUCCESS"
-    valueList = ['""' if v == '' else v for v in value_list]
-    print(f"Value List : {valueList}")
 
-    paramValue = f"Device.Services.VoiceService.1.VoiceProfile.1.Line.1.Enable|{valueList[0]}|string|Device.Services.VoiceService.1.VoiceProfile.1.SIP.OutboundProxy|{valueList[1]}|string|Device.Services.VoiceService.1.VoiceProfile.1.SIP.OutboundProxyPort|{valueList[2]}|unsignedint|Device.Services.VoiceService.1.VoiceProfile.1.Line.1.SIP.AuthUserName|{valueList[3]}|string|Device.Services.VoiceService.1.VoiceProfile.1.Line.1.SIP.AuthPassword|{valueList[4]}|string"
-    print(f"Values to be set : {paramValue}\n")
+    paramList = ["Device.Services.VoiceService.1.VoiceProfile.1.Line.1.Enable", "Device.Services.VoiceService.1.VoiceProfile.1.SIP.OutboundProxy", "Device.Services.VoiceService.1.VoiceProfile.1.SIP.OutboundProxyPort", "Device.Services.VoiceService.1.VoiceProfile.1.Line.1.SIP.AuthUserName", "Device.Services.VoiceService.1.VoiceProfile.1.Line.1.SIP.AuthPassword"]
+    paramType = ["string", "string", "unsignedint", "string", "string"]
+
+    setValues = dict(zip(paramList,value_list))
+    print(f"Setting Values: {setValues}")
 
     print(f"\nTEST STEP {step}: Set the outbound call configurations in the asterisk server hosted in DUT.")
     print(f"EXPECTED RESULT {step}: Should set the outbound call configurations in the asterisk server.")
-    tdkTestObj = obj.createTestStep("TDKB_TR181Stub_SetMultiple")
-    tdkTestObj.addParameter("paramList", paramValue)
-    tdkTestObj.executeTestCase(expectedresult)
-    set_result = tdkTestObj.getResult()
-    set_details = tdkTestObj.getResultDetails()
-    print(f"Details: {set_details}")
-    print(f"Result : {set_result}")
-    if expectedresult in set_result:
+
+    set_result = [None] * len(paramList)
+    set_details = [None] * len(paramList)
+    for i in range(len(paramList)):
+        if i == len(paramList)-1:
+            tdkTestObj = obj.createTestStep('TDKB_TR181Stub_SetOnly')
+        else:
+            tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Set')
+        print("\n Setting parameter: %s to value: %s" %(paramList[i], value_list[i]))
+        set_result[i], set_details[i] = setTR181Value(tdkTestObj, paramList[i], value_list[i], paramType[i])
+    print(f"Set Details: {set_details}")
+    print(f"Set Result : {set_result}")
+
+    if all(res == expectedresult for res in set_result) and all(detail != "" for detail in set_details):
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"ACTUAL RESULT {step}: Successfully set the outbound call configurations")
         print("[TEST EXECUTION RESULT] : SUCCESS")

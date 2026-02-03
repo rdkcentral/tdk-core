@@ -26,6 +26,6 @@ client2_username = 602
 #Outbound Client Username - account configured in subscribe.linphone.org
 outbound_client_username = ""
 outbound_client_password = ""
-outbound_port = 5060
+outbound_port = "5060"
 outbound_proxy = "sip.linphone.org"
 outbound_line_enable = "Enabled"
