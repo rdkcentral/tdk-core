@@ -68,12 +68,10 @@
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>cobalt_test_url:string</input_parameters>
     <automation_approch>1. As a prerequisite enable System plugin disable WebKit and Cobalt plugins.
-2. Get the current standbymode.
-3. If it is not LIGHT_SLEEP set it to LIGHT_SLEEP.
-4. Verify the power state and set it as STANDBY if it is ON.
-5. Set the power state to ON and launch Cobalt
-6. Calculate the resource usage.
-7. Revert values</automation_approch>
+2. Verify the power state and set it as STANDBY if it is ON.
+3. Set the power state to ON and launch Cobalt
+4. Calculate the resource usage.
+5. Revert values</automation_approch>
     <expected_output>Device's power state should be changed.
 Resource usage should be within the expected range.</expected_output>
     <priority>High</priority>
@@ -145,40 +143,7 @@ if expectedResult in result.upper():
         thunder_port = rdkv_performancelib.devicePort
         time.sleep(10)
         print("\nPre conditions for the test are set successfully")
-        print("\n Get the current StandByMode of the device:")
-        print("\n Invoke org.rdk.System.1.getPreferredStandbyMode \n")
-        tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult');
-        tdkTestObj.addParameter("method","org.rdk.System.1.getPreferredStandbyMode");
-        tdkTestObj.addParameter("reqValue","preferredStandbyMode")
-        tdkTestObj.executeTestCase(expectedResult);
-        result = tdkTestObj.getResult();
-        preferred_standby = tdkTestObj.getResultDetails()
-        if expectedResult in result and preferred_standby != "LIGHT_SLEEP":
-            tdkTestObj.setResultStatus("SUCCESS")
-            print("\n Set standby mode as LIGHT_SLEEP \n")
-            params = '{"standbyMode":"LIGHT_SLEEP"}'
-            tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method","org.rdk.System.1.setPreferredStandbyMode");
-            tdkTestObj.addParameter("value",params)
-            tdkTestObj.executeTestCase(expectedResult);
-            result = tdkTestObj.getResult();
-            if expectedResult in result:
-                print("\n SetPreferredStandbyMode is success \n")
-                tdkTestObj.setResultStatus("SUCCESS")
-                print("\n Invoke org.rdk.System.1.getPreferredStandbyMode \n")
-                tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult');
-                tdkTestObj.addParameter("method","org.rdk.System.1.getPreferredStandbyMode");
-                tdkTestObj.addParameter("reqValue","preferredStandbyMode")
-                tdkTestObj.executeTestCase(expectedResult);
-                result = tdkTestObj.getResult();
-                preferred_standby = tdkTestObj.getResultDetails()
-                if expectedResult in result and preferred_standby == "LIGHT_SLEEP":
-                    print("\n Preferred standby mode is LIGHT_SLEEP \n")
-                    tdkTestObj.setResultStatus("SUCCESS")
-                else:
-                    print("\n Error in setting up the stand by mode as LIGHT_SLEEP")
-                    tdkTestObj.setResultStatus("FAILURE")
-        if expectedResult in result and preferred_standby == "LIGHT_SLEEP":
+        if expectedResult in result:
             print("Check the current power state")
             tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
             tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
@@ -189,7 +154,7 @@ if expectedResult in result.upper():
             if expectedResult in result and current_power_state != "STANDBY":
                 print("\n The current power state is: ",current_power_state)
                 print("\n Set the current power state mode to StandBy")
-                params = '{"powerState":"STANDBY", "standbyReason":"APIUnitTest"}'
+                params = '{"powerState":"LIGHT_SLEEP", "standbyReason":"APIUnitTest"}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","org.rdk.System.1.setPowerState")
                 tdkTestObj.addParameter("value",params)

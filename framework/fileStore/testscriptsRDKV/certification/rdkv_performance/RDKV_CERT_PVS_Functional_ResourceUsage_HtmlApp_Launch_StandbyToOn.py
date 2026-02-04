@@ -69,11 +69,10 @@
     <input_parameters>None</input_parameters>
     <automation_approch>1. As a prerequisite enable System plugin disable WebKit and html plugins.
 2. Get the current power state.
-3. Get the preferred standby mode and if it is not LIGHT_SLEEP set it to LIGHT_SLEEP.
-4. Set the power state to STANDBY
-5. Set the power state to ON and launch HtmlApp
-6. Calculate the resource usage.
-7. Revert values</automation_approch>
+3. Set the power state to STANDBY
+4. Set the power state to ON and launch HtmlApp
+5. Calculate the resource usage.
+6. Revert values</automation_approch>
     <expected_output>Device's power state should be changed.
 Resource usage should be within the expected range.</expected_output>
     <priority>High</priority>
@@ -146,39 +145,6 @@ if expectedResult in result.upper():
     if status == "SUCCESS" and expectedResult in result and ssh_param_dict != {}:
         time.sleep(10)
         print("\nPre conditions for the test are set successfully")
-        print("\n Get the current StandByMode of the device:")
-        print("\n Invoke org.rdk.System.1.getPreferredStandbyMode \n")
-        tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult');
-        tdkTestObj.addParameter("method","org.rdk.System.1.getPreferredStandbyMode");
-        tdkTestObj.addParameter("reqValue","preferredStandbyMode")
-        tdkTestObj.executeTestCase(expectedResult);
-        result = tdkTestObj.getResult();
-        preferred_standby = tdkTestObj.getResultDetails()
-        if expectedResult in result and preferred_standby != "LIGHT_SLEEP":
-            tdkTestObj.setResultStatus("SUCCESS")
-            print("\n Set standby mode as LIGHT_SLEEP \n")
-            params = '{"standbyMode":"LIGHT_SLEEP"}'
-            tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method","org.rdk.System.1.setPreferredStandbyMode");
-            tdkTestObj.addParameter("value",params)
-            tdkTestObj.executeTestCase(expectedResult);
-            result = tdkTestObj.getResult();
-            if expectedResult in result:
-                print("\n SetPreferredStandbyMode is success \n")
-                tdkTestObj.setResultStatus("SUCCESS")
-                print("\n Invoke org.rdk.System.1.getPreferredStandbyMode \n")
-                tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult');
-                tdkTestObj.addParameter("method","org.rdk.System.1.getPreferredStandbyMode");
-                tdkTestObj.addParameter("reqValue","preferredStandbyMode")
-                tdkTestObj.executeTestCase(expectedResult);
-                result = tdkTestObj.getResult();
-                preferred_standby = tdkTestObj.getResultDetails()
-                if expectedResult in result and preferred_standby == "LIGHT_SLEEP":
-                    print("\n Preferred standby mode is LIGHT_SLEEP \n")
-                    tdkTestObj.setResultStatus("SUCCESS")
-                else:
-                    print("\n Error in setting up the stand by mode as LIGHT_SLEEP")
-                    tdkTestObj.setResultStatus("FAILURE")
         if expectedResult in result and preferred_standby == "LIGHT_SLEEP":
             print("Check the current power state")
             tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
