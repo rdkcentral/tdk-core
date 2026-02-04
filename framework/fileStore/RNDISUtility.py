@@ -144,7 +144,6 @@ def perform_ping_test(obj, target, count):
 #              interface_name - name of the interface
 # Return Value: tdkTestObj - test object
 #               actualresult - SUCCESS/FAILURE
-#               details - interface status details
 def check_interface_no_ip(obj, interface_name):
     command = f"ifconfig {interface_name} | grep {INET_ADDR_PATTERN}"
     print("Command : %s" % command)
@@ -158,7 +157,7 @@ def check_interface_no_ip(obj, interface_name):
     else:
         actualresult = "FAILURE"
 
-    return tdkTestObj, actualresult, details
+    return tdkTestObj, actualresult
 ########## End of function ##########
 
 # monitor_cellular_status
@@ -214,28 +213,28 @@ def get_cellular_statistics(obj):
     tdkTestObj = obj.createTestStep("TDKB_TR181Stub_Get")
     # Get BytesSent
     actualresult, details = getTR181Value(tdkTestObj, DM_CELLULAR_STATS_BYTES_SENT)
-    if "SUCCESS" in actualresult and details != "":
+    if "SUCCESS" in actualresult and details and details.strip().isdigit():
         bytes_sent = int(details.strip())
     else:
         print("FAILURE: Failed to get %s. Details: %s" % (DM_CELLULAR_STATS_BYTES_SENT, details))
         bytes_sent = 0
     # Get BytesReceived
     actualresult, details = getTR181Value(tdkTestObj, DM_CELLULAR_STATS_BYTES_RECEIVED)
-    if "SUCCESS" in actualresult and details != "":
+    if "SUCCESS" in actualresult and details and details.strip().isdigit():
         bytes_received = int(details.strip())
     else:
         print("FAILURE: Failed to get %s. Details: %s" % (DM_CELLULAR_STATS_BYTES_RECEIVED, details))
         bytes_received = 0
     # Get PacketsSent
     actualresult, details = getTR181Value(tdkTestObj, DM_CELLULAR_STATS_PACKETS_SENT)
-    if "SUCCESS" in actualresult and details != "":
+    if "SUCCESS" in actualresult and details and details.strip().isdigit():
         packets_sent = int(details.strip())
     else:
         print("FAILURE: Failed to get %s. Details: %s" % (DM_CELLULAR_STATS_PACKETS_SENT, details))
         packets_sent = 0
     # Get PacketsReceived
     actualresult, details = getTR181Value(tdkTestObj, DM_CELLULAR_STATS_PACKETS_RECEIVED)
-    if "SUCCESS" in actualresult and details != "":
+    if "SUCCESS" in actualresult and details and details.strip().isdigit():
         packets_received = int(details.strip())
     else:
         print("FAILURE: Failed to get %s. Details: %s" % (DM_CELLULAR_STATS_PACKETS_RECEIVED, details))
@@ -329,3 +328,4 @@ def traverse_host_table_for_client(obj, host_entries, client_type, step):
 
     return tdkTestObj_tr181, actualresult, clientDetected, clientIndex, detectedInfo, step
 ########## End of function ##########
+
