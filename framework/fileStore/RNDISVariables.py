@@ -32,7 +32,6 @@ HWADDR_PATTERN = "HWaddr"
 # Ping Test Configuration
 PING_TARGET = "www.google.com"
 PING_COUNT = 10
-EXPECTED_PACKET_LOSS = "0% packet loss"
 
 # Cellular Interface Data Model Parameters
 DM_CELLULAR_INTERFACE_ENABLE = "Device.Cellular.Interface.1.Enable"
@@ -47,9 +46,6 @@ DM_CELLULAR_STATS_BYTES_RECEIVED = "Device.Cellular.Interface.1.X_RDK_Statistics
 DM_CELLULAR_STATS_PACKETS_SENT = "Device.Cellular.Interface.1.X_RDK_Statistics.PacketsSent"
 DM_CELLULAR_STATS_PACKETS_RECEIVED = "Device.Cellular.Interface.1.X_RDK_Statistics.PacketsReceived"
 
-# Default WAN Interface
-DEFAULT_WAN_INTERFACE = "erouter0"
-
 # WAN Manager Data Model Parameters
 DM_WAN_MANAGER_CURRENT_ACTIVE_INTERFACE = "Device.X_RDK_WanManager.CurrentActiveInterface"
 DM_WAN_MANAGER_CURRENT_STATUS = "Device.X_RDK_WanManager.CurrentStatus"
@@ -61,10 +57,8 @@ EXPECTED_WAN_STATUS_UP = "Up"
 EXPECTED_INTERFACE_ACTIVE_STATUS = "LTE,1|WanOE,0"
 
 # Expected Cellular Status Values
-EXPECTED_STATUS_REGISTERED = "REGISTERED"
+EXPECTED_STATUS_CONNECTED = "CONNECTED"
 EXPECTED_STATUS_DEREGISTERED = "DEREGISTERED"
-EXPECTED_ENABLE_TRUE = "true"
-EXPECTED_ENABLE_FALSE = "false"
 EXPECTED_DEVICE_TYPE_RNDIS = "RNDIS"
 EXPECTED_CONTROL_INTERFACE_STATUS = "OPENED"
 
@@ -77,7 +71,3 @@ DM_HOSTS_HOST_NUMBER_OF_ENTRIES = "Device.Hosts.HostNumberOfEntries"
 
 # Expected Host Table Values
 EXPECTED_LAYER1_INTERFACE_ETHERNET = "Ethernet"
-
-# Expected WiFi SSID Layer1 Interface Values
-EXPECTED_LAYER1_INTERFACE_WIFI_SSID1 = "Device.WiFi.SSID.1"
-EXPECTED_LAYER1_INTERFACE_WIFI_SSID2 = "Device.WiFi.SSID.2"
