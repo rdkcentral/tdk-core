@@ -199,6 +199,7 @@ def setTelcoOutboundConfigs(obj, value_list, step):
         tdkTestObj.setResultStatus("FAILURE")
         print(f"ACTUAL RESULT {step}: Failed to set the outbound call configurations")
         print("[TEST EXECUTION RESULT] : FAILURE")
+    sleep(10)
     return set_flag
 
 
