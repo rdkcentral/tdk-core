@@ -156,7 +156,7 @@ if expectedResult in result.upper():
             if expectedResult in result and current_power_state != "STANDBY":
                 print("\n The current power state is: ",current_power_state)
                 print("\n Set the current power state mode to StandBy")
-                params = '{"powerState":"STANDBY", "standbyReason":"APIUnitTest"}'
+                params = '{"powerState":"LIGHT_SLEEP", "standbyReason":"APIUnitTest"}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","org.rdk.System.1.setPowerState")
                 tdkTestObj.addParameter("value",params)
