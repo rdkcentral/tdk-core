@@ -964,7 +964,7 @@
             </testStep>
 	    <testStep testStepId="4" name="Check_HdmiCecSource_Get_Vendor_ID_API_Response" method="HdmiCecSource_Get_Vendor_ID">
 	    	 <resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
                      <arguments value="deactivate_check_error_message"/>
                  </resultGeneration>
 	    </testStep>
@@ -1027,7 +1027,7 @@
             </testStep>
             <testStep testStepId="4" name="Check_HdmiCecSource_Get_OSD_Name_API_Response" method="HdmiCecSource_Get_OSD_Name">
 	    	 <resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
                      <arguments value="deactivate_check_error_message"/>
                  </resultGeneration>
 	    </testStep>
@@ -1090,7 +1090,7 @@
             </testStep>
             <testStep testStepId="4" name="Check_HdmiCecSource_Get_Device_List_API_Response" method="HdmiCecSource_Get_Device_List">
 	    	 <resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
                      <arguments value="deactivate_check_error_message"/>
                  </resultGeneration>
 	    </testStep>
@@ -1153,7 +1153,7 @@
             </testStep>
             <testStep testStepId="4" name="Check_HdmiCecSource_Get_Enabled_API_Response" method="HdmiCecSource_Get_Enabled">
 	    	 <resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
                      <arguments value="deactivate_check_error_message"/>
                  </resultGeneration> 
 	    </testStep>
@@ -1216,7 +1216,7 @@
             </testStep>
             <testStep testStepId="4" name="Check_HdmiCecSource_Get_OTP_Enabled_API_Response" method="HdmiCecSource_Get_OTP_Enabled">
 		 <resultGeneration useMethodTag="controller_check_error_message">
-		     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+		     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
 		     <arguments value="deactivate_check_error_message"/>
 		 </resultGeneration>
             </testStep>
@@ -1323,7 +1323,7 @@
     <testCase testCaseId="HdmiCecSource_38" testCaseName="Set_Empty_VendorID" desc="Validate by setting up empty Vendor ID">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="HdmiCecSource_Set_Vendor_ID" method="HdmiCecSource_Set_Vendor_ID">
-            <resultGeneration useMethodTag="system_check_negative_scenario" />
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
 </testPlugin>
