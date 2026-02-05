@@ -109,6 +109,8 @@ obj.configureTestCase(ip,port,'RDKV_Telemetry_Uptime');
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 
+expectedResult = "SUCCESS"
+
 pre_requisite_set = False
 if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('telemetry_deviceconfig_value')
@@ -188,7 +190,7 @@ if pre_requisite_set:
             print("\n[TEST STEP RESULT] : FAILURE")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print("\FAILURE observed during rbuscli command execution")
+        print("\nFAILURE observed during rbuscli command execution")
         print("\n[TEST STEP RESULT] : FAILURE\n")
         tdkTestObj.setResultStatus("FAILURE");
 
@@ -228,11 +230,12 @@ if pre_requisite_set:
             print("SUCCESS : cJSON report is generated successfully")
             print("\n[TEST STEP RESULT] : SUCCESS\n");
             tdkTestObj.setResultStatus("SUCCESS");
+
         print ("\n[TEST STEP 4] : Verify if report is sent successfully into server")
         if not HTTP_found and dummy_url:
             print("FAILURE : report not sent successfully to server")
             print("\n[TEST STEP RESULT] : FAILURE\n")
-            print("EXPECTED RESULT AS DUMMY URL USED\n")
+            print("EXPECTED RESULT : Dummy URL used\n")
             tdkTestObj.setResultStatus("SUCCESS")
         elif not HTTP_found:
             print("FAILURE : report not sent successfully to server")

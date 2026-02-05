@@ -150,7 +150,7 @@ if pre_requisite_set:
     tdkTestObj = obj.createTestStep('form_rbuscli_command');
     tdkTestObj.addParameter("param_name", param)
     tdkTestObj.addParameter("profile_name", profile_name)
-    tdkTestObj.addParameter("description", Hardware_Version)
+    tdkTestObj.addParameter("description", description)
     tdkTestObj.addParameter("name", name)
     tdkTestObj.addParameter("Telemetry_Collector_URL",Telemetry_Collector_URL)
     tdkTestObj.executeTestCase("SUCCESS");
