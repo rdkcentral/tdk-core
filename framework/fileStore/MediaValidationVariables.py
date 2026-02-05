@@ -540,6 +540,38 @@ video_src_url_widevine_cbcs_dash_hevc_aac_drmconfigs = ""
 video_src_url_widevine_cbcs_dash_av1_aac = test_streams_base_path + "DASH_AV1_AAC_CBCS/dash_av1_cbcs_master.mpd"
 video_src_url_widevine_cbcs_dash_av1_aac_drmconfigs = ""
 
+video_src_url_widevine_cbcs_hls_hevc_aac = test_streams_base_path + "HLS_HEVC_AAC_CBCS/hls_hevc_master.m3u8"
+video_src_url_widevine_cbcs_hls_hevc_aac_drmconfigs = ""
+
+video_src_url_widevine_cbcs_dash_vp9_opus = test_streams_base_path + "DASH_VP9_OPUS_CBCS/master.mpd"
+video_src_url_widevine_cbcs_dash_vp9_opus_drmconfigs = ""
+
+
+#Crypt and Skip Byte Block DRM Streams
+video_src_url_widevine_crypt_skip_block_dash_h264_aac =  test_streams_base_path + "DASH_H264_AAC_Crypt_block/master.mpd"
+video_src_url_widevine_crypt_skip_block_dash_h264_aac_drmconfigs = ""
+
+video_src_url_widevine_crypt_skip_block_dash_hevc_aac = test_streams_base_path + "DASH_HEVC_AAC_Crypt_block/master.mpd"
+video_src_url_widevine_crypt_skip_block_dash_hevc_aac_drmconfigs = ""
+
+video_src_url_widevine_crypt_skip_block_dash_h264_ac3 = test_streams_base_path + "DASH_H264_AC3_Crypt_block/master.mpd"
+video_src_url_widevine_crypt_skip_block_dash_h264_ac3_drmconfigs = ""
+
+video_src_url_widevine_crypt_skip_block_dash_h264_ec3 = test_streams_base_path + "DASH_EC3_Crypt_block/master.mpd"
+video_src_url_widevine_crypt_skip_block_dash_h264_ec3_drmconfigs = ""
+
+video_src_url_widevine_crypt_skip_block_dash_av1_aac = test_streams_base_path + "DASH_AV1_AAC_Crypt_block/master.mpd"
+video_src_url_widevine_crypt_skip_block_dash_av1_aac_drmconfigs = ""
+
+video_src_url_widevine_crypt_skip_block_dash_vp9_opus = test_streams_base_path + "DASH_VP9_OPUS_Crypt_block/master.mpd"
+video_src_url_widevine_crypt_skip_block_dash_vp9_opus_drmconfigs = ""
+
+video_src_url_widevine_crypt_skip_block_hls_h264_aac = test_streams_base_path + "HLS_H264_Crypt_block/hls_h264_master.m3u8"
+video_src_url_widevine_crypt_skip_block_hls_h264_aac_drmconfigs = ""
+
+video_src_url_widevine_crypt_skip_block_hls_hevc_aac = test_streams_base_path + "HLS_HEVC_Crypt_block/hls_hevc_master.m3u8"
+video_src_url_widevine_crypt_skip_block_hls_hevc_aac_drmconfigs = ""
+
 
 #Multi-DRM Test streams
 video_src_url_multi_drm_dash = ""
