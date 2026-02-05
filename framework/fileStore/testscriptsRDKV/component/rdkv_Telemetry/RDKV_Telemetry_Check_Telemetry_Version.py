@@ -105,7 +105,7 @@ if "SUCCESS" in result.upper():
         print("\n[TEST STEP RESULT] : SUCCESS\n");
         tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print("\Telemetry version is not as expected in device")
+        print("Telemetry version is not as expected in device")
         print("\n[TEST STEP RESULT] : FAILURE\n")
         tdkTestObj.setResultStatus("FAILURE");
 
