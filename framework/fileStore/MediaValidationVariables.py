@@ -256,6 +256,7 @@ video_src_url_resolution_down_vp9 = test_streams_base_path + "TDK_Asset_Sunrise_
 
 #H.264 Codec Video URL
 video_src_url_dash_h264 = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_tdk_avc_aac_fmp4.mpd"
+video_src_url_dash_h264_main = test_streams_base_path + "DASH_H264_AAC_Main/dash_h264_avc_aac_fmp4_main.mpd"
 video_src_url_hls_h264  = test_streams_base_path + "HLS_H264_AAC/master.m3u8"
 
 #H.264 codec video URL with iframe track. Used by UVE AAMP trickplay tests
@@ -264,6 +265,7 @@ video_src_url_hls_h264_iframe  = ""
 
 #HEVC Codec Video URL
 video_src_url_hevc = test_streams_base_path + "DASH_HEVC_AAC/atfms_291_dash_tdk_hevc_aac_fmp4.mpd"
+video_src_url_hevc_main10 = test_streams_base_path + "DASH_HEVC_AAC_Main10/dash_hevc_aac_fmp4_main10.mpd"
 
 #H.263 Codec Video URL
 video_src_url_h263 = test_streams_base_path + "TDK_Asset_Sunrise_H263_AAC.mov"
