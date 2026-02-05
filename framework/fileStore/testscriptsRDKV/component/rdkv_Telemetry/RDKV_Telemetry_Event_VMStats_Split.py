@@ -150,7 +150,7 @@ if pre_requisite_set:
     tdkTestObj = obj.createTestStep('form_rbuscli_event_command');
     tdkTestObj.addParameter("event_name", event)
     tdkTestObj.addParameter("profile_name", profile_name)
-    tdkTestObj.addParameter("description", descripion)
+    tdkTestObj.addParameter("description", description)
     tdkTestObj.addParameter("component_name", component_name)
     tdkTestObj.addParameter("Telemetry_Collector_URL",Telemetry_Collector_URL)
     tdkTestObj.executeTestCase("SUCCESS");
@@ -187,7 +187,7 @@ if pre_requisite_set:
             print("\n[TEST STEP RESULT] : FAILURE")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print("\FAILURE observed during rbuscli command execution")
+        print("\nFAILURE observed during rbuscli command execution")
         print("\n[TEST STEP RESULT] : FAILURE\n")
         tdkTestObj.setResultStatus("FAILURE");
 
@@ -220,7 +220,7 @@ if pre_requisite_set:
             print("FAILURE : Unable to find cJSON report")
             print("\n[TEST STEP RESULT] : FAILURE\n")
             tdkTestObj.setResultStatus("FAILURE")
-        elif name not in cJSON_line:
+        elif component_name not in cJSON_line:
             print("FAILURE : Unable to find device Device VM Stats Split in cJSON report")
             print("\n[TEST STEP RESULT] : FAILURE\n")
             tdkTestObj.setResultStatus("FAILURE")
@@ -247,7 +247,7 @@ if pre_requisite_set:
 
         print ("\n[TEST STEP 5] : Verify if report is generated correctly")
         VMStats_Split = ""
-        if cJSON_line and name in cJSON_line:
+        if cJSON_line and component_name in cJSON_line:
             try:
                 match = re.search(r'(\{.*\})', cJSON_line)
                 if match:
