@@ -29,7 +29,7 @@ import os
 from datetime import datetime
 from time import sleep
 import cv2
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 import numpy as np
 from pytesseract import *
 
@@ -551,7 +551,7 @@ def get_image_resolution(image_path):
 def verifyImageTemplate(appName,image_path):
     if not os.path.exists(image_path): 
         print("FAILURE : image not found")
-    parser = SafeConfigParser()
+    parser = ConfigParser()
     parser.read( os.path.dirname(os.path.abspath(__file__))+"/ScreenshotTemplates.config")
     try:
         ConfigValue = parser.get('templates_verification',appName)
@@ -634,7 +634,7 @@ def extract_text_from_image(image_path,co_ordinates=[]):
 #######################################################################################################
 def getVerificationText(appName):
     #Get Verification text
-    parser = SafeConfigParser()
+    parser = ConfigParser()
     parser.read( os.path.dirname(os.path.abspath(__file__))+"/ScreenshotTemplates.config")
     try:
         ConfigValue = parser.get('text-verification',appName).encode().decode('unicode_escape')
