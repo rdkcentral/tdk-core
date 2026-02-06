@@ -108,7 +108,7 @@ print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 expectedResult = "SUCCESS"
 
-pre_requisite_s description False
+pre_requisite_set = False
 if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('telemetry_deviceconfig_value')
     tdkTestObj.addParameter("basePath",obj.realpath)
@@ -122,6 +122,8 @@ if "SUCCESS" in result.upper():
     details = details.split(",")
     Telemetry_Collector_URL = details[1]
     dummy_url = details[2]
+
+    print("Dummy URL : ", dummy_url)
 
     if "SUCCESS" in details:
         tdkTestObj.setResultStatus("SUCCESS")

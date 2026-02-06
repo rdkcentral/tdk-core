@@ -150,7 +150,7 @@ if pre_requisite_set:
     tdkTestObj = obj.createTestStep('form_rbuscli_command');
     tdkTestObj.addParameter("param_name", param)
     tdkTestObj.addParameter("profile_name", profile_name)
-    tdkTestObj.addParameter("description", Free Memory Threshold)
+    tdkTestObj.addParameter("description", description)
     tdkTestObj.addParameter("name", name)
     tdkTestObj.addParameter("Telemetry_Collector_URL",Telemetry_Collector_URL)
     tdkTestObj.executeTestCase("SUCCESS");
@@ -187,7 +187,7 @@ if pre_requisite_set:
             print("\n[TEST STEP RESULT] : FAILURE")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print("\FAILURE observed during rbuscli command execution")
+        print("\nFAILURE observed during rbuscli command execution")
         print("\n[TEST STEP RESULT] : FAILURE\n")
         tdkTestObj.setResultStatus("FAILURE");
 
