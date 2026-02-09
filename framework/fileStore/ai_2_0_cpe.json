@@ -1,0 +1,82 @@
+{
+	"appstore-catalog": {
+		"url": "https://dac.dev.rdkinnovation.com",
+		"authentication": {
+			"user": "dac-cloud-rdkm-user",
+			"password": "wcE$:66[OkFbX-NrXvP*#F<HtR5z"
+		}
+	},
+	"dac": {
+		"configUrl": "https://dac.config.dev.fireboltconnect.com/configuration/cpe.json"
+	},
+	"thunder": {
+		"host": "127.0.0.1",
+		"port": 9998
+	},
+	"timeouts": {
+		"socket": 10,
+		"http": 30
+	},
+	"packageManager": {
+		"jsonRpcPort": 9998,
+		"preferJsonRpc": true,
+		"maxDownloads": 2,
+		"maxInstalls": 2,
+		"defaultAppVersion": "1.0.0"
+	},
+	"downloadManager": {
+		"jsonRpcPort": 9998,
+		"testUrls": {
+			"small": "https://jsonplaceholder.typicode.com/posts/1",
+			"large": "https://tools.rdkcentral.com:8443/images//lib32-middleware-test-image-RPI4-raspberrypi4-64-rdke-feature-RDKECOREMW-584-OTA.wic.tar.gz",
+			"medium": "http://192.168.29.38/com.rdk.cobalt_rpi4_bundle_rialto_v0.9.5.tar.gz",
+			"largeAlternative": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+		},
+		"testPaths": {
+			"downloadDir": "/opt/CDL/",
+			"testFile": "/tmp/downloadmanager_test_file.tmp",
+			"invalidFile": "/invalid/nonexistent/file/path.invalid"
+		},
+		"timeouts": {
+			"maxWaitTime": 30,
+			"waitInterval": 2,
+			"downloadTimeout": 120,
+			"progressCheckTimeout": 25,
+			"pauseResumeWait": 3
+		},
+		"defaults": {
+			"priority": "true",
+			"retries": "2",
+			"rateLimit": "0",
+			"rateLimitTest": "512000",
+			"rateLimitHighSpeed": "10485760"
+		},
+		"configPath": "/etc/WPEFramework/plugins/DownloadManager.json",
+		"methods": {
+			"download": "org.rdk.DownloadManager.download",
+			"progress": "org.rdk.DownloadManager.progress",
+			"pause": "org.rdk.DownloadManager.pause",
+			"resume": "org.rdk.DownloadManager.resume",
+			"cancel": "org.rdk.DownloadManager.cancel",
+			"delete": "org.rdk.DownloadManager.delete",
+			"rateLimit": "org.rdk.DownloadManager.rateLimit",
+			"getStorageDetails": "org.rdk.DownloadManager.getStorageDetails"
+		}
+	},
+	"ai2Managers": {
+		"corePlugins": [
+			"PackageManagerRDKEMS",
+			"AppManager"
+		],
+		"allPlugins": [
+			"StorageManager",
+			"PackageManagerRDKEMS",
+			"DownloadManager",
+			"RDKWindowManager",
+			"RuntimeManager",
+			"LifecycleManager",
+			"AppManager",
+			"PreinstallManager"
+		]
+	}
+}
