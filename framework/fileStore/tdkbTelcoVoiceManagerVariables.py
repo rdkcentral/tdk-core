@@ -17,9 +17,9 @@
 # limitations under the License.
 ##########################################################################
 
-#The values are filled based on the configuration in pjsip.conf file
+#Configurable parameters which can be populated by the user
 
-#Inbound Client Usernames
+#Inbound Client Usernames - The values are filled based on the configuration in pjsip.conf file
 client1_username = 601
 client2_username = 602
 
@@ -29,3 +29,11 @@ outbound_client_password = ""
 outbound_port = "5060"
 outbound_proxy = "sip.linphone.org"
 outbound_line_enable = "Enabled"
+
+#SIP Configuration file path
+pjsip_conf_file = "/etc/asterisk/pjsip.conf"
+#Dialplan file path
+dialplan_file = "/etc/asterisk/extensions.conf"
+
+#Multiple call count
+max_call_attempt = 5
