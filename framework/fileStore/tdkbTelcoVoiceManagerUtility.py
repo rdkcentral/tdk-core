@@ -277,12 +277,14 @@ def isAvailableInContactList(obj, client_username, step):
 #                actualresult - actual result of the test execution
 #                details - channel name and status of the SIP client
 def getChannelNameAndStatus(obj, client_username):
+    channel_name = ""
     command = f"asterisk -x 'core show channels' | grep 'PJSIP/{client_username}-'"
     print(f"Command : {command}")
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print(f"Command Output: {details}")
-    channel_name = details.split()[0]
+    if details != "":
+        channel_name = details.split()[0]
     return tdkTestObj, actualresult, details, channel_name
 
 
