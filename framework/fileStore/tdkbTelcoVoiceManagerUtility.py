@@ -33,8 +33,10 @@ from tdkbTelcoVoiceManagerVariables import *
 # Return Value : status - True/False based on call initiation success
 def initiateCall(obj, client1_user, client2_user, dialplan_context, step):
     expectedresult = "SUCCESS"
-
-    print(f"\nTEST STEP {step}: Initiate a call between the sip clients configured - {client1_user} to {client2_user}")
+    if client1_user == client2_user:
+        print(f"\nTEST STEP {step}: Initiate a call from the Asterisk Server to the SIP client configured in the same WAN network - {client2_user}")
+    else:
+        print(f"\nTEST STEP {step}: Initiate a call between the sip clients configured - {client1_user} to {client2_user}")
     print(f"EXPECTED RESULT {step}: The call should be initiated successfully.")
     command = f"asterisk -x 'channel originate PJSIP/{client1_user} extension {client2_user}@from-{dialplan_context}'"
     print(f"Command : {command}")
@@ -216,17 +218,136 @@ def getLineStatus(obj):
     return tdkTestObj, actualresult, details
 
 # getOutboundEndpointRegistrationStatus
-# Syntax      : getOutboundEndpointRegistrationStatus(obj)
+# Syntax      : getOutboundEndpointRegistrationStatus(obj, client)
 # Description : Function to get the registration status of the external SIP client configured in asterisk server
 # Parameters  : obj - module object
+#               client - outbound client username obtained from variables file by default if not provided.
 # Return Value : tdkTestObj - module test object
 #                actualresult - actual result of the test execution
 #                details - registration status of the external SIP client
 
-def getOutboundEndpointRegistrationStatus(obj):
+def getOutboundEndpointRegistrationStatus(obj, client=outbound_client_username):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
-    command = f"asterisk -x 'pjsip show registrations' | grep {outbound_client_username}"
+    command = f"asterisk -x 'pjsip show registrations' | grep {client}"
     print(f"Command : {command}")
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print(f"Outbound Endpoint Registration Details: {details}")
     return tdkTestObj, actualresult, details
+
+# isAvailableInContactList
+# Syntax      : isAvailableInContactList(obj, client_username, step)
+# Description : Function to check whether the SIP client details are saved in contact list of asterisk server
+# Parameters  : obj - module object
+#               client_username - SIP Client username
+#               step - Test step number
+# Return Value : availability - True/False based on presence of client details in contact list
+def isAvailableInContactList(obj, client_username, step):
+    expectedresult = "SUCCESS"
+    availability_flag = True
+    #client_username can be a list of 1 or 2 or more usernames
+    print(f"\nTEST STEP {step}: Check whether the Client {client_username} details are saved in contact list.")
+    print(f"EXPECTED RESULT {step}: The Client {client_username} details should be saved in contact list.")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+
+    result = [None] * len(client_username)
+    details = [None] * len(client_username)
+
+    for index in range(len(client_username)):
+        command = f"asterisk -x 'pjsip show contacts' | grep '{client_username[index]}'"
+        print(f"Command: {command}")
+        result[index], details[index] = doSysutilExecuteCommand(tdkTestObj, command)
+        print(f"Command Output: {details[index]}")
+
+    if all(res in expectedresult for res in result) and all(client in detail for client, detail in zip(client_username, details)):
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"ACTUAL RESULT {step}: The Client {client_username} details are present in contact list. Details: {details}")
+        print("[TEST EXECUTION RESULT] : SUCCESS")
+        availability_flag = True
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"ACTUAL RESULT {step}: The Client {client_username} details are NOT present in contact list. Details: {details}")
+        print("[TEST EXECUTION RESULT] : FAILURE")
+        availability_flag = False
+    return availability_flag
+
+
+#getChannelNameAndStatus
+# Syntax      : getChannelNameAndStatus(obj, client_username)
+# Description : Function to get the channel name and status of the SIP client configured in asterisk
+# Parameters  : obj - module object
+#               client_username - SIP Client username
+# Return Value : tdkTestObj - module test object
+#                actualresult - actual result of the test execution
+#                details - channel name and status of the SIP client
+def getChannelNameAndStatus(obj, client_username):
+    channel_name = ""
+    command = f"asterisk -x 'core show channels' | grep 'PJSIP/{client_username}-'"
+    print(f"Command : {command}")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    print(f"Command Output: {details}")
+    if details != "":
+        channel_name = details.split()[0]
+    return tdkTestObj, actualresult, details, channel_name
+
+
+#getActiveChannelCount
+# Syntax      : getActiveChannelCount(obj)
+# Description : Function to get the active channel count from asterisk server
+# Parameters  : obj - module object
+# Return Value : tdkTestObj - module test object
+#                actualresult - actual result of the test execution
+#                channel_count - active channel count retrieved from asterisk server
+def getActiveChannelCount(obj):
+    channel_count = 0
+    command = "asterisk -x 'core show channels' | awk '/active channels/ {print $1}'"
+    print(f"Command : {command}")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, channel_count = doSysutilExecuteCommand(tdkTestObj, command)
+    if channel_count.strip().isdigit():
+        channel_count = int(channel_count.strip())
+    return tdkTestObj, actualresult, channel_count
+
+# Syntax      : hangupChannel(obj, channel_name, step)
+# Description : Function to hang up a specific channel in asterisk server
+# Parameters  : obj - module object
+#               channel_name - Name of the channel to be hanged up
+#               step - Test step number
+# Return Value : status - True/False based on channel hangup success
+
+def hangupChannel(obj, channel_name, step):
+    print(f"\nTEST STEP {step}: Hang up the channel - {channel_name} in asterisk server.")
+    print(f"EXPECTED RESULT {step}: The channel should be hung up successfully.")
+    command = f"asterisk -x 'channel request hangup {channel_name}'"
+    print(f"Command : {command}")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    print(f"Hangup Details: {details}")
+    if "SUCCESS" in actualresult and "Requested Hangup" in details:
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"ACTUAL RESULT {step}: The channel - {channel_name} is hung up successfully.")
+        print("[TEST EXECUTION RESULT] : SUCCESS")
+        return True
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"ACTUAL RESULT {step}: Failed to hang up the channel - {channel_name}.")
+        print("[TEST EXECUTION RESULT] : FAILURE")
+        return False
+
+# getTotalCallsProcessed
+# Syntax      : getTotalCallsProcessed(obj, step)
+# Description : Function to get the total calls processed count from asterisk server
+# Parameters  : obj - module object
+# Return Value : tdkTestObj - module test object
+#                actualresult - actual result of the test execution
+#                calls_processed - total calls processed count retrieved from asterisk server
+def getTotalCallsProcessed(obj):
+    calls_processed = 0
+    command = "asterisk -x 'core show channels' | awk '/processed/ {print $1}'"
+    print(f"Command : {command}")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, calls_processed = doSysutilExecuteCommand(tdkTestObj, command)
+    if calls_processed.strip().isdigit():
+        calls_processed = int(calls_processed.strip())
+    print(f"Total Calls Processed: {calls_processed}")
+    return tdkTestObj, actualresult, calls_processed
