@@ -33,8 +33,10 @@ from tdkbTelcoVoiceManagerVariables import *
 # Return Value : status - True/False based on call initiation success
 def initiateCall(obj, client1_user, client2_user, dialplan_context, step):
     expectedresult = "SUCCESS"
-
-    print(f"\nTEST STEP {step}: Initiate a call between the sip clients configured - {client1_user} to {client2_user}")
+    if client1_user == client2_user:
+        print(f"\nTEST STEP {step}: Initiate a call from the Asterisk Server to the SIP client configured in the same WAN network - {client2_user}")
+    else:
+        print(f"\nTEST STEP {step}: Initiate a call between the sip clients configured - {client1_user} to {client2_user}")
     print(f"EXPECTED RESULT {step}: The call should be initiated successfully.")
     command = f"asterisk -x 'channel originate PJSIP/{client1_user} extension {client2_user}@from-{dialplan_context}'"
     print(f"Command : {command}")
@@ -216,9 +218,10 @@ def getLineStatus(obj):
     return tdkTestObj, actualresult, details
 
 # getOutboundEndpointRegistrationStatus
-# Syntax      : getOutboundEndpointRegistrationStatus(obj)
+# Syntax      : getOutboundEndpointRegistrationStatus(obj, client)
 # Description : Function to get the registration status of the external SIP client configured in asterisk server
 # Parameters  : obj - module object
+#               client - outbound client username obtained from variables file by default if not provided.
 # Return Value : tdkTestObj - module test object
 #                actualresult - actual result of the test execution
 #                details - registration status of the external SIP client
@@ -296,6 +299,7 @@ def getChannelNameAndStatus(obj, client_username):
 #                actualresult - actual result of the test execution
 #                channel_count - active channel count retrieved from asterisk server
 def getActiveChannelCount(obj):
+    channel_count = 0
     command = "asterisk -x 'core show channels' | awk '/active channels/ {print $1}'"
     print(f"Command : {command}")
     tdkTestObj = obj.createTestStep('ExecuteCmd')
@@ -338,6 +342,7 @@ def hangupChannel(obj, channel_name, step):
 #                actualresult - actual result of the test execution
 #                calls_processed - total calls processed count retrieved from asterisk server
 def getTotalCallsProcessed(obj):
+    calls_processed = 0
     command = "asterisk -x 'core show channels' | awk '/processed/ {print $1}'"
     print(f"Command : {command}")
     tdkTestObj = obj.createTestStep('ExecuteCmd')
