@@ -86,19 +86,20 @@ print("[LIB LOAD STATUS] : %s" % loadmodulestatus)
 if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS")
 
-    rpc_port = get_ai2_setting('appManager.jsonRpcPort', 9998)
+    rpc_port = get_ai2_setting('APPMANAGER_JSONRPC_PORT', 9998)
     jsonrpc_url = f"http://{ip}:{rpc_port}/jsonrpc"
 
     # Start the AppManager plugin service
     print("[INFO] Starting wpeframework-appmanager service...")
     import subprocess
     try:
-        subprocess.run(['systemctl', 'start', 'wpeframework-appmanager.service'], 
+        service_name = get_ai2_setting('APPMANAGER_SERVICE_NAME', 'wpeframework-appmanager.service')
+        subprocess.run(['systemctl', 'start', service_name], 
                       check=False, timeout=10)
         print("[INFO] Waiting for service to be active...")
         
         # Check service status
-        status_result = subprocess.run(['systemctl', 'status', 'wpeframework-appmanager.service'],
+        status_result = subprocess.run(['systemctl', 'status', service_name],
                                       capture_output=True, text=True, timeout=10)
         if 'Active: active' in status_result.stdout:
             print("[SUCCESS] wpeframework-appmanager service is active")
@@ -108,7 +109,7 @@ if "SUCCESS" in loadmodulestatus.upper():
         print("[WARNING] Could not manage service: %s" % str(e))
     
     # Verify plugin is active
-    plugin_name = get_ai2_setting('appManager.testData.pluginName', 'org.rdk.AppManager')
+    plugin_name = get_ai2_setting('APPMANAGER_PLUGIN_NAME', 'org.rdk.AppManager')
     if not thunder_is_plugin_active(plugin_name, jsonrpc_url=jsonrpc_url):
         print("[ERROR] AppManager plugin is not active")
         obj.setLoadModuleStatus("FAILURE")
@@ -124,7 +125,7 @@ if "SUCCESS" in loadmodulestatus.upper():
 
         try:
             method_name = "org.rdk.AppManager.1.isInstalled"
-            app_id = get_ai2_setting('appManager.testData.appId', 'com.rdk.app.cobalt25_rpi4')
+            app_id = get_ai2_setting('APPMANAGER_TEST_APP_ID', 'com.rdk.app.cobalt25_rpi4')
             request_data = {
                 "jsonrpc": "2.0",
                 "id": 1,

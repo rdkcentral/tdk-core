@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2025 RDK Management
+ Licensed under the Apache License, Version 2.0
+-->
+<testPlugin pluginName="AppManager" pluginVersion="1">
+  <pluginPreRequisite>
+    <prerequisite requisiteId="1" requisiteName="Activate_AppManager_Plugin">
+      <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+        <params>
+          <param tag="plugin" value="org.rdk.AppManager" indexOnly="true" />
+        </params>
+        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager" />
+      </testStep>
+      <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager" />
+        <params>
+          <param tag="callsign" value="org.rdk.AppManager" />
+        </params>
+      </testStep>
+      <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager" />
+        <params>
+          <param tag="plugin" value="org.rdk.AppManager" indexOnly="true" />
+        </params>
+        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager" expectedValues="activated"/>
+      </testStep>
+    </prerequisite>
+  </pluginPreRequisite>
+
+  <testCase testCaseId="AppManager_01" testCaseName="AppManager_LaunchApp_Positive_Test" desc="Test AppManager launchApp API with valid application ID">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Launch_Application" method="launchApp" pluginName="AppManager">
+      <params>
+        <param tag="appId" useConfigFile="true" key="APPMANAGER_TEST_APP_ID" />
+      </params>
+      <resultGeneration useMethodTag="appmanager_check_result" arguments="check_launch_success" />
+    </testStep>
+    <testStep testStepId="2" name="Get_Loaded_Applications" method="getLoadedApps" pluginName="AppManager">
+      <resultGeneration useMethodTag="appmanager_check_if_app_loaded" >
+        <expectedValues useConfigFile="true" key="APPMANAGER_TEST_APP_ID" />
+      </resultGeneration>
+    </testStep>
+    <testCasePostRequisite>
+      <postrequisite requisiteId="1" requisiteName="Close_Application">
+        <testStep testStepId="1" name="Close_Application" method="closeApp" pluginName="AppManager">
+          <params>
+            <param tag="appId" useConfigFile="true" key="APPMANAGER_TEST_APP_ID" />
+          </params>
+          <resultGeneration useMethodTag="appmanager_check_result" arguments="check_close_success" />
+        </testStep>
+      </postrequisite>
+    </testCasePostRequisite>
+  </testCase>
+
+  <testCase testCaseId="AppManager_02" testCaseName="AppManager_LaunchApp_Negative_Test" desc="Test AppManager launchApp API with invalid application ID">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Launch_Invalid_Application" method="launchApp" pluginName="AppManager">
+      <params>
+        <param tag="appId" useConfigFile="true" key="APPMANAGER_INVALID_APP_ID" />
+      </params>
+      <resultGeneration useMethodTag="appmanager_check_result" arguments="check_launch_failure_expected" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="AppManager_03" testCaseName="AppManager_PreloadApp_Positive_Test" desc="Test AppManager preloadApp API with valid application ID">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Preload_Application" method="preloadApp" pluginName="AppManager">
+      <params>
+        <param tag="appId" useConfigFile="true" key="APPMANAGER_TEST_APP_ID" />
+      </params>
+      <resultGeneration useMethodTag="appmanager_check_result" arguments="check_preload_success" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="AppManager_04" testCaseName="AppManager_IsInstalled_Positive_Test" desc="Test AppManager isInstalled API with installed application">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Check_Application_Installed" method="isInstalled" pluginName="AppManager">
+      <params>
+        <param tag="appId" useConfigFile="true" key="APPMANAGER_TEST_APP_ID" />
+      </params>
+      <resultGeneration useMethodTag="appmanager_check_result" arguments="check_installed_true" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="AppManager_05" testCaseName="AppManager_IsInstalled_Negative_Test" desc="Test AppManager isInstalled API with non-existent application">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Check_Invalid_Application_Installed" method="isInstalled" pluginName="AppManager">
+      <params>
+        <param tag="appId" useConfigFile="true" key="APPMANAGER_INVALID_APP_ID" />
+      </params>
+      <resultGeneration useMethodTag="appmanager_check_result" arguments="check_installed_false" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="AppManager_06" testCaseName="AppManager_GetInstalledApps_Test" desc="Test AppManager getInstalledApps API">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Installed_Applications" method="getInstalledApps" pluginName="AppManager">
+      <resultGeneration useMethodTag="appmanager_check_for_results" arguments="check_app_list_returned" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="AppManager_07" testCaseName="AppManager_GetLoadedApps_Test" desc="Test AppManager getLoadedApps API">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Loaded_Applications" method="getLoadedApps" pluginName="AppManager">
+      <resultGeneration useMethodTag="appmanager_check_for_results" arguments="check_app_list_returned" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="AppManager_08" testCaseName="AppManager_GetMaxRunningApps_Test" desc="Test AppManager getMaxRunningApps API">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Max_Running_Apps" method="getMaxRunningApps" pluginName="AppManager">
+      <resultGeneration useMethodTag="appmanager_check_result" arguments="check_max_running_apps" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="AppManager_09" testCaseName="AppManager_CloseApp_Positive_Test" desc="Test AppManager closeApp API with running application">
+    <testCaseInfo testCaseType="direct"/>
+    <testCasePreRequisite>
+      <prereq requisiteId="1" requisiteName="Launch_Application_Prerequisites">
+        <testStep testStepId="1" name="Launch_Application" method="launchApp" pluginName="AppManager">
+          <params>
+            <param tag="appId" useConfigFile="true" key="APPMANAGER_TEST_APP_ID" />
+          </params>
+          <resultGeneration useMethodTag="appmanager_check_result" arguments="check_launch_success" />
+        </testStep>
+      </prereq>
+    </testCasePreRequisite>
+    <testStep testStepId="1" name="Close_Application" method="closeApp" pluginName="AppManager">
+      <params>
+        <param tag="appId" useConfigFile="true" key="APPMANAGER_TEST_APP_ID" />
+      </params>
+      <resultGeneration useMethodTag="appmanager_check_result" arguments="check_close_success" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="AppManager_10" testCaseName="AppManager_TerminateApp_Positive_Test" desc="Test AppManager terminateApp API with running application">
+    <testCaseInfo testCaseType="direct"/>
+    <testCasePreRequisite>
+      <prereq requisiteId="1" requisiteName="Launch_Application_Prerequisites">
+        <testStep testStepId="1" name="Launch_Application" method="launchApp" pluginName="AppManager">
+          <params>
+            <param tag="appId" useConfigFile="true" key="APPMANAGER_TEST_APP_ID" />
+          </params>
+          <resultGeneration useMethodTag="appmanager_check_result" arguments="check_launch_success" />
+        </testStep>
+      </prereq>
+    </testCasePreRequisite>
+    <testStep testStepId="1" name="Terminate_Application" method="terminateApp" pluginName="AppManager">
+      <params>
+        <param tag="appId" useConfigFile="true" key="APPMANAGER_TEST_APP_ID" />
+      </params>
+      <resultGeneration useMethodTag="appmanager_check_result" arguments="check_terminate_success" />
+    </testStep>
+  </testCase>
+
+</testPlugin>

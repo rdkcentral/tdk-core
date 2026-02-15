@@ -86,11 +86,11 @@ print("[LIB LOAD STATUS] : %s" % loadmodulestatus)
 if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS")
 
-    rpc_port = get_ai2_setting('appManager.jsonRpcPort', 9998)
+    rpc_port = get_ai2_setting('APPMANAGER_JSONRPC_PORT', 9998)
     jsonrpc_url = f"http://{ip}:{rpc_port}/jsonrpc"
 
     # Verify plugin is active
-    plugin_name = get_ai2_setting('appManager.testData.pluginName', 'org.rdk.AppManager')
+    plugin_name = get_ai2_setting('APPMANAGER_PLUGIN_NAME', 'org.rdk.AppManager')
     if not thunder_is_plugin_active(plugin_name, jsonrpc_url=jsonrpc_url):
         print("[ERROR] AppManager plugin is not active")
         obj.setLoadModuleStatus("FAILURE")
@@ -110,7 +110,7 @@ if "SUCCESS" in loadmodulestatus.upper():
 
         try:
             method_name = "org.rdk.AppManager.1.closeApp"
-            app_id = get_ai2_setting('appManager.testData.appId', 'com.rdk.app.cobalt25_rpi4')
+            app_id = get_ai2_setting('APPMANAGER_TEST_APP_ID', 'com.rdk.app.cobalt25_rpi4')
             request_data = {
                 "jsonrpc": "2.0",
                 "id": 1,

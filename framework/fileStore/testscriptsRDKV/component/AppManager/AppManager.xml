@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2025 RDK Management
+ Licensed under the Apache License, Version 2.0
+-->
+<xml>
+  <module name="AppManagerRDK" testGroup="Component">
+    <primitiveTests>
+      <!-- Application Lifecycle Management -->
+      <primitiveTest name="AppManager_LaunchApp" id="" version="1">
+        <function>TestMgr_AppManager_LaunchApp</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+          <parameter name="appVersion" value=""/>
+          <parameter name="metadata" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_PreloadApp" id="" version="1">
+        <function>TestMgr_AppManager_PreloadApp</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_CloseApp" id="" version="1">
+        <function>TestMgr_AppManager_CloseApp</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_TerminateApp" id="" version="1">
+        <function>TestMgr_AppManager_TerminateApp</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_KillApp" id="" version="1">
+        <function>TestMgr_AppManager_KillApp</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <!-- Application Query Methods -->
+      <primitiveTest name="AppManager_IsInstalled" id="" version="1">
+        <function>TestMgr_AppManager_IsInstalled</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_GetInstalledApps" id="" version="1">
+        <function>TestMgr_AppManager_GetInstalledApps</function>
+        <parameters/>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_GetLoadedApps" id="" version="1">
+        <function>TestMgr_AppManager_GetLoadedApps</function>
+        <parameters/>
+      </primitiveTest>
+      
+      <!-- System App Management -->
+      <primitiveTest name="AppManager_StartSystemApp" id="" version="1">
+        <function>TestMgr_AppManager_StartSystemApp</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_StopSystemApp" id="" version="1">
+        <function>TestMgr_AppManager_StopSystemApp</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <!-- Application Data Management -->
+      <primitiveTest name="AppManager_ClearAppData" id="" version="1">
+        <function>TestMgr_AppManager_ClearAppData</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_ClearAllAppData" id="" version="1">
+        <function>TestMgr_AppManager_ClearAllAppData</function>
+        <parameters/>
+      </primitiveTest>
+      
+      <!-- Application Metadata & Configuration -->
+      <primitiveTest name="AppManager_GetAppMetadata" id="" version="1">
+        <function>TestMgr_AppManager_GetAppMetadata</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_GetAppProperty" id="" version="1">
+        <function>TestMgr_AppManager_GetAppProperty</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+          <parameter name="propertyName" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_SetAppProperty" id="" version="1">
+        <function>TestMgr_AppManager_SetAppProperty</function>
+        <parameters>
+          <parameter name="appId" value=""/>
+          <parameter name="propertyName" value=""/>
+          <parameter name="propertyValue" value=""/>
+        </parameters>
+      </primitiveTest>
+      
+      <!-- System Resource Queries -->
+      <primitiveTest name="AppManager_GetMaxRunningApps" id="" version="1">
+        <function>TestMgr_AppManager_GetMaxRunningApps</function>
+        <parameters/>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_GetMaxHibernatedApps" id="" version="1">
+        <function>TestMgr_AppManager_GetMaxHibernatedApps</function>
+        <parameters/>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_GetMaxInactiveRamUsage" id="" version="1">
+        <function>TestMgr_AppManager_GetMaxInactiveRamUsage</function>
+        <parameters/>
+      </primitiveTest>
+      
+      <primitiveTest name="AppManager_GetMaxHibernatedFlashUsage" id="" version="1">
+        <function>TestMgr_AppManager_GetMaxHibernatedFlashUsage</function>
+        <parameters/>
+      </primitiveTest>
+      
+      <!-- Intent Handling -->
+      <primitiveTest name="AppManager_SendIntent" id="" version="1">
+        <function>TestMgr_AppManager_SendIntent</function>
+        <parameters>
+          <parameter name="action" value=""/>
+          <parameter name="uri" value=""/>
+        </parameters>
+      </primitiveTest>
+    </primitiveTests>
+  </module>
+</xml>
