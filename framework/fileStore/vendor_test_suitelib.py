@@ -155,7 +155,7 @@ def parseAsserts(output):
 # Return:
 #              - List of failed test cases.
 #---------------------------------------------------------------------
-def printTestSummary(testData):
+def printTestSummary(testData, plugin_name):
     """Prints the test summary in a tabular column format."""
     global failed_testCases
     # Define column headers
@@ -174,6 +174,61 @@ def printTestSummary(testData):
         print("  ".join(str(row[i]).ljust(colWidths[i]) for i in range(len(headers))))
     print("-" * (sum(colWidths) + len(headers) - 1))  # Final separator
     print("\n")
+
+    # Calculate plugin-level summary
+    total_tests = len(testData)
+    executed_tests = 0
+    passed_tests = 0
+    failed_tests = 0
+    na_tests = 0
+
+    for test_name, test_values in testData.items():
+        # test_values format: [TotalAsserts, Ran, Passed, Failed, Inactive]
+        if len(test_values) >= 4:
+            ran = test_values[1]
+            passed = test_values[2]
+            failed = test_values[3]
+
+            # Count executed tests (Ran > 0)
+            if ran > 0:
+                executed_tests += 1
+
+            # Count passed tests (Failed == 0 and Ran > 0)
+            if ran > 0 and failed == 0:
+                passed_tests += 1
+
+            # Count failed tests (Failed > 0)
+            if failed > 0:
+                failed_tests += 1
+
+    # Calculate N/A tests (not executed)
+    na_tests = total_tests - executed_tests
+
+    # Determine final status
+    if failed_tests > 0:
+        final_status = "FAILURE"
+    elif executed_tests == 0:
+        final_status = "NOT EXECUTED"
+    elif passed_tests == executed_tests:
+        final_status = "SUCCESS"
+    else:
+        final_status = "PARTIAL SUCCESS"
+
+    # Print plugin-level summary
+    print("\n" + "=" * 71)
+    print("PLUGIN TEST SUMMARY".center(71))
+    print("=" * 71)
+    print(f"PLUGIN NAME    :  {plugin_name}")
+    print(f"TOTAL TESTS    :  {total_tests}")
+    print(f"EXECUTED TESTS :  {executed_tests}")
+    print(f"PASSED TESTS   :  {passed_tests}")
+    print(f"FAILED TESTS   :  {failed_tests}")
+    print(f"N/A TESTS      :  {na_tests}")
+    print()
+    print(f"Final Plugin Tests Status: {final_status}")
+    print("=" * 71)
+    print("\n")
+
     return failed_testCases
 
 #-------------------------------------------------------------------
