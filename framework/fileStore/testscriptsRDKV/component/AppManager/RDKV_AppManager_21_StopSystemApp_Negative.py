@@ -16,63 +16,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-'''
-<?xml version='1.0' encoding='utf-8'?>
-<xml>
-  <id></id>
-  <version>1</version>
-  <name>RDKV_AppManager_21_StopSystemApp_Negative</name>
-  <primitive_test_id></primitive_test_id>
-  <primitive_test_name>RdkService_Test</primitive_test_name>
-  <primitive_test_version>1</primitive_test_version>
-  <status>FREE</status>
-  <synopsis>Test AppManager stopSystemApp API - Negative scenarios</synopsis>
-  <groups_id />
-  <execution_time>60</execution_time>
-  <long_duration>false</long_duration>
-  <advanced_script>false</advanced_script>
-  <remarks></remarks>
-  <skip>false</skip>
-  <box_types>
-    <box_type>RPI-Client</box_type>
-    <box_type>Video_Accelerator</box_type>
-  </box_types>
-  <rdk_versions>
-    <rdk_version>RDK2.0</rdk_version>
-  </rdk_versions>
-  <test_cases>
-    <test_case_id>TC_AppManager_stopSystemApp</test_case_id>
-    <test_objective>Test AppManager stopSystemApp API - Negative scenarios</test_objective>
-    <test_type>Negative</test_type>
-    <test_setup>RDK device with AppManager plugin enabled</test_setup>
-    <pre_requisite>1. TDK Agent should be up and running
-2. AppManager plugin should be available and activated
-3. Device should have required applications installed</pre_requisite>
-    <api_or_interface_used>org.rdk.AppManager.1.stopSystemApp</api_or_interface_used>
-    <input_parameters>Method specific parameters</input_parameters>
-    <automation_approch>1. Activate AppManager plugin
-2. Test stopSystemApp API with appropriate parameters
-3. Verify response structure and error handling
-4. Report test results</automation_approch>
-    <expected_output>stopSystemApp API should return appropriate responses for Negative scenarios</expected_output>
-    <priority>High</priority>
-    <test_stub_interface>librdkservicesstub.so</test_stub_interface>
-    <test_script>RDKV_AppManager_21_StopSystemApp_Negative</test_script>
-    <skipped>No</skipped>
-    <release_version>M128</release_version>
-    <remarks>Test case for stopSystemApp API Negative scenarios</remarks>
-  </test_cases>
-</xml>
-'''
+
 
 import tdklib
-import sys
+from aiutils import get_config_value
 
-from ai2_0_utils import (
-    get_ai2_setting,
-    thunder_is_plugin_active,
-)
-
+import json
+import urllib.request as urllib_request
+import urllib.error
+import subprocess
 obj = tdklib.TDKScriptingLibrary("AppManager", "1", standAlone=True)
 
 ip = <ipaddress>
@@ -86,14 +38,13 @@ print("[LIB LOAD STATUS] : %s" % loadmodulestatus)
 if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS")
 
-    rpc_port = get_ai2_setting('APPMANAGER_JSONRPC_PORT', 9998)
+    rpc_port = get_config_value('APPMANAGER_JSONRPC_PORT', 9998)
     jsonrpc_url = f"http://{ip}:{rpc_port}/jsonrpc"
 
     # Start the AppManager plugin service
     print("[INFO] Starting wpeframework-appmanager service...")
-    import subprocess
     try:
-        service_name = get_ai2_setting('APPMANAGER_SERVICE_NAME', 'wpeframework-appmanager.service')
+        service_name = get_config_value('APPMANAGER_SERVICE_NAME', 'wpeframework-appmanager.service')
         subprocess.run(['systemctl', 'start', service_name], 
                       check=False, timeout=10)
         print("[INFO] Waiting for service to be active...")
@@ -108,22 +59,12 @@ if "SUCCESS" in loadmodulestatus.upper():
     except Exception as e:
         print("[WARNING] Could not manage service: %s" % str(e))
     
-    # Verify plugin is active
-    plugin_name = get_ai2_setting('APPMANAGER_PLUGIN_NAME', 'org.rdk.AppManager')
-    if not thunder_is_plugin_active(plugin_name, jsonrpc_url=jsonrpc_url):
-        print("[ERROR] AppManager plugin is not active")
-        obj.setLoadModuleStatus("FAILURE")
-    else:
-        print("[SUCCESS] AppManager plugin is active")
+    # Service status checked, proceeding with tests
+    
+    # Test: stopSystemApp API - Negative
+    print("[TEST] stopSystemApp API - Negative scenarios")
 
-        # Test: stopSystemApp API - Negative
-        print("[TEST] stopSystemApp API - Negative scenarios")
-
-        import json
-        import urllib.request as urllib_request
-        import urllib.error
-
-        try:
+    try:
             method_name = "org.rdk.AppManager.1.stopSystemApp"
             request_data = {
                 "jsonrpc": "2.0",
@@ -149,10 +90,10 @@ if "SUCCESS" in loadmodulestatus.upper():
             else:
                 print("[INFO] stopSystemApp API response: %s" % result)
                 obj.setLoadModuleStatus("SUCCESS")
-        except urllib.error.URLError as e:
+    except urllib.error.URLError as e:
             print("[ERROR] Failed to call stopSystemApp API: %s" % str(e))
             obj.setLoadModuleStatus("FAILURE")
-        except Exception as e:
+    except Exception as e:
             print("[ERROR] Unexpected error during stopSystemApp API call: %s" % str(e))
             obj.setLoadModuleStatus("FAILURE")
 

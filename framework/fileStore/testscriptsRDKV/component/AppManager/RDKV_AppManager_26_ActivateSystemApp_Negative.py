@@ -30,7 +30,7 @@ obj = tdklib.TDKScriptingLibrary("AppManager", "1", standAlone=True)
 ip = <ipaddress>
 port = <port>
 
-obj.configureTestCase(ip, port, 'RDKV_AppManager_22_ClearAppData_Positive')
+obj.configureTestCase(ip, port, 'RDKV_AppManager_26_ActivateSystemApp_Negative')
 
 loadmodulestatus = obj.getLoadModuleResult()
 print("[LIB LOAD STATUS] : %s" % loadmodulestatus)
@@ -61,17 +61,16 @@ if "SUCCESS" in loadmodulestatus.upper():
     
     # Service status checked, proceeding with tests
     
-    # Test: clearAppData API - Positive
-    print("[TEST] clearAppData API - Positive scenarios")
+    # Test: activateSystemApp API - Negative
+    print("[TEST] activateSystemApp API - Negative scenarios")
 
     try:
-            method_name = "org.rdk.AppManager.1.clearAppData"
-            app_id = get_config_value('APPMANAGER_TEST_APP_ID', 'com.rdk.app.cobalt25_rpi4')
+            method_name = "org.rdk.AppManager.1.activateSystemApp"
             request_data = {
                 "jsonrpc": "2.0",
                 "id": 1,
                 "method": method_name,
-                "params": {"appId": app_id}
+                "params": {"appId": "invalid"}
             }
 
             req = urllib_request.Request(
@@ -82,20 +81,20 @@ if "SUCCESS" in loadmodulestatus.upper():
             response = urllib_request.urlopen(req, timeout=10)
             result = json.loads(response.read().decode('utf-8'))
 
-            if "result" in result and result.get("result") in [True, "success"]:
-                print("[SUCCESS] clearAppData API returned successful result for app: %s" % app_id)
+            if "error" in result:
+                print("[SUCCESS] activateSystemApp API correctly returned error for invalid app: %s" % result.get("error"))
                 obj.setLoadModuleStatus("SUCCESS")
-            elif "error" in result:
-                print("[FAILURE] clearAppData API error: %s" % result.get("error"))
-                obj.setLoadModuleStatus("FAILURE")
+            elif "result" in result and result.get("result") in [False, "error"]:
+                print("[SUCCESS] activateSystemApp API correctly rejected invalid app")
+                obj.setLoadModuleStatus("SUCCESS")
             else:
-                print("[INFO] clearAppData API response: %s" % result)
+                print("[INFO] activateSystemApp API response: %s" % result)
                 obj.setLoadModuleStatus("SUCCESS")
     except urllib.error.URLError as e:
-            print("[ERROR] Failed to call clearAppData API: %s" % str(e))
+            print("[ERROR] Failed to call activateSystemApp API: %s" % str(e))
             obj.setLoadModuleStatus("FAILURE")
     except Exception as e:
-            print("[ERROR] Unexpected error during clearAppData API call: %s" % str(e))
+            print("[ERROR] Unexpected error during activateSystemApp API call: %s" % str(e))
             obj.setLoadModuleStatus("FAILURE")
 
     obj.unloadModule("AppManager")

@@ -30,7 +30,7 @@ obj = tdklib.TDKScriptingLibrary("AppManager", "1", standAlone=True)
 ip = <ipaddress>
 port = <port>
 
-obj.configureTestCase(ip, port, 'RDKV_AppManager_22_ClearAppData_Positive')
+obj.configureTestCase(ip, port, 'RDKV_AppManager_37_HibernateSystemApp_Positive')
 
 loadmodulestatus = obj.getLoadModuleResult()
 print("[LIB LOAD STATUS] : %s" % loadmodulestatus)
@@ -61,17 +61,17 @@ if "SUCCESS" in loadmodulestatus.upper():
     
     # Service status checked, proceeding with tests
     
-    # Test: clearAppData API - Positive
-    print("[TEST] clearAppData API - Positive scenarios")
+    # Test: hibernateSystemApp API - Positive
+    print("[TEST] hibernateSystemApp API - Positive scenarios")
 
     try:
-            method_name = "org.rdk.AppManager.1.clearAppData"
-            app_id = get_config_value('APPMANAGER_TEST_APP_ID', 'com.rdk.app.cobalt25_rpi4')
+            method_name = "org.rdk.AppManager.1.hibernateSystemApp"
+            system_app_id = get_config_value('APPMANAGER_TEST_SYSTEM_APP_ID', 'org.rdk.System')
             request_data = {
                 "jsonrpc": "2.0",
                 "id": 1,
                 "method": method_name,
-                "params": {"appId": app_id}
+                "params": {"appId": system_app_id}
             }
 
             req = urllib_request.Request(
@@ -83,19 +83,19 @@ if "SUCCESS" in loadmodulestatus.upper():
             result = json.loads(response.read().decode('utf-8'))
 
             if "result" in result and result.get("result") in [True, "success"]:
-                print("[SUCCESS] clearAppData API returned successful result for app: %s" % app_id)
+                print("[SUCCESS] hibernateSystemApp API returned successful result for app: %s" % system_app_id)
                 obj.setLoadModuleStatus("SUCCESS")
             elif "error" in result:
-                print("[FAILURE] clearAppData API error: %s" % result.get("error"))
+                print("[FAILURE] hibernateSystemApp API error: %s" % result.get("error"))
                 obj.setLoadModuleStatus("FAILURE")
             else:
-                print("[INFO] clearAppData API response: %s" % result)
+                print("[INFO] hibernateSystemApp API response: %s" % result)
                 obj.setLoadModuleStatus("SUCCESS")
     except urllib.error.URLError as e:
-            print("[ERROR] Failed to call clearAppData API: %s" % str(e))
+            print("[ERROR] Failed to call hibernateSystemApp API: %s" % str(e))
             obj.setLoadModuleStatus("FAILURE")
     except Exception as e:
-            print("[ERROR] Unexpected error during clearAppData API call: %s" % str(e))
+            print("[ERROR] Unexpected error during hibernateSystemApp API call: %s" % str(e))
             obj.setLoadModuleStatus("FAILURE")
 
     obj.unloadModule("AppManager")
