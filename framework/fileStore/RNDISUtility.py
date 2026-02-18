@@ -249,17 +249,29 @@ def get_cellular_statistics(obj):
 #              host_entries - total number of host entries to traverse
 #              client_type - type of client (LAN, WiFi_2.4G, WiFi_5G)
 #              step - current test step number
-# Return Value: tdkTestObj - test object
-#               actualresult - SUCCESS/FAILURE
-#               client_detected - 1 if client detected, 0 otherwise
-#               client_index - index of detected client entry
-#               detected_info - additional info
-#               step - updated step number
+# Return Value: tdkTestObj_tr181 - test object
+#               actualresult    - SUCCESS/FAILURE
+#               clientDetected  - 1 if client detected, 0 otherwise
+#               clientIndex     - index of detected client entry
+#               step            - updated step number
 def traverse_host_table_for_client(obj, host_entries, client_type, step):
     expectedresult = "SUCCESS"
     clientDetected = 0
     clientIndex = -1
-    detectedInfo = ""
+
+    # Determine expected interface and description based on client type
+    if client_type == "LAN":
+        expected_interface = EXPECTED_LAYER1_INTERFACE_ETHERNET
+        interface_description = "Ethernet"
+    elif client_type == "WiFi_2.4G":
+        expected_interface = EXPECTED_LAYER1_INTERFACE_WIFI_2_4G
+        interface_description = "WiFi 2.4GHz (Device.WiFi.SSID.1)"
+    elif client_type == "WiFi_5G":
+        expected_interface = EXPECTED_LAYER1_INTERFACE_WIFI_5G
+        interface_description = "WiFi 5GHz (Device.WiFi.SSID.2)"
+    else:
+        expected_interface = ""
+        interface_description = "Unknown"
 
     for index in range(1, host_entries + 1):
         print("\n**········For Host Table Entry %d**········" % index)
@@ -268,22 +280,7 @@ def traverse_host_table_for_client(obj, host_entries, client_type, step):
         # Get the value of Device.Hosts.Host.{i}.Layer1Interface
         paramName = "Device.Hosts.Host." + str(index) + ".Layer1Interface"
 
-        # Determine expected interface based on client type
-        if client_type == "LAN":
-            expected_interface = EXPECTED_LAYER1_INTERFACE_ETHERNET
-            interface_description = "Ethernet"
-        elif client_type == "WiFi_2.4G":
-            expected_interface = EXPECTED_LAYER1_INTERFACE_WIFI_2_4G
-            interface_description = "WiFi 2.4GHz (Device.WiFi.SSID.1)"
-        elif client_type == "WiFi_5G":
-            expected_interface = EXPECTED_LAYER1_INTERFACE_WIFI_5G
-            interface_description = "WiFi 5GHz (Device.WiFi.SSID.2)"
-        else:
-            expected_interface = ""
-            interface_description = "Unknown"
-
         print("\nTEST STEP %d: Get the value of %s and check if it is %s" % (step, paramName, interface_description))
-
         print("EXPECTED RESULT %d: Should successfully retrieve %s" % (step, paramName))
         tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Get')
         actualresult, details = getTR181Value(tdkTestObj_tr181, paramName)
@@ -294,17 +291,14 @@ def traverse_host_table_for_client(obj, host_entries, client_type, step):
             print("ACTUAL RESULT %d: %s : %s" % (step, paramName, layer1Interface))
             print("[TEST EXECUTION RESULT] : SUCCESS")
 
-            # Check for client type match
-            client_match = False
+            # Check if the retrieved Layer1Interface matches the expected interface
             if layer1Interface == expected_interface:
-                client_match = True
-
-            if client_match:
                 clientDetected = 1
                 clientIndex = index
+                tdkTestObj_tr181.setResultStatus("SUCCESS")
                 print("Identified the Host Table Entry for %s client as : %d" % (client_type, index))
 
-                # Check if the client is shown as active
+                # Check if the identified client entry is shown as active in the host table
                 step += 1
                 paramName = "Device.Hosts.Host." + str(index) + ".Active"
                 print("\nTEST STEP %d: Get the value of %s and check if it is true" % (step, paramName))
@@ -332,7 +326,8 @@ def traverse_host_table_for_client(obj, host_entries, client_type, step):
                     print("[TEST EXECUTION RESULT] : FAILURE")
                     break
             else:
-                print("Host Table Entry %d Layer1Interface is %s (not %s)" % (index, layer1Interface, interface_description))
+                tdkTestObj_tr181.setResultStatus("SUCCESS")
+                print("Host Table Entry for %s client is not %d" % (client_type, index))
                 continue
         else:
             tdkTestObj_tr181.setResultStatus("FAILURE")
@@ -340,5 +335,11 @@ def traverse_host_table_for_client(obj, host_entries, client_type, step):
             print("[TEST EXECUTION RESULT] : FAILURE")
             break
 
-    return tdkTestObj_tr181, actualresult, clientDetected, clientIndex, detectedInfo, step
+    # Check if client was detected after traversing all host table entries
+    if clientDetected != 1:
+        tdkTestObj_tr181.setResultStatus("FAILURE")
+        print("\nNone of the Host Table entries show %s as Layer 1 Interface" % expected_interface)
+
+    return tdkTestObj_tr181, actualresult, clientDetected, clientIndex, step
 ########## End of function ##########
+
