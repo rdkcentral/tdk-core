@@ -24,15 +24,6 @@ import json
 import re
 from tdkbVariables import *
 
-# _masked_command
-# Syntax      : _masked_command(command)
-# Description : Internal helper to mask the API key value in a curl command string before printing
-# Parameters  : command - the full curl command string
-# Return Value: command string with API key value replaced by ****
-def _masked_command(command):
-    return re.sub(r"(X-API-KEY:)[^\s'\"]+", r"\1****", command)
-########## End of function ##########
-
 # get_mac
 # Syntax      : get_mac(obj)
 # Description : Function to get the device MAC address
@@ -80,7 +71,7 @@ def rfc_configure_feature(obj, feature_id, name, param_value_dict):
         f"-H 'X-API-KEY:{XCONF_API_KEY}' "
         f"--data '{json.dumps(json_data)}'"
     )
-    print("Command : %s" % _masked_command(command))
+    print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     # Validation logic: Check if the response contains the feature name and the DM parameter/value.
@@ -127,7 +118,7 @@ def rfc_set_feature_rule(obj, rule_id, name, mac):
         f"-H 'X-API-KEY:{XCONF_API_KEY}' "
         f"--data '{json.dumps(json_data)}'"
     )
-    print("Command : %s" % _masked_command(command))
+    print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     # Validation logic: Check if the response contains the feature name and the MAC address.
@@ -225,7 +216,7 @@ def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
         f"-H \"X-API-KEY:{XCONF_API_KEY}\" "
         f"-d '{json.dumps(json_data)}'"
     )
-    print("Command : %s" % _masked_command(command))
+    print("Command : %s" % command)
     tdkTestObj = sysobj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print("PUT command executed. Response: %s" % details)
@@ -286,7 +277,7 @@ def rfc_delete_feature_rule(obj, feature_id):
         f"-H \"Accept: application/json\" "
         f"-H \"X-API-KEY:{XCONF_API_KEY}\""
     )
-    print("Command : %s" % _masked_command(command))
+    print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     if details == "":
@@ -312,7 +303,7 @@ def rfc_delete_feature(obj, feature_id):
         f"-H \"Accept: application/json\" "
         f"-H \"X-API-KEY:{XCONF_API_KEY}\""
     )
-    print("Command : %s" % _masked_command(command))
+    print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     if details == "":
