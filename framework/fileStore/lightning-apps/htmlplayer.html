@@ -115,6 +115,43 @@
             }
         }
     </style>
+
+<!-- Starter function to fetch the url value from PersistentStore, format it & replace the current browser URL -->
+<script>
+function getValuePS(){
+  if (sessionStorage.getItem('loadURL')) return;
+
+  const WS_URL='ws://127.0.0.1:9998/jsonrpc';
+  const REQ={"jsonrpc":"2.0","id":2,"method":"org.rdk.PersistentStore.getValue","params":{"namespace":"MVS","key":"lightningURL"}};
+
+  const formatUrl=(raw)=>{
+    if(!raw) return '';
+    let s=String(raw).trim();
+    s=s.replace(/^%22|^%27|^["']/, '').replace(/%22$|%27$|["']$/, '');
+    try{ const d=decodeURIComponent(s); if(/^https?:\/\//i.test(d)) s=d; }catch(_){}
+    return s;
+  };
+
+  const replaceUrl=(raw)=>{
+    const html_url=formatUrl(raw);
+    console.log('[HTML_getValuePS] The formatted URL obtained from PersistentStore: '+ html_url);
+    if(!html_url) return;
+    sessionStorage.setItem('loadURL','1');
+    console.log('[HTML_getValuePS] Loading the new URL obtained from PersistentStore');
+    window.location.replace(html_url);
+  };
+
+  try{
+    const ws=new WebSocket(WS_URL);
+    const to=setTimeout(()=>{ try{ws.close()}catch{} },2000);
+    ws.onopen   =()=> ws.send(JSON.stringify(REQ));
+    ws.onmessage=(e)=>{ clearTimeout(to); try{ replaceUrl((JSON.parse(e.data)?.result?.value)||''); } finally{ try{ws.close()}catch{} } };
+    ws.onerror  =()=>{ try{ws.close()}catch{} };
+  }catch{}
+}
+getValuePS();
+</script>
+
 </head>
 
 <body>
@@ -221,7 +258,7 @@
         function logMsg(msg) {
             const logging = GetURLParameter("logging");
             const inputs1 = window.location.search.substring(1).split("&");
-            const player = GetURLParameter("player");
+            const player = GetURLParameter("player") ?? "HTML";
             const options1 = [];
             inputs1.forEach(item => {
                 if (item.split("=")[0] === "options") {

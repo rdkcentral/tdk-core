@@ -20,6 +20,8 @@
 import json
 import sys
 import re,time,ast
+import subprocess
+import rdkv_performancelib
 from SSHUtility import *
 from rdkv_performancelib import *
 from rdkv_medialib import *
@@ -62,6 +64,10 @@ proc_check_mode = None
 excluded_process_list = PerformanceTestVariables.excluded_process_list
 # Global variable to store events
 evt_lst = []
+
+
+
+#************************************************************************************************************#
 
 # Function to set the operation and interval
 def setOperation(operation,intervalOrCount):
@@ -147,7 +153,7 @@ def setProcCheckMode(mode):
 def setLoggingMethod(obj):
     global logging_method
     config_file,result = get_configfile_name(obj)
-    result,logging_method = getDeviceConfigKeyValue(config_file,"LOGGING_METHOD")
+    result, logging_method = rdkv_performancelib.getDeviceConfigKeyValue(config_file,"LOGGING_METHOD")
 
 def updateOptions(val):
     if all_arguments.get("options") != None:
@@ -159,13 +165,13 @@ def updateOptions(val):
 def updateLibOptions(val):
     if val == "dash":
         lib_key = "useDashlib"
-        result,uselib = getDeviceConfigKeyValue(deviceConfigFile,"LOAD_USING_DASHLIB")
+        result,uselib = rdkv_performancelib.getDeviceConfigKeyValue(deviceConfigFile,"LOAD_USING_DASHLIB")
         updateOptions(lib_key+"("+uselib+")")
     elif val == "hls":
         lib_key = "useHlslib"
         uselib = "yes"
         # By default yes, if required it can be made configurable
-        #result,uselib = getDeviceConfigKeyValue(deviceConfigFile,"LOAD_USING_HLSLIB")
+        #result,uselib = rdkv_performancelib.getDeviceConfigKeyValue(deviceConfigFile,"LOAD_USING_HLSLIB")
         updateOptions(lib_key+"("+uselib+")")
 
 
@@ -221,7 +227,7 @@ def getTimeInMilliSeconds(time_str):
 
 # Function read the key value from device config file
 def readDeviceConfigKeyValue(conf_file,key):
-    result,value = getDeviceConfigKeyValue(conf_file,key)
+    result,value = rdkv_performancelib.getDeviceConfigKeyValue(conf_file,key)
     return result,value
 
 # Function to enable/disable websocket conn
@@ -275,7 +281,7 @@ def launchPlugin(obj,plugin,url):
     print("\nLaunching %s using RDKShell..." %(plugin))
     url = url.replace('\"',"")
     try:
-        result,base_path_from_config = getDeviceConfigKeyValue(deviceConfigFile,"TEST_STREAMS_BASE_PATH")
+        result,base_path_from_config = rdkv_performancelib.getDeviceConfigKeyValue(deviceConfigFile,"TEST_STREAMS_BASE_PATH")
     except:
         base_path_from_config = ""
     if base_path_from_config :
@@ -307,6 +313,29 @@ def launchPlugin(obj,plugin,url):
         print("Unable to Resume %s plugin " %(plugin))
         tdkTestObj.setResultStatus("FAILURE")
         return result
+
+def launchApp(obj,app_id):
+    print(f"\nLaunching the app: {app_id}")
+    tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+    tdkTestObj.addParameter("app_name", app_id)
+    tdkTestObj.executeTestCase(expectedResult)
+    status = tdkTestObj.getResult()
+    if status == "SUCCESS":
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"\nChecking if {app_id} is launched successfully")
+        app_ids = rdkservice_get_loaded_apps()
+        if app_id in app_ids:
+            print(f"\nSuccessfully launched the app: {app_id}")
+            tdkTestObj.setResultStatus("SUCCESS")
+            return "SUCCESS"
+        else:
+            tdkTestObj.setResultStatus("FAILURE")
+            print(f"\nThe app {app_id} is not listed in LoadedApps, failed to launch the app\n")
+            return "FAILURE"
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"\nFailed to launch the app: {app_id}\n")
+        return "FAILURE"
 
 def checkRDKShellClients(obj,plugin):
     print("\nChecking RDKShell Clients...")
@@ -395,7 +424,7 @@ def checkProcEntry(obj,validation_dict):
     tdkTestObj.addParameter("validation_script",validation_dict["validation_script"])
     global proc_check_mode
     if proc_check_mode == None:
-        result,mode = getDeviceConfigKeyValue(deviceConfigFile,"PROC_CHECK_MODE")
+        result,mode = rdkv_performancelib.getDeviceConfigKeyValue(deviceConfigFile,"PROC_CHECK_MODE")
         if mode.strip() != "":
             tdkTestObj.addParameter("mode",mode)
         else:
@@ -903,8 +932,8 @@ def setAudioAtmosOutputModePreRequisites(obj,mode):
         return False
 
 
-# function to set the primary pre-requisites
-def setMediaTestPreRequisites(obj,webkit_browser_instance,get_proc_info=True):
+# Function to set the primary pre-requisites
+def setMediaTestPreRequisites(obj,app_id,app_download_url,get_proc_info=True):
     pre_requisite_status = "SUCCESS"
     webkit_console_socket = None
     setURLArgument("execID",str(obj.execID))
@@ -912,7 +941,7 @@ def setMediaTestPreRequisites(obj,webkit_browser_instance,get_proc_info=True):
     setURLArgument("resultId",str(obj.resultId))
     setLoggingMethod(obj)
     setURLArgument("logging",logging_method)
-    #print obj.logpath
+    # print(obj.logpath)
     if get_proc_info:
         tdkTestObj = obj.createTestStep('rdkv_media_getProcCheckInfo')
         tdkTestObj.addParameter("realpath",obj.realpath)
@@ -938,41 +967,42 @@ def setMediaTestPreRequisites(obj,webkit_browser_instance,get_proc_info=True):
         tdkTestObj.setResultStatus("FAILURE");
 
     if "SUCCESS" in config_status:
-        result,rdkshell_status = checkPluginStatus(obj,"org.rdk.RDKShell");
-        if "FAILURE" in result or rdkshell_status != "activated":
-            setPluginState(obj,"org.rdk.RDKShell","activate");
+        result,persistent_store_status = checkPluginStatus(obj,"org.rdk.PersistentStore");
+        if "FAILURE" in result or persistent_store_status != "activated":
+            setPluginState(obj,"org.rdk.PersistentStore","activate");
             time.sleep(3)
-            result,rdkshell_status = checkPluginStatus(obj,"org.rdk.RDKShell");
-
-        if "SUCCESS" in result and "activated" in rdkshell_status:
-            launch_status = launchPlugin(obj,webkit_browser_instance,"about:blank")
-            if "SUCCESS" in launch_status:
-                client_status,webkit_client = checkRDKShellClients(obj,webkit_browser_instance)
-                if "SUCCESS" in client_status and webkit_client != "":
-                    result,webkit_z_order_status = checkClientZOrder(obj,webkit_client)
-                    webkit_ready_state = checkWebkitReadyState(obj,result,webkit_client,webkit_z_order_status)
-                    if webkit_ready_state:
-                        if webkit_socket_conn and logging_method == "WEB_INSPECT":
-                            websocket_conn_status,webkit_console_socket = createWebKitSocket(obj)
-                            if not websocket_conn_status:
-                                print("Connection to web-inspect page failed. cannot proceed test")
-                                pre_requisite_status = "FAILURE"
-                            else:
-                                pre_requisite_status = "SUCCESS"
-                        elif webkit_socket_conn and logging_method == "REST_API":
-                            setURLArgument("tmUrl",str(obj.url)+"/")
-                            print("App logs are monitored and collected using REST API")
-                            pre_requisite_status = "SUCCESS"
+            result,persistent_store_status = checkPluginStatus(obj,"org.rdk.PersistentStore");
+		
+        if "SUCCESS" in result and "activated" in persistent_store_status:
+            status, package_ids = rdkv_getInstalledPackages()
+            if "SUCCESS" in status and app_id in package_ids:
+                print(f"\nThe app {app_id} is already installed\n")
+                pre_requisite_status = "SUCCESS"
+            else:
+                print(f"\nThe app {app_id} is not installed, proceeding with app download & installation\n")
+                result = rdkservice_download_app_bundle(app_download_url)
+                if result != "EXCEPTION OCCURRED":
+                    print("\nThe package is downloaded successfully\n")
+                    file_locator = "/opt/CDL/package" + str(result)
+                    result = rdkservice_install_app(file_locator,app_id)
+                    if result != "EXCEPTION OCCURRED":
+                        print(f"\nThe app {app_id} is installed successfully\n")
+                        pre_requisite_status = "SUCCESS"
                     else:
+                        print(f"\nFailed to install the app: {app_id}\n")
                         pre_requisite_status = "FAILURE"
                 else:
+                    print(f"\nFailed to download the package\n")
                     pre_requisite_status = "FAILURE"
-            else:
-                pre_requisite_status = "FAILURE"
         else:
             pre_requisite_status = "FAILURE"
     else:
         pre_requisite_status = "FAILURE"
+
+    if pre_requisite_status == "SUCCESS":
+        if logging_method == "REST_API":
+            setURLArgument("tmUrl",str(obj.url)+"/")
+            print("App logs are monitored and collected using REST API\n")
 
     return pre_requisite_status,webkit_console_socket,validation_dict
 
@@ -1154,7 +1184,8 @@ def monitorAnimationTestUsingRestAPI(obj,check_pattern,timeout):
     animation_test_result = ""
     lastLine = None
     lastIndex = 0
-    app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
+    # app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
+    app_log_file = obj.logpath+"/"+"1111"+"/"+"1111"+"_"+"2222"+"_"+"3333"+"_mvs_applog.txt"
 
     while True:
         if file_check_count > 60:
@@ -1361,38 +1392,14 @@ def getTestURLs(players_list,appArguments):
 
 
 # Function to set the primary post-requisites
-def setMediaTestPostRequisites(obj,webkit_browser_instance,webkit_console_socket):
-    global next_z_order_client
+def setMediaTestPostRequisites(app_id):
     post_requisite_status = "SUCCESS"
-    if logging_method == "WEB_INSPECT" or webkit_console_socket != None:
-        webkit_console_socket.disconnect();
-        time.sleep(3);
-
-    launch_status = launchPlugin(obj,webkit_browser_instance,"about:blank")
-    destroy_status = destroyPlugin(obj,webkit_browser_instance)
-    # TODO webkit browser has to be killed, but when launched again it is not
-    # listed as clients after killing. This can be handled when the issues are fixed
-    if "SUCCESS" in launch_status and "SUCCESS" in destroy_status:
-        tdkTestObj = obj.createTestStep('rdkservice_getValue');
-        tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder");
-        tdkTestObj.executeTestCase("SUCCESS");
-        result  = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        clients_list = ast.literal_eval(details)["clients"]
-        # remove unwanted process from z-order list
-        clients_list = exclude_from_zorder(clients_list)
-        print("Clients Z-Order: %s" %(clients_list))
-        if len(clients_list) > 0:
-            if clients_list[0] == next_z_order_client:
-                move_status = "SUCCESS"
-            elif next_z_order_client != None:
-                move_status = moveToFrontClient(obj,next_z_order_client)
-                if "SUCCESS" not in move_status:
-                    post_requisite_status = "FAILURE"
-    else:
+    # Terminate the app using App Manager
+    terminate_status = rdkv_terminate_app(app_id)
+    if "FAILURE" in terminate_status:
         post_requisite_status = "FAILURE"
-
     return post_requisite_status
+
 
 # Function to validate the Latency time
 def validateLatency(obj):
@@ -1405,7 +1412,7 @@ def validateLatency(obj):
     load_time = play_start_time_millisec - loaded_time_millisec
     print("\n Time taken to load and play video: ",load_time)
     config_file,result = getDeviceConfigFile(obj.realpath)
-    result,load_threshold_value = getDeviceConfigKeyValue(config_file,"PLAYBACK_START_THRESHOLD_VALUE")
+    result,load_threshold_value = rdkv_performancelib.getDeviceConfigKeyValue(config_file,"PLAYBACK_START_THRESHOLD_VALUE")
     print("\n Threshold value for load time: ", load_threshold_value)
     if load_threshold_value != "":
         if 0 < int(load_time) < int(load_threshold_value):

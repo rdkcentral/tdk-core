@@ -167,7 +167,8 @@ if expectedResult in result.upper():
 
         # Setting the video test url in webkit instance using RDKShell
         for video_test_url in video_test_urls:
-            launch_status = launchPlugin(obj,webkit_instance,video_test_url)
+            setPS_value(video_test_url)
+            launch_status = launchApp(obj,MediaValidationVariables.unified_player_app_id)
             if "SUCCESS" in launch_status:
                 # Monitoring the app progress, checking whether app plays the video properly or any hang detected in between,
                 # performing proc entry check and getting the test result from the app
@@ -200,7 +201,7 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult);
         # Setting the post-requites for media test.Removing app url from webkit instance and
         # moving next high z-order app to front (residentApp if its active)
-        post_requisite_status = setMediaTestPostRequisites(obj,webkit_instance,webkit_console_socket)
+        post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.unified_player_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")
             tdkTestObj.setResultStatus("SUCCESS");
