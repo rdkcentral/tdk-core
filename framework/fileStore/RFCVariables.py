@@ -22,3 +22,5 @@ XCONF_URL="https://xconf.rdkcentral.com/xconfAdminService"
 Feature_name="Test_Feat"
 RFC_FILE_PATH="/tmp/rfc-parsed.txt"
 RFC_LOG_FILE="/rdklogs/logs/dcmrfc.log"
+#The user is required to configure the XCONF API key here
+XCONF_API_KEY=""
