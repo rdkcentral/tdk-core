@@ -394,6 +394,21 @@ udp_init_server()
         echo "OUTPUT:$value"
 }
 
+udp_iperf3_init_server()
+{
+        #If server port and server log file is provided as input
+        if [ -n "$var3" ] && [ -n "$var4" ]; then
+            rm -rf $var2
+            iperf3 -s -B $var3 -i 1 -p $var4 > $var2 &
+        #If server port and server log file not provided as input
+        else
+            iperf3 -s -B $var2 &
+        fi
+
+        value="$(ps aux | grep iperf3 | grep -v grep > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+        echo "OUTPUT:$value"
+}
+
 #To send UDP request from client to server
 udp_request()
 {
@@ -421,6 +436,14 @@ validate_udp_output()
 kill_iperf()
 {
         pkill iperf
+        value="$(ps aux | grep iperf | grep -v "grep" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+        echo "OUTPUT:$value"
+}
+
+#To kill iperf pid
+kill_iperf3()
+{
+        pkill iperf3
         value="$(ps aux | grep iperf | grep -v "grep" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
         echo "OUTPUT:$value"
 }
@@ -638,12 +661,16 @@ case $event in
         validate_tcp_server_output_throughput;;
    "udp_init_server")
         udp_init_server;;
+   "udp_iperf3_init_server")
+        udp_iperf3_init_server;;
    "udp_request")
         udp_request;;
    "validate_udp_output")
         validate_udp_output;;
    "kill_iperf")
         kill_iperf;;
+   "kill_iperf3")
+        kill_iperf3;;
    "ftpFromWlan")
         ftpFromWlan;;
    "ftpFromlan")
