@@ -152,6 +152,7 @@ def parseAsserts(output):
 #              formatted tabular structure.
 # Parameters:
 #              - testData: Dictionary containing test execution data.
+#              - plugin_name : test module executed
 # Return:
 #              - List of failed test cases.
 #---------------------------------------------------------------------
@@ -181,6 +182,7 @@ def printTestSummary(testData, plugin_name):
     passed_tests = 0
     failed_tests = 0
     na_tests = 0
+    plugin_data_max_length = 71
 
     for test_name, test_values in testData.items():
         # test_values format: [TotalAsserts, Ran, Passed, Failed, Inactive]
@@ -215,9 +217,9 @@ def printTestSummary(testData, plugin_name):
         final_status = "PARTIAL SUCCESS"
 
     # Print plugin-level summary
-    print("\n" + "=" * 71)
-    print("PLUGIN TEST SUMMARY".center(71))
-    print("=" * 71)
+    print("\n" + "=" * plugin_data_max_length)
+    print("PLUGIN TEST SUMMARY".center(plugin_data_max_length))
+    print("=" * plugin_data_max_length)
     print(f"PLUGIN NAME    :  {plugin_name}")
     print(f"TOTAL TESTS    :  {total_tests}")
     print(f"EXECUTED TESTS :  {executed_tests}")
@@ -226,7 +228,7 @@ def printTestSummary(testData, plugin_name):
     print(f"N/A TESTS      :  {na_tests}")
     print()
     print(f"Final Plugin Tests Status: {final_status}")
-    print("=" * 71)
+    print("=" * plugin_data_max_length)
     print("\n")
 
     return failed_testCases
