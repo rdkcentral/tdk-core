@@ -349,5 +349,5 @@ def getTotalCallsProcessed(obj):
     actualresult, calls_processed = doSysutilExecuteCommand(tdkTestObj, command)
     if calls_processed.strip().isdigit():
         calls_processed = int(calls_processed.strip())
-    print(f"Total Calls Processed: {calls_processed}")
+    print(f"Calls Processed: {calls_processed}")
     return tdkTestObj, actualresult, calls_processed
