@@ -26,7 +26,7 @@ fi
 ROOT_DIR="$(pwd)"
 cd $ROOT_DIR
 
-dropbear_server="$(find . -maxdepth 2 -type d -name lib32-dropbear)"
+dropbear_service="$(find . -maxdepth 2 -type d -name lib32-dropbear)"
 if [ -z "${dropbear_service}" ];then
     echo "\nERROR : Provided directory is not of proper format\nexample argument : ~/rpi/build-raspberrypi4-64-rdke/tmp/work/\n"
     exit
@@ -220,44 +220,24 @@ tar -cjf vulkan_loader.tgz *
 mv vulkan_loader.tgz $ROOT_DIR/Packages
 echo "SUCCESS : Obtained vulkan-loader package successfully\n"
 
-#Acquire wayland-protocols package
-cd $BUILD_DIR
-echo "\nAcquiring wayland-protocols package"
-wayland_protocols_dir="$(find . -maxdepth 2 -type d -name *wayland-protocols | grep -v nativesdk)"
-echo $wayland_protocols_dir
-if [ -z "${wayland_protocols_dir}" ];then
-    echo "\nERROR : lib32-wayland-protocols directory not found\n"
-    exit
-fi
-cd $wayland_protocols_dir
-wayland_protocols_package_dir="$(find . -maxdepth 2 -type d -name image)"
-if [ -z ${wayland_protocols_package_dir} ];then
-    echo "\nERROR : wayland-protocols package not found\n"
-    exit
-fi
-cd $wayland_protocols_package_dir
-tar -cjf wayland_protocols.tgz *
-mv wayland_protocols.tgz $ROOT_DIR/Packages
-echo "SUCCESS : Obtained wayland-protocols package successfully\n"
-
 #Additionial libs
 cd $BUILD_DIR/${gstreamer_plugins_base_dir}
 sysroot_dir="$(find .  -type d -name lib32-recipe-sysroot)"
 cd $sysroot_dir
 lib_dir="$(dirname "$(find .  -type f -name libpcre* | head -n 1)")"
 cd $lib_dir
-mkdir -p $BUILD_DIR/${gstreamer_plugins_base_dir}/additionial_libs/usr/lib/
-cp libpcre* $BUILD_DIR/${gstreamer_plugins_base_dir}/additionial_libs/usr/lib
-cp liborc* $BUILD_DIR/${gstreamer_plugins_base_dir}/additionial_libs/usr/lib
+mkdir -p $BUILD_DIR/${gstreamer_plugins_base_dir}/additional_libs/usr/lib/
+cp libpcre* $BUILD_DIR/${gstreamer_plugins_base_dir}/additional_libs/usr/lib
+cp liborc* $BUILD_DIR/${gstreamer_plugins_base_dir}/additional_libs/usr/lib
 cd $BUILD_DIR/${gstreamer_plugins_base_dir}
 lib_dir2="$(dirname "$(find . -type f -name libz*| head -n 1)")"
 cd $lib_dir2
-mkdir -p $BUILD_DIR/${gstreamer_plugins_base_dir}/additionial_libs/lib/
-cp libz* $BUILD_DIR/${gstreamer_plugins_base_dir}/additionial_libs/lib
+mkdir -p $BUILD_DIR/${gstreamer_plugins_base_dir}/additional_libs/lib/
+cp libz* $BUILD_DIR/${gstreamer_plugins_base_dir}/additional_libs/lib
 cd $BUILD_DIR/${gstreamer_plugins_base_dir}/
-tar -cjf additionial_libs.tgz additionial_libs
-cp additionial_libs.tgz $ROOT_DIR/Packages
-rm -rf additionial_libs*
+tar -cjf additional_libs.tgz additional_libs
+cp additional_libs.tgz $ROOT_DIR/Packages
+rm -rf additional_libs*
 
 
 cd $ROOT_DIR

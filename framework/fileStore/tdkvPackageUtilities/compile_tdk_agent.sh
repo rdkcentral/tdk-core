@@ -18,9 +18,11 @@
 # limitations under the License.
 ##########################################################################
 
-echo "Running as: $(whoami)"
-echo "HOME: $HOME"
-echo "netrc exists? $(ls -l $HOME/.netrc 2>/dev/null)"
+if [ "${DEBUG:-0}" = "1" ]; then
+    echo "Running as: $(whoami)"
+    echo "HOME: $HOME"
+    echo "netrc exists? $(ls -l $HOME/.netrc 2>/dev/null)"
+fi
 
 #meta layers
 SRC_META_RDK_VIDEO="https://github.com/rdkcentral/meta-rdk-video.git"
@@ -595,7 +597,6 @@ install_packages()
         cd $SDKTARGETSYSROOT
         cp -u $glm_package $SDKTARGETSYSROOT
         glm_package_name=$(basename "$glm_package")
-	pwd
 	echo -e "Untarring $glm_package_name"
         tar -xf $glm_package_name
         rm $SDKTARGETSYSROOT/$glm_package_name
@@ -607,36 +608,23 @@ install_packages()
         cd $SDKTARGETSYSROOT
         cp -u $vulkan_loader_package $SDKTARGETSYSROOT
         vulkan_loader_package_name=$(basename "$vulkan_loader_package")
-        pwd
         echo -e "Untarring $vulkan_loader_package_name"
         tar -xf $vulkan_loader_package_name
         rm $SDKTARGETSYSROOT/$vulkan_loader_package_name
     fi
-    wayland_protocols_package="$(find $ROOT_DIR -iname wayland_protocols.tgz)"
-    wayland_protocols_pkgconfig="$(find $SDKTARGETSYSROOT -iname wayland-protocols.pc)"
-    if [ -z "${wayland_protocols_pkgconfig}" ]; then
-        echo -e "Copying wayland_protocols\n" 2>&1 | tee -a $LOG_FILE
-        cd $SDKTARGETSYSROOT
-        cp -u $wayland_protocols_package $SDKTARGETSYSROOT
-        wayland_protocols_package_name=$(basename "$wayland_protocols_package")
-        pwd
-        echo -e "Untarring $wayland_protocols_package_name"
-        tar -xf $wayland_protocols_package_name
-        rm $SDKTARGETSYSROOT/$wayland_protocols_package_name
-    fi
-    pcreposix_package="$(find $ROOT_DIR -iname additionial_libs.tgz)"
+    pcreposix_package="$(find $ROOT_DIR -iname additional_libs.tgz)"
     pcreposix_lib="$(find $SDKTARGETSYSROOT -iname libpcrecpp.so)"
     if [ ! -z "${pcreposix_package}" ] && [ -z "${pcreposix_lib}" ]; then
-	echo -e "Copying additionial_libs \n" 2>&1 | tee -a $LOG_FILE
+	echo -e "Copying additional_libs \n" 2>&1 | tee -a $LOG_FILE
 	cd $SDKTARGETSYSROOT
 	cp $pcreposix_package $SDKTARGETSYSROOT
 	pcreposix_package_name=$(basename "$pcreposix_package")
 	tar -xf $pcreposix_package_name
-	cd $SDKTARGETSYSROOT/additionial_libs/usr/lib
+	cd $SDKTARGETSYSROOT/additional_libs/usr/lib
 	cp * $SDKTARGETSYSROOT/usr/lib/
-	cd $SDKTARGETSYSROOT/additionial_libs/lib
+	cd $SDKTARGETSYSROOT/additional_libs/lib
 	cp * $SDKTARGETSYSROOT/lib
-	rm -rf $SDKTARGETSYSROOT/additionial_libs
+	rm -rf $SDKTARGETSYSROOT/additional_libs
 	rm $SDKTARGETSYSROOT/$pcreposix_package_name
     fi
     cd $ROOT_DIR
@@ -1199,7 +1187,7 @@ compile_skeleton_libraries()
             git clone $SRC_META_RDK_VIDEO
             if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
                 cd meta-rdk-video
-                git checkout $MIDDDLEWARE_VERSION
+                git checkout $MIDDLEWARE_VERSION
                 cd ..
             fi
             cp meta-rdk-video/recipes-support/wdmp-c/files/wdmp-c.patch .
@@ -1251,16 +1239,6 @@ parse_vkmark_bb() {
 
     echo "SRC_VKMARK=\"${SRC_VKMARK}\""
     echo "SRCREV_VKMARK=\"${SRCREV_VKMARK}\""
-}
-
-parse_project_line0() {
-    local line="$1"
-
-    OSS_VENDOR_REPO_NAME=$(echo "$line" | sed -n 's/.*name="\([^"]*\)".*/\1/p')
-    OSS_VENDOR_REPO_TAG=$(echo "$line" | sed -n 's/.*revision="refs\/tags\/\([^"]*\)".*/\1/p')
-
-    echo "REPO_NAME=\"$OSS_VENDOR_REPO_NAME\""
-    echo "REPO_TAG=\"$OSS_VENDOR_REPO_TAG\""
 }
 
 parse_project_line() {
@@ -1434,12 +1412,17 @@ compile_vkmark()
         cp $vkmark_patches_dir/*.patch . 2>/dev/null
         rm -rf "$ROOT_DIR/$OSS_VENDOR_REPO_NAME"
 
-        for p in *.patch; do
-            echo "Applying $p"
-            patch -p1 < "$p" >> "$LOG_FILE" 2>&1
-        done
-
-        echo "vkmark source code patched"
+	# Collect any patch files; avoid iterating on a literal "*.patch" when none exist
+        shopt -s nullglob
+        patches=( *.patch )
+        shopt -u nullglob
+        if [ ${#patches[@]} -gt 0 ]; then
+            for p in "${patches[@]}"; do
+                echo "Applying $p"
+                patch -p1 < "$p" >> "$LOG_FILE" 2>&1
+            done
+            echo "vkmark source code patched"
+        fi
         vkmark_sourceCode_set="TRUE"
     else
         vkmark_sourceCode_set="TRUE"
@@ -1577,7 +1560,7 @@ compile_tdkv()
         git clone $SRC_META_RDK_VIDEO
 	if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
 	    cd meta-rdk-video
-            git checkout $MIDDDLEWARE_VERSION
+            git checkout $MIDDLEWARE_VERSION
 	    cd ..
         fi
 	cp meta-rdk-video/recipes-support/wdmp-c/files/wdmp-c.patch .
