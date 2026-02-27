@@ -29,7 +29,16 @@ SRC_PLATFORM_REALTEK=https://code.rdkcentral.com/r/collaboration/soc/realtek/rdk
 SRC_PLATFORM_AMLOGIC=https://code.rdkcentral.com/r/collaboration/soc/amlogic/rdk/tdk-video
 SRC_PLATFORM_BROADCOM=https://code.rdkcentral.com/r/collaboration/soc/broadcom/rdk/tdk-video
 
-MIDDLEWARE_VERSION=1.11.0
+#Platform image versions
+RPI_VENDOR_MANIFEST_REPO="https://github.com/rdkcentral/vendor-manifest-raspberrypi"
+REALTEK_VENDOR_MANIFEST_REPO="https://code.rdkcentral.com/r/collaboration/soc/realtek/vendor-manifest-rdke-realtek"
+BROADCOM_VENDOR_MANIFEST_REPO="https://code.rdkcentral.com/r/collaboration/soc/broadcom/vendor-manifest-rdke-broadcom"
+
+RPI_VENDOR_VERSION=4.9.1
+REALTEK_VENDOR_VERSION=4.3.0
+BROADCOM_VENDOR_VERSION=4.3.1
+
+MIDDLEWARE_VERSION=8.4.4.0
 
 #Choose from HYBRID, MEDIACLIENT
 DEVICE_TYPE=MEDIACLIENT
@@ -39,13 +48,13 @@ IMAGE_TYPE="MIDDLEWARE"
 
 #Enable modules for Hybrid and Client
 
-CONFIGURE_OPTIONS_MEDIACLIENT=" --enable-client --enable-westeroshal"
+CONFIGURE_OPTIONS_MEDIACLIENT=" --enable-client --enable-westeroshal --enable-tdkgraphics"
 
 CONFIGURE_OPTIONS_HYBRID=" --enable-hybrid --enable-xupnp --enable-westeroshal --enable-trm --enable-dtcp --enable-snmp"
 
 CONFIGURE_OPTIONS_HAL=" --enable-wifihal --enable-powermgrhal --enable-deepsleephal --enable-mfrhal --enable-tdkgraphics --enable-bluetoothhal --disable-defaultComponents --enable-mediautils --enable-westeroshal"
 
-CONFIGURE_OPTIONS_COMPONENTS=" --enable-rdkfwupdater"
+#CONFIGURE_OPTIONS_COMPONENTS=" --enable-rdkfwupdater"
 
 MFRHAL_LIB_NAME="-lRDKMfrLib"
 
@@ -81,7 +90,7 @@ SRC_DEEPSLEEP_HAL_HEADER_REVISION="1.0.3"
 SRC_WIFI_HAL_HEADER_REVISION="DEFAULT"
 SRC_BLUETOOTH_HAL_HEADER_REVISION="DEFAULT"
 SRC_IARMMGRS_HAL_HEADER_REVISION="DEFAULT"
-SRC_WESTEROS_HAL_HEADER_REVISION="DEFAULT"
+SRC_WESTEROS_HAL_HEADER_REVISION="169eb0d501c814c0386573a4046990724a1d2fcb"
 SRC_STORAGE_MGR_HEADER_REVISION="DEFAULT"
 SRC_NETSRVMGR_HEADER_REVISION="DEFAULT"
 
@@ -107,4 +116,4 @@ PARSEJSON_LIB_VERSION=0
 DWNLUTILS_LIB_VERSION=0
 RFCAPI_LIB_VERSION=0
 
-TDK_REVISION="TDK_M139"
+TDK_REVISION="TDK_M145"
