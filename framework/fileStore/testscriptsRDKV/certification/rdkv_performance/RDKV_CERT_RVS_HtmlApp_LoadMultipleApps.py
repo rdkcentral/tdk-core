@@ -27,7 +27,7 @@ from StabilityTestVariables import launch_and_load_max_count
 
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);
+obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True);
 
 #IP and Port of device type, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
@@ -35,17 +35,25 @@ ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'RDKV_CERT_RVS_HtmlApp_LoadMultipleApps');
 
-#The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
+#The device will reboot before starting the stability testing if "pre_req_reboot_pvs" is
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
+
+output_file = '{}{}_{}_{}_CPUMemoryInfo.json'.format(obj.logpath,str(obj.execID),str(obj.execDevId),str(obj.resultId))
+json_file = open(output_file,"w")
+result_dict_list = []
+cpu_mem_info_dict = {}
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
+#Check the device status before starting the stress test
+pre_condition_status = check_device_state(obj)
+
 expectedResult = "SUCCESS"
-if expectedResult in result.upper():
+if expectedResult in (result.upper() and pre_condition_status):
     print("\n Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
@@ -77,7 +85,7 @@ if expectedResult in result.upper():
         print("\nPre conditions for the test are set successfully")
 
         for count in range(launch_and_load_max_count):
-            print("\n[ITER] #{} -------------------------------------------".format(count+1))
+            print("\n============================================= Iteration #{} =============================================".format(count+1))
             launch_status,launch_start_time = launch_plugin(obj,"HtmlApp")
             if launch_status == expectedResult:
                 time.sleep(10)
@@ -355,10 +363,14 @@ if expectedResult in result.upper():
                 tdkTestObj.setResultStatus("FAILURE");
                 break
         if count != launch_and_load_max_count-1:
-            print("Test failed at [ITER] #{} -------------------------------------------".format(count+1))
+            print("Test failed at ITERATION #{} -------------------------------------------".format(count+1))
         else:
             print("\n Successfully Completed {} iterations".format(launch_and_load_max_count))   
 
+        cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
+        json.dump(cpu_mem_info_dict,json_file)
+        json_file.close()
+        
     else:
         print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
@@ -366,7 +378,9 @@ if expectedResult in result.upper():
     if revert=="YES":
         print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
-    obj.unloadModule("rdkv_performance")                                                    
+        
+    post_condition_status = check_device_state(obj)    
+    obj.unloadModule("rdkv_stability")                                                    
 else:
     obj.setLoadModuleStatus("FAILURE")
     print("Failed to load module")
