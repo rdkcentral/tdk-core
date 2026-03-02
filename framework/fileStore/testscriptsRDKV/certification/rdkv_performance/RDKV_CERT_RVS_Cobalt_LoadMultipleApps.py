@@ -38,11 +38,6 @@ obj.configureTestCase(ip,port,'RDKV_CERT_RVS_Cobalt_LoadMultipleApps');
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-output_file = '{}{}_{}_{}_CPUMemoryInfo.json'.format(obj.logpath,str(obj.execID),str(obj.execDevId),str(obj.resultId))
-json_file = open(output_file,"w")
-result_dict_list = []
-cpu_mem_info_dict = {}
-
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
@@ -364,11 +359,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         if count != launch_and_load_max_count-1:
             print("Test failed at ITERATION #{} -------------------------------------------".format(count+1))
         else:
-            print("\n Successfully Completed {} iterations".format(launch_and_load_max_count))
-
-        cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
-        json.dump(cpu_mem_info_dict,json_file)
-        json_file.close()  
+            print("\n Successfully Completed {} iterations".format(launch_and_load_max_count)) 
 
     else:
         print("\n Preconditions are not met")
