@@ -21,7 +21,6 @@ from time import sleep
 from RFCVariables import *
 from tdkutility import *
 import json
-import re
 from tdkbVariables import *
 
 # get_mac
