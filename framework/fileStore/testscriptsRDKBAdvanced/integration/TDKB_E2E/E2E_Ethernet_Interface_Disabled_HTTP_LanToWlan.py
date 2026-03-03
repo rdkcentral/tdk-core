@@ -52,7 +52,7 @@
     <api_or_interface_used>None
 </api_or_interface_used>
     <input_parameters>Device.WiFi.AccessPoint.1.Security.ModeEnabled
-Device.Ethernet.Interface.1.Enable
+Device.Ethernet.Interface.{i}.Enable
 </input_parameters>
     <automation_approch>1. Load tdkb_e2e module
 2. Using tdkb_e2e_Get, get and save security mode,Ethernet enable and ssid enable status of 2.4GHz
@@ -76,62 +76,49 @@ import tdklib;
 import time;
 import tdkbE2EUtility
 from tdkbE2EUtility import *;
-
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1");
-
 #IP and Port of box, No need to change,
 #This will be replaced with correspoing Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'E2E_Ethernet_Interface_Disabled_HTTP_LanToWlan');
-
 #Get the result of connection with test component
 loadmodulestatus =obj.getLoadModuleResult();
-print("[LIB LOAD STATUS]  :  %s" %loadmodulestatus) ;
-
+print("[LIB LOAD STATUS] : %s" %loadmodulestatus) ;
 if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedresult = "SUCCESS"
     finalStatus = "FAILURE"
-
     #Parse the device configuration file
     status = parseDeviceConfig(obj);
     if expectedresult in status:
         obj.setLoadModuleStatus("SUCCESS");
         print("Parsed the device configuration file successfully")
-
         #Assign the WIFI parameters names to a variable
         ssidName = "Device.WiFi.SSID.%s.SSID" %tdkbE2EUtility.ssid_2ghz_index
         keyPassPhrase = "Device.WiFi.AccessPoint.%s.Security.KeyPassphrase" %tdkbE2EUtility.ssid_2ghz_index
         securityMode = "Device.WiFi.AccessPoint.%s.Security.ModeEnabled" %tdkbE2EUtility.ssid_2ghz_index
-        ethernetEnable = "Device.Ethernet.Interface.1.Enable"
-
+        ethernetEnable = "Device.Ethernet.Interface.%s.Enable" % LAN_PORT_Number
         #Get the value of the wifi parameters that are currently set.
         paramList=[ssidName,keyPassPhrase,securityMode,ethernetEnable]
         tdkTestObj,status,orgValue = getMultipleParameterValues(obj,paramList)
-
         if expectedresult in status:
             tdkTestObj.setResultStatus("SUCCESS");
             print("TEST STEP 1: Get the current ssid,keypassphrase,securityMode and ethernetEnable")
             print("EXPECTED RESULT 1: Should retrieve the current ssid,keypassphrase,securityMode and ethernetEnable")
             print("ACTUAL RESULT 1: %s" %orgValue);
             print("[TEST EXECUTION RESULT] : SUCCESS");
-
             # Set securityMode,ethernetEnable for 2.4ghz"
             setValuesList = [tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,'WPA2-Personal','true'];
             print("WIFI parameter values that are set: %s" %setValuesList)
-
             list1 = [ssidName,tdkbE2EUtility.ssid_2ghz_name,'string']
             list2 = [keyPassPhrase,tdkbE2EUtility.ssid_2ghz_pwd,'string']
             list3 = [securityMode,'WPA2-Personal','string']
-
             ethernetParam = "%s|true|bool" %ethernetEnable
-
             #Concatenate the lists with the elements separated by pipe
             setParamList = list1 + list2 + list3
             setParamList = "|".join(map(str, setParamList))
-
             tdkTestObj,actualresult,details = setMultipleParameterValues(obj,setParamList)
             tdkTestObj,ethernetResult,details = setMultipleParameterValues(obj,ethernetParam)
             if expectedresult in actualresult and expectedresult in ethernetResult:
@@ -140,68 +127,54 @@ if "SUCCESS" in loadmodulestatus.upper():
                 print("EXPECTED RESULT 2: Should set the ssid,keypassphrase,securityMode and ethernetEnable");
                 print("ACTUAL RESULT 2: %s" %details);
                 print("[TEST EXECUTION RESULT] : SUCCESS");
-
                 #Retrieve the values after set and compare
                 newParamList=[ssidName,keyPassPhrase,securityMode,ethernetEnable]
                 tdkTestObj,status,newValues = getMultipleParameterValues(obj,newParamList)
-
                 if expectedresult in status and setValuesList == newValues:
                     tdkTestObj.setResultStatus("SUCCESS");
                     print("TEST STEP 3: Get the current ssid,keypassphrase,securityMode,ethernetEnable")
                     print("EXPECTED RESULT 3: Should retrieve the current ssid,keypassphrase,securityMode,ethernetEnable")
                     print("ACTUAL RESULT 3: %s" %newValues);
                     print("[TEST EXECUTION RESULT] : SUCCESS");
-
                     #Wait for the changes to reflect in client device
                     time.sleep(60);
-
                     #Connect to the wifi ssid from wlan client
                     print("TEST STEP 4: From wlan client, Connect to the wifi ssid")
                     status = wlanConnectWifiSsid(tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,tdkbE2EUtility.wlan_2ghz_interface);
                     if expectedresult in status:
                         tdkTestObj.setResultStatus("SUCCESS");
-
                         print("TEST STEP 5: Get the IP address of the wlan client after connecting to wifi")
                         wlanIP = getWlanIPAddress(tdkbE2EUtility.wlan_2ghz_interface);
                         if wlanIP:
                             tdkTestObj.setResultStatus("SUCCESS");
-
                             print("TEST STEP 6: Get the current LAN IP address DHCP range")
                             param = "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress"
                             tdkTestObj,status,curIPAddress = getParameterValue(obj,param)
                             print("LAN IP Address: %s" %curIPAddress);
-
                             if expectedresult in status and curIPAddress:
                                 tdkTestObj.setResultStatus("SUCCESS");
-
                                 print("TEST STEP 7: Check whether wlan ip address is in same DHCP range")
                                 status = "SUCCESS"
                                 status = checkIpRange(curIPAddress,wlanIP);
                                 if expectedresult in status:
                                     tdkTestObj.setResultStatus("SUCCESS");
-
                                     #Connect to LAN client and obtain its IP
                                     print("TEST STEP 8: Get the IP address of the lan client after connecting to it")
                                     lanIP = getLanIPAddress(tdkbE2EUtility.lan_interface);
                                     if lanIP:
                                         tdkTestObj.setResultStatus("SUCCESS");
-
                                         print("TEST STEP 9: Check whether lan ip address is in same DHCP range")
                                         status = "SUCCESS"
                                         status = checkIpRange(curIPAddress,lanIP);
                                         if expectedresult in status:
                                             tdkTestObj.setResultStatus("SUCCESS");
-
                                             #Disabling 2.4GHz ethernet interface of the WG
                                             setValuesList = ['false'];
                                             print("WIFI parameter values that are set: %s" %setValuesList)
-
                                             list1 = [ethernetEnable,'false','bool']
-
                                             #Concatenate the lists with the elements separated by pipe
                                             setParamList = list1
                                             setParamList = "|".join(map(str, setParamList))
-
                                             tdkTestObj,actualresult,details = setMultipleParameterValues(obj,setParamList)
                                             if expectedresult in actualresult:
                                                 tdkTestObj.setResultStatus("SUCCESS");
@@ -209,21 +182,17 @@ if "SUCCESS" in loadmodulestatus.upper():
                                                 print("EXPECTED RESULT 10: Should set the ethernetEnable");
                                                 print("ACTUAL RESULT 10: %s" %details);
                                                 print("[TEST EXECUTION RESULT] : SUCCESS");
-
                                                 #Retrieve the values after set and compare
                                                 newParamList=[ethernetEnable]
                                                 tdkTestObj,status,newValues = getMultipleParameterValues(obj,newParamList)
-
                                                 if expectedresult in status and setValuesList == newValues:
                                                     tdkTestObj.setResultStatus("SUCCESS");
                                                     print("TEST STEP 11: Get the current ethernetEnable")
                                                     print("EXPECTED RESULT 11: Should retrieve the current ethernetEnable")
                                                     print("ACTUAL RESULT 11: %s" %newValues);
                                                     print("[TEST EXECUTION RESULT] : SUCCESS");
-
                                                     #Wait for the changes to reflect in client device
                                                     time.sleep(60);
-
                                                     #refresh lan ip interface
                                                     lanIP1 = getLanIPAddress(tdkbE2EUtility.lan_interface);
                                                     #Send HTTP request to WLAN client from LAN client
@@ -233,7 +202,6 @@ if "SUCCESS" in loadmodulestatus.upper():
                                                         tdkTestObj.setResultStatus("SUCCESS");
                                                         print("HTTP not successful between wired and wireless clients")
                                                         finalStatus = "SUCCESS"
-
                                                         print("TEST STEP 13: From wlan client, Disconnect from the wifi ssid")
                                                         status = wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_2ghz_interface);
                                                         if expectedresult in status:
@@ -286,22 +254,17 @@ if "SUCCESS" in loadmodulestatus.upper():
                 print("EXPECTED RESULT 2: Should set the ssid,keypassphrase,securityMode,ethernetEnable");
                 print("ACTUAL RESULT 2: %s" %details);
                 print("[TEST EXECUTION RESULT] : FAILURE");
-
             #Prepare the list of parameter values to be reverted
             list1 = [ssidName,orgValue[0],'string']
             list2 = [keyPassPhrase,orgValue[1],'string']
             list3 = [securityMode,orgValue[2],'string']
-
             ethernetParam = "%s|true|bool" %ethernetEnable
-
             #Concatenate the lists with the elements separated by pipe
             revertParamList = list1 + list2 + list3
             revertParamList = "|".join(map(str, revertParamList))
-
             #Revert the values to original
             tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
             tdkTestObj,ethernetResult,details = setMultipleParameterValues(obj,ethernetParam)
-
             if expectedresult in actualresult and expectedresult in finalStatus and expectedresult in ethernetResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 print("EXPECTED RESULT 15: Should set the original ssid,keypassphrase,securityMode and ethernetEnable");
@@ -322,11 +285,9 @@ if "SUCCESS" in loadmodulestatus.upper():
     else:
         obj.setLoadModuleStatus("FAILURE");
         print("Failed to parse the device configuration file")
-
     #Handle any post execution cleanup required
     postExecutionCleanup();
     obj.unloadModule("tdkb_e2e");
-
 else:
     print("Failed to load tdkb_e2e module");
     obj.setLoadModuleStatus("FAILURE");

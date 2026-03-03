@@ -52,7 +52,7 @@
     <api_or_interface_used>None
 </api_or_interface_used>
     <input_parameters>Device.WiFi.AccessPoint.1.Security.ModeEnabled
-Device.Ethernet.Interface.1.Enable
+Device.Ethernet.Interface.{i}.Enable
 Device.WiFi.SSID.1.Enable</input_parameters>
     <automation_approch>1. Load tdkb_e2e module
 2. Using tdkb_e2e_Get, get and save security mode,Ethernet enable and ssid enable status of 2.4GHz
@@ -105,7 +105,8 @@ if "SUCCESS" in loadmodulestatus.upper():
         ssidName = "Device.WiFi.SSID.%s.SSID" %tdkbE2EUtility.ssid_2ghz_index
         keyPassPhrase = "Device.WiFi.AccessPoint.%s.Security.KeyPassphrase" %tdkbE2EUtility.ssid_2ghz_index
         securityMode = "Device.WiFi.AccessPoint.%s.Security.ModeEnabled" %tdkbE2EUtility.ssid_2ghz_index
-        ethernetEnable = "Device.Ethernet.Interface.1.Enable"
+
+        ethernetEnable = "Device.Ethernet.Interface.%s.Enable" % LAN_PORT_Number
 
         #Get the value of the wifi parameters that are currently set.
         paramList=[ssidName,keyPassPhrase,securityMode,ethernetEnable]
@@ -325,7 +326,6 @@ if "SUCCESS" in loadmodulestatus.upper():
     #Handle any post execution cleanup required
     postExecutionCleanup();
     obj.unloadModule("tdkb_e2e");
-
 else:
     print("Failed to load tdkb_e2e module");
     obj.setLoadModuleStatus("FAILURE");
