@@ -23,14 +23,15 @@ import tdklib
 from tr69Config import *
 from tdkutility import *
 
-def tr069ACSPreRequisite(obj,sysobj):
 # tr069ACSPreRequisite
 # Syntax      : tr069ACSPreRequisite()
-# Description : Function to do the pre requisite of tr069 ACS
-# Parameters  : obj - Object of the tdk library
-# Return Value: sysobj - Object of tdk library
-#             : username -  Connection request username that uniquely identify the DUT
-#             : SUCCESS/FAILURE
+# Description : Function to do the prerequisite of tr069 ACS.
+# Parameters  : obj - Object of the tdk library.
+#             : sysobj - Object of tdk library.
+# Return Value: tdkTestObj_tr181 - Object of tdk library.
+#             : username - Connection request username that uniquely identify the DUT.
+#             : returnStatus - SUCCESS/FAILURE
+def tr069ACSPreRequisite(obj,sysobj):
     tdkTestObj = sysobj.createTestStep('ExecuteCmd')
     expectedresult = "SUCCESS"
     returnStatus = "FAILURE"
@@ -86,8 +87,8 @@ def tr069ACSPreRequisite(obj,sysobj):
                 print("Set the Device Management Server URL successfully")
                 tdkTestObj_tr181.setResultStatus("SUCCESS")
 
-                print("Set Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation as ", Tr069CERTIFICATE_LOCATION)
-                actualresult, details = setTR181Value(tdkTestObj_tr181, "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation", Tr069CERTIFICATE_LOCATION, "string")
+                print("Set Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation as ", TR069_CERTIFICATE_LOCATION)
+                actualresult, details = setTR181Value(tdkTestObj_tr181, "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation", TR069_CERTIFICATE_LOCATION, "string")
                 if expectedresult in actualresult:
                     print("Set Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation successfully")
                     tdkTestObj_tr181.setResultStatus("SUCCESS")
@@ -118,22 +119,23 @@ def tr069ACSPreRequisite(obj,sysobj):
             tdkTestObj_tr181.setResultStatus("FAILURE")
 
     if tr069paStatus == "SUCCESS" and ConfigStatus == "SUCCESS" and ConnectionStatus == "SUCCESS":
-        #Prerequiiste success check
+        #Prerequisite success check
         returnStatus = "SUCCESS"
         print("PREREQUISITES are success\n")
         return tdkTestObj_tr181,username,returnStatus
     else:
-        return tdkTestObj_tr181,None,returnStatus
+        return None,None,returnStatus
 
-def gettr069ACS(tdkTestObj,username,queryParam,step):
 # gettr069ACS
 # Syntax      : gettr069ACS(tdkTestObj,username,queryParam,step)
-# Description : Function to get value of a parameter
-# Parameters  : tdkTestObj - Object of the tdk library
-#             : username - uniquely identify the DUT in ACS server
-#             : queryParam :  parameter list to be passed on to the curl request
-#             : step : Test step count
-# Return Value: parsedResponse/None,step
+# Description : Function to get value of the parameter.
+# Parameters  : tdkTestObj - Object of the tdk library.
+#             : username - username to be passed in the ACS request for uniquely identifying the DUT.
+#             : queryParam - parameter list to be included in the ACS request.
+#             : step - Test step count.
+# Return Value: parsedResponse - parsed response from the query response of ACS.
+#             : step  - Current test step count.
+def gettr069ACS(tdkTestObj,username,queryParam,step):
     name = queryParam.get("name")
     step += 1
 
@@ -172,7 +174,7 @@ def gettr069ACS(tdkTestObj,username,queryParam,step):
     print("ACTUAL RESULT %d: SEARCH successful for %s from ACS Database" % (step, name))
 
     # Parse response to retrieve the value of parameter
-    parsedResponse = parseTR69ACSResponse(queryResponse, "search")
+    parsedResponse = parseTR69ACSResponse(queryResponse,queryParam,"search")
 
     if parsedResponse is None:
         tdkTestObj.setResultStatus("FAILURE")
@@ -186,14 +188,16 @@ def gettr069ACS(tdkTestObj,username,queryParam,step):
 
     return parsedResponse,step
 
-def getTr181DMValue(obj,queryParam,step):
 # getTr181DMValue
 # Syntax      : getTr181DMValue(obj,queryParam,step)
-# Description : Function to get the parameter value from device
-# Parameters  : obj - object of tdk library
-#             : queryParam - parameter list
-#             : step : Test step count
-# Return Value:  obj,value/None,step
+# Description : Function to get the parameter value from device.
+# Parameters  : obj - object of tdk library.
+#             : queryParam - parameter list with parameter details.
+#             : step - Test step count.
+# Return Value: tdkTestObj_tr181 - object of tdk library.
+#             : getValuesTr181 - parameter value list from device.
+#             : step - current test step count.
+def getTr181DMValue(obj,queryParam,step):
     parameters = queryParam.get("name")
     expectedresult = "SUCCESS"
 
@@ -223,15 +227,16 @@ def getTr181DMValue(obj,queryParam,step):
 
     return tdkTestObj_tr181,getValuesTr181,step
 
-def settr069ACS(tdkTestObj,username,queryParam,step):
 # settr069ACS
 # Syntax      : settr069ACS(tdkTestObj,username,queryParam,step)
-# Description : Function to set value of a parameter
-# Parameters  : tdkTestObj - Object of the tdk library
-#             : username - uniquely identify the DUT in ACS server
-#             : queryParam :  parameter list to be passed on to the curl request
-#             : step : Test step count
-# Return Value: queryResponse/None,step
+# Description : Function to set value of the parameter.
+# Parameters  : tdkTestObj - Object of the tdk library.
+#             : username - username to be passed in the ACS request for uniquely identifying the DUT.
+#             : queryParam - parameter list to be included in the ACS request.
+#             : step - Test step count.
+# Return Value: queryResponse - Query response from ACS server.
+#             : step - current test step count.
+def settr069ACS(tdkTestObj,username,queryParam,step):
     name = queryParam.get("name")
     value = queryParam.get("value")
     step += 1
@@ -250,16 +255,14 @@ def settr069ACS(tdkTestObj,username,queryParam,step):
         print("[TEST EXECUTION RESULT] : FAILURE")
         return None,step
 
-def tr069ACSQuery(username, parameter, method="get"):
 # tr069ACSQuery
-# Syntax      : tr069ACSQuery(username, parameter, method="get")
-# Description : Function to create and send curl request to ACS server
-# Parameters  : username - username to be passed on to the curl request for uniquely identifying the DUT
-#             : parameter - parameter list to be passed on to the curl request
-#             : method - whether the method is get or set or search or reboot or FR or refresh
-# Return Value:  query response/None
-    if parameter != None:
-        tr069ACSQuery.parameter_list=[parameter]
+# Syntax      : tr069ACSQuery(username,parameter,method="get")
+# Description : Function to create and send an HTTP request to the ACS server using the requests library.
+# Parameters  : username - username to be passed in the ACS request for uniquely identifying the DUT.
+#             : parameter - parameter list to be included in the ACS request.
+#             : method - whether the method is get or set or search or refreshObject.
+# Return Value:  query response - query response from the ACS server.
+def tr069ACSQuery(username,parameter,method="get"):
     ACS_QUERY_URL = ACS_NBI_URL + f"/devices"
     ACS_TASK_URL = ACS_QUERY_URL + f"/{username}/tasks"
 
@@ -267,7 +270,7 @@ def tr069ACSQuery(username, parameter, method="get"):
         #Query for GET task operation
         name = parameter.get("name")
 
-        params = { "connection_request": ""}
+        params = {"timeout": 3000,"connection_request": ""}
         if isinstance(name, list):
             payload = {"name": "getParameterValues","parameterNames": name}
         else:
@@ -286,17 +289,18 @@ def tr069ACSQuery(username, parameter, method="get"):
     elif method == "RefreshObject":
         # Query for RefreshObject task operation
         name = parameter.get("name")
-        params = { "connection_request": ""}
         if name:
             payload = {"name": "refreshObject", "objectName":name}
+            params = {"timeout": 3000, "connection_request": ""}
         else:
             payload = {"name": "refreshObject", "objectName":""}
+            params = {"connection_request": ""}
 
     elif method == "set":
         #Query for SET operation
         parameters = parameter.get("name")
         values = parameter.get("value")
-        params = { "connection_request": ""}
+        params = {"timeout": 3000,"connection_request": ""}
 
         #Normalize to list if single parameter
         if not isinstance(parameters, list):
@@ -310,6 +314,7 @@ def tr069ACSQuery(username, parameter, method="get"):
         payload = {"name": "setParameterValues","parameterValues": parameterValues}
 
     try:
+        resp = None
         if method in ("get","set","RefreshObject"):
             #send GET/SET/Refresh request to the DUT via ACS server
             resp = requests.post(ACS_TASK_URL,params=params, json=payload)
@@ -333,22 +338,20 @@ def tr069ACSQuery(username, parameter, method="get"):
         print(f"Response Body: {resp.text}")
         return resp.status_code,None
 
-def parseTR69ACSResponse(response, method):
 # parseTR69ACSResponse
-# Syntax      : parseTR69ACSResponse(response, method="get")
-# Description : Function to parse the Tr69 ACS response
-# Parameters  : response - response message to be parsed
-#             : method - whether the method was to searcg
-# Return Value: parsedValue
-
+# Syntax      : parseTR69ACSResponse(response,parameters,method="get")
+# Description : Function to parse the Tr69 ACS response.
+# Parameters  : response - response message to be parsed.
+#             : parameters - parameter list with parameter details.
+#             : method -  whether the method is to search.
+# Return Value: paramValues - list of parameter values.
+def parseTR69ACSResponse(response,parameters,method):
     if method == "search":
         # Get requested parameter names
-        dmParam = tr069ACSQuery.parameter_list[0].get('name')
-
+        dmParam = parameters.get('name')
         # Normalize to list
         if isinstance(dmParam, str):
             dmParam = [dmParam]
-
         # Validate response structure
         if not response or not isinstance(response, list):
             print("Invalid response format")
@@ -356,11 +359,9 @@ def parseTR69ACSResponse(response, method):
 
         try:
             paramValues = []
-
             for param in dmParam:
                 keys = param.split(".")
                 data = response[0]   # First device object
-
                 #Get the full parameter path
                 for key in keys:
                     if not isinstance(data, dict):
@@ -370,7 +371,6 @@ def parseTR69ACSResponse(response, method):
                     if data is None:
                         print(f"Key not found in response: {key}")
                         return None
-
                 # After full traversal, extract _value
                 if isinstance(data, dict):
                     value = data.get("_value")
@@ -378,13 +378,9 @@ def parseTR69ACSResponse(response, method):
                 else:
                     print("Final node is not a dictionary")
                     return None
-
                 print(f"Extracted value for {param}: {value}")
                 paramValues.append(value)
-
-            print(f"ParamGetValues: {paramValues}")
             return paramValues
-
         except Exception as e:
             print(f"Parsing error: {e}")
             return None
