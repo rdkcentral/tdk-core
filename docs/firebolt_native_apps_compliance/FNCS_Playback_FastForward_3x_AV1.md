@@ -1,0 +1,48 @@
+# FNCS_Playback_FastForward_3x_AV1
+
+## TestCase ID
+FNCS_PLAYBACK_41
+
+## TestCase Name
+FNCS_Playback_FastForward_3x_AV1
+
+## Table of Contents
+- [TestCase ID](#testcase-id)
+- [TestCase Name](#testcase-name)
+- [Objective](#objective)
+- [Preconditions](#preconditions)
+- [Test Steps](#test-steps)
+- [Test Attributes](#test-attributes)
+
+## Objective
+To validate the fast forward functionality of AV1 video streams with 3x playback rate, ensuring proper video frame progression and timing accuracy during trick play operations with next-generation video codec.
+
+**VIDEO CODEC:** AV1
+
+## Preconditions
+
+| ID | Conditions |
+|----|------------|
+| 1 | TDK_FNCS_Package should be installed in DUT |
+| 2 | video_src_url_av1 must be installed in the server hosting streams or installed inside the device if user is selecting filesrc instead of httpsrc users can configure streams via filesrc (copying stream to USB like file:/tmp/usb/) or httpsrc via HTTPS server (https://&lt;server_hosting_stream&gt;:&lt;port_number&gt;/) based on their setup preference |
+| 3 | FIREBOLT_COMPLIANCE_CHECK_AV_STATUS configuration should be set as yes/no in Video_Accelerator.config file to control AV status checking during playback validation |
+| 4 | FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT configuration should be set to time in seconds to wait before checking for AV playback in Video_Accelerator.config file |
+
+## Test Steps
+
+| ID | StepName | Step Description | Expected Result |
+|----|----------|------------------|-----------------|
+| 1 | Initialize Test Environment | Setup environment for playback using platform specific environment variables from TDK.env and create display for playback environment using RDKShell plugin or using westeros --renderer command | All environment variables must be set successfully and display for playback must be created successfully |
+| 2 | Execute MediaPipeline FastForward Test | Retrieve configuration values (FIREBOLT_COMPLIANCE_CHECK_AV_STATUS, FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT), get AV1 stream URL from MediaValidationVariables.video_src_url_av1, construct trickplay command with fastforward3x operation parameters, and execute tdk_mediapipelinetests_trickplay command | Configuration values must be retrieved successfully, AV1 stream URL must be obtained correctly, fastforward3x command must be constructed properly as `tdk_mediapipelinetests_trickplay https://&lt;server_hosting_stream&gt;:&lt;port_number&gt;/[STREAM_NAME] checkavstatus=no operations=fastforward3x:10`, and test application starts execution without errors |
+| 3 | Initialize GStreamer Pipeline | Create GStreamer pipeline using playbin element and configure it for AV1 stream playback with httpsrc source element for network streaming | GStreamer pipeline must be created successfully with playbin configured for AV1 stream processing and httpsrc elements initialized properly |
+| 4 | Configure Pipeline Elements | Set up pipeline elements including video sink (westerossink), audio sink, and configure pipeline properties for AV1 decoding with fast forward capabilities | All pipeline elements must be configured successfully with proper AV1 decoder and sink elements ready for fast forward operations |
+| 5 | Start Pipeline and Begin FastForward | Set pipeline to PLAYING state and initiate fast forward operation at 3x playback rate immediately after playback starts | Pipeline must transition to PLAYING state successfully and fast forward operation must engage at 3x rate with proper video acceleration for AV1 content |
+| 6 | Monitor FastForward Playback | Monitor playback position progression to verify 3x fast forward rate is maintained consistently throughout the test duration with AV1 codec | Position must advance at 3x normal playback rate indicating successful fast forward operation with consistent speed for AV1 content |
+| 7 | Validate Fast Forward Performance | Use pipeline bus messages to monitor for any errors, warnings, or state change notifications during fast forward operation with AV1 processing | No error messages should be received and pipeline must maintain stable fast forward state at 3x rate without frame dropping issues for AV1 content |
+| 8 | Stop Pipeline and Cleanup | Stop fast forward operation, set pipeline to NULL state, and release all allocated resources after test duration | Pipeline must stop gracefully, all resources must be freed properly, and system must return to stable state |
+
+## Test Attributes
+**Supported Models:** Video_Accelerator, Hybrid  
+**Estimated Duration:** 3 minutes  
+**Priority:** High  
+**Release Version:** M121
