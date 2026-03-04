@@ -45,33 +45,26 @@ def tr069ACSPreRequisite(obj,sysobj):
     cmd= "netstat -tulnp | grep ':7547' | grep CcspTr069PaSsp"
     tdkTestObj = sysobj.createTestStep('ExecuteCmd')
     tdkTestObj.addParameter("command", cmd)
-    tdkTestObj.executeTestCase(expectedresult)
-    actualresult = tdkTestObj.getResult()
-    details = tdkTestObj.getResultDetails().strip()
-    print("Network status of tr069 :%s "%details)
-    if expectedresult in actualresult and details:
-        print("tr069pa process is up and listening to port 7547")
-        tr069paStatus = "SUCCESS"
-        tdkTestObj.setResultStatus("SUCCESS")
-    else:
+    retryCount = 1
+    MAX_RETRY = 5
+    while retryCount <= MAX_RETRY:
         #Check for every 1 min whether the process is up
-        retryCount = 0
+        retryCount = 1
         MAX_RETRY = 5
-        while retryCount < MAX_RETRY:
+        tdkTestObj.executeTestCase(expectedresult)
+        actualresult = tdkTestObj.getResult()
+        details = tdkTestObj.getResultDetails()
+        print(f"Iteration {retryCount}, network status of tr069 : {details}")
+        if expectedresult in actualresult and details:
+            print("tr069pa process is up and listening to port 7547")
+            tr069paStatus = "SUCCESS"
+            tdkTestObj.setResultStatus("SUCCESS")
+            break
+        else:
+            retryCount = retryCount + 1
+        tdkTestObj.setResultStatus("FAILURE")
+        if retryCount <= MAX_RETRY:
             sleep(60)
-            tdkTestObj.executeTestCase(expectedresult)
-            actualresult = tdkTestObj.getResult()
-            details = tdkTestObj.getResultDetails()
-            print(f"Iteration {retryCount}, network status of tr069 : {details}")
-            if expectedresult in actualresult and details:
-                print("tr069pa process is up and listening to port 7547")
-                tr069paStatus = "SUCCESS"
-                tdkTestObj.setResultStatus("SUCCESS")
-                break
-            else:
-                retryCount = retryCount + 1
-            tdkTestObj.setResultStatus("FAILURE")
-
     if tr069paStatus == "SUCCESS":
         #Onboard the device to ACS server.
         print("Enable Device.ManagementServer.EnableCWMP parameter")
@@ -223,7 +216,7 @@ def getTr181DMValue(obj,queryParam,step):
             tdkTestObj_tr181.setResultStatus("FAILURE")
             print("ACTUAL RESULT %d : Failed to get the parameter %s value" %(step,name))
             print("[TEST EXECUTION RESULT] : FAILURE")
-            return tdkTestObj_tr181,None,step
+            getValuesTr181.append(details)
 
     return tdkTestObj_tr181,getValuesTr181,step
 
@@ -293,6 +286,7 @@ def tr069ACSQuery(username,parameter,method="get"):
             payload = {"name": "refreshObject", "objectName":name}
             params = {"timeout": 3000, "connection_request": ""}
         else:
+            # payload when all parameters are to be refreshed
             payload = {"name": "refreshObject", "objectName":""}
             params = {"connection_request": ""}
 
