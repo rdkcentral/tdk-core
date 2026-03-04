@@ -170,9 +170,9 @@ if expectedResult in result.upper():
                     
                     stability_checks["plugins_responsive"] = (responsive_count == len(essential_check_plugins))
                     if stability_checks["plugins_responsive"]:
-                        print("\n ✓ Essential plugins are responsive \n")
+                        print("\n Essential plugins are responsive \n")
                     else:
-                        print(f"\n ✗ Some essential plugins are not responsive ({responsive_count}/{len(essential_check_plugins)}) \n")
+                        print(f"\nSome essential plugins are not responsive ({responsive_count}/{len(essential_check_plugins)}) \n")
                     
                     # Check system memory (basic check via getInstalledApps - if it works, memory is likely stable)
                     tdkTestObj = obj.createTestStep('rdkservice_getValue')
@@ -183,9 +183,9 @@ if expectedResult in result.upper():
                     
                     stability_checks["memory_stable"] = (memory_result == "SUCCESS")
                     if stability_checks["memory_stable"]:
-                        print("\n ✓ Memory appears stable (getInstalledApps succeeded) \n")
+                        print("\n Memory appears stable (getInstalledApps succeeded) \n")
                     else:
-                        print("\n ✗ Memory might be unstable (getInstalledApps failed) \n")
+                        print("\n Memory might be unstable (getInstalledApps failed) \n")
                     
                     # Check for no crashes (assume no crashes if all other checks pass)
                     stability_checks["no_crashes"] = all([
@@ -195,9 +195,9 @@ if expectedResult in result.upper():
                     ])
                     
                     if stability_checks["no_crashes"]:
-                        print("\n ✓ No system crashes detected \n")
+                        print("\n No system crashes detected \n")
                     else:
-                        print("\n ✗ System instability detected \n")
+                        print("\n System instability detected \n")
                     
                     return stability_checks
 
@@ -376,12 +376,12 @@ if expectedResult in result.upper():
                                         stability_maintained = all(post_uninstall_stability.values())
                                         
                                         if stability_maintained:
-                                            print("\n ✓ System stability maintained after uninstalling loaded app \n")
+                                            print("\n System stability maintained after uninstalling loaded app \n")
                                             Summ_list.append("Post-uninstall system stability: PASSED")
                                             stability_check_passed = True
                                             status = "SUCCESS"
                                         else:
-                                            print("\n ✗ System stability compromised after uninstalling loaded app \n")
+                                            print("\n System stability compromised after uninstalling loaded app \n")
                                             Summ_list.append("Post-uninstall system stability: FAILED")
                                             
                                             # Log specific stability failures
@@ -402,10 +402,10 @@ if expectedResult in result.upper():
                                         list_apps_result = tdkTestObj.getResult()
                                         
                                         if list_apps_result == "SUCCESS":
-                                            print("\n ✓ System can still list installed apps \n")
+                                            print("\n System can still list installed apps \n")
                                             Summ_list.append("Post-uninstall app listing: PASSED")
                                         else:
-                                            print("\n ✗ System cannot list installed apps after uninstall \n")
+                                            print("\n System cannot list installed apps after uninstall \n")
                                             Summ_list.append("Post-uninstall app listing: FAILED")
                                             status = "FAILURE"
                                         
@@ -419,10 +419,10 @@ if expectedResult in result.upper():
                                                     break
                                         
                                         if plugin_status_accessible:
-                                            print("\n ✓ System plugins remain accessible \n")
+                                            print("\nSystem plugins remain accessible \n")
                                             Summ_list.append("Post-uninstall plugin access: PASSED")
                                         else:
-                                            print("\n ✗ Some system plugins are not accessible after uninstall \n")
+                                            print("\n Some system plugins are not accessible after uninstall \n")
                                             Summ_list.append("Post-uninstall plugin access: FAILED")
                                             status = "FAILURE"
                                         
