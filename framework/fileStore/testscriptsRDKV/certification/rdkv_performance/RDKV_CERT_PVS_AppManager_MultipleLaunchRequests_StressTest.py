@@ -417,31 +417,31 @@ if expectedResult in result.upper():
                     
                     # Check 1: System should handle multiple launch requests gracefully
                     if error_responses > (int(multiple_launch_count) * 0.8):  # More than 80% errors is unusual
-                        print(f"\n ⚠️  High error rate: {error_responses}/{launch_requests_sent} requests failed \n")
+                        print(f"\nHigh error rate: {error_responses}/{launch_requests_sent} requests failed \n")
                         Summ_list.append("High error rate detected")
                         behavioral_analysis_passed = False
                     else:
-                        print(f"\n ✓ Acceptable error handling: {error_responses}/{launch_requests_sent} requests failed \n")
+                        print(f"\n Acceptable error handling: {error_responses}/{launch_requests_sent} requests failed \n")
                     
                     # Check 2: System should not create excessive duplicate instances
                     if active_instances_count > 3:  # More than 3 instances might indicate poor resource management
-                        print(f"\n ⚠️  Excessive app instances: {active_instances_count} active instances \n")
+                        print(f"\n Excessive app instances: {active_instances_count} active instances \n")
                         Summ_list.append("Excessive app instances created")
                         behavioral_analysis_passed = False
                     else:
-                        print(f"\n ✓ Reasonable instance management: {active_instances_count} active instances \n")
+                        print(f"\n Reasonable instance management: {active_instances_count} active instances \n")
                     
                     # Check 3: System should remain responsive
                     if not post_stress_health["system_stable"]:
-                        print(f"\n ⚠️  System instability detected after stress test \n")
+                        print(f"\n System instability detected after stress test \n")
                         Summ_list.append("Post-stress system instability")
                         behavioral_analysis_passed = False
                     else:
-                        print(f"\n ✓ System remained stable during stress test \n")
+                        print(f"\n System remained stable during stress test \n")
                         
                     # Check 4: Events should be reasonable
                     if launch_events_received == 0 and launch_responses_received > 0:
-                        print(f"\n ⚠️  No lifecycle events received despite successful launch responses \n")
+                        print(f"\n No lifecycle events received despite successful launch responses \n")
                         Summ_list.append("Missing lifecycle events")
                         behavioral_analysis_passed = False
                     
