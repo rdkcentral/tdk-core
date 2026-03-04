@@ -162,11 +162,11 @@ if expectedResult in result.upper():
                         stability_status["package_manager_responsive"] = (package_manager_result == "SUCCESS")
                         
                         if stability_status["package_manager_responsive"]:
-                            print("\n ✓ PackageManager is responsive")
+                            print("\n PackageManager is responsive")
                         else:
-                            print("\n ✗ PackageManager is not responsive")
+                            print("\n PackageManager is not responsive")
                     except Exception as e:
-                        print(f"\n ✗ PackageManager test failed: {e}")
+                        print(f"\n PackageManager test failed: {e}")
                         stability_status["package_manager_responsive"] = False
                     
                     # Test AppManager responsiveness
@@ -179,11 +179,11 @@ if expectedResult in result.upper():
                         stability_status["app_manager_responsive"] = (app_manager_result == "SUCCESS")
                         
                         if stability_status["app_manager_responsive"]:
-                            print("\n ✓ AppManager is responsive")
+                            print("\n AppManager is responsive")
                         else:
-                            print("\n ✗ AppManager is not responsive")
+                            print("\n AppManager is not responsive")
                     except Exception as e:
-                        print(f"\n ✗ AppManager test failed: {e}")
+                        print(f"\n AppManager test failed: {e}")
                         stability_status["app_manager_responsive"] = False
                     
                     # Test SystemServices responsiveness (if available)
@@ -197,11 +197,11 @@ if expectedResult in result.upper():
                             stability_status["system_services_responsive"] = (system_services_result == "SUCCESS")
                             
                             if stability_status["system_services_responsive"]:
-                                print("\n ✓ SystemServices is responsive")
+                                print("\n SystemServices is responsive")
                             else:
-                                print("\n ✗ SystemServices is not responsive")
+                                print("\n SystemServices is not responsive")
                         except Exception as e:
-                            print(f"\n ✗ SystemServices test failed: {e}")
+                            print(f"\n SystemServices test failed: {e}")
                             stability_status["system_services_responsive"] = False
                     else:
                         stability_status["system_services_responsive"] = True  # Skip if not available
@@ -216,11 +216,11 @@ if expectedResult in result.upper():
                         stability_status["memory_operations_stable"] = (memory_result == "SUCCESS")
                         
                         if stability_status["memory_operations_stable"]:
-                            print("\n ✓ Memory operations are stable")
+                            print("\nMemory operations are stable")
                         else:
-                            print("\n ✗ Memory operations may be unstable")
+                            print("\nMemory operations may be unstable")
                     except Exception as e:
-                        print(f"\n ✗ Memory stability test failed: {e}")
+                        print(f"\nMemory stability test failed: {e}")
                         stability_status["memory_operations_stable"] = False
                     
                     # Overall stability assessment
@@ -232,9 +232,9 @@ if expectedResult in result.upper():
                     ])
                     
                     if stability_status["overall_stable"]:
-                        print("\n ✓ Overall system stability: STABLE")
+                        print("\nOverall system stability: STABLE")
                     else:
-                        print("\n ✗ Overall system stability: UNSTABLE")
+                        print("\nOverall system stability: UNSTABLE")
                         
                     return stability_status
 
@@ -434,21 +434,21 @@ if expectedResult in result.upper():
                             
                             # Check 1: System should handle duplicate installs gracefully  
                             if duplicate_entries_detected > 0:
-                                print(f"\n ⚠️  Duplicate app entries created: {duplicate_entries_detected} \n")
+                                print(f"\n Duplicate app entries created: {duplicate_entries_detected} \n")
                                 Summ_list.append("WARNING: Duplicate entries created")
                                 # Note: This might be acceptable behavior depending on implementation
                             else:
-                                print(f"\n ✓ No duplicate app entries created \n")
+                                print(f"\n No duplicate app entries created \n")
                             
                             # Check 2: System should provide appropriate responses
                             expected_behavior_met = True
                             if error_responses == 0 and install_events_received > 1:
-                                print(f"\n ⚠️  No error responses but multiple install events - possible duplication issue \n")
+                                print(f"\n No error responses but multiple install events - possible duplication issue \n")
                                 expected_behavior_met = False
                             elif error_responses == install_attempts:
-                                print(f"\n ✓ All duplicate install attempts appropriately rejected \n")
+                                print(f"\nAll duplicate install attempts appropriately rejected \n")
                             elif error_responses > 0:
-                                print(f"\n ℹ️  Mixed responses: {error_responses} rejections, {install_responses_received - error_responses} acceptances \n")
+                                print(f"\n Mixed responses: {error_responses} rejections, {install_responses_received - error_responses} acceptances \n")
                                 # This could be acceptable depending on implementation
                             
                             if not expected_behavior_met:
@@ -457,11 +457,11 @@ if expectedResult in result.upper():
                                 
                             # Check 3: System should remain stable
                             if not post_stress_stability["overall_stable"]:
-                                print(f"\n ⚠️  System instability detected after duplicate install attempts \n")
+                                print(f"\nSystem instability detected after duplicate install attempts \n")
                                 Summ_list.append("Post-stress system instability")
                                 behavioral_assessment_passed = False
                             else:
-                                print(f"\n ✓ System remained stable during duplicate install stress test \n")
+                                print(f"\n System remained stable during duplicate install stress test \n")
                             
                             # Final assessment
                             if behavioral_assessment_passed:
