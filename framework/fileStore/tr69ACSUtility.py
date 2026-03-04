@@ -260,7 +260,7 @@ def settr069ACS(tdkTestObj,username,queryParam,step):
 # Description : Function to create and send an HTTP request to the ACS server using the requests library.
 # Parameters  : username - username to be passed in the ACS request for uniquely identifying the DUT.
 #             : parameter - parameter list to be included in the ACS request.
-#             : method - whether the method is get or set or search or refreshObject.
+#             : method - whether the method is get or set or search or RefreshObject.
 # Return Value:  query response - query response from the ACS server.
 def tr069ACSQuery(username,parameter,method="get"):
     ACS_QUERY_URL = ACS_NBI_URL + f"/devices"
@@ -339,7 +339,7 @@ def tr069ACSQuery(username,parameter,method="get"):
         return resp.status_code,None
 
 # parseTR69ACSResponse
-# Syntax      : parseTR69ACSResponse(response,parameters,method="get")
+# Syntax      : parseTR69ACSResponse(response,parameters,method)
 # Description : Function to parse the Tr69 ACS response.
 # Parameters  : response - response message to be parsed.
 #             : parameters - parameter list with parameter details.
