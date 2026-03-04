@@ -227,7 +227,7 @@ if "SUCCESS" in loadmodulestatus.upper():
 
                                                     #refresh lan ip interface
                                                     lanIP1 = getLanIPAddress(tdkbE2EUtility.lan_interface);
-                                                    #Send Ftp request to WLAN client from LAN client
+                                                    #Send ping request to WLAN client from LAN client
                                                     print("TEST STEP 12: Connect to LAN Client and send Ping Request to WLAN Client")
                                                     status = verifyNetworkConnectivity(wlanIP,"PING",lanIP,curIPAddress,"LAN");
                                                     if "SUCCESS" not in status:

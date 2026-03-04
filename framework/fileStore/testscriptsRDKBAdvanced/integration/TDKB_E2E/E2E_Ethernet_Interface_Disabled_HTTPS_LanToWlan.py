@@ -227,7 +227,7 @@ if "SUCCESS" in loadmodulestatus.upper():
 
                                                     #refresh lan ip interface
                                                     lanIP1 = getLanIPAddress(tdkbE2EUtility.lan_interface);
-                                                    #Send Ftp request to WLAN client from LAN client
+                                                    #Send HTTPS request to WLAN client from LAN client
                                                     print("TEST STEP 12: Connect to LAN client and send HTTPS Request to WLAN Client")
                                                     status = verifyNetworkConnectivity(wlanIP,"WGET_HTTPS",lanIP,curIPAddress,"LAN");
                                                     if "SUCCESS" not in status:
