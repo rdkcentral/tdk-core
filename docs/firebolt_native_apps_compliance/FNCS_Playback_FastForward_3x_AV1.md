@@ -42,7 +42,7 @@ To validate the fast forward functionality of AV1 video streams with 3x playback
 | 8 | Stop Pipeline and Cleanup | Stop fast forward operation, set pipeline to NULL state, and release all allocated resources after test duration | Pipeline must stop gracefully, all resources must be freed properly, and system must return to stable state |
 
 ## Test Attributes
-**Supported Models:** Video_Accelerator, Hybrid  
+**Supported Models:** Video_Accelerator 
 **Estimated Duration:** 3 minutes  
 **Priority:** High  
 **Release Version:** M121

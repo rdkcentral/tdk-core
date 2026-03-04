@@ -42,7 +42,7 @@ To validate the fast forward functionality of H264 video streams at 29 frames pe
 | 8 | Stop Pipeline and Cleanup | Stop fast forward operation, set pipeline to NULL state, and release all allocated resources after test duration | Pipeline must stop gracefully, all resources must be freed properly, and system must return to stable state |
 
 ## Test Attributes
-**Supported Models:** Video_Accelerator, Hybrid, Client  
+**Supported Models:** Video_Accelerator, Client  
 **Estimated Duration:** 3 minutes  
 **Priority:** High  
 **Release Version:** M121
