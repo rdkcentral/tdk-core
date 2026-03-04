@@ -283,7 +283,7 @@ if expectedResult in result.upper():
             
             # Step 2: Launch the installed app (either freshly installed or already existing)
             if status == "SUCCESS":
-            print(f"\n Starting app download for {app_id}... \n")
+            print(f"\nStarting app download for {app_id}... \n")
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method", "org.rdk.DownloadManager.1.download")
             tdkTestObj.addParameter("value", '{"url": "' + app_download_url + '", "appId": "' + app_id + '"}')
