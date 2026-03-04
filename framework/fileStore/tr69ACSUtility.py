@@ -49,8 +49,6 @@ def tr069ACSPreRequisite(obj,sysobj):
     MAX_RETRY = 5
     while retryCount <= MAX_RETRY:
         #Check for every 1 min whether the process is up
-        retryCount = 1
-        MAX_RETRY = 5
         tdkTestObj.executeTestCase(expectedresult)
         actualresult = tdkTestObj.getResult()
         details = tdkTestObj.getResultDetails()

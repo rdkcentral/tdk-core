@@ -36,7 +36,7 @@ SERVERURI_SET_XML=""
 SERVERUSERNAME_GET_XML=""
 
 #Location/path of the TR-069 (CWMP) client certificate on the DUT
-TR069_CERTIFICATE_LOCATION = ""
+TR069_CERTIFICATE_LOCATION=""
 
 #URI of ACS server to be used for accessing API Interface
-ACS_NBI_URL = ""
+ACS_NBI_URL=""
