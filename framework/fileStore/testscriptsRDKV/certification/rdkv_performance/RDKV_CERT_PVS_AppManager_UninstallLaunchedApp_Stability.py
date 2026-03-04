@@ -152,11 +152,11 @@ if expectedResult in result.upper():
                         
                         stability_report["framework_responsive"] = (framework_result == "SUCCESS")
                         if stability_report["framework_responsive"]:
-                            print("\n ✓ WPEFramework is responsive")
+                            print("\n WPEFramework is responsive")
                         else:
-                            print("\n ✗ WPEFramework is not responsive")
+                            print("\n WPEFramework is not responsive")
                     except Exception as e:
-                        print(f"\n ✗ Framework test failed: {e}")
+                        print(f"\n Framework test failed: {e}")
                         stability_report["framework_responsive"] = False
                     
                     # Test 2: AI Manager functionality
@@ -169,11 +169,11 @@ if expectedResult in result.upper():
                         
                         stability_report["ai_manager_functional"] = (ai_manager_result == "SUCCESS")
                         if stability_report["ai_manager_functional"]:
-                            print("\n ✓ AI Manager (AppManager) is functional")
+                            print("\n AI Manager (AppManager) is functional")
                         else:
-                            print("\n ✗ AI Manager (AppManager) is not functional")
+                            print("\n AI Manager (AppManager) is not functional")
                     except Exception as e:
-                        print(f"\n ✗ AI Manager test failed: {e}")
+                        print(f"\n AI Manager test failed: {e}")
                         stability_report["ai_manager_functional"] = False
                     
                     # Test 3: Memory operations stability (via running apps check)
@@ -186,11 +186,11 @@ if expectedResult in result.upper():
                         
                         stability_report["memory_operations_stable"] = (memory_result == "SUCCESS")
                         if stability_report["memory_operations_stable"]:
-                            print("\n ✓ Memory operations are stable")
+                            print("\n Memory operations are stable")
                         else:
-                            print("\n ✗ Memory operations may be unstable")
+                            print("\n Memory operations may be unstable")
                     except Exception as e:
-                        print(f"\n ✗ Memory stability test failed: {e}")
+                        print(f"\n Memory stability test failed: {e}")
                         stability_report["memory_operations_stable"] = False
                     
                     # Test 4: Plugin services availability
@@ -203,9 +203,9 @@ if expectedResult in result.upper():
                     
                     stability_report["plugin_services_available"] = (available_plugins == len(essential_ai_plugins))
                     if stability_report["plugin_services_available"]:
-                        print(f"\n ✓ All {len(essential_ai_plugins)} essential plugin services are available")
+                        print(f"\n All {len(essential_ai_plugins)} essential plugin services are available")
                     else:
-                        print(f"\n ✗ Only {available_plugins}/{len(essential_ai_plugins)} plugin services are available")
+                        print(f"\n Only {available_plugins}/{len(essential_ai_plugins)} plugin services are available")
                     
                     # Overall stability assessment
                     stability_report["overall_stable"] = all([
@@ -216,9 +216,9 @@ if expectedResult in result.upper():
                     ])
                     
                     if stability_report["overall_stable"]:
-                        print("\n ✓ Overall system stability: STABLE")
+                        print("\n Overall system stability: STABLE")
                     else:
-                        print("\n ✗ Overall system stability: UNSTABLE")
+                        print("\n Overall system stability: UNSTABLE")
                         
                     return stability_report
 
@@ -338,7 +338,7 @@ if expectedResult in result.upper():
                                             app_launched = True
                                             launched_app_found = True
                                             app_instance_id = event_data.get("instanceId", "")
-                                            print(f"\n ✓ App {app_id} successfully launched (state: {app_state}) \n")
+                                            print(f"\n App {app_id} successfully launched (state: {app_state}) \n")
                                             Summ_list.append(f"App launch: SUCCESS (state: {app_state})")
                                             break
                                 
@@ -346,15 +346,15 @@ if expectedResult in result.upper():
                                 time.sleep(1)
                             
                             if not app_launched:
-                                print(f"\n ✗ App {app_id} failed to reach launched state within timeout \n")
+                                print(f"\n App {app_id} failed to reach launched state within timeout \n")
                                 Summ_list.append("App launch: TIMEOUT")
                                 status = "FAILURE"
                         else:
-                            print(f"\n ✗ Failed to issue launch command for {app_id} \n")
+                            print(f"\n Failed to issue launch command for {app_id} \n")
                             Summ_list.append("App launch command: FAILED")
                             status = "FAILURE"
                     else:
-                        print(f"\n ✗ App {app_id} is not installed - cannot proceed with launch \n")
+                        print(f"\n App {app_id} is not installed - cannot proceed with launch \n")
                         Summ_list.append("App not available for launch")
                         status = "FAILURE"
 
@@ -393,7 +393,7 @@ if expectedResult in result.upper():
                                     if app_id in event_log:
                                         if "onAppUninstalled" in str(event_log):
                                             uninstall_completed = True
-                                            print(f"\n ✓ Launched app {app_id} successfully uninstalled \n")
+                                            print(f"\n Launched app {app_id} successfully uninstalled \n")
                                             
                                         elif "onAppLifecycleStateChanged" in str(event_log):
                                             event_data = json.loads(event_log.split('$$$')[1])
@@ -409,7 +409,7 @@ if expectedResult in result.upper():
                                 time.sleep(1)
                             
                             if uninstall_completed:
-                                print(f"\n ✓ Launched app {app_id} uninstall COMPLETED \n")
+                                print(f"\n Launched app {app_id} uninstall COMPLETED \n")
                                 Summ_list.append("Launched app uninstall: COMPLETED")
                                 test_app_id = app_id
                                 
@@ -423,7 +423,7 @@ if expectedResult in result.upper():
                                 stability_maintained = post_uninstall_stability["overall_stable"]
                                 
                                 if stability_maintained:
-                                    print(f"\n ✓ SUCCESS: System remained stable after uninstalling launched app {test_app_id} \n")
+                                    print(f"\n SUCCESS: System remained stable after uninstalling launched app {test_app_id} \n")
                                     Summ_list.append("Post-uninstall stability: MAINTAINED")
                                     
                                     # Additional verification tests
@@ -440,7 +440,7 @@ if expectedResult in result.upper():
                                     list_result = tdkTestObj.getResult()
                                     
                                     if list_result == "SUCCESS":
-                                        print("\n ✓ App listing functionality verified \n")
+                                        print("\n App listing functionality verified \n")
                                         Summ_list.append("Post-uninstall app listing: FUNCTIONAL")
                                         
                                         # Confirm target app is actually removed
@@ -450,17 +450,17 @@ if expectedResult in result.upper():
                                             if "result" in list_data and "apps" in list_data["result"]:
                                                 remaining_app_ids = [app.get("id", "") for app in list_data["result"]["apps"]]
                                                 if app_id not in remaining_app_ids:
-                                                    print(f"\n ✓ Confirmed: {app_id} successfully removed from installed apps \n")
+                                                    print(f"\n Confirmed: {app_id} successfully removed from installed apps \n")
                                                     Summ_list.append("App removal verification: CONFIRMED")
                                                 else:
-                                                    print(f"\n ✗ Warning: {app_id} still appears in installed apps list \n")
+                                                    print(f"\n Warning: {app_id} still appears in installed apps list \n")
                                                     Summ_list.append("App removal verification: FAILED")
                                                     verification_passed = False
                                         except json.JSONDecodeError:
-                                            print("\n ✗ Could not verify app removal from installed list \n")
+                                            print("\n Could not verify app removal from installed list \n")
                                             verification_passed = False
                                     else:
-                                        print("\n ✗ App listing functionality compromised after uninstall \n")
+                                        print("\nApp listing functionality compromised after uninstall \n")
                                         Summ_list.append("Post-uninstall app listing: FAILED")
                                         verification_passed = False
                                     
@@ -494,7 +494,7 @@ if expectedResult in result.upper():
                                     status = "FAILURE"
                                     
                             else:
-                                print(f"\n ✗ Launched app {app_id} uninstall did not complete within timeout \n")
+                                print(f"\nLaunched app {app_id} uninstall did not complete within timeout \n")
                                 if app_terminated:
                                     print(f"\n Note: App was terminated but uninstall event not confirmed \n")
                                     Summ_list.append("Launched app uninstall: TIMEOUT (app terminated)")
@@ -502,11 +502,11 @@ if expectedResult in result.upper():
                                     Summ_list.append("Launched app uninstall: TIMEOUT")
                                 status = "FAILURE"
                         else:
-                            print(f"\n ✗ Failed to issue uninstall command for launched app {app_id} \n")
+                            print(f"\n Failed to issue uninstall command for launched app {app_id} \n")
                             Summ_list.append("Launched app uninstall command: FAILED") 
                             status = "FAILURE"
                     else:
-                        print(f"\n ✗ Cannot perform uninstall test - app {app_id} is not in launched state \n")
+                        print(f"\nCannot perform uninstall test - app {app_id} is not in launched state \n")
                         Summ_list.append("Test prerequisite not met: App not launched")
                         status = "FAILURE"
 
