@@ -41,8 +41,6 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_InstallAppTwice_Stabilit
 #configured as "Yes".
 pre_requisite_reboot(obj,"no")
 
-#Execution summary variable
-Summ_list=[]
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
@@ -63,19 +61,19 @@ if expectedResult in result.upper():
     error_responses = 0
     duplicate_entries_detected = 0
 
-    # Required AI Manager plugins
+    # Required AppManager plugins
     plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager", "org.rdk.SystemServices"]
     plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated", "org.rdk.AppManager":"activated", "org.rdk.SystemServices":"activated"}
     conf_file, status = get_configfile_name(obj)
     status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     
-    # Check if essential AI Manager plugins are available
-    essential_ai_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
-    missing_plugins = [plugin for plugin in essential_ai_plugins if plugin not in supported_plugins]
+    # Check if essential AppManager plugins are available
+    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
+    missing_plugins = [plugin for plugin in essential_plugins if plugin not in supported_plugins]
     
     if missing_plugins:
-        print(f"\n Essential AI Manager plugins not available on this device: {missing_plugins}")
-        print("\n This test requires AI Manager functionality which is not supported on this device")
+        print(f"\n Essential AppManager plugins not available on this device: {missing_plugins}")
+        print("\n This test requires AppManager functionality which is not supported on this device")
         print(f"\n Available plugins: {supported_plugins}")
         status = "FAILURE"
         obj.setLoadModuleStatus("FAILURE")
@@ -97,7 +95,7 @@ if expectedResult in result.upper():
         failed_plugins = [plugin for plugin in plugins_list if curr_plugins_status_dict.get(plugin, "FAILURE") == "FAILURE"]
         if failed_plugins:
             print(f"\n Failed to get status for plugins: {failed_plugins}")
-            print("\n Error while getting status of AI Manager plugins")
+            print("\n Error while getting status of AppManager plugins")
             status = "FAILURE"
         elif curr_plugins_status_dict != plugin_status_needed:
             revert = "YES"
@@ -107,10 +105,10 @@ if expectedResult in result.upper():
             if new_plugins_status_dict != plugin_status_needed:
                 status = "FAILURE"
         else:
-            print("\n AI Manager plugins are already in the required state \n")
+            print("\n AppManager plugins are already in the required state \n")
 
         if status == "SUCCESS":
-            print("\n AI Manager plugins are available and activated successfully \n")
+            print("\n AppManager plugins are available and activated successfully \n")
 
             # Setup event listener for lifecycle changes, download status, app installation and system monitoring
             thunder_port = rdkv_performancelib.devicePort
@@ -267,11 +265,9 @@ if expectedResult in result.upper():
                 
                 if not baseline_stability["overall_stable"]:
                     print("\n ABORT: System is not stable at baseline - cannot proceed with test \n")
-                    Summ_list.append("Baseline stability check: FAILED")
                     status = "FAILURE"
                 else:
                     print("\n Baseline system stability confirmed - proceeding with test \n")
-                    Summ_list.append("Baseline stability check: PASSED")
 
                     # Phase 2: Ensure app is installed (prerequisite)
                     print(f"\n === PHASE 2: Ensuring {app_id} is Already Installed === \n")
@@ -323,13 +319,11 @@ if expectedResult in result.upper():
                                             event_log = event_listener.getEventsBuffer().pop(0)
                                             if app_id in event_log and "onAppInstalled" in str(event_log):
                                                 print(f"\n Initial installation of {app_id} completed \n")
-                                                Summ_list.append("Initial app installation: SUCCESS")
                                                 break
                                         continue_count += 1
                                         time.sleep(1)
                                 else:
                                     print(f"\n Failed to perform initial installation of {app_id} \n")
-                                    Summ_list.append("Initial app installation: FAILED")
                                     status = "FAILURE"
                             else:
                                 print(f"\n Failed to download {app_id} for initial installation \n")
@@ -339,7 +333,6 @@ if expectedResult in result.upper():
                             status = "FAILURE"
                     else:
                         print(f"\n App {app_id} is already installed ({initial_app_count} entries found) \n")
-                        Summ_list.append(f"App already installed: {initial_app_count} entries")
 
                     # Verify app is now installed
                     if status == "SUCCESS":
@@ -420,13 +413,6 @@ if expectedResult in result.upper():
                             print(f"\n App Entries After Test: {post_duplicate_count}")
                             print(f"\n Duplicate Entries Created: {duplicate_entries_detected}")
                             
-                            Summ_list.append(f"Duplicate install attempts: {install_attempts}")
-                            Summ_list.append(f"Install responses received: {install_responses_received}")
-                            Summ_list.append(f"Error responses: {error_responses}")
-                            Summ_list.append(f"Install events received: {install_events_received}")
-                            Summ_list.append(f"App entries before test: {final_check_count}")
-                            Summ_list.append(f"App entries after test: {post_duplicate_count}")
-                            Summ_list.append(f"Duplicate entries created: {duplicate_entries_detected}")
 
                             # Assessment of system behavior
                             test_app_id = app_id
@@ -435,7 +421,6 @@ if expectedResult in result.upper():
                             # Check 1: System should handle duplicate installs gracefully  
                             if duplicate_entries_detected > 0:
                                 print(f"\n Duplicate app entries created: {duplicate_entries_detected} \n")
-                                Summ_list.append("WARNING: Duplicate entries created")
                                 # Note: This might be acceptable behavior depending on implementation
                             else:
                                 print(f"\n No duplicate app entries created \n")
@@ -452,13 +437,11 @@ if expectedResult in result.upper():
                                 # This could be acceptable depending on implementation
                             
                             if not expected_behavior_met:
-                                Summ_list.append("Inconsistent duplicate install handling")
                                 behavioral_assessment_passed = False
                                 
                             # Check 3: System should remain stable
                             if not post_stress_stability["overall_stable"]:
                                 print(f"\nSystem instability detected after duplicate install attempts \n")
-                                Summ_list.append("Post-stress system instability")
                                 behavioral_assessment_passed = False
                             else:
                                 print(f"\n System remained stable during duplicate install stress test \n")
@@ -468,21 +451,18 @@ if expectedResult in result.upper():
                                 print(f"\n === DUPLICATE INSTALLATION STABILITY TEST: PASSED === \n")
                                 print(f"\n System handled duplicate installation attempts appropriately \n")
                                 print(f"\n App {test_app_id} duplicate installation behavior: ACCEPTABLE \n")
-                                Summ_list.append("Duplicate installation stability test: PASSED")
                                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                 tdkTestObj.setResultStatus("SUCCESS")
                             else:
                                 print(f"\n === DUPLICATE INSTALLATION STABILITY TEST: ISSUES DETECTED === \n")
                                 print(f"\n System showed problematic behavior during duplicate installation attempts \n")
                                 print(f"\n App {test_app_id} duplicate installation behavior: PROBLEMATIC \n")
-                                Summ_list.append("Duplicate installation stability test: ISSUES DETECTED")
                                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                 tdkTestObj.setResultStatus("FAILURE")
                                 status = "FAILURE"
                                 
                         else:
                             print(f"\n Cannot perform duplicate install test - app {app_id} verification failed \n")
-                            Summ_list.append("Test prerequisite failed: App not properly installed")
                             status = "FAILURE"
 
             # Disconnect event listener
@@ -491,10 +471,9 @@ if expectedResult in result.upper():
                 event_listener.disconnect()
 
         else:
-            print("\n AI Manager plugins preconditions are not met \n")
+            print("\n AppManager plugins preconditions are not met \n")
             obj.setLoadModuleStatus("FAILURE")
                 
-    getSummary(Summ_list, obj)
 
     #Revert the values
     if revert == "YES":

@@ -42,8 +42,6 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_MultipleLaunchRequests_S
 #configured as "Yes".
 pre_requisite_reboot(obj,"no")
 
-#Execution summary variable
-Summ_list=[]
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
@@ -64,19 +62,19 @@ if expectedResult in result.upper():
     duplicate_instances_detected = 0
     error_responses = 0
 
-    # Required AI Manager plugins
+    # Required AppManager plugins
     plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
     plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated", "org.rdk.AppManager":"activated"}
     conf_file, status = get_configfile_name(obj)
     status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     
-    # Check if essential AI Manager plugins are available
-    essential_ai_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
-    missing_plugins = [plugin for plugin in essential_ai_plugins if plugin not in supported_plugins]
+    # Check if essential AppManager plugins are available
+    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
+    missing_plugins = [plugin for plugin in essential_plugins if plugin not in supported_plugins]
     
     if missing_plugins:
-        print(f"\n Essential AI Manager plugins not available on this device: {missing_plugins}")
-        print("\n This test requires AI Manager functionality which is not supported on this device")
+        print(f"\n Essential AppManager plugins not available on this device: {missing_plugins}")
+        print("\n This test requires AppManager functionality which is not supported on this device")
         print(f"\n Available plugins: {supported_plugins}")
         status = "FAILURE"
         obj.setLoadModuleStatus("FAILURE")
@@ -98,7 +96,7 @@ if expectedResult in result.upper():
         failed_plugins = [plugin for plugin in plugins_list if curr_plugins_status_dict.get(plugin, "FAILURE") == "FAILURE"]
         if failed_plugins:
             print(f"\n Failed to get status for plugins: {failed_plugins}")
-            print("\n Error while getting status of AI Manager plugins")
+            print("\n Error while getting status of AppManager plugins")
             status = "FAILURE"
         elif curr_plugins_status_dict != plugin_status_needed:
             revert = "YES"
@@ -108,10 +106,10 @@ if expectedResult in result.upper():
             if new_plugins_status_dict != plugin_status_needed:
                 status = "FAILURE"
         else:
-            print("\n AI Manager plugins are already in the required state \n")
+            print("\n AppManager plugins are already in the required state \n")
 
         if status == "SUCCESS":
-            print("\n AI Manager plugins are available and activated successfully \n")
+            print("\n AppManager plugins are available and activated successfully \n")
 
             # Setup event listener for lifecycle changes, download status, and app installation
             thunder_port = rdkv_performancelib.devicePort
@@ -154,7 +152,7 @@ if expectedResult in result.upper():
                         "system_stable": False
                     }
                     
-                    # Check AI Manager responsiveness
+                    # Check AppManager responsiveness
                     try:
                         tdkTestObj = obj.createTestStep('rdkservice_getValue')
                         tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getRunningApps")
@@ -247,7 +245,6 @@ if expectedResult in result.upper():
                                         if app_id in event_log and "onAppInstalled" in str(event_log):
                                             app_installed = True
                                             print(f"\n App {app_id} installed successfully \n")
-                                            Summ_list.append("App installation: SUCCESS")
                                             break
                                     continue_count += 1
                                     time.sleep(1)
@@ -281,7 +278,6 @@ if expectedResult in result.upper():
                             print(f"\n Error parsing running apps response \n")
 
                     print(f"\n Clean state established for {app_id} \n")
-                    Summ_list.append("Clean state preparation: SUCCESS")
 
                     # Phase 3: Multiple Launch Requests Stress Test
                     print(f"\n === PHASE 3: MULTIPLE LAUNCH REQUESTS STRESS TEST === \n")
@@ -404,13 +400,6 @@ if expectedResult in result.upper():
                     print(f"\n Duplicate Instances Detected: {duplicate_instances_detected}")
                     print(f"\n Active App Instances: {active_instances_count}")
                     
-                    Summ_list.append(f"Launch requests sent: {launch_requests_sent}")
-                    Summ_list.append(f"Launch responses received: {launch_responses_received}")
-                    Summ_list.append(f"Error responses: {error_responses}")
-                    Summ_list.append(f"Lifecycle events received: {launch_events_received}")
-                    Summ_list.append(f"Unique instance IDs: {len(instance_ids_seen)}")
-                    Summ_list.append(f"Active app instances: {active_instances_count}")
-
                     # Assessment of behavior
                     test_app_id = app_id
                     behavioral_analysis_passed = True
@@ -418,7 +407,6 @@ if expectedResult in result.upper():
                     # Check 1: System should handle multiple launch requests gracefully
                     if error_responses > (int(multiple_launch_count) * 0.8):  # More than 80% errors is unusual
                         print(f"\nHigh error rate: {error_responses}/{launch_requests_sent} requests failed \n")
-                        Summ_list.append("High error rate detected")
                         behavioral_analysis_passed = False
                     else:
                         print(f"\n Acceptable error handling: {error_responses}/{launch_requests_sent} requests failed \n")
@@ -426,7 +414,6 @@ if expectedResult in result.upper():
                     # Check 2: System should not create excessive duplicate instances
                     if active_instances_count > 3:  # More than 3 instances might indicate poor resource management
                         print(f"\n Excessive app instances: {active_instances_count} active instances \n")
-                        Summ_list.append("Excessive app instances created")
                         behavioral_analysis_passed = False
                     else:
                         print(f"\n Reasonable instance management: {active_instances_count} active instances \n")
@@ -434,7 +421,6 @@ if expectedResult in result.upper():
                     # Check 3: System should remain responsive
                     if not post_stress_health["system_stable"]:
                         print(f"\n System instability detected after stress test \n")
-                        Summ_list.append("Post-stress system instability")
                         behavioral_analysis_passed = False
                     else:
                         print(f"\n System remained stable during stress test \n")
@@ -442,7 +428,6 @@ if expectedResult in result.upper():
                     # Check 4: Events should be reasonable
                     if launch_events_received == 0 and launch_responses_received > 0:
                         print(f"\n No lifecycle events received despite successful launch responses \n")
-                        Summ_list.append("Missing lifecycle events")
                         behavioral_analysis_passed = False
                     
                     # Final assessment
@@ -450,21 +435,18 @@ if expectedResult in result.upper():
                         print(f"\n === MULTIPLE LAUNCH STRESS TEST: PASSED === \n")
                         print(f"\n System handled {multiple_launch_count} rapid launch requests appropriately \n")
                         print(f"\n App {test_app_id} behavior under multiple launch stress: ACCEPTABLE \n")
-                        Summ_list.append("Multiple launch stress test: PASSED")
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
                         print(f"\n === MULTIPLE LAUNCH STRESS TEST: ISSUES DETECTED === \n")
                         print(f"\n System showed problematic behavior during multiple launch requests \n")
                         print(f"\n App {test_app_id} behavior under multiple launch stress: PROBLEMATIC \n")
-                        Summ_list.append("Multiple launch stress test: ISSUES DETECTED")
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.setResultStatus("FAILURE")
                         status = "FAILURE"
 
                 else:
                     print(f"\n Cannot perform stress test - app {app_id} is not installed \n")
-                    Summ_list.append("Test prerequisite failed: App not installed")
                     status = "FAILURE"
 
             # Disconnect event listener
@@ -473,10 +455,9 @@ if expectedResult in result.upper():
                 event_listener.disconnect()
 
         else:
-            print("\n AI Manager plugins preconditions are not met \n")
+            print("\n AppManager plugins preconditions are not met \n")
             obj.setLoadModuleStatus("FAILURE")
                 
-    getSummary(Summ_list, obj)
 
     #Revert the values
     if revert == "YES":

@@ -57,19 +57,19 @@ if expectedResult in result.upper():
     app_instance_id = ""
     test_app_id = ""
 
-    # Required AI Manager plugins
+    # Required AppManager plugins
     plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
     plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated", "org.rdk.AppManager":"activated"}
     conf_file, status = get_configfile_name(obj)
     status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     
-    # Check if essential AI Manager plugins are available
-    essential_ai_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
-    missing_plugins = [plugin for plugin in essential_ai_plugins if plugin not in supported_plugins]
+    # Check if essential AppManager plugins are available
+    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
+    missing_plugins = [plugin for plugin in essential_plugins if plugin not in supported_plugins]
     
     if missing_plugins:
-        print(f"\n Essential AI Manager plugins not available on this device: {missing_plugins}")
-        print("\n This test requires AI Manager functionality which is not supported on this device")
+        print(f"\n Essential AppManager plugins not available on this device: {missing_plugins}")
+        print("\n This test requires AppManager functionality which is not supported on this device")
         print(f"\n Available plugins: {supported_plugins}")
         status = "FAILURE"
         obj.setLoadModuleStatus("FAILURE")
@@ -91,7 +91,7 @@ if expectedResult in result.upper():
         failed_plugins = [plugin for plugin in plugins_list if curr_plugins_status_dict.get(plugin, "FAILURE") == "FAILURE"]
         if failed_plugins:
             print(f"\n Failed to get status for plugins: {failed_plugins}")
-            print("\n Error while getting status of AI Manager plugins")
+            print("\n Error while getting status of AppManager plugins")
             status = "FAILURE"
         elif curr_plugins_status_dict != plugin_status_needed:
             revert = "YES"
@@ -101,10 +101,10 @@ if expectedResult in result.upper():
             if new_plugins_status_dict != plugin_status_needed:
                 status = "FAILURE"
         else:
-            print("\n AI Manager plugins are already in the required state \n")
+            print("\n AppManager plugins are already in the required state \n")
 
         if status == "SUCCESS":
-            print("\n AI Manager plugins are available and activated successfully \n")
+            print("\n AppManager plugins are available and activated successfully \n")
 
             # Setup event listener for lifecycle changes, download status, app installation and uninstall
             thunder_port = rdkv_performancelib.devicePort
@@ -386,7 +386,7 @@ if expectedResult in result.upper():
                 event_listener.disconnect()
 
         else:
-            print("\n AI Manager plugins preconditions are not met \n")
+            print("\n AppManager plugins preconditions are not met \n")
             obj.setLoadModuleStatus("FAILURE")
                 
     getSummary(Summ_list, obj)

@@ -31,7 +31,7 @@ import time
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 
-#IP and Port of box, No need to change,
+#IP and Port of box, No need to change
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
@@ -41,8 +41,6 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_UninstallApp_StabilityCh
 #configured as "Yes".
 pre_requisite_reboot(obj,"no")
 
-#Execution summary variable
-Summ_list=[]
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
@@ -59,19 +57,19 @@ if expectedResult in result.upper():
     test_app_id = ""
     stability_check_passed = False
 
-    # Required AI Manager plugins
+    # Required AppManager plugins
     plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager", "org.rdk.SystemServices"]
     plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated", "org.rdk.AppManager":"activated", "org.rdk.SystemServices":"activated"}
     conf_file, status = get_configfile_name(obj)
     status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     
-    # Check if essential AI Manager plugins are available
-    essential_ai_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
-    missing_plugins = [plugin for plugin in essential_ai_plugins if plugin not in supported_plugins]
+    # Check if essential AppManager plugins are available
+    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
+    missing_plugins = [plugin for plugin in essential_plugins if plugin not in supported_plugins]
     
     if missing_plugins:
-        print(f"\n Essential AI Manager plugins not available on this device: {missing_plugins}")
-        print("\n This test requires AI Manager functionality which is not supported on this device")
+        print(f"\n Essential AppManager plugins not available on this device: {missing_plugins}")
+        print("\n This test requires AppManager functionality which is not supported on this device")
         print(f"\n Available plugins: {supported_plugins}")
         status = "FAILURE"
         obj.setLoadModuleStatus("FAILURE")
@@ -93,7 +91,7 @@ if expectedResult in result.upper():
         failed_plugins = [plugin for plugin in plugins_list if curr_plugins_status_dict.get(plugin, "FAILURE") == "FAILURE"]
         if failed_plugins:
             print(f"\n Failed to get status for plugins: {failed_plugins}")
-            print("\n Error while getting status of AI Manager plugins")
+            print("\n Error while getting status of AppManager plugins")
             status = "FAILURE"
         elif curr_plugins_status_dict != plugin_status_needed:
             revert = "YES"
@@ -103,10 +101,10 @@ if expectedResult in result.upper():
             if new_plugins_status_dict != plugin_status_needed:
                 status = "FAILURE"
         else:
-            print("\n AI Manager plugins are already in the required state \n")
+            print("\n AppManager plugins are already in the required state \n")
 
         if status == "SUCCESS":
-            print("\n AI Manager plugins are available and activated successfully \n")
+            print("\n AppManager plugins are available and activated successfully \n")
 
             # Setup event listener for lifecycle changes, download status, app installation, and system monitoring
             thunder_port = rdkv_performancelib.devicePort
@@ -207,11 +205,9 @@ if expectedResult in result.upper():
                 
                 if not all(initial_stability.values()):
                     print("\n System is not stable at start - aborting test \n")
-                    Summ_list.append("Initial system stability check failed")
                     status = "FAILURE"
                 else:
                     print("\n Initial system stability confirmed \n")
-                    Summ_list.append("Initial system stability: PASSED")
 
                     # Ensure app is installed and loaded
                     app_loaded_successfully = False
@@ -318,7 +314,6 @@ if expectedResult in result.upper():
                                         app_loaded_successfully = True
                                         app_instance_id = event_data.get("instanceId", "")
                                         print(f"\n App {app_id} is now loaded and running (state: {app_state}) \n")
-                                        Summ_list.append(f"App {app_id} loaded successfully")
                                         break
                                         
                             if app_loaded_successfully:
@@ -357,7 +352,6 @@ if expectedResult in result.upper():
                                             if "onAppUninstalled" in str(event_log):
                                                 uninstall_completed = True
                                                 print(f"\n App {app_id} uninstalled successfully from loaded state \n")
-                                                Summ_list.append("Loaded app uninstall completed")
                                                 break
                                             elif "onAppLifecycleStateChanged" in str(event_log):
                                                 event_data = json.loads(event_log.split('$$$')[1])
@@ -377,17 +371,14 @@ if expectedResult in result.upper():
                                         
                                         if stability_maintained:
                                             print("\n System stability maintained after uninstalling loaded app \n")
-                                            Summ_list.append("Post-uninstall system stability: PASSED")
                                             stability_check_passed = True
                                             status = "SUCCESS"
                                         else:
                                             print("\n System stability compromised after uninstalling loaded app \n")
-                                            Summ_list.append("Post-uninstall system stability: FAILED")
                                             
                                             # Log specific stability failures
                                             for check, result in post_uninstall_stability.items():
                                                 if not result:
-                                                    Summ_list.append(f"Stability check failed: {check}")
                                             
                                             status = "FAILURE"
                                         
@@ -403,15 +394,13 @@ if expectedResult in result.upper():
                                         
                                         if list_apps_result == "SUCCESS":
                                             print("\n System can still list installed apps \n")
-                                            Summ_list.append("Post-uninstall app listing: PASSED")
                                         else:
                                             print("\n System cannot list installed apps after uninstall \n")
-                                            Summ_list.append("Post-uninstall app listing: FAILED")
                                             status = "FAILURE"
                                         
                                         # Test 2: Can still access plugin status
                                         plugin_status_accessible = True
-                                        for plugin in essential_ai_plugins:
+                                        for plugin in essential_plugins:
                                             if plugin in supported_plugins:
                                                 plugin_status_dict = get_plugins_status(obj, [plugin])
                                                 if plugin_status_dict.get(plugin) == "FAILURE":
@@ -420,10 +409,8 @@ if expectedResult in result.upper():
                                         
                                         if plugin_status_accessible:
                                             print("\nSystem plugins remain accessible \n")
-                                            Summ_list.append("Post-uninstall plugin access: PASSED")
                                         else:
                                             print("\n Some system plugins are not accessible after uninstall \n")
-                                            Summ_list.append("Post-uninstall plugin access: FAILED")
                                             status = "FAILURE"
                                         
                                         test_app_id = app_id
@@ -432,34 +419,27 @@ if expectedResult in result.upper():
                                         if status == "SUCCESS":
                                             print(f"\n === STABILITY TEST PASSED === \n")
                                             print(f"\n Successfully uninstalled loaded app {test_app_id} without system instability \n")
-                                            Summ_list.append("Overall stability test: PASSED")
                                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                             tdkTestObj.setResultStatus("SUCCESS")
                                         else:
                                             print(f"\n === STABILITY TEST FAILED === \n")
                                             print(f"\n System instability detected after uninstalling loaded app {test_app_id} \n")
-                                            Summ_list.append("Overall stability test: FAILED")
                                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
                                         print(f"\n Failed: App uninstall did not complete within timeout \n")
-                                        Summ_list.append("Uninstall operation timeout")
                                         status = "FAILURE"
                                 else:
                                     print(f"\n Failed to initiate uninstall for loaded app {app_id} \n")
-                                    Summ_list.append("Failed to initiate uninstall")
                                     status = "FAILURE"
                             else:
                                 print(f"\n Failed: App {app_id} did not reach loaded state \n")
-                                Summ_list.append("App failed to reach loaded state")
                                 status = "FAILURE"
                         else:
                             print(f"\n Failed to launch app {app_id} \n")
-                            Summ_list.append("App launch failed")
                             status = "FAILURE"
                     else:
                         print(f"\n Failed: App {app_id} is not installed \n")
-                        Summ_list.append("App installation prerequisite failed")
                         status = "FAILURE"
 
             # Disconnect event listener
@@ -468,10 +448,9 @@ if expectedResult in result.upper():
                 event_listener.disconnect()
 
         else:
-            print("\n AI Manager plugins preconditions are not met \n")
+            print("\n AppManager plugins preconditions are not met \n")
             obj.setLoadModuleStatus("FAILURE")
                 
-    getSummary(Summ_list, obj)
 
     #Revert the values
     if revert == "YES":
