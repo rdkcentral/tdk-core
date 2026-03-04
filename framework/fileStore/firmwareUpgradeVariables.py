@@ -80,6 +80,14 @@ logFile = "/rdklogs/TDK_FirmwareUpgrade.log"
 # Suffix for firmware checksum version
 checksum_suffix = ".txt"
 
+#Binary to trigger Firmware Upgrade
+FWUPGRADE_BINARY="/usr/bin/fwupgrade"
+
+#Firmware Download Location in DUT
+FW_DOWNLOAD_PATH="/mnt/bootpart"
+
+#Delay between the execution of XCONF config commands
+XCONF_CMD_WAIT = 30
+
 # Partition path for getting partition count
 PARTITION_PATH = "/dev/mmcblk0p*"
-

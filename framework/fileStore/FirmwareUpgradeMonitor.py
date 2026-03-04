@@ -22,7 +22,7 @@ import subprocess
 from firmwareUpgradeVariables import *
 from firmwareUpgradeUtility import *
 
-# Function to wait for the device to come up after reboot and then SCP the TDK packages and execute the installation script to enable TDK if not already enabled
+# Function to wait for the device to come up after reboot, validate whether firmware got upgraded and perform revert firmware operation.
 def fw_upgrade_checker(dest_ip, initial_firmware, target_firmware, fw_binary):
     # Wait till device comes up after reboot
     print("Sleeping while waiting for the device to come up")
@@ -30,7 +30,7 @@ def fw_upgrade_checker(dest_ip, initial_firmware, target_firmware, fw_binary):
     hostname = dest_ip
     upgraded_firmware = ""
     revert_flag = False
-    #Check whether the upgraded image is TDK enabled
+    # Get the current firmware details and check if it has been upgraded to target firmware
     try:
         command = "head -n 1 /version.txt"
         result = subprocess.run(["ssh", f"{username}@{hostname}", "-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", command], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
