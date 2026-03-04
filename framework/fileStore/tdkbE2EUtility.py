@@ -41,33 +41,6 @@ isSessionActive = False
 isPerformanceTest = False
 clientOutput_avg = 0
 
-def parseSampleDeviceConfig():
-    try:
-        status = "SUCCESS"
-
-        configFilePath = os.path.dirname(os.path.realpath(__file__))
-        configFilePath = configFilePath + "/tdkbDeviceConfig/sampleDevice.config"
-
-        print("Sample device config file:", configFilePath)
-
-        global lan_port_number
-        with open(configFilePath, 'r') as f:
-            for line in f:
-                # Skip comments and empty lines
-                line = line.strip()
-                if line.startswith('#') or not line:
-                    continue
-                if 'LAN_PORT_Number' in line:
-                    lan_port_number = line.split('=')[1].strip().strip('"')
-                    break
-
-    except Exception as e:
-        print(e)
-        status = "Failed to parse the sampleDevice configuration file"
-
-    return status
-########## End of Function ##########
-
 def parseDeviceConfig(obj):
 
 # parseDeviceConfig
@@ -238,6 +211,9 @@ def parseDeviceConfig(obj):
 
         global lan_script
         lan_script = config.get(deviceConfig, "LAN_SCRIPT")
+
+        global lan_port_number
+        lan_port_number = config.get(deviceConfig, "LAN_PORT_Number")
 
         global wan_ip
         wan_ip = config.get(deviceConfig, "WAN_IP")
