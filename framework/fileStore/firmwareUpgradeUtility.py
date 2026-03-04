@@ -258,7 +258,7 @@ def getErouterIP(obj, step):
         tdkTestObj.setResultStatus("FAILURE")
         print("ACTUAL RESULT %d: Failed to fetch INTERFACE from the tdk_platform.properties. INTERFACE is %s" %(step, interface))
         print("[TEST EXECUTION RESULT] : FAILURE\n")
-    return ip, step
+    return tdkTestObj, ip, step
 
 ########## End of function ##########
 # getMacAddress
