@@ -53,7 +53,7 @@ def tr069ACSPreRequisite(obj,sysobj):
         actualresult = tdkTestObj.getResult()
         details = tdkTestObj.getResultDetails()
         print(f"Iteration {retryCount}, network status of tr069 : {details}")
-        if expectedresult in actualresult and details:
+        if expectedresult in actualresult and details != "":
             print("tr069pa process is up and listening to port 7547")
             tr069paStatus = "SUCCESS"
             tdkTestObj.setResultStatus("SUCCESS")
@@ -99,7 +99,7 @@ def tr069ACSPreRequisite(obj,sysobj):
         print("Get the Username for connection request")
         tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Get')
         actualresult, details = getTR181Value(tdkTestObj_tr181,"Device.ManagementServer.ConnectionRequestUsername")
-        if expectedresult in actualresult and details:
+        if expectedresult in actualresult and details != "":
             #Set the result status of execution
             username = details.strip()
             print(f"Got Connection Request Username : {username} successfully")
@@ -204,7 +204,7 @@ def getTr181DMValue(obj,queryParam,step):
         print("EXPECTED RESULT %d : Get the value of the parameter %s successfully" %(step,name))
         tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Get')
         actualresult, details = getTR181Value(tdkTestObj_tr181,name)
-        if expectedresult in actualresult and details:
+        if expectedresult in actualresult and details != "":
             getValueTr181 = details.strip("'")
             tdkTestObj_tr181.setResultStatus("SUCCESS")
             print("ACTUAL RESULT %d : Got the parameter %s value as %s successfully" %(step,name,getValueTr181))
