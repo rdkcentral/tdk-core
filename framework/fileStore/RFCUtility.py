@@ -16,7 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-
 import tdklib
 from time import sleep
 from RFCVariables import *
@@ -68,6 +67,7 @@ def rfc_configure_feature(obj, feature_id, name, param_value_dict):
         f"curl -s -i -X POST {XCONF_URL}/feature?applicationType=stb "
         f"-H 'Content-Type: application/json' "
         f"-H 'Accept: application/json' "
+        f"-H 'X-API-KEY:{XCONF_API_KEY}' "
         f"--data '{json.dumps(json_data)}'"
     )
     print("Command : %s" % command)
@@ -114,9 +114,10 @@ def rfc_set_feature_rule(obj, rule_id, name, mac):
         f"curl -s -i -X POST {XCONF_URL}/featurerule?applicationType=stb "
         f"-H 'Content-Type: application/json' "
         f"-H 'Accept: application/json' "
+        f"-H 'X-API-KEY:{XCONF_API_KEY}' "
         f"--data '{json.dumps(json_data)}'"
     )
-    print("Command : %s" % command)  # Debug print to verify command
+    print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     # Validation logic: Check if the response contains the feature name and the MAC address.
@@ -137,7 +138,6 @@ def rfc_set_feature_rule(obj, rule_id, name, mac):
 # Return Value: tdkTestObj - test object
 #               actualresult - SUCCESS/FAILURE
 #               details - response from CURL command
-
 def rfc_validate_feature_rule(obj, mac, feature_name, param_value_dict):
     sleep(20)
     command = f"curl -s -i '{RFC_URL}?estbMacAddress={mac}'"
@@ -212,6 +212,7 @@ def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
         f"curl -X PUT {XCONF_URL}/feature?applicationType=stb "
         f"-H \"Content-Type: application/json\" "
         f"-H \"Accept: application/json\" "
+        f"-H \"X-API-KEY:{XCONF_API_KEY}\" "
         f"-d '{json.dumps(json_data)}'"
     )
     print("Command : %s" % command)
@@ -272,9 +273,10 @@ def rfc_delete_feature_rule(obj, feature_id):
     command = (
         f"curl -X DELETE {XCONF_URL}/featurerule/{feature_id}?applicationType=stb "
         f"-H \"Content-Type: application/json\" "
-        f"-H \"Accept: application/json\""
+        f"-H \"Accept: application/json\" "
+        f"-H \"X-API-KEY:{XCONF_API_KEY}\""
     )
-    print("Command : %s" % command)  # Debug print to verify command
+    print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     if details == "":
@@ -297,9 +299,10 @@ def rfc_delete_feature(obj, feature_id):
     command = (
         f"curl -X DELETE {XCONF_URL}/feature/{feature_id}?applicationType=stb "
         f"-H \"Content-Type: application/json\" "
-        f"-H \"Accept: application/json\""
+        f"-H \"Accept: application/json\" "
+        f"-H \"X-API-KEY:{XCONF_API_KEY}\""
     )
-    print("Command : %s" % command)  # Debug print to verify command
+    print("Command : %s" % command)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     if details == "":
@@ -309,4 +312,3 @@ def rfc_delete_feature(obj, feature_id):
         print(details)
     return tdkTestObj, actualresult, details
 ########## End of function ##########
-

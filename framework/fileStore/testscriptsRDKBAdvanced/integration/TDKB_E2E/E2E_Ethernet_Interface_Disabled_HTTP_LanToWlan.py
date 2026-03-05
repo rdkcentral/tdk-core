@@ -52,7 +52,7 @@
     <api_or_interface_used>None
 </api_or_interface_used>
     <input_parameters>Device.WiFi.AccessPoint.1.Security.ModeEnabled
-Device.Ethernet.Interface.1.Enable
+Device.Ethernet.Interface.{i}.Enable
 </input_parameters>
     <automation_approch>1. Load tdkb_e2e module
 2. Using tdkb_e2e_Get, get and save security mode,Ethernet enable and ssid enable status of 2.4GHz
@@ -105,7 +105,8 @@ if "SUCCESS" in loadmodulestatus.upper():
         ssidName = "Device.WiFi.SSID.%s.SSID" %tdkbE2EUtility.ssid_2ghz_index
         keyPassPhrase = "Device.WiFi.AccessPoint.%s.Security.KeyPassphrase" %tdkbE2EUtility.ssid_2ghz_index
         securityMode = "Device.WiFi.AccessPoint.%s.Security.ModeEnabled" %tdkbE2EUtility.ssid_2ghz_index
-        ethernetEnable = "Device.Ethernet.Interface.1.Enable"
+
+        ethernetEnable = "Device.Ethernet.Interface.%s.Enable" % tdkbE2EUtility.lan_port_number
 
         #Get the value of the wifi parameters that are currently set.
         paramList=[ssidName,keyPassPhrase,securityMode,ethernetEnable]
@@ -118,7 +119,7 @@ if "SUCCESS" in loadmodulestatus.upper():
             print("ACTUAL RESULT 1: %s" %orgValue);
             print("[TEST EXECUTION RESULT] : SUCCESS");
 
-            # Set securityMode,ethernetEnable for 2.4ghz"
+            # Set securityMode and ethernetEnable for 2.4ghz"
             setValuesList = [tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,'WPA2-Personal','true'];
             print("WIFI parameter values that are set: %s" %setValuesList)
 
@@ -147,8 +148,8 @@ if "SUCCESS" in loadmodulestatus.upper():
 
                 if expectedresult in status and setValuesList == newValues:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print("TEST STEP 3: Get the current ssid,keypassphrase,securityMode,ethernetEnable")
-                    print("EXPECTED RESULT 3: Should retrieve the current ssid,keypassphrase,securityMode,ethernetEnable")
+                    print("TEST STEP 3: Get the current ssid,keypassphrase,securityMode and ethernetEnable")
+                    print("EXPECTED RESULT 3: Should retrieve the current ssid,keypassphrase,securityMode and ethernetEnable")
                     print("ACTUAL RESULT 3: %s" %newValues);
                     print("[TEST EXECUTION RESULT] : SUCCESS");
 
@@ -276,14 +277,14 @@ if "SUCCESS" in loadmodulestatus.upper():
                         print("wlanConnectWifiSsid:Failed to connect wifi ssid")
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print("TEST STEP 3: Get the current ssid,keypassphrase,securityMode,ethernetEnable")
-                    print("EXPECTED RESULT 3: Should retrieve the current ssid,keypassphrase,securityMode,ethernetEnable")
+                    print("TEST STEP 3: Get the current ssid,keypassphrase,securityMode and ethernetEnable")
+                    print("EXPECTED RESULT 3: Should retrieve the current ssid,keypassphrase,securityMode and ethernetEnable")
                     print("ACTUAL RESULT 3: %s" %newValues);
                     print("[TEST EXECUTION RESULT] : FAILURE");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print("TEST STEP 2: Set the ssid,keypassphrase,securityMode,ethernetEnable")
-                print("EXPECTED RESULT 2: Should set the ssid,keypassphrase,securityMode,ethernetEnable");
+                print("TEST STEP 2: Set the ssid,keypassphrase,securityMode and ethernetEnable")
+                print("EXPECTED RESULT 2: Should set the ssid,keypassphrase,securityMode and ethernetEnable");
                 print("ACTUAL RESULT 2: %s" %details);
                 print("[TEST EXECUTION RESULT] : FAILURE");
 
@@ -301,7 +302,6 @@ if "SUCCESS" in loadmodulestatus.upper():
             #Revert the values to original
             tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
             tdkTestObj,ethernetResult,details = setMultipleParameterValues(obj,ethernetParam)
-
             if expectedresult in actualresult and expectedresult in finalStatus and expectedresult in ethernetResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 print("EXPECTED RESULT 15: Should set the original ssid,keypassphrase,securityMode and ethernetEnable");
