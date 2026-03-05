@@ -212,6 +212,9 @@ def parseDeviceConfig(obj):
         global lan_script
         lan_script = config.get(deviceConfig, "LAN_SCRIPT")
 
+        global lan_port_number
+        lan_port_number = config.get(deviceConfig, "LAN_PORT_Number")
+
         global wan_ip
         wan_ip = config.get(deviceConfig, "WAN_IP")
 

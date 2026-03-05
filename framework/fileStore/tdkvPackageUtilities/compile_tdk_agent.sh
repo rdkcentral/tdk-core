@@ -18,6 +18,12 @@
 # limitations under the License.
 ##########################################################################
 
+if [ "${DEBUG:-0}" = "1" ]; then
+    echo "Running as: $(whoami)"
+    echo "HOME: $HOME"
+    echo "netrc exists? $(ls -l $HOME/.netrc 2>/dev/null)"
+fi
+
 #meta layers
 SRC_META_RDK_VIDEO="https://github.com/rdkcentral/meta-rdk-video.git"
 
@@ -28,6 +34,7 @@ SRC_JSONCPP="https://github.com/open-source-parsers/jsoncpp/archive/refs/tags/1.
 SRC_TINYXML2="https://github.com/leethomason/tinyxml2.git"
 SRC_TDK="https://github.com/rdkcentral/tdk-video.git"
 SRC_ZLIB="https://sourceforge.net/projects/libpng/files/zlib/1.2.11/zlib-1.2.11.tar.xz"
+SRC_ASSIMP="https://github.com/assimp/assimp.git"
 
 #HAL source
 #SRC_WIFI="https://github.com/rdkcentral/rdkv-halif-wifi.git"
@@ -37,7 +44,6 @@ SRC_DEEPSLEEP_HAL="https://github.com/rdkcentral/rdk-halif-deepsleep_manager.git
 SRC_DS_HAL="https://github.com/rdkcentral/rdk-halif-device_settings.git"
 SRC_HDMICEC_HAL="https://github.com/rdkcentral/rdk-halif-hdmi_cec.git"
 SRC_BLUETOOTH_HAL="https://code.rdkcentral.com/r/rdk/components/generic/bluetooth"
-#SRC_IARMMGRS="https://code.rdkcentral.com/r/rdk/components/generic/iarmmgrs"
 SRC_IARMMGRS="https://github.com/rdkcentral/iarmmgrs.git"
 SRC_WESTEROS="https://code.rdkcentral.com/r/components/opensource/westeros"
 SRC_EGL="https://github.com/KhronosGroup/EGL-Registry.git"
@@ -61,6 +67,7 @@ SRC_AAMP="https://github.com/rdkcentral/aamp.git"
 SRC_RFC="https://github.com/rdkcentral/rfc.git"
 SRC_WDMP_C="https://github.com/xmidt-org/wdmp-c.git"
 SRC_RFCAPI="https://github.com/rdkcentral/rfc.git"
+SRC_VULKAN="https://github.com/KhronosGroup/Vulkan-Headers.git"
 
 #Platformwise repositories
 SRC_RPI="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
@@ -85,6 +92,7 @@ COMPILE_SKELETON=false
 SYSROOT=${ROOT_DIR}/sysroots
 SKIP_PLATFORM="FALSE"
 SKIP_PACKAGES="FALSE"
+vkmark_compiled="FALSE"
 
 platform_arg=false
 for arg in "$@"
@@ -121,6 +129,9 @@ for arg in "$@"; do
 	FNCS_PACKAGE="TRUE"
     fi
 done
+
+#Enabling FNCS Package Flag as rdkfwupgrader compilation is disabled
+FNCS_PACKAGE="TRUE"
 
 if [ -z $PLATFORM ];then
     echo -e "\nNO PLATFORM Selected , creating Generic_TDK_Package\n"
@@ -224,10 +235,83 @@ install_sdk()
 	
 }
 
+get_middleware_support_version() {
+
+    local middleware_version="$1"
+    local base_dir="$(pwd)"
+    local mw_manifest_repo="https://github.com/rdkcentral/middleware-manifest-rdke"
+    local generic_manifest_repo="https://github.com/rdkcentral/rdke-middleware-generic-manifest"
+
+    local generic_version
+    local support_version
+
+    echo "Resolving meta-middleware-generic-support version for middleware ${middleware_version}"
+
+    #########################################
+    # Step 1: Clone middleware-manifest-rdke
+    #########################################
+
+    git clone "$mw_manifest_repo" middleware-manifest-rdke >/dev/null 2>&1 || return 1
+    cd middleware-manifest-rdke || return 1
+
+    git checkout "$middleware_version" >/dev/null 2>&1 || {
+        echo "Invalid middleware version: $middleware_version"
+        cd "$base_dir"
+        rm -rf middleware-manifest-rdke
+        return 1
+    }
+
+    #########################################
+    # Step 2: Extract generic manifest tag
+    #########################################
+
+    generic_version=$(grep 'rdke-middleware-generic-manifest' rdke-middleware.xml \
+        | sed -n 's/.*revision="refs\/tags\/\([^"]*\)".*/\1/p')
+
+    cd "$base_dir"
+    rm -rf middleware-manifest-rdke
+
+    if [[ -z "$generic_version" ]]; then
+        echo "Failed to resolve generic manifest version"
+        return 1
+    fi
+
+    #########################################
+    # Step 3: Clone generic manifest
+    #########################################
+
+    git clone "$generic_manifest_repo" rdke-middleware-generic-manifest >/dev/null 2>&1 || return 1
+    cd rdke-middleware-generic-manifest || return 1
+
+    git checkout "$generic_version" >/dev/null 2>&1 || {
+        echo "Invalid generic manifest version: $generic_version"
+        cd "$base_dir"
+        rm -rf rdke-middleware-generic-manifest
+        return 1
+    }
+
+    #########################################
+    # Step 4: Extract meta-middleware-generic-support version
+    #########################################
+
+    middleware_support_version=$(grep 'meta-middleware-generic-support' middleware-generic.xml \
+        | sed -n 's/.*revision="refs\/tags\/\([^"]*\)".*/\1/p')
+
+    cd "$base_dir"
+    rm -rf rdke-middleware-generic-manifest
+
+    if [[ -z "$middleware_support_version" ]]; then
+        echo "Failed to resolve meta-middleware-generic-support version"
+        return 1
+    fi
+
+    echo "meta-middleware-generic-support version obtained as $middleware_support_version"
+}
 
 get_component_versions()
 {
     cd $TDK_SOURCE_DIR
+    get_middleware_support_version "$MIDDLEWARE_VERSION"
     echo -e "Gathering versions from meta-middleware-generic-support"
     if [[ "$MIDDLEWARE_VERSION" == "DEFAULT" ]];then
 	 echo -e "All versions set to DEFAULT\n"
@@ -238,9 +322,7 @@ get_component_versions()
     fi
     git clone $SRC_MIDDLEWARE_SUPPORT >> $LOG_FILE 2>&1
     cd meta-middleware-generic-support
-    if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
-	 git checkout $MIDDLEWARE_VERSION >> $LOG_FILE 2>&1
-    fi
+    git checkout $middleware_support_version >> $LOG_FILE 2>&1
 
     iarmbus_srcrev=`grep iarmbus conf/include/generic-srcrev.inc | cut -d "=" -f 2`
     iarmbus_srcrev=${iarmbus_srcrev//\"/}
@@ -430,11 +512,11 @@ update_m4()
     cd $ROOT_DIR
 }
 
-# Function: install_gstreamer_glib
-# Description: Installs GStreamer and GLib headers/libraries from external package.
+# Function: install_packages
+# Description: Installs headers/libraries from external package.
 # Parameters: None
 # Return: None
-install_gstreamer_glib()
+install_packages()
 {
     cd $ROOT_DIR
     Packages="$(find $ROOT_DIR -iname Packages.tgz)"
@@ -466,7 +548,7 @@ install_gstreamer_glib()
     fi
     cd $ROOT_DIR
     glib_2_0_package="$(find $ROOT_DIR -iname glib2.0.tgz)"
-    glib_h="$(find $SDKTARGETSYSROOT -iname glib.h)"
+    glib_h="$(find $SDKTARGETSYSROOT -iname glibconfig.h)"
     if [ ! -z "${glib_2_0_package}" ] && [  -z "${glib_h}" ]; then
 	echo -e "Copying glib-2.0 headers and libraries\n" 2>&1 | tee -a $LOG_FILE
 	cd $SDKTARGETSYSROOT
@@ -476,7 +558,7 @@ install_gstreamer_glib()
 	rm $SDKTARGETSYSROOT/$glib_2_0_package_name
     fi
     libffi_package="$(find $ROOT_DIR -iname libffi.tgz)"
-    libffi_lib="$(find $SDKTARGETSYSROOT -iname libffi*)"
+    libffi_lib="$(find $SDKTARGETSYSROOT -iname libffi.pc)"
     if [ ! -z "${libffi_package}" ] && [  -z "${libffi_lib}" ]; then
         echo -e "Copying libffi headers and libraries\n" 2>&1 | tee -a $LOG_FILE
         cd $SDKTARGETSYSROOT
@@ -496,19 +578,53 @@ install_gstreamer_glib()
         tar -xf $wayland_package_name
         rm $SDKTARGETSYSROOT/$wayland_package_name
     fi
-    pcreposix_package="$(find $ROOT_DIR -iname additionial_libs.tgz)"
+    wayland_protocols_package="$(find $ROOT_DIR -iname wayland_protocols.tgz)"
+    wayland_protocols_pkgconfig="$(find $SDKTARGETSYSROOT -iname wayland-protocols.pc)"
+    if [ -z "${wayland_protocols_pkgconfig}" ]; then
+        echo -e "Copying wayland protocols\n" 2>&1 | tee -a $LOG_FILE
+        cd $SDKTARGETSYSROOT
+        cp -u $wayland_protocols_package $SDKTARGETSYSROOT/usr/share/
+        wayland_protocols_package_name=$(basename "$wayland_protocols_package")
+	cd usr/share
+        tar -xf $wayland_protocols_package_name
+	find $SDKTARGETSYSROOT -iname wayland-protocols.pc
+        rm $SDKTARGETSYSROOT/usr/share/$wayland_protocols_package_name
+    fi
+    glm_package="$(find $ROOT_DIR -iname glm.tgz)"
+    glm_pkgconfig="$(find $SDKTARGETSYSROOT -iname glm.pc)"
+    if [ -z "${glm_pkgconfig}" ]; then
+        echo -e "Copying glm\n" 2>&1 | tee -a $LOG_FILE
+        cd $SDKTARGETSYSROOT
+        cp -u $glm_package $SDKTARGETSYSROOT
+        glm_package_name=$(basename "$glm_package")
+	echo -e "Untarring $glm_package_name"
+        tar -xf $glm_package_name
+        rm $SDKTARGETSYSROOT/$glm_package_name
+    fi
+    vulkan_loader_package="$(find $ROOT_DIR -iname vulkan_loader.tgz)"
+    vulkan_loader_pkgconfig="$(find $SDKTARGETSYSROOT -iname vulkan.pc)"
+    if [ -z "${vulkan_loader_pkgconfig}" ]; then
+        echo -e "Copying vulkan_loader\n" 2>&1 | tee -a $LOG_FILE
+        cd $SDKTARGETSYSROOT
+        cp -u $vulkan_loader_package $SDKTARGETSYSROOT
+        vulkan_loader_package_name=$(basename "$vulkan_loader_package")
+        echo -e "Untarring $vulkan_loader_package_name"
+        tar -xf $vulkan_loader_package_name
+        rm $SDKTARGETSYSROOT/$vulkan_loader_package_name
+    fi
+    pcreposix_package="$(find $ROOT_DIR -iname additional_libs.tgz)"
     pcreposix_lib="$(find $SDKTARGETSYSROOT -iname libpcrecpp.so)"
     if [ ! -z "${pcreposix_package}" ] && [ -z "${pcreposix_lib}" ]; then
-	echo -e "Copying additionial_libs \n" 2>&1 | tee -a $LOG_FILE
+	echo -e "Copying additional_libs \n" 2>&1 | tee -a $LOG_FILE
 	cd $SDKTARGETSYSROOT
 	cp $pcreposix_package $SDKTARGETSYSROOT
 	pcreposix_package_name=$(basename "$pcreposix_package")
 	tar -xf $pcreposix_package_name
-	cd $SDKTARGETSYSROOT/additionial_libs/usr/lib
+	cd $SDKTARGETSYSROOT/additional_libs/usr/lib
 	cp * $SDKTARGETSYSROOT/usr/lib/
-	cd $SDKTARGETSYSROOT/additionial_libs/lib
+	cd $SDKTARGETSYSROOT/additional_libs/lib
 	cp * $SDKTARGETSYSROOT/lib
-	rm -rf $SDKTARGETSYSROOT/additionial_libs
+	rm -rf $SDKTARGETSYSROOT/additional_libs
 	rm $SDKTARGETSYSROOT/$pcreposix_package_name
     fi
     cd $ROOT_DIR
@@ -535,6 +651,37 @@ setup_CURL()
 	cp src/curl $SYSROOT/usr/bin
  	cp lib/.libs/libcurl.so.4.7.0 $SYSROOT/usr/lib/
         cd ${ROOT_DIR}
+    fi
+}
+
+# Function: compile_assimp
+# Description: Compiles assimp library and installs it in sysroot.
+# Parameters: None
+# Return: None
+compile_assimp()
+{
+    echo -e "Checking if assimp is installed in SDK\n"
+    echo "$SYSROOT/usr/lib/pkgconfig/assimp.pc"
+    if [  -f "$SYSROOT/usr/lib/pkgconfig/assimp.pc" ]; then
+	echo -e "\e[1;42m COMPILE assimp : SKIPPED \e[0m \n" 2>&1 | tee -a $LOG_FILE
+    else
+	rm -rf assimp
+	git clone $SRC_ASSIMP >> $LOG_FILE 2>&1
+	cd assimp
+	git checkout 8f0c6b04b2257a520aaab38421b2e090204b69df  >> $LOG_FILE 2>&1
+	mkdir build
+	cd build 
+	cmake .. \
+	    -DCMAKE_INSTALL_PREFIX=/usr \
+	    -DBUILD_SHARED_LIBS=ON \
+	    -DASSIMP_BUILD_TESTS=OFF \
+	    -DASSIMP_BUILD_ASSIMP_TOOLS=OFF \
+	    -DASSIMP_BUILD_SAMPLES=OFF \
+	    -DASSIMP_NO_EXPORT=ON \
+	    -DASSIMP_BUILD_ZLIB=ON  >> $LOG_FILE 2>&1
+        make -j$(nproc) >> $LOG_FILE 2>&1
+	DESTDIR=${SYSROOT} make install >> $LOG_FILE 2>&1
+	cd ${ROOT_DIR}
     fi
 }
 
@@ -592,24 +739,24 @@ compile_JSONRPC()
              rm "$file"
         done
 	echo -e "Copying libs and header for JSONRPC to sysroot folder" 2>&1 | tee -a $LOG_FILE
-        sudo cp build/lib/libjsonrpccpp-*.so.1.3.0 $SYSROOT/usr/lib
-        sudo cp -r src/jsonrpccpp $SYSROOT/usr/include/
-        sudo ln -s $SYSROOT/usr/lib/libjsonrpccpp-server.so.1.3.0 $SYSROOT/usr/lib/libjsonrpccpp-server.so
-        sudo ln -s $SYSROOT/usr/lib/libjsonrpccpp-client.so.1.3.0 $SYSROOT/usr/lib/libjsonrpccpp-client.so
-        sudo ln -s $SYSROOT/usr/lib/libjsonrpccpp-common.so.1.3.0 $SYSROOT/usr/lib/libjsonrpccpp-common.so
+        cp build/lib/libjsonrpccpp-*.so.1.3.0 $SYSROOT/usr/lib
+        cp -r src/jsonrpccpp $SYSROOT/usr/include/
+        ln -s $SYSROOT/usr/lib/libjsonrpccpp-server.so.1.3.0 $SYSROOT/usr/lib/libjsonrpccpp-server.so
+        ln -s $SYSROOT/usr/lib/libjsonrpccpp-client.so.1.3.0 $SYSROOT/usr/lib/libjsonrpccpp-client.so
+        ln -s $SYSROOT/usr/lib/libjsonrpccpp-common.so.1.3.0 $SYSROOT/usr/lib/libjsonrpccpp-common.so
     fi
     if [ ! -f "$SYSROOT/usr/include/jsonrpccpp" ]; then
-	sudo mkdir -p $SYSROOT/usr/include/jsonrpccpp/server/connectors
-	sudo mkdir -p $SYSROOT/usr/include/jsonrpccpp/client/connectors
-	sudo mkdir -p $SYSROOT/usr/include/jsonrpccpp/common
-	sudo cp build/gen/jsonrpccpp/common/jsonparser.h $SYSROOT/usr/include/ 
-	sudo cp build/gen/jsonrpccpp/common/jsonparser.h $SYSROOT/usr/include/jsonrpccpp/common/
-	sudo cp src/jsonrpccpp/common/*.h $SYSROOT/usr/include/jsonrpccpp/common
-        sudo cp src/jsonrpccpp/*.h $SYSROOT/usr/include/jsonrpccpp/
-        sudo cp src/jsonrpccpp/server/*.h $SYSROOT/usr/include/jsonrpccpp/server
-        sudo cp src/jsonrpccpp/server/connectors/*.h $SYSROOT/usr/include/jsonrpccpp/server/connectors/
-        sudo cp src/jsonrpccpp/client/*.h $SYSROOT/usr/include/jsonrpccpp/client
-        sudo cp src/jsonrpccpp/client/connectors/*.h $SYSROOT/usr/include/jsonrpccpp/client/connectors/
+	mkdir -p $SYSROOT/usr/include/jsonrpccpp/server/connectors
+	mkdir -p $SYSROOT/usr/include/jsonrpccpp/client/connectors
+	mkdir -p $SYSROOT/usr/include/jsonrpccpp/common
+	cp build/gen/jsonrpccpp/common/jsonparser.h $SYSROOT/usr/include/ 
+	cp build/gen/jsonrpccpp/common/jsonparser.h $SYSROOT/usr/include/jsonrpccpp/common/
+	cp src/jsonrpccpp/common/*.h $SYSROOT/usr/include/jsonrpccpp/common
+        cp src/jsonrpccpp/*.h $SYSROOT/usr/include/jsonrpccpp/
+        cp src/jsonrpccpp/server/*.h $SYSROOT/usr/include/jsonrpccpp/server
+        cp src/jsonrpccpp/server/connectors/*.h $SYSROOT/usr/include/jsonrpccpp/server/connectors/
+        cp src/jsonrpccpp/client/*.h $SYSROOT/usr/include/jsonrpccpp/client
+        cp src/jsonrpccpp/client/connectors/*.h $SYSROOT/usr/include/jsonrpccpp/client/connectors/
     fi
     cd ../
 }
@@ -620,7 +767,7 @@ compile_JSONRPC()
 # Return: None
 clone_tdk()
 {
-	if [  ! -d "tdkv" ];then
+	if [  ! -d $DIR_TDK ];then
 	    git clone $SRC_TDK >> $LOG_FILE 2>&1
 	    existing_directory_use=false
 	else
@@ -751,9 +898,9 @@ compile_skeleton_libraries()
     COMPILE_SKELETON=false
     COMPILE_DUMMY_LIBS="WiFiHal PowerMgrHal DeepSleepHal DSHal IARMBus HdmiCec Bluetooth MfrHal WesterosHal Essos AudioCaptureMgr Graphics AAMP"
     COMPILE_DUMMY_LIBS="$COMPILE_DUMMY_LIBS common_utilities rdklogger DeviceSettings IARMBus libsyswrapper NetSrvMgr "
-    COMPILE_DUMMY_LIBS="rfcapi"
+    COMPILE_DUMMY_LIBS="cJSON common_utilities libsyswrapper rdklogger Graphics WesterosHal Essos wdmp rfcapi DSHal"
     if [[ $FNCS_PACKAGE == "TRUE" ]];then
-	COMPILE_DUMMY_LIBS="Graphics Essos DSHal"
+	COMPILE_DUMMY_LIBS="Graphics WesterosHal Essos DSHal"
     fi
     got_versions=false
     if ! $got_versions;then
@@ -761,8 +908,11 @@ compile_skeleton_libraries()
          get_component_versions
          got_versions=true
     fi
-    clone_and_move $SRC_IARMBUS $iarmbus_srcrev "iarmbus" "core/include"
-    clone_and_move $SRC_IARMBUS $iarmbus_srcrev "iarmbus" "core"
+    mkdir -p ${TDK_SOURCE_DIR}/RDK_Source
+    if [[ $COMPILE_DUMMY_LIBS == "*IARMBus*" ]];then
+        clone_and_move $SRC_IARMBUS $iarmbus_srcrev "iarmbus" "core/include"
+        clone_and_move $SRC_IARMBUS $iarmbus_srcrev "iarmbus" "core"
+    fi
     COMPILE_SKELETON=true
     for COMPONENT in $COMPILE_DUMMY_LIBS; do
         if [[ $COMPONENT == "WiFiHal" ]];then
@@ -862,10 +1012,12 @@ compile_skeleton_libraries()
         if [[ $COMPONENT == "WesterosHal" ]];then
             if [[ $PLATFORM == "BROADCOM" ]];then
                 clone_and_move $SRC_WESTEROS $SRC_WESTEROS_HAL_HEADER_REVISION "WesterosHal_BRCM" "WESTEROS_LIB_VERSION" "brcm/westeros-gl"
-		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/* $SYSROOT/usr/include/
+		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/GLES2 $SYSROOT/usr/include/
+		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/wayland-egl.h $SYSROOT/usr/include/
             else
                 clone_and_move $SRC_WESTEROS $SRC_WESTEROS_HAL_HEADER_REVISION "WesterosHal_DRM" "WESTEROS_LIB_VERSION" "drm/westeros-gl"
-		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/* $SYSROOT/usr/include/
+		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/GLES2 $SYSROOT/usr/include/
+		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/wayland-egl.h $SYSROOT/usr/include/
             fi
         fi
         if [[ $COMPONENT == "AudioCaptureMgr" ]];then
@@ -948,10 +1100,16 @@ compile_skeleton_libraries()
 	    sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/tsb/api/*.h $SYSROOT/usr/include/
             sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/support/aampmetrics/*.h $SYSROOT/usr/include/
             sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/support/aampabr/*.h $SYSROOT/usr/include/
-	    git clone $SRC_CJSON
-	    sudo mkdir -p $SYSROOT/usr/include/cjson
-	    sudo cp cJSON/*.h $SYSROOT/usr/include/cjson
-	    git clone $SRC_UTIL_LINUX
+	fi
+	if [[ $COMPONENT == "cJSON" ]];then
+	    cd ${TDK_SOURCE_DIR}/RDK_Source/
+	    git clone $SRC_CJSON >> $LOG_FILE 2>&1
+	    mkdir -p $SYSROOT/usr/include/cjson
+	    cp cJSON/*.h $SYSROOT/usr/include/cjson
+	fi
+	if [[ $COMPONENT == "Util_linux" ]];then
+            cd ${TDK_SOURCE_DIR}/RDK_Source/
+	    git clone $SRC_UTIL_LINUX >> $LOG_FILE 2>&1
 	    sudo mkdir -p $SYSROOT/usr/include/uuid
 	    sudo cp util-linux/libuuid/src/uuid.h $SYSROOT/usr/include/uuid  
             cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
@@ -1021,6 +1179,23 @@ compile_skeleton_libraries()
 	    make
 	    mv *.so* $SYSROOT/usr/lib/
 	fi
+	if [[ $COMPONENT == "wdmp" ]];then
+	    echo "Compiling wdmp"
+	    git clone $SRC_WDMP_C wdmp-c_source >> $LOG_FILE 2>&1
+            cd wdmp-c_source/
+            git checkout f9f687b6b4b10c2b72341e792a64334f0a409848 >> $LOG_FILE 2>&1
+            git clone $SRC_META_RDK_VIDEO
+            if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
+                cd meta-rdk-video
+                git checkout $MIDDLEWARE_VERSION
+                cd ..
+            fi
+            cp meta-rdk-video/recipes-support/wdmp-c/files/wdmp-c.patch .
+            patch -p1 < wdmp-c.patch
+            mkdir -p "$SYSROOT/usr/include/wdmp-c"
+            find . -type f -name "wdmp-c.h" -exec cp {} "$SYSROOT/usr/include/wdmp-c" \;
+            cd ..; rm -rf wdmp-c_source/
+	fi
 	if [[ $COMPONENT == "rfcapi" ]];then
 	    echo "Compiling rfcapi"
 	    cd ${TDK_SOURCE_DIR}/RDK_Source
@@ -1037,19 +1212,296 @@ compile_skeleton_libraries()
     rm -rf  ${TDK_SOURCE_DIR}/RDK_Source
 }
 
+parse_vkmark_bb() {
+    local bbfile="$1"
+
+    if [ ! -f "$bbfile" ]; then
+        echo "Error: $bbfile not found"
+        return 1
+    fi
+
+    # Extract SRC_URI git URL
+    local repo
+    repo=$(grep -E '^SRC_URI\s*=' "$bbfile" \
+        | sed -E 's/.*git:\/\/([^;"]+).*/https:\/\/\1/')
+
+    # Extract SRCREV (handles ?= or =)
+    local srcrev
+    srcrev=$(grep -E '^SRCREV' "$bbfile" \
+        | sed -E 's/.*"([^"]+)".*/\1/')
+
+    # Export variables
+    SRC_VKMARK="${repo}"
+    SRCREV_VKMARK="${srcrev}"
+
+    export SRC_VKMARK
+    export SRCREV_VKMARK
+
+    echo "SRC_VKMARK=\"${SRC_VKMARK}\""
+    echo "SRCREV_VKMARK=\"${SRCREV_VKMARK}\""
+}
+
+parse_project_line() {
+    local line="$1"
+
+    local name
+    local revision
+    local remote
+    local tag
+    local repo_url
+    local repo_short_name
+
+    # Extract attributes
+    name=$(echo "$line" | sed -n 's/.*name="\([^"]*\)".*/\1/p')
+    revision=$(echo "$line" | sed -n 's/.*revision="\([^"]*\)".*/\1/p')
+    remote=$(echo "$line" | sed -n 's/.*remote="\([^"]*\)".*/\1/p')
+
+    # Normalize revision
+    case "$revision" in
+        refs/tags/*)
+            tag="${revision#refs/tags/}"
+            ;;
+        refs/heads/*)
+            tag="${revision#refs/heads/}"
+            ;;
+        *)
+            tag="$revision"
+            ;;
+    esac
+
+    # Repo short name (last part after /)
+    repo_short_name="${name##*/}"
+
+    # Build repo URL
+    case "$remote" in
+        rdkcentral)
+            repo_url="https://github.com/rdkcentral/${repo_short_name}"
+            ;;
+        cmf)
+            repo_url="https://code.rdkcentral.com/r/${name}"
+            ;;
+        *)
+            echo "Unknown remote: $remote"
+            return 1
+            ;;
+    esac
+
+    # Return pipe-separated values
+    echo "${repo_short_name}|${tag}|${repo_url}"
+}
+
+compile_vkmark()
+{
+    echo -e "Compiling vkmark\n"
+    cd "$ROOT_DIR"
+    rm -rf vkmark
+
+    vkmark_sourceCode_set="FALSE"
+
+    if [[ -z "$PLATFORM" ]];then
+	echo "NO PLATFORM is selected for vkmark compilation"
+	echo "Setting PLATFORM to RPI"
+	PLATFORM="RPI"
+    fi
+
+    echo "Compiling vkmark for $PLATFORM platform"
+
+    ############################################
+    # Platform Vendor Manifest
+    ############################################
+
+    case "$PLATFORM" in
+        RPI)
+            VENDOR_MANIFEST_REPO=$RPI_VENDOR_MANIFEST_REPO
+            VENDOR_VERSION="$RPI_VENDOR_VERSION"
+	    SOC_OSS_REPO="meta-oss-vendor-raspberrypi"
+            ;;
+        REALTEK)
+            VENDOR_MANIFEST_REPO=$REALTEK_VENDOR_MANIFEST_REPO
+            VENDOR_VERSION="$REALTEK_VENDOR_VERSION"
+	    SOC_OSS_REPO="meta-rdk-soc-realtek"
+            ;;
+	BROADCOM)
+	    VENDOR_MANIFEST_REPO=$BROADCOM_VENDOR_MANIFEST_REPO
+            VENDOR_VERSION="$BROADCOM_VENDOR_VERSION"
+            SOC_OSS_REPO="meta-vendor-rdke-broadcom-oss"
+            ;;
+        *)
+            echo "Unsupported platform: $PLATFORM"
+	    echo "PLATFORM needed for vkmark compilation"
+            return 1
+            ;;
+    esac
+
+    ############################################
+    # Clone Vendor Manifest
+    ############################################
+
+    git clone $VENDOR_MANIFEST_REPO.git >> "$LOG_FILE" 2>&1
+    REPO_NAME="${VENDOR_MANIFEST_REPO##*/}"
+    VENDOR_MANIFEST_REPO=$REPO_NAME
+    cd "$VENDOR_MANIFEST_REPO" || return 1
+
+    if [[ "$VENDOR_VERSION" != "default" && -n "$VENDOR_VERSION" ]]; then
+        git checkout "$VENDOR_VERSION" >> "$LOG_FILE" 2>&1
+    fi
+
+    ############################################
+    # Parse OSS Vendor Repo + Tag
+    ############################################
+
+    oss_vendor_line=$(grep -r --exclude-dir=.git --include="*.xml" "$SOC_OSS_REPO" .)
+    result=$(parse_project_line "$oss_vendor_line")
+
+    OSS_VENDOR_REPO_NAME="${result%%|*}"
+    tmp="${result#*|}"
+    OSS_VENDOR_REPO_TAG="${tmp%%|*}"
+    OSS_VENDOR_REPO_URL="${result##*|}"
+
+    cd ..
+    rm -rf "$VENDOR_MANIFEST_REPO"
+
+    ############################################
+    # Clone OSS Vendor Repo
+    ############################################
+
+    git clone ${OSS_VENDOR_REPO_URL}.git >> "$LOG_FILE" 2>&1
+    cd "$OSS_VENDOR_REPO_NAME" 
+    git checkout "$OSS_VENDOR_REPO_TAG" >> "$LOG_FILE" 2>&1
+
+    ############################################
+    # Locate vkmark Recipe
+    ############################################
+
+    vkmark_recipe_path=$(find . -iname vkmark_git.bb | head -n1)
+    echo "vkmark recipe: $vkmark_recipe_path"
+
+    parse_vkmark_bb "$vkmark_recipe_path"
+
+    bbdir=$(dirname "$vkmark_recipe_path")
+    cd "$bbdir" || return 1
+
+    ############################################
+    # Locate Patches
+    ############################################
+
+    patch_file=$(find . -iname "*.patch" | head -n1)
+
+    if [[ -n "$patch_file" ]]; then
+        vkmark_patches_dir=$(dirname "$patch_file")
+	cd $vkmark_patches_dir
+	vkmark_patches_dir=$(pwd)
+        echo "vkmark patches dir: $vkmark_patches_dir"
+    fi
+
+    cd "$ROOT_DIR"
+
+    ############################################
+    # Clone Upstream vkmark
+    ############################################
+
+    git clone "$SRC_VKMARK" >> "$LOG_FILE" 2>&1
+    cd vkmark || return 1
+    git checkout "$SRCREV_VKMARK" >> "$LOG_FILE" 2>&1
+
+    ############################################
+    # Apply Patches (if any)
+    ############################################
+
+    if [[ ! -z "$vkmark_patches_dir" ]]; then
+        cp $vkmark_patches_dir/*.patch . 2>/dev/null
+        rm -rf "$ROOT_DIR/$OSS_VENDOR_REPO_NAME"
+
+	# Collect any patch files; avoid iterating on a literal "*.patch" when none exist
+        shopt -s nullglob
+        patches=( *.patch )
+        shopt -u nullglob
+        if [ ${#patches[@]} -gt 0 ]; then
+            for p in "${patches[@]}"; do
+                echo "Applying $p"
+                patch -p1 < "$p" >> "$LOG_FILE" 2>&1
+            done
+            echo "vkmark source code patched"
+        fi
+        vkmark_sourceCode_set="TRUE"
+    else
+        vkmark_sourceCode_set="TRUE"
+    fi
+
+    ############################################
+    # Copy Vulkan headers into sysroot
+    ############################################
+    git clone $SRC_VULKAN vulkan_source >> $LOG_FILE 2>&1
+    cd vulkan_source/
+    vulkan_srcrev="95a13d7b7118d3824f0ef236bb0438d9d51f3634"
+    git checkout $vulkan_srcrev >> $LOG_FILE 2>&1
+    cp -r include/vulkan $SYSROOT/usr/include/
+    cp -r include/vk_video $SYSROOT/usr/include/
+    mkdir -p $SYSROOT/usr/share/vulkan/registry
+    cp registry/vk.xml $SYSROOT/usr/share/vulkan/registry/
+    cd ..
+    rm -rf vulkan_source
+
+    ############################################
+    # Build
+    ############################################
+
+    if [[ "$vkmark_sourceCode_set" == "TRUE" ]]; then
+
+        meson build \
+            --buildtype=release \
+            --prefix=/usr \
+            -Dwayland=true \
+            -Dxcb=false \
+            -Dkms=false >> "$LOG_FILE" 2>&1
+
+        ninja -C build >> "$LOG_FILE" 2>&1
+
+        vkmark_bin=$(find build -iname vkmark)
+
+        if [[ -n "$vkmark_bin" ]]; then
+            echo -e "\e[1;42m VKMARK COMPILATION : SUCCESS \e[0m" | tee -a "$LOG_FILE"
+
+            mkdir -p vkmark_bins/usr/bin
+            cp build/src/vkmark vkmark_bins/usr/bin
+
+            mkdir -p vkmark_bins/usr/lib/vkmark
+            cp build/src/*.so vkmark_bins/usr/lib/vkmark/
+	    #Copy libassimp as well
+	    cp $SYSROOT/usr/lib/libassimp.so.5.0.0 vkmark_bins/usr/lib/
+
+            mkdir -p vkmark_bins/usr/share/vkmark
+            cp -r data/models vkmark_bins/usr/share/vkmark/
+            cp -r data/shaders vkmark_bins/usr/share/vkmark/
+            cp -r data/textures vkmark_bins/usr/share/vkmark/
+
+
+            cd vkmark_bins
+            tar -cjf vkmark_${PLATFORM}.tgz *
+            cp vkmark_${PLATFORM}.tgz "$ROOT_DIR"
+
+            cd "$ROOT_DIR"
+            rm -rf vkmark
+	    vkmark_compiled="TRUE"
+        else
+            echo -e "\e[1;41m VKMARK COMPILATION : FAILURE \e[0m" | tee -a "$LOG_FILE"
+        fi
+    fi
+}
+
 compile_tdkv()
 {
     echo -e "Configuring TDK with toolchain \n"
     echo -e "TDK_SOURCE_DIR : $TDK_SOURCE_DIR"
     cd ${TDK_SOURCE_DIR}
-    sed -i '/^PKG_CHECK_MODULES/d' configure.ac
+    sed -i '/PKG_CHECK_MODULES/d' configure.ac
     sudo autoreconf -i >> $LOG_FILE 2>&1
     if [[ $PLATFORM == "RPI" ]];then
 	CONFIGURE_OPTIONS_VA=""
 	FLAGS_VA=""
     fi
     CONF_DEVICE=CONFIGURE_OPTIONS_$DEVICE_TYPE
-    CONF_OPTIONS="${!CONF_DEVICE} $DISTRO_CONFIGURE $CONFIGURE_OPTIONS_VA $CONFIGURE_OPTIONS_HAL $CONFIGURE_OPTIONS_COMPONENTS"
+    CONF_OPTIONS="${!CONF_DEVICE} $DISTRO_CONFIGURE $CONFIGURE_OPTIONS_VA  $CONFIGURE_OPTIONS_COMPONENTS"
     if [[ $FNCS_PACKAGE == "TRUE" ]];then
         CONF_OPTIONS=" --enable-fncsPackage --enable-tdkgraphics "
 	echo "FNCS Package compilation enabled"
@@ -1108,7 +1560,7 @@ compile_tdkv()
         git clone $SRC_META_RDK_VIDEO
 	if [[ "$MIDDLEWARE_VERSION" != "DEFAULT" ]];then
 	    cd meta-rdk-video
-            git checkout $MIDDDLEWARE_VERSION
+            git checkout $MIDDLEWARE_VERSION
 	    cd ..
         fi
 	cp meta-rdk-video/recipes-support/wdmp-c/files/wdmp-c.patch .
@@ -1135,7 +1587,7 @@ compile_tdkv()
 
 modify_tdk_files()
 {
-    cd $DIR_TDK
+    cd $ROOT_DIR/$DIR_TDK
     if ! grep -q  "TDK_OFFPLANT" tdk.service;then
         sed -e "s@\[Service\]@\[Service\]\nEnvironment=\"TDK_OFFPLANT=TRUE\"\nExecStartPre=\/bin\/sh -c \'touch /tmp/estbconfigsettings.bin\'\nExecStartPre=\/bin\/sh -c \'touch /tmp/ip_acquired\'\nExecStartPost=\/bin\/sh -c \'touch /tmp/estb_ipv4\'@" -i tdk.service
     fi
@@ -1164,31 +1616,38 @@ pack_tdkv()
 	cd $ROOT_DIR
     fi
     if ls waymetric_* 1>/dev/null 2>&1;then
-            echo -e "Waymetric binary is found"
-            if [[ $PLATFORM == "AMLOGIC" ]];then
-                    cp waymetric_aml TDK_Package/usr/bin
-                    cd TDK_Package/usr/bin
-                    mv waymetric_aml waymetric
-                    chmod +x waymetric
-                    echo -e "Waymetric binary is copied"
-                    cd $ROOT_DIR
-            fi
-            if [[ $PLATFORM == "BROADCOM" ]];then
-                    cp waymetric_bcm TDK_Package/usr/bin
-                    cd TDK_Package/usr/bin
-                    mv waymetric_bcm waymetric
-                    chmod +x waymetric
-                    echo -e "Waymetric binary is copied"
-                    cd $ROOT_DIR
-            fi
-            if [[ $PLATFORM == "REALTEK" ]];then
-                    cp waymetric_rtk TDK_Package/usr/bin
-                    cd TDK_Package/usr/bin
-                    mv waymetric_rtk waymetric
-                    chmod +x waymetric
-                    echo -e "Waymetric binary is copied"
-                    cd $ROOT_DIR
-            fi
+        echo -e "Waymetric binary is found"
+        if [[ $PLATFORM == "AMLOGIC" ]];then
+            cp waymetric_aml TDK_Package/usr/bin
+            cd TDK_Package/usr/bin
+            mv waymetric_aml waymetric
+            chmod +x waymetric
+            echo -e "Waymetric binary is copied"
+            cd $ROOT_DIR
+        fi
+        if [[ $PLATFORM == "BROADCOM" ]];then
+            cp waymetric_bcm TDK_Package/usr/bin
+            cd TDK_Package/usr/bin
+            mv waymetric_bcm waymetric
+            chmod +x waymetric
+            echo -e "Waymetric binary is copied"
+            cd $ROOT_DIR
+        fi
+        if [[ $PLATFORM == "REALTEK" ]];then
+            cp waymetric_rtk TDK_Package/usr/bin
+            cd TDK_Package/usr/bin
+            mv waymetric_rtk waymetric
+            chmod +x waymetric
+            echo -e "Waymetric binary is copied"
+            cd $ROOT_DIR
+        fi
+    fi
+    if [[ $vkmark_compiled == "TRUE" ]];then
+	cp $ROOT_DIR/vkmark_$PLATFORM.tgz TDK_Package/
+	cd TDK_Package/
+	tar -xvf vkmark_$PLATFORM.tgz >> $LOG_FILE 2>&1
+	cd $ROOT_DIR
+	rm vkmark_$PLATFORM.tgz
     fi
     if [[ $FNCS_PACKAGE != "TRUE" ]];then
         mkdir -p TDK_Package/var/TDK/scripts
@@ -1315,17 +1774,9 @@ pack_tdkv()
     formatted_date=$(echo "$system_date" | awk '{ printf "%02d%02d%04d_%02d%02d%02d\n", $3, (index("JanFebMarAprMayJunJulAugSepOctNovDec", $2)+2)/3, $6, substr($4,1,2), substr($4,4,2), substr($4,7,2) }')
 
     if [ -z $PLATFORM ];then
-        if [[ $FNCS_PACKAGE == "TRUE" ]];then
-	     PACKAGE_NAME="Generic_TDK_Package_FNCS_${IMAGE_TYPE}_${formatted_date}.tar.gz"
-	else
-	     PACKAGE_NAME="Generic_TDK_Package_${IMAGE_TYPE}_${formatted_date}.tar.gz"
-	fi
+	PACKAGE_NAME="Generic_TDK_Package_${IMAGE_TYPE}_${formatted_date}.tar.gz"
     else
-        if [[ $FNCS_PACKAGE == "TRUE" ]];then
-	     PACKAGE_NAME="TDK_Package_FNCS_${PLATFORM}_${IMAGE_TYPE}_${formatted_date}.tar.gz"
-        else
-             PACKAGE_NAME="TDK_Package_${PLATFORM}_${IMAGE_TYPE}_${formatted_date}.tar.gz"
-        fi	     
+	PACKAGE_NAME="TDK_Package_${PLATFORM}_${IMAGE_TYPE}_${formatted_date}.tar.gz"
     fi
     tar -cvzf $PACKAGE_NAME -C TDK_Package . >> $LOG_FILE 2>&1
     if [ $? -eq 0 ]; then
@@ -1431,11 +1882,15 @@ if [ $SKIP_PACKAGES != "TRUE" ];then
     update_m4
     compile_XKBCOMMON
     sleep_bar
-    install_gstreamer_glib
+    compile_assimp
+    sleep_bar
+    install_packages
     sleep_bar
 fi
 clone_tdk
 compile_skeleton_libraries
+compile_vkmark
+sleep_bar
 compile_tdkv
 sleep_bar
 modify_tdk_files
