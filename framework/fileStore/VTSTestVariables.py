@@ -52,7 +52,7 @@ VTS_Binary_basePath = " /VTS_Package/"
 
 # Device Settings HAL Test Configurations
 DeviceSettings_basePath = "device_settings/"
-DeviceSettings_binaryName = "hal_test_device_settings"
+DeviceSettings_binaryName = "hal_test_dshal"
 
 VideoDevice_binaryConfig = "Source_VideoDevice.yaml"
 VideoDevice_L1_List = []
@@ -133,14 +133,14 @@ Display_L2_List = []
 
 # RMF Audio Capture HAL test Configurations
 rmfAudioCapture_basePath = "rmf_audio_capture/"
-rmfAudioCapture_binaryName = "hal_test_rmf_audio_capture"
+rmfAudioCapture_binaryName = "hal_test_rmfAudioCapture"
 rmfAudioCapture_binaryConfig = "rmfAudioCaptureAuxNotSupported.yaml"
 rmfAudioCapture_L1_List = []
 rmfAudioCapture_L2_List = []
 
 # HDMICEC HAL test configurations
 HDMICEC_basePath = "hdmi_cec/"
-HDMICEC_binaryName = "hal_test_hdmi_cec"
+HDMICEC_binaryName = "hal_test_RCECHal"
 HDMICEC_binaryConfig = "source_hdmiCEC.yml"
 HDMICEC_L1_List = []
 HDMICEC_L1_SkipTestCaseList = {}
@@ -152,7 +152,7 @@ HDMICEC_L2_SkipTestCaseList_RPI["L2_ValidateLogicalAddressUnavailability_source"
 
 # PowerManager HAL test configurations
 PowerManager_basePath = "power_manager/"
-PowerManager_binaryName = "hal_test_power_manager"
+PowerManager_binaryName = "hal_test_iarmmgrs-power-hal"
 PowerManager_binaryConfig = "source_powerManager.yaml"
 PowerManager_L1_List = []
 PowerManager_L2_List = []
@@ -165,7 +165,7 @@ PowerManager_L2_SkipTestCaseList["L2_SetAndGetPowerState"] = "Testcase includes 
 
 # DeepSleep HAL test configurations
 DeepSleep_basePath = "deepsleep_manager/"
-DeepSleep_binaryName = "hal_test_deepsleep_manager"
+DeepSleep_binaryName = "hal_test_iarmmgrs-deepsleep-hal"
 DeepSleep_binaryConfig = "deepsleepmanagerExtendedEnumsNotSupported.yaml"
 DeepSleep_L1_List = []
 DeepSleep_L2_List = []
