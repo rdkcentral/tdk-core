@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>a356c3ac-b329-41c9-b272-71ce99b5ad67</moduleId>
+        <!-- Module name -->
+        <moduleName>TelcoVoiceManager</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/rdklogs/logs]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[/rdklogs/logs]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="35fef9bf-bf0c-471c-8d4a-4723a5af6be2" name="TelcoVoiceManager_DoNothing">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>b937520f-81ab-41e1-aef9-f4b57b84f8ad</id>
+                <name>TelcoVoiceManager_DoNothing</name>
+                <funName>TelcoVoiceManager_DoNothing</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

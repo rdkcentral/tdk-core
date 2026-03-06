@@ -8,7 +8,7 @@
         <!-- Category of the module -->
         <category>RDKV_RDKSERVICE</category>
         <!-- Execution time out of module -->
-        <executionTimeOut>1</executionTimeOut>
+        <executionTimeOut>20</executionTimeOut>
         <!-- Test Group of the module -->
         <testGroup>Certification</testGroup>
         <!-- Logs File Names of module -->
@@ -19,16 +19,16 @@
         <functions>
             <function id="64fc22d6-6fe9-4aa4-bd75-46aa02225974" name="rdkv_media_checkProcEntry">
                 <parameters>
+                    <parameter id="236c8ebc-7733-4902-858e-9956790890bf" parameterName="mode" parameterType="STRING" range="a-z"/>
+                    <parameter id="4ad3e832-718b-4f00-b381-96ec04ce91ce" parameterName="credentials" parameterType="STRING" range="a-z"/>
                     <parameter id="c9090bd6-5c7e-45e8-92a1-b61e1f52f2de" parameterName="sshMethod" parameterType="STRING" range="a-z"/>
                     <parameter id="2603d514-9015-4c72-b041-5c5ceaf06606" parameterName="validation_script" parameterType="STRING" range="a-z"/>
-                    <parameter id="4ad3e832-718b-4f00-b381-96ec04ce91ce" parameterName="credentials" parameterType="STRING" range="a-z"/>
-                    <parameter id="236c8ebc-7733-4902-858e-9956790890bf" parameterName="mode" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
             <function id="ce8dd598-8bef-414e-b2ce-ad7334e38c04" name="rdkv_media_readUIData">
                 <parameters>
-                    <parameter id="5d1534a0-9e7d-4741-8d51-4b24bc387c54" parameterName="dataXpath" parameterType="STRING" range="a-z"/>
                     <parameter id="4cd53bef-532e-4a16-8b8a-50f6d1315996" parameterName="elementExpandXpath" parameterType="STRING" range="a-z"/>
+                    <parameter id="5d1534a0-9e7d-4741-8d51-4b24bc387c54" parameterName="dataXpath" parameterType="STRING" range="a-z"/>
                     <parameter id="2637b9a0-3407-4b33-a954-da87eae904cc" parameterName="count" parameterType="INTEGER" range="0-60"/>
                 </parameters>
             </function>
@@ -37,8 +37,20 @@
                     <parameter id="d86f2e8a-b116-4701-baaa-6f39521e3d36" parameterName="realpath" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
+            <function id="09e9b49d-2bbc-4be4-90e2-c3eabc4789df" name="printDRMObservation">
+                <parameters>
+                    <parameter id="3cf89b0c-41f9-4827-8ad2-a5484c1522e5" parameterName="observe_duration" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="5e5abaff-caa5-407c-a711-08975cd9743a" parameterName="app_log_file" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
             <function id="2db7b81b-6015-4431-94ff-43203f8dee0f" name="rdkv_media_post_requisites">
                 <parameters/>
+            </function>
+            <function id="a4d131b0-2abb-4d7d-a619-8ea115d60ea0" name="rdkv_media_validate_drm_transition">
+                <parameters>
+                    <parameter id="eb2d080f-fbe7-437c-8815-e0d22903d623" parameterName="app_log_file" parameterType="STRING" range="a-z"/>
+                    <parameter id="dab4ea29-86b8-44ae-ad31-7fcc86770147" parameterName="transition_time" parameterType="INTEGER" range="0-100"/>
+                </parameters>
             </function>
             <function id="9a1033c6-273b-4e3a-98bd-187f6333d3f4" name="rdkv_media_pre_requisites">
                 <parameters/>
@@ -56,10 +68,52 @@
                 <primitivetestparameters/>
             </primitivetest>
             <primitivetest>
+                <id>31ba074c-1b3f-4656-a3ae-6c5aa4371bd8</id>
+                <name>rdkv_media_validate_drm_transition</name>
+                <funName>rdkv_media_validate_drm_transition</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6b93bc53-3b9c-4478-b329-aaad2f37e973</id>
+                        <parameterName>app_log_file</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>ae782c8f-a904-41dc-9a8f-ff9929a1bf42</id>
+                        <parameterName>transition_time</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
                 <id>348fc786-9d7e-4f36-80c1-8605d06f1abc</id>
                 <name>rdkv_media_post_requisites</name>
                 <funName>rdkv_media_post_requisites</funName>
                 <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>5143cc35-9c00-4b25-8a6c-de760bf17728</id>
+                <name>printDRMObservation</name>
+                <funName>printDRMObservation</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>86b48596-9613-45e3-8de4-e9fc2ef0513b</id>
+                        <parameterName>app_log_file</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>be450aee-f5e3-4ab7-a2cf-d3dbff6556f2</id>
+                        <parameterName>observe_duration</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-100</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
             </primitivetest>
             <primitivetest>
                 <id>ca8643f6-bd3e-4cef-b57b-e0d578c88bc0</id>

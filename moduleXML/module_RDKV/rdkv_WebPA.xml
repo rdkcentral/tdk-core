@@ -6,7 +6,7 @@
         <!-- Module name -->
         <moduleName>rdkv_WebPA</moduleName>
         <!-- Category of the module -->
-        <category>RDKV</category>
+        <category>RDKV_RDKSERVICE</category>
         <!-- Execution time out of module -->
         <executionTimeOut>1</executionTimeOut>
         <!-- Test Group of the module -->
@@ -17,6 +17,19 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
+            <function id="c1d2c1dd-dc60-49ea-b15b-c1aa7b4ef97b" name="integer_check">
+                <parameters>
+                    <parameter id="b096ecea-43f3-44fe-b010-14c19d551b20" parameterName="value" parameterType="STRING" range="A-Z"/>
+                    <parameter id="42d1c39e-da7d-4a1c-92af-c748b10adf0a" parameterName="threshold_value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="687342a1-f469-4ea6-a86f-db704ef21c78" name="webpa_deviceconfig_value">
+                <parameters>
+                    <parameter id="df06e735-186c-435d-adb0-c6760ca2a10e" parameterName="configKey" parameterType="STRING" range="a-z"/>
+                    <parameter id="2575c3b2-366e-4174-8d6d-4333463034b2" parameterName="basePath" parameterType="STRING" range="a-z"/>
+                    <parameter id="9f2b0f6b-3de6-4ec6-9d0f-c47e151fa42f" parameterName="configKey2" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
             <function id="2c2a25a3-6a12-4443-b24d-04b5435910d4" name="webpa_validate_set">
                 <parameters>
                     <parameter id="2e89d0d2-dd49-4429-b3e0-bf08b846c779" parameterName="AUTH_TOKEN" parameterType="STRING" range="a-z"/>
@@ -25,41 +38,28 @@
                     <parameter id="f517e7d0-a818-4bea-bd60-1a57bc1a864a" parameterName="testValue" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="d2e23770-a6f2-4bd1-9a27-976c407a177b" name="webpa_set">
-                <parameters>
-                    <parameter id="cf6c9ed6-2fe0-4653-92c8-92d6848708e6" parameterName="AUTH_TOKEN" parameterType="STRING" range="a-z"/>
-                    <parameter id="cc6b4abf-0c5f-4f13-aded-80547a768e53" parameterName="dataType" parameterType="INTEGER" range="0-10"/>
-                    <parameter id="0db31047-5f25-4737-ac48-8181d412cab6" parameterName="testValue" parameterType="STRING" range="a-z"/>
-                    <parameter id="63d37ce4-66c6-4930-9d18-b7ee126d54f8" parameterName="WEBPA_URL" parameterType="STRING" range="a-z"/>
-                    <parameter id="21ac3ec5-21fe-4238-b3fa-67a36338a6c2" parameterName="paramName" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="5319d56d-215a-4c23-8f28-3ba9e8a5dc40" name="webpa_get">
-                <parameters>
-                    <parameter id="0701eab8-3c62-4a7b-982e-8feed1d1db97" parameterName="AUTH_TOKEN" parameterType="STRING" range="a-z"/>
-                    <parameter id="93355427-1bf2-447e-9ca5-828875078855" parameterName="paramName" parameterType="STRING" range="a-z"/>
-                    <parameter id="755e1a86-ea7e-4287-8e16-f0ec7ceec6f9" parameterName="WEBPA_URL" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="687342a1-f469-4ea6-a86f-db704ef21c78" name="webpa_deviceconfig_value">
-                <parameters>
-                    <parameter id="9f2b0f6b-3de6-4ec6-9d0f-c47e151fa42f" parameterName="configKey2" parameterType="STRING" range="a-z"/>
-                    <parameter id="df06e735-186c-435d-adb0-c6760ca2a10e" parameterName="configKey" parameterType="STRING" range="a-z"/>
-                    <parameter id="2575c3b2-366e-4174-8d6d-4333463034b2" parameterName="basePath" parameterType="STRING" range="a-z"/>
-                </parameters>
+            <function id="00947129-71c4-4ba2-affb-b4c0917024a0" name="webpa_parodusstatuscheck">
+                <parameters/>
             </function>
             <function id="30187cb6-f553-4242-950d-55b25b10deb3" name="webpa_revert_parameter">
                 <parameters>
                     <parameter id="5c35ac74-ab76-4c87-89fb-0b0a929a2f4e" parameterName="paramName" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="00947129-71c4-4ba2-affb-b4c0917024a0" name="webpa_parodusstatuscheck">
-                <parameters/>
-            </function>
-            <function id="c1d2c1dd-dc60-49ea-b15b-c1aa7b4ef97b" name="integer_check">
+            <function id="d2e23770-a6f2-4bd1-9a27-976c407a177b" name="webpa_set">
                 <parameters>
-                    <parameter id="b096ecea-43f3-44fe-b010-14c19d551b20" parameterName="value" parameterType="STRING" range="A-Z"/>
-                    <parameter id="42d1c39e-da7d-4a1c-92af-c748b10adf0a" parameterName="threshold_value" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cc6b4abf-0c5f-4f13-aded-80547a768e53" parameterName="dataType" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="0db31047-5f25-4737-ac48-8181d412cab6" parameterName="testValue" parameterType="STRING" range="a-z"/>
+                    <parameter id="cf6c9ed6-2fe0-4653-92c8-92d6848708e6" parameterName="AUTH_TOKEN" parameterType="STRING" range="a-z"/>
+                    <parameter id="21ac3ec5-21fe-4238-b3fa-67a36338a6c2" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                    <parameter id="63d37ce4-66c6-4930-9d18-b7ee126d54f8" parameterName="WEBPA_URL" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="5319d56d-215a-4c23-8f28-3ba9e8a5dc40" name="webpa_get">
+                <parameters>
+                    <parameter id="93355427-1bf2-447e-9ca5-828875078855" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                    <parameter id="0701eab8-3c62-4a7b-982e-8feed1d1db97" parameterName="AUTH_TOKEN" parameterType="STRING" range="a-z"/>
+                    <parameter id="755e1a86-ea7e-4287-8e16-f0ec7ceec6f9" parameterName="WEBPA_URL" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
         </functions>

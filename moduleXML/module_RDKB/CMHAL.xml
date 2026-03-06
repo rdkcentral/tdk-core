@@ -17,58 +17,10 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="9e67867b-0ae6-4e54-940a-440fdffb424a" name="CMHAL_Reboot_Now">
-                <parameters/>
-            </function>
-            <function id="048e5103-f9c3-4480-b9eb-773097a9bc62" name="CMHAL_HTTP_Download">
-                <parameters/>
-            </function>
-            <function id="e07a1526-8337-493b-bdf8-b3644a4a0d42" name="CMHAL_FWupdateAndFactoryReset">
-                <parameters/>
-            </function>
-            <function id="7663a226-f0b6-4cff-a94f-668e937fb752" name="CMHAL_SetStartFreq">
-                <parameters>
-                    <parameter id="b69ec7c4-0f9a-40c9-88f5-85a1a0418e05" parameterName="Value" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="193ffbcc-e3c6-43c0-8382-dd141e079722" name="CMHAL_SetUSChannelId">
-                <parameters>
-                    <parameter id="e6a68dd4-81eb-41fb-8448-048c31759b56" parameterName="Value" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="ca31168b-b591-43f0-a074-83760d871188" name="CMHAL_GetCPEList">
-                <parameters>
-                    <parameter id="e3c1cf28-4274-4cf0-9ec2-570c74052c19" parameterName="flag" parameterType="STRING" range="A-Z"/>
-                    <parameter id="92b556a2-41ba-4259-97c7-d36b92741253" parameterName="lanMode" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="13535fd2-21ed-4092-a45f-c47ac3bb4d99" name="CMHAL_GetUsOfdmChanTable">
-                <parameters>
-                    <parameter id="b37e377e-db2f-48fc-a2e5-31db8d894e9f" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="345e6237-7cfa-48f1-b495-2d1269be3e4d" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="bb052848-2cc7-46d3-ba85-8ff74319370d" name="CMHAL_GetStatusOfdmaUsTable">
-                <parameters>
-                    <parameter id="b46e2892-647f-424a-99ce-ade6946f5720" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="928d0376-abc1-4e55-a52f-b6af1af34390" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="7d31cd54-2a89-4aa3-bb3e-546d5dfd8cf3" name="CMHAL_GetParamCharValue">
                 <parameters>
-                    <parameter id="a61c6de1-d294-4a90-b3da-a2b66073465e" parameterName="paramType" parameterType="STRING" range="A-Z"/>
                     <parameter id="45f7b691-2654-41f1-9ac8-94900fb6d534" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="02aebb73-768d-473b-867b-f0fdda0b7311" name="CMHAL_SetMddIpModeOverride">
-                <parameters>
-                    <parameter id="b9935986-7321-4a08-acc6-b2cabea34ee6" parameterName="value" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="50bbb52e-17d8-4ef6-87a8-36a6e9ef5f92" name="CMHAL_GetDsOfdmChanTable">
-                <parameters>
-                    <parameter id="3c87d3f4-2fbe-4d4c-87de-8c6ee27bd73a" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="b7383d9a-e694-4ef1-9f2c-a7b07e68a91c" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a61c6de1-d294-4a90-b3da-a2b66073465e" parameterName="paramType" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="535e87ba-6f06-406f-ae23-4bbf14bf0571" name="CMHAL_GetErrorCodeWords">
@@ -76,27 +28,42 @@
                     <parameter id="8837d012-3a8a-434c-8702-8eb98bd53dba" parameterName="flag" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="6a36d6b3-cc5b-4c1d-9d88-6182580f94ba" name="CMHAL_ClearDocsisEventLog">
-                <parameters/>
-            </function>
             <function id="8e5d942c-bb5f-45d3-bdf1-2be250f40158" name="CMHAL_Init">
                 <parameters>
                     <parameter id="ed111a81-c643-4d14-925c-71fb313946db" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="5f91b1a9-0097-47cb-a540-2056e0952a7d" name="CMHAL_IsEnergyDetected">
+            <function id="1746b970-b0e5-4424-9db3-7196eff5b461" name="CMHAL_GetDocsisEventLogItems">
                 <parameters>
-                    <parameter id="813472d5-0a70-4cfe-958f-d0b8390b636f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="0265186c-825a-4cf7-a958-bf49b10a437b" parameterName="flag" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="00ef1b6c-b778-4649-b17e-7e71af8d2350" name="CMHAL_SetHTTP_Download_Interface">
+            <function id="50bbb52e-17d8-4ef6-87a8-36a6e9ef5f92" name="CMHAL_GetDsOfdmChanTable">
                 <parameters>
-                    <parameter id="e5f765bb-a2a2-40d2-8ab5-8b75193ceb50" parameterName="interface" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b7383d9a-e694-4ef1-9f2c-a7b07e68a91c" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="3c87d3f4-2fbe-4d4c-87de-8c6ee27bd73a" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
+            </function>
+            <function id="a4fb5d2c-2931-4674-98a8-77a65d570bc7" name="CMHAL_GetParamUlongValue">
+                <parameters>
+                    <parameter id="c6bf5afc-7b4b-4e79-84b3-cf2757aa45f0" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b50268ba-abe4-41ca-8d6a-78d7fca2874d" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9e67867b-0ae6-4e54-940a-440fdffb424a" name="CMHAL_Reboot_Now">
+                <parameters/>
+            </function>
+            <function id="e07a1526-8337-493b-bdf8-b3644a4a0d42" name="CMHAL_FWupdateAndFactoryReset">
+                <parameters/>
             </function>
             <function id="ea002660-6249-4a78-bf72-5759142716f3" name="CMHAL_SetLEDFlashStatus">
                 <parameters>
                     <parameter id="8ea104e4-2d16-4c80-99e2-734fec960905" parameterName="LEDFlash" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="193ffbcc-e3c6-43c0-8382-dd141e079722" name="CMHAL_SetUSChannelId">
+                <parameters>
+                    <parameter id="e6a68dd4-81eb-41fb-8448-048c31759b56" parameterName="Value" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="6fc9b710-86a9-4c9f-91f4-98658510c7b3" name="CMHAL_SetHTTP_Download_Url">
@@ -105,20 +72,53 @@
                     <parameter id="e085f4ce-d3c7-48ed-b62c-e5d6b5449f0d" parameterName="filename" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="a4fb5d2c-2931-4674-98a8-77a65d570bc7" name="CMHAL_GetParamUlongValue">
+            <function id="7663a226-f0b6-4cff-a94f-668e937fb752" name="CMHAL_SetStartFreq">
                 <parameters>
-                    <parameter id="b50268ba-abe4-41ca-8d6a-78d7fca2874d" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="c6bf5afc-7b4b-4e79-84b3-cf2757aa45f0" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b69ec7c4-0f9a-40c9-88f5-85a1a0418e05" parameterName="Value" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="1746b970-b0e5-4424-9db3-7196eff5b461" name="CMHAL_GetDocsisEventLogItems">
+            <function id="13535fd2-21ed-4092-a45f-c47ac3bb4d99" name="CMHAL_GetUsOfdmChanTable">
                 <parameters>
-                    <parameter id="0265186c-825a-4cf7-a958-bf49b10a437b" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                    <parameter id="345e6237-7cfa-48f1-b495-2d1269be3e4d" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b37e377e-db2f-48fc-a2e5-31db8d894e9f" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="02aebb73-768d-473b-867b-f0fdda0b7311" name="CMHAL_SetMddIpModeOverride">
+                <parameters>
+                    <parameter id="b9935986-7321-4a08-acc6-b2cabea34ee6" parameterName="value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="6a36d6b3-cc5b-4c1d-9d88-6182580f94ba" name="CMHAL_ClearDocsisEventLog">
+                <parameters/>
+            </function>
+            <function id="5f91b1a9-0097-47cb-a540-2056e0952a7d" name="CMHAL_IsEnergyDetected">
+                <parameters>
+                    <parameter id="813472d5-0a70-4cfe-958f-d0b8390b636f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="bb052848-2cc7-46d3-ba85-8ff74319370d" name="CMHAL_GetStatusOfdmaUsTable">
+                <parameters>
+                    <parameter id="b46e2892-647f-424a-99ce-ade6946f5720" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="928d0376-abc1-4e55-a52f-b6af1af34390" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="edafd989-d442-4fa9-a797-f546f5b31f6f" name="CMHAL_GetHTTP_Download_Url">
                 <parameters>
                     <parameter id="3f29a84b-bb2b-4552-be9a-a6578c60530a" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="00ef1b6c-b778-4649-b17e-7e71af8d2350" name="CMHAL_SetHTTP_Download_Interface">
+                <parameters>
+                    <parameter id="e5f765bb-a2a2-40d2-8ab5-8b75193ceb50" parameterName="interface" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="048e5103-f9c3-4480-b9eb-773097a9bc62" name="CMHAL_HTTP_Download">
+                <parameters/>
+            </function>
+            <function id="ca31168b-b591-43f0-a074-83760d871188" name="CMHAL_GetCPEList">
+                <parameters>
+                    <parameter id="92b556a2-41ba-4259-97c7-d36b92741253" parameterName="lanMode" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e3c1cf28-4274-4cf0-9ec2-570c74052c19" parameterName="flag" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>

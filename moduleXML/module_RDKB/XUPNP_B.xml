@@ -17,13 +17,13 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="5fb08f3a-69d9-4ae9-ab78-c47682eafa54" name="XUPNPStub_CheckXDiscOutputFile">
-                <parameters/>
-            </function>
             <function id="79cab9f7-d95b-4a18-80ac-3d0fc429064b" name="XUPNPStub_ReadXDiscOutputFile">
                 <parameters>
                     <parameter id="c5f21c08-8c28-46a6-b2c5-ea6194c1a796" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
+            </function>
+            <function id="5fb08f3a-69d9-4ae9-ab78-c47682eafa54" name="XUPNPStub_CheckXDiscOutputFile">
+                <parameters/>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->

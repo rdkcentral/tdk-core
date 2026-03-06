@@ -17,28 +17,11 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="0b3a3562-d40c-4e51-97fd-8e736c07f0f2" name="TR069Agent_Init">
-                <parameters/>
-            </function>
-            <function id="a7f54481-b7d5-4984-8cfc-b300f7a82849" name="TR069Agent_Terminate">
-                <parameters/>
-            </function>
-            <function id="89d9baa7-0645-4f76-bd76-be5570aba7f9" name="TR069Agent_GetParameterNames">
-                <parameters>
-                    <parameter id="58fe281d-72b5-4572-b795-f4c141be879f" parameterName="ParamList" parameterType="STRING" range="A-Z"/>
-                    <parameter id="07e98ed3-5c3a-4e9a-8575-ff3767632fc9" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="271ed749-e39a-41d9-a0b6-d9120eb706e2" name="TR069Agent_SetParameterValues">
                 <parameters>
-                    <parameter id="ed425bcd-9966-4f71-9690-d96511b33037" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
-                    <parameter id="c84f7657-e32d-49a9-a6b3-df5cf94247f6" parameterName="Type" parameterType="STRING" range="A-Z"/>
                     <parameter id="85600fe3-df27-469c-b346-a48912a56f9b" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="d9d86a99-dcca-45af-bd5c-e9e130331898" name="TR069Agent_GetParameterAttr">
-                <parameters>
-                    <parameter id="3811a7bb-a03e-4c6a-95ef-7622397b714a" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c84f7657-e32d-49a9-a6b3-df5cf94247f6" parameterName="Type" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ed425bcd-9966-4f71-9690-d96511b33037" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="0be3bda5-ca4c-4c3c-896c-d789a2a434cf" name="TR069Agent_GetParameterValues">
@@ -46,12 +29,32 @@
                     <parameter id="146cdb8f-d791-45c8-bc07-ad4e56e1d217" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
+            <function id="f28e28e9-5163-4994-a104-c28c5d12bce7" name="TR069Agent_Donothing">
+                <parameters/>
+            </function>
             <function id="a4d051aa-f339-460d-b67d-58ff106578c4" name="TR069Agent_SetParameterAttr">
                 <parameters>
+                    <parameter id="5fe98a44-5986-4f46-8190-5c3c2e01c094" parameterName="AccessControl" parameterType="STRING" range="A-Z"/>
                     <parameter id="3cc87254-8765-4f7b-9698-ba267e2341dc" parameterName="Notify" parameterType="STRING" range="A-Z"/>
                     <parameter id="a2954522-0240-4151-813f-197cbcf6a786" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="5fe98a44-5986-4f46-8190-5c3c2e01c094" parameterName="AccessControl" parameterType="STRING" range="A-Z"/>
                 </parameters>
+            </function>
+            <function id="0b3a3562-d40c-4e51-97fd-8e736c07f0f2" name="TR069Agent_Init">
+                <parameters/>
+            </function>
+            <function id="89d9baa7-0645-4f76-bd76-be5570aba7f9" name="TR069Agent_GetParameterNames">
+                <parameters>
+                    <parameter id="07e98ed3-5c3a-4e9a-8575-ff3767632fc9" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="58fe281d-72b5-4572-b795-f4c141be879f" parameterName="ParamList" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d9d86a99-dcca-45af-bd5c-e9e130331898" name="TR069Agent_GetParameterAttr">
+                <parameters>
+                    <parameter id="3811a7bb-a03e-4c6a-95ef-7622397b714a" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a7f54481-b7d5-4984-8cfc-b300f7a82849" name="TR069Agent_Terminate">
+                <parameters/>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->
@@ -83,6 +86,12 @@
                         <value>A</value>
                     </primitiveTestParameter>
                 </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6a8f2a03-841a-4e43-9ee5-e5e08850277f</id>
+                <name>TR069Agent_Donothing</name>
+                <funName>TR069Agent_Donothing</funName>
+                <primitivetestparameters/>
             </primitivetest>
             <primitivetest>
                 <id>9b56079f-432b-41cf-b1a7-1407308f4d34</id>

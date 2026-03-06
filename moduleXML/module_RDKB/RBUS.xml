@@ -17,21 +17,11 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="b28a80cf-9c87-4dd9-9aef-13337f0f43ab" name="RBUS_ObjectCommands">
+            <function id="0b66b087-6fd0-4423-8c7e-3fc9b2212472" name="RBUS_PropertyCommands">
                 <parameters>
-                    <parameter id="87e73567-0c6d-4809-b06a-acaeb9b5dfa3" parameterName="object_name" parameterType="STRING" range="a-z"/>
-                    <parameter id="182fdef2-348a-4a48-8823-741b828c05cf" parameterName="operation" parameterType="STRING" range="a-z"/>
-                    <parameter id="19c25d60-23f9-49df-a560-883c65ddbf78" parameterName="obj_count" parameterType="INTEGER" range="0-9"/>
-                </parameters>
-            </function>
-            <function id="34c0edb3-56bc-43b7-9696-29e20deb0812" name="RBUS_Open">
-                <parameters/>
-            </function>
-            <function id="491f00db-f5f8-4c8a-ab14-5ef0f1a2c925" name="RBUS_SetValue">
-                <parameters>
-                    <parameter id="570cb016-b7b8-40a1-b9b6-125182936302" parameterName="paramValue" parameterType="STRING" range="a-z"/>
-                    <parameter id="998a1c48-5847-4be9-a3f3-dd03bc7dc0af" parameterName="paramName" parameterType="STRING" range="a-z"/>
-                    <parameter id="364ceda2-8fd1-47af-8d7f-cd912a59a886" parameterName="paramType" parameterType="STRING" range="a-z"/>
+                    <parameter id="aa3adc1d-5059-4c14-96ba-aa75fcef270e" parameterName="property_name" parameterType="STRING" range="a-z"/>
+                    <parameter id="190cde4b-df59-4f8e-9d06-b5c570726b1d" parameterName="operation" parameterType="STRING" range="a-z"/>
+                    <parameter id="9498d5a4-de90-4cf6-b04c-44eb98309363" parameterName="prop_count" parameterType="INTEGER" range="0-9"/>
                 </parameters>
             </function>
             <function id="198778f7-fd3e-4292-9944-aa7f859fa87a" name="RBUS_GetValue">
@@ -40,32 +30,42 @@
                     <parameter id="cef61cec-933a-457f-88c4-4bf86edcf901" parameterName="paramName" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="a0a6b583-76e7-4f0a-b7e4-fa4af9899686" name="RBUS_Close">
-                <parameters/>
+            <function id="491f00db-f5f8-4c8a-ab14-5ef0f1a2c925" name="RBUS_SetValue">
+                <parameters>
+                    <parameter id="998a1c48-5847-4be9-a3f3-dd03bc7dc0af" parameterName="paramName" parameterType="STRING" range="a-z"/>
+                    <parameter id="364ceda2-8fd1-47af-8d7f-cd912a59a886" parameterName="paramType" parameterType="STRING" range="a-z"/>
+                    <parameter id="570cb016-b7b8-40a1-b9b6-125182936302" parameterName="paramValue" parameterType="STRING" range="a-z"/>
+                </parameters>
             </function>
             <function id="80ebd279-1c92-4549-b255-4d1ad8774aa9" name="RBUS_DataElements">
                 <parameters>
                     <parameter id="1e080e05-6d45-4f1e-a6a7-5b7f1935f58c" parameterName="element1" parameterType="STRING" range="a-z"/>
-                    <parameter id="faddad6b-f766-4d3d-a514-347ca411a8ac" parameterName="operation" parameterType="STRING" range="a-z"/>
                     <parameter id="326fe553-97ba-4196-8079-fa90e1fdc1b9" parameterName="element2" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="1c9a927a-3fd0-4251-9b43-bb8e01e92a18" name="RBUS_CloseSession">
-                <parameters>
-                    <parameter id="ef54f8e5-abad-475f-94bb-9f55d4579297" parameterName="sessionid" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="faddad6b-f766-4d3d-a514-347ca411a8ac" parameterName="operation" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
             <function id="36ca9dbd-21c6-4d50-bdca-30e6cef05291" name="RBUS_RegisterOperation">
                 <parameters>
                     <parameter id="456300b2-a5b2-45a3-b0e2-0c7841c9a840" parameterName="objectName" parameterType="STRING" range="a-z"/>
-                    <parameter id="4c2227d1-4cd9-4782-be3d-975c23e16c17" parameterName="methodName" parameterType="STRING" range="a-z"/>
                     <parameter id="d311b009-621f-4496-af8a-04a660b792e3" parameterName="operation" parameterType="STRING" range="a-z"/>
+                    <parameter id="4c2227d1-4cd9-4782-be3d-975c23e16c17" parameterName="methodName" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="0e34f15b-6814-4817-a459-1912d07f4153" name="RBUS_DiscoverComponentDataElements">
+            <function id="b28a80cf-9c87-4dd9-9aef-13337f0f43ab" name="RBUS_ObjectCommands">
                 <parameters>
-                    <parameter id="c3b468f5-ccd2-49e0-9639-fe3feabdf404" parameterName="componentName" parameterType="STRING" range="a-z"/>
+                    <parameter id="87e73567-0c6d-4809-b06a-acaeb9b5dfa3" parameterName="object_name" parameterType="STRING" range="a-z"/>
+                    <parameter id="182fdef2-348a-4a48-8823-741b828c05cf" parameterName="operation" parameterType="STRING" range="a-z"/>
+                    <parameter id="19c25d60-23f9-49df-a560-883c65ddbf78" parameterName="obj_count" parameterType="INTEGER" range="0-9"/>
                 </parameters>
+            </function>
+            <function id="11359c8e-7e7d-4ea1-897d-cf27b510e3bf" name="RBUS_TableRowCommands">
+                <parameters>
+                    <parameter id="5ca691c3-349c-4e11-ade4-5fc022128778" parameterName="table_row" parameterType="STRING" range="a-z"/>
+                    <parameter id="63a17edf-cce9-4772-82f0-7efc529ab00a" parameterName="operation" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="a0a6b583-76e7-4f0a-b7e4-fa4af9899686" name="RBUS_Close">
+                <parameters/>
             </function>
             <function id="936cef14-544f-41ef-a9ea-8c5926fcc9eb" name="RBUS_Session">
                 <parameters>
@@ -77,15 +77,6 @@
                     <parameter id="5e3d3553-7257-4ea9-a034-169d23a118de" parameterName="level" parameterType="INTEGER" range="0-100"/>
                 </parameters>
             </function>
-            <function id="4ff2f7fc-e40f-4430-a6d8-282d62b51916" name="RBUS_CheckStatus">
-                <parameters/>
-            </function>
-            <function id="11359c8e-7e7d-4ea1-897d-cf27b510e3bf" name="RBUS_TableRowCommands">
-                <parameters>
-                    <parameter id="5ca691c3-349c-4e11-ade4-5fc022128778" parameterName="table_row" parameterType="STRING" range="a-z"/>
-                    <parameter id="63a17edf-cce9-4772-82f0-7efc529ab00a" parameterName="operation" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
             <function id="52cb4fa4-2f9f-4029-b5b2-78ed4a916047" name="RBUS_Get">
                 <parameters>
                     <parameter id="3af7fa03-a1cb-4fbd-a007-67b9cd089052" parameterName="paramName" parameterType="STRING" range="a-z"/>
@@ -94,12 +85,28 @@
             <function id="fa252fb9-16de-453f-a30e-93d26b718d97" name="RBUS_DoNothing">
                 <parameters/>
             </function>
-            <function id="0b66b087-6fd0-4423-8c7e-3fc9b2212472" name="RBUS_PropertyCommands">
+            <function id="f2ff2225-ef3b-4ee5-9a90-e9dcd09b1103" name="RBUS_GetElementInfo">
                 <parameters>
-                    <parameter id="190cde4b-df59-4f8e-9d06-b5c570726b1d" parameterName="operation" parameterType="STRING" range="a-z"/>
-                    <parameter id="aa3adc1d-5059-4c14-96ba-aa75fcef270e" parameterName="property_name" parameterType="STRING" range="a-z"/>
-                    <parameter id="9498d5a4-de90-4cf6-b04c-44eb98309363" parameterName="prop_count" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="bb86b902-40fd-40f8-adaa-95ce18a73b28" parameterName="compName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="341719a9-979b-4d8f-83bb-1c30b6716e13" parameterName="pathName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="1a4eb332-dde4-4606-97ba-4d72b51a2dcb" parameterName="depth" parameterType="INTEGER" range="0-10"/>
                 </parameters>
+            </function>
+            <function id="0e34f15b-6814-4817-a459-1912d07f4153" name="RBUS_DiscoverComponentDataElements">
+                <parameters>
+                    <parameter id="c3b468f5-ccd2-49e0-9639-fe3feabdf404" parameterName="componentName" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="1c9a927a-3fd0-4251-9b43-bb8e01e92a18" name="RBUS_CloseSession">
+                <parameters>
+                    <parameter id="ef54f8e5-abad-475f-94bb-9f55d4579297" parameterName="sessionid" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="34c0edb3-56bc-43b7-9696-29e20deb0812" name="RBUS_Open">
+                <parameters/>
+            </function>
+            <function id="4ff2f7fc-e40f-4430-a6d8-282d62b51916" name="RBUS_CheckStatus">
+                <parameters/>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->
@@ -308,6 +315,34 @@
                         <parameterName>sessionid</parameterName>
                         <parameterType>INTEGER</parameterType>
                         <range>0-9</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a29b1ce8-bbf9-406c-9567-7217fe4d9e73</id>
+                <name>RBUS_GetElementInfo</name>
+                <funName>RBUS_GetElementInfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>081cc7e3-8769-431b-af65-00fce90f6958</id>
+                        <parameterName>depth</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>615eaa37-eff6-4e0a-a574-8e683996e6c8</id>
+                        <parameterName>pathName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>c1a63ced-207e-41b2-b3f3-880e69f2a5a4</id>
+                        <parameterName>compName</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
                         <value/>
                     </primitiveTestParameter>
                 </primitivetestparameters>

@@ -4,11 +4,11 @@ VTS Configuration File
 Contains all configuration parameters for the VTS test framework.
 """
 
-import os
+from vts_common_config import *
 
 # ============= BASE PATH CONFIGURATION =============
 # Set the base path for all VTS operations
-BASE_PATH = os.getcwd() + "rdk-halif-test-device_settings"
+BASE_PATH = os.getcwd() + "/rdk-halif-test-device_settings"
 
 #========== REPO DETAILS ========================
 
@@ -16,25 +16,7 @@ REPO_URL = "https://github.com/rdkcentral/rdk-halif-test-device_settings.git"
 REPO_DIR = "rdk-halif-test-device_settings"
 CHECKOUT_VER = "6.0.0"
 
-# ============= DEVICE CONFIGURATION =============
-# Rack Configuration Parameters
-#Update device ip below inside quotes
-DEVICE_IP = ""
-#Update device SoC inside quotes ex : "Amlogic", "Realtek" , "Broadcom"
-DEVICE_PLATFORM = ""
-DEVICE_DESCRIPTION = "xxx"
-SSH_USERNAME = "root"
-SSH_PASSWORD = ""
-SSH_PORT = 22
-LOG_DIRECTORY = "./logs"
-
-# Device Configuration Parameters  
-#Update device SoC inside quotes ex : "Amlogic", "Realtek" , "Broadcom"
-CPE_PLATFORM = ""
-CPE_MODEL = "test"
-#Update device SoC inside quotes ex : "amlogic", "realtek", "broadcom"
-SOC_VENDOR = ""
-TARGET_DIRECTORY ="/VTS_Package/"
+#========== PROFILE PATH =========================
 PROFILE_PATH = "../../../../profiles/source/Source_AudioSettings.yaml"
 
 # ============= FILE PATHS (RELATIVE TO BASE_PATH) =============
@@ -94,16 +76,6 @@ DEVICE_CONFIG_ARG = "../../configs/deviceConfig.yml"
 UTPLAYERCONFIG_FILE = "utPlayerConfig.yml"
 UTPLAYERCONFIG_PATH = os.path.join(BASE_PATH, "host","tests","raft","framework","plugins","ut_raft","configs", UTPLAYERCONFIG_FILE)
 
-#=====================STREAM====================================
-#Update stream server hosting streams
-STREAM_DOWNLOAD_PATH = ""
-
-# Optional per-module toggle (defaults to True if omitted)
-DOWNLOAD_STREAMS = True
-
-# Keep downloaded streams on the device after tests (do NOT delete in testCleanAssets)
-PRESERVE_STREAMS = True
-
 # ================== STREAM RENAME RULES ===========================
 
 STREAM_RENAME_MAP = {
@@ -114,7 +86,7 @@ STREAM_RENAME_RULES = []
 #==================================================================
 
 # Log Configuration
-LOG_FILE = "menu.log"
+LOG_FILE = "dsAudio.log"
 
 # ============= ADVANCED CONFIGURATION =============
 # Terminal Configuration

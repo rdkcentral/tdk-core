@@ -17,84 +17,20 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="06734827-18ed-4ff9-a126-5fde9da7e799" name="TestMgr_Aamp_AampGetPlaybackRate">
-                <parameters/>
-            </function>
-            <function id="249231e9-c715-4b7c-a1ca-dc7b54d84ebf" name="TestMgr_Aamp_AampSetVideoMute">
+            <function id="9e6c809d-a732-419b-883e-b04778171832" name="TestMgr_Aamp_AampGetPlaybackDuration">
                 <parameters>
-                    <parameter id="4e07afa6-eed0-471f-beef-74c20e8161b9" parameterName="mute" parameterType="STRING" range="A-Z"/>
+                    <parameter id="717d5fcc-93a5-4367-9adf-317281d5210b" parameterName="URL" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="bc91f731-4d40-40b2-9803-1265ca4c4e8f" name="TestMgr_Aamp_AampGetBitrateDetails">
-                <parameters/>
-            </function>
-            <function id="4ba1503a-13f7-4635-9315-6710c94e41f3" name="TestMgr_Aamp_AampGetCurrentAudioLanguage">
-                <parameters/>
-            </function>
-            <function id="dc1c589e-1cd4-4a8a-a64e-adebc8f2b354" name="TestMgr_Aamp_AampPersistBitRateOverSeek">
+            <function id="c145baf3-ea2e-4b5c-a79c-9ed6c457c7f2" name="TestMgr_Aamp_AampSetLanguage">
                 <parameters>
-                    <parameter id="206d4039-f820-4fa0-90f2-250429c9d14f" parameterName="enable" parameterType="STRING" range="a-z"/>
+                    <parameter id="26a811f6-303e-460e-8619-74294fafa5d6" parameterName="language" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="6c64bb19-98f2-45f2-bafb-375e4ced54cd" name="TestMgr_Aamp_AampGetCurrentDRM">
+            <function id="d748a05b-1653-4831-8b6c-557fd80a91f3" name="TestMgr_Aamp_AampPlayTillEof">
                 <parameters/>
-            </function>
-            <function id="949ec8a8-52e3-4329-8ede-77f25282bcef" name="TestMgr_Aamp_AampGetAudioBitrate">
-                <parameters/>
-            </function>
-            <function id="03d0c389-de0e-4584-befc-bf127895e2c5" name="TestMgr_Aamp_AampGetVideoBitrate">
-                <parameters/>
-            </function>
-            <function id="3d8f36e5-4036-4ae1-b334-05821a297002" name="TestMgr_Aamp_AampGetState">
-                <parameters/>
-            </function>
-            <function id="1b4536e5-b687-42e1-aaef-9c3e73f988c6" name="TestMgr_Aamp_AampSetWesterosSinkConfig">
-                <parameters>
-                    <parameter id="076ed46f-85fe-4fe5-b57a-368da34d28b6" parameterName="enable" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="ec00777f-b7c8-4b2b-8b0f-6c4bc8f1de9a" name="TestMgr_Aamp_AampSetPreferredDRM">
-                <parameters>
-                    <parameter id="e1d58f14-7b33-4133-8e16-6d9879d6457a" parameterName="preferredDrm" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="3bdc9933-8695-4234-bc26-e702a85f4915" name="TestMgr_Aamp_AampIsLive">
-                <parameters/>
-            </function>
-            <function id="2fc46ec1-6960-48e8-8500-5d4d9ac8fc31" name="TestMgr_Aamp_AampGetPlaybackPosition">
-                <parameters/>
-            </function>
-            <function id="af0c96e1-3aa3-4eb8-8651-3c81e2ef0edb" name="TestMgr_Aamp_AampGetPreferredLanguages">
-                <parameters/>
-            </function>
-            <function id="d5697582-5f5d-40a2-a92e-b654364feb4d" name="TestMgr_Aamp_AampStop">
-                <parameters/>
-            </function>
-            <function id="fd7b8fb5-6315-42a2-9e60-0846776cc443" name="TestMgr_Aamp_AampGetAudioVolume">
-                <parameters/>
-            </function>
-            <function id="4ba7dfd2-de5f-486e-be7b-ba920589254b" name="TestMgr_Aamp_AampGetVideoRectangle">
-                <parameters/>
-            </function>
-            <function id="31edff16-6a00-46e3-87cd-e831c04e7b60" name="TestMgr_Aamp_AampEnableVideoRectangle">
-                <parameters>
-                    <parameter id="2e1c4b27-53c0-409d-a2c8-781a5087305f" parameterName="enable" parameterType="STRING" range="A-Z"/>
-                </parameters>
             </function>
             <function id="c7670fd9-79a8-4fec-a45d-41679f7c1c30" name="TestMgr_Aamp_AampGetPreferredDRM">
-                <parameters/>
-            </function>
-            <function id="bca30483-c736-4ee1-ace7-6de0df8a78e0" name="TestMgr_Aamp_AampSetDisable4K">
-                <parameters>
-                    <parameter id="1eb11f6d-9762-4f12-a12f-bdb2130caf48" parameterName="disable4K" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="d1da8df6-d812-4de8-8687-6922f4879cca" name="TestMgr_Aamp_AampTune">
-                <parameters>
-                    <parameter id="5193ecd6-7444-40d8-9ac0-28f49960f1b8" parameterName="URL" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="6ec97fb0-3648-48f3-b45f-7b0b0a43c4d7" name="TestMgr_Aamp_AampGetAvailableAudioTracks">
                 <parameters/>
             </function>
             <function id="819d0089-b7a9-47c8-b3a1-0bbffd88fbe5" name="TestMgr_Aamp_AampSetPreferredLanguages">
@@ -102,13 +38,24 @@
                     <parameter id="fd4f4919-0694-4bf5-bf95-751662af8c6c" parameterName="languages" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="7a012fda-6ca0-44c2-99bd-53da8ddf89bd" name="TestMgr_Aamp_AampGetVideoBitrates">
+            <function id="8f97562d-dadb-4f4b-8c61-1dc247c0f769" name="TestMgr_Aamp_AampGetAudioBitrates">
                 <parameters/>
+            </function>
+            <function id="caa7770f-70f4-49ac-a370-e63d0c785261" name="TestMgr_Aamp_AampSeekLive">
+                <parameters/>
+            </function>
+            <function id="fd7b8fb5-6315-42a2-9e60-0846776cc443" name="TestMgr_Aamp_AampGetAudioVolume">
+                <parameters/>
+            </function>
+            <function id="4245b99e-1c42-4d98-b924-0d6420e22a99" name="TestMgr_Aamp_AampSetAudioVolume">
+                <parameters>
+                    <parameter id="e46ac785-9922-408a-904e-7340949da12b" parameterName="volume" parameterType="INTEGER" range="0-200"/>
+                </parameters>
             </function>
             <function id="9ecd2e2c-ddea-4b09-82f7-093a379dc300" name="TestMgr_Aamp_AampProxy">
                 <parameters>
-                    <parameter id="2a4e2271-4d6c-4dc5-bd96-c51fffb2f1fc" parameterName="http_proxy" parameterType="STRING" range="A-Z"/>
                     <parameter id="a39995f5-51cd-4970-b9d6-9b81c51c2b29" parameterName="no_proxy" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2a4e2271-4d6c-4dc5-bd96-c51fffb2f1fc" parameterName="http_proxy" parameterType="STRING" range="A-Z"/>
                     <parameter id="4e7e47a4-0953-4dab-bb74-d9e48403bd4f" parameterName="set" parameterType="FLOAT" range="-100-100"/>
                 </parameters>
             </function>
@@ -117,20 +64,17 @@
                     <parameter id="61544b28-7347-4450-a085-a2bf2b5fb901" parameterName="position" parameterType="DOUBLE" range="1-1000"/>
                 </parameters>
             </function>
-            <function id="caa7770f-70f4-49ac-a370-e63d0c785261" name="TestMgr_Aamp_AampSeekLive">
-                <parameters/>
-            </function>
-            <function id="e03a0d5c-b029-40ef-87cf-3fb7feb1a5d9" name="TestMgr_Aamp_AampGetAvailableTextTracks">
-                <parameters/>
-            </function>
-            <function id="c145baf3-ea2e-4b5c-a79c-9ed6c457c7f2" name="TestMgr_Aamp_AampSetLanguage">
+            <function id="1732e242-609f-4744-ab6c-216dd7a5ba39" name="TestMgr_Aamp_AampSetAudioTrack">
                 <parameters>
-                    <parameter id="26a811f6-303e-460e-8619-74294fafa5d6" parameterName="language" parameterType="STRING" range="a-z"/>
+                    <parameter id="f113854e-3ef6-4327-b3e9-f4b1652f6a24" parameterName="track_index" parameterType="INTEGER" range="1-10"/>
                 </parameters>
             </function>
-            <function id="90f257d0-5b39-440f-b335-7ef4eeeb3aa4" name="TestMgr_Aamp_AampSetVideoZoom">
+            <function id="c0d9be9f-0e1f-4e39-8330-a14e1fed35b2" name="TestMgr_Aamp_AampGetVideoZoom">
+                <parameters/>
+            </function>
+            <function id="2b519268-229a-4a40-b7ed-a261d6d085b1" name="TestMgr_Aamp_AampSetAudioBitrate">
                 <parameters>
-                    <parameter id="847fdf65-f184-449e-9a5f-9cad62f6f8bb" parameterName="zoom" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8f012ab6-f436-40d6-8691-f0459f36431f" parameterName="bitRate" parameterType="INTEGER" range="0-9"/>
                 </parameters>
             </function>
             <function id="245477fe-6b39-455c-9444-c9aa20ebdf99" name="TestMgr_Aamp_AampSetVideoBitrate">
@@ -138,24 +82,26 @@
                     <parameter id="1514d1b3-b732-4483-b2f8-e305013bcad1" parameterName="bitRate" parameterType="INTEGER" range="0-9"/>
                 </parameters>
             </function>
-            <function id="9e6c809d-a732-419b-883e-b04778171832" name="TestMgr_Aamp_AampGetPlaybackDuration">
+            <function id="6c64bb19-98f2-45f2-bafb-375e4ced54cd" name="TestMgr_Aamp_AampGetCurrentDRM">
+                <parameters/>
+            </function>
+            <function id="09c9766b-ab82-4f60-be49-702b18c30f07" name="TestMgr_Aamp_AampCheckPlaybackRate">
+                <parameters/>
+            </function>
+            <function id="3bdc9933-8695-4234-bc26-e702a85f4915" name="TestMgr_Aamp_AampIsLive">
+                <parameters/>
+            </function>
+            <function id="4ba7dfd2-de5f-486e-be7b-ba920589254b" name="TestMgr_Aamp_AampGetVideoRectangle">
+                <parameters/>
+            </function>
+            <function id="dc1c589e-1cd4-4a8a-a64e-adebc8f2b354" name="TestMgr_Aamp_AampPersistBitRateOverSeek">
                 <parameters>
-                    <parameter id="717d5fcc-93a5-4367-9adf-317281d5210b" parameterName="URL" parameterType="STRING" range="A-Z"/>
+                    <parameter id="206d4039-f820-4fa0-90f2-250429c9d14f" parameterName="enable" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="d748a05b-1653-4831-8b6c-557fd80a91f3" name="TestMgr_Aamp_AampPlayTillEof">
-                <parameters/>
-            </function>
-            <function id="c0d9be9f-0e1f-4e39-8330-a14e1fed35b2" name="TestMgr_Aamp_AampGetVideoZoom">
-                <parameters/>
-            </function>
-            <function id="14bdab1c-5fe1-45f3-84a7-a42323d9cbe5" name="TestMgr_Aamp_AampGetAudioTrack">
-                <parameters/>
-            </function>
-            <function id="dd6685f5-53dd-43ec-97e8-ffcd71d3bd4d" name="TestMgr_Aamp_AampSetRate">
+            <function id="ec00777f-b7c8-4b2b-8b0f-6c4bc8f1de9a" name="TestMgr_Aamp_AampSetPreferredDRM">
                 <parameters>
-                    <parameter id="37d042a6-6318-4284-927b-a4963b9e5503" parameterName="check_rate_value" parameterType="STRING" range="A-Z"/>
-                    <parameter id="94beab09-23f5-4167-b62a-00bf6efac10a" parameterName="rate" parameterType="FLOAT" range="-1000-1000"/>
+                    <parameter id="e1d58f14-7b33-4133-8e16-6d9879d6457a" parameterName="preferredDrm" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="bafa4ee8-0a92-474b-9b56-e66076e5d881" name="TestMgr_Aamp_AampSetRateAndSeek">
@@ -164,23 +110,40 @@
                     <parameter id="0e921570-0c6f-4977-b343-277978bce38c" parameterName="rate" parameterType="FLOAT" range="-1000-1000"/>
                 </parameters>
             </function>
-            <function id="8f97562d-dadb-4f4b-8c61-1dc247c0f769" name="TestMgr_Aamp_AampGetAudioBitrates">
+            <function id="d5697582-5f5d-40a2-a92e-b654364feb4d" name="TestMgr_Aamp_AampStop">
                 <parameters/>
             </function>
-            <function id="09c9766b-ab82-4f60-be49-702b18c30f07" name="TestMgr_Aamp_AampCheckPlaybackRate">
+            <function id="e03a0d5c-b029-40ef-87cf-3fb7feb1a5d9" name="TestMgr_Aamp_AampGetAvailableTextTracks">
                 <parameters/>
             </function>
-            <function id="4245b99e-1c42-4d98-b924-0d6420e22a99" name="TestMgr_Aamp_AampSetAudioVolume">
+            <function id="14bdab1c-5fe1-45f3-84a7-a42323d9cbe5" name="TestMgr_Aamp_AampGetAudioTrack">
+                <parameters/>
+            </function>
+            <function id="3d8f36e5-4036-4ae1-b334-05821a297002" name="TestMgr_Aamp_AampGetState">
+                <parameters/>
+            </function>
+            <function id="4ba1503a-13f7-4635-9315-6710c94e41f3" name="TestMgr_Aamp_AampGetCurrentAudioLanguage">
+                <parameters/>
+            </function>
+            <function id="1b4536e5-b687-42e1-aaef-9c3e73f988c6" name="TestMgr_Aamp_AampSetWesterosSinkConfig">
                 <parameters>
-                    <parameter id="e46ac785-9922-408a-904e-7340949da12b" parameterName="volume" parameterType="INTEGER" range="0-200"/>
+                    <parameter id="076ed46f-85fe-4fe5-b57a-368da34d28b6" parameterName="enable" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="468c67a3-a315-4081-92a8-5933152f002d" name="TestMgr_Aamp_AampSetVideoRectangle">
+            <function id="d1da8df6-d812-4de8-8687-6922f4879cca" name="TestMgr_Aamp_AampTune">
                 <parameters>
-                    <parameter id="e62f27d4-6b0a-4c9d-8794-9ba3ee1d187b" parameterName="w" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="a3403c0d-ad1a-422a-aaa4-8303f5f997d9" parameterName="y" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="6f1ac050-c6da-4020-ad58-06eb13953f6f" parameterName="x" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="e684bf52-816e-4a50-a6d2-d3e595965cee" parameterName="h" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="5193ecd6-7444-40d8-9ac0-28f49960f1b8" parameterName="URL" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="bc91f731-4d40-40b2-9803-1265ca4c4e8f" name="TestMgr_Aamp_AampGetBitrateDetails">
+                <parameters/>
+            </function>
+            <function id="af0c96e1-3aa3-4eb8-8651-3c81e2ef0edb" name="TestMgr_Aamp_AampGetPreferredLanguages">
+                <parameters/>
+            </function>
+            <function id="249231e9-c715-4b7c-a1ca-dc7b54d84ebf" name="TestMgr_Aamp_AampSetVideoMute">
+                <parameters>
+                    <parameter id="4e07afa6-eed0-471f-beef-74c20e8161b9" parameterName="mute" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="28c9b40e-96cb-4300-a6d8-c8571e42c950" name="TestMgr_Aamp_AampSetLicenseServerURL">
@@ -189,14 +152,51 @@
                     <parameter id="b5f99716-1cc9-492c-87b8-d8996739e17a" parameterName="DRM" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="2b519268-229a-4a40-b7ed-a261d6d085b1" name="TestMgr_Aamp_AampSetAudioBitrate">
+            <function id="31edff16-6a00-46e3-87cd-e831c04e7b60" name="TestMgr_Aamp_AampEnableVideoRectangle">
                 <parameters>
-                    <parameter id="8f012ab6-f436-40d6-8691-f0459f36431f" parameterName="bitRate" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="2e1c4b27-53c0-409d-a2c8-781a5087305f" parameterName="enable" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="1732e242-609f-4744-ab6c-216dd7a5ba39" name="TestMgr_Aamp_AampSetAudioTrack">
+            <function id="468c67a3-a315-4081-92a8-5933152f002d" name="TestMgr_Aamp_AampSetVideoRectangle">
                 <parameters>
-                    <parameter id="f113854e-3ef6-4327-b3e9-f4b1652f6a24" parameterName="track_index" parameterType="INTEGER" range="1-10"/>
+                    <parameter id="6f1ac050-c6da-4020-ad58-06eb13953f6f" parameterName="x" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="a3403c0d-ad1a-422a-aaa4-8303f5f997d9" parameterName="y" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="e62f27d4-6b0a-4c9d-8794-9ba3ee1d187b" parameterName="w" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="e684bf52-816e-4a50-a6d2-d3e595965cee" parameterName="h" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="6ec97fb0-3648-48f3-b45f-7b0b0a43c4d7" name="TestMgr_Aamp_AampGetAvailableAudioTracks">
+                <parameters/>
+            </function>
+            <function id="7a012fda-6ca0-44c2-99bd-53da8ddf89bd" name="TestMgr_Aamp_AampGetVideoBitrates">
+                <parameters/>
+            </function>
+            <function id="03d0c389-de0e-4584-befc-bf127895e2c5" name="TestMgr_Aamp_AampGetVideoBitrate">
+                <parameters/>
+            </function>
+            <function id="bca30483-c736-4ee1-ace7-6de0df8a78e0" name="TestMgr_Aamp_AampSetDisable4K">
+                <parameters>
+                    <parameter id="1eb11f6d-9762-4f12-a12f-bdb2130caf48" parameterName="disable4K" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="90f257d0-5b39-440f-b335-7ef4eeeb3aa4" name="TestMgr_Aamp_AampSetVideoZoom">
+                <parameters>
+                    <parameter id="847fdf65-f184-449e-9a5f-9cad62f6f8bb" parameterName="zoom" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="949ec8a8-52e3-4329-8ede-77f25282bcef" name="TestMgr_Aamp_AampGetAudioBitrate">
+                <parameters/>
+            </function>
+            <function id="06734827-18ed-4ff9-a126-5fde9da7e799" name="TestMgr_Aamp_AampGetPlaybackRate">
+                <parameters/>
+            </function>
+            <function id="2fc46ec1-6960-48e8-8500-5d4d9ac8fc31" name="TestMgr_Aamp_AampGetPlaybackPosition">
+                <parameters/>
+            </function>
+            <function id="dd6685f5-53dd-43ec-97e8-ffcd71d3bd4d" name="TestMgr_Aamp_AampSetRate">
+                <parameters>
+                    <parameter id="94beab09-23f5-4167-b62a-00bf6efac10a" parameterName="rate" parameterType="FLOAT" range="-1000-1000"/>
+                    <parameter id="37d042a6-6318-4284-927b-a4963b9e5503" parameterName="check_rate_value" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>

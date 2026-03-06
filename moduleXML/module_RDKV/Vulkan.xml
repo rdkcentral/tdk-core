@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>3ba5524a-595a-4156-b8ae-24a22725c995</moduleId>
+        <!-- Module name -->
+        <moduleName>Vulkan</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>E2E</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="e9e5d120-6a1b-4329-bb1a-5c077b43f33f" name="execute_Cmnd_InDUT">
+                <parameters>
+                    <parameter id="f69838c4-e48c-4866-aa9b-ef5bd6875456" parameterName="command" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="318c114e-a29f-470a-bc8d-d65bf66033bb" name="execute_binary">
+                <parameters/>
+            </function>
+            <function id="130b238a-9ebd-4923-ace0-8fb978fd08e3" name="set_prerequisites">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>49ec3b57-9419-47f6-85a3-8af0520b6f58</id>
+                <name>execute_binary</name>
+                <funName>execute_binary</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>5d32fbb6-7ebb-428d-b053-f91c56cc71f1</id>
+                <name>execute_Cmnd_InDUT</name>
+                <funName>execute_Cmnd_InDUT</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>f4b88ab0-310d-453e-8809-72e755f4ce75</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>6d67ecee-7928-4cba-be58-1f048704358e</id>
+                <name>set_prerequisites</name>
+                <funName>set_prerequisites</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

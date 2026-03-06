@@ -17,146 +17,80 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="bfae0b70-1508-445b-9594-2ce32264516c" name="TestMgr_rdkfwupdater_GetAccountID">
+            <function id="cedbaddf-6401-41bb-aeda-f4bdb414e186" name="TestMgr_rdkfwupdater_GetFileContents">
                 <parameters>
-                    <parameter id="6693ad2d-da6e-405e-b55c-a645373c9852" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="0bf954ff-5c80-4077-80e1-3599f41f7b68" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="b123ab73-a9eb-401c-9168-e9a48f664f3f" parameterName="filename_null_check" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="88dd7ad8-4fa1-4ad4-92c8-728cbcf4b46f" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="c87a4f4b-14a5-4f65-bed3-a41f203cc3f4" parameterName="filename" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="de79ba07-850d-4510-89ec-7ff02edcc347" name="TestMgr_rdkfwupdater_GetEstbMac">
-                <parameters>
-                    <parameter id="db52cee5-b5db-49e6-9b94-e5d9b35bca59" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="87b5221e-17f7-4b01-8f28-5de3337fe639" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="943875f9-8c7b-44c4-bf81-128226f4ff17" name="TestMgr_rdkfwupdater_write_RFCProperty">
-                <parameters>
-                    <parameter id="32cd29fc-5aef-403b-b4e3-0c2970e5304d" parameterName="rfctype" parameterType="STRING" range="A-Z"/>
-                    <parameter id="b2604e68-8fa2-4c74-aab6-72b1f3a791ba" parameterName="rfckey" parameterType="STRING" range="A-Z"/>
-                    <parameter id="bd2bfe3f-9c3a-4169-977e-0a8328641ec3" parameterName="type_null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="e1714b2d-cbab-4203-8e60-7917e05be418" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="658e0749-6ba7-44ed-82d1-97e174cf61e6" parameterName="dataType" parameterType="INTEGER" range="1-10"/>
-                    <parameter id="77783677-0e00-43f5-8772-83080d31ea90" parameterName="key_null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="b450797d-e2fe-4583-88e9-40a9092c34d9" parameterName="rfcdata" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="3322550f-d05e-4da1-b196-d18099d47891" name="TestMgr_rdkfwupdater_getMetaDataFile">
-                <parameters>
-                    <parameter id="776c2c52-a39d-4b9b-b891-2dd672523f19" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="d6db218a-567f-47ac-9147-d04ed05510b4" parameterName="directory" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="33ed0c1c-b682-41da-b71c-9d36b29809c9" name="TestMgr_rdkfwupdater_GetModelNum">
-                <parameters>
-                    <parameter id="dce3bc62-5104-4fb0-9248-d50f7eeec5d8" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="a88947ae-e8bc-4259-a6e4-f4a31083ecd6" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="7305f340-6c8f-4371-99bb-f23f008e852b" name="TestMgr_rdkfwupdater_RunCommand">
-                <parameters>
-                    <parameter id="2f6fa38d-3436-4736-ae95-b7c63f428551" parameterName="result_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="e11468ea-3376-476e-a255-bc29976695a2" parameterName="result_size_empty" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="b42892e2-bf10-41a3-9ef6-98871f9a95db" parameterName="result_empty" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="50ba137a-40bc-4f05-bbc9-ed5821205736" parameterName="command" parameterType="STRING" range="A-Z"/>
-                    <parameter id="375a87fe-e752-4452-9fb5-961adcd236b5" parameterName="argument" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="79a4c1be-7c68-44af-bdd4-909256fcd586" name="TestMgr_rdkfwupdater_read_RFCProperty">
-                <parameters>
-                    <parameter id="8c9264f0-f82e-4f59-8e7c-b604701e882e" parameterName="rfctype" parameterType="STRING" range="A-Z"/>
-                    <parameter id="54489d50-f5be-4e9d-8e77-fe3adbb646c5" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="8c8fc50c-e6da-4f2d-8151-35dd8dacf02f" parameterName="data_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="10ca02c8-02dd-4842-a6c5-580c4a270fd0" parameterName="rfckey" parameterType="STRING" range="A-Z"/>
-                    <parameter id="7e589f5d-2f13-4abd-8606-3741018a456c" parameterName="key_null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="af949f54-cd4a-4833-9c99-0aaa0057c440" parameterName="type_null_param" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="39390755-1361-4718-9752-687f5ce49976" name="TestMgr_rdkfwupdater_GetServURL">
-                <parameters>
-                    <parameter id="ff2261b1-d1f8-4e25-b94c-592f2aed1223" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="c7459281-2d86-4bc4-a0b2-bd537c868dfa" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="e7a2d5f1-b2a4-47bf-a29e-b1f91e515a74" name="TestMgr_rdkfwupdater_isInStateRed">
+            <function id="81ae56d6-e15f-492b-bafe-d03b4310fbbc" name="TestMgr_rdkfwupdater_isPDRIEnable">
                 <parameters/>
             </function>
-            <function id="9e25096e-d2ea-4680-a1fa-82aec5c94f6c" name="TestMgr_rdkfwupdater_isMtlsEnabled">
+            <function id="cc59376a-60b1-43c3-b19c-34c4c364d277" name="TestMgr_rdkfwupdater_GetTR181Url">
                 <parameters>
-                    <parameter id="72fe2213-a6a4-4907-a5ec-9554ca4594d1" parameterName="devicename" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="171dff18-4608-412c-b1c5-ec9c2af72f9e" name="TestMgr_rdkfwupdater_GetExperience">
-                <parameters>
-                    <parameter id="c12dee5c-28f8-4749-bf27-ff0b3f89111a" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="bc530162-fd33-4a3f-82ea-8a8145837eed" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="c558cf1b-e5a9-4992-93a6-78fc8382b497" name="TestMgr_rdkfwupdater_GetAdditionalFwVerInfo">
-                <parameters>
-                    <parameter id="871320b3-9a3d-4752-9cf6-3f3849bdefa1" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="59f6cfb5-6366-4f45-a87e-0e67426eff7f" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                </parameters>
-            </function>
-            <function id="a4413b1e-bce8-4132-b668-800e6917aec3" name="TestMgr_rdkfwupdater_mergeLists">
-                <parameters>
-                    <parameter id="38c1aea9-c55d-4408-8fe8-2a4cad8c0a7e" parameterName="null_list2" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="f317aa09-766f-43a4-aab1-3c06fb9926a9" parameterName="list2" parameterType="STRING" range="A-Z"/>
-                    <parameter id="545546db-a457-45de-b63f-c46d1453909d" parameterName="null_list1" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="e702aee9-259e-427a-aa2d-dc10304eff14" parameterName="list1" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="2de7d6b7-1611-444f-baee-11ba0fb0cc04" name="TestMgr_rdkfwupdater_getJsonRpc">
-                <parameters>
-                    <parameter id="43d2c6b0-dbfc-4cae-948e-c12ccf2ed95c" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="deb9e06c-034a-4e3a-8c51-d7ac07b38a1f" parameterName="string" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="ab9a90ec-9900-494b-9cff-4d695e06f498" name="TestMgr_rdkfwupdater_GetUTCTime">
-                <parameters>
-                    <parameter id="1ba4ec00-16a2-41e6-82b6-d09de2e7e6e3" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="f1b5aab5-5626-4656-a8d9-2676994a054a" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                </parameters>
-            </function>
-            <function id="cc4cd0c7-5935-48d8-879e-cf2d27ed4977" name="TestMgr_rdkfwupdater_GetCapabilities">
-                <parameters>
-                    <parameter id="ca792f26-8067-4cee-86e1-e2141e121983" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="128c7fc9-5963-40e7-89fe-712317c33503" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                </parameters>
-            </function>
-            <function id="0c8b6793-ff37-4157-9c92-44fb24d4a002" name="TestMgr_rdkfwupdater_GetBuildType">
-                <parameters>
-                    <parameter id="b49f3533-fc88-4ef4-af68-177a72b34fe2" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="ed019a0b-6e29-4aa1-82a6-60ae80641792" parameterName="BuildType_null_param_check" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="1bc89b30-005c-443c-a1a8-a2f87ba43880" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="2871cd42-d465-4550-a728-db28ab99eabe" parameterName="eURL_enum" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="3190d2f1-2b98-48b0-aaad-b6c9201ce435" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="25e4c359-689c-46ee-8826-0f5a1907db73" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
                 </parameters>
             </function>
             <function id="58c94bdd-95a6-44d8-96ab-efa2c4b49a7d" name="TestMgr_rdkfwupdater_getCurrentSysTimeSec">
                 <parameters/>
             </function>
-            <function id="20d680e0-c9dc-49df-b77e-5198b4675690" name="TestMgr_rdkfwupdater_GetSerialNum">
+            <function id="a043b01f-4459-47cd-8ae3-7ab4aea28d42" name="TestMgr_rdkfwupdater_GetRdmManifestVersion">
                 <parameters>
-                    <parameter id="b72c73ba-4688-4dc0-ab0d-63342e59fcfb" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="bad58588-e1b2-42e1-966e-8730e890a7ee" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="93949c62-50b6-4f31-bed1-ba2cef86c62a" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="7860dd78-fb85-47fa-bc00-902a42b50d89" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
                 </parameters>
+            </function>
+            <function id="0c8b6793-ff37-4157-9c92-44fb24d4a002" name="TestMgr_rdkfwupdater_GetBuildType">
+                <parameters>
+                    <parameter id="1bc89b30-005c-443c-a1a8-a2f87ba43880" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="ed019a0b-6e29-4aa1-82a6-60ae80641792" parameterName="BuildType_null_param_check" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="b49f3533-fc88-4ef4-af68-177a72b34fe2" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="0dff8f28-1dbc-40c8-a3f1-f36083fcf350" name="TestMgr_rdkfwupdater_getJRPCTokenData">
+                <parameters>
+                    <parameter id="7916f045-fe8c-4c00-b49e-a1cdedf906c4" parameterName="null_token" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="73d6b682-fa87-409c-82bb-c4a552f53bc0" parameterName="string" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a4a427fe-21d0-4d36-87c4-d88b0d9a1190" parameterName="null_tokenSize" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="f0886551-53e2-4882-80de-27c8159d4a77" name="TestMgr_rdkfwupdater_makeHttpHttps">
+                <parameters>
+                    <parameter id="cea5d8af-4f2e-4587-9077-6210cbf89f66" parameterName="string_size" parameterType="INTEGER" range="1-10"/>
+                    <parameter id="9503db59-200a-4143-93f2-72c855d10f2c" parameterName="string" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="965a0be4-9bb0-4810-a99b-e10abcd8c708" name="TestMgr_rdkfwupdater_isStateRedSupported">
+                <parameters/>
             </function>
             <function id="252c6c19-fd26-42f9-a819-ac25160b8f5d" name="TestMgr_rdkfwupdater_GetTimezone">
                 <parameters>
-                    <parameter id="1728349f-8006-4aab-a414-e322747afa17" parameterName="cpuarch" parameterType="STRING" range="A-Z"/>
-                    <parameter id="89fb3bec-cebd-4067-ab93-47e4c3e94b03" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="c2299aa9-3538-47b8-8ba5-bf6f09531f4b" parameterName="cpuarch_null_param_check" parameterType="INTEGER" range="0-1"/>
                     <parameter id="4ee3cd08-3cfd-4037-a8df-3644101b7b20" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="1728349f-8006-4aab-a414-e322747afa17" parameterName="cpuarch" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c2299aa9-3538-47b8-8ba5-bf6f09531f4b" parameterName="cpuarch_null_param_check" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="89fb3bec-cebd-4067-ab93-47e4c3e94b03" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
                 </parameters>
             </function>
-            <function id="17c2cecd-29af-49c8-a9f5-447a9850f9f1" name="TestMgr_rdkfwupdater_GetPartnerId">
+            <function id="aad9f264-12bb-4044-aa74-8e668a5100c1" name="TestMgr_rdkfwupdater_GetServerURL">
                 <parameters>
-                    <parameter id="420ec1f8-de7a-47a0-9116-a6ad7db35926" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="ab8df8ff-be43-4dd9-83a3-807543df74ba" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="4d4cb5aa-7e0b-476d-ac3e-632a7637f7ee" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="1dcd8114-54c3-4580-9425-5f208d6c7afd" parameterName="filename_null_check" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="cbd4cf5c-5218-4213-aef2-c39ef9c0994c" parameterName="filename" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d3384dea-27a3-47ca-a963-e5d6e93e08d7" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
                 </parameters>
             </function>
-            <function id="b1d86c09-942f-4648-927b-c9c47f95aaef" name="TestMgr_rdkfwupdater_MemDLAlloc">
+            <function id="0d0900c8-91fd-43a2-8cac-3aeaecfe369c" name="TestMgr_rdkfwupdater_get_system_uptime">
                 <parameters>
-                    <parameter id="cbe0ba61-91ae-4983-bd60-2e2c5b502d37" parameterName="allocate_size" parameterType="INTEGER" range="1-10000"/>
-                    <parameter id="57c0b263-315a-4fc6-9bd1-852ef7f1cbcc" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="15f298b2-e41d-4c64-87db-3990f2803251" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="ab9a90ec-9900-494b-9cff-4d695e06f498" name="TestMgr_rdkfwupdater_GetUTCTime">
+                <parameters>
+                    <parameter id="f1b5aab5-5626-4656-a8d9-2676994a054a" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="1ba4ec00-16a2-41e6-82b6-d09de2e7e6e3" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
                 </parameters>
             </function>
             <function id="0dece8d4-2c0b-4720-b280-81c9d870feab" name="TestMgr_rdkfwupdater_GetInstalledBundles">
@@ -165,89 +99,16 @@
                     <parameter id="c45faac2-6e25-4e4d-b971-2bf25e7e9015" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
                 </parameters>
             </function>
-            <function id="167b77b4-8c20-4829-ad76-b9651ac032cc" name="TestMgr_rdkfwupdater_GetRemoteInfo">
-                <parameters>
-                    <parameter id="b21d2b14-b898-4031-966b-3d14ce36515e" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="83ad910b-bf37-433f-a1cf-eec62e62dc4b" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                </parameters>
-            </function>
-            <function id="d8c6eb7a-9dcf-40c4-951d-b39648a0ff00" name="TestMgr_rdkfwupdater_GetPDRIFileName">
-                <parameters>
-                    <parameter id="2bd071e7-c081-44d0-9904-3807838d918a" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="d9d7b907-a247-4484-ac71-d02f5409b7dc" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="1594afe2-446d-45fd-bba5-1cf83e0a253c" name="TestMgr_rdkfwupdater_GetPDRIVersion">
-                <parameters>
-                    <parameter id="9085ebff-2421-4e61-8fd0-d00ebd2e1555" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="83f42b8b-b7d5-4a0f-b540-2444814b5ba9" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                </parameters>
-            </function>
-            <function id="cedbaddf-6401-41bb-aeda-f4bdb414e186" name="TestMgr_rdkfwupdater_GetFileContents">
-                <parameters>
-                    <parameter id="88dd7ad8-4fa1-4ad4-92c8-728cbcf4b46f" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="b123ab73-a9eb-401c-9168-e9a48f664f3f" parameterName="filename_null_check" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="c87a4f4b-14a5-4f65-bed3-a41f203cc3f4" parameterName="filename" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="5c6d564a-cfbc-4621-b405-d579ab848db7" name="TestMgr_rdkfwupdater_GetFirmwareVersion">
-                <parameters>
-                    <parameter id="833258ab-fe83-4d93-911d-88c7e0372053" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="c9f87892-4c3a-4fe4-ad10-cb19357e7b3d" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
             <function id="3692f19c-2b97-4547-a3f1-14266f15289b" name="TestMgr_rdkfwupdater_stripinvalidchar">
                 <parameters>
-                    <parameter id="9c59764c-5163-433b-b6d3-471f3bef5327" parameterName="string_size" parameterType="INTEGER" range="1-1000"/>
                     <parameter id="fa4fa452-4ed5-4b4a-a854-577a124e0b3a" parameterName="string" parameterType="STRING" range="A-Z"/>
+                    <parameter id="9c59764c-5163-433b-b6d3-471f3bef5327" parameterName="string_size" parameterType="INTEGER" range="1-1000"/>
                 </parameters>
             </function>
-            <function id="0bf7861a-5029-4f51-8641-d544c1f09726" name="TestMgr_rdkfwupdater_getRFCSettings">
+            <function id="cc4cd0c7-5935-48d8-879e-cf2d27ed4977" name="TestMgr_rdkfwupdater_GetCapabilities">
                 <parameters>
-                    <parameter id="79580b94-dacf-40f5-b93d-3b7d9aba6a83" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="aad9f264-12bb-4044-aa74-8e668a5100c1" name="TestMgr_rdkfwupdater_GetServerURL">
-                <parameters>
-                    <parameter id="d3384dea-27a3-47ca-a963-e5d6e93e08d7" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="4d4cb5aa-7e0b-476d-ac3e-632a7637f7ee" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="1dcd8114-54c3-4580-9425-5f208d6c7afd" parameterName="filename_null_check" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="cbd4cf5c-5218-4213-aef2-c39ef9c0994c" parameterName="filename" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="f0886551-53e2-4882-80de-27c8159d4a77" name="TestMgr_rdkfwupdater_makeHttpHttps">
-                <parameters>
-                    <parameter id="9503db59-200a-4143-93f2-72c855d10f2c" parameterName="string" parameterType="STRING" range="A-Z"/>
-                    <parameter id="cea5d8af-4f2e-4587-9077-6210cbf89f66" parameterName="string_size" parameterType="INTEGER" range="1-10"/>
-                </parameters>
-            </function>
-            <function id="a043b01f-4459-47cd-8ae3-7ab4aea28d42" name="TestMgr_rdkfwupdater_GetRdmManifestVersion">
-                <parameters>
-                    <parameter id="7860dd78-fb85-47fa-bc00-902a42b50d89" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="93949c62-50b6-4f31-bed1-ba2cef86c62a" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                </parameters>
-            </function>
-            <function id="fb9af5b7-73e9-45bc-8293-a5f4681d206b" name="TestMgr_rdkfwupdater_GetRemoteVers">
-                <parameters>
-                    <parameter id="43064125-f164-4b0e-a56c-c431e31dec9b" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="19ddd6eb-84ce-44fd-9470-adfe3483f983" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="965a0be4-9bb0-4810-a99b-e10abcd8c708" name="TestMgr_rdkfwupdater_isStateRedSupported">
-                <parameters/>
-            </function>
-            <function id="cc59376a-60b1-43c3-b19c-34c4c364d277" name="TestMgr_rdkfwupdater_GetTR181Url">
-                <parameters>
-                    <parameter id="3190d2f1-2b98-48b0-aaad-b6c9201ce435" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
-                    <parameter id="2871cd42-d465-4550-a728-db28ab99eabe" parameterName="eURL_enum" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="25e4c359-689c-46ee-8826-0f5a1907db73" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="0dff8f28-1dbc-40c8-a3f1-f36083fcf350" name="TestMgr_rdkfwupdater_getJRPCTokenData">
-                <parameters>
-                    <parameter id="a4a427fe-21d0-4d36-87c4-d88b0d9a1190" parameterName="null_tokenSize" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="73d6b682-fa87-409c-82bb-c4a552f53bc0" parameterName="string" parameterType="STRING" range="A-Z"/>
-                    <parameter id="7916f045-fe8c-4c00-b49e-a1cdedf906c4" parameterName="null_token" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="128c7fc9-5963-40e7-89fe-712317c33503" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="ca792f26-8067-4cee-86e1-e2141e121983" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
                 </parameters>
             </function>
             <function id="6b09900c-b794-44e1-9a70-aae5a1c4766e" name="TestMgr_rdkfwupdater_GetOsClass">
@@ -256,24 +117,163 @@
                     <parameter id="6e04349d-ed69-4d41-a847-33bfdfdcee40" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
                 </parameters>
             </function>
-            <function id="f77928b8-7133-4b5f-8608-6a888c047de1" name="TestMgr_rdkfwupdater_isOCSPEnable">
-                <parameters/>
+            <function id="167b77b4-8c20-4829-ad76-b9651ac032cc" name="TestMgr_rdkfwupdater_GetRemoteInfo">
+                <parameters>
+                    <parameter id="83ad910b-bf37-433f-a1cf-eec62e62dc4b" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="b21d2b14-b898-4031-966b-3d14ce36515e" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="0bf7861a-5029-4f51-8641-d544c1f09726" name="TestMgr_rdkfwupdater_getRFCSettings">
+                <parameters>
+                    <parameter id="79580b94-dacf-40f5-b93d-3b7d9aba6a83" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="9e25096e-d2ea-4680-a1fa-82aec5c94f6c" name="TestMgr_rdkfwupdater_isMtlsEnabled">
+                <parameters>
+                    <parameter id="72fe2213-a6a4-4907-a5ec-9554ca4594d1" parameterName="devicename" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a4413b1e-bce8-4132-b668-800e6917aec3" name="TestMgr_rdkfwupdater_mergeLists">
+                <parameters>
+                    <parameter id="f317aa09-766f-43a4-aab1-3c06fb9926a9" parameterName="list2" parameterType="STRING" range="A-Z"/>
+                    <parameter id="e702aee9-259e-427a-aa2d-dc10304eff14" parameterName="list1" parameterType="STRING" range="A-Z"/>
+                    <parameter id="38c1aea9-c55d-4408-8fe8-2a4cad8c0a7e" parameterName="null_list2" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="545546db-a457-45de-b63f-c46d1453909d" parameterName="null_list1" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="c558cf1b-e5a9-4992-93a6-78fc8382b497" name="TestMgr_rdkfwupdater_GetAdditionalFwVerInfo">
+                <parameters>
+                    <parameter id="59f6cfb5-6366-4f45-a87e-0e67426eff7f" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="871320b3-9a3d-4752-9cf6-3f3849bdefa1" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="943875f9-8c7b-44c4-bf81-128226f4ff17" name="TestMgr_rdkfwupdater_write_RFCProperty">
+                <parameters>
+                    <parameter id="32cd29fc-5aef-403b-b4e3-0c2970e5304d" parameterName="rfctype" parameterType="STRING" range="A-Z"/>
+                    <parameter id="77783677-0e00-43f5-8772-83080d31ea90" parameterName="key_null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="b2604e68-8fa2-4c74-aab6-72b1f3a791ba" parameterName="rfckey" parameterType="STRING" range="A-Z"/>
+                    <parameter id="658e0749-6ba7-44ed-82d1-97e174cf61e6" parameterName="dataType" parameterType="INTEGER" range="1-10"/>
+                    <parameter id="b450797d-e2fe-4583-88e9-40a9092c34d9" parameterName="rfcdata" parameterType="STRING" range="A-Z"/>
+                    <parameter id="bd2bfe3f-9c3a-4169-977e-0a8328641ec3" parameterName="type_null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="e1714b2d-cbab-4203-8e60-7917e05be418" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="20d680e0-c9dc-49df-b77e-5198b4675690" name="TestMgr_rdkfwupdater_GetSerialNum">
+                <parameters>
+                    <parameter id="bad58588-e1b2-42e1-966e-8730e890a7ee" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="b72c73ba-4688-4dc0-ab0d-63342e59fcfb" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="7305f340-6c8f-4371-99bb-f23f008e852b" name="TestMgr_rdkfwupdater_RunCommand">
+                <parameters>
+                    <parameter id="375a87fe-e752-4452-9fb5-961adcd236b5" parameterName="argument" parameterType="STRING" range="A-Z"/>
+                    <parameter id="50ba137a-40bc-4f05-bbc9-ed5821205736" parameterName="command" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b42892e2-bf10-41a3-9ef6-98871f9a95db" parameterName="result_empty" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="e11468ea-3376-476e-a255-bc29976695a2" parameterName="result_size_empty" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="2f6fa38d-3436-4736-ae95-b7c63f428551" parameterName="result_size" parameterType="INTEGER" range="1-1000"/>
+                </parameters>
+            </function>
+            <function id="de79ba07-850d-4510-89ec-7ff02edcc347" name="TestMgr_rdkfwupdater_GetEstbMac">
+                <parameters>
+                    <parameter id="db52cee5-b5db-49e6-9b94-e5d9b35bca59" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="87b5221e-17f7-4b01-8f28-5de3337fe639" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="33ed0c1c-b682-41da-b71c-9d36b29809c9" name="TestMgr_rdkfwupdater_GetModelNum">
+                <parameters>
+                    <parameter id="a88947ae-e8bc-4259-a6e4-f4a31083ecd6" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="dce3bc62-5104-4fb0-9248-d50f7eeec5d8" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                </parameters>
+            </function>
+            <function id="3322550f-d05e-4da1-b196-d18099d47891" name="TestMgr_rdkfwupdater_getMetaDataFile">
+                <parameters>
+                    <parameter id="d6db218a-567f-47ac-9147-d04ed05510b4" parameterName="directory" parameterType="STRING" range="A-Z"/>
+                    <parameter id="776c2c52-a39d-4b9b-b891-2dd672523f19" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="bfae0b70-1508-445b-9594-2ce32264516c" name="TestMgr_rdkfwupdater_GetAccountID">
+                <parameters>
+                    <parameter id="0bf954ff-5c80-4077-80e1-3599f41f7b68" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="6693ad2d-da6e-405e-b55c-a645373c9852" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                </parameters>
+            </function>
+            <function id="17c2cecd-29af-49c8-a9f5-447a9850f9f1" name="TestMgr_rdkfwupdater_GetPartnerId">
+                <parameters>
+                    <parameter id="420ec1f8-de7a-47a0-9116-a6ad7db35926" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="ab8df8ff-be43-4dd9-83a3-807543df74ba" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                </parameters>
+            </function>
+            <function id="2de7d6b7-1611-444f-baee-11ba0fb0cc04" name="TestMgr_rdkfwupdater_getJsonRpc">
+                <parameters>
+                    <parameter id="deb9e06c-034a-4e3a-8c51-d7ac07b38a1f" parameterName="string" parameterType="STRING" range="A-Z"/>
+                    <parameter id="43d2c6b0-dbfc-4cae-948e-c12ccf2ed95c" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
             </function>
             <function id="309ef950-91f1-42aa-a5cd-dab0d091a831" name="TestMgr_rdkfwupdater_isThrottleEnabled">
                 <parameters>
+                    <parameter id="c359221b-90c9-4e07-b8e4-ec64c9b98473" parameterName="devname_null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="3e27285d-c0e6-452e-92b2-18c52f790fb4" parameterName="devicename" parameterType="STRING" range="A-Z"/>
+                    <parameter id="1d69f0eb-f399-4452-8950-bd6d1f14b923" parameterName="rebootflag" parameterType="STRING" range="A-Z"/>
                     <parameter id="08d37b60-bd95-4787-969a-8e65dcc6038c" parameterName="appmode" parameterType="INTEGER" range="-1-10"/>
                     <parameter id="18fff092-87e1-470c-916e-a119666bf92e" parameterName="reboot_null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="3e27285d-c0e6-452e-92b2-18c52f790fb4" parameterName="devicename" parameterType="STRING" range="A-Z"/>
-                    <parameter id="c359221b-90c9-4e07-b8e4-ec64c9b98473" parameterName="devname_null_param" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="1d69f0eb-f399-4452-8950-bd6d1f14b923" parameterName="rebootflag" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="81ae56d6-e15f-492b-bafe-d03b4310fbbc" name="TestMgr_rdkfwupdater_isPDRIEnable">
+            <function id="39390755-1361-4718-9752-687f5ce49976" name="TestMgr_rdkfwupdater_GetServURL">
+                <parameters>
+                    <parameter id="ff2261b1-d1f8-4e25-b94c-592f2aed1223" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="c7459281-2d86-4bc4-a0b2-bd537c868dfa" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="79a4c1be-7c68-44af-bdd4-909256fcd586" name="TestMgr_rdkfwupdater_read_RFCProperty">
+                <parameters>
+                    <parameter id="7e589f5d-2f13-4abd-8606-3741018a456c" parameterName="key_null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="af949f54-cd4a-4833-9c99-0aaa0057c440" parameterName="type_null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="10ca02c8-02dd-4842-a6c5-580c4a270fd0" parameterName="rfckey" parameterType="STRING" range="A-Z"/>
+                    <parameter id="54489d50-f5be-4e9d-8e77-fe3adbb646c5" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="8c8fc50c-e6da-4f2d-8151-35dd8dacf02f" parameterName="data_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="8c9264f0-f82e-4f59-8e7c-b604701e882e" parameterName="rfctype" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f77928b8-7133-4b5f-8608-6a888c047de1" name="TestMgr_rdkfwupdater_isOCSPEnable">
                 <parameters/>
             </function>
-            <function id="0d0900c8-91fd-43a2-8cac-3aeaecfe369c" name="TestMgr_rdkfwupdater_get_system_uptime">
+            <function id="171dff18-4608-412c-b1c5-ec9c2af72f9e" name="TestMgr_rdkfwupdater_GetExperience">
                 <parameters>
-                    <parameter id="15f298b2-e41d-4c64-87db-3990f2803251" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="bc530162-fd33-4a3f-82ea-8a8145837eed" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="c12dee5c-28f8-4749-bf27-ff0b3f89111a" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                </parameters>
+            </function>
+            <function id="5c6d564a-cfbc-4621-b405-d579ab848db7" name="TestMgr_rdkfwupdater_GetFirmwareVersion">
+                <parameters>
+                    <parameter id="833258ab-fe83-4d93-911d-88c7e0372053" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="c9f87892-4c3a-4fe4-ad10-cb19357e7b3d" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="d8c6eb7a-9dcf-40c4-951d-b39648a0ff00" name="TestMgr_rdkfwupdater_GetPDRIFileName">
+                <parameters>
+                    <parameter id="2bd071e7-c081-44d0-9904-3807838d918a" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="d9d7b907-a247-4484-ac71-d02f5409b7dc" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="b1d86c09-942f-4648-927b-c9c47f95aaef" name="TestMgr_rdkfwupdater_MemDLAlloc">
+                <parameters>
+                    <parameter id="57c0b263-315a-4fc6-9bd1-852ef7f1cbcc" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="cbe0ba61-91ae-4983-bd60-2e2c5b502d37" parameterName="allocate_size" parameterType="INTEGER" range="1-10000"/>
+                </parameters>
+            </function>
+            <function id="e7a2d5f1-b2a4-47bf-a29e-b1f91e515a74" name="TestMgr_rdkfwupdater_isInStateRed">
+                <parameters/>
+            </function>
+            <function id="fb9af5b7-73e9-45bc-8293-a5f4681d206b" name="TestMgr_rdkfwupdater_GetRemoteVers">
+                <parameters>
+                    <parameter id="19ddd6eb-84ce-44fd-9470-adfe3483f983" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="43064125-f164-4b0e-a56c-c431e31dec9b" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                </parameters>
+            </function>
+            <function id="1594afe2-446d-45fd-bba5-1cf83e0a253c" name="TestMgr_rdkfwupdater_GetPDRIVersion">
+                <parameters>
+                    <parameter id="83f42b8b-b7d5-4a0f-b540-2444814b5ba9" parameterName="buffer_size" parameterType="INTEGER" range="1-1000"/>
+                    <parameter id="9085ebff-2421-4e61-8fd0-d00ebd2e1555" parameterName="null_param" parameterType="INTEGER" range="0-1"/>
                 </parameters>
             </function>
         </functions>

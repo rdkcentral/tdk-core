@@ -17,52 +17,12 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="6b77e670-69c6-402e-9229-742397ad198e" name="CMAgent_SetCommit">
-                <parameters>
-                    <parameter id="d7d1cade-c604-4e05-b294-c9df5500f1be" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="3b18035b-5477-47d2-9986-88cad19b8335" name="CMAgent_GetNames">
-                <parameters>
-                    <parameter id="5ed0de51-7660-43d2-8f52-0c360c70bef9" parameterName="brecursive" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="4b8f706a-4f59-41c3-8f3c-b2d7163361fb" parameterName="pathname" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="5788c100-d2c1-4c89-ac81-6b85b0b22070" name="CMAgent_DelObject">
-                <parameters>
-                    <parameter id="472e6c83-f318-4d36-86bc-cfe02ad9a28e" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="18cb5529-f1c2-42ee-935e-d634a0b57ce8" parameterName="apiTest" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="a9aa6ee6-5225-4f6e-b866-76425664e61a" name="CMAgent_Set_Get">
-                <parameters>
-                    <parameter id="3f91f7a7-2334-457a-a626-75d717601172" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
-                    <parameter id="1a78f0be-36c5-4580-ba84-8d0022a57041" parameterName="commit" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="5e13227a-c998-403f-bcf0-2ea597c210bf" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="2202628b-3803-4151-9286-4a4ab1c565c5" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="a78cdc72-8821-45c9-be8d-6e7e37cf3091" name="CMAgent_Get">
-                <parameters>
-                    <parameter id="17a64a65-376d-4e32-8e0a-3940b53a09b8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="2c25b3bb-249d-4936-90cd-14dfb890d7b3" name="CMAgent_GetHealth">
-                <parameters>
-                    <parameter id="993b97bc-e05a-417e-9958-17ce5f9e5d59" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="2dc1cab5-9511-4329-a92a-851632eea199" name="CMAgent_GetAttr">
-                <parameters>
-                    <parameter id="0a65d6e5-0cee-4267-a41f-2fcf1d3cc32d" parameterName="paramname" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="af6e8f4e-7d71-4c6e-8e62-7f8f96bb0fd1" name="CMAgent_SetSessionId">
                 <parameters>
                     <parameter id="97853ec0-1300-4b76-a9f1-f2e44a7b2fab" parameterName="sessionId" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="f28a2b28-d036-433d-9871-404d35d4e160" parameterName="priority" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="9c04febe-f7aa-4962-b812-6bb2df6d2305" parameterName="override" parameterType="INTEGER" range="0-1"/>
                     <parameter id="1256b7f4-cd0d-4ab8-a2d3-51a37234d274" parameterName="pathname" parameterType="STRING" range="A-Z"/>
+                    <parameter id="9c04febe-f7aa-4962-b812-6bb2df6d2305" parameterName="override" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="f28a2b28-d036-433d-9871-404d35d4e160" parameterName="priority" parameterType="INTEGER" range="0-1"/>
                 </parameters>
             </function>
             <function id="a3e3a396-a46d-428d-add6-eeec315313b5" name="CMAgent_AddObject">
@@ -77,12 +37,52 @@
                     <parameter id="f54ac0b7-71cd-4715-97a6-8fa5db67c9d3" parameterName="paramname" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
+            <function id="a9aa6ee6-5225-4f6e-b866-76425664e61a" name="CMAgent_Set_Get">
+                <parameters>
+                    <parameter id="3f91f7a7-2334-457a-a626-75d717601172" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2202628b-3803-4151-9286-4a4ab1c565c5" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5e13227a-c998-403f-bcf0-2ea597c210bf" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="1a78f0be-36c5-4580-ba84-8d0022a57041" parameterName="commit" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
             <function id="c8f6a384-eb27-464c-8c2d-ee080fadb403" name="CMAgent_Set">
                 <parameters>
                     <parameter id="14553b9d-dd54-4986-9c48-c7ef38d4bcb4" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
                     <parameter id="ae5dd325-8342-4819-a778-268906048864" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                     <parameter id="66d80498-6ea4-4650-af5b-644e7457cb5f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
                     <parameter id="f099921b-d44e-4ca8-99fa-ffbb67fc8676" parameterName="commit" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="2c25b3bb-249d-4936-90cd-14dfb890d7b3" name="CMAgent_GetHealth">
+                <parameters>
+                    <parameter id="993b97bc-e05a-417e-9958-17ce5f9e5d59" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3b18035b-5477-47d2-9986-88cad19b8335" name="CMAgent_GetNames">
+                <parameters>
+                    <parameter id="4b8f706a-4f59-41c3-8f3c-b2d7163361fb" parameterName="pathname" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5ed0de51-7660-43d2-8f52-0c360c70bef9" parameterName="brecursive" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="6b77e670-69c6-402e-9229-742397ad198e" name="CMAgent_SetCommit">
+                <parameters>
+                    <parameter id="d7d1cade-c604-4e05-b294-c9df5500f1be" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5788c100-d2c1-4c89-ac81-6b85b0b22070" name="CMAgent_DelObject">
+                <parameters>
+                    <parameter id="18cb5529-f1c2-42ee-935e-d634a0b57ce8" parameterName="apiTest" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="472e6c83-f318-4d36-86bc-cfe02ad9a28e" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a78cdc72-8821-45c9-be8d-6e7e37cf3091" name="CMAgent_Get">
+                <parameters>
+                    <parameter id="17a64a65-376d-4e32-8e0a-3940b53a09b8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2dc1cab5-9511-4329-a92a-851632eea199" name="CMAgent_GetAttr">
+                <parameters>
+                    <parameter id="0a65d6e5-0cee-4267-a41f-2fcf1d3cc32d" parameterName="paramname" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>

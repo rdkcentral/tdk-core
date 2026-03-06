@@ -17,14 +17,14 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="789426f9-aaac-44f1-8354-475fbd91e0b3" name="BLEHAL_GetStatus">
-                <parameters>
-                    <parameter id="eb20dc99-15a2-4229-97c1-ec0d87d6b13c" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
             <function id="fcc1b47e-1bc3-4780-aaca-46ada6dad78e" name="BLEHAL_Enable">
                 <parameters>
                     <parameter id="01a519a3-d9a1-4c37-af99-a48fdcb8df3e" parameterName="enable" parameterType="INTEGER" range="1-3"/>
+                </parameters>
+            </function>
+            <function id="789426f9-aaac-44f1-8354-475fbd91e0b3" name="BLEHAL_GetStatus">
+                <parameters>
+                    <parameter id="eb20dc99-15a2-4229-97c1-ec0d87d6b13c" parameterName="flag" parameterType="INTEGER" range="0-1"/>
                 </parameters>
             </function>
         </functions>
