@@ -17,19 +17,7 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="2e2df4d1-6e1f-4ccc-a2c8-23e0c47338e0" name="ethsw_stub_hal_Get_Port_Admin_Status">
-                <parameters>
-                    <parameter id="7d32635e-849a-49af-9c32-17ff546fa077" parameterName="PortID" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="8885b7a2-c2a5-4bfc-8154-13d1de6efbae" parameterName="flag" parameterType="INTEGER" range="0-9"/>
-                </parameters>
-            </function>
-            <function id="a1337016-7f5f-4b0e-a3f3-35084bcacd88" name="ethsw_stub_hal_Get_Port_Status">
-                <parameters>
-                    <parameter id="145bcdba-f7ed-4f86-8483-c7753ab5f132" parameterName="PortID" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="80d85542-23c0-4243-aca6-d3e3252590ae" parameterName="flag" parameterType="INTEGER" range="0-9"/>
-                </parameters>
-            </function>
-            <function id="788319f0-6eee-4128-b308-1db6a3ca5ff5" name="ethsw_stub_hal_Init">
+            <function id="27cf31ca-b878-42fe-878a-40a542a2b1e0" name="ethsw_stub_hal_Get_EthWanLinkStatus">
                 <parameters/>
             </function>
             <function id="cc77a3cb-04f4-4986-8c77-26c03bd8c32c" name="ethsw_stub_hal_SetPortAdminStatus">
@@ -38,51 +26,13 @@
                     <parameter id="0dabc888-65af-4978-8107-a1b0339bfa97" parameterName="adminstatus" parameterType="INTEGER" range="0-9"/>
                 </parameters>
             </function>
-            <function id="1243e6eb-4918-4780-8a28-bed042777cc6" name="ethsw_stub_hal_Set_EthWanEnable">
-                <parameters>
-                    <parameter id="852acfaa-6bf7-47eb-b6e7-861156cfbfb2" parameterName="enable" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="3f1ba917-1744-49c2-ac1a-598043275454" name="ethsw_stub_hal_SetPortCfg">
-                <parameters>
-                    <parameter id="341e8b66-2e42-491f-9e35-b06b300b8a84" parameterName="linkrate" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="4cda0e06-3c4b-4293-9f75-23cf1294113d" parameterName="PortID" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="d22b59ac-b723-46b9-9eaa-5a17ce8b81b4" parameterName="mode" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="ce86904b-7b26-4dd3-a125-c9259082495c" name="ethsw_stub_hal_Get_EthWanInterfaceName">
-                <parameters>
-                    <parameter id="4fad369a-88ee-46ab-b5d3-ad288fa9e7fc" parameterName="flag" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="27cf31ca-b878-42fe-878a-40a542a2b1e0" name="ethsw_stub_hal_Get_EthWanLinkStatus">
+            <function id="788319f0-6eee-4128-b308-1db6a3ca5ff5" name="ethsw_stub_hal_Init">
                 <parameters/>
             </function>
-            <function id="f2f47113-4790-4df8-839e-b15c9683130c" name="ethsw_stub_hal_Set_EthWanPort">
+            <function id="a1337016-7f5f-4b0e-a3f3-35084bcacd88" name="ethsw_stub_hal_Get_Port_Status">
                 <parameters>
-                    <parameter id="ede3f279-5acb-4e64-a4f5-d1efbdc9bce2" parameterName="port" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="85b256ff-0ddb-445e-b3de-36de6f369a9b" name="ethsw_stub_hal_Get_EthWanEnable">
-                <parameters>
-                    <parameter id="e34a467e-b160-4f24-ba58-bb33ee2b8960" parameterName="flag" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="9c87a57b-11fd-460d-b0b4-5031cad6379b" name="ethsw_stub_hal_SetAgingSpeed">
-                <parameters>
-                    <parameter id="b2d70beb-9b6b-4eee-9b02-29432449d7f4" parameterName="AgingSpeed" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="0fc3d777-dcf8-4c01-b296-4638da510b8b" parameterName="PortID" parameterType="INTEGER" range="0-9"/>
-                </parameters>
-            </function>
-            <function id="d1dafa33-a220-4ab9-bbcc-cd02154861b1" name="ethsw_stub_hal_Get_Port_Cfg">
-                <parameters>
-                    <parameter id="c00a72f7-ac25-4884-b461-a50f2f3d9f16" parameterName="PortID" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="dc87bdda-a03a-4dac-8495-5093787dacb0" parameterName="flag" parameterType="INTEGER" range="0-9"/>
-                </parameters>
-            </function>
-            <function id="c985df90-ecd7-4a05-a12f-ec9259c025d3" name="ethsw_stub_hal_Get_AssociatedDevice">
-                <parameters>
-                    <parameter id="0fa151e2-9e23-4f13-b5e1-7545106e718a" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                    <parameter id="145bcdba-f7ed-4f86-8483-c7753ab5f132" parameterName="PortID" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="80d85542-23c0-4243-aca6-d3e3252590ae" parameterName="flag" parameterType="INTEGER" range="0-9"/>
                 </parameters>
             </function>
             <function id="0c6c5a44-5ea3-41aa-b47a-d92828b9c33d" name="ethsw_stub_hal_LocatePort_By_MacAddress">
@@ -94,6 +44,56 @@
             <function id="11b1774e-826d-4cbf-8ee4-8af23ac7ba00" name="ethsw_stub_hal_Get_EthWanPort">
                 <parameters>
                     <parameter id="4663ec4a-1178-41a0-a918-b2084496c440" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ce86904b-7b26-4dd3-a125-c9259082495c" name="ethsw_stub_hal_Get_EthWanInterfaceName">
+                <parameters>
+                    <parameter id="4fad369a-88ee-46ab-b5d3-ad288fa9e7fc" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2e2df4d1-6e1f-4ccc-a2c8-23e0c47338e0" name="ethsw_stub_hal_Get_Port_Admin_Status">
+                <parameters>
+                    <parameter id="8885b7a2-c2a5-4bfc-8154-13d1de6efbae" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="7d32635e-849a-49af-9c32-17ff546fa077" parameterName="PortID" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="c985df90-ecd7-4a05-a12f-ec9259c025d3" name="ethsw_stub_hal_Get_AssociatedDevice">
+                <parameters>
+                    <parameter id="0fa151e2-9e23-4f13-b5e1-7545106e718a" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="1243e6eb-4918-4780-8a28-bed042777cc6" name="ethsw_stub_hal_Set_EthWanEnable">
+                <parameters>
+                    <parameter id="852acfaa-6bf7-47eb-b6e7-861156cfbfb2" parameterName="enable" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="85b256ff-0ddb-445e-b3de-36de6f369a9b" name="ethsw_stub_hal_Get_EthWanEnable">
+                <parameters>
+                    <parameter id="e34a467e-b160-4f24-ba58-bb33ee2b8960" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f2f47113-4790-4df8-839e-b15c9683130c" name="ethsw_stub_hal_Set_EthWanPort">
+                <parameters>
+                    <parameter id="ede3f279-5acb-4e64-a4f5-d1efbdc9bce2" parameterName="port" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="3f1ba917-1744-49c2-ac1a-598043275454" name="ethsw_stub_hal_SetPortCfg">
+                <parameters>
+                    <parameter id="d22b59ac-b723-46b9-9eaa-5a17ce8b81b4" parameterName="mode" parameterType="STRING" range="A-Z"/>
+                    <parameter id="341e8b66-2e42-491f-9e35-b06b300b8a84" parameterName="linkrate" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="4cda0e06-3c4b-4293-9f75-23cf1294113d" parameterName="PortID" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="d1dafa33-a220-4ab9-bbcc-cd02154861b1" name="ethsw_stub_hal_Get_Port_Cfg">
+                <parameters>
+                    <parameter id="dc87bdda-a03a-4dac-8495-5093787dacb0" parameterName="flag" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="c00a72f7-ac25-4884-b461-a50f2f3d9f16" parameterName="PortID" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="9c87a57b-11fd-460d-b0b4-5031cad6379b" name="ethsw_stub_hal_SetAgingSpeed">
+                <parameters>
+                    <parameter id="0fc3d777-dcf8-4c01-b296-4638da510b8b" parameterName="PortID" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="b2d70beb-9b6b-4eee-9b02-29432449d7f4" parameterName="AgingSpeed" parameterType="INTEGER" range="0-9"/>
                 </parameters>
             </function>
         </functions>

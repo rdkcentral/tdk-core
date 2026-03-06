@@ -2,31 +2,31 @@
 <xml>
     <module>
         <!-- Module Id -->
-        <moduleId>9db5d773-f151-41dc-90a3-a9b091f3fc94</moduleId>
+        <moduleId>3cda2cf9-bfa5-48b6-bf47-17fa143fecdc</moduleId>
         <!-- Module name -->
-        <moduleName>fog</moduleName>
+        <moduleName>CrashUpload</moduleName>
         <!-- Category of the module -->
-        <category>RDKV</category>
+        <category>RDKB</category>
         <!-- Execution time out of module -->
-        <executionTimeOut>20</executionTimeOut>
+        <executionTimeOut>5</executionTimeOut>
         <!-- Test Group of the module -->
         <testGroup>Component</testGroup>
         <!-- Logs File Names of module -->
         <logFileNames>[]</logFileNames>
         <!-- Crash File Names of the module  -->
-        <crashFileNames>[]</crashFileNames>
+        <crashFileNames>[/rdklogs/logs]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="6fcee82a-8229-467e-b275-3849ecb0d1b3" name="Fog_Do_Nothing">
+            <function id="a612e592-b610-4b56-b604-67239f49fece" name="CrashUpload_DoNothing">
                 <parameters/>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->
         <primitivetests>
             <primitivetest>
-                <id>027c43f1-2224-49fe-8348-d2efc7ef5d0d</id>
-                <name>Fog_Do_Nothing</name>
-                <funName>Fog_Do_Nothing</funName>
+                <id>2036783e-fa21-4645-a568-5dc9a82ecd92</id>
+                <name>CrashUpload_DoNothing</name>
+                <funName>CrashUpload_DoNothing</funName>
                 <primitivetestparameters/>
             </primitivetest>
         </primitivetests>

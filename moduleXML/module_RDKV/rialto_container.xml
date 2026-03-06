@@ -30,9 +30,34 @@
                     <parameter id="746ae7a9-fc27-4080-9da5-ec35d4413748" parameterName="operation" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="bf22ed05-f717-4e5e-ad7f-33c1121ee0ee" name="HandleHomePage">
+            <function id="a0a9183e-82d7-4fb0-a5c8-12be4ae2d09b" name="HandleYoutubeSignIn">
                 <parameters>
-                    <parameter id="3d3daff6-bbba-476a-920e-ec1ce45f41bb" parameterName="image" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4be04526-af6c-4292-b74c-98dcd14472ea" parameterName="image" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="1672a6b6-d8f5-4f49-87fc-d85a4278f0c2" name="LaunchApplication">
+                <parameters/>
+            </function>
+            <function id="3b580fed-a7fc-46a9-bf64-de9625f560a9" name="checkPROC">
+                <parameters>
+                    <parameter id="838ca898-1028-45a6-ad83-38415290f697" parameterName="check_pause" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="327e68dc-b28e-4491-bb53-f8ae7613f7e3" name="checkApplicationInstalled">
+                <parameters/>
+            </function>
+            <function id="861b58e5-521c-4dc0-ae68-fd5dcc38baee" name="KillApplication">
+                <parameters/>
+            </function>
+            <function id="1d60afea-29f8-4fda-87b4-a0d3eddbdd27" name="executeInDUT">
+                <parameters>
+                    <parameter id="8829e6d6-d09c-4f0f-8b4d-4c1c2215e0b0" parameterName="command" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2994ca10-28e8-44a8-ad43-5705a05d9faa" name="getSSHParams">
+                <parameters>
+                    <parameter id="4e3a21a5-9fbd-4252-9812-d7ad4942ff05" parameterName="deviceIP" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ca8f1351-a23a-4ef5-853e-cca33740a10d" parameterName="realpath" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="3f7132ac-e93f-4713-939f-55ed8171530d" name="executeCurlCommand">
@@ -41,34 +66,9 @@
                     <parameter id="07b87cc9-ffdf-4931-aa69-0f7c6ddd0b19" parameterName="value" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="1d60afea-29f8-4fda-87b4-a0d3eddbdd27" name="executeInDUT">
+            <function id="bf22ed05-f717-4e5e-ad7f-33c1121ee0ee" name="HandleHomePage">
                 <parameters>
-                    <parameter id="8829e6d6-d09c-4f0f-8b4d-4c1c2215e0b0" parameterName="command" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="861b58e5-521c-4dc0-ae68-fd5dcc38baee" name="KillApplication">
-                <parameters/>
-            </function>
-            <function id="327e68dc-b28e-4491-bb53-f8ae7613f7e3" name="checkApplicationInstalled">
-                <parameters/>
-            </function>
-            <function id="1672a6b6-d8f5-4f49-87fc-d85a4278f0c2" name="LaunchApplication">
-                <parameters/>
-            </function>
-            <function id="2994ca10-28e8-44a8-ad43-5705a05d9faa" name="getSSHParams">
-                <parameters>
-                    <parameter id="4e3a21a5-9fbd-4252-9812-d7ad4942ff05" parameterName="deviceIP" parameterType="STRING" range="A-Z"/>
-                    <parameter id="ca8f1351-a23a-4ef5-853e-cca33740a10d" parameterName="realpath" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="a0a9183e-82d7-4fb0-a5c8-12be4ae2d09b" name="HandleYoutubeSignIn">
-                <parameters>
-                    <parameter id="4be04526-af6c-4292-b74c-98dcd14472ea" parameterName="image" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="3b580fed-a7fc-46a9-bf64-de9625f560a9" name="checkPROC">
-                <parameters>
-                    <parameter id="838ca898-1028-45a6-ad83-38415290f697" parameterName="check_pause" parameterType="STRING" range="A-Z"/>
+                    <parameter id="3d3daff6-bbba-476a-920e-ec1ce45f41bb" parameterName="image" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>

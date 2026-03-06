@@ -17,19 +17,21 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="ca938dfc-6389-440b-8a8f-223c9391221a" name="webaudio_getSSHParams">
-                <parameters/>
-            </function>
-            <function id="00625d1a-3090-4081-89b2-6b829970ac81" name="webaudio_setPluginStatus">
+            <function id="0b82b38f-a4dd-40dc-9723-0e1880a731be" name="webaudio_getValue">
                 <parameters>
-                    <parameter id="774911b8-25f0-4b5f-9e75-ce1c84e924dc" parameterName="plugin" parameterType="STRING" range="A-Z"/>
-                    <parameter id="91412a1d-b63a-4c9c-8355-f59cfd1a652f" parameterName="uri" parameterType="STRING" range="A-Z"/>
-                    <parameter id="8c28563e-002c-4088-b207-9f3e2096c41f" parameterName="status" parameterType="STRING" range="A-Z"/>
+                    <parameter id="84ab1bb2-f921-41be-9333-1782277aa918" parameterName="method" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="5baba9b8-02c1-4b95-a1b5-2c971a0269ae" name="webaudio_getPluginStatus">
                 <parameters>
                     <parameter id="524d54ec-515c-43a5-bb48-8cf317d5fde1" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="00625d1a-3090-4081-89b2-6b829970ac81" name="webaudio_setPluginStatus">
+                <parameters>
+                    <parameter id="8c28563e-002c-4088-b207-9f3e2096c41f" parameterName="status" parameterType="STRING" range="A-Z"/>
+                    <parameter id="91412a1d-b63a-4c9c-8355-f59cfd1a652f" parameterName="uri" parameterType="STRING" range="A-Z"/>
+                    <parameter id="774911b8-25f0-4b5f-9e75-ce1c84e924dc" parameterName="plugin" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="47889174-060d-4c63-94e1-91e795adf099" name="webaudio_setValue">
@@ -38,28 +40,26 @@
                     <parameter id="981e8cf9-6efe-44ed-9bb7-f64a27506b2f" parameterName="value" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
+            <function id="d811f172-49ca-45d3-8987-92a8ca9b62ab" name="webaudio_getRequiredLog">
+                <parameters>
+                    <parameter id="585fece0-fbf1-4182-b6a4-b11895f7578f" parameterName="ssh_method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="6163b75c-e113-481a-83cd-63a32d2fc8a5" parameterName="command" parameterType="STRING" range="A-Z"/>
+                    <parameter id="576ac2f4-1421-4106-bbee-42e15eb9e077" parameterName="credentials" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ca938dfc-6389-440b-8a8f-223c9391221a" name="webaudio_getSSHParams">
+                <parameters/>
+            </function>
             <function id="0b80681b-f95e-48d2-961d-51d4cbfe7ce4" name="webaudio_getLogs_webinspectpage">
                 <parameters>
-                    <parameter id="020702ed-4985-4193-80f1-74cb1072262c" parameterName="browser" parameterType="STRING" range="A-Z"/>
                     <parameter id="71fdbeee-d0e9-4276-bcc3-24cba862e42b" parameterName="obj" parameterType="STRING" range="A-Z"/>
+                    <parameter id="020702ed-4985-4193-80f1-74cb1072262c" parameterName="browser" parameterType="STRING" range="A-Z"/>
                     <parameter id="163799f9-a4a0-4469-a483-4ab23eaf39ca" parameterName="url" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="b7e93460-d83a-493c-9a78-a64ae4cc2804" name="webaudio_prerequisite">
                 <parameters>
                     <parameter id="9b34dc3c-5b05-4244-9fb1-79e2aaf4b522" parameterName="VariableList" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="0b82b38f-a4dd-40dc-9723-0e1880a731be" name="webaudio_getValue">
-                <parameters>
-                    <parameter id="84ab1bb2-f921-41be-9333-1782277aa918" parameterName="method" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="d811f172-49ca-45d3-8987-92a8ca9b62ab" name="webaudio_getRequiredLog">
-                <parameters>
-                    <parameter id="6163b75c-e113-481a-83cd-63a32d2fc8a5" parameterName="command" parameterType="STRING" range="A-Z"/>
-                    <parameter id="576ac2f4-1421-4106-bbee-42e15eb9e077" parameterName="credentials" parameterType="STRING" range="A-Z"/>
-                    <parameter id="585fece0-fbf1-4182-b6a4-b11895f7578f" parameterName="ssh_method" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>

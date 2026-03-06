@@ -12,7 +12,7 @@
         <!-- Test Group of the module -->
         <testGroup>Component</testGroup>
         <!-- Logs File Names of module -->
-        <logFileNames>[]</logFileNames>
+        <logFileNames>[/opt/logs/wpeframework.log]</logFileNames>
         <!-- Crash File Names of the module  -->
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->

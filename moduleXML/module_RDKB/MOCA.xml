@@ -29,18 +29,18 @@
                     <parameter id="ca037b6c-cfd5-4559-b175-f18e53d8ed96" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="89fddba3-babd-44d3-9f7b-434394e6fc0b" name="Mocastub_SetKeypassphrase">
-                <parameters>
-                    <parameter id="8ab1fc11-967a-48a0-bb8d-aa5ba532135c" parameterName="Type" parameterType="STRING" range="A-Z"/>
-                    <parameter id="e7e0d589-b3a7-4fa7-b896-d3eb4a126bda" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
-                    <parameter id="acb41f04-d0e1-4507-a348-a88c831e04a2" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="9260bb01-9145-4c9e-9b23-a0b83e065314" name="Mocastub_Set">
                 <parameters>
                     <parameter id="5a84161c-1ca3-4265-a818-99a5671eac61" parameterName="Type" parameterType="STRING" range="A-Z"/>
                     <parameter id="1bdfc3d4-5d6a-4c87-aeeb-d0102d295912" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
                     <parameter id="83b628e6-fb16-4aef-887a-65ddbb94b49b" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="89fddba3-babd-44d3-9f7b-434394e6fc0b" name="Mocastub_SetKeypassphrase">
+                <parameters>
+                    <parameter id="e7e0d589-b3a7-4fa7-b896-d3eb4a126bda" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="acb41f04-d0e1-4507-a348-a88c831e04a2" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8ab1fc11-967a-48a0-bb8d-aa5ba532135c" parameterName="Type" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>
