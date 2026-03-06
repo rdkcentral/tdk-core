@@ -3,12 +3,11 @@
 VTS Configuration File
 Contains all configuration parameters for the VTS test framework.
 """
-
-import os
+from vts_common_config import *
 
 # ============= BASE PATH CONFIGURATION =============
 # Set the base path for all VTS operations
-BASE_PATH = os.getcwd() + "rdk-halif-test-device_settings"
+BASE_PATH = os.getcwd() + "/rdk-halif-test-device_settings"
 
 #========== REPO DETAILS ========================
 
@@ -16,25 +15,7 @@ REPO_URL = "https://github.com/rdkcentral/rdk-halif-test-device_settings.git"
 REPO_DIR = "rdk-halif-test-device_settings"
 CHECKOUT_VER = "6.0.0"
 
-# ============= DEVICE CONFIGURATION =============
-# Rack Configuration Parameters
-#Update device ip below inside quotes
-DEVICE_IP = ""
-#Update device SoC inside quotes ex : "Amlogic", "Realtek" , "Broadcom"
-DEVICE_PLATFORM = ""
-DEVICE_DESCRIPTION = "xxx"
-SSH_USERNAME = "root"
-SSH_PASSWORD = ""
-SSH_PORT = 22
-LOG_DIRECTORY = "./logs"
-
-# Device Configuration Parameters  
-#Update device SoC inside quotes ex : "Amlogic", "Realtek" , "Broadcom"
-CPE_PLATFORM = ""
-CPE_MODEL = "test"
-#Update device SoC inside quotes ex : "amlogic", "realtek", "broadcom"
-SOC_VENDOR = ""
-TARGET_DIRECTORY ="/VTS_Package/"
+#========== PROFILE PATH =========================
 PROFILE_PATH = "../../../../profiles/source/Source_4K_Display.yaml"
 
 # ============= FILE PATHS (RELATIVE TO BASE_PATH) =============
@@ -66,7 +47,7 @@ MONITOR_YAML_PATH = os.path.join(TARGET_DIR, "dsDisplay_test_MonitorDetails.yml"
 # Replace 'Monitor' list with exactly these entries
 # Update monitor details in the below dictionary
 MONITOR_DETAILS = [
-    {"Product": "",      "manufacturerId": "", "monitorName": ""},
+    {"Product": "Redmi",      "manufacturerId": "GSM", "monitorName": "Redmi"},
 ]
 # ===================================================================
 
@@ -85,10 +66,8 @@ TEST_SCRIPT = [
 RACK_CONFIG_ARG = "../../configs/example_rack_config.yml"
 DEVICE_CONFIG_ARG = "../../configs/deviceConfig.yml"
 
-#Update stream server hosting streams
-STREAM_DOWNLOAD_PATH = ""
 # Log Configuration
-LOG_FILE = "menu.log"
+LOG_FILE = "dsDisplay.log"
 
 # ============= ADVANCED CONFIGURATION =============
 # Terminal Configuration
