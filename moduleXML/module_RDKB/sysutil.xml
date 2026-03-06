@@ -17,14 +17,14 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="0a380ec3-5488-4c9d-b78e-db959a8fffdd" name="TestMgr_ExecuteCmd">
-                <parameters>
-                    <parameter id="2260720c-0989-4e29-b088-25f2a5659ff6" parameterName="command" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="5d0a438a-3760-4411-a651-1c7eadd92a03" name="TestMgr_ExecuteCmdReboot">
                 <parameters>
                     <parameter id="63fe74c1-6b96-4bac-885f-9de9946325bf" parameterName="command" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0a380ec3-5488-4c9d-b78e-db959a8fffdd" name="TestMgr_ExecuteCmd">
+                <parameters>
+                    <parameter id="2260720c-0989-4e29-b088-25f2a5659ff6" parameterName="command" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>

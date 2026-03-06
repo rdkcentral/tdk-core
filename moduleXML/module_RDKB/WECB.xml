@@ -17,6 +17,11 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
+            <function id="f2927f83-1ed7-4b15-898b-2dae2cd9165f" name="WECB_DelObject">
+                <parameters>
+                    <parameter id="fd9be3b3-df8f-4684-8f56-6eabf1e323ec" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
             <function id="09974e80-5761-4ad4-8f66-989e747abef6" name="WECB_AddObject">
                 <parameters>
                     <parameter id="81d51846-0097-4f0c-9c44-71b17e31b791" parameterName="paramName" parameterType="STRING" range="A-Z"/>
@@ -27,9 +32,17 @@
                     <parameter id="c22d5f67-e0a9-45c5-96c8-543867df8363" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="e7e84d8c-5cfb-4a16-8623-e75f84f20f05" name="WECB_GetParamValues">
+            <function id="3b6fe828-f115-4783-9f40-85338f97991f" name="WECB_SetParamValues">
                 <parameters>
-                    <parameter id="222732c1-cc82-4665-b1ab-70d165743427" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="71b809e9-dedf-45be-baa5-299c4a6f4bc7" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="617337e6-53ec-420e-a6ff-0b5d43421bd3" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="fa253445-cdab-4c2d-a22b-2e1bfa3e6f9f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="81fe0988-738f-4cda-ae43-a15ba606c3b2" parameterName="commit" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="d9c28fcd-72aa-4572-b1eb-8fe42a48c3d8" name="WECB_GetParamAttributes">
+                <parameters>
+                    <parameter id="12c06551-e98d-43da-8eda-aaa2272c612d" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="625f9c69-5fd6-4469-a302-d581098facce" name="WECB_SetSessionId">
@@ -37,12 +50,9 @@
                     <parameter id="918419d9-ef04-4e08-9fa4-58acb7f19d6a" parameterName="sessionId" parameterType="INTEGER" range="0-9"/>
                 </parameters>
             </function>
-            <function id="3b6fe828-f115-4783-9f40-85338f97991f" name="WECB_SetParamValues">
+            <function id="e7e84d8c-5cfb-4a16-8623-e75f84f20f05" name="WECB_GetParamValues">
                 <parameters>
-                    <parameter id="81fe0988-738f-4cda-ae43-a15ba606c3b2" parameterName="commit" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="fa253445-cdab-4c2d-a22b-2e1bfa3e6f9f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="71b809e9-dedf-45be-baa5-299c4a6f4bc7" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="617337e6-53ec-420e-a6ff-0b5d43421bd3" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="222732c1-cc82-4665-b1ab-70d165743427" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="6deb756a-509e-490f-b916-d495cd961599" name="WECB_SetParamAttribute">
@@ -54,22 +64,12 @@
             </function>
             <function id="741092d8-3b8d-4e06-b129-a986dfa8a6b6" name="WECB_GetParamNames">
                 <parameters>
-                    <parameter id="51958d62-ac13-4f90-9687-cae6955931b4" parameterName="recursive" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="83c23c46-7ea4-4ce5-82ea-4739845b7f34" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
                     <parameter id="737b2e77-dad0-4ff8-9ce9-5417b20d02b6" parameterName="paramList" parameterType="STRING" range="A-Z"/>
-                    <parameter id="8557ea62-e2e0-4925-a156-f502cbe2450e" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="9c534f8e-7676-4938-8133-e4473fdba827" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="83c23c46-7ea4-4ce5-82ea-4739845b7f34" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="51958d62-ac13-4f90-9687-cae6955931b4" parameterName="recursive" parameterType="INTEGER" range="0-9"/>
                     <parameter id="edd05545-31f2-4dab-b7ea-0941d7191e54" parameterName="commit" parameterType="INTEGER" range="0-9"/>
-                </parameters>
-            </function>
-            <function id="d9c28fcd-72aa-4572-b1eb-8fe42a48c3d8" name="WECB_GetParamAttributes">
-                <parameters>
-                    <parameter id="12c06551-e98d-43da-8eda-aaa2272c612d" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="f2927f83-1ed7-4b15-898b-2dae2cd9165f" name="WECB_DelObject">
-                <parameters>
-                    <parameter id="fd9be3b3-df8f-4684-8f56-6eabf1e323ec" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="9c534f8e-7676-4938-8133-e4473fdba827" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8557ea62-e2e0-4925-a156-f502cbe2450e" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>

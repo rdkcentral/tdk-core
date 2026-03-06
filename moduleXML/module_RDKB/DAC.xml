@@ -2,31 +2,31 @@
 <xml>
     <module>
         <!-- Module Id -->
-        <moduleId>2953ef6b-ffdd-4928-9f2c-544dc10d8ec3</moduleId>
+        <moduleId>4cba03d7-f224-4b90-a97f-04efd76a802c</moduleId>
         <!-- Module name -->
-        <moduleName>snmp</moduleName>
+        <moduleName>DAC</moduleName>
         <!-- Category of the module -->
-        <category>RDKV</category>
+        <category>RDKB</category>
         <!-- Execution time out of module -->
-        <executionTimeOut>0</executionTimeOut>
+        <executionTimeOut>15</executionTimeOut>
         <!-- Test Group of the module -->
         <testGroup>Component</testGroup>
         <!-- Logs File Names of module -->
         <logFileNames>[]</logFileNames>
         <!-- Crash File Names of the module  -->
-        <crashFileNames>[]</crashFileNames>
+        <crashFileNames>[/rdklogs/logs]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="9d78d3c5-feab-412b-bb6a-a4e54dd133b8" name="TestMgr_GetCommString">
+            <function id="883a4493-7a60-4729-a4ba-92de2863803e" name="DAC_DoNothing">
                 <parameters/>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->
         <primitivetests>
             <primitivetest>
-                <id>11b633d5-3055-448e-bebd-b1b9adf96d2b</id>
-                <name>SNMP_GetCommString</name>
-                <funName>TestMgr_GetCommString</funName>
+                <id>969ebb28-25f9-405a-9050-3762cf005730</id>
+                <name>DAC_DoNothing</name>
+                <funName>DAC_DoNothing</funName>
                 <primitivetestparameters/>
             </primitivetest>
         </primitivetests>

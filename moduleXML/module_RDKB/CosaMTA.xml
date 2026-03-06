@@ -17,131 +17,9 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="9763158e-0b3a-4663-9050-a5cbe63848f2" name="CosaMTA_DectGetRegistrationMode">
+            <function id="20962b6e-4fb1-40ec-b9a0-32f91b099faa" name="CosaMTA_BatteryGetRemainingTime">
                 <parameters>
-                    <parameter id="a01963e4-bd70-4861-8682-59a4dc2bd47a" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="93f9e9cf-8037-4136-bdcf-575aee476774" parameterName="Value" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="1d49d3c7-cec4-453a-ae16-2b5f0281bbbc" name="CosaMTA_GetDSXLogs">
-                <parameters>
-                    <parameter id="2928d1c4-f8ee-4b7b-8325-544ad50af9f7" parameterName="handleType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="3e61c2ec-e66e-4586-884c-981db5db6a17" name="CosaMTA_GetDHCPInfo">
-                <parameters>
-                    <parameter id="75c84cd1-2809-4cdd-8a28-1dc43cdee599" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="374f57ee-5f3f-4c94-9653-aaab176f62c0" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="019accd1-5d22-4f6f-bde0-aa22e78634b2" name="CosaMTA_GetMtaLog">
-                <parameters>
-                    <parameter id="01d27ac5-27a4-4e1a-8d17-51f527acc733" parameterName="handleType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="11a6e5d2-83be-4b19-8d0f-ad579286fafe" name="CosaMTA_SetDSXLogEnable">
-                <parameters>
-                    <parameter id="0b7d6862-6c1a-4c2f-a213-15741cd34c03" parameterName="Value" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="775953c5-903a-4e2d-885e-826d2a324b51" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="8046df90-3a96-4b9b-b014-0978576e611c" name="CosaMTA_GetDect">
-                <parameters>
-                    <parameter id="44afe921-8e51-432d-a212-ec9fe5bf1c13" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="dfe4fcdf-5073-44ad-8f6e-ad21cac9fefd" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="a2609bdc-8f03-4823-996b-8d63e4769e71" name="CosaMTA_ClearDSXLog">
-                <parameters>
-                    <parameter id="39513705-5d21-4e61-9bd4-785d349ea67a" parameterName="Value" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="53b40b68-54df-43f8-b4a0-a58be93b3b72" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="31a72fd5-27bf-4669-8c62-8e0912412197" name="CosaMTA_GetCallSignallingLogEnable">
-                <parameters>
-                    <parameter id="cc6eea36-20e7-4feb-ba7f-842bf1bc44c7" parameterName="Value" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="50e5a7a2-9420-4ff3-9d3b-1ba91f3487b5" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="b13780c7-488b-489b-9c33-bed260a251a4" name="CosaMTA_BatteryGetInfo">
-                <parameters>
-                    <parameter id="68169454-1905-425b-a392-a06b335a4c26" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="ad431c60-ae0e-4448-bdd1-9427b06a162e" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="1a72aee8-e7f7-44a1-b406-69880eb9a6e4" name="CosaMTA_DectSetRegistrationMode">
-                <parameters>
-                    <parameter id="d0269ea0-1b73-4de7-8423-bae801379e1d" parameterName="Value" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="02424294-9c4c-4766-8ebb-0227c34dfa84" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="9d2a4917-2751-47ad-ad70-6741487a18a9" name="CosaMTA_LineTableGetEntry">
-                <parameters>
-                    <parameter id="4b1826f0-7cbe-48da-8947-618c8ab28a4d" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="01374212-1ff2-46bc-bcbc-4e277de32739" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="d31cc2a6-a720-4158-a3d8-65a739db3ea4" name="CosaMTA_BatteryGetPowerStatus">
-                <parameters>
-                    <parameter id="774de76a-8a15-48a4-9c72-9b2ee5cc95ed" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="183a1a56-1ec3-40ad-8d14-0d7866d70649" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="00c25332-dfee-4173-aec0-300e4416eb7c" name="CosaMTA_GetLineRegisterStatus">
-                <parameters/>
-            </function>
-            <function id="48c904cc-228a-47fb-856e-42578105c426" name="CosaMTA_BatteryGetNumberofCycles">
-                <parameters>
-                    <parameter id="869b560a-cf40-4c0a-bfb2-5eb867b52e84" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="aa481930-03c8-45ec-a1be-4ce6199e5b58" name="CosaMTA_BatteryGetLife">
-                <parameters>
-                    <parameter id="41494679-6e9f-4c4d-8cd9-c2606e57045a" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="c6d7a832-8f03-455f-b624-816c2964041c" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="f731949a-b715-4633-ba73-878c2f783fc9" name="CosaMTA_GetCalls">
-                <parameters>
-                    <parameter id="8ae7f673-077a-48b3-9591-df0d2e0de0cd" parameterName="handleType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="d9f7d001-66a9-4380-b282-706de7bbfdd9" parameterName="value" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="c01bafc7-68c0-4a3c-98e6-03b2269b5f62" name="CosaMTA_SetDectPIN">
-                <parameters>
-                    <parameter id="5c6701eb-7142-4f33-8ccc-67d33bf387e6" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="cc1c0bb5-27be-421b-8b10-04b479987d2e" parameterName="value" parameterType="STRING" range="A-Z"/>
-                    <parameter id="41aaae17-adf9-4bc4-958a-215c1b70a0d0" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="7ae87c73-4f5a-43bf-b6f2-af737e96f429" name="CosaMTA_SetCallSignallingLogEnable">
-                <parameters>
-                    <parameter id="ae941ad0-091d-4371-be49-0efbe70ffb65" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="648a5e62-4713-4547-aa55-ee97d707dc73" parameterName="Value" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="de6d765f-a88c-4fab-8a06-9a9bb802b57a" name="CosaMTA_LineTableGetNumberOfEntries">
-                <parameters>
-                    <parameter id="16eb2e26-9f34-4dd7-a2fa-569a541193b7" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="be317f35-fe42-4ba4-9557-858c82e21dd3" name="CosaMTA_GetResetCount">
-                <parameters>
-                    <parameter id="4202cab8-26b7-46ed-99e7-1386bb486b15" parameterName="resetType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="9f8fba84-6964-48e8-9836-1e14af7f4fdf" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="f21d53cd-25e7-4698-821a-7402af8f4dc0" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="ce201e4f-8814-4a15-9065-209fc2b3ad7e" name="CosaMTA_ClearCallSignallingLog">
-                <parameters>
-                    <parameter id="316fa723-b3cd-4f11-aa36-94ab02c77b28" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="398d56d9-095c-4fb9-b26e-58061723493e" parameterName="Value" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="805bc8b6-2f77-4fd6-ac81-a2f32cb6e510" name="CosaMTA_DectSetEnable">
-                <parameters>
-                    <parameter id="59f4acb0-3d23-482b-b7ba-45f506e0572a" parameterName="Value" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="df59a318-8fdd-48ee-ac99-880e7fe27756" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="dd2011fb-4807-4623-9abf-f9ae624c2630" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
                 </parameters>
             </function>
             <function id="005a2891-1e2e-4486-8f6b-2dc93c1d2d54" name="CosaMTA_BatteryGetCondition">
@@ -150,43 +28,49 @@
                     <parameter id="f0d0992a-d06c-4ff6-a608-006d0b9c2d7b" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
                 </parameters>
             </function>
+            <function id="ee759a07-1e62-4a9d-afd9-2898ee318654" name="CosaMTA_BatteryGetStatus">
+                <parameters>
+                    <parameter id="f537c12d-cbe1-4131-a477-3e6ddd1a4945" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="1166a99a-fd04-4930-90d5-6b832a1dfd31" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="13f8c457-a06e-4770-9190-a05598dd03fa" name="CosaMTA_GetServiceClass">
+                <parameters>
+                    <parameter id="8e9d4745-5e47-4927-98d2-fdc8c39147b8" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="be317f35-fe42-4ba4-9557-858c82e21dd3" name="CosaMTA_GetResetCount">
+                <parameters>
+                    <parameter id="4202cab8-26b7-46ed-99e7-1386bb486b15" parameterName="resetType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f21d53cd-25e7-4698-821a-7402af8f4dc0" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="9f8fba84-6964-48e8-9836-1e14af7f4fdf" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="de6d765f-a88c-4fab-8a06-9a9bb802b57a" name="CosaMTA_LineTableGetNumberOfEntries">
+                <parameters>
+                    <parameter id="16eb2e26-9f34-4dd7-a2fa-569a541193b7" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="31a72fd5-27bf-4669-8c62-8e0912412197" name="CosaMTA_GetCallSignallingLogEnable">
+                <parameters>
+                    <parameter id="cc6eea36-20e7-4feb-ba7f-842bf1bc44c7" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="50e5a7a2-9420-4ff3-9d3b-1ba91f3487b5" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="7857c325-30ca-423d-a8d7-4b932b98ae39" name="CosaMTA_GetConfigFileStatus">
+                <parameters/>
+            </function>
+            <function id="c01bafc7-68c0-4a3c-98e6-03b2269b5f62" name="CosaMTA_SetDectPIN">
+                <parameters>
+                    <parameter id="cc1c0bb5-27be-421b-8b10-04b479987d2e" parameterName="value" parameterType="STRING" range="A-Z"/>
+                    <parameter id="41aaae17-adf9-4bc4-958a-215c1b70a0d0" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="5c6701eb-7142-4f33-8ccc-67d33bf387e6" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
             <function id="652f9770-ab14-4b34-8a9a-4045f6d19b51" name="CosaMTA_DectGetEnable">
                 <parameters>
                     <parameter id="6fcb0d66-057f-4800-bb8f-e07d35deb4c0" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
                     <parameter id="5e49f3e7-25db-4e87-91ca-3d183546a475" parameterName="Value" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="ba02337b-77f4-4089-bc30-603514ece0db" name="CosaMTA_GetHandsets">
-                <parameters>
-                    <parameter id="90900c80-3bc1-479f-9cd8-18cbe70f1eee" parameterName="handleType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="20962b6e-4fb1-40ec-b9a0-32f91b099faa" name="CosaMTA_BatteryGetRemainingTime">
-                <parameters>
-                    <parameter id="dd2011fb-4807-4623-9abf-f9ae624c2630" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="e62bea28-933e-4b9a-be0a-cdcb59cb7c82" name="CosaMTA_GetDectPIN">
-                <parameters>
-                    <parameter id="4bd253bc-8c0d-42cb-8278-6303683a31d0" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="8ca1fa32-db03-4ec6-a1b8-478347fa2850" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="86e6f907-0e4e-4531-bffe-71dfe4858d8a" name="CosaMTA_GetParamUlongValue">
-                <parameters>
-                    <parameter id="59f06dee-0581-43ea-80e6-0100d6ada5c8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="a6aa8ecc-89b9-43c7-8a8e-cc9bbfb317ae" parameterName="handleType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="ee759a07-1e62-4a9d-afd9-2898ee318654" name="CosaMTA_BatteryGetStatus">
-                <parameters>
-                    <parameter id="1166a99a-fd04-4930-90d5-6b832a1dfd31" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="f537c12d-cbe1-4131-a477-3e6ddd1a4945" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="dbd53a15-9b33-49c6-924a-2075e6375ab2" name="CosaMTA_Triggerdiagnostics">
-                <parameters>
-                    <parameter id="18712d49-941a-463a-a799-d85146d26d63" parameterName="index" parameterType="INTEGER" range="0-100"/>
                 </parameters>
             </function>
             <function id="c0ad5a70-086e-442a-a93f-af8f03a07c3f" name="CosaMTA_GetDSXLogEnable">
@@ -195,21 +79,137 @@
                     <parameter id="20079db6-c291-4a3f-a941-feab5ffb147d" parameterName="Value" parameterType="INTEGER" range="0-100"/>
                 </parameters>
             </function>
-            <function id="531226b2-71eb-4105-b449-1120c03fdbef" name="CosaMTA_GetDhcpStatus">
-                <parameters/>
+            <function id="ba02337b-77f4-4089-bc30-603514ece0db" name="CosaMTA_GetHandsets">
+                <parameters>
+                    <parameter id="90900c80-3bc1-479f-9cd8-18cbe70f1eee" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="805bc8b6-2f77-4fd6-ac81-a2f32cb6e510" name="CosaMTA_DectSetEnable">
+                <parameters>
+                    <parameter id="df59a318-8fdd-48ee-ac99-880e7fe27756" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="59f4acb0-3d23-482b-b7ba-45f506e0572a" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="ce201e4f-8814-4a15-9065-209fc2b3ad7e" name="CosaMTA_ClearCallSignallingLog">
+                <parameters>
+                    <parameter id="398d56d9-095c-4fb9-b26e-58061723493e" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="316fa723-b3cd-4f11-aa36-94ab02c77b28" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="48c904cc-228a-47fb-856e-42578105c426" name="CosaMTA_BatteryGetNumberofCycles">
+                <parameters>
+                    <parameter id="869b560a-cf40-4c0a-bfb2-5eb867b52e84" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
             </function>
             <function id="780b26ff-b09b-401a-9826-42d9f635c3da" name="CosaMTA_GetServiceFlow">
                 <parameters>
                     <parameter id="ba5a97cd-5107-490a-850a-a5707c575681" parameterName="handleType" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="13f8c457-a06e-4770-9190-a05598dd03fa" name="CosaMTA_GetServiceClass">
+            <function id="f731949a-b715-4633-ba73-878c2f783fc9" name="CosaMTA_GetCalls">
                 <parameters>
-                    <parameter id="8e9d4745-5e47-4927-98d2-fdc8c39147b8" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="8ae7f673-077a-48b3-9591-df0d2e0de0cd" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d9f7d001-66a9-4380-b282-706de7bbfdd9" parameterName="value" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="7857c325-30ca-423d-a8d7-4b932b98ae39" name="CosaMTA_GetConfigFileStatus">
+            <function id="1a72aee8-e7f7-44a1-b406-69880eb9a6e4" name="CosaMTA_DectSetRegistrationMode">
+                <parameters>
+                    <parameter id="02424294-9c4c-4766-8ebb-0227c34dfa84" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="d0269ea0-1b73-4de7-8423-bae801379e1d" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="aa481930-03c8-45ec-a1be-4ce6199e5b58" name="CosaMTA_BatteryGetLife">
+                <parameters>
+                    <parameter id="41494679-6e9f-4c4d-8cd9-c2606e57045a" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="c6d7a832-8f03-455f-b624-816c2964041c" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="7ae87c73-4f5a-43bf-b6f2-af737e96f429" name="CosaMTA_SetCallSignallingLogEnable">
+                <parameters>
+                    <parameter id="ae941ad0-091d-4371-be49-0efbe70ffb65" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="648a5e62-4713-4547-aa55-ee97d707dc73" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="9d2a4917-2751-47ad-ad70-6741487a18a9" name="CosaMTA_LineTableGetEntry">
+                <parameters>
+                    <parameter id="4b1826f0-7cbe-48da-8947-618c8ab28a4d" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="01374212-1ff2-46bc-bcbc-4e277de32739" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="b13780c7-488b-489b-9c33-bed260a251a4" name="CosaMTA_BatteryGetInfo">
+                <parameters>
+                    <parameter id="ad431c60-ae0e-4448-bdd1-9427b06a162e" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="68169454-1905-425b-a392-a06b335a4c26" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="d31cc2a6-a720-4158-a3d8-65a739db3ea4" name="CosaMTA_BatteryGetPowerStatus">
+                <parameters>
+                    <parameter id="183a1a56-1ec3-40ad-8d14-0d7866d70649" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="774de76a-8a15-48a4-9c72-9b2ee5cc95ed" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="1d49d3c7-cec4-453a-ae16-2b5f0281bbbc" name="CosaMTA_GetDSXLogs">
+                <parameters>
+                    <parameter id="2928d1c4-f8ee-4b7b-8325-544ad50af9f7" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="11a6e5d2-83be-4b19-8d0f-ad579286fafe" name="CosaMTA_SetDSXLogEnable">
+                <parameters>
+                    <parameter id="775953c5-903a-4e2d-885e-826d2a324b51" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="0b7d6862-6c1a-4c2f-a213-15741cd34c03" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="019accd1-5d22-4f6f-bde0-aa22e78634b2" name="CosaMTA_GetMtaLog">
+                <parameters>
+                    <parameter id="01d27ac5-27a4-4e1a-8d17-51f527acc733" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a2609bdc-8f03-4823-996b-8d63e4769e71" name="CosaMTA_ClearDSXLog">
+                <parameters>
+                    <parameter id="53b40b68-54df-43f8-b4a0-a58be93b3b72" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="39513705-5d21-4e61-9bd4-785d349ea67a" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="00c25332-dfee-4173-aec0-300e4416eb7c" name="CosaMTA_GetLineRegisterStatus">
                 <parameters/>
+            </function>
+            <function id="3e61c2ec-e66e-4586-884c-981db5db6a17" name="CosaMTA_GetDHCPInfo">
+                <parameters>
+                    <parameter id="374f57ee-5f3f-4c94-9653-aaab176f62c0" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="75c84cd1-2809-4cdd-8a28-1dc43cdee599" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="9763158e-0b3a-4663-9050-a5cbe63848f2" name="CosaMTA_DectGetRegistrationMode">
+                <parameters>
+                    <parameter id="a01963e4-bd70-4861-8682-59a4dc2bd47a" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="93f9e9cf-8037-4136-bdcf-575aee476774" parameterName="Value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="86e6f907-0e4e-4531-bffe-71dfe4858d8a" name="CosaMTA_GetParamUlongValue">
+                <parameters>
+                    <parameter id="a6aa8ecc-89b9-43c7-8a8e-cc9bbfb317ae" parameterName="handleType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="59f06dee-0581-43ea-80e6-0100d6ada5c8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="531226b2-71eb-4105-b449-1120c03fdbef" name="CosaMTA_GetDhcpStatus">
+                <parameters/>
+            </function>
+            <function id="8046df90-3a96-4b9b-b014-0978576e611c" name="CosaMTA_GetDect">
+                <parameters>
+                    <parameter id="dfe4fcdf-5073-44ad-8f6e-ad21cac9fefd" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="44afe921-8e51-432d-a212-ec9fe5bf1c13" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="e62bea28-933e-4b9a-be0a-cdcb59cb7c82" name="CosaMTA_GetDectPIN">
+                <parameters>
+                    <parameter id="8ca1fa32-db03-4ec6-a1b8-478347fa2850" parameterName="bufferType" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="4bd253bc-8c0d-42cb-8278-6303683a31d0" parameterName="handleType" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="dbd53a15-9b33-49c6-924a-2075e6375ab2" name="CosaMTA_Triggerdiagnostics">
+                <parameters>
+                    <parameter id="18712d49-941a-463a-a799-d85146d26d63" parameterName="index" parameterType="INTEGER" range="0-100"/>
+                </parameters>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->

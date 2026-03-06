@@ -17,14 +17,50 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="54bd9fc5-a0a8-49c6-bca7-99b891d15c91" name="CCSPMBUS_GetRegisteredComponents">
+            <function id="addd987a-6840-450b-a83f-eae6c16478d7" name="CCSPMBUS_DiskComponentSupportingDynamicTbl">
                 <parameters/>
             </function>
-            <function id="11f9bebf-f6e4-4cc3-9015-fd35198b1d2f" name="CCSPMBUS_BusCheck">
+            <function id="b280dcb2-29f6-42a6-93e1-aa84f6615c07" name="CCSPMBUS_Init">
+                <parameters>
+                    <parameter id="c73db131-6cb3-4bdd-8214-6341318996bd" parameterName="cfgfileName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c3d5a7b2-23ea-4e86-b8cd-f71b8adbad16" name="CCSPMBUS_LoadCfg">
+                <parameters>
+                    <parameter id="bbc82a3f-635c-4d90-9de0-202b8728ec5c" parameterName="cmpCfgFile" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="b083879e-020e-46e2-a15c-1cbfbbb5c6f0" name="CCSPMBUS_UnRegisterComponent">
                 <parameters/>
             </function>
-            <function id="9d0de443-dfb4-4082-b5d1-cb60b38d9616" name="CCSPMBUS_IsSystemReady">
+            <function id="c8cd26d3-553b-4e39-a82c-db6901be5c56" name="CCSPMBUS_QueryStatus">
                 <parameters/>
+            </function>
+            <function id="3070bd39-9aba-487e-bb4b-4e0e8f179280" name="CCSPMBUS_DumpComponentRegistry">
+                <parameters/>
+            </function>
+            <function id="9eb6281a-43fc-46d3-9e84-b6a52eb2b365" name="CCSPMBUS_GetHealth">
+                <parameters>
+                    <parameter id="ed2879d1-1819-466a-b891-5ea855299e61" parameterName="cmpPath" parameterType="STRING" range="A-Z"/>
+                    <parameter id="830348f9-184e-4ba5-af91-2ca9c2ee6726" parameterName="cmpId" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="82d83368-e4a4-44d6-8107-0ce11e6ac245" name="CCSPMBUS_UnloadCfg">
+                <parameters/>
+            </function>
+            <function id="f58e3853-cf73-4074-8929-2dcd14631d15" name="CCSPMBUS_SendSignal">
+                <parameters/>
+            </function>
+            <function id="3ea8b116-6f97-40b2-8107-720a9032bc0b" name="CCSPMBUS_UnRegisterNamespace">
+                <parameters/>
+            </function>
+            <function id="af5037da-8182-488c-be9d-ae174767d84f" name="CCSPMBUS_DiskNamespaceSupportedByComponent">
+                <parameters/>
+            </function>
+            <function id="ee958440-429d-498d-961d-aae33af1a0b6" name="CCSPMBUS_LoadDmXml">
+                <parameters>
+                    <parameter id="01627fea-42de-4ab7-b9fe-e2ee7f4dc0b0" parameterName="xmlfileName" parameterType="STRING" range="A-Z"/>
+                </parameters>
             </function>
             <function id="2138a508-359c-4ca6-b105-69fa3387b849" name="CCSPMBUS_RegisterEvent">
                 <parameters>
@@ -34,69 +70,33 @@
             <function id="53c43cf9-239b-449a-a183-64f65f0ea1b9" name="CCSPMBUS_RegisterPath">
                 <parameters/>
             </function>
-            <function id="ee958440-429d-498d-961d-aae33af1a0b6" name="CCSPMBUS_LoadDmXml">
-                <parameters>
-                    <parameter id="01627fea-42de-4ab7-b9fe-e2ee7f4dc0b0" parameterName="xmlfileName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="f58e3853-cf73-4074-8929-2dcd14631d15" name="CCSPMBUS_SendSignal">
-                <parameters/>
-            </function>
-            <function id="65a66730-883f-4a31-9b8c-fcc3c24eeebb" name="CCSPMBUS_Exit">
-                <parameters/>
-            </function>
-            <function id="3070bd39-9aba-487e-bb4b-4e0e8f179280" name="CCSPMBUS_DumpComponentRegistry">
-                <parameters/>
-            </function>
-            <function id="b280dcb2-29f6-42a6-93e1-aa84f6615c07" name="CCSPMBUS_Init">
-                <parameters>
-                    <parameter id="c73db131-6cb3-4bdd-8214-6341318996bd" parameterName="cfgfileName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="3ea8b116-6f97-40b2-8107-720a9032bc0b" name="CCSPMBUS_UnRegisterNamespace">
-                <parameters/>
-            </function>
             <function id="778f4a88-aa9b-4a8c-9ffb-6951acc7c3b7" name="CCSPMBUS_UnRegisterEvent">
                 <parameters>
                     <parameter id="1b643152-1fed-424f-9170-af91b7b27b15" parameterName="eventName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="82d83368-e4a4-44d6-8107-0ce11e6ac245" name="CCSPMBUS_UnloadCfg">
+            <function id="9d0de443-dfb4-4082-b5d1-cb60b38d9616" name="CCSPMBUS_IsSystemReady">
                 <parameters/>
             </function>
-            <function id="addd987a-6840-450b-a83f-eae6c16478d7" name="CCSPMBUS_DiskComponentSupportingDynamicTbl">
-                <parameters/>
-            </function>
-            <function id="c3d5a7b2-23ea-4e86-b8cd-f71b8adbad16" name="CCSPMBUS_LoadCfg">
-                <parameters>
-                    <parameter id="bbc82a3f-635c-4d90-9de0-202b8728ec5c" parameterName="cmpCfgFile" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="9eb6281a-43fc-46d3-9e84-b6a52eb2b365" name="CCSPMBUS_GetHealth">
-                <parameters>
-                    <parameter id="830348f9-184e-4ba5-af91-2ca9c2ee6726" parameterName="cmpId" parameterType="STRING" range="A-Z"/>
-                    <parameter id="ed2879d1-1819-466a-b891-5ea855299e61" parameterName="cmpPath" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="c9ea7c24-1e01-4ecc-861b-8b248fc3f533" name="CCSPMBUS_GetMaxMemory">
-                <parameters/>
-            </function>
-            <function id="c8cd26d3-553b-4e39-a82c-db6901be5c56" name="CCSPMBUS_QueryStatus">
-                <parameters/>
-            </function>
-            <function id="6d50a127-7513-4b04-8105-c3089debbab3" name="CCSPMBUS_CheckNamespaceDataType">
+            <function id="f3ac93f4-8f06-4127-bc2f-b81707e1beb2" name="CCSPMBUS_ReqSessionId">
                 <parameters/>
             </function>
             <function id="d649a2f3-f3b8-4f90-9ddc-12693395e68c" name="CCSPMBUS_InformEndSession">
                 <parameters/>
             </function>
+            <function id="11f9bebf-f6e4-4cc3-9015-fd35198b1d2f" name="CCSPMBUS_BusCheck">
+                <parameters/>
+            </function>
+            <function id="54bd9fc5-a0a8-49c6-bca7-99b891d15c91" name="CCSPMBUS_GetRegisteredComponents">
+                <parameters/>
+            </function>
+            <function id="65a66730-883f-4a31-9b8c-fcc3c24eeebb" name="CCSPMBUS_Exit">
+                <parameters/>
+            </function>
+            <function id="6d50a127-7513-4b04-8105-c3089debbab3" name="CCSPMBUS_CheckNamespaceDataType">
+                <parameters/>
+            </function>
             <function id="f10fdcb1-f24d-4f1b-93ba-4e8086b688da" name="CCSPMBUS_RegisterBase">
-                <parameters/>
-            </function>
-            <function id="af5037da-8182-488c-be9d-ae174767d84f" name="CCSPMBUS_DiskNamespaceSupportedByComponent">
-                <parameters/>
-            </function>
-            <function id="b083879e-020e-46e2-a15c-1cbfbbb5c6f0" name="CCSPMBUS_UnRegisterComponent">
                 <parameters/>
             </function>
             <function id="01ba383e-9cff-49ee-81b9-11d880a7e45e" name="CCSPMBUS_RegisterCapabilities">
@@ -105,7 +105,7 @@
             <function id="95a864bb-c93c-457a-bf45-dbf16ac0d3cf" name="CCSPMBUS_GetAllocMemory">
                 <parameters/>
             </function>
-            <function id="f3ac93f4-8f06-4127-bc2f-b81707e1beb2" name="CCSPMBUS_ReqSessionId">
+            <function id="c9ea7c24-1e01-4ecc-861b-8b248fc3f533" name="CCSPMBUS_GetMaxMemory">
                 <parameters/>
             </function>
         </functions>

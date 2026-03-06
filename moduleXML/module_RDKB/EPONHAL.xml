@@ -17,25 +17,43 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="0531eb10-e9dc-47b8-8d03-208b0dfeb302" name="EPONHAL_GetDeviceSysDescrInfo">
-                <parameters/>
-            </function>
-            <function id="d2fd08c2-b31c-482a-92fa-96c4c2a063c4" name="EPONHAL_hal_Get_eponResetCount">
-                <parameters/>
-            </function>
-            <function id="1644dc06-2422-40ef-9dc6-3e1dfa444165" name="EPONHAL_GetMaxLogicalLinks">
-                <parameters/>
-            </function>
-            <function id="91d21cd1-e376-4f7a-aafa-c9c35641f687" name="EPONHAL_GetFirmwareInfo">
+            <function id="79b00230-5150-43e5-8720-c64782461725" name="EPONHAL_GetManufacturerInfo">
                 <parameters/>
             </function>
             <function id="9d9c23c8-aa0d-4c84-953c-9fcfd5f59349" name="EPONHAL_SetClearOnuLinkStatistics">
                 <parameters/>
             </function>
-            <function id="165b45a2-2ab3-4a2a-b22f-a562e43e4855" name="EPONHAL_GetEponChipInfo">
+            <function id="8838e1e9-6939-490e-a01d-513b8a1a1e6e" name="EPONHAL_GetStaticMacTable">
+                <parameters>
+                    <parameter id="af45e2e0-9db2-48a5-909e-91f7ba6ad904" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="bd45d191-c023-4af5-ae01-9237d5d3b855" name="EPONHAL_OnuLinkStatisticsGetEntryCount">
                 <parameters/>
             </function>
-            <function id="79b00230-5150-43e5-8720-c64782461725" name="EPONHAL_GetManufacturerInfo">
+            <function id="1644dc06-2422-40ef-9dc6-3e1dfa444165" name="EPONHAL_GetMaxLogicalLinks">
+                <parameters/>
+            </function>
+            <function id="d2fd08c2-b31c-482a-92fa-96c4c2a063c4" name="EPONHAL_hal_Get_eponResetCount">
+                <parameters/>
+            </function>
+            <function id="baf16006-9d1d-45b9-a964-b1b838bc09be" name="EPONHAL_GetOnuLinkStatistics">
+                <parameters>
+                    <parameter id="eb6046af-ae1b-4906-8bcc-106b02ea7a56" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="8e5437a2-3574-4329-afd3-0bceba6c5315" name="EPONHAL_GetOnuPacketBufferCapabilities">
+                <parameters/>
+            </function>
+            <function id="1d3101c3-5f4f-41c3-8a11-c3234ea12403" name="EPONHAL_GetDynamicMacTable">
+                <parameters>
+                    <parameter id="fc353e40-65e9-44aa-89ef-ed77a67b072c" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="9c796f4f-4ccc-432a-840a-0bd08f8e53e0" name="EPONHAL_SetResetOnu">
+                <parameters/>
+            </function>
+            <function id="91d21cd1-e376-4f7a-aafa-c9c35641f687" name="EPONHAL_GetFirmwareInfo">
                 <parameters/>
             </function>
             <function id="b36ecc21-3bd3-4a15-8ce9-0c4b150ca134" name="EPONHAL_GetOamFrameRate">
@@ -46,35 +64,11 @@
             <function id="eb959ead-229e-4d56-b6a9-12975488499e" name="EPONHAL_hal_LocalResetCount">
                 <parameters/>
             </function>
-            <function id="baf16006-9d1d-45b9-a964-b1b838bc09be" name="EPONHAL_GetOnuLinkStatistics">
-                <parameters>
-                    <parameter id="eb6046af-ae1b-4906-8bcc-106b02ea7a56" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
             <function id="28fad897-ef75-4965-95e8-42f5f0407701" name="EPONHAL_GetParamUshortValue">
-                <parameters/>
-            </function>
-            <function id="1d3101c3-5f4f-41c3-8a11-c3234ea12403" name="EPONHAL_GetDynamicMacTable">
-                <parameters>
-                    <parameter id="fc353e40-65e9-44aa-89ef-ed77a67b072c" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="8e5437a2-3574-4329-afd3-0bceba6c5315" name="EPONHAL_GetOnuPacketBufferCapabilities">
                 <parameters/>
             </function>
             <function id="3be3ce8a-4f91-424b-8b92-f23fb2f9f900" name="EPONHAL_hal_Get_ErouterResetCount">
                 <parameters/>
-            </function>
-            <function id="9c796f4f-4ccc-432a-840a-0bd08f8e53e0" name="EPONHAL_SetResetOnu">
-                <parameters/>
-            </function>
-            <function id="bd45d191-c023-4af5-ae01-9237d5d3b855" name="EPONHAL_OnuLinkStatisticsGetEntryCount">
-                <parameters/>
-            </function>
-            <function id="8838e1e9-6939-490e-a01d-513b8a1a1e6e" name="EPONHAL_GetStaticMacTable">
-                <parameters>
-                    <parameter id="af45e2e0-9db2-48a5-909e-91f7ba6ad904" parameterName="numEntries" parameterType="INTEGER" range="0-100"/>
-                </parameters>
             </function>
             <function id="6ad6d644-d148-4b18-9d68-2a5af90e55df" name="EPONHAL_GetLlidForwardingState">
                 <parameters>
@@ -90,7 +84,13 @@
             <function id="f2ffe810-c3d5-4568-b32b-0f334c0a472b" name="EPONHAL_OamFrameRateGetEntryCount">
                 <parameters/>
             </function>
+            <function id="165b45a2-2ab3-4a2a-b22f-a562e43e4855" name="EPONHAL_GetEponChipInfo">
+                <parameters/>
+            </function>
             <function id="c755a408-6380-4961-a624-e3a6b6419f31" name="EPONHAL_GetOnuId">
+                <parameters/>
+            </function>
+            <function id="0531eb10-e9dc-47b8-8d03-208b0dfeb302" name="EPONHAL_GetDeviceSysDescrInfo">
                 <parameters/>
             </function>
         </functions>

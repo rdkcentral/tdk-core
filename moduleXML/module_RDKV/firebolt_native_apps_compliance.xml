@@ -27,49 +27,15 @@
                     <parameter id="97c1be0f-f359-45cf-9b79-1d5d47edbeb1" parameterName="outputString" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="9e31d46f-4040-4dd2-865b-29e98afbd356" name="executeCmndInDUT">
-                <parameters>
-                    <parameter id="440fc796-1a77-4bc6-bb92-df4c50b8290a" parameterName="command" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
             <function id="c9a08dee-b164-484d-b13d-e5d82c704ab8" name="DurationParse">
                 <parameters>
                     <parameter id="499ba55c-27fb-4769-b330-1338b98246b9" parameterName="duration_to_be_verified" parameterType="DOUBLE" range="1-1000"/>
                     <parameter id="c4de2114-d1d5-4d34-9415-01aac766992e" parameterName="output" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="5f5adc04-95c1-41ce-939f-2bc25f7fbcbe" name="setOperations">
+            <function id="9e31d46f-4040-4dd2-865b-29e98afbd356" name="executeCmndInDUT">
                 <parameters>
-                    <parameter id="c3caf82d-81ce-48a0-b5ea-a44167b71d2a" parameterName="operation" parameterType="STRING" range="a-z"/>
-                    <parameter id="40adac00-8c57-4a4e-995b-9ece66530d53" parameterName="arguments" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="4c696a3b-fe68-4df9-8b5f-2bc153e318d0" name="checkifLanguagePlayed">
-                <parameters>
-                    <parameter id="6c91bdfd-2099-471b-981a-9d67ec332df8" parameterName="language" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="b33fe5e9-1148-4b65-837f-dc4339769801" name="parseLatency">
-                <parameters>
-                    <parameter id="cee07e46-4d75-47ec-b58d-38a86ab0432f" parameterName="latencyThreshold" parameterType="DOUBLE" range="1-1000"/>
-                    <parameter id="53492123-5eb3-492b-b8c7-5951efa2481a" parameterName="output" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="8c20f641-20a8-4a12-aeb3-f9aa9075bba1" name="getDeviceConfigValue">
-                <parameters>
-                    <parameter id="c51b3a63-bdea-49a6-bca5-8923ad79aa50" parameterName="configKey" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="be3ca858-5895-4dfa-bd21-559f0742f6c5" name="getDeviceDetails">
-                <parameters>
-                    <parameter id="96da987b-2bc9-4327-8ed1-981642015d89" parameterName="detail" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="54f58468-bfcb-4d57-8709-55434b7c2e29" name="init_module">
-                <parameters>
-                    <parameter id="08c0b771-3a5a-4f3d-8d99-79eba1c4257f" parameterName="libobj" parameterType="STRING" range="a-z"/>
-                    <parameter id="d38c280c-0056-44a2-bc58-d81c8718c37e" parameterName="port" parameterType="STRING" range="a-z"/>
-                    <parameter id="dc15953d-14f5-48ca-a019-5d432116da72" parameterName="deviceInfo" parameterType="STRING" range="a-z"/>
+                    <parameter id="440fc796-1a77-4bc6-bb92-df4c50b8290a" parameterName="command" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
             <function id="9049b3a5-f5cb-4861-8bb4-6c98d2e6d05e" name="getDeviceConfig">
@@ -84,20 +50,54 @@
             </function>
             <function id="c0012920-7f53-42ab-9b06-3c5de5d55dc3" name="ParseGraphicsOutput">
                 <parameters>
-                    <parameter id="4c886282-db6b-475a-a595-7bb170782769" parameterName="test_app" parameterType="STRING" range="A-Z"/>
                     <parameter id="f1fee93d-ac11-4682-af30-e2f9be9ff8ae" parameterName="graphics_output" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4c886282-db6b-475a-a595-7bb170782769" parameterName="test_app" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="b9f4c551-7949-4e32-bab4-b18dd582a2d5" name="getMediaPipelineTestCommand">
                 <parameters>
                     <parameter id="9e69038f-8eb7-434c-9ac1-74afdb8226ba" parameterName="test_url" parameterType="STRING" range="a-z"/>
                     <parameter id="36df0f53-9efe-4a3f-a0ac-85992bd66ada" parameterName="getMediaPipelineTestCommand" parameterType="STRING" range="a-z"/>
-                    <parameter id="4f824991-360f-4cdf-a133-6e35cfe1f483" parameterName="arguments" parameterType="STRING" range="a-z"/>
                     <parameter id="ccebb67b-803d-485e-9513-f0c29365a9c5" parameterName="test_name" parameterType="STRING" range="a-z"/>
+                    <parameter id="4f824991-360f-4cdf-a133-6e35cfe1f483" parameterName="arguments" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="be3ca858-5895-4dfa-bd21-559f0742f6c5" name="getDeviceDetails">
+                <parameters>
+                    <parameter id="96da987b-2bc9-4327-8ed1-981642015d89" parameterName="detail" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
             <function id="e02e9108-388d-4a5a-b5b5-e237256d8f4a" name="getOperations">
                 <parameters/>
+            </function>
+            <function id="4c696a3b-fe68-4df9-8b5f-2bc153e318d0" name="checkifLanguagePlayed">
+                <parameters>
+                    <parameter id="6c91bdfd-2099-471b-981a-9d67ec332df8" parameterName="language" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="54f58468-bfcb-4d57-8709-55434b7c2e29" name="init_module">
+                <parameters>
+                    <parameter id="08c0b771-3a5a-4f3d-8d99-79eba1c4257f" parameterName="libobj" parameterType="STRING" range="a-z"/>
+                    <parameter id="dc15953d-14f5-48ca-a019-5d432116da72" parameterName="deviceInfo" parameterType="STRING" range="a-z"/>
+                    <parameter id="d38c280c-0056-44a2-bc58-d81c8718c37e" parameterName="port" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="5f5adc04-95c1-41ce-939f-2bc25f7fbcbe" name="setOperations">
+                <parameters>
+                    <parameter id="40adac00-8c57-4a4e-995b-9ece66530d53" parameterName="arguments" parameterType="STRING" range="a-z"/>
+                    <parameter id="c3caf82d-81ce-48a0-b5ea-a44167b71d2a" parameterName="operation" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="b33fe5e9-1148-4b65-837f-dc4339769801" name="parseLatency">
+                <parameters>
+                    <parameter id="53492123-5eb3-492b-b8c7-5951efa2481a" parameterName="output" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cee07e46-4d75-47ec-b58d-38a86ab0432f" parameterName="latencyThreshold" parameterType="DOUBLE" range="1-1000"/>
+                </parameters>
+            </function>
+            <function id="8c20f641-20a8-4a12-aeb3-f9aa9075bba1" name="getDeviceConfigValue">
+                <parameters>
+                    <parameter id="c51b3a63-bdea-49a6-bca5-8923ad79aa50" parameterName="configKey" parameterType="STRING" range="a-z"/>
+                </parameters>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->

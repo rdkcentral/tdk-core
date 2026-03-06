@@ -17,86 +17,9 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="de334a68-f9ae-45ea-8c8f-b07bc325eb21" name="WIFIAgent_Set">
-                <parameters>
-                    <parameter id="6df509c7-ade5-41df-a72e-112339b0519d" parameterName="paramValue" parameterType="STRING" range="a-z,A-Z"/>
-                    <parameter id="157d03fa-f909-464d-b098-f90a47e77950" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
-                    <parameter id="e399e1eb-6674-4ada-bd46-d64024d4b7ba" parameterName="paramType" parameterType="STRING" range="a-z,A-Z"/>
-                </parameters>
-            </function>
-            <function id="0a780433-947d-4d16-82e2-3f286b53b869" name="WIFIAgent_AddObject">
-                <parameters>
-                    <parameter id="b58bffd0-0cd4-4a32-a770-2f44b7e1c3f0" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="501ccb4f-e6b4-46bd-b80b-dc8d37388d70" name="WIFIAgent_GetNames">
-                <parameters>
-                    <parameter id="79e94394-6477-4f8d-842f-25144766795c" parameterName="brecursive" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="c50338c0-aa55-40f1-8e12-624377bd36b1" parameterName="pathname" parameterType="STRING" range="a-z,A-Z"/>
-                </parameters>
-            </function>
             <function id="197c8517-5e00-4983-a00f-1e442706413b" name="WIFIAgent_Get_LargeValue">
                 <parameters>
                     <parameter id="3f908bb9-0679-491f-894d-cb98b066c8a6" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="56274ed4-ebef-4a6c-bfae-132304323b6f" name="WIFIAgent_DelObject">
-                <parameters>
-                    <parameter id="86a8c707-8204-4e53-b320-e38174f5731b" parameterName="apiTest" parameterType="STRING" range="0-1"/>
-                    <parameter id="f1195520-277f-4f28-a628-279f0473bfc8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="b319c9be-27e1-4cda-a86b-83eeb78d3f1f" name="WIFIAgent_SetAttr">
-                <parameters>
-                    <parameter id="bc4c9f35-3465-4dbc-b8ea-aa81e1dd3e23" parameterName="paramname" parameterType="STRING" range="a-z,A-Z"/>
-                    <parameter id="8356aad0-bd3c-48c2-8d6f-57f106c63b55" parameterName="accessControlChanged" parameterType="STRING" range="a-z,A-Z"/>
-                    <parameter id="688a6424-b995-4b20-823f-a8bcb7c6e85e" parameterName="notification" parameterType="STRING" range="a-z,A-Z"/>
-                </parameters>
-            </function>
-            <function id="27c7767c-7869-4465-a9ef-7982400d8692" name="WIFIAgent_SetMultiple">
-                <parameters>
-                    <parameter id="f34c17de-ca92-47c0-9ab2-441404ce8a0b" parameterName="paramList" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="f3f9a830-814b-4e0b-b131-1ff602b308bc" name="WIFIHal_CallMethodForString">
-                <parameters>
-                    <parameter id="007d17d8-7627-45ff-a263-c0249a0921c9" parameterName="methodName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="5a0c657c-970e-43e4-ba93-d7b382fc0d54" parameterName="radioIndex" parameterType="STRING" range="A-Z"/>
-                    <parameter id="6232d96a-1891-400c-971e-040174f710a7" parameterName="param" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="5e980cfb-ff77-42df-80b1-73a2cce2d2c4" name="WIFIAgent_Set_LargeValue">
-                <parameters>
-                    <parameter id="787c0b39-ef05-4de0-8534-b3008b23bad1" parameterName="ParamType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="cfc3fad3-a2b1-4d2d-9a7c-558ada282887" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="5888b6c2-6edc-43a2-ac1b-f17bdbda70c2" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="b69f9c39-3565-4637-8dbf-63f295053e6a" name="WIFIAgent_Set_Get">
-                <parameters>
-                    <parameter id="6c7cc867-9b1c-43c5-980d-a3aab71a940a" parameterName="paramValue" parameterType="STRING" range="a-z,A-Z"/>
-                    <parameter id="d6f67aaf-f2b5-4de6-81bd-894eb53f067a" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
-                    <parameter id="7feee272-4411-4d5b-9990-df999b5c92a8" parameterName="paramType" parameterType="STRING" range="a-z,A-Z"/>
-                </parameters>
-            </function>
-            <function id="922abd6d-19b0-4096-8540-aa8ddcec809b" name="WIFIHal_CallMethodForULong">
-                <parameters>
-                    <parameter id="7a5aae7d-ac20-46f9-bcd8-29aba95c6f73" parameterName="param" parameterType="STRING" range="A-Z"/>
-                    <parameter id="7baa7ad8-a52b-4482-be81-3a3525a1d56d" parameterName="radioIndex" parameterType="STRING" range="A-Z"/>
-                    <parameter id="8b4121a0-c563-49f0-b3ef-ee4547b3f59c" parameterName="methodName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="9a4f02cc-4775-4acf-a48f-bc600ac22fb9" name="WIFIAgent_SetSessionId">
-                <parameters>
-                    <parameter id="08ad0bb1-0f73-4cad-bbb5-779921c51bd8" parameterName="priority" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="23070498-a07d-44ae-9663-5966a4d8e1c7" parameterName="sessionId" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="045a9a99-46d8-4881-8f09-acddee90ad6e" parameterName="pathname" parameterType="STRING" range="a-z,A-Z"/>
-                    <parameter id="ffaa4bd3-9ef0-4850-8c8d-ba19e2d33254" parameterName="override" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="3adccb62-8685-430c-862f-580f1e008015" name="WIFIAgent_Get">
-                <parameters>
-                    <parameter id="e6f86b62-0739-439c-804b-3feaaa91d4cc" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="501f1678-9a5c-4270-97e4-e9f7e0c1e768" name="WIFIAgent_GetAttr">
@@ -109,20 +32,97 @@
                     <parameter id="910d217a-817b-4aa4-aa38-b7e192f12420" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
                 </parameters>
             </function>
-            <function id="6b963ee6-248a-47de-8d70-6abd2afe9f4c" name="WIFIAgent_GetHealth">
+            <function id="501ccb4f-e6b4-46bd-b80b-dc8d37388d70" name="WIFIAgent_GetNames">
                 <parameters>
-                    <parameter id="772afb73-c2fb-4496-b438-ca413d895eb8" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="79e94394-6477-4f8d-842f-25144766795c" parameterName="brecursive" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="c50338c0-aa55-40f1-8e12-624377bd36b1" parameterName="pathname" parameterType="STRING" range="a-z,A-Z"/>
                 </parameters>
             </function>
             <function id="5c6c0d9f-281c-4ebe-b3b0-fdb10ba99c56" name="WIFIHal_CallMethodForBool">
                 <parameters>
                     <parameter id="49d59e20-893e-4584-b329-e4461313b007" parameterName="radioIndex" parameterType="STRING" range="A-Z"/>
-                    <parameter id="526318e3-9312-4a1e-842e-5c14f48b4f2d" parameterName="param" parameterType="STRING" range="A-Z"/>
                     <parameter id="2c57ffe0-4502-4af5-ad79-9c3bbc33c58f" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="526318e3-9312-4a1e-842e-5c14f48b4f2d" parameterName="param" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="922abd6d-19b0-4096-8540-aa8ddcec809b" name="WIFIHal_CallMethodForULong">
+                <parameters>
+                    <parameter id="7baa7ad8-a52b-4482-be81-3a3525a1d56d" parameterName="radioIndex" parameterType="STRING" range="A-Z"/>
+                    <parameter id="7a5aae7d-ac20-46f9-bcd8-29aba95c6f73" parameterName="param" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8b4121a0-c563-49f0-b3ef-ee4547b3f59c" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0a780433-947d-4d16-82e2-3f286b53b869" name="WIFIAgent_AddObject">
+                <parameters>
+                    <parameter id="b58bffd0-0cd4-4a32-a770-2f44b7e1c3f0" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="e18dc2ac-2f2a-416d-979b-1339816a2d68" name="WIFIHal_CallMethodForInt">
                 <parameters/>
+            </function>
+            <function id="6b963ee6-248a-47de-8d70-6abd2afe9f4c" name="WIFIAgent_GetHealth">
+                <parameters>
+                    <parameter id="772afb73-c2fb-4496-b438-ca413d895eb8" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="b319c9be-27e1-4cda-a86b-83eeb78d3f1f" name="WIFIAgent_SetAttr">
+                <parameters>
+                    <parameter id="688a6424-b995-4b20-823f-a8bcb7c6e85e" parameterName="notification" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="bc4c9f35-3465-4dbc-b8ea-aa81e1dd3e23" parameterName="paramname" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="8356aad0-bd3c-48c2-8d6f-57f106c63b55" parameterName="accessControlChanged" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="de334a68-f9ae-45ea-8c8f-b07bc325eb21" name="WIFIAgent_Set">
+                <parameters>
+                    <parameter id="6df509c7-ade5-41df-a72e-112339b0519d" parameterName="paramValue" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="157d03fa-f909-464d-b098-f90a47e77950" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="e399e1eb-6674-4ada-bd46-d64024d4b7ba" parameterName="paramType" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="5e980cfb-ff77-42df-80b1-73a2cce2d2c4" name="WIFIAgent_Set_LargeValue">
+                <parameters>
+                    <parameter id="787c0b39-ef05-4de0-8534-b3008b23bad1" parameterName="ParamType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5888b6c2-6edc-43a2-ac1b-f17bdbda70c2" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cfc3fad3-a2b1-4d2d-9a7c-558ada282887" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9a4f02cc-4775-4acf-a48f-bc600ac22fb9" name="WIFIAgent_SetSessionId">
+                <parameters>
+                    <parameter id="ffaa4bd3-9ef0-4850-8c8d-ba19e2d33254" parameterName="override" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="23070498-a07d-44ae-9663-5966a4d8e1c7" parameterName="sessionId" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="08ad0bb1-0f73-4cad-bbb5-779921c51bd8" parameterName="priority" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="045a9a99-46d8-4881-8f09-acddee90ad6e" parameterName="pathname" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="b69f9c39-3565-4637-8dbf-63f295053e6a" name="WIFIAgent_Set_Get">
+                <parameters>
+                    <parameter id="7feee272-4411-4d5b-9990-df999b5c92a8" parameterName="paramType" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="6c7cc867-9b1c-43c5-980d-a3aab71a940a" parameterName="paramValue" parameterType="STRING" range="a-z,A-Z"/>
+                    <parameter id="d6f67aaf-f2b5-4de6-81bd-894eb53f067a" parameterName="paramName" parameterType="STRING" range="a-z,A-Z"/>
+                </parameters>
+            </function>
+            <function id="3adccb62-8685-430c-862f-580f1e008015" name="WIFIAgent_Get">
+                <parameters>
+                    <parameter id="e6f86b62-0739-439c-804b-3feaaa91d4cc" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="27c7767c-7869-4465-a9ef-7982400d8692" name="WIFIAgent_SetMultiple">
+                <parameters>
+                    <parameter id="f34c17de-ca92-47c0-9ab2-441404ce8a0b" parameterName="paramList" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="56274ed4-ebef-4a6c-bfae-132304323b6f" name="WIFIAgent_DelObject">
+                <parameters>
+                    <parameter id="86a8c707-8204-4e53-b320-e38174f5731b" parameterName="apiTest" parameterType="STRING" range="0-1"/>
+                    <parameter id="f1195520-277f-4f28-a628-279f0473bfc8" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="f3f9a830-814b-4e0b-b131-1ff602b308bc" name="WIFIHal_CallMethodForString">
+                <parameters>
+                    <parameter id="6232d96a-1891-400c-971e-040174f710a7" parameterName="param" parameterType="STRING" range="A-Z"/>
+                    <parameter id="007d17d8-7627-45ff-a263-c0249a0921c9" parameterName="methodName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5a0c657c-970e-43e4-ba93-d7b382fc0d54" parameterName="radioIndex" parameterType="STRING" range="A-Z"/>
+                </parameters>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->

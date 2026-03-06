@@ -17,16 +17,29 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
+            <function id="6c773bb2-b6cd-4de6-b15a-bc1f99f5caa1" name="AdvancedConfig_Set">
+                <parameters>
+                    <parameter id="da850508-d197-4bf1-a2a9-1eb2f3d1eacb" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c36c8b22-ed41-46e0-b086-74773bf7583f" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4ebb10c8-3011-4860-961e-efe1f0b57433" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
             <function id="42f7f81d-6064-4673-bec1-edc2a48d4268" name="AdvancedConfig_AddObject">
                 <parameters>
                     <parameter id="6eec90a5-1f98-4d5c-aebf-8f6f9d19f324" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
+            <function id="d2e32d4a-8c36-49c2-b06d-861a714c716e" name="AdvancedConfig_GetNames">
+                <parameters>
+                    <parameter id="b3319acd-e032-4cdc-8e85-6ff52ca4299f" parameterName="brecursive" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="f25057fb-8c80-42e5-bbdd-a399a4e35a4d" parameterName="pathname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
             <function id="971701ef-09f0-41fe-9292-6bafa538357a" name="AdvancedConfig_Get">
                 <parameters>
-                    <parameter id="26c13eb4-405c-40c9-8237-46dfad0ff972" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                     <parameter id="8b5bde82-c2ef-47d7-aee6-83a57193b1bb" parameterName="paramType" parameterType="STRING" range="A-Z"/>
                     <parameter id="776be3e9-604f-4dca-9735-14b4cfd8105f" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="26c13eb4-405c-40c9-8237-46dfad0ff972" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="19744b7b-1744-4368-96b4-fcba9233d3ab" name="AdvancedConfig_SetMultiple">
@@ -37,19 +50,6 @@
             <function id="fc3b8404-b797-4d3a-a2d9-983764930bfb" name="AdvancedConfig_DelObject">
                 <parameters>
                     <parameter id="ff01a329-7718-454f-bc3b-d22596a460e0" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="6c773bb2-b6cd-4de6-b15a-bc1f99f5caa1" name="AdvancedConfig_Set">
-                <parameters>
-                    <parameter id="da850508-d197-4bf1-a2a9-1eb2f3d1eacb" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="4ebb10c8-3011-4860-961e-efe1f0b57433" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
-                    <parameter id="c36c8b22-ed41-46e0-b086-74773bf7583f" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="d2e32d4a-8c36-49c2-b06d-861a714c716e" name="AdvancedConfig_GetNames">
-                <parameters>
-                    <parameter id="b3319acd-e032-4cdc-8e85-6ff52ca4299f" parameterName="brecursive" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="f25057fb-8c80-42e5-bbdd-a399a4e35a4d" parameterName="pathname" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>

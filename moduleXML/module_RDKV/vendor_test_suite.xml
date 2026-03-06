@@ -17,9 +17,18 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="9eb2019e-5695-45ce-9ac4-ccf41b460241" name="getDeviceConfigValues">
+            <function id="fec570b6-7623-4cc0-89c9-aa09bf62011e" name="executePostRequisites">
+                <parameters/>
+            </function>
+            <function id="4b84e748-bda3-45c7-a82b-96d0a64d6fb3" name="SetupPreRequisites">
                 <parameters>
-                    <parameter id="2259ef8d-9f73-4d09-9235-b3a6adbc6c58" parameterName="configKey" parameterType="STRING" range="A-Z"/>
+                    <parameter id="741e8697-f48a-4543-9331-a831ceee24eb" parameterName="binaryConfig" parameterType="STRING" range="A-Z"/>
+                    <parameter id="6b324a10-d45c-4298-9288-b1756a06f221" parameterName="binaryName" parameterType="STRING" range="A-Z"/>
+                    <parameter id="00e6597f-87bc-498a-9a3c-bcb507f5b9d8" parameterName="host" parameterType="STRING" range="A-Z"/>
+                    <parameter id="50acf880-c0bc-4253-9bbb-4df0c2c1ad45" parameterName="module" parameterType="STRING" range="A-Z"/>
+                    <parameter id="126aec19-fe4d-4c6a-97a2-46deebddc34b" parameterName="basePath" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ebf8f4ad-6dea-4707-9147-e09b0d9cbee4" parameterName="password" parameterType="STRING" range="A-Z"/>
+                    <parameter id="caf9443b-aec2-4928-aa72-033ed539344e" parameterName="username" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="879c0a9c-bd10-4ced-bcca-1a45961cf048" name="setVTSResult">
@@ -27,18 +36,9 @@
                     <parameter id="9e6c1b93-0fe5-4d3d-ac7e-cb416921fd32" parameterName="failed_testCases" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="fec570b6-7623-4cc0-89c9-aa09bf62011e" name="executePostRequisites">
-                <parameters/>
-            </function>
-            <function id="4b84e748-bda3-45c7-a82b-96d0a64d6fb3" name="SetupPreRequisites">
+            <function id="9eb2019e-5695-45ce-9ac4-ccf41b460241" name="getDeviceConfigValues">
                 <parameters>
-                    <parameter id="ebf8f4ad-6dea-4707-9147-e09b0d9cbee4" parameterName="password" parameterType="STRING" range="A-Z"/>
-                    <parameter id="50acf880-c0bc-4253-9bbb-4df0c2c1ad45" parameterName="module" parameterType="STRING" range="A-Z"/>
-                    <parameter id="6b324a10-d45c-4298-9288-b1756a06f221" parameterName="binaryName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="00e6597f-87bc-498a-9a3c-bcb507f5b9d8" parameterName="host" parameterType="STRING" range="A-Z"/>
-                    <parameter id="741e8697-f48a-4543-9331-a831ceee24eb" parameterName="binaryConfig" parameterType="STRING" range="A-Z"/>
-                    <parameter id="126aec19-fe4d-4c6a-97a2-46deebddc34b" parameterName="basePath" parameterType="STRING" range="A-Z"/>
-                    <parameter id="caf9443b-aec2-4928-aa72-033ed539344e" parameterName="username" parameterType="STRING" range="A-Z"/>
+                    <parameter id="2259ef8d-9f73-4d09-9235-b3a6adbc6c58" parameterName="configKey" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>
