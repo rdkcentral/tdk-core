@@ -131,7 +131,7 @@ def gettr069ACS(tdkTestObj,username,queryParam,step):
     step += 1
 
     #Send GET task request to get the parameter details from device
-    print("TEST STEP %d: Send GET task request to get %s and receive a valid response via ACS server" % (step, name))
+    print("\nTEST STEP %d: Send GET task request to get %s and receive a valid response via ACS server" % (step, name))
     print("EXPECTED RESULT %d: Send GET task request to get %s and receive a valid response successfully via ACS server" % (step,name))
 
     status, queryResponse = tr069ACSQuery(username, queryParam, "get")
@@ -174,7 +174,9 @@ def gettr069ACS(tdkTestObj,username,queryParam,step):
         return None, step
 
     tdkTestObj.setResultStatus("SUCCESS")
-    print("Retrieved value of %s as %s successfully" % (name, parsedResponse))
+    print("Retrieved value of %s successfully" %name)
+    for key,value in parsedResponse.items():
+        print(f"{key} : {value}")
     print("[TEST EXECUTION RESULT] : SUCCESS")
 
     return parsedResponse,step
@@ -196,25 +198,26 @@ def getTr181DMValue(obj,queryParam,step):
     if isinstance(parameters, str):
         parameters = [parameters]
 
-    getValuesTr181 = []
+    getValuesTr181 = {}
     # Get the parameter value
     for name in parameters:
         step += 1
-        print("\n TEST STEP %d : Get the value of the parameter %s from DUT" %(step,name))
+        print("\nTEST STEP %d : Get the value of the parameter %s from DUT" %(step,name))
         print("EXPECTED RESULT %d : Get the value of the parameter %s successfully" %(step,name))
         tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Get')
         actualresult, details = getTR181Value(tdkTestObj_tr181,name)
-        if expectedresult in actualresult and details != "":
-            getValueTr181 = details.strip("'")
+        if expectedresult in actualresult:
+            if details != "":
+                getValueTr181 = details.strip("'")
             tdkTestObj_tr181.setResultStatus("SUCCESS")
             print("ACTUAL RESULT %d : Got the parameter %s value as %s successfully" %(step,name,getValueTr181))
             print("[TEST EXECUTION RESULT] : SUCCESS")
-            getValuesTr181.append(getValueTr181)
+            getValuesTr181[name] = getValueTr181
         else:
             tdkTestObj_tr181.setResultStatus("FAILURE")
             print("ACTUAL RESULT %d : Failed to get the parameter %s value" %(step,name))
             print("[TEST EXECUTION RESULT] : FAILURE")
-            getValuesTr181.append(details)
+            getValuesTr181[name] = details
 
     return tdkTestObj_tr181,getValuesTr181,step
 
@@ -251,7 +254,7 @@ def settr069ACS(tdkTestObj,username,queryParam,step):
 # Description : Function to create and send an HTTP request to the ACS server using the requests library.
 # Parameters  : username - username to be passed in the ACS request for uniquely identifying the DUT.
 #             : parameter - parameter list to be included in the ACS request.
-#             : method - whether the method is get or set or search or RefreshObject.
+#             : method - whether the method is get or set or search or RefreshObject or AddObject or DeleteObject or FactoryReset or Reboot.
 # Return Value:  query response - query response from the ACS server.
 def tr069ACSQuery(username,parameter,method="get"):
     ACS_QUERY_URL = ACS_NBI_URL + f"/devices"
@@ -302,13 +305,28 @@ def tr069ACSQuery(username,parameter,method="get"):
             values = [values]
 
         parameterValues = [[p, v] for p, v in zip(parameters, values)]
-
         payload = {"name": "setParameterValues","parameterValues": parameterValues}
 
+    elif method in ("AddObject","DeleteObject"):
+        #Query for AddObject and DeleteObject operation
+        name = parameter.get("name")
+        values = parameter.get("value")
+        params = {"timeout": 3000,"connection_request": ""}
+        if method == "AddObject":
+            payload = {"name":"addObject","objectName":name}
+        else:
+            payload = {"name":"deleteObject","objectName":name}
+    elif method in ("FactoryReset","Reboot"):
+        #Query for FactoryReset and Reboot operation
+        params = {"timeout": 3000,"connection_request": ""}
+        if method == "FactoryReset":
+            payload = {"name":"factoryReset"}
+        else:
+            payload = {"name":"reboot"}
     try:
         resp = None
-        if method in ("get","set","RefreshObject"):
-            #send GET/SET/Refresh request to the DUT via ACS server
+        if method in ("get","set","RefreshObject","AddObject","DeleteObject","FactoryReset","Reboot"):
+            # Send GET/SET/RefreshObject/AddObject/DeleteObject/FactoryReset/Reboot request to the DUT via ACS server
             resp = requests.post(ACS_TASK_URL,params=params, json=payload)
         elif method == "search":
             resp = requests.get(ACS_QUERY_URL, params=params)
@@ -350,7 +368,7 @@ def parseTR69ACSResponse(response,parameters,method):
             return None
 
         try:
-            paramValues = []
+            paramValues = {}
             for param in dmParam:
                 keys = param.split(".")
                 data = response[0]   # First device object
@@ -363,16 +381,25 @@ def parseTR69ACSResponse(response,parameters,method):
                     if data is None:
                         print(f"Key not found in response: {key}")
                         return None
-                # After full traversal, extract _value
-                if isinstance(data, dict):
-                    value = data.get("_value")
+                # Case 1: Leaf parameter
+                if isinstance(data, dict) and "_value" in data:
+                    value = data["_value"]
                     value = value.strip("'") if isinstance(value, str) else value
+                    paramValues[param] = value
+
+                # Case 2: Object parameter
+                elif isinstance(data, dict) and data.get("_object") is True:
+                    for child_key, child_val in data.items():
+                        if isinstance(child_val, dict) and "_value" in child_val:
+                            val = child_val["_value"]
+                            val = val.strip("'") if isinstance(val, str) else val
+                            # build full parameter path
+                            full_param = f"{param}.{child_key}"
+                            paramValues[full_param] = val
                 else:
-                    print("Final node is not a dictionary")
+                    print("Final node is not a valid parameter or object")
                     return None
-                print(f"Extracted value for {param}: {value}")
-                paramValues.append(value)
             return paramValues
         except Exception as e:
-            print(f"Parsing error: {e}")
+            print("Error parsing search response:", str(e))
             return None
