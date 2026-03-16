@@ -16,6 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
+#-----------------------------------------------------------------------------
+# module imports
+#------------------------------------------------------------------------------
 import json
 import requests
 from time import sleep
@@ -116,6 +119,7 @@ def tr069ACSPreRequisite(obj,sysobj):
         return tdkTestObj_tr181,username,returnStatus
     else:
         return None,None,returnStatus
+########## End of function ##########
 
 # gettr069ACS
 # Syntax      : gettr069ACS(tdkTestObj,username,queryParam,step)
@@ -180,6 +184,7 @@ def gettr069ACS(tdkTestObj,username,queryParam,step):
     print("[TEST EXECUTION RESULT] : SUCCESS")
 
     return parsedResponse,step
+########## End of function ##########
 
 # getTr181DMValue
 # Syntax      : getTr181DMValue(obj,queryParam,step)
@@ -220,6 +225,7 @@ def getTr181DMValue(obj,queryParam,step):
             getValuesTr181[name] = details
 
     return tdkTestObj_tr181,getValuesTr181,step
+########## End of function ##########
 
 # settr069ACS
 # Syntax      : settr069ACS(tdkTestObj,username,queryParam,step)
@@ -248,6 +254,7 @@ def settr069ACS(tdkTestObj,username,queryParam,step):
         print("ACTUAL RESULT %d : Failed to set the parameter %s" %(step,name))
         print("[TEST EXECUTION RESULT] : FAILURE")
         return None,step
+########## End of function ##########
 
 # tr069ACSQuery
 # Syntax      : tr069ACSQuery(username,parameter,method="get")
@@ -310,7 +317,6 @@ def tr069ACSQuery(username,parameter,method="get"):
     elif method in ("AddObject","DeleteObject"):
         #Query for AddObject and DeleteObject operation
         name = parameter.get("name")
-        values = parameter.get("value")
         params = {"timeout": 3000,"connection_request": ""}
         if method == "AddObject":
             payload = {"name":"addObject","objectName":name}
@@ -343,10 +349,14 @@ def tr069ACSQuery(username,parameter,method="get"):
 
     except Exception as e:
         # catches any unexpected errors
-        print(f"[UNEXPECTED ERROR] {e}")
-        print(f"Status: {resp.status_code}")
-        print(f"Response Body: {resp.text}")
-        return resp.status_code,None
+        if resp is not None:
+            print(f"Status: {resp.status_code}")
+            print(f"Response Body: {resp.text}")
+            return resp.status_code,None
+        else:
+            print("No response received from server")
+            return None,None
+########## End of function ##########
 
 # parseTR69ACSResponse
 # Syntax      : parseTR69ACSResponse(response,parameters,method)
@@ -354,7 +364,7 @@ def tr069ACSQuery(username,parameter,method="get"):
 # Parameters  : response - response message to be parsed.
 #             : parameters - parameter list with parameter details.
 #             : method -  whether the method is to search.
-# Return Value: paramValues - list of parameter values.
+# Return Value: paramValues - dict mapping parameter paths to values.
 def parseTR69ACSResponse(response,parameters,method):
     if method == "search":
         # Get requested parameter names
@@ -403,3 +413,4 @@ def parseTR69ACSResponse(response,parameters,method):
         except Exception as e:
             print("Error parsing search response:", str(e))
             return None
+########## End of function ##########
