@@ -1,0 +1,400 @@
+{
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_DeviceFingerPrint.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_DeviceFingerPrint.LoggingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["1440"],
+        "expectedValues": ["[60:2880]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_DeviceFingerPrint.EndpointURL": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_DeviceFingerPrint.LogLevel": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["2"],
+        "expectedValues": ["1","2","3","4"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.Data": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_DeviceFingerPrint.Enable": "true"
+            }
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.LookupTimeout": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.LookupTimeoutExceededCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.Threshold": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.Timeout": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.Cachettl": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.Ttl": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.WhitelistMaxEntries": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.Endpoint": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.Blockpage": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.Warnpage": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.Cacheurl": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.SafeBrowsing.OtmDedupFqdn": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedSecurity.Softflowd.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_DeviceFingerPrint.Enable": "true"
+            }
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AdvancedParentalControl.Activate": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_DeviceFingerPrint.Enable": "true"
+            }
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_PrivacyProtection.Activate": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_DeviceFingerPrint.Enable": "true"
+            }
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.RabidFramework.MemoryLimit": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[46:]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.RabidFramework.MacCacheSize": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[200:10000]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.RabidFramework.DNSCacheSize": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[200:10000]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvancedParentalControl.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["true"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PrivacyProtection.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.DeviceFingerPrintICMPv6.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["true"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.WS-Discovery_Analysis.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvancedSecurityOTM.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["true"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvanceSecurityUserSpace.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["true"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Levl.Enable": "true"
+            },
+            "false": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Levl.Enable": "true"
+            }
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvanceSecurityCujoTracer.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvanceSecurityCujoTelemetry.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.WifiDataCollection.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Levl.Enable": "true"
+            },
+            "false": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Levl.Enable": "true"
+            }
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Levl.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvSecAgent.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["true"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvSecSafeBrowsing.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["true"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvanceSecurityUserSpace.Enable": "true"
+            },
+            "false": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvanceSecurityUserSpace.Enable": "true"
+            }
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvSecCujoTelemetryWiFiFP.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvanceSecurityUserSpace.Enable": "true"
+            },
+            "false": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvanceSecurityUserSpace.Enable": "true"
+            }
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvSecAgentRaptr.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvSecSentryAtTheEdge.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvSecTCPTrackerFilterDevices.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

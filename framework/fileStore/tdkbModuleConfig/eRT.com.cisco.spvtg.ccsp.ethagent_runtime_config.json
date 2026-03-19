@@ -1,0 +1,385 @@
+{
+    "Device.Ethernet.X_RDKCENTRAL-COM_InterfaceNumberOfEntries": {
+        "X_RDKCENTRAL-COM_InterfaceNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifdef FEATURE_RDKB_WAN_AGENT"]
+    },
+    "Device.Ethernet.X_RDKCENTRAL-COM_Interface.{i}.X_RDKCENTRAL-COM_Upstream": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_AGENT"]
+    },
+    "Device.Ethernet.X_RDKCENTRAL-COM_Interface.{i}.X_RDKCENTRAL-COM_WanValidated": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_AGENT"]
+    },
+    "Device.Ethernet.X_RDKCENTRAL-COM_Interface.{i}.X_RDKCENTRAL-COM_Name": {
+        "type": ["string(64))"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_AGENT"]
+    },
+    "Device.Ethernet.X_RDKCENTRAL-COM_Interface.{i}.X_RDKCENTRAL-COM_Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Up","Down"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_AGENT"]
+    },
+    "Device.Ethernet.X_RDKCENTRAL-COM_Interface.{i}.X_RDKCENTRAL-COM_WanStatus": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Up","Down"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_AGENT"]
+    },
+    "Device.Ethernet.InterfaceNumberOfEntries": {
+        "InterfaceNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Up","Down","Unknown","Dormant","NotPresent","LowerLayerDown","Error"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Alias": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "Interface_new"
+        }
+    },
+    "Device.Ethernet.Interface.{i}.Name": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.LastChange": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.LowerLayers": {
+        "type": ["string(1024)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Upstream": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.MACAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.MaxBitRate": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(-1,2^31 - 1)"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.CurrentBitRate": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(0,2^32 - 1)"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.DuplexMode": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Half","Full","Auto"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"],
+        "Set_type": "L2"
+    },
+    "Device.Ethernet.Interface.{i}.X_CISCO_COM_AssociatedDevice": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.X_RDKCENTRAL-COM_AssociatedDeviceNumberOfEntries": {
+        "X_RDKCENTRAL-COM_AssociatedDeviceNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.X_RDKCENTRAL-COM_AssociatedDevice.{i}.MACAddress": {
+        "type": ["string(1024)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.BytesSent": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.BytesReceived": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.PacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.PacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.ErrorsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.ErrorsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.UnicastPacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.UnicastPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.DiscardPacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.DiscardPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.MulticastPacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.MulticastPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.BroadcastPacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.BroadcastPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.Interface.{i}.Stats.UnknownProtoPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.X_RDK_InterfaceNumberOfEntries": {
+        "X_RDK_InterfaceNumberOfEntries": "",
+        "table": "writableTable",
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.X_RDK_Interface.{i}.Upstream": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"],
+        "Set_type": "L2"
+    },
+    "Device.Ethernet.X_RDK_Interface.{i}.WanValidated": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"],
+        "Set_type": "L2"
+    },
+    "Device.Ethernet.X_RDK_Interface.{i}.Name": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "eth_new"
+        }
+    },
+    "Device.Ethernet.X_RDK_Interface.{i}.Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Up","Down"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.X_RDK_Interface.{i}.WanStatus": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Up","Down"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"],
+        "Set_type": "L2"
+    },
+    "Device.Ethernet.X_RDK_Interface.{i}.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"],
+        "Set_type": "L2"
+    },
+    "Device.Ethernet.X_RDK_Interface.{i}.LowerLayers": {
+        "type": ["string(128)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Device.Ethernet.X_RDK_Interface.1","Device.Ethernet.X_RDK_Interface.2","Device.Ethernet.X_RDK_Interface.3","Device.Ethernet.X_RDK_Interface.4"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.X_RDK_Interface.{i}.WanConfigPort": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.X_RDK_Interface.{i}.AddToLanBridge": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.Ethernet.X_RDK_Interface.{i}.PortCapability": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["WAN","LAN","WAN_LAN"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER","ifdef FEATURE_RDKB_AUTO_PORT_SWITCH"]
+    }
+}
