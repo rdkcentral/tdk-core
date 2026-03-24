@@ -3025,4 +3025,643 @@
 	<event name="Event_On_PreferredAudioLanguagesChanged" eventName="onPreferredAudioLanguagesChanged" eventId="client.events.1" type="event" desc="Triggered when the audio preferred Audio languages changes"/>
 	<event name="Event_On_PresentationLanguageChanged" eventName="onPresentationLanguageChanged" eventId="client.events.1" type="event" desc="Triggered when the presentation Language changes"/>
     </plugin>
+
+    <!-- AppManager Plugin Information -->
+    <plugin pluginName="AppManager" serviceName="org.rdk.AppManager" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="Get_Installed_Apps" api="getInstalledApps" type="method" desc="Function fetches the details of all applications currently installed"/>
+        <method name="Is_Installed" api="isInstalled" type="method" desc="Check if an application is installed">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Is_Installed" api="isInstalled" type="method" desc="Check if an application is installed">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Get_Loaded_Apps" api="getLoadedApps" type="method" desc="Retrieves a list of applications currently loaded on the device"/>
+        <method name="Launch_App" api="launchApp" type="method" desc="Launches an application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="intent" defaultValue="null" type="string"/>
+                <param tag="launchArgs" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Preload_App" api="preloadApp" type="method" desc="Preloads an application instance.">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="launchArgs" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Preload_App" api="preloadApp" type="method" desc="Preloads an application instance.">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+                <param tag="launchArgs" defaultValue="null" type="string"/>
+            </params>
+	</method>
+	<method name="Numeric_LaunchArgs_Preload_App" api="preloadApp" type="method" desc="Preloads an application instance.">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="launchArgs" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Close_App" api="closeApp" type="method" desc="Close the app">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Terminate_App" api="terminateApp" type="method" desc="Terminates an application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Terminate_App" api="terminateApp" type="method" desc="Terminates an application">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Start_System_App" api="startSystemApp" type="method" desc="Starts the device application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Start_System_App" api="startSystemApp" type="method" desc="Starts the device application">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Stop_System_App" api="stopSystemApp" type="method" desc="Stops the device application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Stop_System_App" api="stopSystemApp" type="method" desc="Stops the device application">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Kill_App" api="killApp" type="method" desc="Terminates the specified application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Kill_App" api="killApp" type="method" desc="Terminates the specified application">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Send_Intent" api="sendIntent" type="method" desc="Sends an intent to a specific application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="intent" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Clear_App_Data" api="clearAppData" type="method" desc="Clears the data of a specific application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Clear_App_Data" api="clearAppData" type="method" desc="Clears the data of a specific application">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Clear_All_App_Data" api="clearAllAppData" type="method" desc="Clears all application data"/>
+        <method name="Get_App_Metadata" api="getAppMetadata" type="method" desc="Fetches metadata for a specific application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="metaData" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Get_App_Metadata" api="getAppMetadata" type="method" desc="Fetches metadata for a specific application">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+                <param tag="metaData" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Set_App_Property" api="setAppProperty" type="method" desc="Sets a property for the application instance">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="key" defaultValue="null" type="string"/>
+                <param tag="value" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Negative_Set_App_Property" api="setAppProperty" type="method" desc="Sets a property for the application instance">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="key" defaultValue="null" type="string"/>
+                <param tag="value" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Numeric_Set_App_Property" api="setAppProperty" type="method" desc="Sets a property for the application instance">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+                <param tag="key" defaultValue="null" type="int"/>
+                <param tag="value" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Get_App_Property" api="getAppProperty" type="method" desc="Retrieve a specific property of an application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="key" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Get_Max_Running_Apps" api="getMaxRunningApps" type="method" desc="Retrieves the maximum number of running applications allowed"/>
+    </plugin>
+
+    <!-- RDKWindowManager Plugin Information -->
+    <plugin pluginName="RDKWindowManager" serviceName="org.rdk.RDKWindowManager" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="RWM_addKeyIntercepts" api="addKeyIntercepts" type="method" desc="Adds the list of key intercepts">
+            <params paramType="userGenerate" useMethodTag="rwm_add_key_intercepts">
+                <param tag="clientId" type="string"/>
+                <param tag="keyCode" type="int"/>
+                <param tag="modifiers" type="list"/>
+                <param tag="focusOnly" type="bool"/>
+                <param tag="propagate" type="bool"/>
+            </params>
+        </method>
+        <method name="Create_Display" api="createDisplay" type="method" desc="Creates a new display">
+            <params paramType="userGenerate" useMethodTag="rwm_create_display">
+                <param tag="clientId" defaultValue="null" type="string"/>
+                <param tag="displayName" defaultValue="null" type="string"/>
+                <param tag="displayWidth" defaultValue="null" type="int"/>
+                <param tag="displayHeight" defaultValue="null" type="int"/>
+                <param tag="virtualWidth" defaultValue="null" type="int"/>
+                <param tag="virtualHeight" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Empty_Create_Display" api="createDisplay" type="method" desc="Creates a new display">
+            <params paramType="userGenerate" useMethodTag="rwm_empty_create_display">
+            <param tag="clientId" defaultValue="null"/>
+            <param tag="displayName" defaultValue="null"/>
+            <param tag="displayWidth" defaultValue="null"/>
+            <param tag="displayHeight" defaultValue="null"/>
+            <param tag="virtualWidth" defaultValue="null"/>
+            <param tag="virtualHeight" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Enable_Inactivity_Reporting" api="enableInactivityReporting" type="method" desc="Enables or disables inactivity reporting">
+            <params>
+                <param tag="enable" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+        <method name="String_Enable_Inactivity_Reporting" api="enableInactivityReporting" type="method" desc="Enables inactivity reporting" >
+            <params>
+                <param tag="enable" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Generate_Key" api="generateKey" type="method" desc="Generates a key for the window manager">
+            <params paramType="userGenerate" useMethodTag="rwm_generate_key">
+                <param tag="clientId" defaultValue="null" type="string"/>
+                <param tag="keyCode" defaultValue="null" type="int"/>
+                <param tag="modifiers" defaultValue="null" type="list"/>
+                <param tag="delay" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Invalid_Generate_Key" api="generateKey" type="method" desc="Generates a key for the window manager">
+            <params paramType="userGenerate" useMethodTag="rwm_invalid_generate_key">
+                <param tag="clientId" defaultValue="null" type="string"/>
+                <param tag="keyCode" defaultValue="null"/>
+                <param tag="modifiers" defaultValue="null" type="list"/>
+                <param tag="delay" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Get_Apps" api="getApps" type="method" desc="Retrieves the list of available applications"/>
+        <method name="Remove_Key_Intercept" api="removeKeyIntercept" type="method" desc="Removes a key intercept">
+            <params paramType="userGenerate" useMethodTag="rwm_remove_key_intercept">
+                <param tag="clientId" defaultValue="null" type="string"/>
+                <param tag="keyCode" defaultValue="null" type="int"/>
+                <param tag="modifiers" defaultValue="null" type="list"/>
+            </params>
+        </method>
+        <method name="Negative_Remove_Key_Intercept" api="removeKeyIntercept" type="method" desc="Removes a key intercept">
+            <params paramType="userGenerate" useMethodTag="rwm_negative_remove_key_intercept">
+                <param tag="clientId" defaultValue="null" type="string"/>
+                <param tag="keyCode" defaultValue="null"/>
+                <param tag="modifiers" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Reset_Inactivity_Time" api="resetInactivityTime" type="method" desc="Resets the inactivity time counter"/>
+        <method name="Set_Inactivity_Interval" api="setInactivityInterval" type="method" desc="Sets the inactivity interval">
+            <params>
+                <param tag="interval" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Set_Focus" api="setFocus" type="method" desc="Set focus to a specific application instance">
+            <params>
+                <param tag="client" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Set_Visible" api="setVisible" type="method" desc="Sets the visibility of a specific application instance">
+            <params>
+                <param tag="client" defaultValue="null" type="string"/>
+                <param tag="visible" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+        <method name="Render_Ready" api="renderReady" type="method" desc="Indicates that the rendering is ready for the specified app instance">
+            <params>
+                <param tag="clientId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Enable_Display_Render" api="enableDisplayRender" type="method" desc="Enables or disables display rendering for a specific app instance">
+            <params>
+                <param tag="clientId" defaultValue="null" type="string"/>
+                <param tag="enable" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+        <method name="Set_Z_Order" api="setZOrder" type="method" desc="Sets the z-order of the specified app">
+            <params>
+                <param tag="clientId" defaultValue="null" type="string"/>
+                <param tag="zOrder" defaultValue="null" type="int"/>
+            </params>
+	</method>
+	<method name="Negative_Set_Z_Order" api="setZOrder" type="method" desc="Sets the z-order of the specified app">
+            <params>
+                <param tag="clientId" defaultValue="null" type="string"/>
+                <param tag="zOrder" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Get_Z_Order" api="getZOrder" type="method" desc="Retrieves the Z-order of a specific application instance">
+            <params>
+                <param tag="clientId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+    </plugin>
+
+    <!-- LifecycleManager Plugin Information -->
+    <plugin pluginName="LifecycleManager" serviceName="org.rdk.LifecycleManager" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="App_Ready" api="appReady" type="method" desc="Response API call to appInitializing API">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_App_Ready" api="appReady" type="method" desc="Response API call to appInitializing API">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Boolean_App_Ready" api="appReady" type="method" desc="Response API call to appInitializing API">
+            <params>
+                <param tag="appId" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+        <method name="Close_App" api="closeApp" type="method" desc="Close the app">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="closeReason" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_AppId_Close_App" api="closeApp" type="method" desc="Close the app">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+                <param tag="closeReason" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_CloseReason_Close_App" api="closeApp" type="method" desc="Close the app">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="closeReason" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Boolean_AppId_Close_App" api="closeApp" type="method" desc="Close the app">
+            <params>
+                <param tag="appId" defaultValue="null" type="bool"/>
+                <param tag="closeReason" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Boolean_CloseReason_Close_App" api="closeApp" type="method" desc="Close the app">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="closeReason" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+    </plugin>
+
+    <!-- ResourceManager Plugin Information -->
+    <plugin pluginName="ResourceManager" serviceName="org.rdk.ResourceManager" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="Set_AV_Blocked" api="setAVBlocked" type="method" desc="Adds/removes the list of applications with the given callsigns to/from the blacklist">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="blocked" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+        <method name="Get_Blocked_AV_Applications" api="getBlockedAVApplications" type="method" desc="Gets a list of blacklisted clients"/>
+        <method name="Reserve_TTS_Resource_For_Apps" api="reserveTTSResourceForApps" type="method" desc="Reserves TTS resource for applications">
+            <params>
+                <param tag="appids" defaultValue="null" type="list"/>
+            </params>
+        </method>
+        <method name="Reserve_TTS_Resource" api="reserveTTSResource" type="method" desc="Reserves the Text To speech Resource for specified client">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Reserve_TTS_Resource" api="reserveTTSResource" type="method" desc="Reserves the Text To speech Resource for specified client">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+    </plugin>
+
+    <!-- StorageManager Plugin Information -->
+    <plugin pluginName="StorageManager" serviceName="org.rdk.StorageManager" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="getStorage" api="getStorage" type="method" desc="Returns the storage location for a given app id">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="userId " type="int"/>
+                <param tag="groupId" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_AppId_Getstorage" api="getStorage" type="method" desc="Returns the storage location for a given app id">
+            <params>
+                <param tag="appId" type="int"/>
+                <param tag="userId " type="int"/>
+                <param tag="groupId" type="int"/>
+            </params>
+        </method>
+        <method name="String_UserId_Getstorage" api="getStorage" type="method" desc="Returns the storage location for a given app id">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="userId " defaultValue="null" type="string"/>
+                <param tag="groupId" type="int"/>
+            </params>
+        </method>
+        <method name="String_Getstorage" api="getStorage" type="method" desc="Returns the storage location for a given app id">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="userId" defaultValue="null" type="string"/>
+                <param tag="groupId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="String_GroupId_Getstorage" api="getStorage" type="method" desc="Returns the storage location for a given app id">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="userId " type="int"/>
+                <param tag="groupId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="createStorage" api="createStorage" type="method" desc="Creates storage for a given app id">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="size" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_AppId_Createstorage" api="createStorage" type="method" desc="Creates storage for a given app id">
+            <params>
+                <param tag="appId" type="int"/>
+                <param tag="size" type="int"/>
+            </params>
+        </method>
+        <method name="String_Size_Createstorage" api="createStorage" type="method" desc="Creates storage for a given app id">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+                <param tag="size" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="deleteStorage" api="deleteStorage" type="method" desc="Deletes storage for a given app id">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_AppId_Deletestorage" api="deleteStorage" type="method" desc="Deletes storage for a given app id">
+            <params>
+                <param tag="appId" type="int"/>
+            </params>
+        </method>
+        <method name="Clear_App_Data" api="clear" type="method" desc="Clears app data for a given app id">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Clear_App_Data" api="clear" type="method" desc="Clears app data for a given app id">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Clear_All" api="clearAll" type="method" desc="Clears all app data except for the exempt app ids">
+            <params>
+                <param tag="exemptionAppIds" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Clear_All" api="clearAll" type="method" desc="Clears all app data except for the exempt app ids">
+            <params>
+                <param tag="exemptionAppIds" type="int"/>
+            </params>
+        </method>
+    </plugin>
+
+    <!-- DownloadManager Plugin Information -->
+    <plugin pluginName="DownloadManager" serviceName="org.rdk.DownloadManager" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="Download_Package" api="download" type="method" desc="Downloads a file from the specified URL">
+            <params>
+                <param tag="url" defaultValue="null" type="string"/>
+            </params>
+        </method>
+    </plugin>
+
+    <!-- PackageManager Plugin Information -->
+    <plugin pluginName="PackageManager" serviceName="org.rdk.PackageManagerRDKEMS" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="List_Package_Info" api="listPackages" type="method" desc="Retrieves information about packages"/>
+        <method name="Download_Package" api="download" type="method" desc="Download the package">
+            <params>
+                <param tag="url" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Pause_Download" api="pause" type="method" desc="Pauses an ongoing download">
+            <params>
+                <param tag="downloadId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Resume_Download" api="resume" type="method" desc="Resumes a paused download">
+            <params>
+                <param tag="downloadId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Cancel_Download" api="cancel" type="method" desc="Cancels an ongoing download">
+            <params>
+                <param tag="handle" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Progress_Download" api="progress" type="method" desc="Retrieves the progress of a download">
+            <params>
+                <param tag="downloadId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Delete_Package" api="delete" type="method" desc="Deletes a package">
+            <params>
+                <param tag="fileLocator" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Install_Package" api="install" type="method" desc="Installs a package">
+            <params paramType="userGenerate" useMethodTag="pm_install_package">
+                <param tag="packageId" defaultValue="null" type="string"/>
+                <param tag="version" defaultValue="null" type="string"/>
+                <param tag ="fileLocator" defaultValue="null" type="string"/>
+                <param tag ="name" defaultValue="null" type="string"/>
+                <param tag ="value" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Uninstall_Package" api="uninstall" type="method" desc="Uninstalls a package">
+            <params>
+                <param tag="packageId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Get_Storage_Details" api="getStorageDetails" type="method" desc="Retrieve storage details of packages">
+            <params>
+                <param tag="type" defaultValue="null" type="string"/>
+                <param tag="id" defaultValue="null" type="string"/>
+                <param tag="version" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Unlock_Package" api="unlock" type="method" desc="Unlocks a package">
+            <params>
+                <param tag="packageId" defaultValue="null" type="string"/>
+                <param tag="version" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Lock_Package" api="lock" type="method" desc="Locks an application to prevent uninstallation">
+            <params>
+                <param tag="packageId" defaultValue="null" type="string"/>
+                <param tag="version" defaultValue="null" type="string"/>
+                <param tag="lockReason" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Get_Locked_Info" api="getLockedInfo" type="method" desc="Retrieves lock information for packages">
+            <params>
+                <param tag="packageId" defaultValue="null" type="string"/>
+                <param tag="version" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Package_State" api="packageState" type="method" desc="Retrieves the current state of a package">
+            <params>
+                <param tag="packageId" defaultValue="null" type="string"/>
+                <param tag="version" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="reset" api="reset" type="method" desc="Deletes all persistent local data of the application">
+            <params>
+                <param tag="type" defaultValue="null" type="string"/>
+                <param tag="id" defaultValue="null" type="string"/>
+                <param tag="version" defaultValue="null" type="string"/>
+                <param tag="resetType" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="getMetadata" api="getMetadata" type="method" desc="Retrieves metadata and auxiliary resource list for an application">
+            <params>
+                <param tag="type" defaultValue="null" type="string"/>
+                <param tag="id" defaultValue="null" type="string"/>
+                <param tag="version" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="config" api="config" type="method" desc="Retrieves configuration information for a installed application">
+            <params>
+                <param tag="packageId" defaultValue="null" type="string"/>
+                <param tag="version" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="getConfigForPackage" api="getConfigForPackage" type="method" desc="Retrieves configuration information for a package">
+            <params>
+                <param tag="fileLocator" defaultValue="null" type="string"/>
+            </params>
+        </method>
+
+        <!-- Event Definitions -->
+        <event name="Event_On_AppInstallationStatus" eventName="onAppInstallationStatus" eventId="client.events.1" type="event" desc="Emitted when the Installation status of a queued requested has changed, including if it's terminated either gracefully or via a crash"/>
+    </plugin>
+
+    <!-- PreinstallManager Plugin Information -->
+    <plugin pluginName="PreinstallManager" serviceName="org.rdk.PreinstallManager" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="StartPreInstall" api="startPreinstall" type="method" desc="Checks the preinstall directory for packages to be preinstalled and installs them as needed">
+            <params>
+                <param tag="forceInstall" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+        <method name="Sring_StartPreInstall" api="startPreinstall" type="method" desc="Checks the preinstall directory for packages to be preinstalled and installs them as needed">
+            <params>
+                <param tag="forceInstall" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_StartPreInstall" api="startPreinstall" type="method" desc="Checks the preinstall directory for packages to be preinstalled and installs them as needed">
+            <params>
+                <param tag="forceInstall" defaultValue="null" type="int"/>
+            </params>
+        </method>
+    </plugin>
+
+    <!-- RuntimeManager Plugin Information -->
+     <plugin pluginName="RuntimeManager" serviceName="org.rdk.RuntimeManager" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="Runtime_getInfo" api="getInfo" type="method" desc="Get info of the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Runtime_Numeric_getInfo" api="getInfo" type="method" desc="Get info of the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="int"/>
+            </params>
+	</method>
+	<method name="Runtime_annotate" api="annotate" type="method" desc="Annotates are sent to Dobby for recording">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="string"/>
+                <param tag="key" defaultValue="null" type="string"/>
+                <param tag="value" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Runtime_hibernate" api="hibernate" type="method" desc="Hibernate the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Runtime_Numeric_hibernate" api="hibernate" type="method" desc="Hibernate the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Runtime_suspend" api="suspend" type="method" desc="Suspend the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Runtime_Numeric_suspend" api="suspend" type="method" desc="Suspend the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Runtime_resume" api="resume" type="method" desc="Resume the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Runtime_Numeric_resume" api="resume" type="method" desc="Resume the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Runtime_Numeric_resume" api="resume" type="method" desc="Resume the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Runtime_wake" api="wake" type="method" desc="Wake the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="string"/>
+                <param tag="state" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Runtime_Numeric_AppId_wake" api="wake" type="method" desc="Wake the application">
+            <params>
+                <param tag="appInstanceId" defaultValue="null" type="int"/>
+                <param tag="state" defaultValue="null" type="string"/>
+            </params>
+        </method>
+    </plugin>
 </thunderPlugins>

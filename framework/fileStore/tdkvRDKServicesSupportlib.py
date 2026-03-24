@@ -4125,10 +4125,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             info = checkAndGetAllResultInfo(result,result.get("success"))
 
         elif tag == "success_status_validation":
-            info["success"] = result.get("success")
-            if str(result.get("success")).lower() == "true":
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                info["success"] = result.get("success")
+                if str(result.get("success")).lower() == "true":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "get_enabled_status_validation":
@@ -4142,10 +4146,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "success_negative_status_validation":
-            info = result
-            if str(result.get("success")).lower() == "false":
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                info = result
+                if str(result.get("success")).lower() == "false":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "error_negative_scenario_validation":
@@ -4275,6 +4283,486 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+
+        # AppManager Response result parser steps
+        # LifecycleManager uses appmanager parser steps for result validation
+        # ResourceMonitor uses appmanager parser steps for result validation
+        elif tag == "appmanager_null_result_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if str(result).strip().lower() in ("none"):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "appmanager_check_getinstalledapps_status":
+            try:
+                found = False
+                if not isinstance(result, list):
+                    raise ValueError("'apps' is not a list")
+                for index, app in enumerate(result):
+                    if not isinstance(app, dict):
+                        raise ValueError(f"Item at index '{index}' is not a dictionary")
+                    app_id = app.get("appId")
+                    if app_id == arg[0]:
+                        found = True
+                if not found:
+                    raise ValueError(f"AppId '{arg[0]}' not found in the list")
+                info["result"] = result
+                info["Test_Step_Status"] = "SUCCESS"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "appmanager_check_installed_status":
+            try:
+                actual_value = str(result).lower()
+                expected_value = str(expectedValues[0]).lower()
+                if actual_value != expected_value:
+                    raise ValueError(f"Value '{actual_value}' does not match expected value '{expected_value}'")
+                info["result"] = result
+                info["Test_Step_Status"] = "SUCCESS"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "appmanager_negative_scenario_validation":
+            try:
+                info["otherInfo"] = otherInfo
+                message = otherInfo.get("error").get("message")
+                if str(message).lower() in [str(val).lower() for val in expectedValues]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "appmanager_check_getLoadedApps_status":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    for index, item in enumerate(result):
+                        # Check each item is dict
+                        if not isinstance(item, dict):
+                            raise ValueError(f"Item at index '{index}' is not a dictionary")
+                        # Check for empty or None values
+                        for key, value in item.items():
+                            if value is None or value == "":
+                                raise ValueError(f"Empty value found for key '{key}' in result index '{index}'")
+                    info["Test_Step_Status"] = "SUCCESS"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag =="appmanager_check_loaded_apps":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if len(arg) and arg[0] == "check_loaded_app":
+                        if len(result) == 0:
+                            info["Test_Step_Status"] = "FAILURE"
+                        elif len(result) > 0:
+                            for app in result:
+                                if app.get("appId") == expectedValues[1] and app.get("lifecycleState") == expectedValues[0]:
+                                    info["Test_Step_Status"] = "SUCCESS"
+                                    break
+                                else:
+                                    info["Test_Step_Status"] = "FAILURE"
+                    elif len(arg) and arg[0] == "check_loaded_app_name":
+                        appStatus = "FALSE"
+                        if len(result) == 0:
+                            info["Test_Step_Status"] = "SUCCESS"
+                        elif len(result) > 0:
+                            for app in result:
+                                if app.get("appId") == arg[1]:
+                                    appStatus = "TRUE"
+                                    info["Test_Step_Status"] = "SUCCESS"
+                                    break
+                            if appStatus != "TRUE":
+                                info["Test_Step_Status"] = "SUCCESS"
+                        info["appStatus"] = appStatus
+                    else:
+                        info["Test_Step_Status"] = "SUCCESS"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "appmanager_get_app_instance_id":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    for app in result:
+                        if app.get("appId") == expectedValues[1] and app.get("lifecycleState") == expectedValues[0]:
+                            appInstanceId = app.get("appInstanceId")
+                            info["appInstanceId"] = appInstanceId
+                            info["Test_Step_Status"] = "SUCCESS"
+                            break
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "appmanager_getmaxrunningapps_status":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                elif int(result) >= 0:
+                    info["result"] = result
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        # RDKWindowManager Response result parser steps
+        elif tag == "rwm_null_result_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if str(result).strip().lower() in ("none"):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "rwm_negative_scenario_validation":
+            try:
+                info["otherInfo"] = otherInfo
+                message = otherInfo.get("error").get("message")
+                if str(message).lower() in [str(val).lower() for val in expectedValues]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "rwm_get_apps":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    # Convert string to list
+                    result = json.loads(result)
+                    if len(arg) and arg[0] == "check_launched_app":
+                        if isinstance(result, list) and any(app.lower() == expectedValues[0].lower() for app in result):
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        if isinstance(result, list) and (len(result) == 0 or len(result) > 0):
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "rwm_get_zorder":
+            info = result
+            zOrder = result.get("zOrder")
+            if zOrder is not None and isinstance(zOrder, int) and zOrder >= 0:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        # StorageManager Response result parser steps
+        elif tag == "storagemanager_null_result_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if str(result).strip().lower() in ("none"):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "storagemanager_negative_scenario_validation":
+            try:
+                info["otherInfo"] = otherInfo
+                message = otherInfo.get("error").get("message")
+                if str(message).lower() in [str(val).lower() for val in expectedValues]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        # PackageManager Response result parser steps
+        elif tag == "packagemanager_list_packages_validation":
+            try:
+                if len(result) >= 1:
+                    info["result"] = result
+                    info["Test_Step_Status"] = "SUCCESS"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_list_packages":
+            try:
+                appStatus = "FALSE"
+                info["result"] = result
+                if not result:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    for item in result:
+                        if item["packageId"] in arg[1]:
+                            state = item["state"]
+                            if state == "INSTALLED":
+                                appStatus = "TRUE"
+                                break
+                            else:
+                                appStatus = "FALSE"
+                info["appStatus"] = appStatus
+            except Exception as e:
+                info["error"] = str(e)
+                info["appStatus"] = "FALSE"
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_no_result_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if str(result).strip().lower() in ("none"):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_downloadid_validation":
+            try:
+                info["result"] = result
+                #if result:
+                if result["downloadId"]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_check_install_package":
+            try:
+                info["result"] = result
+                for item in result:
+                    if item["packageId"] in expectedValues:
+                        state = item["state"]
+                        if state == "INSTALLED":
+                            info["Test_Step_Status"] = "SUCCESS"
+                            break
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_check_uninstall_package":
+            try:
+                info["result"] = result
+                for item in result:
+                    if item["packageId"] in expectedValues:
+                        state = item["state"]
+                        if state == "UNINSTALLED":
+                            info["Test_Step_Status"] = "SUCCESS"
+                            break
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_getstorage_details_validation":
+            try:
+                info["result"] = result
+                status = checkNonEmptyResultData(result)
+                if "FALSE" not in status:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_negative_scenario_validation":
+            try:
+                info["otherInfo"] = otherInfo
+                message = otherInfo.get("error").get("message")
+                if str(message).lower() in [str(val).lower() for val in expectedValues]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_download_progress_validation":
+            try:
+                info["progress"] = result.get("progress")
+                if int(result.get("progress")) >= 0 and int(result.get("progress")) <=100:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_confirm_download_paused_validation":
+            try:
+                progress = result.get("progress")
+                info["progress"] = progress
+                if int(progress) == int(expectedValues[0]):
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_progress_check_after_resume_validation":
+            try:
+                progress = result.get("progress")
+                info["progress"] = progress
+                if int(progress) >= int(arg[0]) and int(progress) <= 100:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_check_package_state":
+            try:
+                info["result"] = result
+                if str(result).strip().lower() in str(expectedValues[0]).strip().lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "packagemanager_non_empty_result_check":
+            try:
+                info["result"] = result
+                status = has_empty_values(result)
+                if "TRUE" not in status:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+                    message = "Empty values found in result"
+                    info["message"] = message
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        # PreinstallManager Response result parser steps
+        elif tag == "preinstallmanager_negative_scenario_validation":
+            try:
+                info["otherInfo"] = otherInfo
+                message = otherInfo.get("error").get("message")
+                if str(message).lower() in [str(val).lower() for val in expectedValues]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "preinstallmanager_null_result_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if str(result).strip().lower() in ("none"):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        # RuntimeManager Response result parser steps
+        elif tag == "runtimemanager_non_empty_result_check":
+            try:
+                info["result"] = result
+                status = checkNonEmptyResultData(result)
+                if "FALSE" not in status:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "runtimemanager_negative_scenario_validation":
+            try:
+                info["otherInfo"] = otherInfo
+                message = otherInfo.get("error").get("message")
+                if str(message).lower() in [str(val).lower() for val in expectedValues]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "runtimemanager_null_result_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if str(result).strip().lower() in ("none"):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
@@ -4796,6 +5284,21 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 result = "TRUE"
             else:
                 result = "FALSE"
+
+        # PackageManager Plugin Response result parser steps
+        elif tag == "packagemanager_check_app_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            appStatus = testStepResults[0].get("appStatus")
+            if len(arg) and arg[0] == "launch_app":
+                if appStatus == "FALSE":
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+            else:
+                if appStatus == "FALSE":
+                    result = "FALSE"
+                else:
+                    result = "TRUE"
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
@@ -5958,6 +6461,41 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             else:
                 info["enabled"] = True
 
+        # RDKWindowManager Response result parser steps
+        elif tag == "rwm_previous_get_apps":
+            testStepResults = list(testStepResults[0].values())[0]
+            appIds = testStepResults[0].get("appIds")
+            index = int(arg[0])
+            if len(arg) > 1:
+                info["appIds"] = appIds[index]
+
+        # PackageManager Response result parser steps
+        elif tag == "packagemanager_get_previous_downloadid":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["downloadId"] = testStepResults[0]["result"].get("downloadId")
+            #info["downloadId"] = testStepResults[0].get("result")
+
+        elif tag == "packagemanager_get_previous_filelocator_url":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["fileLocator"] = testStepResults[0].get("fileLocator")
+
+        elif tag == "packagemanager_get_previous_download_progress":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["progress"] = testStepResults[0].get("progress")
+
+        # AppManager Plugin Response result parser steps
+        elif tag == "appmanager_get_previous_appinstance_id":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["clientId"] = testStepResults[0].get("appInstanceId")
+
+        elif tag == "appmanager_get_previous_appinstance_id_client":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["client"] = testStepResults[0].get("appInstanceId")
+
+        elif tag == "appmanager_get_previous_appinstance_id_for_runtime":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["appInstanceId"] = testStepResults[0].get("appInstanceId")
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
@@ -6196,7 +6734,33 @@ def generateComplexTestInputParam(methodTag,testParams):
             userGeneratedParam = {"thresholds":testParams}
         elif tag == "webkit_browser_configuration":
             userGeneratedParam = testParams.get("configuration")
-
+        elif tag == "rwm_add_key_intercepts":
+            #print(testParams,"testParams")
+            userGeneratedParam = { "intercepts":[{ "keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"focusOnly": testParams.get("focusOnly"),"propagate": testParams.get("propagate")}],"clientId": testParams.get("clientId") }
+        elif tag == "rwm_create_display":
+            #print(testParams,"testParams")
+            userGeneratedParam = { "clientId": testParams.get("clientId"),"displayName": testParams.get("displayName"),"displayWidth": int(testParams.get("displayWidth")),"displayHeight": int(testParams.get("displayHeight")),"virtualWidth": int(testParams.get("virtualWidth")),"virtualHeight": int(testParams.get("virtualHeight")) }
+        elif tag == "rwm_empty_create_display":
+            #print(testParams,"testParams")
+            userGeneratedParam = { "clientId": testParams.get("clientId"),"displayName": testParams.get("displayName"),"displayWidth": testParams.get("displayWidth"),"displayHeight": testParams.get("displayHeight"),"virtualWidth": testParams.get("virtualWidth"),"virtualHeight": testParams.get("virtualHeight") }
+        elif tag == "rwm_generate_key":
+            #print(testParams,"testParams")
+            if "clientId" in testParams:
+                userGeneratedParam = { "keys": [{"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"delay": int(testParams.get("delay"))}],"clientId": testParams.get("clientId") }
+            else:
+                userGeneratedParam = { "keys": [{"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"delay": int(testParams.get("delay")) } ] }
+        elif tag == "rwm_invalid_generate_key":
+            #print(testParams,"testParams")
+            userGeneratedParam = { "keys": [{"keyCode": testParams.get("keyCode"),"modifiers": testParams.get("modifiers"),"delay": testParams.get("delay"),"clientId": testParams.get("clientId") } ] }
+        elif tag == "rwm_remove_key_intercept":
+            #print(testParams,"testParams")
+            userGeneratedParam = { "clientId": testParams.get("clientId"),"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers") }
+        elif tag == "rwm_negative_remove_key_intercept":
+            #print(testParams,"testParams")
+            userGeneratedParam = { "clientId": testParams.get("clientId"),"keyCode": testParams.get("keyCode"),"modifiers": testParams.get("modifiers") }
+        elif tag == "pm_install_package":
+            #print(testParams,"testParams")
+            userGeneratedParam = { "packageId": testParams.get("packageId"), "version": testParams.get("version"), "additionalMetadata": [ {"name": testParams.get("name"), "value": testParams.get("value") } ], "fileLocator": testParams.get("fileLocator") }
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
@@ -7287,6 +7851,33 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             command = '/bin/sh '+arg[0]
             info["deatils"] = executeCommand(execInfo, command)
             info["Test_Step_Status"] =  "SUCCESS"
+        elif tag == "packagemanager_form_filelocator_url":
+            if basePath.endswith('/'):
+                basePath = basePath[:-1]
+            package_filelocator = getDeviceConfig(basePath, "PACKAGEMANAGER_FILE_LOCATOR", deviceName, deviceType)
+            if package_filelocator:
+                info["fileLocator"] = package_filelocator + arg[0].strip()
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+        elif tag == "check_downloaded_package_status":
+            try:
+                command = "md5sum " + arg[0] + " | awk '{print $1}'"
+                output = executeCommand(execInfo, command)
+                print("Command Output:", output)
+                output = str(output).split("\n")[1].strip()
+                if output == expectedValues[0].strip():
+                    message = "Downloaded package MD5SUM matches the expected MD5SUM"
+                    info["Test_Step_Message"] = message
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    message = "Downloaded package MD5SUM does not match the expected MD5SUM"
+                    info["Test_Step_Message"] = message
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                message = "Error occurred while validating downloaded package MD5SUM: " + str(e)
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
 
         else:
             print("\nError Occurred: [%s] No function call available for %s" %(inspect.stack()[0][3],methodTag))
@@ -7330,6 +7921,23 @@ def checkNonEmptyResultData(resultData):
 
     return status
 
+def has_empty_values(data):
+    status = "FALSE"
+    # Direct empty check
+    if data in ("", [], {}):
+        status = "TRUE"
+    # Dictionary check
+    if isinstance(data, dict):
+        for value in data.values():
+            if has_empty_values(value):
+                status = "TRUE"
+    # List check
+    elif isinstance(data, list):
+        for item in data:
+            if has_empty_values(item):
+                status = "TRUE"
+    return status
+
 def compareURLs(actualURL,expectedURL):
     if expectedURL in actualURL:
         status = "TRUE"
@@ -7345,7 +7953,6 @@ def compareURLs(actualURL,expectedURL):
         for data in url_data:
             if data not in actualURL:
                 status = "FALSE"
-
     return status
 
 def DecodeBase64ToHex(base64):
