@@ -83,7 +83,7 @@ def setRDKRemoteDebuggerIssueType(obj, step, value):
 #               flag - Flag indicating whether the debug report is generated or not (1 for success, 0 for failure)
 
 def checkDebugReportGenerated(obj, profile_type, step):
-    flag = 0
+    flag = False
     file_path = ""
     if profile_type == "static":
         file_path = static_json_file
@@ -91,7 +91,7 @@ def checkDebugReportGenerated(obj, profile_type, step):
         file_path = dynamic_json_file
     else:
         print(f"Invalid profile type {profile_type} passed.")
-
+    expectedresult="SUCCESS"
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     print(f"\nTEST STEP {step} : Check if the {profile_type} debug report is generated at {file_path}")
     print(f"EXPECTED RESULT {step} : The {profile_type} debug report should be present at {file_path}")
@@ -99,9 +99,9 @@ def checkDebugReportGenerated(obj, profile_type, step):
     print(f"Command : {command}")
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print(f"Command Output : {details}")
-    if actualresult == "SUCCESS" and details == file_path:
+    if expectedresult in actualresult and details.strip() == file_path:
         print(f"ACTUAL RESULT {step} : The {profile_type} debug report is present at {file_path}")
-        flag = 1
+        flag = True
     else:
         print(f"ACTUAL RESULT {step} : The {profile_type} debug report is not present at {file_path}")
     return tdkTestObj, flag
@@ -167,22 +167,23 @@ def setRDKRemoteDebuggerEnable(obj, value, step):
 # Description: Function to check whether the debug report got created in the designated location
 # Parameters: obj - The TDK scripting library object for TR181 component
 #             profile_type - The type of debug report (static or dynamic)
-#             upload_server_url - The URL of the server where the debug report should be uploaded
+#             upload_server_url - The report upload server location URL
+#             log_file - The RRD log file path
 #             step - The test step number
 # Return Value: tdkTestObj - The TDK test object created for the command execution
 #               flag - Flag indicating whether the debug report is generated or not (1 for success, 0 for failure)
 
-def validateDebugReportUpload(obj, profile_type, upload_server_url, step):
+def validateDebugReportUpload(obj, profile_type, upload_server_url, log_file, step):
     flag = 0
-    file_path = ""
+    expectedresult="SUCCESS"
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     print(f"\nTEST STEP {step} : Check if the {profile_type} debug report is uploaded to the server {upload_server_url}")
     print(f"EXPECTED RESULT {step} : The {profile_type} debug report should be uploaded to the server {upload_server_url}")
-    command = f"cat {upload_server_url} | grep 'Debug Information Report upload Success'"
+    command = f"cat {log_file} | grep 'Debug Information Report upload Success'"
     print(f"Command : {command}")
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print(f"Command Output : {details}")
-    if actualresult == "SUCCESS" and details != "":
+    if expectedresult in actualresult and details != "":
         print(f"ACTUAL RESULT {step} : The {profile_type} debug report is successfully uploaded to the server {upload_server_url}")
         flag = 1
     else:

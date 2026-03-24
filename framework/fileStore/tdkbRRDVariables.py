@@ -21,7 +21,7 @@
 report_generation_location = "/tmp/rrd"
 
 # Static JSON File Location
-static_json_file = " /etc/rrd/remote_debugger.json"
+static_json_file = "/etc/rrd/remote_debugger.json"
 
 # Dynamic JSON File Location
 dynamic_json_file = "/tmp/RDK-RRD-Device/etc/rrd/remote_debugger.json"
