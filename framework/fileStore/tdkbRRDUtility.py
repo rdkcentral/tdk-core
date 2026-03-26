@@ -129,7 +129,7 @@ def getRDKRemoteDebuggerEnable(obj, step):
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"TEST EXECUTION RESULT : SUCCESS")
     else:
-        print(f"ACTUAL RESULT {step} : Failed to get the value of RDKRemoteDebugger Enable")
+        print(f"ACTUAL RESULT {step} : Failed to get the value of RDKRemoteDebugger Enable. Details : {value}")
         tdkTestObj.setResultStatus("FAILURE")
         print(f"TEST EXECUTION RESULT : FAILURE")
     return tdkTestObj, get_flag, value
