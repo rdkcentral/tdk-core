@@ -83,15 +83,14 @@ def setRDKRemoteDebuggerIssueType(obj, step, value):
 #               flag - Flag indicating whether the debug report is generated or not (1 for success, 0 for failure)
 
 def checkDebugReportGenerated(obj, profile_type, step):
+    expectedresult="SUCCESS"
     flag = False
     file_path = ""
     if profile_type == "static":
         file_path = static_json_file
     elif profile_type == "dynamic":
         file_path = dynamic_json_file
-    else:
-        print(f"Invalid profile type {profile_type} passed.")
-    expectedresult="SUCCESS"
+
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     print(f"\nTEST STEP {step} : Check if the {profile_type} debug report is generated at {file_path}")
     print(f"EXPECTED RESULT {step} : The {profile_type} debug report should be present at {file_path}")
@@ -164,7 +163,7 @@ def setRDKRemoteDebuggerEnable(obj, value, step):
 
 #validateDebugReportUpload
 # Syntax: validateDebugReportUpload(obj, profile_type, upload_server_url, step)
-# Description: Function to check whether the debug report got created in the designated location
+# Description: Function to check whether the debug report got uploaded in the designated location from the RRD log file
 # Parameters: obj - The TDK scripting library object for TR181 component
 #             profile_type - The type of debug report (static or dynamic)
 #             upload_server_url - The report upload server location URL
