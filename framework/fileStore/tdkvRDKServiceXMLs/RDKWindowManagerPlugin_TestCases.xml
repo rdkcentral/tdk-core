@@ -1,0 +1,754 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2026 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="RDKWindowManager" pluginVersion="1">
+    <pluginPreRequisite>
+        <!-- PluginPreRequisite 1 -->
+        <prerequisite requisiteId="1" requisiteName="Activate_AppStorageManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppStorageManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 2 -->
+        <prerequisite requisiteId="2" requisiteName="Activate_DownloadManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DownloadManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.DownloadManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.DownloadManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.DownloadManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DownloadManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 3 -->
+        <prerequisite requisiteId="3" requisiteName="Activate_PackageManagerRDKEMS_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.PackageManagerRDKEMS"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+        
+        <!-- PluginPreRequisite 4 -->
+        <prerequisite requisiteId="4" requisiteName="Activate_AppManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 5 -->
+        <prerequisite requisiteId="5" requisiteName="Activate_RDKWindowManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.RDKWindowManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKWindowManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKWindowManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.RDKWindowManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKWindowManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.RDKWindowManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKWindowManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 6 -->
+        <prerequisite requisiteId="6" requisiteName="Check_Existing_Package_Before_Install">
+            <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
+                <resultGeneration useMethodTag="packagemanager_list_packages">
+                    <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="PackageManager" delay="10">
+                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+            </testStep>
+            <testStep testStepId="3" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                <params>
+                    <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                </params>
+                <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+            </testStep>
+            <testStep testStepId="4" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                    <arguments usePreviousResult="true" Id="3" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                <resultGeneration useMethodTag="check_downloaded_package_status">
+                    <arguments usePreviousResult="true" Id="4" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                    <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="Install" method="Install_Package" pluginName="PackageManager" delay="3">
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                    <param tag="fileLocator" usePreviousResult="true" Id="4" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                    <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                    <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="PackageManager" delay="5">
+                <resultGeneration useMethodTag="packagemanager_check_install_package">
+                    <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 7 -->
+        <prerequisite requisiteId="7" requisiteName="Launch_Application">
+            <testStep testStepId="1" name="Launch_App_Valid_Params" method="Launch_App" pluginName="AppManager">
+                <params>
+                    <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    <param tag="intent" value=""/>
+                    <param tag="launchArgs" value=""/>
+                </params>
+                <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="2" name="Check_App_Launched" method="Get_Loaded_Apps" pluginName="AppManager" delay="8">
+                <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                    <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+        </prerequisite>
+    </pluginPreRequisite>
+    
+    <!-- Test case 01 -->
+    <testCase testCaseId="RWM_01" testCaseName="RWM_Check_Add_Key_Intercepts" desc="Pass a valid list of key intercepts and ensure the method successfully adds the intercepts without errors">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Add_Key_Intercepts" method="RWM_addKeyIntercepts">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="keyCode" value="13"/>
+                <param tag="modifiers" value="shift"/>
+                <param tag="focusOnly" value="true"/>
+                <param tag="propagate" value="false"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 02 -->
+    <testCase testCaseId="RWM_02" testCaseName="RWM_AddKeyIntercepts_Empty_Modifiers" desc="Pass an empty modifiers to the method and ensure it handles the input gracefully">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Add_Key_Intercepts_Empty_Modifiers" method="RWM_addKeyIntercepts">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="keyCode" value="13"/>
+                <param tag="modifiers" value=""/>
+                <param tag="focusOnly" value="true"/>
+                <param tag="propagate" value="false"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 03 -->
+    <testCase testCaseId="RWM_03" testCaseName="RWM_Check_AddKeyIntercepts_Invalid_Keys" desc="Pass a list containing invalid key intercepts and ensure the method returns an appropriate error or handles the input correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Add_Key_Intercepts_Invalid" method="RWM_addKeyIntercepts">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="keyCode" value="0000"/>
+                <param tag="modifiers" value="INVALID_MODIFIERS"/>
+                <param tag="focusOnly" value="true"/>
+                <param tag="propagate" value="false"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 04 -->
+    <testCase testCaseId="RWM_04" testCaseName="RWM_Check_Create_Display_Valid_Params" desc="Test the createDisplay method by passing valid displayParams containing all required fields and valid values. Ensure the display is created successfully without errors">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Create_Display_Valid_Params" method="Create_Display">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="displayName" value="Main Display"/>
+                <param tag="displayWidth" value="1920"/>
+                <param tag="displayHeight" value="1080"/>
+                <param tag="virtualWidth" value="1920"/>
+                <param tag="virtualHeight" value="1080"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 05 -->
+    <testCase testCaseId="RWM_05" testCaseName="RWM_CreateDisplay_Empty_DisplayParams" desc="Test the createDisplay method by passing an empty object or null as displayParams. Ensure the method handles the input gracefully and returns an appropriate error or failure response">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Create_Display_Empty_Params" method="Empty_Create_Display">
+            <params>
+                <param tag="clientId" value=""/>
+                <param tag="displayName" value=""/>
+                <param tag="displayWidth" value=""/>
+                <param tag="displayHeight" value=""/>
+                <param tag="virtualWidth" value=""/>
+                <param tag="virtualHeight" value=""/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 06 -->
+    <testCase testCaseId="RWM_06" testCaseName="RWM_Create_Display_Invalid_Params" desc="Test the createDisplay method by passing displayParams with invalid or malformed data">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Create_Display_Invalid_Params" method="Empty_Create_Display">
+            <params>
+                <param tag="clientId" value="INVALID_CLIENT"/>
+                <param tag="displayName" value="INVALID_DISPLAY"/>
+                <param tag="displayWidth" value="0000"/>
+                <param tag="displayHeight" value="0000"/>
+                <param tag="virtualWidth" value="0000"/>
+                <param tag="virtualHeight" value="0000"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 07 -->
+    <testCase testCaseId="RWM_07" testCaseName="RWM_Check_Enable_Inactivity_Reporting" desc="Test the API by passing enable parameter as true to ensure inactivity reporting is successfully enabled">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Enable_Inactivity_Reporting" method="Enable_Inactivity_Reporting">
+            <params>
+                <param tag="enable" value="true"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 08 -->
+    <testCase testCaseId="RWM_08" testCaseName="RWM_Check_Disable_Inactivity_Reporting" desc="Test the API by passing enable parameter as false to ensure inactivity reporting is successfully disabled">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Disable_Inactivity_Reporting" method="Enable_Inactivity_Reporting">
+            <params>
+                <param tag="enable" value="false"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 09 -->
+    <testCase testCaseId="RWM_09" testCaseName="RWM_Check_Enable_Inactivity_Reporting_Invalid_Value" desc="Test the API by passing an invalid value for enable to ensure the API handles invalid inputs gracefully and returns an appropriate error">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Enable_Inactivity_Reporting_Invalid" method="String_Enable_Inactivity_Reporting">
+            <params>
+                <param tag="enable" value="InvalidValue"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 10 -->
+    <testCase testCaseId="RWM_10" testCaseName="RWM_Check_GenerateKey_Valid_Key" desc="Verify the behavior of generateKey when called with valid key press and release. Ensure the method triggers the correct key without errors">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Generate_Key_Valid_Events" method="Generate_Key">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="keyCode" value="13"/>
+                <param tag="modifiers" value="shift"/>
+                <param tag="delay" value="10"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 11 -->
+    <testCase testCaseId="RWM_11" testCaseName="RWM_GenerateKey_Invalid_KeyCode" desc="Test generateKey with invalid or unsupported key codes. Verify that the method handles the input gracefully and does not trigger any unintended behavior">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Generate_Key_Invalid" method="Invalid_Generate_Key">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="keyCode" value="INVALID_KEY"/>
+                <param tag="modifiers" value="shift"/>
+                <param tag="delay" value="10"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 12 -->
+    <testCase testCaseId="RWM_12" testCaseName="RWM_GenerateKey_No_Params" desc="Check the response of generateKey when no parameters are provided. Ensure the method either throws an appropriate error or handles the scenario as expected">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Generate_Key_No_Params" method="Generate_Key">
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 13 -->
+    <testCase testCaseId="RWM_13" testCaseName="RWM_Check_Successful_Retrieval_Active_Application_IDs" desc="Verify the successful retrieval of active application IDs when there are multiple active applications">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Active_Application_IDs" method="Get_Apps">
+            <resultGeneration useMethodTag="rwm_get_apps"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 14 -->
+    <testCase testCaseId="RWM_14" testCaseName="RWM_RemoveKeyIntercept_Valid_Params" desc="Pass a valid intercept parameter and ensure the key intercept is successfully removed">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Remove_Key_Intercept" method="Remove_Key_Intercept">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="keyCode" value="13"/>
+                <param tag="modifiers" value="shift"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 15 -->
+    <testCase testCaseId="RWM_15" testCaseName="RWM_RemoveKeyIntercept_Invalid_Params" desc="Verify removeKeyIntercept with an invalid intercept value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Remove_Key_Intercept_Invalid" method="Negative_Remove_Key_Intercept">
+            <params>
+                <param tag="clientId" value="InvalidClient"/>
+                <param tag="keyCode" value="InvalidKeyCode"/>
+                <param tag="modifiers" value="InvalidModifiers"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 16 -->
+    <testCase testCaseId="RWM_16" testCaseName="RWM_RemoveKeyIntercept_Empty_Params" desc="Pass a null or empty intercept parameter and ensure the API handles the input gracefully, returning an appropriate error or failure response">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Remove_Key_Intercept_Empty" method="Negative_Remove_Key_Intercept">
+            <params>
+                <param tag="clientId" value=""/>
+                <param tag="keyCode" value=""/>
+                <param tag="modifiers" value=""/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 17 -->
+    <testCase testCaseId="RWM_17" testCaseName="RWM_Check_Reset_Inactivity_Time" desc="Call the resetInactivityTime method and ensure it executes successfully, resetting the inactivity timer as expected">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Reset_Inactivity_Time" method="Reset_Inactivity_Time">
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 18 -->
+    <testCase testCaseId="RWM_18" testCaseName="RWM_Check_SetInactivityInterval_Valid_Positive_Value" desc="Call the setInactivityInterval method with a valid positive integer value for the interval parameter. Ensure the method executes successfully and sets the inactivity interval as expected.">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Inactivity_Interval" method="Set_Inactivity_Interval">
+            <params>
+                <param tag="interval" value="5"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 19 -->
+    <testCase testCaseId="RWM_19" testCaseName="RWM_SetInactivityInterval_NegativeValue" desc="Call the setInactivityInterval method with a negative integer value for the interval parameter and ensure it returns an appropriate error">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Inactivity_Interval_Negative" method="Set_Inactivity_Interval">
+            <params>
+                <param tag="interval" value="-100"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 20 -->
+    <testCase testCaseId="RWM_20" testCaseName="RWM_Check_SetFocus_Valid_Client" desc="Pass a valid client to the setFocus method and ensure the focus is successfully set to the specified application">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Set_Focus_Valid_Client" method="Set_Focus">
+            <params>
+                <param tag="client" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_client"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 21 -->
+    <testCase testCaseId="RWM_21" testCaseName="RWM_SetFocus_Invalid_Client" desc="Pass an invalid or non-existent client to the setFocus method and ensure the method returns an appropriate error or failure response">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Focus_Invalid_Client" method="Set_Focus">
+            <params>
+                <param tag="client" value="InvalidClient"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 22 -->
+    <testCase testCaseId="RWM_22" testCaseName="RWM_SetFocus_Empty_Client" desc="Pass an empty string as the client to the setFocus method and ensure the method handles the input gracefully, returning an appropriate error or failure response">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Focus_Empty_Client" method="Set_Focus">
+            <params>
+                <param tag="client" value=""/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 23 -->
+    <testCase testCaseId="RWM_23" testCaseName="RWM_SetVisible_Valid_Client_True" desc="Test the setVisible method by passing a valid client and setting visible to true. Ensure the application becomes visible successfully">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Set_Visible_Valid_Client_True" method="Set_Visible">
+            <params>
+                <param tag="client" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_client"/>
+                <param tag="visible" value="true"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 24 -->
+    <testCase testCaseId="RWM_24" testCaseName="RWM_SetVisible_Valid_Client_False" desc="Test the setVisible method by passing a valid client and setting visible to false. Ensure the application becomes hidden successfully">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Set_Visible_Valid_Client_False" method="Set_Visible">
+            <params>
+                <param tag="client" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_client"/>
+                <param tag="visible" value="false"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 25 -->
+    <testCase testCaseId="RWM_25" testCaseName="RWM_SetVisible_Invalid_Client" desc="Test the setVisible method by passing an invalid client and setting visible to true. Ensure the method handles the invalid client gracefully and returns an appropriate error">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Visible_Invalid_Client" method="Set_Visible">
+            <params>
+                <param tag="client" value="InvalidClient"/>
+                <param tag="visible" value="true"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 26 -->
+    <testCase testCaseId="RWM_26" testCaseName="RWM_RenderReady_Valid_ClientId " desc="Call the renderReady method with a valid clientId of an application that has rendered its first frame. Ensure the method returns true indicating the application is ready">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Render_Ready_Valid_ClientId" method="Render_Ready">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 27 -->
+    <testCase testCaseId="RWM_27" testCaseName="RWM_Check_RenderReady_Invalid_ClientId" desc="Call the renderReady method with an invalid or non-existent clientId. Ensure the method returns false or an appropriate error response indicating the application is not ready">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Render_Ready_Invalid_ClientId" method="Render_Ready">
+            <params>
+                <param tag="clientId" value="InvalidClientId"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 28 -->
+    <testCase testCaseId="RWM_28" testCaseName="RWM_Check_RenderReady_Empty_ClientId" desc="Call the renderReady method with a null or empty string as the clientId. Ensure the method handles the input gracefully and returns an error or false indicating invalid input">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="RenderReady_Empty_ClientId" method="Render_Ready">
+            <params>
+                <param tag="clientId" value=""/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 29 -->
+    <testCase testCaseId="RWM_29" testCaseName="RWM_EnableDisplayRender_Valid_ClientId_Enable_True" desc="Call the enableDisplayRender method with a valid clientId and set enable to true. Ensure the display rendering is successfully enabled for the specified application instance">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Enable_Display_Render" method="Enable_Display_Render">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="enable" value="true"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 30 -->
+    <testCase testCaseId="RWM_30" testCaseName="RWM_Check_EnableDisplayRender_Valid_ClientId_Enable_False" desc="Call the enableDisplayRender method with a valid clientId and set enable to false. Ensure the display rendering is successfully disabled for the specified application instance">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Disable_Display_Render" method="Enable_Display_Render">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="enable" value="false"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 31 -->
+    <testCase testCaseId="RWM_31" testCaseName="RWM_EnableDisplayRender_Invalid_ClientId" desc="Call the enableDisplayRender method with an invalid or non-existent clientId and set enable to true. Ensure the method returns an appropriate error or failure response">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Enable_Display_Render_Invalid_ClientId" method="Enable_Display_Render">
+            <params>
+                <param tag="clientId" value="InvalidClientId"/>
+                <param tag="enable" value="true"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 32 -->
+    <testCase testCaseId="RWM_32" testCaseName="RWM_Check_SetZOrder_Valid_ClientId_ZOrder" desc="Test the setZOrder method by providing a valid clientId and a valid zOrder value. Ensure the method sets the z-order successfully without errors">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Set_Z_Order_Valid_Params" method="Set_Z_Order">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="zOrder" value="1"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 33 -->
+    <testCase testCaseId="RWM_33" testCaseName="RWM_SetZOrder_Invalid_ClientId" desc="Test the setZOrder method by providing an invalid clientId and a valid zOrder value. Ensure the method returns an appropriate error or failure response">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Z_Order_Invalid_ClientId" method="Set_Z_Order">
+            <params>
+                <param tag="clientId" value="InvalidClientId"/>
+                <param tag="zOrder" value="1"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 34 -->
+    <testCase testCaseId="RWM_34" testCaseName="RWM_SetZOrder_ValidClientId_InvalidZOrder" desc="Test the setZOrder method by providing a valid clientId and an invalid zOrder value. Ensure the method returns an appropriate error or failure response">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Set_Z_Order_Invalid_ZOrder" method="Negative_Set_Z_Order">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="zOrder" value="InvalidZOrderValue"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 35 -->
+    <testCase testCaseId="RWM_35" testCaseName="RWM_Check_GetZOrder_Valid_ClientId" desc="Pass a valid clientId to the getZOrder method and ensure it returns the correct z-order value for the specified application">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="GetZOrder_Valid_ClientId" method="Get_Z_Order">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 36 -->
+    <testCase testCaseId="RWM_36" testCaseName="RWM_Check_GetZOrder_Invalid_ClientId" desc="Pass an invalid or non-existent clientId to the getZOrder method and ensure it returns an appropriate error or null response">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Verify_GetZOrder_Invalid_ClientId" method="Get_Z_Order">
+            <params>
+                <param tag="clientId" value="InvalidClientId"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 37 -->
+    <testCase testCaseId="RWM_37" testCaseName="RWM_GetZOrder_Empty_ClientId" desc="Verify getZOrder with a null or empty clientId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetZOrder_Empty_ClientId" method="Get_Z_Order">
+            <params>
+                <param tag="clientId" value=""/>
+            </params>
+            <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+    
+    <pluginPostRequisite>
+        <!-- PluginPostRequisite 1 -->
+        <postrequisite requisiteId="1" requisiteName="Uninstall_Package">
+            <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+                <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                    <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" pluginName="AppManager" delay="3">
+                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_Package_Info" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
+                <resultGeneration useMethodTag="packagemanager_list_packages">
+                    <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="4" name="Uninstall_Package" method="Uninstall_Package" pluginName="PackageManager" delay="3">
+                <conditionalExecution enable="true" Id="3" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+            </testStep>
+        </postrequisite>
+    </pluginPostRequisite>
+</testPlugin>
