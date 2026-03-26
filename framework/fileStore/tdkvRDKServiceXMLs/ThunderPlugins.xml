@@ -3128,18 +3128,6 @@
             </params>
         </method>
         <method name="Clear_All_App_Data" api="clearAllAppData" type="method" desc="Clears all application data"/>
-        <method name="Get_App_Metadata" api="getAppMetadata" type="method" desc="Fetches metadata for a specific application">
-            <params>
-                <param tag="appId" defaultValue="null" type="string"/>
-                <param tag="metaData" defaultValue="null" type="string"/>
-            </params>
-        </method>
-        <method name="Numeric_Get_App_Metadata" api="getAppMetadata" type="method" desc="Fetches metadata for a specific application">
-            <params>
-                <param tag="appId" defaultValue="null" type="int"/>
-                <param tag="metaData" defaultValue="null" type="int"/>
-            </params>
-        </method>
         <method name="Set_App_Property" api="setAppProperty" type="method" desc="Sets a property for the application instance">
             <params>
                 <param tag="appId" defaultValue="null" type="string"/>
@@ -3367,8 +3355,8 @@
         </method>
     </plugin>
 
-    <!-- StorageManager Plugin Information -->
-    <plugin pluginName="StorageManager" serviceName="org.rdk.StorageManager" serviceVersion="1">
+    <!-- AppStorageManager Plugin Information -->
+    <plugin pluginName="AppStorageManager" serviceName="org.rdk.AppStorageManager" serviceVersion="1">
         <!-- Method Definitions -->
         <method name="getStorage" api="getStorage" type="method" desc="Returns the storage location for a given app id">
             <params>
@@ -3463,17 +3451,6 @@
                 <param tag="url" defaultValue="null" type="string"/>
             </params>
         </method>
-    </plugin>
-
-    <!-- PackageManager Plugin Information -->
-    <plugin pluginName="PackageManager" serviceName="org.rdk.PackageManagerRDKEMS" serviceVersion="1">
-        <!-- Method Definitions -->
-        <method name="List_Package_Info" api="listPackages" type="method" desc="Retrieves information about packages"/>
-        <method name="Download_Package" api="download" type="method" desc="Download the package">
-            <params>
-                <param tag="url" defaultValue="null" type="string"/>
-            </params>
-        </method>
         <method name="Pause_Download" api="pause" type="method" desc="Pauses an ongoing download">
             <params>
                 <param tag="downloadId" defaultValue="null" type="string"/>
@@ -3499,6 +3476,19 @@
                 <param tag="fileLocator" defaultValue="null" type="string"/>
             </params>
         </method>
+        <method name="Get_Storage_Details" api="getStorageDetails" type="method" desc="Retrieve storage details of packages">
+            <params>
+                <param tag="type" defaultValue="null" type="string"/>
+                <param tag="id" defaultValue="null" type="string"/>
+                <param tag="version" defaultValue="null" type="string"/>
+            </params>
+        </method>
+    </plugin>
+
+    <!-- PackageManager Plugin Information -->
+    <plugin pluginName="PackageManager" serviceName="org.rdk.PackageManagerRDKEMS" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="List_Package_Info" api="listPackages" type="method" desc="Retrieves information about packages"/>
         <method name="Install_Package" api="install" type="method" desc="Installs a package">
             <params paramType="userGenerate" useMethodTag="pm_install_package">
                 <param tag="packageId" defaultValue="null" type="string"/>
@@ -3511,13 +3501,6 @@
         <method name="Uninstall_Package" api="uninstall" type="method" desc="Uninstalls a package">
             <params>
                 <param tag="packageId" defaultValue="null" type="string"/>
-            </params>
-        </method>
-        <method name="Get_Storage_Details" api="getStorageDetails" type="method" desc="Retrieve storage details of packages">
-            <params>
-                <param tag="type" defaultValue="null" type="string"/>
-                <param tag="id" defaultValue="null" type="string"/>
-                <param tag="version" defaultValue="null" type="string"/>
             </params>
         </method>
         <method name="Unlock_Package" api="unlock" type="method" desc="Unlocks a package">
@@ -3545,30 +3528,10 @@
                 <param tag="version" defaultValue="null" type="string"/>
             </params>
         </method>
-        <method name="reset" api="reset" type="method" desc="Deletes all persistent local data of the application">
-            <params>
-                <param tag="type" defaultValue="null" type="string"/>
-                <param tag="id" defaultValue="null" type="string"/>
-                <param tag="version" defaultValue="null" type="string"/>
-                <param tag="resetType" defaultValue="null" type="string"/>
-            </params>
-        </method>
-        <method name="getMetadata" api="getMetadata" type="method" desc="Retrieves metadata and auxiliary resource list for an application">
-            <params>
-                <param tag="type" defaultValue="null" type="string"/>
-                <param tag="id" defaultValue="null" type="string"/>
-                <param tag="version" defaultValue="null" type="string"/>
-            </params>
-        </method>
         <method name="config" api="config" type="method" desc="Retrieves configuration information for a installed application">
             <params>
                 <param tag="packageId" defaultValue="null" type="string"/>
                 <param tag="version" defaultValue="null" type="string"/>
-            </params>
-        </method>
-        <method name="getConfigForPackage" api="getConfigForPackage" type="method" desc="Retrieves configuration information for a package">
-            <params>
-                <param tag="fileLocator" defaultValue="null" type="string"/>
             </params>
         </method>
 

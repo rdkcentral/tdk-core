@@ -4286,7 +4286,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         # AppManager Response result parser steps
         # LifecycleManager uses appmanager parser steps for result validation
-        # ResourceMonitor uses appmanager parser steps for result validation
+        # ResourceManager uses appmanager parser steps for result validation
         elif tag == "appmanager_null_result_validation":
             try:
                 if otherInfo and "error" in otherInfo:
@@ -4492,8 +4492,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
-        # StorageManager Response result parser steps
-        elif tag == "storagemanager_null_result_validation":
+        # AppStorageManager Response result parser steps
+        elif tag == "appstoragemanager_null_result_validation":
             try:
                 if otherInfo and "error" in otherInfo:
                     info["error_info"] = otherInfo["error"]
@@ -4508,7 +4508,100 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "storagemanager_negative_scenario_validation":
+        elif tag == "appstoragemanager_negative_scenario_validation":
+            try:
+                info["otherInfo"] = otherInfo
+                message = otherInfo.get("error").get("message")
+                if str(message).lower() in [str(val).lower() for val in expectedValues]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        # DownloadManager Response result parser steps
+        elif tag == "downloadmanager_null_result_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if str(result).strip().lower() in ("none"):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "downloadmanager_downloadid_validation":
+            try:
+                info["result"] = result
+                if result:
+                #if result["downloadId"]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "downloadmanager_getstorage_details_validation":
+            try:
+                info["result"] = result
+                status = checkNonEmptyResultData(result)
+                if "FALSE" not in status:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "downloadmanager_download_progress_validation":
+            try:
+                #info["progress"] = result.get("progress")
+                #if int(result.get("progress")) >= 0 and int(result.get("progress")) <=100:
+                info["result"] = result
+                if int(result) >= 0 and int(result) <=100:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "downloadmanager_confirm_download_paused_validation":
+            try:
+                #progress = result.get("progress")
+                #info["progress"] = progress
+                #if int(progress) == int(expectedValues[0]):
+                info["result"] = result
+                if int(result) == int(expectedValues[0]):
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "downloadmanager_progress_check_after_resume_validation":
+            try:
+                #progress = result.get("progress")
+                #info["progress"] = progress
+                #if int(progress) >= int(arg[0]) and int(progress) <= 100:
+                info["result"] = result
+                if int(result) >= int(arg[0]) and int(result) <= 100:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "downloadmanager_negative_scenario_validation":
             try:
                 info["otherInfo"] = otherInfo
                 message = otherInfo.get("error").get("message")
@@ -4551,7 +4644,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["appStatus"] = "FALSE"
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_no_result_validation":
+        elif tag == "packagemanager_null_result_validation":
             try:
                 if otherInfo and "error" in otherInfo:
                     info["error_info"] = otherInfo["error"]
@@ -4562,18 +4655,6 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
                         info["Test_Step_Status"] = "FAILURE"
-            except Exception as e:
-                info["error"] = str(e)
-                info["Test_Step_Status"] = "FAILURE"
-
-        elif tag == "packagemanager_downloadid_validation":
-            try:
-                info["result"] = result
-                #if result:
-                if result["downloadId"]:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
             except Exception as e:
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
@@ -4612,58 +4693,11 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_getstorage_details_validation":
-            try:
-                info["result"] = result
-                status = checkNonEmptyResultData(result)
-                if "FALSE" not in status:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
-            except Exception as e:
-                info["error"] = str(e)
-                info["Test_Step_Status"] = "FAILURE"
-
         elif tag == "packagemanager_negative_scenario_validation":
             try:
                 info["otherInfo"] = otherInfo
                 message = otherInfo.get("error").get("message")
                 if str(message).lower() in [str(val).lower() for val in expectedValues]:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
-            except Exception as e:
-                info["error"] = str(e)
-                info["Test_Step_Status"] = "FAILURE"
-
-        elif tag == "packagemanager_download_progress_validation":
-            try:
-                info["progress"] = result.get("progress")
-                if int(result.get("progress")) >= 0 and int(result.get("progress")) <=100:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
-            except Exception as e:
-                info["error"] = str(e)
-                info["Test_Step_Status"] = "FAILURE"
-
-        elif tag == "packagemanager_confirm_download_paused_validation":
-            try:
-                progress = result.get("progress")
-                info["progress"] = progress
-                if int(progress) == int(expectedValues[0]):
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
-            except Exception as e:
-                info["error"] = str(e)
-                info["Test_Step_Status"] = "FAILURE"
-
-        elif tag == "packagemanager_progress_check_after_resume_validation":
-            try:
-                progress = result.get("progress")
-                info["progress"] = progress
-                if int(progress) >= int(arg[0]) and int(progress) <= 100:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
@@ -6469,19 +6503,20 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             if len(arg) > 1:
                 info["appIds"] = appIds[index]
 
-        # PackageManager Response result parser steps
-        elif tag == "packagemanager_get_previous_downloadid":
+        # DownloadManager Response result parser steps
+        elif tag == "downloadmanager_get_previous_downloadid":
             testStepResults = list(testStepResults[0].values())[0]
-            info["downloadId"] = testStepResults[0]["result"].get("downloadId")
-            #info["downloadId"] = testStepResults[0].get("result")
+            #info["downloadId"] = testStepResults[0]["result"].get("downloadId")
+            info["downloadId"] = testStepResults[0].get("result")
 
-        elif tag == "packagemanager_get_previous_filelocator_url":
+        elif tag == "downloadmanager_get_previous_filelocator_url":
             testStepResults = list(testStepResults[0].values())[0]
             info["fileLocator"] = testStepResults[0].get("fileLocator")
 
-        elif tag == "packagemanager_get_previous_download_progress":
+        elif tag == "downloadmanager_get_previous_download_progress":
             testStepResults = list(testStepResults[0].values())[0]
-            info["progress"] = testStepResults[0].get("progress")
+            #info["progress"] = testStepResults[0].get("progress")
+            info["progress"] = testStepResults[0].get("result")
 
         # AppManager Plugin Response result parser steps
         elif tag == "appmanager_get_previous_appinstance_id":
@@ -7829,6 +7864,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             command = "reboot"
             info["deatils"] = executeCommand(execInfo, command)
             info["Test_Step_Status"] =  "SUCCESS"
+
         elif tag == "getImageVersion":
             command = "cat /version.txt | grep imagename | cut -d ':' -f2"
             details = executeCommand(execInfo, command)
@@ -7847,11 +7883,13 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "toggleMemoryBank":
             command = '/bin/sh '+arg[0]
             info["deatils"] = executeCommand(execInfo, command)
             info["Test_Step_Status"] =  "SUCCESS"
-        elif tag == "packagemanager_form_filelocator_url":
+
+        elif tag == "downloadmanager_form_filelocator_url":
             if basePath.endswith('/'):
                 basePath = basePath[:-1]
             package_filelocator = getDeviceConfig(basePath, "PACKAGEMANAGER_FILE_LOCATOR", deviceName, deviceType)
@@ -7860,6 +7898,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "check_downloaded_package_status":
             try:
                 command = "md5sum " + arg[0] + " | awk '{print $1}'"
@@ -7953,6 +7992,7 @@ def compareURLs(actualURL,expectedURL):
         for data in url_data:
             if data not in actualURL:
                 status = "FALSE"
+
     return status
 
 def DecodeBase64ToHex(base64):
