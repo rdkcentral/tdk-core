@@ -16,53 +16,30 @@
 <testPlugin pluginName="AppManager" pluginVersion="1">
     <pluginPreRequisite>
         <!-- PluginPreRequisite 1 -->
-        <prerequisite requisiteId="1" requisiteName="Activate_AppManager_Plugin">
+        <prerequisite requisiteId="1" requisiteName="Activate_AppStorageManager_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
-                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
                 </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager"/>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager"/>
             </testStep>
             <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
                 <params>
-                    <param tag="callsign" value="org.rdk.AppManager"/>
+                    <param tag="callsign" value="org.rdk.AppStorageManager"/>
                 </params>
             </testStep>
             <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
                 <params>
-                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
                 </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager" expectedValues="activated"/>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager" expectedValues="activated"/>
             </testStep>
         </prerequisite>
 
         <!-- PluginPreRequisite 2 -->
-        <prerequisite requisiteId="2" requisiteName="Activate_StorageManager_Plugin">
-            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                <params>
-                    <param tag="plugin" value="org.rdk.StorageManager" indexOnly="true"/>
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.StorageManager"/>
-            </testStep>
-            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.StorageManager"/>
-                <params>
-                    <param tag="callsign" value="org.rdk.StorageManager"/>
-                </params>
-            </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.StorageManager"/>
-                <params>
-                    <param tag="plugin" value="org.rdk.StorageManager" indexOnly="true"/>
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.StorageManager" expectedValues="activated"/>
-            </testStep>
-        </prerequisite>
-
-        <!-- PluginPreRequisite 3 -->
-        <prerequisite requisiteId="3" requisiteName="Activate_DownloadManager_Plugin">
+        <prerequisite requisiteId="2" requisiteName="Activate_DownloadManager_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
                     <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
@@ -84,8 +61,8 @@
             </testStep>
         </prerequisite>
 
-        <!-- PluginPreRequisite 4 -->
-        <prerequisite requisiteId="4" requisiteName="Activate_PackageManagerRDKEMS_Plugin">
+        <!-- PluginPreRequisite 3 -->
+        <prerequisite requisiteId="3" requisiteName="Activate_PackageManagerRDKEMS_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
                     <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
@@ -107,6 +84,29 @@
             </testStep>
         </prerequisite>
 
+        <!-- PluginPreRequisite 4 -->
+        <prerequisite requisiteId="4" requisiteName="Activate_AppManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
         <!-- PluginPreRequisite 5 -->
         <prerequisite requisiteId="5" requisiteName="Check_Existing_Package_Before_Install">
             <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
@@ -119,22 +119,22 @@
                 <params>
                     <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 </params>
-                <resultGeneration useMethodTag="packagemanager_no_result_validation"/>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
             </testStep>
             <testStep testStepId="3" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
                 <params>
                     <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
                 </params>
-                <resultGeneration useMethodTag="packagemanager_downloadid_validation"/>
+                <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
             </testStep>
             <testStep testStepId="4" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
-                <resultGeneration useMethodTag="packagemanager_form_filelocator_url">
-                    <arguments usePreviousResult="true" Id="3" useMethodTag="packagemanager_get_previous_downloadid"/>
+                <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                    <arguments usePreviousResult="true" Id="3" useMethodTag="downloadmanager_get_previous_downloadid"/>
                 </resultGeneration>
             </testStep>
             <testStep testStepId="5" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
                 <resultGeneration useMethodTag="check_downloaded_package_status">
-                    <arguments usePreviousResult="true" Id="4" useMethodTag="packagemanager_get_previous_filelocator_url"/>
+                    <arguments usePreviousResult="true" Id="4" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
                     <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
                 </resultGeneration>
             </testStep>
@@ -142,11 +142,11 @@
                 <params>
                     <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                     <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
-                    <param tag="fileLocator" usePreviousResult="true" Id="4" useMethodTag="packagemanager_get_previous_filelocator_url"/>
+                    <param tag="fileLocator" usePreviousResult="true" Id="4" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
                     <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
                     <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
                 </params>
-                <resultGeneration useMethodTag="packagemanager_no_result_validation"/>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
             </testStep>
             <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="PackageManager" delay="5">
                 <resultGeneration useMethodTag="packagemanager_check_install_package">
@@ -276,16 +276,51 @@
     <!-- TestCases 12 -->
     <testCase testCaseId="AM_12" testCaseName="AppManager_LaunchApp_Valid_Param" desc="Verify that the launchApp method successfully launches an application when provided with a valid appId">
         <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" saveResult="true">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                        <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" delay="3">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
         <testStep testStepId="1" name="Launch_App_Valid_Param" method="Launch_App">
             <params>
                 <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="intent" value=""/>
+                <param tag="launchArgs" value=""/>
             </params>
             <resultGeneration useMethodTag="appmanager_null_result_validation"/>
         </testStep>
+        <testStep testStepId="2" name="Check_App_Launched" method="Get_Loaded_Apps" delay="10">
+            <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Terminate_Application">
+                <testStep testStepId="1" name="Terminate_App_Valid_Param" method="Terminate_App">
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
     </testCase>
 
     <!-- TestCases 13 -->
-    <testCase testCaseId="AM_13" testCaseName="AppManager_LaunchApp_Invalid_AppId" desc="Verify that the launchApp method fails gracefully when an invalid appId is provided, while intent and launchArgsare valid">
+    <testCase testCaseId="AM_13" testCaseName="AppManager_LaunchApp_Invalid_AppId" desc="Verify that the launchApp method fails gracefully when an invalid appId is provided, while intent and launchArgs are valid">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Launch_App_Invalid_AppId" method="Launch_App">
             <params>
@@ -337,10 +372,11 @@
     </testCase>
 
     <!-- TestCases 17 -->
-    <testCase testCaseId="AM_17" testCaseName="AppManager_LaunchApp_Missing_AppId" desc="Verify that the launchApp method fails gracefully when the appId parameter is missing, while intent and launchArgsare provided">
+    <testCase testCaseId="AM_17" testCaseName="AppManager_LaunchApp_Empty_AppId" desc="Verify that the launchApp method fails gracefully when the appId parameter is empty, while intent and launchArgs are provided">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Launch_App_Missing_AppId" method="Launch_App">
+        <testStep testStepId="1" name="Launch_App_Empty_AppId" method="Launch_App">
             <params>
+                <param tag="appId" value=""/>
                 <param tag="intent" value=""/>
                 <param tag="launchArgs" value=""/>
             </params>
@@ -349,11 +385,12 @@
     </testCase>
 
     <!-- TestCases 18 -->
-    <testCase testCaseId="AM_18" testCaseName="AppManager_LaunchApp_Fail_Gracefully_Without_Intent" desc="Verify that the launchApp method fails gracefully when the intent parameter is missing, while appId and launchArgsare provided">
+    <testCase testCaseId="AM_18" testCaseName="AppManager_LaunchApp_Fail_Gracefully_Empty_Intent" desc="Verify that the launchApp method fails gracefully when the intent parameter is empty, while appId and launchArgs are provided">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Launch_App_Without_Intent" method="Launch_App">
+        <testStep testStepId="1" name="Launch_App_Empty_Intent" method="Launch_App">
             <params>
                 <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="intent" value=""/>
                 <param tag="launchArgs" value=""/>
             </params>
             <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
@@ -361,21 +398,22 @@
     </testCase>
 
     <!-- TestCases 19 -->
-    <testCase testCaseId="AM_19" testCaseName="AppManager_LaunchApp_Missing_LaunchArgs" desc="Verify that the launchApp method fails gracefully when the launchArgs parameter is missing, while appId and intent are provided">
+    <testCase testCaseId="AM_19" testCaseName="AppManager_LaunchApp_Fail_Gracefully_Empty_LaunchArgs" desc="Verify that the launchApp method fails gracefully when the launchArgs parameter is empty, while appId and intent are provided">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Launch_App_Missing_LaunchArgs" method="Launch_App">
+        <testStep testStepId="1" name="Launch_App_Empty_LaunchArgs" method="Launch_App">
             <params>
                 <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 <param tag="intent" value=""/>
+                <param tag="launchArgs" value=""/>
             </params>
             <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
 
     <!-- TestCases 20 -->
-    <testCase testCaseId="AM_20" testCaseName="AppManager_LaunchApp_Fail_Gracefully_Missing_Params" desc="Verify that the launchApp method fails gracefully when all parameters appId, intent, and launchArgs are missing">
+    <testCase testCaseId="AM_20" testCaseName="AppManager_LaunchApp_Fail_Gracefully_Without_Params" desc="Verify that the launchApp method fails gracefully when all parameters appId, intent, and launchArgs are missing">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Launch_App_Missing_Params" method="Launch_App">
+        <testStep testStepId="1" name="Launch_App_Without_Params" method="Launch_App">
             <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="Invalid Parameter"/>
         </testStep>
     </testCase>
@@ -396,6 +434,23 @@
     <!-- TestCases 22 -->
     <testCase testCaseId="AM_22" testCaseName="AppManager_Verify_preloadApp_valid_Params" desc="Verify preloadApp with a valid params when provided with a valid appId and launchArgs">
         <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" saveResult="true">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                        <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" delay="3">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
         <testStep testStepId="1" name="Preload_App_valid_Params" method="Preload_App">
             <params>
                 <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
@@ -403,6 +458,22 @@
             </params>
             <resultGeneration useMethodTag="appmanager_null_result_validation"/>
         </testStep>
+        <testStep testStepId="2" name="Check_App_Launched" method="Get_Loaded_Apps" delay="10">
+            <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                <expectedValues value="APP_STATE_PAUSED" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Terminate_Application">
+                <testStep testStepId="1" name="Terminate_App_Valid_Param" method="Terminate_App">
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
     </testCase>
 
     <!-- TestCases 23 -->
@@ -504,6 +575,23 @@
     <!-- TestCases 31 -->
     <testCase testCaseId="AM_31" testCaseName="AppManager_PreloadApp_Valid_AppId_Already_Preloaded" desc="Verify preloadApp with a appId that is a valid application but is already preloaded">
         <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" saveResult="true">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                        <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" delay="3">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
         <testStep testStepId="1" name="Preload_App_Valid_AppId" method="Preload_App">
             <params>
                 <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
@@ -511,49 +599,81 @@
             </params>
             <resultGeneration useMethodTag="appmanager_null_result_validation"/>
         </testStep>
-        <testStep testStepId="2" name="Preload_App_Valid_AppId_Already_Preloaded" method="Preload_App" delay="5">
+        <testStep testStepId="2" name="Check_App_Launched" method="Get_Loaded_Apps" delay="10">
+            <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                <expectedValues value="APP_STATE_PAUSED" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Preload_App_Valid_AppId_Already_Preloaded" method="Preload_App" delay="3">
             <params>
                 <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 <param tag="launchArgs" value=""/>
             </params>
             <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
+
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Terminate_Application">
+                <testStep testStepId="1" name="Terminate_App_Valid_Param" method="Terminate_App">
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
     </testCase>
 
     <!-- TestCases 32 -->
     <testCase testCaseId="AM_32" testCaseName="AppManager_CloseApp_Valid_AppId" desc="Verify closeApp with valid appId">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" saveResult="true">
-            <resultGeneration useMethodTag="appmanager_check_loaded_apps">
-                <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-            </resultGeneration>
-        </testStep>
-        <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" delay="3">
-            <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
-                <params>
-                    <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                </params>
-                <resultGeneration useMethodTag="appmanager_null_result_validation"/>
-        </testStep>
-        <testStep testStepId="3" name="Launch_App_Valid_Params" method="Launch_App">
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" saveResult="true">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                        <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" delay="3">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="3" name="Launch_App_Valid_Params" method="Launch_App">
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="intent" value=""/>
+                        <param tag="launchArgs" value=""/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="4" name="Check_App_Launched" method="Get_Loaded_Apps" delay="10">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                        <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+	<testStep testStepId="1" name="Close_App_Valid_Params" method="Close_App">
             <params>
                 <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                <param tag="intent" value=""/>
-                <param tag="launchArgs" value=""/>
             </params>
             <resultGeneration useMethodTag="appmanager_null_result_validation"/>
         </testStep>
-        <testStep testStepId="4" name="Check_App_Launched" method="Get_Loaded_Apps" delay="10">
-            <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
-                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-            </resultGeneration>
-        </testStep>
-        <testStep testStepId="5" name="Close_App_Valid_Params" method="Close_App">
-            <params>
-                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-            </params>
-            <resultGeneration useMethodTag="appmanager_null_result_validation"/>
-        </testStep>
+
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Terminate_Application">
+                <testStep testStepId="1" name="Terminate_App_Valid_Param" method="Terminate_App">
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
     </testCase>
 
     <!-- TestCases 33 -->
@@ -603,32 +723,37 @@
     <!-- TestCases 37 -->
     <testCase testCaseId="AM_37" testCaseName="AppManager_TerminateApp_Valid_AppId_Param" desc="Verify terminateApp with valid appId">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" saveResult="true">
-            <resultGeneration useMethodTag="appmanager_check_loaded_apps">
-                <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-            </resultGeneration>
-        </testStep>
-        <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" delay="3">
-            <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
-                <params>
-                    <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                </params>
-                <resultGeneration useMethodTag="appmanager_null_result_validation"/>
-        </testStep>
-        <testStep testStepId="3" name="Launch_App_Valid_Params" method="Launch_App">
-            <params>
-                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                <param tag="intent" value=""/>
-                <param tag="launchArgs" value=""/>
-            </params>
-            <resultGeneration useMethodTag="appmanager_null_result_validation"/>
-        </testStep>
-        <testStep testStepId="4" name="Check_App_Launched" method="Get_Loaded_Apps" delay="10">
-            <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
-                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-            </resultGeneration>
-        </testStep>
-        <testStep testStepId="5" name="Terminate_App_Valid_Param" method="Terminate_App">
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" saveResult="true">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                        <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" delay="3">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="3" name="Launch_App_Valid_Params" method="Launch_App">
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="intent" value=""/>
+                        <param tag="launchArgs" value=""/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="4" name="Check_App_Launched" method="Get_Loaded_Apps" delay="10">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                        <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Terminate_App_Valid_Param" method="Terminate_App">
             <params>
                 <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
             </params>
@@ -685,7 +810,7 @@
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Start_System_App" method="Start_System_App">
             <params>
-                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_SYSTEM_APPLICATION_NAME"/>
             </params>
             <resultGeneration useMethodTag="appmanager_null_result_validation"/>
         </testStep>
@@ -740,7 +865,7 @@
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Stop_System_App" method="Stop_System_App">
             <params>
-                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_SYSTEM_APPLICATION_NAME"/>
             </params>
             <resultGeneration useMethodTag="appmanager_null_result_validation"/>
         </testStep>
@@ -752,19 +877,19 @@
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Start_System_App" method="Start_System_App">
             <params>
-                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_SYSTEM_APPLICATION_NAME"/>
             </params>
             <resultGeneration useMethodTag="appmanager_null_result_validation"/>
         </testStep>
         <testStep testStepId="2" name="Stop_System_App" method="Stop_System_App" delay="5">
             <params>
-                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_SYSTEM_APPLICATION_NAME"/>
             </params>
             <resultGeneration useMethodTag="appmanager_null_result_validation"/>
         </testStep>
         <testStep testStepId="3" name="Stop_System_App" method="Stop_System_App" delay="5">
             <params>
-                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_SYSTEM_APPLICATION_NAME"/>
             </params>
             <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
@@ -828,32 +953,37 @@
     <!-- TestCase 54 -->
     <testCase testCaseId="AM_54" testCaseName="AppManager_KillApp_Valid_AppId" desc="Verify killApp with valid appId">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" saveResult="true">
-            <resultGeneration useMethodTag="appmanager_check_loaded_apps">
-                <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-            </resultGeneration>
-        </testStep>
-        <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" delay="3">
-            <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
-                <params>
-                    <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                </params>
-                <resultGeneration useMethodTag="appmanager_null_result_validation"/>
-        </testStep>
-        <testStep testStepId="3" name="Launch_App_Valid_Params" method="Launch_App">
-            <params>
-                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                <param tag="intent" value=""/>
-                <param tag="launchArgs" value=""/>
-            </params>
-            <resultGeneration useMethodTag="appmanager_null_result_validation"/>
-        </testStep>
-        <testStep testStepId="4" name="Check_App_Launched" method="Get_Loaded_Apps" delay="10">
-            <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
-                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-            </resultGeneration>
-        </testStep>
-        <testStep testStepId="5" name="Kill_App_Valid_Param" method="Kill_App">
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" saveResult="true">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                        <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" delay="3">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="3" name="Launch_App_Valid_Params" method="Launch_App">
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="intent" value=""/>
+                        <param tag="launchArgs" value=""/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="4" name="Check_App_Launched" method="Get_Loaded_Apps" delay="10">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                        <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Kill_App_Valid_Param" method="Kill_App">
             <params>
                 <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
             </params>
@@ -1053,80 +1183,7 @@
     </testCase>
 
     <!-- TestCase 72 -->
-    <!-- Need to check the  metaData parameter value-->
-    <testCase testCaseId="AM_72" testCaseName="AppManager_GetAppMetadata_Valid_Params" desc="Verify getAppMetadata with valid appId and metaData">
-        <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Verify_Get_App_Metadata" method="Get_App_Metadata">
-            <params>
-                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                <param tag="metaData" value="metaData"/>
-            </params>
-            <resultGeneration useMethodTag="appmanager_null_result_validation"/>
-        </testStep>
-    </testCase>
-
-    <!-- TestCase 73 -->
-    <testCase testCaseId="AM_73" testCaseName="AppManager_GetAppMetadata_ValidAppId_EmptyMetaData" desc="Verify getAppMetadata with valid appId and an empty metaData">
-        <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Get_App_Metadata_ValidAppId_EmptyMetaData" method="Get_App_Metadata">
-            <params>
-                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                <param tag="metaData" value=""/>
-            </params>
-            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
-        </testStep>
-    </testCase>
-
-    <!-- TestCase 74 -->
-    <testCase testCaseId="AM_74" testCaseName="AppManager_GetAppMetadata_EmptyAppId_ValidMetaData" desc="Verify getAppMetadata with an empty appId and a valid metaData">
-        <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Get_App_Metadata_EmptyAppId_ValidMetaData" method="Get_App_Metadata">
-            <params>
-                <param tag="appId" value=""/>
-                <param tag="metaData" value="metaData"/>
-            </params>
-            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
-        </testStep>
-    </testCase>
-
-    <!-- TestCase 75 -->
-    <testCase testCaseId="AM_75" testCaseName="AppManager_GetAppMetadata_InvalidAppId_ValidMetaData" desc="Verify getAppMetadata with an invalid appId (bad format) and a valid metaData">
-        <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Verify_GetAppMetadata_Invalid_AppId" method="Get_App_Metadata">
-            <params>
-                <param tag="appId" value="Invalid@AppId!"/>
-                <param tag="metaData" value="metaData"/>
-            </params>
-            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
-        </testStep>
-    </testCase>
-
-    <!-- TestCase 76 -->
-    <testCase testCaseId="AM_76" testCaseName="AppManager_GetAppMetadata_Empty_Params" desc="Verify getAppMetadata with both appId and metadata as empty strings">
-        <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Verify_GetAppMetadata_Empty_Params" method="Get_App_Metadata">
-            <params>
-                <param tag="appId" value=""/>
-                <param tag="metaData" value=""/>
-            </params>
-            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
-        </testStep>
-    </testCase>
-
-    <!-- TestCase 77 -->
-    <testCase testCaseId="AM_77" testCaseName="AppManager_GetAppMetadata_Invalid_DataTypes" desc="Verify getAppMetadata with invalid data types for appId and metadata">
-        <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Get_App_Metadata_Invalid_Params" method="Numeric_Get_App_Metadata">
-            <params>
-                <param tag="appId" value="12345"/>
-                <param tag="metaData" value="1234"/>
-            </params>
-            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
-        </testStep>
-    </testCase>
-
-    <!-- TestCase 78 -->
-    <testCase testCaseId="AM_78" testCaseName="AppManager_SetAppProperty_ValidAppId_Delay_10" desc="Verify setAppProperty sets key 'delay' to value '10' for the valid appId">
+    <testCase testCaseId="AM_72" testCaseName="AppManager_SetAppProperty_ValidAppId_Delay_10" desc="Verify setAppProperty sets key 'delay' to value '10' for the valid appId">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Set_App_Property_Delay_10" method="Set_App_Property">
             <params>
@@ -1145,8 +1202,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 79 -->
-    <testCase testCaseId="AM_79" testCaseName="AppManager_SetAppProperty_Empty_AppId_Key_Value" desc="Verify setAppProperty with all parameters empty.">
+    <!-- TestCase 73 -->
+    <testCase testCaseId="AM_73" testCaseName="AppManager_SetAppProperty_Empty_AppId_Key_Value" desc="Verify setAppProperty with all parameters empty.">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Set_App_Property_Empty_Params" method="Negative_Set_App_Property">
             <params>
@@ -1158,8 +1215,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 80 -->
-    <testCase testCaseId="AM_80" testCaseName="AppManager_SetAppProperty_Numeric_AppId_Key_Value" desc="Verify setAppProperty with numeric strings for all parameters.">
+    <!-- TestCase 74 -->
+    <testCase testCaseId="AM_74" testCaseName="AppManager_SetAppProperty_Numeric_AppId_Key_Value" desc="Verify setAppProperty with numeric strings for all parameters.">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Set_App_Property_Numeric_Params" method="Numeric_Set_App_Property">
             <params>
@@ -1171,8 +1228,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 81 -->
-    <testCase testCaseId="AM_81" testCaseName="AppManager_SetAppProperty_SpecialChars_All_Params" desc="Verify setAppProperty with only special characters for all parameters.">
+    <!-- TestCase 75 -->
+    <testCase testCaseId="AM_75" testCaseName="AppManager_SetAppProperty_SpecialChars_All_Params" desc="Verify setAppProperty with only special characters for all parameters.">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Set_App_Property_SpecialChars_All" method="Negative_Set_App_Property">
             <params>
@@ -1184,8 +1241,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 82 -->
-    <testCase testCaseId="AM_82" testCaseName="AppManager_SetAppProperty_InvalidAppId_ValidKey_ValidValue" desc="Verify setAppProperty with invalid appId and valid key/value.">
+    <!-- TestCase 76 -->
+    <testCase testCaseId="AM_76" testCaseName="AppManager_SetAppProperty_InvalidAppId_ValidKey_ValidValue" desc="Verify setAppProperty with invalid appId and valid key/value.">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Set_App_Property_InvalidAppId" method="Set_App_Property">
             <params>
@@ -1197,8 +1254,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 83 -->
-    <testCase testCaseId="AM_83" testCaseName="AppManager_SetAppProperty_ValidAppId_InvalidKey_ValidValue" desc="Verify setAppProperty with valid appId, invalid key, valid value.">
+    <!-- TestCase 77 -->
+    <testCase testCaseId="AM_77" testCaseName="AppManager_SetAppProperty_ValidAppId_InvalidKey_ValidValue" desc="Verify setAppProperty with valid appId, invalid key, valid value.">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Set_App_Property_InvalidKey" method="Set_App_Property">
             <params>
@@ -1210,8 +1267,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 84 -->
-    <testCase testCaseId="AM_84" testCaseName="AppManager_SetAppProperty_ValidAppId_EmptyKey_ValidValue" desc="Verify setAppProperty with valid appId/value and empty key.">
+    <!-- TestCase 78 -->
+    <testCase testCaseId="AM_78" testCaseName="AppManager_SetAppProperty_ValidAppId_EmptyKey_ValidValue" desc="Verify setAppProperty with valid appId/value and empty key.">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Set_App_Property_EmptyKey" method="Set_App_Property">
             <params>
@@ -1223,8 +1280,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 85 -->
-    <testCase testCaseId="AM_85" testCaseName="AppManager__GetAppProperty_ValidAppId_InvalidKey" desc="Verify getAppProperty with valid appId and invalid key">
+    <!-- TestCase 79 -->
+    <testCase testCaseId="AM_79" testCaseName="AppManager_GetAppProperty_ValidAppId_InvalidKey" desc="Verify getAppProperty with valid appId and invalid key">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Verify_GetAppProperty" method="Get_App_Property">
             <params>
@@ -1235,8 +1292,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 86 -->
-    <testCase testCaseId="AM_86" testCaseName="AppManager_GetAppProperty_ValidAppId_EmptyKey" desc="Verify getAppProperty with valid appId and empty key">
+    <!-- TestCase 80 -->
+    <testCase testCaseId="AM_80" testCaseName="AppManager_GetAppProperty_ValidAppId_EmptyKey" desc="Verify getAppProperty with valid appId and empty key">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Verify_GetAppProperty" method="Get_App_Property">
             <params>
@@ -1247,8 +1304,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 87 -->
-    <testCase testCaseId="AM_87" testCaseName="AppManager_GetAppProperty_Invalid_AppId_Valid_Key" desc="Verify getAppProperty with invalid appId and valid key">
+    <!-- TestCase 81 -->
+    <testCase testCaseId="AM_81" testCaseName="AppManager_GetAppProperty_Invalid_AppId_Valid_Key" desc="Verify getAppProperty with invalid appId and valid key">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Verify_GetAppProperty_Invalid_AppId_Valid_Key" method="Get_App_Property">
             <params>
@@ -1259,8 +1316,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 88 -->
-    <testCase testCaseId="AM_88" testCaseName="AppManager_GetAppProperty_Invalid_Params" desc="Verify getAppProperty with invalid appId and invalid key">
+    <!-- TestCase 82 -->
+    <testCase testCaseId="AM_82" testCaseName="AppManager_GetAppProperty_Invalid_Params" desc="Verify getAppProperty with invalid appId and invalid key">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Verify_GetAppProperty_Invalid_Params" method="Get_App_Property">
             <params>
@@ -1271,8 +1328,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 89 -->
-    <testCase testCaseId="AM_89" testCaseName="AppManager_GetAppProperty_InvalidAppId_EmptyKey" desc="Verify getAppProperty with invalid appId and empty key.">
+    <!-- TestCase 83 -->
+    <testCase testCaseId="AM_83" testCaseName="AppManager_GetAppProperty_InvalidAppId_EmptyKey" desc="Verify getAppProperty with invalid appId and empty key.">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Get_App_Property_InvalidAppId_EmptyKey" method="Get_App_Property">
             <params>
@@ -1283,8 +1340,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 90 -->
-    <testCase testCaseId="AM_90" testCaseName="AppManager_GetAppProperty_EmptyAppId_ValidKey" desc="Verify getAppProperty with empty appId and valid key">
+    <!-- TestCase 84 -->
+    <testCase testCaseId="AM_84" testCaseName="AppManager_GetAppProperty_EmptyAppId_ValidKey" desc="Verify getAppProperty with empty appId and valid key">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Get_App_Property_EmptyAppId_ValidKey" method="Get_App_Property">
             <params>
@@ -1295,8 +1352,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 91 -->
-    <testCase testCaseId="AM_91" testCaseName="AppManager_GetAppProperty_EmptyAppId_InvalidKey" desc="Verify getAppProperty with empty appId and invalid key">
+    <!-- TestCase 85 -->
+    <testCase testCaseId="AM_85" testCaseName="AppManager_GetAppProperty_EmptyAppId_InvalidKey" desc="Verify getAppProperty with empty appId and invalid key">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="GetAppProperty_EmptyAppId_InvalidKey" method="Get_App_Property">
             <params>
@@ -1307,8 +1364,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 92 -->
-    <testCase testCaseId="AM_92" testCaseName="AppManager_GetAppProperty_EmptyAppId_EmptyKey" desc="Verify getAppProperty with empty appId and empty key">
+    <!-- TestCase 86 -->
+    <testCase testCaseId="AM_86" testCaseName="AppManager_GetAppProperty_EmptyAppId_EmptyKey" desc="Verify getAppProperty with empty appId and empty key">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Get_App_Property_Empty_Params" method="Get_App_Property">
             <params>
@@ -1319,8 +1376,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 93 -->
-    <testCase testCaseId="AM_93" testCaseName="AppManager_Max_Running_Apps" desc="Verify the successful retrieval of the maximum number of running apps">
+    <!-- TestCase 87 -->
+    <testCase testCaseId="AM_87" testCaseName="AppManager_Max_Running_Apps" desc="Verify the successful retrieval of the maximum number of running apps">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Get_Max_Running_Apps" method="Get_Max_Running_Apps">
             <resultGeneration useMethodTag="appmanager_getmaxrunningapps_status"/>
@@ -1352,7 +1409,7 @@
                 <params>
                     <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 </params>
-                <resultGeneration useMethodTag="packagemanager_no_result_validation" arguments="empty_result_validation"/>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
             </testStep>
         </postrequisite>
     </pluginPostRequisite>
