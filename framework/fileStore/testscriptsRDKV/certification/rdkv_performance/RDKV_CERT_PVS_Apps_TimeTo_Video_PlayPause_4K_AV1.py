@@ -124,8 +124,8 @@ if expectedResult in result.upper():
     revert="NO"
     plugins_list = ["DeviceInfo","org.rdk.PersistentStore"]
     plugin_status_needed = {"org.rdk.PersistentStore":"activated","DeviceInfo":"activated"}
-     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
-     time.sleep(20)
+    curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
+    time.sleep(20)
     status = "SUCCESS"
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         print("\n Error while getting plugin status")
@@ -223,7 +223,95 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
+        print("\n Pre conditions for the test are set successfully")
+        webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
+        time.sleep(60)
+        rdkv_performancelib.setPS_value(video_test_urls[0])
+        app_bundle_name=MediaValidationVariables.unified_player_app_download_url.split("/")[-1]
+        print(f"\nApp bundle name: {app_bundle_name}")
+        app_name = app_bundle_name.split("+")[0]
+        print(f"\nApp name: {app_name}")
+        app_download_url = MediaValidationVariables.unified_player_app_download_url.split(app_bundle_name)[0]
+        print("app_download_url", app_download_url)
+        status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
+        if logging_method == "REST_API":
+            expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result = testusingRestAPI(obj);
+            evt_list = [expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result]
+        elif logging_method == "WEB_INSPECT":
+            if current_url != None and expectedResult in result:
+                tdkTestObj.setResultStatus("SUCCESS");
+                expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result = testusingWebInspect(obj,webkit_console_socket);
+                evt_list = [expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result]
+        if ("SUCCESS" in test_result) and (not any(value == "" for value in evt_list)):
+            pausing_time = getTimeFromMsg(expected_pause_evt)
+            print("\n Pause initiated at {} (UTC)".format(pausing_time))
+            pausing_time_millisec = getTimeInMilliSeconds(pausing_time)
+            paused_time = getTimeFromMsg(observed_pause_evt)
+            print("\n Pause happend at {} (UTC)".format(paused_time))
+            paused_time_millisec = getTimeInMilliSeconds(paused_time)
+            pause_opn_time = paused_time_millisec - pausing_time_millisec
+            print("\n Time taken for pause operation: {} milleseconds \n".format(pause_opn_time))
+            conf_file,result = getConfigFileName(obj.realpath)
+            result1, pause_time_threshold_value = getDeviceConfigKeyValue(conf_file,"PAUSE_TIME_THRESHOLD_VALUE")
+            Summ_list.append('PAUSE_TIME_THRESHOLD_VALUE :{}ms'.format(pause_time_threshold_value))
+            result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+            Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
+            Summ_list.append('Pause initiated at  :{}'.format(pausing_time))
+            Summ_list.append('Pause happend at :{}'.format(paused_time))
+            Summ_list.append('Time taken for pause operation :{}ms'.format(pause_opn_time))
+            if all(value != "" for value in (pause_time_threshold_value,offset)):
+                print("\n The threshold value for time taken to pause operation: {} ms".format(pause_time_threshold_value))
+                if 0 < int(pause_opn_time) < (int(pause_time_threshold_value) + int(offset)):
+                    pause_status = True
+                    print("\n Time taken for pause operation is within the expected limit \n")
+                else:
+                    pause_status = False
+                    print("\n Time taken for pause operation is not within the expected limit \n")
+            else:
+                pause_status = False
+                print("\n Failed to get the threshold value for pause operation time from config file \n")
+            playing_time = getTimeFromMsg(expected_play_evt)
+            print("\n Play initiated at {} (UTC)".format(playing_time))
+            playing_time_millisec = getTimeInMilliSeconds(playing_time)
+            played_time = getTimeFromMsg(observed_play_evt)
+            print("\n Play happend at {} (UTC)".format(played_time))
+            played_time_millisec = getTimeInMilliSeconds(played_time)
+            play_opn_time = played_time_millisec - playing_time_millisec
+            print("\n Time taken for play operation: {} milliseconds \n".format(play_opn_time))
+            result, play_time_threshold_value = getDeviceConfigKeyValue(conf_file,"PLAY_TIME_THRESHOLD_VALUE")
+            Summ_list.append('PLAY_TIME_THRESHOLD_VALUE :{}ms'.format(play_time_threshold_value))
+            Summ_list.append('Play initiated at :{}'.format(playing_time))
+            Summ_list.append('Play happend at :{}'.format(played_time))
+            Summ_list.append('Time taken for play operation :{}ms'.format(play_opn_time))
+            if play_time_threshold_value != "":
+                print("\n The threshold value for time taken to play operation: {} ms".format(play_time_threshold_value))
+                if 0 < int(play_opn_time) < (int(play_time_threshold_value) + int(offset)):
+                    play_status = True
+                    print("\n Time taken for play operation is within the expected limit \n")
+                else:
+                    play_status = False
+                    print("\n Time taken for play operation is not within the expected limit \n")
+            else:
+                play_status = False
+                print("Failed to get the threshold value for play operation time from config file")
+            #Set the result status based on time taken for both pause and play operations.
+            if all(status for status in (pause_status,play_status)):
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
         else:
+            obj.setLoadModuleStatus("FAILURE")
+            print("\n Error occured during video playback")
+        print("\n Terminating the app")
+        tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+        tdkTestObj.addParameter("app_id",app_name)
+        tdkTestObj.executeTestCase(expectedResult)
+        result = tdkTestObj.getResult()
+        if result == "SUCCESS":
+            tdkTestObj.setResultStatus("SUCCESS")
+        else:
+            tdkTestObj.setResultStatus("FAILURE")
+            print("Unable to terminate the app")
             tdkTestObj.setResultStatus("FAILURE")
             print("Unable to terminate the app")
     else:

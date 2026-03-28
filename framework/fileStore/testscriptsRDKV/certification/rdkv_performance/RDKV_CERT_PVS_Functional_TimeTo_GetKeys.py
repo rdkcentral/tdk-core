@@ -90,6 +90,7 @@ from StabilityTestUtility import *
 from web_socket_util import *
 from rdkv_performancelib import *
 import ast
+import ast
 import PerformanceTestVariables
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);
@@ -115,6 +116,7 @@ if expectedResult in result.upper():
     tdkTestObj.executeTestCase(expectedResult)
     result = tdkTestObj.getResult()
     ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+    if expectedResult in result and ssh_param_dict != {}:
     if expectedResult in result and ssh_param_dict != {}:
         print("\nPre conditions for the test are set successfully")
         app_bundle_name=PerformanceTestVariables.keytest_bundle
@@ -163,7 +165,7 @@ if expectedResult in result.upper():
                         output = tdkTestObj.getResultDetails()
                         output = output[output.find('\n'):]
                         if "KeyCode" in output:
-                            print("\n Keycode logs are present in wpelogs")
+                            print("\n Keycode logs are present in logs")
                             log_line = output.split('\n')[1]
                             end_get_key_time = getTimeStampFromString(log_line)
                             if result in expectedResult and end_get_key_time != {}:
@@ -180,7 +182,7 @@ if expectedResult in result.upper():
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                         else:
-                            print("\n Keycode logs are not present in wpelogs")
+                            print("\n Keycode logs are not present in logs")
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
@@ -221,6 +223,7 @@ if expectedResult in result.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
+                print("Unable to terminate the app")
                 print("Unable to terminate the app")
     else:
         print("Pre conditions are not met")

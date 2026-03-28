@@ -72,11 +72,11 @@
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import rdkv_performancelib
-from rdkv_performancelib import *
 from datetime import datetime
 from StabilityTestUtility import *
 from web_socket_util import *
 import PerformanceTestVariables
+from rdkv_performancelib import *
 import json
 
 #Test component to be tested

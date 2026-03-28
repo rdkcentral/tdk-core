@@ -109,6 +109,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_ChannelChange');
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 #webkit_console_socket = None
+#webkit_console_socket = None
 channel_change_count = 1
 max_channel_change_count = 5
 #Execution summary variable
@@ -164,10 +165,10 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResult()
             output = tdkTestObj.getResultDetails()
             output = output[output.find('\n'):]
-            print("Tuning to channel logs from wpelogs:")
+            print("Tuning to channel logs from logs:")
             print(output)
             if "Tuning to channel" in output and expectedResult in result:
-                print("Tuning logs are present in wpelogs")
+                print("Tuning logs are present in logs")
                 print("checking for playing log")
                 command = 'cat /opt/logs/dacapp.log | grep -nr Playing | head -n1'
                 print("COMMAND : %s" %(command))
@@ -182,10 +183,10 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 output = tdkTestObj.getResultDetails()
                 output = output[output.find('\n'):]
-                print("Playing logs from wpelogs:")
+                print("Playing logs from logs:")
                 print(output)
                 if "Playing" in output and expectedResult in result:
-                    print("Playing logs are present in wpelogs")
+                    print("Playing logs are present in logs")
                     print("\nchecking time taken for channel change")
                     #checking for time taken print
                     command = 'cat /opt/logs/dacapp.log | grep -nr "channel change:"'
@@ -208,13 +209,13 @@ if expectedResult in result.upper():
                             total_time += time_taken
                             result = "SUCCESS"
                     else:
-                        print("Channel change logs are not present in wpelogs")
+                        print("Channel change logs are not present in logs")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print("\n Playing logs not present in wpelogs")
+                    print("\n Playing logs not present in logs")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print("Tuning logs are not present in wpelogs")
+                print("Tuning logs are not present in logs")
                 tdkTestObj.setResultStatus("FAILURE")
                 result = "FAILURE"
         if result == "SUCCESS":
@@ -250,6 +251,8 @@ if expectedResult in result.upper():
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
+            tdkTestObj.setResultStatus("FAILURE")
+            print("Unable to terminate the app")
             tdkTestObj.setResultStatus("FAILURE")
             print("Unable to terminate the app")
     getSummary(Summ_list,obj)

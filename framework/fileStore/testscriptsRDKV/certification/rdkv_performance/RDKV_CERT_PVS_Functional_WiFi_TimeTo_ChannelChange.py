@@ -80,7 +80,7 @@ webinspect port : string
 b) Connect to SSID
 c) Launch Lightning app for detecting IP change in WebKitBrowser
 d) Set WIFI as default interface
-3. validate channel change time using logs from wpelogs.
+3. validate channel change time using logs from logs.
 4. Check logs for playing
 5. Find the channel change time for 5  channel changes and find the average time
 6. Revert the values</automation_approch>
@@ -156,6 +156,9 @@ if expectedResult in result.upper():
         # channel_change_url = PerformanceTestVariables.channel_change_url
         # tm_url = obj.url.split("/")[2]
         # channel_change_url=channel_change_url.replace("TM-IP",tm_url)
+        # channel_change_url = PerformanceTestVariables.channel_change_url
+        # tm_url = obj.url.split("/")[2]
+        # channel_change_url=channel_change_url.replace("TM-IP",tm_url)
         #Write the TestManager IP and stream path to the channels.js file
         #where the user can configure their own channels for the test.
         filename = obj.realpath+"fileStore/lightning-apps/channels.js"
@@ -193,10 +196,10 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         output = tdkTestObj.getResultDetails()
         output = output[output.find('\n'):]
-        print("Tuning to channel logs from wpelogs:")
+        print("Tuning to channel logs from logs:")
         print(output)
         if "Tuning to channel" in output and expectedResult in result:
-            print("Tuning logs are present in wpelogs")
+            print("Tuning logs are present in logs")
             print("checking for playing log")
             command = 'cat /opt/logs/dacapp.log | grep -nr Playing | head -n1'
             print("COMMAND : %s" %(command))
@@ -211,10 +214,10 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResult()
             output = tdkTestObj.getResultDetails()
             output = output[output.find('\n'):]
-            print("Playing logs from wpelogs:")
+            print("Playing logs from logs:")
             print(output)
             if "Playing" in output and expectedResult in result:
-                print("Playing logs are present in wpelogs")
+                print("Playing logs are present in logs")
                 print("\nchecking time taken for channel change")
                 #checking for time taken print
                 command = 'cat /opt/logs/dacapp.log | grep -nr "channel change:"'
@@ -237,13 +240,13 @@ if expectedResult in result.upper():
                         total_time += time_taken
                         result = "SUCCESS"
                 else:
-                    print("Channel chnage logs are not present in wpelogs")
+                    print("Channel chnage logs are not present in logs")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print("\n Playing logs not present in wpelogs")
+                print("\n Playing logs not present in logs")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print("Tuning logs are not present in wpelogs")
+            print("Tuning logs are not present in logs")
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
         if result == "SUCCESS":
@@ -280,6 +283,8 @@ if expectedResult in result.upper():
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
+            tdkTestObj.setResultStatus("FAILURE")
+            print("Unable to terminate the app")
             tdkTestObj.setResultStatus("FAILURE")
             print("Unable to terminate the app")
     else:

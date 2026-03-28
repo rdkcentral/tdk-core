@@ -44,6 +44,7 @@ import urllib.request, urllib.parse, urllib.error
 from SecurityTokenUtility import *
 import web_socket_util
 import StabilityTestUtility
+import StabilityTestUtility
 
 deviceIP=""
 devicePort=""
@@ -1851,7 +1852,7 @@ def rdkservice_install_app(fileLocator, app_id):
 #LAUNCH INSTALLED APP
 #---------------------------------------------------------------
 def rdkservice_launch_app(app_name):
-    params='{"appId": "' + app_name +'", "intent": "", "launchArgs": ""}}'
+    params='{"appId": "' + app_name +'", "intent": "", "launchArgs": ""}'
     result = rdkservice_setValue("org.rdk.AppManager.launchApp", params)
     return result
 
@@ -1876,34 +1877,12 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
     if status == "SUCCESS" and app_name in details:
         tdkTestObj.setResultStatus("SUCCESS")
         print("\nApp is already installed. Skipping the installation")
-        #Skip launching the app if the launch argument is set to false
-        if launch:
-            print(f"\nLaunching {app_name}")
-            tdkTestObj = obj.createTestStep('rdkservice_launch_app')
-            tdkTestObj.addParameter("app_name", app_name)
-
-            tdkTestObj.executeTestCase(expectedResult)
-            status = tdkTestObj.getResult()
-            details = tdkTestObj.getResultDetails()
-
-            if status == "SUCCESS":
-                tdkTestObj.setResultStatus("SUCCESS")
-                print(f"\nCheck if {app_name} is launched")
-                app_ids = rdkservice_get_loaded_apps()
-                if app_name in app_ids:
-                    print(f"\nSuccessfully launched {app_name}")
-                    tdkTestObj.setResultStatus("SUCCESS")
-                else:
-                    tdkTestObj.setResultStatus("FAILURE")
-                    print(f"{app_name} is not listed as loadedapps")
-            else:
-                tdkTestObj.setResultStatus("FAILURE")
-                print(f"\nFailed to launch {app_name}")
-            return status
+        Isinstalled = True
     elif status == "FAILURE":
         tdkTestObj.setResultStatus("FAILURE")
         return status
     else:
+        Isinstalled = False
         tdkTestObj.setResultStatus("SUCCESS")
         print("\nApp is not installed in the device")
         status = "SUCCESS"
@@ -1930,50 +1909,39 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
                 print(f"Successfully downloaded {app_bundle_name}")
                 print(f"Installing {app_bundle_name}")
                 conf_file,result = getConfigFileName(libObj.realpath)
-                fileLocator ="/opt/CDL/package"
+                fileLocator = ""
                 if result == "SUCCESS":
                     status,fileLocator = getDeviceConfigKeyValue(conf_file,"PACKAGEMANAGER_FILE_LOCATOR")
-                fileLocator = fileLocator + str(details)
-                print (fileLocator)
-                tdkTestObj = obj.createTestStep('rdkservice_install_app')
-                tdkTestObj.addParameter("fileLocator", fileLocator)
-                tdkTestObj.addParameter("app_id", app_name)
+                if fileLocator != "":
+                    fileLocator = fileLocator + str(details)
+                    print (fileLocator)
+                    tdkTestObj = obj.createTestStep('rdkservice_install_app')
+                    tdkTestObj.addParameter("fileLocator", fileLocator)
+                    tdkTestObj.addParameter("app_id", app_name)
 
-                tdkTestObj.executeTestCase(expectedResult)
-                status = tdkTestObj.getResult()
-                details = tdkTestObj.getResultDetails()
-                if status == "SUCCESS":
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"Check if the app is installed successfully")
-                    tdkTestObj = obj.createTestStep('rdkv_getInstalledPackages')
                     tdkTestObj.executeTestCase(expectedResult)
                     status = tdkTestObj.getResult()
                     details = tdkTestObj.getResultDetails()
-                    if status == "SUCCESS" and app_name in details:
+                    if status == "SUCCESS":
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print(f"Successfully installed {app_bundle_name} as {app_name}")
-
-                        #Skip launching the app if the launch argument is set to false
-                        if launch:
-                            tdkTestObj = obj.createTestStep('rdkservice_launch_app')
-                            tdkTestObj.addParameter("app_name", app_name)
-
-                            tdkTestObj.executeTestCase(expectedResult)
-                            status = tdkTestObj.getResult()
-                            details = tdkTestObj.getResultDetails()
-
-                            if status == "SUCCESS":
-                                tdkTestObj.setResultStatus("SUCCESS")
-                                print(f"Successfully launched {app_name}")
-                            else:
-                                tdkTestObj.setResultStatus("FAILURE")
-                                print(f"Failed to launch {app_name}")
+                        print(f"Check if the app is installed successfully")
+                        tdkTestObj = obj.createTestStep('rdkv_getInstalledPackages')
+                        tdkTestObj.executeTestCase(expectedResult)
+                        status = tdkTestObj.getResult()
+                        details = tdkTestObj.getResultDetails()
+                        if status == "SUCCESS" and app_name in details:
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            print(f"Successfully installed {app_bundle_name} as {app_name}")
+                            Isinstalled=True
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE")
+                            print(f"{app_bundle_name} is not listed in the packages even after installing")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print(f"{app_bundle_name} is not listed in the packages even after installing")
+                        print(f"Failed to install {app_bundle_name}")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print(f"Failed to install {app_bundle_name}")
+                    print(f"Failed to get file locator for {app_bundle_name}")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print(f"Failed to download {app_bundle_name}")
@@ -1981,7 +1949,30 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
             tdkTestObj.setResultStatus("FAILURE")
             print("Unable to activate the AppManagers")
             status ="FAILURE"
-        return status
+    if Isinstalled and launch:
+        print(f"\nLaunching {app_name}")
+        tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+        tdkTestObj.addParameter("app_name", app_name)
+
+        tdkTestObj.executeTestCase(expectedResult)
+        status = tdkTestObj.getResult()
+        details = tdkTestObj.getResultDetails()
+
+        if status == "SUCCESS":
+            tdkTestObj.setResultStatus("SUCCESS")
+            print(f"\nCheck if {app_name} is launched")
+            app_ids = rdkservice_get_loaded_apps()
+            if app_name in app_ids:
+                print(f"\nSuccessfully launched {app_name}")
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                status = "FAILURE"
+                tdkTestObj.setResultStatus("FAILURE")
+                print(f"{app_name} is not listed as loadedapps")
+        else:
+            tdkTestObj.setResultStatus("FAILURE")
+            print(f"\nFailed to launch {app_name}")
+    return status
 #---------------------------------------------------------------------------------------------
 # Function to set the PersistentStore value 'MVS:lightningURL' via JSON-RPC using curl command
 #---------------------------------------------------------------------------------------------
