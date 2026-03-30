@@ -19,6 +19,43 @@
 from tdkutility import *
 from tdkbRRDVariables import *
 
+# clearLogsAndDebugReports
+# Syntax: clearLogsAndDebugReports(obj)
+# Description: Function to clear the RRD log file and delete the existing debug reports before starting the test execution
+# Parameters: obj - The TDK scripting library object for sysutil component
+# Return Value: prereq_flag - Flag indicating whether the prerequisite steps are successful or not (1 for success, 0 for failure)
+def clearLogsAndDebugReports(obj):
+    #Remove the existing debug reports in the report generation location before starting the test execution
+    expectedresult = "SUCCESS"
+    prereq_flag = False
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    print(f"\nPREREQUISITE : Remove the existing debug reports in the report generation location {report_generation_location} before starting the test execution")
+    command = f"rm -rf {report_generation_location}/*"
+    print(f"Command : {command}")
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    if actualresult in expectedresult:
+        print(f"PREREQUISITE SUCCESS : Successfully removed the existing debug reports in the report generation location {report_generation_location}")
+        tdkTestObj.setResultStatus("SUCCESS")
+
+        # Clear the RRD log file to ensure that the logs captured during the test execution are only related to the current test execution
+        tdkTestObj = obj.createTestStep('ExecuteCmd')
+        print(f"\nPREREQUISITE : Clear the RRD log file {rrd_log_file} before starting the test execution")
+        command = f"cat /dev/null > {rrd_log_file}"
+        print(f"Command : {command}")
+        actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+        if actualresult in expectedresult:
+            print(f"PREREQUISITE SUCCESS : Successfully cleared the RRD log file {rrd_log_file}")
+            tdkTestObj.setResultStatus("SUCCESS")
+            prereq_flag = True
+        else:
+            print(f"PREREQUISITE FAILURE : Failed to clear the RRD log file {rrd_log_file}")
+            tdkTestObj.setResultStatus("FAILURE")
+    else:
+        print(f"PREREQUISITE FAILURE : Failed to remove the existing debug reports in the report generation location {report_generation_location}")
+        tdkTestObj.setResultStatus("FAILURE")
+    return prereq_flag
+########## End of function ##########
+
 # getRDKRemoteDebuggerIssueType
 # Syntax: getRDKRemoteDebuggerIssueType(obj, step)
 # Description: Function to get the value of RDKRemoteDebugger IssueType parameter using TR181 Get operation.
@@ -85,25 +122,56 @@ def setRDKRemoteDebuggerIssueType(obj, step, value):
 def checkDebugReportGenerated(obj, profile_type, step):
     expectedresult="SUCCESS"
     flag = False
-    file_path = ""
-    if profile_type == "static":
-        file_path = static_json_file
-    elif profile_type == "dynamic":
-        file_path = dynamic_json_file
-
+    file_path = report_generation_location
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     print(f"\nTEST STEP {step} : Check if the {profile_type} debug report is generated at {file_path}")
     print(f"EXPECTED RESULT {step} : The {profile_type} debug report should be present at {file_path}")
-    command = f"find {file_path} -type f"
+    command = f"find {file_path}/Device-DebugReport*"
     print(f"Command : {command}")
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print(f"Command Output : {details}")
-    if expectedresult in actualresult and details.strip() == file_path:
+    if expectedresult in actualresult and 'No such file or directory' not in details:
         print(f"ACTUAL RESULT {step} : The {profile_type} debug report is present at {file_path}")
         flag = True
     else:
         print(f"ACTUAL RESULT {step} : The {profile_type} debug report is not present at {file_path}")
     return tdkTestObj, flag
+########## End of function ##########
+
+# checkJsonProfileAvailable
+# Syntax: checkJsonProfileAvailable(obj, profile_type, step)
+# Description: Function to check whether the profile debug report is fetched and present at the designated location
+# Parameters: obj - The TDK scripting library object for TR181 component
+#             profile_type - The type of debug report (static or dynamic)
+#             issue_type - The issue type for which the debug report is generated
+#             step - The test step number
+# Return Value: tdkTestObj - The TDK test object created for the command execution
+#               flag - Flag indicating whether the profile debug report is fetched and present or not (1 for success, 0 for failure)
+
+def checkJsonProfileAvailable(obj, profile_type, issue_type, step):
+    expectedresult="SUCCESS"
+    flag = False
+    profile_path = ""
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    if profile_type == "static":
+        profile_path = static_json_file
+        print(f"\nTEST STEP {step} : Check if the {profile_type} debug report is present at {profile_path}")
+    elif profile_type == "dynamic":
+        profile_path = dynamic_json_file
+        print(f"\nTEST STEP {step} : Check if the {profile_type} debug report is fetched from the server and present at {profile_path}")
+    print(f"EXPECTED RESULT {step} : The {profile_type} debug report should be present at {profile_path}")
+    command = f"cat {profile_path} | grep -i {issue_type.split('.')[1]}"
+    print(f"Command : {command}")
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    print(f"Command Output : {details}")
+    if expectedresult in actualresult and details.strip() != "":
+        print(f"ACTUAL RESULT {step} : The {profile_type} debug report is present at {profile_path}")
+        flag = True
+    else:
+        print(f"ACTUAL RESULT {step} : The {profile_type} debug report is not present at {profile_path}")
+    return tdkTestObj, flag
+
+
 ########## End of function ##########
 
 #getRDKRemoteDebuggerEnable
