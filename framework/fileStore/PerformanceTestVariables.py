@@ -81,3 +81,50 @@ SDRvideo_test_url = ""
 
 #URL used for Vimeo app
 vimeo_test_url="https://widgets.metrological.com/lightning/rdk/d431ce8577be56e82630650bf701c57d#app:com.metrological.app.VimeoRelease"
+
+# ============================================================
+# APP MANAGER - PERFORMANCE VARIABLES (NEW)
+# ============================================================
+
+# ------------------------------------------------------------
+# Primary App (used in most scripts)
+# ------------------------------------------------------------
+primary_app_name = ""
+primary_app_url  = ""
+
+# ------------------------------------------------------------
+# Secondary App (used for switch scenarios)
+# ------------------------------------------------------------
+secondary_app_name = ""
+secondary_app_url  = ""
+
+# ------------------------------------------------------------
+# Source / Target naming (recommended usage in scripts)
+# ------------------------------------------------------------
+source_app_name = primary_app_name
+source_app_url  = primary_app_url
+
+target_app_name = secondary_app_name
+target_app_url  = secondary_app_url
+
+# ------------------------------------------------------------
+# Multiple Apps (used in TimeToLaunchMultipleApps)
+# ------------------------------------------------------------
+multiple_application_names = []
+
+multiple_application_urls =[]
+
+# ------------------------------------------------------------
+# Optional: Download specific app (if different from primary)
+# ------------------------------------------------------------
+download_app_name = primary_app_name
+download_app_url  = primary_app_url
+
+# ------------------------------------------------------------
+# Threshold Variables (Optional – if not using device config)
+# ------------------------------------------------------------
+app_launch_threshold = 5000        # ms
+app_switch_threshold = 7000        # ms
+app_download_threshold = 15000     # ms
+app_run_threshold = 6000           # ms
+app_stop_threshold = 4000          # ms
