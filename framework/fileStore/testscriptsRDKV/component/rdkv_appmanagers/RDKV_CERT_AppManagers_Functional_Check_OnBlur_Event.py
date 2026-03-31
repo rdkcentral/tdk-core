@@ -49,7 +49,7 @@ installation_status_dict = {}
 download_status_dict = {}
 launch_status_dict = {}
 event_listener = None
-application_name_list = []
+applications = []
 app_presence_status_dict = {}
 filelocator_url_dict = {}
 blur_status = "FALSE"
@@ -219,7 +219,7 @@ if "SUCCESS" in result.upper():
                         break
             
             if (app_presence_status_dict and "FALSE" not in app_presence_status_dict.values()) or (installation_status_dict and "FALSE" not in installation_status_dict.values()):
-                print("\nINFO : %s are present, proceeding with launch steps" % application_name_list)
+                print("\nINFO : %s are present, proceeding with launch steps" % applications)
 
                 # Clear the event buffer before waiting for events to avoid processing old events
                 event_listener.clearEventsBuffer()
