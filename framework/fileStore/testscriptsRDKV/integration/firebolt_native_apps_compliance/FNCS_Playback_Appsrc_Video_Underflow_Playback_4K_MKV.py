@@ -116,7 +116,9 @@ checkAVStatus = "no"
 timeoutInSeconds = "10"
 
 #Threshold value for appsrc
-threshold = "5511672"
+#Update threshold as per ffmpeg for VBR stream
+#Trim the video to 30secs to obtain the exact bytes
+threshold = "3218827"
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);

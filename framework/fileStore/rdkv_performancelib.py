@@ -1464,3 +1464,362 @@ def testusingWebInspect(obj,webkit_console_socket):
     webkit_console_socket.disconnect()
     time.sleep(5)
     return expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result
+
+#---------------------------------------------------------------
+#COMMON PERFORMANCE TEST UTILITY FUNCTIONS
+#---------------------------------------------------------------
+
+#---------------------------------------------------------------
+#VALIDATE TIME AGAINST THRESHOLD WITH OFFSET
+#---------------------------------------------------------------
+def validate_time_with_threshold(time_taken, conf_file, threshold_key, offset_key="THRESHOLD_OFFSET"):
+    """
+    Common function to validate time taken against threshold + offset
+    Returns: (is_valid, threshold_value, offset_value)
+    """
+    config_status, threshold_value = getDeviceConfigKeyValue(conf_file, threshold_key)
+    offset_status, offset_value = getDeviceConfigKeyValue(conf_file, offset_key)
+    
+    if all(value != "" for value in (threshold_value, offset_value)):
+        max_allowed_time = int(threshold_value) + int(offset_value)
+        is_valid = 0 < time_taken < max_allowed_time
+        return is_valid, threshold_value, offset_value
+    else:
+        print(f"\n Please configure {threshold_key} and {offset_key} in device configuration file \n")
+        return False, "", ""
+
+#---------------------------------------------------------------
+#MEASURE APP LAUNCH TIME USING LIFECYCLE EVENTS
+#---------------------------------------------------------------
+def measure_app_launch_time(app_id, launch_start_time, event_listener, timeout=120):
+    """
+    Common function to measure app launch time using lifecycle events
+    Returns: (success, launched_time, launch_time_ms)
+    """
+    continue_count = 0
+    launched_time = ""
+    app_active = False
+    
+    while continue_count < timeout:
+        if len(event_listener.getEventsBuffer()) == 0:
+            continue_count += 1
+            time.sleep(1)
+            continue
+            
+        event_log = event_listener.getEventsBuffer().pop(0)
+        print("\n Lifecycle Event Received: ", event_log, "\n")
+        
+        if app_id in str(event_log) and "onAppLifecycleStateChanged" in str(event_log):
+            try:
+                event_parts = str(event_log).split('$$$')
+                if len(event_parts) > 1:
+                    event_timestamp = event_parts[0]
+                    event_data_str = event_parts[1]
+                    event_data = json.loads(event_data_str)
+                    
+                    if "params" in event_data:
+                        params = event_data["params"]
+                        app_id_from_event = params.get("appId", "")
+                        new_state = params.get("newLifecycleState", "")
+                        
+                        if app_id_from_event == app_id and new_state == "ACTIVE":
+                            launched_time = event_timestamp
+                            app_active = True
+                            break
+            except Exception as e:
+                print(f"Error parsing event: {e}")
+                continue
+        continue_count += 1
+    
+    if app_active and launched_time:
+        launch_start_time_ms = getTimeInMilliSec(launch_start_time)
+        launched_time_ms = getTimeInMilliSec(launched_time)
+        time_taken = launched_time_ms - launch_start_time_ms
+        return True, launched_time, time_taken
+    else:
+        return False, "", 0
+
+#---------------------------------------------------------------
+#GET THRESHOLD AND OFFSET VALUES FROM CONFIG
+#---------------------------------------------------------------
+def get_threshold_values(conf_file, threshold_key, offset_key="THRESHOLD_OFFSET"):
+    """
+    Common function to get threshold and offset values from config
+    Returns: (status, threshold_value, offset_value)
+    """
+    config_status, threshold_value = getDeviceConfigKeyValue(conf_file, threshold_key)
+    offset_status, offset_value = getDeviceConfigKeyValue(conf_file, offset_key) 
+    
+    if all(value != "" for value in (threshold_value, offset_value)):
+        return "SUCCESS", threshold_value, offset_value
+    else:
+        return "FAILURE", "", ""
+
+#---------------------------------------------------------------
+#DOWNLOAD, INSTALL AND LAUNCH APP WITH PERFORMANCE MEASUREMENT
+#---------------------------------------------------------------
+#DOWNLOAD APP USING DOWNLOAD MANAGER
+#---------------------------------------------------------------
+def rdkv_download_app(event_listener, app_download_url, app_id, download_timeout=120):
+    """
+    Download an app using Download Manager
+    Returns: (status, download_time_ms)
+    """
+    try:
+        print(f"\n Starting app download for {app_id}... \n")
+        download_start_time = str(datetime.utcnow()).split()[1]
+
+        download_params = '{"url":"' + app_download_url + '", "appId":"' + app_id + '"}'
+        result = rdkservice_setValue("org.rdk.DownloadManager.1.download", download_params)
+        
+        if result == "EXCEPTION OCCURRED":
+            print(f"\n Error while initiating app download for {app_id} \n")
+            return "FAILURE", 0
+
+        print(f"\n App download initiated successfully for {app_id} \n")
+
+        # Wait for download completion using events
+        download_success = False
+        download_count = 0
+        download_time_ms = 0
+
+        while download_count < download_timeout:
+            if len(event_listener.getEventsBuffer()) == 0:
+                download_count += 1
+                time.sleep(1)
+                continue
+
+            event_log = event_listener.getEventsBuffer().pop(0)
+            
+            if app_id in str(event_log) and "onAppDownloadStatus" in str(event_log):
+                try:
+                    event_parts = str(event_log).split('$$$')
+                    if len(event_parts) > 1:
+                        event_data_str = event_parts[1]
+                        event_data = json.loads(event_data_str)
+
+                        if "params" in event_data:
+                            params = event_data["params"]
+                            download_id = params.get("downloadId", "")
+                            file_locator = params.get("fileLocator", "")
+                            fail_reason = params.get("failReason", "")
+
+                            if app_id in str(download_id) or app_id in str(file_locator):
+                                if fail_reason == "" or fail_reason is None:
+                                    download_success = True
+                                    download_end_time = str(datetime.utcnow()).split()[1]
+                                    download_time_ms = getTimeInMilliSec(download_end_time) - getTimeInMilliSec(download_start_time)
+                                    print(f"\n App download completed successfully in {download_time_ms}ms \n")
+                                else:
+                                    print(f"\n App download failed with reason: {fail_reason} \n")
+                                break
+                except Exception as e:
+                    print(f"Error parsing download event: {e}")
+                    continue
+            download_count += 1
+
+        if download_success:
+            return "SUCCESS", download_time_ms
+        else:
+            print(f"\n Download did not complete within timeout period ({download_timeout} seconds) \n")
+            return "FAILURE", 0
+
+    except Exception as e:
+        print(f"\n Exception occurred during app download: {e} \n")
+        return "FAILURE", 0
+
+#---------------------------------------------------------------
+#INSTALL APP USING PACKAGE MANAGER
+#---------------------------------------------------------------
+def rdkv_install_app(event_listener, app_id, install_timeout=120):
+    """
+    Install an app using Package Manager
+    Returns: (status, install_time_ms, app_instance_id)
+    """
+    try:
+        print(f"\n Starting app installation for {app_id}... \n")
+        install_start_time = str(datetime.utcnow()).split()[1]
+
+        install_params = '{"appId":"' + app_id + '"}'
+        result = rdkservice_setValue("org.rdk.PackageManagerRDKEMS.1.install", install_params)
+
+        if result == "EXCEPTION OCCURRED":
+            print(f"\n Error while initiating app installation for {app_id} \n")
+            return "FAILURE", 0, ""
+
+        print(f"\n App installation initiated successfully for {app_id} \n")
+
+        # Wait for installation completion using onAppInstalled event
+        install_success = False
+        install_count = 0
+        app_instance_id = ""
+        install_time_ms = 0
+
+        while install_count < install_timeout:
+            if len(event_listener.getEventsBuffer()) == 0:
+                install_count += 1
+                time.sleep(1)
+                continue
+
+            event_log = event_listener.getEventsBuffer().pop(0)
+
+            if app_id in str(event_log) and "onAppInstalled" in str(event_log):
+                try:
+                    event_parts = str(event_log).split('$$$')
+                    if len(event_parts) > 1:
+                        event_data_str = event_parts[1]
+                        event_data = json.loads(event_data_str)
+
+                        if "params" in event_data:
+                            params = event_data["params"]
+                            installed_app_id = params.get("appId", "")
+                            app_instance_id = params.get("appInstanceId", "")
+
+                            if installed_app_id == app_id:
+                                install_success = True
+                                install_end_time = str(datetime.utcnow()).split()[1]
+                                install_time_ms = getTimeInMilliSec(install_end_time) - getTimeInMilliSec(install_start_time)
+                                print(f"\n App {app_id} installed successfully in {install_time_ms}ms \n")
+                                print(f"\n App Instance ID: {app_instance_id} \n")
+                                break
+                except Exception as e:
+                    print(f"Error parsing installation event: {e}")
+                    continue
+            install_count += 1
+
+        if install_success:
+            return "SUCCESS", install_time_ms, app_instance_id
+        else:
+            print(f"\n Installation did not complete within timeout period ({install_timeout} seconds) \n")
+            return "FAILURE", 0, ""
+
+    except Exception as e:
+        print(f"\n Exception occurred during app installation: {e} \n")
+        return "FAILURE", 0, ""
+
+#---------------------------------------------------------------
+#LAUNCH APP USING APP MANAGER
+#---------------------------------------------------------------
+def rdkv_launch_app_with_timing(event_listener, app_id, launch_timeout=120):
+    """
+    Launch an app using App Manager and measure launch time
+    Returns: (status, launch_time_ms, launched_time)
+    """
+    try:
+        launch_start_time = str(datetime.utcnow()).split()[1]
+        print(f"\n Launching app {app_id} at: {launch_start_time} \n")
+
+        launch_params = '{"appId":"' + app_id + '"}'
+        result = rdkservice_setValue("org.rdk.AppManager.1.launchApp", launch_params)
+
+        if result == "EXCEPTION OCCURRED":
+            print(f"\n Error while launching app {app_id} \n")
+            return "FAILURE", 0, ""
+
+        print(f"\n App launch request submitted successfully for {app_id} \n")
+
+        # Measure app launch time using existing library function
+        success, launched_time, time_taken_for_launch = measure_app_launch_time(app_id, launch_start_time, event_listener, launch_timeout)
+
+        if success and launched_time:
+            print(f"\n App {app_id} launched successfully in {time_taken_for_launch}ms \n")
+            return "SUCCESS", time_taken_for_launch, launched_time
+        else:
+            print(f"\n App {app_id} did not become ACTIVE within timeout period \n")
+            return "FAILURE", 0, ""
+
+    except Exception as e:
+        print(f"\n Exception occurred during app launch: {e} \n")
+        return "FAILURE", 0, ""
+
+#---------------------------------------------------------------
+#TERMINATE APP USING APP MANAGER
+#---------------------------------------------------------------
+def rdkv_terminate_app(app_id):
+    """
+    Common function to terminate an app using App Manager
+    Returns: status (SUCCESS/FAILURE)
+    """
+    try:
+        print(f"\n Terminating app {app_id} \n")
+        
+        terminate_params = '{"appId":"' + app_id + '"}'
+        result = rdkservice_setValue("org.rdk.AppManager.1.terminateApp", terminate_params)
+        
+        if result != "EXCEPTION OCCURRED":
+            print(f"\n App {app_id} terminated successfully \n")
+            return "SUCCESS"
+        else:
+            print(f"\n Unable to terminate app {app_id} \n")
+            return "FAILURE"
+            
+    except Exception as e:
+        print(f"\n Exception occurred while terminating app {app_id}: {e} \n")
+        return "FAILURE"
+
+#---------------------------------------------------------------
+#VALIDATE APP PERFORMANCE AGAINST THRESHOLDS
+#---------------------------------------------------------------
+def validate_app_performance_thresholds(conf_file, results_dict, threshold_keys):
+    """
+    Common function to validate app performance metrics against thresholds
+    threshold_keys: dict with keys like {"launch": "APP_LAUNCH_THRESHOLD_VALUE", "download": "APP_DOWNLOAD_THRESHOLD_VALUE"}
+    Returns: (overall_status, validation_results)
+    """
+    validation_results = {}
+    overall_status = "SUCCESS"
+    
+    try:
+        for metric, threshold_key in threshold_keys.items():
+            if metric + "_time" in results_dict and results_dict[metric + "_success"]:
+                time_taken = results_dict[metric + "_time"]
+                is_valid, threshold_value, offset = validate_time_with_threshold(time_taken, conf_file, threshold_key)
+                
+                validation_results[metric] = {
+                    "time_taken": time_taken,
+                    "threshold": threshold_value,
+                    "offset": offset,
+                    "is_valid": is_valid,
+                    "status": "SUCCESS" if is_valid else "FAILURE"
+                }
+                
+                print(f"\n {metric.capitalize()} Time: {time_taken}ms, Threshold: {threshold_value}ms, Valid: {is_valid} \n")
+                
+                if not is_valid:
+                    overall_status = "FAILURE"
+            else:
+                validation_results[metric] = {
+                    "status": "FAILURE",
+                    "error": f"{metric} operation failed"
+                }
+                overall_status = "FAILURE"
+        
+        return overall_status, validation_results
+        
+    except Exception as e:
+        print(f"\n Exception occurred during threshold validation: {e} \n")
+        return "FAILURE", {}
+
+#---------------------------------------------------------------
+# GET THE LIST OF INSTALLED PACKAGES USING PACKAGE MANAGER
+#---------------------------------------------------------------
+def rdkv_getInstalledPackages():
+    """
+    Function to get the list of installed packages in device using Package Manager
+    Returns: status (SUCCESS/FAILURE), package_ids (if SUCCESS, else empty list)
+    """
+    try:
+        print(f"\nGetting the list of installed packages")
+
+        result = rdkservice_getValue("org.rdk.PackageManagerRDKEMS.1.listPackages")
+        if result != "EXCEPTION OCCURRED":
+            package_ids = [item["packageId"] for item in result if item["state"] == "INSTALLED"]
+            print(f"\nList of packages installed in device: {package_ids}")
+            return "SUCCESS", package_ids
+        else:
+            print(f"\nFailed to get the list of installed packages")
+            return "FAILURE", []
+
+    except Exception as e:
+        print(f"\nException occurred while getting the list of installed packages: {e}")
+        return "FAILURE", []

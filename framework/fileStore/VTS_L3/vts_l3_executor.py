@@ -32,6 +32,7 @@ import yaml
 import importlib
 from collections import OrderedDict
 from typing import Optional, List, Iterable
+from datetime import datetime
 
 # ====================================
 # Dynamic target -> config module
@@ -65,7 +66,6 @@ def load_config_for_target(target: str):
 #============= CLONING THE REPO AND RAFT INSTALLATION ======================
 
 def setup_halif_test():
-   
     """
     Clone the test repo and installation of RAFT using values from vtsconfig_<target>.py
     """
@@ -73,7 +73,8 @@ def setup_halif_test():
     repo_dir = getattr(config, "REPO_DIR")
     checkout_ver = getattr(config, "CHECKOUT_VER")
     host_dir = os.path.join(repo_dir, "host")
-
+    print("REPO DIR " , repo_dir)
+    print("host_dir ", host_dir)
     try:
         # Step 1: Clone the repo
         if not os.path.exists(repo_dir):
@@ -89,32 +90,34 @@ def setup_halif_test():
         # Step 3: Run install.sh
         print("⚙️ Running initial install.sh...")
         try:
-            subprocess.run(["./install.sh"], cwd=host_dir, check=True)
+            subprocess.run(["bash", "-c", "pwd && ./install.sh"], cwd=host_dir, check=False)
         except subprocess.CalledProcessError:
             print("ℹ️ Initial install.sh exited with non-zero status (expected). Proceeding to activate venv...")
             
         # Step 4: Source activate_venv.sh and rerun install.sh
         print("🧪 Activating virtual environment and rerunning install.sh...")
-        subprocess.run(["bash", "-c", "source ./activate_venv.sh && ./install.sh"], cwd=host_dir, check=True)
+        subprocess.run(["bash", "-c", "source ./activate_venv.sh && ./install.sh"], cwd=host_dir, check=False)
 
         print("✅ RAFT setup completed successfully.")
-
     except subprocess.CalledProcessError as e:
         print(f"❌ Error during RAFT setup: {e}")
 
 # ============= SCP MODIFICATION FUNCTIONS =============
 
-def modify_scpCopy_to_skip(file_path):
+def modify_scpCopy_to_skip():
     """
     Modify the scpCopy function in the given file to return 'skipped' immediately.
-    
-    Args:
-        file_path (str): Path to the Python file containing scpCopy function
     
     Returns:
         bool: True if modification was successful, False otherwise
     """
     try:
+        file_path = config.UTBASEUTILS_PATH
+
+        if not os.path.exists(file_path):
+            print(f"Warning: utBaseUtils.py not found at {config.UTBASEUTILS_PATH}")
+            return
+
         # Read the file
         with open(file_path, 'r') as f:
             content = f.read()
@@ -155,13 +158,155 @@ def modify_scpCopy_to_skip(file_path):
         print(f"Error modifying {file_path}: {e}")
         return False
 
-def ensure_scp_skipped():
-    """Ensure scpCopy function is skipped by default"""
-    print("Checking and modifying SCP function...")
-    if os.path.exists(config.UTBASEUTILS_PATH):
-        modify_scpCopy_to_skip(config.UTBASEUTILS_PATH)
-    else:
-        print(f"Warning: utBaseUtils.py not found at {config.UTBASEUTILS_PATH}")
+def modify_waitForBoot_to_return_true_if_needed():
+    """
+    Modify waitForBoot(self) to immediately return True,
+    ONLY if the first executable statement is not already 'return True'.
+
+    Returns:
+        bool: True if already patched OR successfully patched, False otherwise
+    """
+    try:
+        utBasePath = os.path.dirname(config.UTBASEUTILS_PATH)
+        file_path = utBasePath + "/utHelper.py"
+        print(file_path)
+
+        if not os.path.exists(file_path):
+            print(f"Warning: utHelper.py not found at {config.UTBASEUTILS_PATH}")
+            return
+        
+        with open(file_path, "r") as f:
+            content = f.read()
+
+        # Find function definition
+        func_def_pattern = r'(^[ \t]*def[ \t]+waitForBoot[ \t]*\([ \t]*self[ \t]*\)[ \t]*:[ \t]*\n)'
+        m = re.search(func_def_pattern, content, flags=re.MULTILINE)
+
+        if not m:
+            print(f"❌ waitForBoot(self) not found in {file_path}")
+            return False
+
+        def_start = m.start(1)
+        def_end = m.end(1)
+
+        # Determine indentation (spaces/tabs before "def")
+        def_line = m.group(1)
+        base_indent = re.match(r'^([ \t]*)def', def_line).group(1)
+
+        # Indentation for function body (one level inside)
+        body_indent = base_indent + "    "
+
+        # Extract content after def line
+        after_def = content[def_end:]
+
+        # Take a small chunk to inspect first lines inside function
+        # (we don't need the full file; first ~30 lines is enough)
+        preview = after_def.splitlines(True)[:40]  # keep newline chars
+        preview_text = "".join(preview)
+
+        # Remove leading blank lines
+        preview_text_no_blank = re.sub(r'^(?:[ \t]*\n)+', '', preview_text)
+
+        # If function starts with docstring, skip it
+        # Handles """...""" or '''...'''
+        docstring_pattern = (
+            r'^([ \t]*("""|\'\'\')'
+            r'(?:.|\n)*?'
+            r'\2[ \t]*\n)'
+        )
+        preview_wo_doc = re.sub(docstring_pattern, '', preview_text_no_blank, flags=re.DOTALL)
+
+        # Remove leading comments and blank lines again
+        preview_wo_doc = re.sub(r'^(?:[ \t]*#.*\n|[ \t]*\n)+', '', preview_wo_doc)
+
+        # Now check the first executable line
+        first_exec_line = preview_wo_doc.splitlines()[0] if preview_wo_doc.strip() else ""
+
+        if re.match(r'^[ \t]*return[ \t]+True[ \t]*$', first_exec_line):
+            print(f"✅ waitForBoot(self) already starts with 'return True' in {file_path} (no change needed)")
+            return True
+
+        # If not already returning True, patch it by inserting return True right after def
+        patched_content = (
+            content[:def_end] +
+            f"{body_indent}return True\n" +
+            content[def_end:]
+        )
+
+        with open(file_path, "w") as f:
+            f.write(patched_content)
+
+        print(f"✅ Patched waitForBoot(self) to return True in {file_path}")
+        return True
+
+    except Exception as e:
+        print(f"❌ Error modifying {file_path}: {e}")
+        return False
+
+def patch_testCleanSingleAsset_skip_cleanup(TARGET_DIR,target):
+    """
+    Patch <testModule>HelperClass.py to skip cleanup in:
+        def testCleanSingleAsset(self):
+
+    Replace:
+        self.deleteFromDevice(self.testStreams)
+
+    With:
+        print("Cleanup handled by external framework")
+        return
+
+    Args:
+        TARGET_DIR (str): Path to test directory
+        target (str): Test module name (example: dsVideoPort)
+
+    Returns:
+        bool: True if patched or already patched, False otherwise
+    """
+    file_path = TARGET_DIR + "/" + target + "HelperClass.py"
+    if not os.path.exists(file_path):
+        print(f"❌ File not found: {file_path}")
+        return False
+
+    with open(file_path, "r") as f:
+        content = f.read()
+
+    # ✅ Check function exists
+    func_pattern = r'def\s+testCleanSingleAsset\s*\(\s*self\s*\)\s*:'
+    if not re.search(func_pattern, content):
+        print(f"❌ testCleanSingleAsset(self) not found in {file_path}")
+        return False
+
+    # ✅ Already patched check (print + return exists inside function)
+    already_pattern = r'def\s+testCleanSingleAsset\s*\(\s*self\s*\)\s*:\s*[\s\S]*?print\(\s*[\'"]Cleanup handled by external framework[\'"]\s*\)\s*[\s\S]*?return'
+    if re.search(already_pattern, content):
+        print(f"✅ Already patched: testCleanSingleAsset() in {file_path}")
+        return True
+
+    # ✅ Replace the exact cleanup call line (simple + safe)
+    old_line_pattern = r'^[ \t]*self\.deleteFromDevice\(\s*self\.testStreams\s*\)[ \t]*$'
+
+    if not re.search(old_line_pattern, content, flags=re.MULTILINE):
+        print(f"❌ Cleanup line not found: self.deleteFromDevice(self.testStreams) in {file_path}")
+        return False
+
+    replacement_block = (
+        '        print("Cleanup handled by external framework")\n'
+        '        return'
+    )
+
+    modified_content = re.sub(
+        old_line_pattern,
+        replacement_block,
+        content,
+        flags=re.MULTILINE,
+        count=1
+    )
+
+    with open(file_path, "w") as f:
+        f.write(modified_content)
+
+    print(f"✅ Patched successfully: Cleanup skipped in {file_path}")
+    return True
 
 # ============= CONFIG FILE GENERATION FUNCTIONS =============
 
@@ -374,7 +519,7 @@ def update_monitor_yaml(create_backup: bool = True) -> int:
     """
     yaml_path = getattr(config, "MONITOR_YAML_PATH", None)
     if not yaml_path:
-        raise ValueError("MONITOR_YAML_PATH is not set in vtsconfig.py")
+        raise ValueError("MONITOR_YAML_PATH is not set in vtsconfig_dsDisplay.py")
 
     monitors = getattr(config, "MONITOR_DETAILS", None)
     if not monitors or not isinstance(monitors, list):
@@ -507,11 +652,11 @@ def get_normalized_streams_for_target(target: str,config,remove_empty: bool = Tr
  
     mapping = getattr(config, "STREAM_RENAME_MAP", None)
     if mapping is None:
-         mapping = STREAM_RENAME_MAP_BY_MODULE.get(target, {}) or {}
+         mapping = config.STREAM_RENAME_MAP_BY_MODULE.get(target, {}) or {}
 
     rules = getattr(config, "STREAM_RENAME_RULES", None)
     if rules is None:
-        rules = STREAM_RENAME_RULES_BY_MODULE.get(target, []) or []
+        rules = config.STREAM_RENAME_RULES_BY_MODULE.get(target, []) or []
 
 
     def apply_rules(name: str) -> str:
@@ -652,7 +797,7 @@ def _build_url_and_filename(stream: str, base_url: str):
         filename = os.path.basename(stream.split("?")[0])
     return url, filename
 
-def download_streams_for_target(target: str,config,use_sshpass: bool = False,allow_self_signed_tls: bool = True) -> None:
+def download_streams_for_target(target: str,config,use_sshpass: bool = False,allow_self_signed_tls: bool = True, targetDirectory: str = "NONE") -> None:
     """
     Download streams for the selected target *only* if it is in ALLOWED_DOWNLOAD_MODULES.
     """
@@ -669,7 +814,7 @@ def download_streams_for_target(target: str,config,use_sshpass: bool = False,all
     ssh_port   = getattr(config, "SSH_PORT", 22)
 
     target_root = getattr(config, "TARGET_DIRECTORY", "/opt/HAL/").rstrip("/")
-    remote_dir  = f"{target_root}/{target}"
+    remote_dir  = f"{target_root}/{targetDirectory}"
 
     yaml_path = _resolve_yaml_path_for_target(target, config)
     if not yaml_path:
@@ -688,7 +833,7 @@ def download_streams_for_target(target: str,config,use_sshpass: bool = False,all
         f'cd "{remote_dir}"',
     ]
 
-    wget_flags = ["-nv", "-c", "--timeout=30"]
+    wget_flags = ["-nc","-nv", "-c", "--timeout=30"]
     #wget_flags = ["-q", "-c", "-T", "30"]
     if allow_self_signed_tls:
         wget_flags.append("--no-check-certificate")
@@ -704,7 +849,7 @@ def download_streams_for_target(target: str,config,use_sshpass: bool = False,all
         f'cd "{remote_dir}" && '
         "for u in " + " ".join([f'"{_build_url_and_filename(s, stream_base)[0]}"' for s in streams]) + "; do "
         'fname=$(basename "${u%%\\?*}"); '
-        'curl -L --retry 3 --retry-connrefused -o "$fname" "$u" || exit 1; '
+        'curl -L --progress-bar --retry 3 --retry-connrefused -o "$fname" "$u" || exit 1; '
         "done"
     )
 
@@ -739,7 +884,7 @@ def download_streams_for_target(target: str,config,use_sshpass: bool = False,all
 
 #================== REMOVE THE DOWNLOADED STREAMS=============================================
 
-def cleanup_streams_for_target(target: str,config,use_sshpass: bool = False,remove_dir: bool = False,dry_run: bool = False,verbose: bool = True,) -> None:
+def cleanup_streams_for_target(target: str,config,use_sshpass: bool = False,remove_dir: bool = False,dry_run: bool = False,verbose: bool = True, targetDirectory: str = "NONE") -> None:
     """
     Remove downloaded stream files from the device for the selected target.
     """
@@ -756,7 +901,7 @@ def cleanup_streams_for_target(target: str,config,use_sshpass: bool = False,remo
 
     # Remote directory
     target_root = getattr(config, "TARGET_DIRECTORY", "/opt/HAL/").rstrip("/")
-    remote_dir  = f"{target_root}/{target}"
+    remote_dir  = f"{target_root}/{targetDirectory}"
 
     yaml_path = _resolve_yaml_path_for_target(target, config)
     if not yaml_path or not os.path.exists(yaml_path):
@@ -769,9 +914,8 @@ def cleanup_streams_for_target(target: str,config,use_sshpass: bool = False,remo
 
     streams = _collect_streams_from_yaml(yaml_path)
 
-    mapping = STREAM_RENAME_MAP_BY_MODULE.get(target, {}) or {}
-    rules   = STREAM_RENAME_RULES_BY_MODULE.get(target, []) or []
-
+    mapping = config.STREAM_RENAME_MAP
+    rules   = config.STREAM_RENAME_RULES
     def apply_rules(name: str) -> str:
         for rule in rules:
             if isinstance(rule, dict) and "regex" in rule and "replace" in rule:
@@ -1086,7 +1230,18 @@ def _run_one_script_with_logging(script_path: str, logfile):
                     sys.stdout.write(decoded)
                     sys.stdout.flush()
                     logfile.write(decoded)
+                    if "core dumped" in str(decoded):
+                        print("\nERROR: Exiting from test, Observed crash during execution")
+                        logfile.write("ERROR: Observed crash during execution")
+                    if "symbol lookup error" in  str(decoded):
+                        print("\nERROR: Exiting from test, symbol lookup error observed during execution")
+                        logfile.write("ERROR: Exiting from test, symbol lookup error observed during execution")
+                    if "Segmentation fault" in  str(decoded):
+                        print("\nERROR: Exiting from test, segmentation fault observed during execution")
+                        logfile.write("ERROR: Exiting from test, segmentation fault observed during execution")
                     logfile.flush()
+                    if "core dumped" in str(decoded) or "symbol lookup error" in  str(decoded) or "Segmentation fault" in  str(decoded):
+                        return 0
 
             # Read single keypress from user
             if sys.stdin in ready:
@@ -1127,7 +1282,7 @@ def _run_one_script_with_logging(script_path: str, logfile):
 
     return process.wait()
 
-def run_interactive_with_logging():
+def run_interactive_with_logging(log_path : str = "test_run.log"):
     """
     Run one or more interactive tests sequentially with logging.
     """
@@ -1137,8 +1292,8 @@ def run_interactive_with_logging():
         raise ValueError("config.TEST_SCRIPT is not set")
     scripts = ts if isinstance(ts, (list, tuple)) else [ts]
 
-    log_path = getattr(config, "LOG_FILE", "test_run.log")
-    os.makedirs(os.path.dirname(log_path) or ".", exist_ok=True)
+    #log_path = getattr(config, "LOG_FILE", "test_run.log")
+    #os.makedirs(os.path.dirname(log_path) or ".", exist_ok=True)
 
     results = []
 
@@ -1223,6 +1378,7 @@ def generate_excel_from_log(target: str,log_path: str = "menu.log",excel_path: s
             r"\bFAILED\b",
             r"undefined symbol",
             r"symbol lookup error",
+            r"core dumped",
             r"segmentation fault",
             r"\bassert\b",
             r"\bexception\b",
@@ -1325,55 +1481,57 @@ def generate_excel_from_log(target: str,log_path: str = "menu.log",excel_path: s
    
     print(f" Excel file '{excel_path}' created successfully with full logs.")
 
-#================= MODIFICATION OF START FUNCTION======================================
-
-def ensure_single_command_override(file_path):
+def patch_targetWorkspace(repo_dir, moduleName, testModule):
     """
-    Ensures the command override line is present only once in the start function.
+    Patch <testModule>HelperClass.py to replace:
+        self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
+    with:
+        self.targetWorkspace = os.path.join(self.targetWorkspace, "<moduleName>")
+
+    Args:
+        repo_dir (str): Path to repo root
+        moduleName (str): module name to hardcode (example: device_settings)
+        testModule (str): test module name (example: dsVideoPort)
+
+    Returns:
+        bool: True if patched or already patched, False otherwise
     """
-    try:
-        with open(file_path, 'r') as f:
-            lines = f.readlines()
 
-        command_line = "        command = \"cd /VTS_Package/device_settings; ./hal_test_dshal -p Source_HostSettings.yaml\"\n"
-        modified_lines = []
-        inside_start = False
-        command_inserted = False
+    file_path = os.path.join(
+        repo_dir,
+        f"{testModule}HelperClass.py"
+    )
 
-        for line in lines:
-            stripped = line.strip()
-            if stripped.startswith("def start"):
-                inside_start = True
+    if not os.path.exists(file_path):
+        print(f"❌ File not found: {file_path}")
+        return False
 
-            # Skip duplicate command lines
-            if inside_start and stripped == command_line.strip():
-                continue
+    with open(file_path, "r") as f:
+        content = f.read()
 
-            # Insert command line before session.write if not already inserted
-            if inside_start and stripped.startswith("self.session.write(command)") and not command_inserted:
-                modified_lines.append(command_line)
-                command_inserted = True
+    # ✅ If already patched with requested moduleName
+    already_pattern = rf'self\.targetWorkspace\s*=\s*os\.path\.join\(\s*self\.targetWorkspace\s*,\s*"{re.escape(moduleName)}"\s*\)'
+    if re.search(already_pattern, content):
+        print(f"✅ Already patched: moduleName='{moduleName}' in {file_path}")
+        return True
 
-            modified_lines.append(line)
+    # ✅ Look for original line
+    old_pattern = r'self\.targetWorkspace\s*=\s*os\.path\.join\(\s*self\.targetWorkspace\s*,\s*self\.moduleName\s*\)'
 
-            if inside_start and stripped.startswith("return result"):
-                inside_start = False
+    if not re.search(old_pattern, content):
+        print(f"❌ Original targetWorkspace line not found in {file_path}")
+        return False
 
-        with open(file_path, 'w') as f:
-            f.writelines(modified_lines)
+    # ✅ Replace with hardcoded moduleName
+    new_line = f'self.targetWorkspace = os.path.join(self.targetWorkspace, "{moduleName}")'
+    modified_content = re.sub(old_pattern, new_line, content, count=1)
 
-        print(f"✅ Ensured single command override in start function of {file_path}.")
+    with open(file_path, "w") as f:
+        f.write(modified_content)
 
-    except Exception as e:
-        print(f"❌ Failed to update {file_path}: {e}")
+    print(f"✅ Patched successfully: {file_path}")
+    return True
 
-def ensure_add_command():
-    print("Checking and modifying start function...")
-    if os.path.exists(config.UTSUITENAVIGATOR_PATH):
-        ensure_single_command_override(config.UTSUITENAVIGATOR_PATH)
-    else:
-        print(f"Warning: utBaseUtils.py not found at {config.UTBASEUTILS_PATH}")
-        
 #============================================================================================
 
 def main():
@@ -1412,9 +1570,16 @@ def main():
     global config
     config = load_config_for_target(target)  
     setup_halif_test()
+
+    unique_string = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+
     # Always ensure SCP is skipped at startup
-    ensure_scp_skipped()
-    # ensure_add_command()
+    modify_scpCopy_to_skip()
+    modify_waitForBoot_to_return_true_if_needed()
+    if target == "dsVideoPort" or target == "dsAudio" or target == "dsVideoDevice":
+        testModule = "device_settings"
+        patch_targetWorkspace(config.TARGET_DIR, testModule, target)
+        patch_testCleanSingleAsset_skip_cleanup(config.TARGET_DIR, target)
     
     # Optional flag after the target
     flag = sys.argv[2] if len(sys.argv) > 2 else None
@@ -1457,19 +1622,23 @@ def main():
             print(f"[streams-rename] Preview ({target}): {normalized}")
             rewrite_testsetup_yaml_streams_with_renames(target, config)
     if target in ALLOWED_DOWNLOAD_MODULES:
-            download_streams_for_target(target, config,use_sshpass=bool(getattr(config, "SSH_PASSWORD","")),allow_self_signed_tls=True)
-            ensure_preserve_streams_cleanup_override(target, config)
+            download_streams_for_target(target, config,use_sshpass=bool(getattr(config, "SSH_PASSWORD","")),allow_self_signed_tls=True, targetDirectory=testModule)
+            ensure_preserve_streams_cleanup_override(testModule, config)
     if target in ('dsVideoPort','dsAudio','rmfaudiocapture'):
             comment_download_calls_in_helper(target=target,base_path=config.BASE_PATH,enabled_targets=None,note_text="Skipping asset downloads on DUT for this run.")
 
-    run_interactive_with_logging()
-    generate_excel_from_log(target=target)
+    log_path = target + "_" + unique_string + ".log"
+    run_interactive_with_logging(log_path)
+    excel_sheet_path = target + "_" + unique_string + ".xlsx"
+    generate_excel_from_log(target=target,excel_path=excel_sheet_path)
+    print("Removing embedded characters from log file")
+    subprocess.run(["sed", "-i", "-e", "s/\r//g", log_path],check=True)
     if target in ALLOWED_DOWNLOAD_MODULES:
             # Remove only files (keep directory)
             cleanup_streams_for_target(target=target,config=config,use_sshpass=bool(getattr(config, "SSH_PASSWORD", "")),
                                              remove_dir=False,      # set True if you want to remove /opt/HAL/<target> entirely
                                              dry_run=False,         # set True to preview without deleting
-                                             verbose=True)
+                                             verbose=True,targetDirectory=testModule)
 
 
 if __name__ == "__main__":

@@ -17,261 +17,6 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="03e25737-3448-473e-a8b8-c88675c3a4c4" name="platform_stub_hal_GetHardwareVersion">
-                <parameters>
-                    <parameter id="2b333dfc-e4cc-48bc-9392-7b82e16cbb07" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="c81746e5-cd06-4fe8-868f-63c389b8037d" name="platform_stub_hal_GetMACsecOperationalStatus">
-                <parameters>
-                    <parameter id="09a3f478-baa0-4e39-9864-b15859b74d4c" parameterName="ethPort" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="9fa395b9-c757-4e3a-bbd9-c5c7ac1f4aa2" parameterName="index" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="aa08496e-c90b-4262-88be-8a164c4a6b1c" name="platform_stub_hal_SetLowPowerModeState">
-                <parameters>
-                    <parameter id="52a23497-fa89-43c4-b2a1-43a07af05c92" parameterName="state" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="3b21d278-4122-441f-86be-52f6c91d4ed9" name="platform_stub_hal_GetMemoryPaths">
-                <parameters>
-                    <parameter id="a02d4745-0d63-4a56-9308-ba1a8e806b6c" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="f7cc16c4-175a-4bef-95e4-bfa0103b55b9" parameterName="cpus" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="25979b32-3098-441d-9c10-d24f11c0874f" name="platform_stub_hal_GetRouterRegion">
-                <parameters>
-                    <parameter id="ff72c60d-95fa-4f3d-9ba6-71cb0d6910dd" parameterName="flag" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="035dd2e3-5b5a-4fbc-8d84-678464ac006f" name="platform_stub_hal_GetFactoryResetCount">
-                <parameters>
-                    <parameter id="f6427eb7-a066-4d75-ba83-4b7f5987a63f" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="0e0b8428-0e24-4e26-ab7a-4ff60c0d127e" name="platform_stub_hal_getRPM">
-                <parameters/>
-            </function>
-            <function id="2aaa28ab-3d99-4b8c-9aa8-bf9073a6ba82" name="platform_stub_hal_SetDeviceCodeImageValid">
-                <parameters>
-                    <parameter id="342338cb-6228-4322-9581-277996928d64" parameterName="value" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="7ad97d72-4568-4a05-8a25-d7f90a859a32" name="platform_stub_hal_getFactoryCmVariant">
-                <parameters/>
-            </function>
-            <function id="8502aa38-204f-4334-b0cc-df0486c6e934" name="platform_stub_hal_getFanStatus">
-                <parameters/>
-            </function>
-            <function id="3a5bf416-54d9-40f9-a79d-a512079cd0f4" name="platform_stub_hal_GetFreeMemorySize">
-                <parameters>
-                    <parameter id="8fd0b04d-19e2-48fb-8b8c-66aa3d9157dd" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="9022b553-43a4-40fe-9470-c1428f97d771" name="platform_stub_hal_GetBootLoaderVersion">
-                <parameters>
-                    <parameter id="1301574d-2b6c-4677-a7a3-e43e0f71b55b" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="3d7a723a-1239-40ca-a5f6-e78b5e4eb3aa" name="platform_stub_hal_GetTelnetEnable">
-                <parameters>
-                    <parameter id="58952856-7507-45b8-9e62-a534fc80c75e" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="c6d584c3-78ad-40f7-a1a7-c32258b4552e" name="platform_stub_hal_GetMACsecEnable">
-                <parameters>
-                    <parameter id="c01a02ca-5bf1-4abe-89ca-9eebe897eca8" parameterName="ethPort" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="277aaacc-2578-4c6c-92ee-6b7d73d1fbb2" parameterName="index" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="270f3af9-3d09-485f-8889-d2a9ae6a6b8b" name="platform_stub_hal_SetMACsecEnable">
-                <parameters>
-                    <parameter id="e911c601-c6d8-4304-b729-18d36e917b73" parameterName="ethPort" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="1bd792f1-972a-42d5-8e6f-e42d935afc52" parameterName="index" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="bdfa844c-1011-4c95-9c16-83863a09beef" name="platform_stub_hal_GetHardware">
-                <parameters>
-                    <parameter id="76defeff-1bc0-4b05-b47e-543a3b9ba8b0" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="3060b711-a5e0-4589-a0b4-8f47ce89ea2d" name="platform_stub_hal_GetWebAccessLevel">
-                <parameters>
-                    <parameter id="cf922833-41bf-429a-8440-8f6a9224e4c5" parameterName="ifIndex" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="531e0a7d-a541-489d-9c4e-39de4e17208d" parameterName="userIndex" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="c19d4756-29a0-4027-81c0-fe7f471ab48f" name="platform_stub_hal_GetChipTemperature">
-                <parameters>
-                    <parameter id="60830908-1550-489b-8eda-e4ca26b8f039" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="e7c1a453-cb5e-4c75-b2c2-ebd55bce0184" parameterName="chipIndex" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="820d2fcc-5d17-4897-9a10-140aada3f31e" name="platform_stub_hal_SetFanSpeed">
-                <parameters>
-                    <parameter id="47ef8636-7d26-4351-98d0-db5cbdfd0a68" parameterName="index" parameterType="INTEGER" range="0-100000"/>
-                </parameters>
-            </function>
-            <function id="b30da0d1-17d9-442f-9e56-dcf8ea3e8380" name="platform_stub_hal_ResetDscpCounts">
-                <parameters>
-                    <parameter id="7cf96c4d-9136-4294-bce7-cd76d5b8346f" parameterName="interfaceType" parameterType="INTEGER" range="0-10"/>
-                </parameters>
-            </function>
-            <function id="003a7762-e409-4363-9bba-304b2f31b114" name="platform_stub_hal_SetWebUITimeout">
-                <parameters>
-                    <parameter id="a286b4e1-288c-4c00-ba0b-e02b7e7eccee" parameterName="index" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="f4cb969a-19e4-4330-af56-16f865a79426" name="platform_stub_hal_GetHardwareMemUsed">
-                <parameters>
-                    <parameter id="acfcc12c-a068-41ac-8ec0-4c88803ea493" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="6d0d2868-64e5-444e-b701-6e30387bd2dc" name="platform_stub_hal_GetTotalMemorySize">
-                <parameters>
-                    <parameter id="13f6ba6b-8083-42f3-a882-81b795db696d" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="97ab2f42-025f-41de-a318-f6c6122527c1" name="platform_stub_hal_GetFirmwareName">
-                <parameters>
-                    <parameter id="a19ee286-bfbd-498f-903a-fd59310149ff" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="2b5af75e-a5b6-49d8-b78e-c22c32ce8ec3" name="platform_stub_hal_GetWebUITimeout">
-                <parameters>
-                    <parameter id="6c4efa6d-b886-4dad-baae-f8a2f7043566" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="b934944a-a164-4f2d-bdc6-9b9ff9cf9609" name="platform_stub_hal_GetUsedMemorySize">
-                <parameters>
-                    <parameter id="a391485e-d53a-4f97-9bfd-dab2479c0d80" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="8922ce4b-9844-44e5-8fd6-a4c7145d8e10" name="platform_stub_hal_ClearResetCount">
-                <parameters>
-                    <parameter id="9fb2a6eb-ffc7-45bd-a9b7-154e18d6d592" parameterName="index" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="360513d2-1fc2-4966-8a5b-8be69ae4adf5" name="platform_stub_hal_setFactoryCmVariant">
-                <parameters>
-                    <parameter id="955ff011-efa6-4b5e-adae-376251898d25" parameterName="CmVarient" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="41a8f89f-9312-48d4-8aff-4d44a7d1055a" name="platform_stub_hal_SetLed">
-                <parameters>
-                    <parameter id="b9ed9ba9-ed49-4ec8-a959-92f6252604be" parameterName="state" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="c87fdebf-53a0-4658-b79f-24b6cf499a30" parameterName="color" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="9635ffee-ba90-4daa-baad-f371c2a98635" parameterName="interval" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="c5e1ec4e-9e72-401c-b88c-2cd66da4f8db" name="platform_stub_hal_getFactoryPartnerId">
-                <parameters>
-                    <parameter id="36b820b7-5169-452e-8c25-0a23683dc8c2" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="d61aa9b8-6f47-481e-8871-336785702dda" name="platform_stub_hal_GetSerialNumber">
-                <parameters>
-                    <parameter id="3a742971-6632-4312-a471-9143f593594a" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="c7bbb49b-adf5-468a-8321-edb08efa3a87" name="platform_stub_hal_GetCMTSMac">
-                <parameters>
-                    <parameter id="80dc3197-5b97-4d3b-b779-a63d34160bcd" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="2b91f99e-5ace-4b0f-b162-55011a4005ca" name="platform_stub_hal_SetTelnetEnable">
-                <parameters>
-                    <parameter id="210cbe23-4874-4482-91d4-5d35e444504b" parameterName="index" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="8bae1c1a-907e-4434-acf6-93790ae19afe" name="platform_stub_hal_SetWebAccessLevel">
-                <parameters>
-                    <parameter id="615915b5-1fdc-456a-875a-07ae14ec5c18" parameterName="level" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="832d651c-53ec-4424-b1e0-20579c5810ff" parameterName="userIndex" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="8a572332-2ac9-48f5-9443-d9654921af6c" parameterName="ifIndex" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="595b5d5b-4667-4aee-be08-94d5d5bb7f0a" name="platform_stub_hal_GetSSHEnable">
-                <parameters>
-                    <parameter id="c5095543-edc7-43ae-82c7-144d91399f51" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="c0334dd5-ea7b-4928-9c57-3e589fd6df30" name="platform_stub_hal_StartMACsec">
-                <parameters>
-                    <parameter id="8bd38189-a858-4ac0-847b-ba4386e0b148" parameterName="ethPort" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="4ebe02c8-ba5c-42dd-bc4a-211d1c08ff15" parameterName="timeoutSec" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="c5ee2677-1022-4c16-8179-420b5eeb53db" name="platform_stub_hal_getRotorLock">
-                <parameters/>
-            </function>
-            <function id="432c26a4-70fc-4187-a11a-cac080edc46c" name="platform_stub_hal_SetSNMPOnboardRebootEnable">
-                <parameters>
-                    <parameter id="96f4ec8b-ac31-4279-9fa1-c89aaf98c3ef" parameterName="SNMPonboard" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="a061ced8-41ef-4eb5-b4cb-4521bc996bc3" name="platform_stub_hal_GetHardwareFree">
-                <parameters>
-                    <parameter id="5f828046-a6d5-4b7f-8c81-9cd8b09015ec" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="06dcd75b-5792-4249-98e5-e16f2934288b" name="platform_stub_hal_SetSSHEnable">
-                <parameters>
-                    <parameter id="992e5484-e332-4bd0-85b7-79edf26a163c" parameterName="index" parameterType="INTEGER" range="0-10"/>
-                </parameters>
-            </function>
-            <function id="40ac1b5e-b03e-485b-9aaa-b5ca1dc109f7" name="platform_stub_hal_DocsisParamsDBInit">
-                <parameters/>
-            </function>
-            <function id="49f79219-ec4d-47d0-aed1-a7695a179f88" name="platform_stub_hal_setFanMaxOverride">
-                <parameters>
-                    <parameter id="dc5f85a9-741e-4bf2-8868-3552d7fa2866" parameterName="flag" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="b28fdd6f-d757-4a9e-9d9e-9c459a18d4c1" name="platform_stub_hal_GetDeviceConfigStatus">
-                <parameters>
-                    <parameter id="59fec11c-64b1-439c-a028-131e67ff5b29" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="ad9372f1-925e-4d46-bd9b-a8d6ac15c0c0" name="platform_stub_hal_SetDeviceCodeImageTimeout">
-                <parameters>
-                    <parameter id="8a3e5295-6582-4cd2-ae03-cd38516d68cf" parameterName="value" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="111ff0be-dec3-490d-aa72-ce8346a24091" name="platform_stub_hal_GetBaseMacAddress">
-                <parameters>
-                    <parameter id="b4861414-271b-4d4b-804c-0bbcd1e15ad0" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="ffeacbd5-f21e-47c6-8f21-0d1c9119f5fe" name="platform_stub_hal_StopMACsec">
-                <parameters>
-                    <parameter id="0924633e-8df5-4526-82f8-4a7fb0d1039e" parameterName="ethPort" parameterType="INTEGER" range="0-100"/>
-                </parameters>
-            </function>
-            <function id="24b37f7b-ff04-4baf-a8a3-ea1ac5713b0a" name="platform_stub_hal_GetTimeOffSet">
-                <parameters>
-                    <parameter id="8e69eb8a-852b-4498-adfe-8975dfbea18a" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="2c6cf54d-56fe-4186-869a-fbc5072855e2" name="platform_stub_hal_GetFanSpeed">
-                <parameters>
-                    <parameter id="aac52cd2-c7df-4108-960e-209494b8d748" parameterName="flag" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="7bd9de8b-e229-448c-9e28-06c9b32c9c98" name="platform_stub_hal_SetDscp">
-                <parameters>
-                    <parameter id="6382f79e-904d-4988-af26-35f2e9904cf8" parameterName="cmd" parameterType="INTEGER" range="1-2"/>
-                    <parameter id="2ff13542-8521-43f8-8cbd-0e496cf909ef" parameterName="isDscpValNull" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="40ea602f-ff81-43d2-9ccb-9b9a5dd4e060" parameterName="dscpVal" parameterType="STRING" range="A-Z"/>
-                    <parameter id="a1ed0735-e8d1-452d-a570-d329f4c46f83" parameterName="interfaceType" parameterType="INTEGER" range="0-10"/>
-                </parameters>
-            </function>
-            <function id="ac8ae9b9-ac27-47e7-922d-b4fdad5711ae" name="platform_stub_hal_GetDscpClientList">
-                <parameters>
-                    <parameter id="5e71ae7d-2fe1-46db-b6be-b12194bad02d" parameterName="isClientListNull" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="473f820f-2e62-42bd-84b2-05d70f6b6694" parameterName="interfaceType" parameterType="INTEGER" range="0-10"/>
-                </parameters>
-            </function>
             <function id="0d564c8c-dc35-4816-aa1e-695f827ce9fd" name="platform_stub_hal_GetSNMPEnable">
                 <parameters>
                     <parameter id="f7bc901c-5e54-4674-84dc-b1cf06c7cacc" parameterName="flag" parameterType="INTEGER" range="0-1"/>
@@ -282,8 +27,263 @@
                     <parameter id="7576d175-4939-4490-abb9-d789c4ee4579" parameterName="flag" parameterType="INTEGER" range="0-1"/>
                 </parameters>
             </function>
+            <function id="ffeacbd5-f21e-47c6-8f21-0d1c9119f5fe" name="platform_stub_hal_StopMACsec">
+                <parameters>
+                    <parameter id="0924633e-8df5-4526-82f8-4a7fb0d1039e" parameterName="ethPort" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="2c6cf54d-56fe-4186-869a-fbc5072855e2" name="platform_stub_hal_GetFanSpeed">
+                <parameters>
+                    <parameter id="aac52cd2-c7df-4108-960e-209494b8d748" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="3060b711-a5e0-4589-a0b4-8f47ce89ea2d" name="platform_stub_hal_GetWebAccessLevel">
+                <parameters>
+                    <parameter id="cf922833-41bf-429a-8440-8f6a9224e4c5" parameterName="ifIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="531e0a7d-a541-489d-9c4e-39de4e17208d" parameterName="userIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="c0334dd5-ea7b-4928-9c57-3e589fd6df30" name="platform_stub_hal_StartMACsec">
+                <parameters>
+                    <parameter id="8bd38189-a858-4ac0-847b-ba4386e0b148" parameterName="ethPort" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="4ebe02c8-ba5c-42dd-bc4a-211d1c08ff15" parameterName="timeoutSec" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="432c26a4-70fc-4187-a11a-cac080edc46c" name="platform_stub_hal_SetSNMPOnboardRebootEnable">
+                <parameters>
+                    <parameter id="96f4ec8b-ac31-4279-9fa1-c89aaf98c3ef" parameterName="SNMPonboard" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="035dd2e3-5b5a-4fbc-8d84-678464ac006f" name="platform_stub_hal_GetFactoryResetCount">
+                <parameters>
+                    <parameter id="f6427eb7-a066-4d75-ba83-4b7f5987a63f" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="8502aa38-204f-4334-b0cc-df0486c6e934" name="platform_stub_hal_getFanStatus">
+                <parameters/>
+            </function>
+            <function id="97ab2f42-025f-41de-a318-f6c6122527c1" name="platform_stub_hal_GetFirmwareName">
+                <parameters>
+                    <parameter id="a19ee286-bfbd-498f-903a-fd59310149ff" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="2aaa28ab-3d99-4b8c-9aa8-bf9073a6ba82" name="platform_stub_hal_SetDeviceCodeImageValid">
+                <parameters>
+                    <parameter id="342338cb-6228-4322-9581-277996928d64" parameterName="value" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="2b5af75e-a5b6-49d8-b78e-c22c32ce8ec3" name="platform_stub_hal_GetWebUITimeout">
+                <parameters>
+                    <parameter id="6c4efa6d-b886-4dad-baae-f8a2f7043566" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="40ac1b5e-b03e-485b-9aaa-b5ca1dc109f7" name="platform_stub_hal_DocsisParamsDBInit">
+                <parameters/>
+            </function>
+            <function id="595b5d5b-4667-4aee-be08-94d5d5bb7f0a" name="platform_stub_hal_GetSSHEnable">
+                <parameters>
+                    <parameter id="c5095543-edc7-43ae-82c7-144d91399f51" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="0e0b8428-0e24-4e26-ab7a-4ff60c0d127e" name="platform_stub_hal_getRPM">
+                <parameters/>
+            </function>
+            <function id="49f79219-ec4d-47d0-aed1-a7695a179f88" name="platform_stub_hal_setFanMaxOverride">
+                <parameters>
+                    <parameter id="dc5f85a9-741e-4bf2-8868-3552d7fa2866" parameterName="flag" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="270f3af9-3d09-485f-8889-d2a9ae6a6b8b" name="platform_stub_hal_SetMACsecEnable">
+                <parameters>
+                    <parameter id="1bd792f1-972a-42d5-8e6f-e42d935afc52" parameterName="index" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="e911c601-c6d8-4304-b729-18d36e917b73" parameterName="ethPort" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="c19d4756-29a0-4027-81c0-fe7f471ab48f" name="platform_stub_hal_GetChipTemperature">
+                <parameters>
+                    <parameter id="e7c1a453-cb5e-4c75-b2c2-ebd55bce0184" parameterName="chipIndex" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="60830908-1550-489b-8eda-e4ca26b8f039" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="f4cb969a-19e4-4330-af56-16f865a79426" name="platform_stub_hal_GetHardwareMemUsed">
+                <parameters>
+                    <parameter id="acfcc12c-a068-41ac-8ec0-4c88803ea493" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="c5ee2677-1022-4c16-8179-420b5eeb53db" name="platform_stub_hal_getRotorLock">
+                <parameters/>
+            </function>
+            <function id="03e25737-3448-473e-a8b8-c88675c3a4c4" name="platform_stub_hal_GetHardwareVersion">
+                <parameters>
+                    <parameter id="2b333dfc-e4cc-48bc-9392-7b82e16cbb07" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="aa08496e-c90b-4262-88be-8a164c4a6b1c" name="platform_stub_hal_SetLowPowerModeState">
+                <parameters>
+                    <parameter id="52a23497-fa89-43c4-b2a1-43a07af05c92" parameterName="state" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="d61aa9b8-6f47-481e-8871-336785702dda" name="platform_stub_hal_GetSerialNumber">
+                <parameters>
+                    <parameter id="3a742971-6632-4312-a471-9143f593594a" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="c5e1ec4e-9e72-401c-b88c-2cd66da4f8db" name="platform_stub_hal_getFactoryPartnerId">
+                <parameters>
+                    <parameter id="36b820b7-5169-452e-8c25-0a23683dc8c2" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="b30da0d1-17d9-442f-9e56-dcf8ea3e8380" name="platform_stub_hal_ResetDscpCounts">
+                <parameters>
+                    <parameter id="7cf96c4d-9136-4294-bce7-cd76d5b8346f" parameterName="interfaceType" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="3b21d278-4122-441f-86be-52f6c91d4ed9" name="platform_stub_hal_GetMemoryPaths">
+                <parameters>
+                    <parameter id="a02d4745-0d63-4a56-9308-ba1a8e806b6c" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="f7cc16c4-175a-4bef-95e4-bfa0103b55b9" parameterName="cpus" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="c6d584c3-78ad-40f7-a1a7-c32258b4552e" name="platform_stub_hal_GetMACsecEnable">
+                <parameters>
+                    <parameter id="277aaacc-2578-4c6c-92ee-6b7d73d1fbb2" parameterName="index" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="c01a02ca-5bf1-4abe-89ca-9eebe897eca8" parameterName="ethPort" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="360513d2-1fc2-4966-8a5b-8be69ae4adf5" name="platform_stub_hal_setFactoryCmVariant">
+                <parameters>
+                    <parameter id="955ff011-efa6-4b5e-adae-376251898d25" parameterName="CmVarient" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="8922ce4b-9844-44e5-8fd6-a4c7145d8e10" name="platform_stub_hal_ClearResetCount">
+                <parameters>
+                    <parameter id="9fb2a6eb-ffc7-45bd-a9b7-154e18d6d592" parameterName="index" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="b934944a-a164-4f2d-bdc6-9b9ff9cf9609" name="platform_stub_hal_GetUsedMemorySize">
+                <parameters>
+                    <parameter id="a391485e-d53a-4f97-9bfd-dab2479c0d80" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="003a7762-e409-4363-9bba-304b2f31b114" name="platform_stub_hal_SetWebUITimeout">
+                <parameters>
+                    <parameter id="a286b4e1-288c-4c00-ba0b-e02b7e7eccee" parameterName="index" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="820d2fcc-5d17-4897-9a10-140aada3f31e" name="platform_stub_hal_SetFanSpeed">
+                <parameters>
+                    <parameter id="47ef8636-7d26-4351-98d0-db5cbdfd0a68" parameterName="index" parameterType="INTEGER" range="0-100000"/>
+                </parameters>
+            </function>
+            <function id="6d0d2868-64e5-444e-b701-6e30387bd2dc" name="platform_stub_hal_GetTotalMemorySize">
+                <parameters>
+                    <parameter id="13f6ba6b-8083-42f3-a882-81b795db696d" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="7bd9de8b-e229-448c-9e28-06c9b32c9c98" name="platform_stub_hal_SetDscp">
+                <parameters>
+                    <parameter id="40ea602f-ff81-43d2-9ccb-9b9a5dd4e060" parameterName="dscpVal" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a1ed0735-e8d1-452d-a570-d329f4c46f83" parameterName="interfaceType" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="6382f79e-904d-4988-af26-35f2e9904cf8" parameterName="cmd" parameterType="INTEGER" range="1-2"/>
+                    <parameter id="2ff13542-8521-43f8-8cbd-0e496cf909ef" parameterName="isDscpValNull" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="b28fdd6f-d757-4a9e-9d9e-9c459a18d4c1" name="platform_stub_hal_GetDeviceConfigStatus">
+                <parameters>
+                    <parameter id="59fec11c-64b1-439c-a028-131e67ff5b29" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="41a8f89f-9312-48d4-8aff-4d44a7d1055a" name="platform_stub_hal_SetLed">
+                <parameters>
+                    <parameter id="c87fdebf-53a0-4658-b79f-24b6cf499a30" parameterName="color" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="9635ffee-ba90-4daa-baad-f371c2a98635" parameterName="interval" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="b9ed9ba9-ed49-4ec8-a959-92f6252604be" parameterName="state" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="a061ced8-41ef-4eb5-b4cb-4521bc996bc3" name="platform_stub_hal_GetHardwareFree">
+                <parameters>
+                    <parameter id="5f828046-a6d5-4b7f-8c81-9cd8b09015ec" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="9022b553-43a4-40fe-9470-c1428f97d771" name="platform_stub_hal_GetBootLoaderVersion">
+                <parameters>
+                    <parameter id="1301574d-2b6c-4677-a7a3-e43e0f71b55b" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="ad9372f1-925e-4d46-bd9b-a8d6ac15c0c0" name="platform_stub_hal_SetDeviceCodeImageTimeout">
+                <parameters>
+                    <parameter id="8a3e5295-6582-4cd2-ae03-cd38516d68cf" parameterName="value" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="bdfa844c-1011-4c95-9c16-83863a09beef" name="platform_stub_hal_GetHardware">
+                <parameters>
+                    <parameter id="76defeff-1bc0-4b05-b47e-543a3b9ba8b0" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="3d7a723a-1239-40ca-a5f6-e78b5e4eb3aa" name="platform_stub_hal_GetTelnetEnable">
+                <parameters>
+                    <parameter id="58952856-7507-45b8-9e62-a534fc80c75e" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="2b91f99e-5ace-4b0f-b162-55011a4005ca" name="platform_stub_hal_SetTelnetEnable">
+                <parameters>
+                    <parameter id="210cbe23-4874-4482-91d4-5d35e444504b" parameterName="index" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="7ad97d72-4568-4a05-8a25-d7f90a859a32" name="platform_stub_hal_getFactoryCmVariant">
+                <parameters/>
+            </function>
+            <function id="8bae1c1a-907e-4434-acf6-93790ae19afe" name="platform_stub_hal_SetWebAccessLevel">
+                <parameters>
+                    <parameter id="615915b5-1fdc-456a-875a-07ae14ec5c18" parameterName="level" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="8a572332-2ac9-48f5-9443-d9654921af6c" parameterName="ifIndex" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="832d651c-53ec-4424-b1e0-20579c5810ff" parameterName="userIndex" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="25979b32-3098-441d-9c10-d24f11c0874f" name="platform_stub_hal_GetRouterRegion">
+                <parameters>
+                    <parameter id="ff72c60d-95fa-4f3d-9ba6-71cb0d6910dd" parameterName="flag" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="c81746e5-cd06-4fe8-868f-63c389b8037d" name="platform_stub_hal_GetMACsecOperationalStatus">
+                <parameters>
+                    <parameter id="09a3f478-baa0-4e39-9864-b15859b74d4c" parameterName="ethPort" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="9fa395b9-c757-4e3a-bbd9-c5c7ac1f4aa2" parameterName="index" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="3a5bf416-54d9-40f9-a79d-a512079cd0f4" name="platform_stub_hal_GetFreeMemorySize">
+                <parameters>
+                    <parameter id="8fd0b04d-19e2-48fb-8b8c-66aa3d9157dd" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="06dcd75b-5792-4249-98e5-e16f2934288b" name="platform_stub_hal_SetSSHEnable">
+                <parameters>
+                    <parameter id="992e5484-e332-4bd0-85b7-79edf26a163c" parameterName="index" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
             <function id="93143fdd-1c30-433f-a0e1-1bfdb0237e57" name="platform_stub_hal_PandMDBInit">
                 <parameters/>
+            </function>
+            <function id="ac8ae9b9-ac27-47e7-922d-b4fdad5711ae" name="platform_stub_hal_GetDscpClientList">
+                <parameters>
+                    <parameter id="473f820f-2e62-42bd-84b2-05d70f6b6694" parameterName="interfaceType" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="5e71ae7d-2fe1-46db-b6be-b12194bad02d" parameterName="isClientListNull" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="c7bbb49b-adf5-468a-8321-edb08efa3a87" name="platform_stub_hal_GetCMTSMac">
+                <parameters>
+                    <parameter id="80dc3197-5b97-4d3b-b779-a63d34160bcd" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="24b37f7b-ff04-4baf-a8a3-ea1ac5713b0a" name="platform_stub_hal_GetTimeOffSet">
+                <parameters>
+                    <parameter id="8e69eb8a-852b-4498-adfe-8975dfbea18a" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
+            </function>
+            <function id="111ff0be-dec3-490d-aa72-ce8346a24091" name="platform_stub_hal_GetBaseMacAddress">
+                <parameters>
+                    <parameter id="b4861414-271b-4d4b-804c-0bbcd1e15ad0" parameterName="flag" parameterType="INTEGER" range="0-1"/>
+                </parameters>
             </function>
             <function id="4febbd50-b574-41dd-a5a6-6558c3840a72" name="platform_stub_hal_GetModelName">
                 <parameters>

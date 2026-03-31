@@ -17,13 +17,6 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="2d47ff02-435a-4910-ba21-cf686497aea8" name="tdkb_e2e_Set">
-                <parameters>
-                    <parameter id="eaa43e8d-76a7-45da-8589-e3303f5f777d" parameterName="paramName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="a721cb79-3477-4542-a193-f51c51e0f8d7" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
-                    <parameter id="cfc320c6-b072-47e7-ab68-29457ee08625" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="fdb2da13-3567-48d8-9dfc-7c96f87a2581" name="tdkb_e2e_SetMultipleParams">
                 <parameters>
                     <parameter id="623912e5-0406-4987-9182-2a733e01a97d" parameterName="paramList" parameterType="STRING" range="A-Z"/>
@@ -32,6 +25,13 @@
             <function id="7e1d3d86-6f13-4ddc-9d62-1fe7fef25ac9" name="tdkb_e2e_Get">
                 <parameters>
                     <parameter id="2f0fdb6f-32fd-4a80-9ee5-70ece3834d7b" parameterName="paramName" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2d47ff02-435a-4910-ba21-cf686497aea8" name="tdkb_e2e_Set">
+                <parameters>
+                    <parameter id="a721cb79-3477-4542-a193-f51c51e0f8d7" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cfc320c6-b072-47e7-ab68-29457ee08625" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="eaa43e8d-76a7-45da-8589-e3303f5f777d" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>

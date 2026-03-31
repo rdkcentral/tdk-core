@@ -8,7 +8,7 @@
         <!-- Category of the module -->
         <category>RDKV_RDKSERVICE</category>
         <!-- Execution time out of module -->
-        <executionTimeOut>1</executionTimeOut>
+        <executionTimeOut>2</executionTimeOut>
         <!-- Test Group of the module -->
         <testGroup>Component</testGroup>
         <!-- Logs File Names of module -->
@@ -17,9 +17,58 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
+            <function id="c7a566eb-16b1-43be-970d-15bfcbc6203c" name="rfc_datfilechecker">
+                <parameters/>
+            </function>
+            <function id="1858d47b-e1e1-4f9e-a896-57b21e47d8c1" name="rfc_deletefeature">
+                <parameters>
+                    <parameter id="e2cc091c-cbc5-433a-9849-e148bb0f08eb" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="72c45b63-9066-4644-8198-f60eb6e7d10e" name="rfc_disable_enable_maintenance_manager">
+                <parameters>
+                    <parameter id="ac391a3f-df2f-494b-80fa-f6288adc11a6" parameterName="params" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f82ba196-89a2-4ace-b602-9e2bcd1f05d4" parameterName="method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5790c622-f87a-47f9-8f18-e6b566fb1bf6" name="rfc_formfeaturename">
+                <parameters>
+                    <parameter id="fe30398a-d1ac-49db-ab65-502d27aaa6cf" parameterName="feature_name" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="0da95c03-c341-4323-86cb-c88f4d02c2e1" name="rfc_datamodelcheck">
+                <parameters>
+                    <parameter id="8efb7e4a-0217-4192-976f-7cbcfcfd397c" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="582fdcd2-60f1-47d9-bb03-b7fdca054480" name="rfc_urlvalidate">
+                <parameters>
+                    <parameter id="e1851193-093e-4330-97dd-182f04634dd4" parameterName="basePath" parameterType="STRING" range="A-Z"/>
+                    <parameter id="7c7d4586-1e8e-49ad-974d-12f11a0fe6f3" parameterName="configKey" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="44a34311-97d0-4bc4-8fd6-4628c86b5627" name="rfc_deletefeaturerule">
+                <parameters>
+                    <parameter id="764875d5-9588-4690-8c1e-db13a46f05fa" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
             <function id="053a11fc-57a6-4f63-a3cf-ce18609e4a71" name="rfc_partnersdefaultschecker">
                 <parameters>
                     <parameter id="7d6f8a71-bf90-40f7-ae78-dee958f13f47" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="99d4c4de-2714-481b-b699-086c94b57e1a" name="rfc_checkconfiguredata">
+                <parameters>
+                    <parameter id="231931f2-b092-4311-9dc7-6390e3add9e3" parameterName="feature_name" parameterType="STRING" range="A-Z"/>
+                    <parameter id="1b2f41a9-f895-4ab3-b0d2-d8bb7d02d15d" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f2d28210-b5de-4a3a-8c94-3c26f7a6462c" parameterName="expectedvalue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8c66ec4c-6f22-4179-a866-94f95f43c826" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e62345dd-273d-4ba0-b766-30889478e87e" name="rfc_check_setornot_configdata">
+                <parameters>
+                    <parameter id="f7f7c0fe-7921-41e6-a48f-80a9cbff6602" parameterName="expectedvalue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="27d0a7f6-f8ae-46a9-ba98-06492add7faa" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="0e768733-2b93-4e8b-b235-747cc7da5f1c" name="rfc_enable_maintenance_manager">
@@ -30,59 +79,10 @@
             </function>
             <function id="c1661d1c-addf-461d-a45c-496f3da315db" name="rfc_initializefeatures">
                 <parameters>
-                    <parameter id="61edd512-2190-4d27-bd79-5d7b7ec914fb" parameterName="feature_name" parameterType="STRING" range="A-Z"/>
-                    <parameter id="42ba22a8-bd2a-46ad-a3a9-df090a9a8a10" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
                     <parameter id="4e72be4b-c04b-4acb-9da7-149a82b51694" parameterName="expectedvalue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="42ba22a8-bd2a-46ad-a3a9-df090a9a8a10" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
+                    <parameter id="61edd512-2190-4d27-bd79-5d7b7ec914fb" parameterName="feature_name" parameterType="STRING" range="A-Z"/>
                     <parameter id="71ade6e5-cc09-4da2-bc3a-857746438836" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="99d4c4de-2714-481b-b699-086c94b57e1a" name="rfc_checkconfiguredata">
-                <parameters>
-                    <parameter id="1b2f41a9-f895-4ab3-b0d2-d8bb7d02d15d" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
-                    <parameter id="f2d28210-b5de-4a3a-8c94-3c26f7a6462c" parameterName="expectedvalue" parameterType="STRING" range="A-Z"/>
-                    <parameter id="8c66ec4c-6f22-4179-a866-94f95f43c826" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
-                    <parameter id="231931f2-b092-4311-9dc7-6390e3add9e3" parameterName="feature_name" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="582fdcd2-60f1-47d9-bb03-b7fdca054480" name="rfc_urlvalidate">
-                <parameters>
-                    <parameter id="7c7d4586-1e8e-49ad-974d-12f11a0fe6f3" parameterName="configKey" parameterType="STRING" range="A-Z"/>
-                    <parameter id="e1851193-093e-4330-97dd-182f04634dd4" parameterName="basePath" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="72c45b63-9066-4644-8198-f60eb6e7d10e" name="rfc_disable_enable_maintenance_manager">
-                <parameters>
-                    <parameter id="ac391a3f-df2f-494b-80fa-f6288adc11a6" parameterName="params" parameterType="STRING" range="A-Z"/>
-                    <parameter id="f82ba196-89a2-4ace-b602-9e2bcd1f05d4" parameterName="method" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="c7a566eb-16b1-43be-970d-15bfcbc6203c" name="rfc_datfilechecker">
-                <parameters/>
-            </function>
-            <function id="5790c622-f87a-47f9-8f18-e6b566fb1bf6" name="rfc_formfeaturename">
-                <parameters>
-                    <parameter id="fe30398a-d1ac-49db-ab65-502d27aaa6cf" parameterName="feature_name" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="1858d47b-e1e1-4f9e-a896-57b21e47d8c1" name="rfc_deletefeature">
-                <parameters>
-                    <parameter id="e2cc091c-cbc5-433a-9849-e148bb0f08eb" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="0da95c03-c341-4323-86cb-c88f4d02c2e1" name="rfc_datamodelcheck">
-                <parameters>
-                    <parameter id="8efb7e4a-0217-4192-976f-7cbcfcfd397c" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="44a34311-97d0-4bc4-8fd6-4628c86b5627" name="rfc_deletefeaturerule">
-                <parameters>
-                    <parameter id="764875d5-9588-4690-8c1e-db13a46f05fa" parameterName="xconfdomainname" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="e62345dd-273d-4ba0-b766-30889478e87e" name="rfc_check_setornot_configdata">
-                <parameters>
-                    <parameter id="27d0a7f6-f8ae-46a9-ba98-06492add7faa" parameterName="rfcparameter" parameterType="STRING" range="A-Z"/>
-                    <parameter id="f7f7c0fe-7921-41e6-a48f-80a9cbff6602" parameterName="expectedvalue" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>

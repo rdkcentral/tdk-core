@@ -17,21 +17,14 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="d6076194-8a01-442e-af93-7dd9f78a2463" name="LMLiteStub_Set_Get">
-                <parameters>
-                    <parameter id="d80ac07c-746b-4807-ab0a-c61340dc7b9e" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="53c5fe41-45a1-49a5-ac00-63232196f21b" parameterName="ParamType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="79142555-0e5b-448a-97c2-425012f128bf" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="fb4e520a-579e-4b08-9998-99e7a8cc384d" name="LMLiteStub_Set">
                 <parameters>
                     <parameter id="07de23de-beee-4220-94f7-0da221d3b399" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
-                    <parameter id="c043f25a-2a86-40a3-b245-99e3f71679bc" parameterName="Type" parameterType="STRING" range="A-Z"/>
                     <parameter id="2f452890-ff69-487c-a9e1-bf2c1709aeac" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c043f25a-2a86-40a3-b245-99e3f71679bc" parameterName="Type" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="c0d9527b-920b-420c-a890-ec867593f241" name="LMLiteStub_GetAllHosts">
+            <function id="f4f34592-871e-4166-b5b4-a05ab8c6659f" name="LMLiteStub_GetOnlineDevice">
                 <parameters/>
             </function>
             <function id="25cc2dfb-fddc-4b7a-bad6-00d4d1b111ca" name="LMLiteStub_Get">
@@ -39,8 +32,15 @@
                     <parameter id="7723eb98-7e4c-43a1-a227-a0751b7b7f0b" parameterName="paramName" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="f4f34592-871e-4166-b5b4-a05ab8c6659f" name="LMLiteStub_GetOnlineDevice">
+            <function id="c0d9527b-920b-420c-a890-ec867593f241" name="LMLiteStub_GetAllHosts">
                 <parameters/>
+            </function>
+            <function id="d6076194-8a01-442e-af93-7dd9f78a2463" name="LMLiteStub_Set_Get">
+                <parameters>
+                    <parameter id="53c5fe41-45a1-49a5-ac00-63232196f21b" parameterName="ParamType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="79142555-0e5b-448a-97c2-425012f128bf" parameterName="ParamValue" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d80ac07c-746b-4807-ab0a-c61340dc7b9e" parameterName="ParamName" parameterType="STRING" range="A-Z"/>
+                </parameters>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->

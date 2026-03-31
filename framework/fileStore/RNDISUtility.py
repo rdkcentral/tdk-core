@@ -243,23 +243,32 @@ def get_cellular_statistics(obj):
 ########## End of function ##########
 
 # traverse_host_table_for_client
-# Syntax : traverse_host_table_for_client(obj, host_entries, client_type, step)
-# Description : Function to traverse host table and find client entry based on type
+# Syntax : traverse_host_table_for_client(obj, host_entries, expected_layer1_interface, step)
+# Description : Function to traverse host table and find client entry based on expected Layer1Interface
 # Parameters : obj - TR181 module object
 #              host_entries - total number of host entries to traverse
-#              client_type - type of client
+#              expected_layer1_interface - expected Layer1Interface value (e.g., EXPECTED_LAYER1_INTERFACE_ETHERNET,
+#                                          EXPECTED_LAYER1_INTERFACE_WIFI_2_4G, EXPECTED_LAYER1_INTERFACE_WIFI_5G)
 #              step - current test step number
-# Return Value: tdkTestObj - test object
-#               actualresult - SUCCESS/FAILURE
-#               client_detected - 1 if client detected, 0 otherwise
-#               client_index - index of detected client entry
-#               detected_info - additional info
-#               step - updated step number
-def traverse_host_table_for_client(obj, host_entries, client_type, step):
+# Return Value: tdkTestObj_tr181 - test object
+#               actualresult    - SUCCESS/FAILURE
+#               clientDetected  - 1 if client detected, 0 otherwise
+#               clientIndex     - index of detected client entry
+#               step            - updated step number
+def traverse_host_table_for_client(obj, host_entries, expected_layer1_interface, step):
     expectedresult = "SUCCESS"
     clientDetected = 0
     clientIndex = -1
-    detectedInfo = ""
+
+    # Determine interface description based on the expected Layer1Interface value
+    if expected_layer1_interface == EXPECTED_LAYER1_INTERFACE_ETHERNET:
+        interface_description = "Ethernet"
+    elif expected_layer1_interface == EXPECTED_LAYER1_INTERFACE_WIFI_2_4G:
+        interface_description = "WiFi 2.4GHz (Device.WiFi.SSID.1)"
+    elif expected_layer1_interface == EXPECTED_LAYER1_INTERFACE_WIFI_5G:
+        interface_description = "WiFi 5GHz (Device.WiFi.SSID.2)"
+    else:
+        interface_description = "Unknown"
 
     for index in range(1, host_entries + 1):
         print("\n**········For Host Table Entry %d**········" % index)
@@ -268,8 +277,7 @@ def traverse_host_table_for_client(obj, host_entries, client_type, step):
         # Get the value of Device.Hosts.Host.{i}.Layer1Interface
         paramName = "Device.Hosts.Host." + str(index) + ".Layer1Interface"
 
-        print("\nTEST STEP %d: Get the value of %s and check if it is Ethernet" % (step, paramName))
-
+        print("\nTEST STEP %d: Get the value of %s and check if it is %s" % (step, paramName, interface_description))
         print("EXPECTED RESULT %d: Should successfully retrieve %s" % (step, paramName))
         tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Get')
         actualresult, details = getTR181Value(tdkTestObj_tr181, paramName)
@@ -280,17 +288,14 @@ def traverse_host_table_for_client(obj, host_entries, client_type, step):
             print("ACTUAL RESULT %d: %s : %s" % (step, paramName, layer1Interface))
             print("[TEST EXECUTION RESULT] : SUCCESS")
 
-            # Check for LAN client only
-            client_match = False
-            if layer1Interface == EXPECTED_LAYER1_INTERFACE_ETHERNET:
-                client_match = True
-
-            if client_match:
+            # Check if the retrieved Layer1Interface matches the expected interface
+            if layer1Interface == expected_layer1_interface:
                 clientDetected = 1
                 clientIndex = index
-                print("Identified the Host Table Entry for %s client as : %d" % (client_type, index))
+                tdkTestObj_tr181.setResultStatus("SUCCESS")
+                print("Identified the Host Table Entry for %s interface as : %d" % (interface_description, index))
 
-                # Check if the client is shown as active
+                # Check if the identified client entry is shown as active in the host table
                 step += 1
                 paramName = "Device.Hosts.Host." + str(index) + ".Active"
                 print("\nTEST STEP %d: Get the value of %s and check if it is true" % (step, paramName))
@@ -306,7 +311,7 @@ def traverse_host_table_for_client(obj, host_entries, client_type, step):
 
                     if activeStatus == "true":
                         tdkTestObj_tr181.setResultStatus("SUCCESS")
-                        print("Host is Active - LAN client detected in Host Table while RNDIS is active")
+                        print("Host is Active - %s interface client detected in Host Table while RNDIS is active" % interface_description)
                         break
                     else:
                         tdkTestObj_tr181.setResultStatus("FAILURE")
@@ -318,7 +323,8 @@ def traverse_host_table_for_client(obj, host_entries, client_type, step):
                     print("[TEST EXECUTION RESULT] : FAILURE")
                     break
             else:
-                print("Host Table Entry %d Layer1Interface is %s (not Ethernet)" % (index, layer1Interface))
+                tdkTestObj_tr181.setResultStatus("SUCCESS")
+                print("Host Table Entry for %s interface is not %d" % (interface_description, index))
                 continue
         else:
             tdkTestObj_tr181.setResultStatus("FAILURE")
@@ -326,6 +332,10 @@ def traverse_host_table_for_client(obj, host_entries, client_type, step):
             print("[TEST EXECUTION RESULT] : FAILURE")
             break
 
-    return tdkTestObj_tr181, actualresult, clientDetected, clientIndex, detectedInfo, step
-########## End of function ##########
+    # Check if client was detected after traversing all host table entries
+    if clientDetected != 1:
+        tdkTestObj_tr181.setResultStatus("FAILURE")
+        print("\nNone of the Host Table entries show %s as Layer 1 Interface" % expected_layer1_interface)
 
+    return tdkTestObj_tr181, actualresult, clientDetected, clientIndex, step
+########## End of function ##########

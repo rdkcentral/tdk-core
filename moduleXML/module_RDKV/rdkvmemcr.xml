@@ -17,14 +17,16 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="c4af5cb9-2945-40f4-a2af-82e7f3fbed3b" name="memcr_appMemorySize">
+            <function id="c38024ae-d9e3-4de0-af78-327441941040" name="memcr_setValue">
                 <parameters>
-                    <parameter id="f4603ed9-86f0-4ecc-89d8-7a1315c52ded" parameterName="processID" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="0dab339f-4d15-4953-8b5d-9b752f31f11d" parameterName="method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="5eae639f-bb25-484a-ae0e-1d56b50e9328" parameterName="value" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="6a3382d7-b03e-4762-82cc-813047981289" name="memcr_rebootDevice">
+            <function id="a030057a-eba7-49e0-a4b7-162c693ea226" name="memcr_checkPluginStatus">
                 <parameters>
-                    <parameter id="d4907b52-7773-4d36-bcdd-c3bb72921dbf" parameterName="waitTime" parameterType="INTEGER" range="0-9"/>
+                    <parameter id="0435c334-2a38-4567-8919-94f9ac7c3505" parameterName="params" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f8d78d35-9eb7-4b66-a1d9-cd6a7788c4f0" parameterName="method" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="a257c3a1-19cf-417f-9f6a-d3bb7aa48dbc" name="memcr_datamodelcheck">
@@ -32,10 +34,16 @@
                     <parameter id="16272ce9-1618-42fe-a881-e36e347d033f" parameterName="datamodel" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="c38024ae-d9e3-4de0-af78-327441941040" name="memcr_setValue">
+            <function id="6acc9f3c-b158-422d-8122-ff2175b86b63" name="memcr_checkImgFile">
                 <parameters>
-                    <parameter id="5eae639f-bb25-484a-ae0e-1d56b50e9328" parameterName="value" parameterType="STRING" range="A-Z"/>
-                    <parameter id="0dab339f-4d15-4953-8b5d-9b752f31f11d" parameterName="method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="11528866-7eba-4e0f-9c33-60f65bfacf88" parameterName="filepath" parameterType="STRING" range="A-Z"/>
+                    <parameter id="400746d4-30ee-4b9f-80e0-b9ca49e408dd" parameterName="checkfile" parameterType="STRING" range="A-Z"/>
+                    <parameter id="73604cc7-0903-4cb0-9bf6-c202ad48af19" parameterName="processID" parameterType="INTEGER" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="6a3382d7-b03e-4762-82cc-813047981289" name="memcr_rebootDevice">
+                <parameters>
+                    <parameter id="d4907b52-7773-4d36-bcdd-c3bb72921dbf" parameterName="waitTime" parameterType="INTEGER" range="0-9"/>
                 </parameters>
             </function>
             <function id="c8dd0a8a-884f-4131-a20a-347253c3b2be" name="memcr_getTR181Value">
@@ -47,24 +55,22 @@
             <function id="4ec53dd7-bc2f-4d8f-bec9-34e05928d520" name="memcr_restart_wpeframework_service">
                 <parameters/>
             </function>
+            <function id="a5530e42-5201-4865-a05c-19a44a141b1a" name="memcr_checkAppHibernateRFC">
+                <parameters>
+                    <parameter id="74c1a9a4-f3df-47e1-9290-a86d98b69df6" parameterName="datamodel" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
             <function id="507c460d-8d37-4217-9b07-cc6dd49dbebb" name="memcr_logValidation">
                 <parameters>
                     <parameter id="b9696d25-6175-4c73-b590-dbae50be79bc" parameterName="log_Occurrences" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="6acc9f3c-b158-422d-8122-ff2175b86b63" name="memcr_checkImgFile">
-                <parameters>
-                    <parameter id="73604cc7-0903-4cb0-9bf6-c202ad48af19" parameterName="processID" parameterType="INTEGER" range="0-9"/>
-                    <parameter id="11528866-7eba-4e0f-9c33-60f65bfacf88" parameterName="filepath" parameterType="STRING" range="A-Z"/>
-                    <parameter id="400746d4-30ee-4b9f-80e0-b9ca49e408dd" parameterName="checkfile" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="0eae0185-6ec8-4a63-8f6e-d68866a65b36" name="memcr_statuscheck">
                 <parameters/>
             </function>
-            <function id="a5530e42-5201-4865-a05c-19a44a141b1a" name="memcr_checkAppHibernateRFC">
+            <function id="575bccf9-24e7-4acf-a165-62ee9640a030" name="memcr_getProcessID">
                 <parameters>
-                    <parameter id="74c1a9a4-f3df-47e1-9290-a86d98b69df6" parameterName="datamodel" parameterType="STRING" range="A-Z"/>
+                    <parameter id="4f34516d-4f54-438f-924c-e0bbcb081fc6" parameterName="appname" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="fc690feb-800f-46ff-bd57-b656938cc3b2" name="memcr_getValue">
@@ -72,15 +78,9 @@
                     <parameter id="61c82b27-e88d-4e0b-a39a-3d35d0fcd73c" parameterName="method" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="575bccf9-24e7-4acf-a165-62ee9640a030" name="memcr_getProcessID">
+            <function id="c4af5cb9-2945-40f4-a2af-82e7f3fbed3b" name="memcr_appMemorySize">
                 <parameters>
-                    <parameter id="4f34516d-4f54-438f-924c-e0bbcb081fc6" parameterName="appname" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="a030057a-eba7-49e0-a4b7-162c693ea226" name="memcr_checkPluginStatus">
-                <parameters>
-                    <parameter id="f8d78d35-9eb7-4b66-a1d9-cd6a7788c4f0" parameterName="method" parameterType="STRING" range="A-Z"/>
-                    <parameter id="0435c334-2a38-4567-8919-94f9ac7c3505" parameterName="params" parameterType="STRING" range="A-Z"/>
+                    <parameter id="f4603ed9-86f0-4ecc-89d8-7a1315c52ded" parameterName="processID" parameterType="INTEGER" range="0-9"/>
                 </parameters>
             </function>
         </functions>

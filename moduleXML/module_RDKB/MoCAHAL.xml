@@ -17,94 +17,10 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="8261608f-851b-4f6c-9f0f-0d01545ba719" name="MoCAHAL_SetIfAcaConfig">
-                <parameters>
-                    <parameter id="90c44315-adda-4ea4-80dc-f125a89c44c1" parameterName="ifIndex" parameterType="INTEGER" range="0-10"/>
-                    <parameter id="35a8f3d0-14d3-4c82-893f-c7fe0f6efbae" parameterName="nodeId" parameterType="INTEGER" range="0-10"/>
-                    <parameter id="48be00bc-287c-4b5b-9208-7ce7056d7e53" parameterName="probeType" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="6bdf637f-b4fc-4f4e-a6f9-3d3412e910c8" parameterName="channel" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="9304b84b-5c31-4216-a278-991dd481f9bf" parameterName="reportNodes" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="df6a8f36-08d5-4799-9f09-7df35bfb42d1" parameterName="ACAStart" parameterType="INTEGER" range="0-1"/>
-                </parameters>
-            </function>
-            <function id="d7b9aefa-a6c2-4aaf-8eaa-c4c1ff284107" name="MoCAHAL_HardwareEquipped">
-                <parameters/>
-            </function>
-            <function id="79f0e0d4-5bd7-419e-8f6f-400fd0aa81cc" name="MoCAHAL_GetIfScmod">
-                <parameters>
-                    <parameter id="c8627a21-432d-46e1-bc35-a25c5443d07f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="057cc779-d9fd-49b9-b2d3-579bbcbb04f7" parameterName="ifIndex" parameterType="INTEGER" range="0-10"/>
-                </parameters>
-            </function>
-            <function id="13e15219-c823-453e-b3c8-1cb62ff5204e" name="MoCAHAL_IfGetStats">
-                <parameters>
-                    <parameter id="a6d76169-2b19-472c-9ab0-319da12bf1b9" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
-                    <parameter id="41d9bb2d-ef35-481c-8538-c52a3092a1f0" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="c8fcb9e5-2128-4100-afe2-49094632f883" name="MoCAHAL_CancelIfAca">
-                <parameters>
-                    <parameter id="d4124092-7f6f-4ae7-8522-9cb5e1f6ad3e" parameterName="ifIndex" parameterType="INTEGER" range="0-10"/>
-                </parameters>
-            </function>
-            <function id="4e762f11-84c7-408f-a359-c9040ac73ebd" name="MoCAHAL_GetAssociatedDevices">
-                <parameters>
-                    <parameter id="665cb0c4-8967-4ed7-b69f-8dfce17ad3eb" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
-                    <parameter id="f701cc9d-5771-4b00-945e-40537041b779" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="3c87cc07-b936-42eb-89a3-8f4582af2ea0" parameterName="devCount" parameterType="INTEGER" range="0-20"/>
-                </parameters>
-            </function>
             <function id="0c24695f-3446-4d71-8926-142db369f97e" name="MoCAHAL_GetMocaCPEs">
                 <parameters>
-                    <parameter id="d2d25306-b6f5-4d9f-ab14-cd90f53baacf" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
                     <parameter id="cd7c5ab2-1722-4578-8658-b8832ee7bc32" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="18c9294e-d96d-4681-9aef-56a1c58e64c6" name="MoCAHAL_GetIfAcaConfig">
-                <parameters>
-                    <parameter id="41d1f063-ecc4-45f3-9862-daea46919c84" parameterName="ifIndex" parameterType="INTEGER" range="0-10"/>
-                    <parameter id="612a8c95-e08a-4dab-9a48-f86f1607d072" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="ff3d47e3-a564-4d5f-9a25-2b8638df1948" name="MoCAHAL_GetNumAssociatedDevices">
-                <parameters>
-                    <parameter id="57f5f6a0-eef8-4cf0-b3b1-de223ffc41b0" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                    <parameter id="6eb5e11a-2951-498d-b907-9593bf2f82fa" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
-                </parameters>
-            </function>
-            <function id="9efec7c2-f94b-463c-9e84-2c3d8277e485" name="oCAHAL_CancelIfAca">
-                <parameters/>
-            </function>
-            <function id="1d2be58d-9a0d-4bc9-9a7b-fa3520dee815" name="MoCAHAL_IfGetExtAggrCounter">
-                <parameters>
-                    <parameter id="53471282-b415-49cc-a4fa-ef30060486ca" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
-                    <parameter id="e3dae55a-61d4-49e6-b628-3786a3791b26" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="6e9e0c92-3913-460e-9ee2-dedcbad933b2" name="MoCAHAL_GetResetCount">
-                <parameters>
-                    <parameter id="4ba74bf6-7de4-437c-a42b-259536111161" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="cb0b6cb0-f840-4059-962e-8d4aa08c7975" name="MoCAHAL_FreqMaskToValue">
-                <parameters>
-                    <parameter id="5a948beb-8b47-4a35-a716-88fe585a55d3" parameterName="mask" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="e338a962-8230-420f-aef7-779d648d5157" name="MoCAHAL_GetIfAcaStatus">
-                <parameters>
-                    <parameter id="a1d21c8a-a692-405c-9db7-eeb563a7e29f" parameterName="ifIndex" parameterType="INTEGER" range="0-10"/>
-                    <parameter id="0ac76fee-96d6-4f4e-8e48-3f412b7700eb" parameterName="paramType" parameterType="STRING" range="A-z"/>
-                </parameters>
-            </function>
-            <function id="02dcb873-dd53-4a6d-a2c4-4f90477f41ba" name="MoCAHAL_SetIfConfig">
-                <parameters>
-                    <parameter id="46755d98-b5e9-478d-9181-2d71a9fe35a5" parameterName="keyPassphrase" parameterType="STRING" range="A-Z"/>
-                    <parameter id="fb83a74d-d479-45ff-9088-9c16581dc558" parameterName="privacyEnable" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="ba85cb6c-96e2-4a94-b734-753aaeebf6f3" parameterName="ifIndex" parameterType="STRING" range="0-10"/>
-                    <parameter id="e73eb961-d6b5-4e35-9fdc-6f5cf1142312" parameterName="autoPowerEnable" parameterType="INTEGER" range="0-1"/>
-                    <parameter id="5fd02a6a-62f2-4ec2-9d3c-32dfa34839d2" parameterName="autoPowerRate" parameterType="INTEGER" range="0-100000"/>
-                    <parameter id="bd28b0b9-3a1d-4707-b17a-946fb77eccc2" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d2d25306-b6f5-4d9f-ab14-cd90f53baacf" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
                 </parameters>
             </function>
             <function id="63a54840-bf95-4ce5-8968-96710644e705" name="MoCAHAL_IfGetExtCounter">
@@ -119,16 +35,36 @@
                     <parameter id="a63d8206-3244-41fd-960b-cb7b8e3203d5" parameterName="paramType" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="da45db51-cf78-474f-bbeb-c75943ff40cf" name="MoCAHAL_IfGetStaticInfo">
+            <function id="9efec7c2-f94b-463c-9e84-2c3d8277e485" name="oCAHAL_CancelIfAca">
+                <parameters/>
+            </function>
+            <function id="ff3d47e3-a564-4d5f-9a25-2b8638df1948" name="MoCAHAL_GetNumAssociatedDevices">
                 <parameters>
-                    <parameter id="1fc2d01a-cef3-475d-8f64-5d3309a05fe0" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
-                    <parameter id="313c0e1f-4d2a-44cb-923a-4fe1f3cf50de" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="6eb5e11a-2951-498d-b907-9593bf2f82fa" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
+                    <parameter id="57f5f6a0-eef8-4cf0-b3b1-de223ffc41b0" parameterName="paramType" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="a0d79621-6f7b-450d-a582-453258b3dd9d" name="MoCAHAL_GetIfConfig">
+            <function id="79f0e0d4-5bd7-419e-8f6f-400fd0aa81cc" name="MoCAHAL_GetIfScmod">
                 <parameters>
-                    <parameter id="9d8fe831-6c9b-48b8-bad1-7dbb1eae2423" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
-                    <parameter id="c6f0b279-88ae-4825-8cf6-747183a91489" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="057cc779-d9fd-49b9-b2d3-579bbcbb04f7" parameterName="ifIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="c8627a21-432d-46e1-bc35-a25c5443d07f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="1d2be58d-9a0d-4bc9-9a7b-fa3520dee815" name="MoCAHAL_IfGetExtAggrCounter">
+                <parameters>
+                    <parameter id="53471282-b415-49cc-a4fa-ef30060486ca" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
+                    <parameter id="e3dae55a-61d4-49e6-b628-3786a3791b26" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e338a962-8230-420f-aef7-779d648d5157" name="MoCAHAL_GetIfAcaStatus">
+                <parameters>
+                    <parameter id="a1d21c8a-a692-405c-9db7-eeb563a7e29f" parameterName="ifIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="0ac76fee-96d6-4f4e-8e48-3f412b7700eb" parameterName="paramType" parameterType="STRING" range="A-z"/>
+                </parameters>
+            </function>
+            <function id="cb0b6cb0-f840-4059-962e-8d4aa08c7975" name="MoCAHAL_FreqMaskToValue">
+                <parameters>
+                    <parameter id="5a948beb-8b47-4a35-a716-88fe585a55d3" parameterName="mask" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="c3cb408b-01a9-4f30-b587-200033590889" name="MoCAHAL_IfGetDynamicInfo">
@@ -137,11 +73,75 @@
                     <parameter id="b7c545ea-1cfc-46ee-8b43-ee8ce46840b1" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
                 </parameters>
             </function>
+            <function id="c8fcb9e5-2128-4100-afe2-49094632f883" name="MoCAHAL_CancelIfAca">
+                <parameters>
+                    <parameter id="d4124092-7f6f-4ae7-8522-9cb5e1f6ad3e" parameterName="ifIndex" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
             <function id="fbbf25d1-062b-4fec-bc13-35a1517fbb53" name="MoCAHAL_GetFullMeshRates">
                 <parameters>
-                    <parameter id="066c0578-a384-4fe6-84e0-d7dcaa5729ea" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
                     <parameter id="e6c37c92-e0d2-4099-b1a7-809f9e7d1ae4" parameterName="count" parameterType="INTEGER" range="0-1"/>
                     <parameter id="f9afc1cb-148b-49f0-96fb-350193166cff" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="066c0578-a384-4fe6-84e0-d7dcaa5729ea" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
+                </parameters>
+            </function>
+            <function id="02dcb873-dd53-4a6d-a2c4-4f90477f41ba" name="MoCAHAL_SetIfConfig">
+                <parameters>
+                    <parameter id="46755d98-b5e9-478d-9181-2d71a9fe35a5" parameterName="keyPassphrase" parameterType="STRING" range="A-Z"/>
+                    <parameter id="bd28b0b9-3a1d-4707-b17a-946fb77eccc2" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ba85cb6c-96e2-4a94-b734-753aaeebf6f3" parameterName="ifIndex" parameterType="STRING" range="0-10"/>
+                    <parameter id="fb83a74d-d479-45ff-9088-9c16581dc558" parameterName="privacyEnable" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="e73eb961-d6b5-4e35-9fdc-6f5cf1142312" parameterName="autoPowerEnable" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="5fd02a6a-62f2-4ec2-9d3c-32dfa34839d2" parameterName="autoPowerRate" parameterType="INTEGER" range="0-100000"/>
+                </parameters>
+            </function>
+            <function id="18c9294e-d96d-4681-9aef-56a1c58e64c6" name="MoCAHAL_GetIfAcaConfig">
+                <parameters>
+                    <parameter id="612a8c95-e08a-4dab-9a48-f86f1607d072" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="41d1f063-ecc4-45f3-9862-daea46919c84" parameterName="ifIndex" parameterType="INTEGER" range="0-10"/>
+                </parameters>
+            </function>
+            <function id="da45db51-cf78-474f-bbeb-c75943ff40cf" name="MoCAHAL_IfGetStaticInfo">
+                <parameters>
+                    <parameter id="313c0e1f-4d2a-44cb-923a-4fe1f3cf50de" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="1fc2d01a-cef3-475d-8f64-5d3309a05fe0" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
+                </parameters>
+            </function>
+            <function id="6e9e0c92-3913-460e-9ee2-dedcbad933b2" name="MoCAHAL_GetResetCount">
+                <parameters>
+                    <parameter id="4ba74bf6-7de4-437c-a42b-259536111161" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="4e762f11-84c7-408f-a359-c9040ac73ebd" name="MoCAHAL_GetAssociatedDevices">
+                <parameters>
+                    <parameter id="3c87cc07-b936-42eb-89a3-8f4582af2ea0" parameterName="devCount" parameterType="INTEGER" range="0-20"/>
+                    <parameter id="f701cc9d-5771-4b00-945e-40537041b779" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="665cb0c4-8967-4ed7-b69f-8dfce17ad3eb" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
+                </parameters>
+            </function>
+            <function id="8261608f-851b-4f6c-9f0f-0d01545ba719" name="MoCAHAL_SetIfAcaConfig">
+                <parameters>
+                    <parameter id="35a8f3d0-14d3-4c82-893f-c7fe0f6efbae" parameterName="nodeId" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="df6a8f36-08d5-4799-9f09-7df35bfb42d1" parameterName="ACAStart" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="48be00bc-287c-4b5b-9208-7ce7056d7e53" parameterName="probeType" parameterType="INTEGER" range="0-1"/>
+                    <parameter id="9304b84b-5c31-4216-a278-991dd481f9bf" parameterName="reportNodes" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="90c44315-adda-4ea4-80dc-f125a89c44c1" parameterName="ifIndex" parameterType="INTEGER" range="0-10"/>
+                    <parameter id="6bdf637f-b4fc-4f4e-a6f9-3d3412e910c8" parameterName="channel" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="a0d79621-6f7b-450d-a582-453258b3dd9d" name="MoCAHAL_GetIfConfig">
+                <parameters>
+                    <parameter id="9d8fe831-6c9b-48b8-bad1-7dbb1eae2423" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
+                    <parameter id="c6f0b279-88ae-4825-8cf6-747183a91489" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d7b9aefa-a6c2-4aaf-8eaa-c4c1ff284107" name="MoCAHAL_HardwareEquipped">
+                <parameters/>
+            </function>
+            <function id="13e15219-c823-453e-b3c8-1cb62ff5204e" name="MoCAHAL_IfGetStats">
+                <parameters>
+                    <parameter id="41d9bb2d-ef35-481c-8538-c52a3092a1f0" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a6d76169-2b19-472c-9ab0-319da12bf1b9" parameterName="ifIndex" parameterType="INTEGER" range="0-5"/>
                 </parameters>
             </function>
         </functions>

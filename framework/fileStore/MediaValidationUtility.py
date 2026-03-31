@@ -330,7 +330,7 @@ def launchApp(obj,app_id):
             return "SUCCESS"
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print(f"\nThe app {app_id} is not listed in LoadedApps, failed to launch the app\n")
+            print(f"\nThe app {app_id} is not listed in LoadedApps, hence failed to launch\n")
             return "FAILURE"
     else:
         tdkTestObj.setResultStatus("FAILURE")
@@ -983,13 +983,19 @@ def setMediaTestPreRequisites(obj,app_id,app_download_url,get_proc_info=True):
                 result = rdkservice_download_app_bundle(app_download_url)
                 if result != "EXCEPTION OCCURRED":
                     print("\nThe package is downloaded successfully\n")
-                    file_locator = "/opt/CDL/package" + str(result)
-                    result = rdkservice_install_app(file_locator,app_id)
-                    if result != "EXCEPTION OCCURRED":
-                        print(f"\nThe app {app_id} is installed successfully\n")
-                        pre_requisite_status = "SUCCESS"
+                    config_file, status = get_configfile_name(obj)
+                    status, file_locator = rdkv_performancelib.getDeviceConfigKeyValue(config_file,"PACKAGEMANAGER_FILE_LOCATOR")
+                    if status:
+                        final_file_locator = file_locator + str(result)
+                        result = rdkservice_install_app(final_file_locator,app_id)
+                        if result != "EXCEPTION OCCURRED":
+                            print(f"\nThe app {app_id} is installed successfully\n")
+                            pre_requisite_status = "SUCCESS"
+                        else:
+                            print(f"\nFailed to install the app: {app_id}\n")
+                            pre_requisite_status = "FAILURE"
                     else:
-                        print(f"\nFailed to install the app: {app_id}\n")
+                        print("\nFailed to get the file locator path from config\n")
                         pre_requisite_status = "FAILURE"
                 else:
                     print(f"\nFailed to download the package\n")

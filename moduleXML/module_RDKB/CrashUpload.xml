@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>3cda2cf9-bfa5-48b6-bf47-17fa143fecdc</moduleId>
+        <!-- Module name -->
+        <moduleName>CrashUpload</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[/rdklogs/logs]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="a612e592-b610-4b56-b604-67239f49fece" name="CrashUpload_DoNothing">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>2036783e-fa21-4645-a568-5dc9a82ecd92</id>
+                <name>CrashUpload_DoNothing</name>
+                <funName>CrashUpload_DoNothing</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

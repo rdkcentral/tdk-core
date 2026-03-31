@@ -6,7 +6,7 @@
         <!-- Module name -->
         <moduleName>webkit</moduleName>
         <!-- Category of the module -->
-        <category>RDKV</category>
+        <category>RDKV_RDKSERVICE</category>
         <!-- Execution time out of module -->
         <executionTimeOut>20</executionTimeOut>
         <!-- Test Group of the module -->
@@ -17,29 +17,28 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="36834995-4a2a-4ee2-bc1f-8f450204196b" name="webkit_prerequisite">
-                <parameters>
-                    <parameter id="810cb507-c35d-4604-a640-1afc15884628" parameterName="VariableList" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="c4af00cf-68e7-491a-9e4c-790958645b80" name="webkit_getValue">
                 <parameters>
                     <parameter id="fd461157-caf2-459e-9879-e051d6382787" parameterName="method" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="760ea817-54a1-4a7b-8162-ca06ba2a1a81" name="webkit_getSSHParams">
-                <parameters/>
-            </function>
-            <function id="d83b84bd-d084-4ce5-9284-18d14ecd7c0d" name="webkit_getPluginStatus">
-                <parameters>
-                    <parameter id="c1d6443e-111d-4bda-a111-83a73931835c" parameterName="plugin" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="0e56e4c1-c634-46ca-8b83-92bbad9263de" name="webkit_getRequiredLog">
                 <parameters>
-                    <parameter id="51392431-9988-4b0b-b126-389d4fbdc3ca" parameterName="credentials" parameterType="STRING" range="A-Z"/>
                     <parameter id="9e26b1fe-c36a-4a86-85ef-0128f8e3a848" parameterName="ssh_method" parameterType="STRING" range="A-Z"/>
                     <parameter id="f03f80d7-dd41-435f-9409-94a9f7b6f0d2" parameterName="command" parameterType="STRING" range="A-Z"/>
+                    <parameter id="51392431-9988-4b0b-b126-389d4fbdc3ca" parameterName="credentials" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="36834995-4a2a-4ee2-bc1f-8f450204196b" name="webkit_prerequisite">
+                <parameters>
+                    <parameter id="810cb507-c35d-4604-a640-1afc15884628" parameterName="VariableList" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="95ed5155-5086-40f0-8499-c2639c4a6bea" name="webkit_setPluginStatus">
+                <parameters>
+                    <parameter id="dbd434c0-3f92-4754-88f2-4797bf4c477a" parameterName="status" parameterType="STRING" range="A-Z"/>
+                    <parameter id="a4d49b87-e604-4e51-8d46-80659b58bf24" parameterName="uri" parameterType="STRING" range="A-Z"/>
+                    <parameter id="10970834-1dd0-4bc7-ba61-69452aee03f8" parameterName="plugin" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="7a570d18-52e1-46f2-abee-786eb07590b6" name="webkit_getLogs_webinspectpage">
@@ -49,18 +48,19 @@
                     <parameter id="adff5aab-dead-45d9-9ee9-d9347e832cef" parameterName="url" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="95ed5155-5086-40f0-8499-c2639c4a6bea" name="webkit_setPluginStatus">
-                <parameters>
-                    <parameter id="a4d49b87-e604-4e51-8d46-80659b58bf24" parameterName="uri" parameterType="STRING" range="A-Z"/>
-                    <parameter id="10970834-1dd0-4bc7-ba61-69452aee03f8" parameterName="plugin" parameterType="STRING" range="A-Z"/>
-                    <parameter id="dbd434c0-3f92-4754-88f2-4797bf4c477a" parameterName="status" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
             <function id="c32ad386-f842-4c6a-9eea-e06f2180ca1b" name="webkit_setValue">
                 <parameters>
-                    <parameter id="40e3b485-1ea8-45b0-a202-b52636f754ab" parameterName="value" parameterType="STRING" range="A-Z"/>
                     <parameter id="503fa5ad-98c8-4300-8adc-d07276ddfd30" parameterName="method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="40e3b485-1ea8-45b0-a202-b52636f754ab" parameterName="value" parameterType="STRING" range="A-Z"/>
                 </parameters>
+            </function>
+            <function id="d83b84bd-d084-4ce5-9284-18d14ecd7c0d" name="webkit_getPluginStatus">
+                <parameters>
+                    <parameter id="c1d6443e-111d-4bda-a111-83a73931835c" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="760ea817-54a1-4a7b-8162-ca06ba2a1a81" name="webkit_getSSHParams">
+                <parameters/>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->

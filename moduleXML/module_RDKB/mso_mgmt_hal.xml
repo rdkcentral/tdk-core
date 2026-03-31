@@ -17,6 +17,11 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
+            <function id="197fed80-1192-4aaa-b13e-0ed47139e26f" name="mso_mgmt_hal_GetMsoPodSeed">
+                <parameters>
+                    <parameter id="d39dddcc-f9d8-48bd-b372-35bb80d281d0" parameterName="paramType" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
             <function id="f12f910b-208d-45ed-834a-f749205f0be2" name="mso_mgmt_hal_MsoValidatePwd">
                 <parameters>
                     <parameter id="03ae9c0e-bc0c-4afd-a00e-412e2546a83f" parameterName="paramType" parameterType="STRING" range="A-Z"/>
@@ -27,11 +32,6 @@
                 <parameters>
                     <parameter id="19891084-3888-4228-bdf0-6ed93b43f5c7" parameterName="paramValue" parameterType="STRING" range="A-Z"/>
                     <parameter id="40823e03-4dfa-4c48-9fbc-acfe5deefff6" parameterName="paramType" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="197fed80-1192-4aaa-b13e-0ed47139e26f" name="mso_mgmt_hal_GetMsoPodSeed">
-                <parameters>
-                    <parameter id="d39dddcc-f9d8-48bd-b372-35bb80d281d0" parameterName="paramType" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>
