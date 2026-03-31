@@ -34,7 +34,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_appmanagers","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_AppManagers_Functional_App_Launch_ContainerMode_Status_Check')
+obj.configureTestCase(ip,port,'RDKV_CERT_AppManagers_Functional_Kill_Already_Terminated_App')
 
 # Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult()
@@ -48,13 +48,13 @@ expectedResult = "SUCCESS"
 installation_status = "FALSE"
 download_status = "FALSE"
 launch_status = "FALSE"
-container_status = "FALSE"
+terminate_status = "FALSE"
 event_listener = None
 
 if "SUCCESS" in result.upper():
     # Step 1 : Get the device configuration values
     print("\n")
-    configkeylist = ["SSH_METHOD","SSH_USERNAME","SSH_PASSWORD","PACKAGEMANAGER_APPLICATION_HOSTEDURL","PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME","PACKAGEMANAGER_APPLICATION_NAME","PACKAGEMANAGER_APPLICATION_VERSION","PACKAGEMANAGER_ADDITIONALMETADATA_NAME","PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"]
+    configkeylist = ["PACKAGEMANAGER_APPLICATION_HOSTEDURL","PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME","PACKAGEMANAGER_APPLICATION_NAME","PACKAGEMANAGER_APPLICATION_VERSION","PACKAGEMANAGER_ADDITIONALMETADATA_NAME","PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"]
     tdkTestObj = obj.createTestStep('appmanagers_getdeviceconfig')
     tdkTestObj.addParameter("configkeylist",configkeylist)
     tdkTestObj.executeTestCase(expectedResult)
@@ -94,7 +94,7 @@ if "SUCCESS" in result.upper():
                     payloads.append(payload)
             print("Event Registration List : ", payloads)
             event_listener = createEventListener(ip,thunder_port,payloads,"/jsonrpc",False)
-            
+
             # Step 3 : Check whether the package is already installed if installed skip download and installation steps
             time.sleep(10)
             print("\n")
@@ -150,7 +150,6 @@ if "SUCCESS" in result.upper():
                             # Step 5 : Form filelocator URL and Install the package
                             print("\n")
                             time.sleep(int(download_time))
-                            #filelocator_url = filelocator_url + str(download_id)
                             method = "org.rdk.PackageManagerRDKEMS.1.install"
                             value = '{ "packageId": "'+application_name+'", "version": "'+application_version+'", "additionalMetadata": [ {"name": "'+additionalmetadata_name+'", "value": "'+additionalmetadata_value+'"} ], "fileLocator": "'+filelocator_url+'" }'
                             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
@@ -195,7 +194,7 @@ if "SUCCESS" in result.upper():
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     print("FAILURE : Failed to initiate package download")
-            
+
             if ("error" not in result and "result" in result) or result["result"] == True or installation_status == "TRUE":
                 print("INFO : Package is installed, proceeding with launch step")
 
@@ -227,66 +226,104 @@ if "SUCCESS" in result.upper():
                             appId = inner["appId"]
                             newState = inner["newState"]
                             errorReason = inner["errorReason"]
-                            appInstanceId = inner["appInstanceId"]
                             if appId == application_name and newState == "APP_STATE_ACTIVE" and errorReason == "APP_ERROR_NONE":
                                 print("SUCCESS : Application launch successful with correct lifecycle state")
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 launch_status = "TRUE"
                                 break
-                
+
                         if launch_status == "TRUE":
-                            # Step 7 : Verify whether the launched application is in top z-order
+                            # Step 7 : Terminate the application
                             print("\n")
                             time.sleep(3)
-                            command = "DobbyTool list"
-                            tdkTestObj = obj.createTestStep('appmanagers_executeInDUT')
-                            tdkTestObj.addParameter("command", command)
+                            method  = "org.rdk.AppManager.1.terminateApp"
+                            value = '{"appId": "'+application_name+'"}'
+                            tdkTestObj = obj.createTestStep('appmanagers_setvalue')
+                            tdkTestObj.addParameter("method",method)
+                            tdkTestObj.addParameter("value",value)
                             tdkTestObj.executeTestCase(expectedResult)
                             result = tdkTestObj.getResultDetails()
-                            print("\nExecuting Command : %s" %command)
-                            print("Output of executing command : %s" %result)
-                            result = result.splitlines()
-                            for line in result:
-                                if appInstanceId in line.lower() and "running" in line.lower():
-                                    print("SUCCESS : Launched application is running in container mode")
+                            result = ast.literal_eval(result)
+                            if "error" not in result and "result" in result and result["result"] in (None, '', 'NONE'):
+                                print("SUCCESS : Application terminated successfully")
+                                tdkTestObj.setResultStatus("SUCCESS")
+
+                                # Step 8 : Kill the application which is already terminated and check for the expected error
+                                print("\n")
+                                time.sleep(3)
+                                method = "org.rdk.AppManager.1.killApp"
+                                value = '{"appId": "'+application_name+'"}'
+                                tdkTestObj = obj.createTestStep('appmanagers_setvalue')
+                                tdkTestObj.addParameter("method",method)
+                                tdkTestObj.addParameter("value",value)
+                                tdkTestObj.executeTestCase(expectedResult)
+                                result = tdkTestObj.getResultDetails()
+                                result = ast.literal_eval(result)
+                                if "error" in result and result["error"]["message"] == "ERROR_GENERAL":
+                                    print("SUCCESS : killApp returned expected error when trying to kill a terminated application")
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    container_status = "TRUE"
-                                    break
-                            if container_status != "TRUE":
-                                print("FAILURE : Launched application is not running in container mode")
+                                else:
+                                    print("FAILURE : killApp did not return expected error when trying to kill a terminated application")
+                                    tdkTestObj.setResultStatus("FAILURE")
+                            else:
+                                print("FAILURE : Failed to terminate the application")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
                             print("FAILURE : Application launch failed or incorrect lifecycle state received in event")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        tdkTestObj.setResultStatus("FAILURE")                    
+                        tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print("FAILURE : Application launch failed")
                     tdkTestObj.setResultStatus("FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-
+        
         if launch_status == "TRUE":
-            # Step 8 : Terminate the application
+            # Step 9 : Check whether the launched application is present in loaded apps list before termination
             print("\n")
             time.sleep(3)
-            method = "org.rdk.AppManager.1.terminateApp"
-            value = '{"appId": "'+application_name+'"}'
-            tdkTestObj = obj.createTestStep('appmanagers_setvalue')
-            tdkTestObj.addParameter("method", method)
-            tdkTestObj.addParameter("value", value)
+            method = "org.rdk.AppManager.1.getLoadedApps"
+            tdkTestObj = obj.createTestStep('appmanagers_getvalue')
+            tdkTestObj.addParameter("method",method)
             tdkTestObj.executeTestCase(expectedResult)
             result = tdkTestObj.getResultDetails()
             result = ast.literal_eval(result)
-            if "error" not in result and "result" in result and result["result"] in (None, '', 'NONE'):
-                print("SUCCESS : Application terminated successfully")
-                tdkTestObj.setResultStatus("SUCCESS")
+            if "error" not in result and "result" in result and result["result"] not in (None, '', 'NONE'):
+                result = result["result"]
+                for app in result:
+                     if app["appId"] == application_name:
+                        print("INFO : Application is present in loaded apps list so proceeding with termination")
+                        terminate_status = "TRUE"
+                        break
+
+                if terminate_status == "TRUE":
+                    # Step 10 : Terminate the application
+                    print("\n")
+                    time.sleep(3)
+                    method  = "org.rdk.AppManager.1.terminateApp"
+                    value = '{"appId": "'+application_name+'"}'
+                    tdkTestObj = obj.createTestStep('appmanagers_setvalue')
+                    tdkTestObj.addParameter("method",method)
+                    tdkTestObj.addParameter("value",value)
+                    tdkTestObj.executeTestCase(expectedResult)
+                    result = tdkTestObj.getResultDetails()
+                    result = ast.literal_eval(result)
+                    if "error" not in result and "result" in result and result["result"] in (None, '', 'NONE'):
+                        print("SUCCESS : Application terminated successfully")
+                        tdkTestObj.setResultStatus("SUCCESS")
+                    else:
+                        print("FAILURE : Failed to terminate the application")
+                        tdkTestObj.setResultStatus("FAILURE")
+                else:
+                    print("INFO : Application not present in loaded apps list, skipped terminate step")
+                    tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print("FAILURE : Failed to terminate the application")
+                print("FAILURE : Failed to get the loaded apps list")
                 tdkTestObj.setResultStatus("FAILURE")
-        
+                
         if installation_status == "TRUE":
-            # Step 9 : Uninstall the package
+            # Step 11 : Uninstall the package
             print("\n")
             method = "org.rdk.PackageManagerRDKEMS.1.uninstall"
             value = '{ "packageId": "'+application_name+'"}'
@@ -304,7 +341,7 @@ if "SUCCESS" in result.upper():
                 tdkTestObj.setResultStatus("FAILURE")
 
         if download_status == "TRUE":
-            # Step 10 : Delete the package
+            # Step 12 : Delete the package
             print("\n")
             method = "org.rdk.DownloadManager.1.delete"
             value = '{"fileLocator": "'+filelocator_url+'"}'
@@ -326,7 +363,7 @@ if "SUCCESS" in result.upper():
             print("\nUnregistering the events and closing the websocket connection")
             event_listener.disconnect()
             time.sleep(10)
-            
+
     else:
         tdkTestObj.setResultStatus("FAILURE")
 else:

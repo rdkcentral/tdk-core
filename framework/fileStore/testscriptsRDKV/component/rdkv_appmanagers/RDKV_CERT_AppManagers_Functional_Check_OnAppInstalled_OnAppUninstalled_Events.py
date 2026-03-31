@@ -59,7 +59,7 @@ if "SUCCESS" in result.upper():
     tdkTestObj.executeTestCase(expectedResult)
     result = tdkTestObj.getResultDetails()
     result = ast.literal_eval(result)
-    downlaod_url = result[0]["PACKAGEMANAGER_APPLICATION_HOSTEDURL"]
+    download_url = result[0]["PACKAGEMANAGER_APPLICATION_HOSTEDURL"]
     download_time = result[0]["PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME"]
     application_name = result[0]["PACKAGEMANAGER_APPLICATION_NAME"]
     application_version = result[0]["PACKAGEMANAGER_APPLICATION_VERSION"]
@@ -70,7 +70,7 @@ if "SUCCESS" in result.upper():
 
         # Step 2 : Check the status of the dependent plugins
         print("\n")
-        pluginlist = ["org.rdk.StorageManager", "org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
+        pluginlist = ["org.rdk.AppStorageManager", "org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
         tdkTestObj = obj.createTestStep('appmanagers_checkpluginstatus')
         tdkTestObj.addParameter("pluginlist",pluginlist)
         tdkTestObj.executeTestCase(expectedResult)
@@ -97,7 +97,7 @@ if "SUCCESS" in result.upper():
             # Step 3 : Check whether the package is already installed if installed skip download and installation steps
             time.sleep(10)
             print("\n")
-            method = "org.rdk.AppManager.isInstalled"
+            method = "org.rdk.AppManager.1.isInstalled"
             value = '{"appId": "'+application_name+'"}'
             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
             tdkTestObj.addParameter("method",method)
@@ -116,7 +116,7 @@ if "SUCCESS" in result.upper():
                 # Step 4 : Uninstall the package
                 print("\n")
                 time.sleep(5)
-                method = "org.rdk.PackageManagerRDKEMS.uninstall"
+                method = "org.rdk.PackageManagerRDKEMS.1.uninstall"
                 value = '{"packageId": "'+application_name+'"}'
                 tdkTestObj = obj.createTestStep('appmanagers_setvalue')
                 tdkTestObj.addParameter("method",method)
@@ -147,7 +147,7 @@ if "SUCCESS" in result.upper():
                             # Step 5 : Get the list of packages and check whether the uninstalled package is listed with correct status
                             print("\n")
                             time.sleep(3)
-                            method = "org.rdk.PackageManagerRDKEMS.listPackages"
+                            method = "org.rdk.PackageManagerRDKEMS.1.listPackages"
                             tdkTestObj = obj.createTestStep('appmanagers_getvalue')
                             tdkTestObj.addParameter("method",method)
                             tdkTestObj.executeTestCase(expectedResult)
@@ -188,8 +188,8 @@ if "SUCCESS" in result.upper():
                 event_listener.clearEventsBuffer()
                 # Step 6 : Download the package
                 print("\n")
-                method = "org.rdk.DownloadManager.download"
-                value = '{"url": "'+downlaod_url+'"}'
+                method = "org.rdk.DownloadManager.1.download"
+                value = '{"url": "'+download_url+'"}'
                 tdkTestObj = obj.createTestStep('appmanagers_setvalue')
                 tdkTestObj.addParameter("method",method)
                 tdkTestObj.addParameter("value",value)
@@ -224,7 +224,7 @@ if "SUCCESS" in result.upper():
                             print("\n")
                             time.sleep(int(download_time))
                             #filelocator_url = filelocator_url + str(download_id)
-                            method = "org.rdk.PackageManagerRDKEMS.install"
+                            method = "org.rdk.PackageManagerRDKEMS.1.install"
                             value = '{ "packageId": "'+application_name+'", "version": "'+application_version+'", "additionalMetadata": [ {"name": "'+additionalmetadata_name+'", "value": "'+additionalmetadata_value+'"} ], "fileLocator": "'+filelocator_url+'" }'
                             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
                             tdkTestObj.addParameter("method",method)
@@ -256,7 +256,7 @@ if "SUCCESS" in result.upper():
                                         # Step 8 : Get the list of packages and check whether the installed package is listed with correct status
                                         print("\n")
                                         time.sleep(5)
-                                        method = "org.rdk.PackageManagerRDKEMS.listPackages"
+                                        method = "org.rdk.PackageManagerRDKEMS.1.listPackages"
                                         tdkTestObj = obj.createTestStep('appmanagers_getvalue')
                                         tdkTestObj.addParameter("method",method)
                                         tdkTestObj.executeTestCase(expectedResult)
@@ -279,7 +279,7 @@ if "SUCCESS" in result.upper():
                                                 # Step 9 : Uninstall the package
                                                 print("\n")
                                                 time.sleep(3)
-                                                method = "org.rdk.PackageManagerRDKEMS.uninstall"
+                                                method = "org.rdk.PackageManagerRDKEMS.1.uninstall"
                                                 value = '{"packageId": "'+application_name+'"}'
                                                 tdkTestObj = obj.createTestStep('appmanagers_setvalue')
                                                 tdkTestObj.addParameter("method",method)
@@ -310,7 +310,7 @@ if "SUCCESS" in result.upper():
                                                             # Step 10 : Get the list of packages and check whether the uninstalled package is listed with correct status
                                                             print("\n")
                                                             time.sleep(3)
-                                                            method = "org.rdk.PackageManagerRDKEMS.listPackages"
+                                                            method = "org.rdk.PackageManagerRDKEMS.1.listPackages"
                                                             tdkTestObj = obj.createTestStep('appmanagers_getvalue')
                                                             tdkTestObj.addParameter("method",method)
                                                             tdkTestObj.executeTestCase(expectedResult)
@@ -366,7 +366,7 @@ if "SUCCESS" in result.upper():
         if download_status == "TRUE":
             # Step 11 : Delete the package
             print("\n")
-            method = "org.rdk.DownloadManager.delete"
+            method = "org.rdk.DownloadManager.1.delete"
             value = '{"fileLocator": "'+filelocator_url+'"}'
             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
             tdkTestObj.addParameter("method",method)
