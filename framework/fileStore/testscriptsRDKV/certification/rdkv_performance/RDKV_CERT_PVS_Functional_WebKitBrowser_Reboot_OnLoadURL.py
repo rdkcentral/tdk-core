@@ -99,7 +99,6 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     conf_file,file_status = get_configfile_name(obj)
-    from rdkv_performancelib import *
     result1, rebootwaitTime = getDeviceConfigKeyValue(conf_file,"REBOOT_WAIT_TIME")
     for count in range(0,2):
         app_bundle_name=PerformanceTestVariables.google_bundle
