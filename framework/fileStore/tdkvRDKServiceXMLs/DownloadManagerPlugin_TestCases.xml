@@ -82,7 +82,6 @@
             </resultGeneration>
 	    </testStep>
         <testStep testStepId="4" name="Delete_Package" method="Delete_Package" delay="3">
-            <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
             <params>
                 <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
             </params>
