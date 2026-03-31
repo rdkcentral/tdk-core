@@ -1800,4 +1800,26 @@ def validate_app_performance_thresholds(conf_file, results_dict, threshold_keys)
         print(f"\n Exception occurred during threshold validation: {e} \n")
         return "FAILURE", {}
 
+#---------------------------------------------------------------
+# GET THE LIST OF INSTALLED PACKAGES USING PACKAGE MANAGER
+#---------------------------------------------------------------
+def rdkv_getInstalledPackages():
+    """
+    Function to get the list of installed packages in device using Package Manager
+    Returns: status (SUCCESS/FAILURE), package_ids (if SUCCESS, else empty list)
+    """
+    try:
+        print(f"\nGetting the list of installed packages")
 
+        result = rdkservice_getValue("org.rdk.PackageManagerRDKEMS.1.listPackages")
+        if result != "EXCEPTION OCCURRED":
+            package_ids = [item["packageId"] for item in result if item["state"] == "INSTALLED"]
+            print(f"\nList of packages installed in device: {package_ids}")
+            return "SUCCESS", package_ids
+        else:
+            print(f"\nFailed to get the list of installed packages")
+            return "FAILURE", []
+
+    except Exception as e:
+        print(f"\nException occurred while getting the list of installed packages: {e}")
+        return "FAILURE", []
