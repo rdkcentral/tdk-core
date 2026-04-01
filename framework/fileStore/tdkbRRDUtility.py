@@ -19,41 +19,188 @@
 from tdkutility import *
 from tdkbRRDVariables import *
 
-# clearLogsAndDebugReports
-# Syntax: clearLogsAndDebugReports(obj)
-# Description: Function to clear the RRD log file and delete the existing debug reports before starting the test execution
+#checkRRDPrerequisites
+# Syntax: checkRRDPrerequisites(tr181obj, sysobj, step, profile_type,logFile, debug_report_path)
+# Description: Function to perform the prerequisite checks before starting the test execution
+# Parameters: tr181obj - The TDK scripting library object for TR181 component
+#            sysobj - The TDK scripting library object for sysutil component
+#            step - The test step number
+#            profile_type - The type of debug report (static or dynamic)
+#            logFile - The RRD log file path
+#            debug_report_path - The location where debug reports are generated
+# Return Value: prereq_flag - Flag indicating whether the prerequisite checks were successful or not
+#               revert_flag - Flag indicating whether the RDKRemoteDebugger Enable parameter value was modified and needs to be reverted or not
+#               step - The updated test step number after performing the prerequisite checks
+def checkRRDPrerequisites(tr181obj, sysobj, step, profile_type, logFile = rrd_log_file, debug_report_path = report_generation_location):
+    prereq_flag = True
+    revert_flag = False
+    # Validate whether the value of RemoteDebugger Enable RFC is true, if not set it to true
+    print("PREREQUISITE : Validate whether the value of RemoteDebugger Enable RFC is true, if not set it to true")
+    tdkTestObj, get_flag, rrd_enable = getRDKRemoteDebuggerEnable(tr181obj, step)
+    if get_flag:
+        if rrd_enable == "false":
+            print(f"RDKRemoteDebugger Enable is false, setting it to true for the test execution")
+            step += 1
+            revert_flag = setRDKRemoteDebuggerEnable(tr181obj, "true", step)
+            if revert_flag:
+                print(f"PREREQUISITE SUCCESS : Successfully set RDKRemoteDebugger Enable to true")
+            else:
+                prereq_flag = False
+                print(f"PREREQUISITE FAILURE : Failed to set RDKRemoteDebugger Enable to true. Cannot proceed with the test execution")
+        else:
+            print(f"PREREQUISITE SUCCESS : RDKRemoteDebugger Enable is already true.")
+    else:
+        prereq_flag = False
+        print(f"PREREQUISITE FAILURE : Failed to get the value of RDKRemoteDebugger Enable. Cannot proceed with the test execution")
+
+    if prereq_flag:
+        # Check if the RRD log file is present in the DUT
+        step += 1
+        print(f"\nPREREQUISITE : Checking if the RRD log file {logFile} is present in the DUT")
+        tdkTestObj, file_flag = isRRDLogFilePresent(sysobj, step, logFile)
+        if file_flag:
+            print(f"PREREQUISITE SUCCESS : RRD log file {logFile} is present in the DUT")
+
+            # Clear the RRD log file to ensure that the logs captured during the test execution are only related to the current test execution
+            step += 1
+            tdkTestObj, clear_flag = clearRRDLogFile(sysobj, step, logFile)
+            if clear_flag:
+                print(f"PREREQUISITE SUCCESS : Successfully cleared the RRD log file {logFile}")
+
+                # Remove the existing debug reports in the report generation location before starting the test execution
+                step += 1
+                print(f"\nPREREQUISITE : Remove the existing debug reports in the report generation location {debug_report_path} before starting the test execution")
+                tdkTestObj, remove_flag = removeDebugReports(sysobj, step, debug_report_path)
+                if remove_flag:
+                    print(f"PREREQUISITE SUCCESS : Successfully removed the existing debug reports in the report generation location {debug_report_path}")
+
+                    # Remove the existing json profile if present before starting the test execution in case of dynamic profile
+                    if profile_type == "dynamic":
+                        step += 1
+                        print(f"\nPREREQUISITE : Remove the existing {profile_type} json profile if present before starting the test execution")
+                        tdkTestObj, remove_flag = removeJsonProfile(sysobj, profile_type, dynamic_json_file, step)
+                        if remove_flag:
+                            print(f"PREREQUISITE SUCCESS : Successfully removed the existing {profile_type} json profile if present")
+                        else:
+                            prereq_flag = False
+                            print(f"PREREQUISITE FAILURE : Failed to remove the existing {profile_type} json profile")
+                else:
+                    prereq_flag = False
+                    print(f"PREREQUISITE FAILURE : Failed to remove the existing debug reports in the report generation location {debug_report_path}")
+            else:
+                prereq_flag = False
+                print(f"PREREQUISITE FAILURE : Failed to clear the RRD log file {logFile}")
+        else:
+            prereq_flag = False
+            print(f"PREREQUISITE FAILURE : RRD log file {logFile} is not present in the DUT")
+    return prereq_flag, revert_flag, step
+############ End of function ##########
+
+# isRRDLogFilePresent
+# Syntax: isRRDLogFilePresent(obj, step, log_file)
+# Description: Function to check whether the RRD log file is present in the DUT
 # Parameters: obj - The TDK scripting library object for sysutil component
-# Return Value: prereq_flag - Flag indicating whether the prerequisite steps are successful or not (1 for success, 0 for failure)
-def clearLogsAndDebugReports(obj):
-    #Remove the existing debug reports in the report generation location before starting the test execution
+#             step - The test step number
+#             log_file - The RRD log file path
+# Return Value: tdkTestObj - The TDK test object created for the command execution
+#               file_flag - Flag indicating whether the RRD log file is present or not
+def isRRDLogFilePresent(obj, step, log_file):
     expectedresult = "SUCCESS"
-    prereq_flag = False
+    file_flag = False
+    print(f"\nTEST STEP {step} : Check whether the RRD log file {log_file} is present in the DUT")
+    print(f"EXPECTED RESULT {step} : RRD log file {log_file} should be present in the DUT")
     tdkTestObj = obj.createTestStep('ExecuteCmd')
-    print(f"\nPREREQUISITE : Remove the existing debug reports in the report generation location {report_generation_location} before starting the test execution")
-    command = f"rm -rf {report_generation_location}/*"
+    actualresult, details = isFilePresent(tdkTestObj, log_file)
+    if expectedresult in actualresult and details.strip() == log_file:
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"ACTUAL RESULT {step} : RRD log file {log_file} is present")
+        file_flag = True
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"ACTUAL RESULT {step} : RRD log file {log_file} is not present. Details : {details}")
+    return tdkTestObj, file_flag
+############ End of function ##########
+
+#clearRRDLogFile
+# Syntax: clearRRDLogFile(obj, step, log_file)
+# Description: Function to clear the RRD log file in the DUT
+# Parameters: obj - The TDK scripting library object for sysutil component
+#             step - The test step number
+#             log_file - The RRD log file path
+# Return Value: tdkTestObj - The TDK test object created for the command execution
+#               flag - Flag indicating whether the RRD log file is cleared successfully or not
+def clearRRDLogFile(obj, step, log_file):
+    expectedresult = "SUCCESS"
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    print(f"\nTEST STEP {step} : Clear the RRD log file {log_file} before starting the test execution")
+    print(f"EXPECTED RESULT {step} : Should clear the RRD log file {log_file} successfully")
+    command = f"cat /dev/null > {log_file}"
     print(f"Command : {command}")
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    if actualresult in expectedresult:
-        print(f"PREREQUISITE SUCCESS : Successfully removed the existing debug reports in the report generation location {report_generation_location}")
+    if expectedresult in actualresult:
+        print(f"ACTUAL RESULT {step} : Successfully cleared the RRD log file {log_file}. Details : {details}")
         tdkTestObj.setResultStatus("SUCCESS")
-
-        # Clear the RRD log file to ensure that the logs captured during the test execution are only related to the current test execution
-        tdkTestObj = obj.createTestStep('ExecuteCmd')
-        print(f"\nPREREQUISITE : Clear the RRD log file {rrd_log_file} before starting the test execution")
-        command = f"cat /dev/null > {rrd_log_file}"
-        print(f"Command : {command}")
-        actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-        if actualresult in expectedresult:
-            print(f"PREREQUISITE SUCCESS : Successfully cleared the RRD log file {rrd_log_file}")
-            tdkTestObj.setResultStatus("SUCCESS")
-            prereq_flag = True
-        else:
-            print(f"PREREQUISITE FAILURE : Failed to clear the RRD log file {rrd_log_file}")
-            tdkTestObj.setResultStatus("FAILURE")
+        flag = True
     else:
-        print(f"PREREQUISITE FAILURE : Failed to remove the existing debug reports in the report generation location {report_generation_location}")
+        print(f"ACTUAL RESULT {step} : Failed to clear the RRD log file {log_file}. Details : {details}")
         tdkTestObj.setResultStatus("FAILURE")
-    return prereq_flag
+        flag = False
+    return tdkTestObj, flag
+
+#removeDebugReports
+# Syntax: removeDebugReports(obj, step, debug_report_location)
+# Description: Function to remove the existing debug reports in the report generation location
+# Parameters: obj - The TDK scripting library object for sysutil component
+#             step - The test step number
+#             debug_report_location - The location where debug reports are generated
+# Return Value: tdkTestObj - The TDK test object created for the command execution
+#               flag - Flag indicating whether the debug reports were removed successfully or not
+def removeDebugReports(obj, step, debug_report_location):
+    expectedresult = "SUCCESS"
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    print(f"\nTEST STEP {step} : Remove the existing debug reports in the report generation location {debug_report_location} before starting the test execution")
+    print(f"EXPECTED RESULT {step} : Should remove the existing debug reports in the report generation location {debug_report_location} successfully")
+    command = f"rm -rf '{debug_report_location}'/*"
+    print(f"Command : {command}")
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    if expectedresult in actualresult:
+        print(f"ACTUAL RESULT {step} : Successfully removed the existing debug reports in the report generation location {debug_report_location}. Details : {details}")
+        tdkTestObj.setResultStatus("SUCCESS")
+        flag = True
+    else:
+        print(f"ACTUAL RESULT {step} : Failed to remove the existing debug reports in the report generation location {debug_report_location}. Details : {details}")
+        tdkTestObj.setResultStatus("FAILURE")
+        flag = False
+    return tdkTestObj, flag
+
+#removeJsonProfile
+# Syntax: removeJsonProfile(obj, profile_type, profile_path, step)
+# Description: Function to remove the existing json profile if present before starting the test execution
+# Parameters: obj - The TDK scripting library object for sysutil component
+#             profile_type - The type of debug report (static or dynamic)
+#             profile_path - The path where the json profile is present
+#             step - The test step number
+# Return Value: tdkTestObj - The TDK test object created for the command execution
+#               flag - Flag indicating whether the json profile was removed successfully or not
+
+def removeJsonProfile(obj, profile_type, profile_path, step):
+    expectedresult = "SUCCESS"
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    print(f"\nTEST STEP {step} : Remove the existing {profile_type} json profile at {profile_path} before starting the test execution")
+    print(f"EXPECTED RESULT {step} : Should remove the existing {profile_type} json profile at {profile_path} successfully")
+    command = f"rm -rf '{profile_path}'"
+    print(f"Command : {command}")
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    if expectedresult in actualresult:
+        print(f"ACTUAL RESULT {step} : Successfully removed the existing {profile_type} json profile at {profile_path}. Details : {details}")
+        tdkTestObj.setResultStatus("SUCCESS")
+        flag = True
+    else:
+        print(f"ACTUAL RESULT {step} : Failed to remove the existing {profile_type} json profile at {profile_path}. Details : {details}")
+        tdkTestObj.setResultStatus("FAILURE")
+        flag = False
+    return tdkTestObj, flag
+
 ########## End of function ##########
 
 # getRDKRemoteDebuggerIssueType
@@ -62,18 +209,18 @@ def clearLogsAndDebugReports(obj):
 # Parameters: obj - The TDK scripting library object for TR181 component
 #             step - The test step number
 # Return Value: tdkTestObj - The TDK test object created for TR181 Get operation
-#               get_flag - Flag indicating whether the TR181 Get operation was successful or not (1 for success, 0 for failure)
+#               get_flag - Flag indicating whether the TR181 Get operation was successful or not
 #               value - The value of the RDKRemoteDebugger IssueType parameter
 def getRDKRemoteDebuggerIssueType(obj, step):
     expectedresult="SUCCESS"
     value = ""
-    get_flag = 0
+    get_flag = False
     tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Get')
     print(f"\nTEST STEP {step} : Get the value of RDKRemoteDebugger IssueType")
     print(f"EXPECTED RESULT {step} : Should get the value of RDKRemoteDebugger IssueType")
     actualresult, value = getTR181Value(tdkTestObj,"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.RDKRemoteDebugger.IssueType")
-    if actualresult in expectedresult:
-        get_flag = 1
+    if expectedresult in actualresult:
+        get_flag = True
         print(f"ACTUAL RESULT {step} : Value of RDKRemoteDebugger IssueType is {value}")
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"TEST EXECUTION RESULT : SUCCESS")
@@ -90,16 +237,16 @@ def getRDKRemoteDebuggerIssueType(obj, step):
 # Parameters: obj - The TDK scripting library object for TR181 component
 #             step - The test step number
 #             value - The value to be set for RDKRemoteDebugger IssueType parameter
-# Return Value: set_flag - Flag indicating whether the TR181 Set operation was successful or not (1 for success, 0 for failure)
+# Return Value: set_flag - Flag indicating whether the TR181 Set operation was successful or not
 def setRDKRemoteDebuggerIssueType(obj, step, value):
     expectedresult="SUCCESS"
-    set_flag = 0
+    set_flag = False
     tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Set')
     print(f"\nTEST STEP {step} : Set the value of RDKRemoteDebugger IssueType as {value}")
     print(f"EXPECTED RESULT {step} : Should set the value of RDKRemoteDebugger IssueType as {value}")
     actualresult, details = setTR181Value(tdkTestObj,"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.RDKRemoteDebugger.IssueType", value, "string")
-    if actualresult in expectedresult and details != "":
-        set_flag = 1
+    if expectedresult in actualresult and details != "":
+        set_flag = True
         print(f"ACTUAL RESULT {step} : Successfully set the value of RDKRemoteDebugger IssueType to {value}. Details : {details}")
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"TEST EXECUTION RESULT : SUCCESS")
@@ -117,7 +264,7 @@ def setRDKRemoteDebuggerIssueType(obj, step, value):
 #             profile_type - The type of debug report (static or dynamic)
 #             step - The test step number
 # Return Value: tdkTestObj - The TDK test object created for the command execution
-#               flag - Flag indicating whether the debug report is generated or not (1 for success, 0 for failure)
+#               flag - Flag indicating whether the debug report is generated or not
 
 def checkDebugReportGenerated(obj, profile_type, step):
     expectedresult="SUCCESS"
@@ -126,11 +273,11 @@ def checkDebugReportGenerated(obj, profile_type, step):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     print(f"\nTEST STEP {step} : Check if the {profile_type} debug report is generated at {file_path}")
     print(f"EXPECTED RESULT {step} : The {profile_type} debug report should be present at {file_path}")
-    command = f"find {file_path}/Device-DebugReport*"
+    command = f"ls {file_path}/Device-DebugReport*"
     print(f"Command : {command}")
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print(f"Command Output : {details}")
-    if expectedresult in actualresult and 'No such file or directory' not in details:
+    if expectedresult in actualresult and details.strip() != "":
         print(f"ACTUAL RESULT {step} : The {profile_type} debug report is present at {file_path}")
         flag = True
     else:
@@ -139,14 +286,14 @@ def checkDebugReportGenerated(obj, profile_type, step):
 ########## End of function ##########
 
 # checkJsonProfileAvailable
-# Syntax: checkJsonProfileAvailable(obj, profile_type, step)
+# Syntax: checkJsonProfileAvailable(obj, profile_type, issue_type, step)
 # Description: Function to check whether the profile debug report is fetched and present at the designated location
 # Parameters: obj - The TDK scripting library object for TR181 component
 #             profile_type - The type of debug report (static or dynamic)
 #             issue_type - The issue type for which the debug report is generated
 #             step - The test step number
 # Return Value: tdkTestObj - The TDK test object created for the command execution
-#               flag - Flag indicating whether the profile debug report is fetched and present or not (1 for success, 0 for failure)
+#               flag - Flag indicating whether the profile debug report is fetched and present or not
 
 def checkJsonProfileAvailable(obj, profile_type, issue_type, step):
     expectedresult="SUCCESS"
@@ -180,18 +327,18 @@ def checkJsonProfileAvailable(obj, profile_type, issue_type, step):
 # Parameters: obj - The TDK scripting library object for TR181 component
 #             step - The test step number
 # Return Value: tdkTestObj - The TDK test object created for the command execution
-#               get_flag - Flag indicating whether the TR181 Get operation was successful or not (1 for success, 0 for failure)
+#               get_flag - Flag indicating whether the TR181 Get operation was successful or not
 #               value - The value of RDKRemoteDebugger Enable parameter
 def getRDKRemoteDebuggerEnable(obj, step):
     expectedresult="SUCCESS"
     value = ""
-    get_flag = 0
+    get_flag = False
     tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Get')
     print(f"\nTEST STEP {step} : Get the value of RDKRemoteDebugger Enable")
     print(f"EXPECTED RESULT {step} : Should get the value of RDKRemoteDebugger Enable")
     actualresult, value = getTR181Value(tdkTestObj,"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.RDKRemoteDebugger.Enable")
-    if actualresult in expectedresult:
-        get_flag = 1
+    if expectedresult in actualresult:
+        get_flag = True
         print(f"ACTUAL RESULT {step} : Value of RDKRemoteDebugger Enable is {value}")
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"TEST EXECUTION RESULT : SUCCESS")
@@ -208,17 +355,17 @@ def getRDKRemoteDebuggerEnable(obj, step):
 # Parameters: obj - The TDK scripting library object for TR181 component
 #             value - The value to be set for RDKRemoteDebugger Enable parameter
 #             step - The test step number
-# Return Value: set_flag - Flag indicating whether the TR181 Set operation was successful or not (1 for success, 0 for failure)
+# Return Value: set_flag - Flag indicating whether the TR181 Set operation was successful or not
 
 def setRDKRemoteDebuggerEnable(obj, value, step):
     expectedresult="SUCCESS"
-    set_flag = 0
+    set_flag = False
     tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Set')
     print(f"\nTEST STEP {step} : Set the value of RDKRemoteDebugger Enable as {value}")
     print(f"EXPECTED RESULT {step} : Should set the value of RDKRemoteDebugger Enable as {value}")
     actualresult, details = setTR181Value(tdkTestObj,"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.RDKRemoteDebugger.Enable", value, "bool")
-    if actualresult in expectedresult and details != "":
-        set_flag = 1
+    if expectedresult in actualresult and details != "":
+        set_flag = True
         print(f"ACTUAL RESULT {step} : Successfully set the value of RDKRemoteDebugger Enable to {value}. Details : {details}")
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"TEST EXECUTION RESULT : SUCCESS")
@@ -230,7 +377,7 @@ def setRDKRemoteDebuggerEnable(obj, value, step):
 ########## End of function ##########
 
 #validateDebugReportUpload
-# Syntax: validateDebugReportUpload(obj, profile_type, upload_server_url, step)
+# Syntax: validateDebugReportUpload(obj, profile_type, upload_server_url, log_file, step)
 # Description: Function to check whether the debug report got uploaded in the designated location from the RRD log file
 # Parameters: obj - The TDK scripting library object for TR181 component
 #             profile_type - The type of debug report (static or dynamic)
@@ -238,10 +385,10 @@ def setRDKRemoteDebuggerEnable(obj, value, step):
 #             log_file - The RRD log file path
 #             step - The test step number
 # Return Value: tdkTestObj - The TDK test object created for the command execution
-#               flag - Flag indicating whether the debug report is generated or not (1 for success, 0 for failure)
+#               flag - Flag indicating whether the debug report is generated or not
 
 def validateDebugReportUpload(obj, profile_type, upload_server_url, log_file, step):
-    flag = 0
+    flag = False
     expectedresult="SUCCESS"
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     print(f"\nTEST STEP {step} : Check if the {profile_type} debug report is uploaded to the server {upload_server_url}")
@@ -252,7 +399,7 @@ def validateDebugReportUpload(obj, profile_type, upload_server_url, log_file, st
     print(f"Command Output : {details}")
     if expectedresult in actualresult and details != "":
         print(f"ACTUAL RESULT {step} : The {profile_type} debug report is successfully uploaded to the server {upload_server_url}")
-        flag = 1
+        flag = True
     else:
         print(f"ACTUAL RESULT {step} : The {profile_type} debug report is not uploaded to the server {upload_server_url}")
     return tdkTestObj, flag
@@ -264,19 +411,19 @@ def validateDebugReportUpload(obj, profile_type, upload_server_url, log_file, st
 # Parameters: obj - The TDK scripting library object for TR181 component
 #             step - The test step number
 # Return Value: tdkTestObj - The TDK test object created for the command execution
-#               get_flag - Flag indicating whether the TR181 Get operation was successful or not (1 for success, 0 for failure)
+#               get_flag - Flag indicating whether the TR181 Get operation was successful or not
 #               value - The download server URL configured in the DUT
 
 def getRDKRemoteDebuggerCDLModuleURL(obj, step):
     expectedresult="SUCCESS"
     value = ""
-    get_flag = 0
+    get_flag = False
     tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Get')
     print(f"\nTEST STEP {step} : Get the download server URL configured in the DUT")
     print(f"EXPECTED RESULT {step} : Should get the download server URL configured in the DUT")
     actualresult, value = getTR181Value(tdkTestObj,"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.CDLDM.CDLModuleUrl")
-    if actualresult in expectedresult:
-        get_flag = 1
+    if expectedresult in actualresult:
+        get_flag = True
         print(f"ACTUAL RESULT {step} : Download server URL configured in the DUT is {value}")
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"TEST EXECUTION RESULT : SUCCESS")
@@ -297,14 +444,14 @@ def getRDKRemoteDebuggerCDLModuleURL(obj, step):
 
 def setRDKRemoteDebuggerCDLModuleURL(obj, server_url, step):
     expectedresult="SUCCESS"
-    set_flag = 0
+    set_flag = False
     #Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.CDLDM.CDLModuleUrl
     tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Set')
     print(f"\nTEST STEP {step} : Configure the download server URL {server_url} in the DUT")
     print(f"EXPECTED RESULT {step} : Should configure the download server URL {server_url} in the DUT")
     actualresult, details = setTR181Value(tdkTestObj,"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.CDLDM.CDLModuleUrl", server_url, "string")
-    if actualresult in expectedresult and details != "":
-        set_flag = 1
+    if expectedresult in actualresult and details != "":
+        set_flag = True
         print(f"ACTUAL RESULT {step} : Successfully configured the download server URL {server_url} in the DUT. Details : {details}")
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"TEST EXECUTION RESULT : SUCCESS")
@@ -314,3 +461,68 @@ def setRDKRemoteDebuggerCDLModuleURL(obj, server_url, step):
         print(f"TEST EXECUTION RESULT : FAILURE")
     return set_flag
 ########## End of function ##########
+
+
+# getUpstreamRRDURL
+# Syntax: getUpstreamRRDURL(sysobj, upstreamRRDURLpath, step)
+# Description: Function to get the upload server URL assigned to UPSTREAM_RRD_URL in the specified file path in the DUT
+# Parameters: sysobj - The TDK scripting library object for sysutil component
+#             upstreamRRDURLpath - The file path where the UPSTREAM_RRD_URL is assigned in the DUT
+#             step - The test step number
+# Return Value: get_flag - Flag indicating whether the upload server URL is successfully obtained
+#               value - upload server URL value configured.
+
+def getUpstreamRRDURL(sysobj, upstreamRRDURLpath, step):
+    expectedresult="SUCCESS"
+    value = ""
+    get_flag = False
+    tdkTestObj = sysobj.createTestStep('ExecuteCmd')
+    print(f"\nTEST STEP {step} : Get the upload server URL assigned to UPSTREAM_RRD_URL in {upstreamRRDURLpath}")
+    print(f"EXPECTED RESULT {step} : Should get the upload server URL assigned to UPSTREAM_RRD_URL in {upstreamRRDURLpath}")
+    command = f"sed -n 's/^UPSTREAM_RRD_URL=//p' {upstreamRRDURLpath}"
+
+    print(f"Command : {command}")
+    actualresult, value = doSysutilExecuteCommand(tdkTestObj, command)
+    print(f"Command Output : {value}")
+    if expectedresult in actualresult and value.strip() != "":
+        get_flag = True
+        print(f"ACTUAL RESULT {step} : Upload server URL assigned to UPSTREAM_RRD_URL in {upstreamRRDURLpath} is {value.strip()}")
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"TEST EXECUTION RESULT : SUCCESS")
+    else:
+        print(f"ACTUAL RESULT {step} : Failed to get the upload server URL assigned to UPSTREAM_RRD_URL in {upstreamRRDURLpath}")
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"TEST EXECUTION RESULT : FAILURE")
+    return get_flag, value.strip()
+
+# setUpstreamRRDURL
+# Syntax: setUpstreamRRDURL(sysobj, server_url, upstream_rrd_url_path, step)
+# Description: Function to set the upload server URL to UPSTREAM_RRD_URL in the specified file path in the DUT
+# Parameters: sysobj - The TDK scripting library object for sysutil component
+#             server_url - The upload server URL to be set for UPSTREAM_RRD_URL in the DUT
+#             upstreamRRDURLpath - The file path where the UPSTREAM_RRD_URL is assigned in the DUT
+#             step - The test step number
+# Return Value: set_flag - Flag indicating whether the upload server URL is set to UPSTREAM_RRD_URL successfully or not
+
+def setUpstreamRRDURL(sysobj, server_url, upstreamRRDURLpath, step):
+    expectedresult="SUCCESS"
+    set_flag = False
+    #Assign the upload server URL to UPSTREAM_RRD_URL in upstreamRRDURLpath
+    tdkTestObj = sysobj.createTestStep('ExecuteCmd')
+    print(f"\nTEST STEP {step} : Assign the upload server URL to UPSTREAM_RRD_URL in {upstreamRRDURLpath}")
+    print(f"EXPECTED RESULT {step} : Should assign the upload server URL to UPSTREAM_RRD_URL in {upstreamRRDURLpath}")
+    command = f"sed -i 's|^UPSTREAM_RRD_URL=.*|UPSTREAM_RRD_URL={server_url}|' {upstreamRRDURLpath}"
+    print(f"Command : {command}")
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    print(f"Command Output : {details}")
+    if expectedresult in actualresult:
+        set_flag = True
+        print(f"ACTUAL RESULT {step} : Successfully assigned the upload server URL to UPSTREAM_RRD_URL in {upstreamRRDURLpath}")
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"TEST EXECUTION RESULT : SUCCESS")
+    else:
+        print(f"ACTUAL RESULT {step} : Failed to assign the upload server URL to UPSTREAM_RRD_URL in {upstreamRRDURLpath}")
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"TEST EXECUTION RESULT : FAILURE")
+    return set_flag
+
