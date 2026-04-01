@@ -336,26 +336,32 @@ def tr069ACSQuery(username,parameter,method="get"):
             resp = requests.post(ACS_TASK_URL,params=params, json=payload)
         elif method == "search":
             resp = requests.get(ACS_QUERY_URL, params=params)
-        print(f"Status: {resp.status_code}")
-        if not resp.text:
-            return resp.status_code,None
-        try:
-            data = resp.json()
-        except ValueError:
-            print("Invalid JSON response:", resp.text)
-            return resp.status_code,None
-        print(f"JSON Response : {data}")
-        return resp.status_code,data
-
+        if resp is not None:
+            print(f"Response is not empty")
+            if resp.status_code:
+                print(f"Status: {resp.status_code}")
+                if not resp.text:
+                    print(f"Response have empty text response")
+                    return resp.status_code,None
+                else:
+                    print(f"Response Body: {resp.text}")
+                    try:
+                        data = resp.json()
+                    except ValueError:
+                        print("Invalid JSON response:", resp.text)
+                        return resp.status_code,None
+                    print(f"JSON Response : {data}")
+                    return resp.status_code,data
+            else:
+                print(f"Response have empty status code")
+                return None,None
+        else:
+            print(f"Request has no valid response")
+            return None,None
     except Exception as e:
         # catches any unexpected errors
-        if resp is not None:
-            print(f"Status: {resp.status_code}")
-            print(f"Response Body: {resp.text}")
-            return resp.status_code,None
-        else:
-            print("No response received from server")
-            return None,None
+        print(f"Exception occurred: {e}")
+        return None, None
 ########## End of function ##########
 
 # parseTR69ACSResponse
