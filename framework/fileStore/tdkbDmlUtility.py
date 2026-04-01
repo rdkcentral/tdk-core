@@ -1235,7 +1235,7 @@ def parseRuntimeConfigAndExecuteTest(setup_type, secondary_config, obj, rbusobj,
 
                                             #There might be unexpected parameters under the table which are not found in config file
                                             unexpectedParams = set(paramNames) - set(tableParams)
-                                            if unecpectedParams != set():
+                                            if unexpectedParams != set():
                                                 print("\nUnexpected parameter(s) found under table instance: ", unexpectedParams)
                                                 status = "FAILURE"
 
@@ -1489,8 +1489,12 @@ def AddRowToTableObject(setup_type, table, obj, expectedresult):
             if "row" not in details:
                 print(f"EXPECTED RESULT {step}: Adding new row to the table object should fail with errorcode {expectedresult[1]} and return message should be {expectedresult[2]}")
                 #print("Details: ", details)
-                returnValue = details.split("statusCode: ")[1]
-                returnMsg = details.split("Message: ")[1].split(",")[0]
+                try:
+                    returnValue = details.split("statusCode: ")[1]
+                    returnMsg = details.split("Message: ")[1].split(",")[0]
+                except Exception as e:
+                    returnValue = ""
+                    returnMsg = ""
                 #print(f"{returnValue}, {expectedresult[1]}, {returnMsg}, {expectedresult[2]}")
                 if returnValue == expectedresult[1] and returnMsg == expectedresult[2]:
                     tdkTestObj.setResultStatus("SUCCESS")
@@ -1574,8 +1578,12 @@ def DeleteRowFromTableObject(setup_type, table, obj, expectedresult):
 
         elif setup_type == "WEBPA":
             print(f"EXPECTED RESULT {step}: Deleting row from the table object should fail with errorcode {expectedresult[1]} and return message should be {expectedresult[2]}")
-            returnValue = details.split("statusCode: ")[1]
-            returnMsg = details.split("Message: ")[1].split(",")[0]
+            try:
+                returnValue = details.split("statusCode: ")[1]
+                returnMsg = details.split("Message: ")[1].split(",")[0]
+            except Exception as e:
+                returnValue = ""
+                returnMsg = ""
             #print(f"{returnValue}, {expectedresult[1]}, {returnMsg}, {expectedresult[2]}")
             if returnValue == expectedresult[1] and returnMsg == expectedresult[2]:
                 tdkTestObj.setResultStatus("SUCCESS")
@@ -1742,11 +1750,6 @@ def parseXMLAndExecuteTest(paramsRoot, factoryReset, setup_type, obj, testtype):
                 if param.find('writable').text == "false":
                     paramList.append(param.find('name').text)
         print("\nPARAMS TO BE SET ARE: ",paramList)
-
-    elif testtype == "paraparameterExistence":
-        for param in paramsRoot:
-            paramList.append(param.find('name').text)
-            print("\nPARAMS TO CHECK FOR EXISTENCE ARE: ",paramList)
 
     elif testtype == "writeAccessCompliance" or testtype == "writeTypeCompliance":
         for param in paramsRoot:

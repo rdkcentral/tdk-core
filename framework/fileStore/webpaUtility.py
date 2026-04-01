@@ -153,7 +153,7 @@ def parseWebpaResponse(response, count, method="get"):
             else:
                 msg = "Message: " + responseDict['message'] + ", statusCode: " + str(statusCode)
         elif method == "addTableRow" or method == "deleteTableRow":
-             msg = "Message: " + responseDict['message'] + ", statusCode: " + str(statusCode)
+            msg = "Message: " + responseDict['message'] + ", statusCode: " + str(statusCode)
         else:
             msg = responseDict["message"]
         print("GET/SET/ADD/DELETE operation failed. Response msg for failure: ",msg)

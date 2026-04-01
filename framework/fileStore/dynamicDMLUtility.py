@@ -1025,7 +1025,7 @@ def isParamFlagDependent(param, config):
             convertedDM = convertedDM + p
 
     #Check flags from config file
-    if config[convertedDM]["flags"] == "":
+    if config[convertedDM]["flags"] == [""]:
         return False
     else:
         return True
