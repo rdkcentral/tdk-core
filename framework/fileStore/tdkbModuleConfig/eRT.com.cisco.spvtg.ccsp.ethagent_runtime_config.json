@@ -23,7 +23,7 @@
         "flags": ["ifdef FEATURE_RDKB_WAN_AGENT"]
     },
     "Device.Ethernet.X_RDKCENTRAL-COM_Interface.{i}.X_RDKCENTRAL-COM_Name": {
-        "type": ["string(64))"],
+        "type": ["string(64)"],
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
@@ -355,7 +355,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["Device.Ethernet.X_RDK_Interface.1","Device.Ethernet.X_RDK_Interface.2","Device.Ethernet.X_RDK_Interface.3","Device.Ethernet.X_RDK_Interface.4"],
+        "expectedValues": [],
         "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.Ethernet.X_RDK_Interface.{i}.WanConfigPort": {

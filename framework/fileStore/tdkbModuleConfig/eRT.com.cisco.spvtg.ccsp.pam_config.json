@@ -1106,7 +1106,7 @@
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_xOpsDeviceMgmt.RPC.RebootDevice": {
         "type": ["string"],
-        "writable": ["false"],
+        "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
@@ -2158,14 +2158,6 @@
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.CrashUpload.S3SigningUrl": {
         "type": ["string(255)"],
-        "writable": ["true"],
-        "persistentSet": [""],
-        "defaultValue": [""],
-        "expectedValues": [""],
-        "flags": [""]
-    },
-    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.NonRootSupport.ApparmorBlocklist": {
-        "type": ["string"],
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],

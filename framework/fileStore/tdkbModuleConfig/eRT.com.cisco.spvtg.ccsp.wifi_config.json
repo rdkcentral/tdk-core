@@ -225,8 +225,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": ["range(5,3601)"],
-        "flags": ["[5:3600]"
-        ],
+        "flags": [""],
         "Set_type": "L2"
     },
     "Device.WiFi.X_RDKCENTRAL-COM_vAPStatsEnable": {
