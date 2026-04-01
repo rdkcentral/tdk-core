@@ -126,7 +126,7 @@ def tr069ACSPreRequisite(obj,sysobj):
 # Description : Function to get value of the parameter.
 # Parameters  : tdkTestObj - Object of the tdk library.
 #             : username - username to be passed in the ACS request for uniquely identifying the DUT.
-#             : queryParam - parameter list to be included in the ACS request.
+#             : queryParam - dict of parameters with parameter details to be included in the ACS request.
 #             : step - Test step count.
 # Return Value: parsedResponse - parsed response from the query response of ACS.
 #             : step  - Current test step count.
@@ -190,10 +190,10 @@ def gettr069ACS(tdkTestObj,username,queryParam,step):
 # Syntax      : getTr181DMValue(obj,queryParam,step)
 # Description : Function to get the parameter value from device.
 # Parameters  : obj - object of tdk library.
-#             : queryParam - parameter list with parameter details.
+#             : queryParam - dict of parameters with parameter details.
 #             : step - Test step count.
 # Return Value: tdkTestObj_tr181 - object of tdk library.
-#             : getValuesTr181 - parameter value list from device.
+#             : getValuesTr181 - dict keyed by parameter name.
 #             : step - current test step count.
 def getTr181DMValue(obj,queryParam,step):
     parameters = queryParam.get("name")
@@ -212,8 +212,7 @@ def getTr181DMValue(obj,queryParam,step):
         tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Get')
         actualresult, details = getTR181Value(tdkTestObj_tr181,name)
         if expectedresult in actualresult:
-            if details != "":
-                getValueTr181 = details.strip("'")
+            getValueTr181 = details.strip("'")
             tdkTestObj_tr181.setResultStatus("SUCCESS")
             print("ACTUAL RESULT %d : Got the parameter %s value as %s successfully" %(step,name,getValueTr181))
             print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -232,7 +231,7 @@ def getTr181DMValue(obj,queryParam,step):
 # Description : Function to set value of the parameter.
 # Parameters  : tdkTestObj - Object of the tdk library.
 #             : username - username to be passed in the ACS request for uniquely identifying the DUT.
-#             : queryParam - parameter list to be included in the ACS request.
+#             : queryParam - dict of parameters with parameter details to be included in the ACS request.
 #             : step - Test step count.
 # Return Value: queryResponse - Query response from ACS server.
 #             : step - current test step count.
