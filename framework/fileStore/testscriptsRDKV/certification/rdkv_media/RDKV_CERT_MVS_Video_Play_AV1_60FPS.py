@@ -118,7 +118,7 @@ if expectedResult in result.upper():
     # Setting the pre-requites for media test. Launching the webkit instance via RDKShell and
     # moving it to the front, openning a socket connection to the webkit inspect page and
     # getting the details for proc validation from config file
-    pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,webkit_instance)
+    pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.unified_player_app_id,MediaValidationVariables.unified_player_app_download_url)
     config_status = "SUCCESS"
     conf_file,result = getDeviceConfigFile(obj.realpath)
     expected_fps  = 60
