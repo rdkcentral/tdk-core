@@ -72,11 +72,11 @@
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import rdkv_performancelib
-from rdkv_performancelib import *
 from datetime import datetime
 from StabilityTestUtility import *
 from web_socket_util import *
 import PerformanceTestVariables
+from rdkv_performancelib import *
 import json
 
 #Test component to be tested
@@ -98,155 +98,47 @@ print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    event_listener = None
-    browser_test_url = PerformanceTestVariables.browser_test_url
-    print("\n Check Pre conditions")
-    #No need to revert any values if the pre conditions are already set.
-    revert="NO"
     conf_file,file_status = get_configfile_name(obj)
     result1, rebootwaitTime = getDeviceConfigKeyValue(conf_file,"REBOOT_WAIT_TIME")
-    plugin = "WebKitBrowser"
-    plugins_list = ["Cobalt","WebKitBrowser"]
-    plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"deactivated"}
-    conf_file, status = get_configfile_name(obj);
-    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
-    for plugin_item in plugins_list[:]:
-        if plugin_item not in supported_plugins:
-            plugins_list.remove(plugin_item)
-            plugin_status_needed.pop(plugin_item)
-    curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
-    time.sleep(10)
-    status = "SUCCESS"
-    if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print("\n Error while getting status of plugins")
-        status = "FAILURE"
-    elif curr_plugins_status_dict != plugin_status_needed:
-        revert = "YES"
-        status = set_plugins_status(obj,plugin_status_needed)
-        time.sleep(10)
-        plugins_status_dict = get_plugins_status(obj,plugins_list)
-        if plugins_status_dict != plugin_status_needed:
-            print("\n Unable to set status of plugins")
-            status = "FAILURE"
-    if status == "SUCCESS" :
-        print("\n Preconditions are set successfully")
-        plugin = "WebKitBrowser"
-        for count in range(0,2):
-            launch_status,launch_start_time = launch_plugin(obj,plugin)
-            if launch_status == expectedResult:
-                time.sleep(10)
-                tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
-                tdkTestObj.addParameter("plugin",plugin)
-                tdkTestObj.executeTestCase(expectedResult)
-                plugin_status = tdkTestObj.getResultDetails()
-                result = tdkTestObj.getResult()
-                if plugin_status == 'resumed' and expectedResult in result:
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    print("\n {} is resumed successfully".format(plugin))
-                    if count == 1:
-                        thunder_port = rdkv_performancelib.devicePort
-                        event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 5,"method": "'+plugin+'.1.register","params": {"event": "urlchange", "id": "client.events.1" }}'],"/jsonrpc",False)
-                        time.sleep(15)
-                    print("\n Set test URL")
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method",plugin+".1.url")
-                    tdkTestObj.addParameter("value",browser_test_url)
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResult()
-                    if expectedResult in result:
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        if count == 1:
-                            continue_count = 0
-                            url_change_count = 0
-                            while url_change_count < 2:
-                                if (continue_count > 60):
-                                    print("\n URL change related events are not triggered \n")
-                                    tdkTestObj.setResultStatus("FAILURE")
-                                    break
-                                if (len(event_listener.getEventsBuffer())== 0):
-                                    continue_count += 1
-                                    time.sleep(1)
-                                    continue
-                                event_log = event_listener.getEventsBuffer().pop(0)
-                                print("\n Triggered event: ",event_log)
-                                json_msg = json.loads(event_log.split('$$$')[1])
-                                if "urlchange" in event_log and browser_test_url in event_log.replace("\\",""):
-                                    if not json_msg["params"]["loaded"]:
-                                        url_change_count += 1
-                                    elif json_msg["params"]["loaded"]:
-                                        url_change_count += 1
-                                    else:
-                                        continue_count += 1
-                                else:
-                                    continue_count += 1
-                            else:
-                                print("\nValidate if the URL is set successfully or not")
-                                tdkTestObj = obj.createTestStep('rdkservice_getValue')
-                                tdkTestObj.addParameter("method",plugin+".1.url")
-                                tdkTestObj.executeTestCase(expectedResult);
-                                new_url = tdkTestObj.getResultDetails();
-                                result = tdkTestObj.getResult()
-                                if browser_test_url in new_url and expectedResult in result:
-                                    tdkTestObj.setResultStatus("SUCCESS");
-                                    print("\n URL(",new_url,") is set successfully")
-                                else:
-                                    print("\n Unable to set the test URL in {}, current URL: {}".format(plugin,new_url))
-                                    tdkTestObj.setResultStatus("FAILURE")
-                                    break
-                            event_listener.disconnect()
-                            time.sleep(5)
-                        else:
-                            tdkTestObj = obj.createTestStep('rdkservice_rebootDevice')
-                            tdkTestObj.addParameter("waitTime",float(rebootwaitTime))
-                            tdkTestObj.executeTestCase(expectedResult)
-                            result = tdkTestObj.getResultDetails()
-                            if expectedResult in result:
-                                tdkTestObj.setResultStatus("SUCCESS")
-                                print("\n Device is rebooted")
-                                uptime = get_device_uptime(obj)
-                                if uptime != -1 and uptime < 280:
-                                    print("\n Device is rebooted and uptime is: {}\n".format(uptime))
-                                else:
-                                    print("\n Error while validating uptime")
-                                    tdkTestObj.setResultStatus("FAILURE")
-                                    break
-                            else:
-                                print("\n Error while rebooting the device")
-                                tdkTestObj.setResultStatus("FAILURE")
-                                break
-                    else:
-                        print("\n Error while setting the URL in ",plugin)
-                        tdkTestObj.setResultStatus("FAILURE")
-                        break
+    for count in range(0,2):
+        app_bundle_name=PerformanceTestVariables.google_bundle
+        app_name="com.rdkcentral.google"
+        status = rdkservice_install_launch_app(obj, app_bundle_name, app_name)
+        if status == expectedResult:
+            tdkTestObj = obj.createTestStep('rdkservice_rebootDevice')
+            tdkTestObj.addParameter("waitTime",float(rebootwaitTime))
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResultDetails()
+            if expectedResult in result:
+                tdkTestObj.setResultStatus("SUCCESS")
+                print("\n Device is rebooted")
+                uptime = get_device_uptime(obj)
+                if uptime != -1 and uptime < 280:
+                    print("\n Device is rebooted and uptime is: {}\n".format(uptime))
                 else:
-                    print("\n  Error while resuming {}, current status: {} ".format(plugin,plugin_status))
+                    print("\n Error while validating uptime")
                     tdkTestObj.setResultStatus("FAILURE")
                     break
             else:
-                print("\n Unable to launch ",plugin)
-                obj.setLoadModuleStatus("FAILURE")
-                break
-        else:
-            print("\n Completing the test")
-            #Deactivate plugin
-            print("\n Exiting from ",plugin)
-            tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
-            tdkTestObj.addParameter("plugin",plugin)
-            tdkTestObj.addParameter("status","deactivate")
-            tdkTestObj.executeTestCase(expectedResult)
-            result = tdkTestObj.getResult()
-            if result == "SUCCESS":
-                print("\n Destroyed {} plugin".format(plugin))
-                tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                print("\n Unable to deactivate ",plugin)
+                print("\n Error while rebooting the device")
                 tdkTestObj.setResultStatus("FAILURE")
-    else:
-        print("\n Preconditions are not met")
-        obj.setLoadModuleStatus("FAILURE")
-    if revert=="YES":
-        print("Revert the values before exiting")
-        status = set_plugins_status(obj,curr_plugins_status_dict)
+                break
+            if count==1:
+                print("\n Terminating the app")
+                tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                tdkTestObj.addParameter("app_id",app_name)
+                tdkTestObj.executeTestCase(expectedResult)
+                result = tdkTestObj.getResult()
+                if result == "SUCCESS":
+                    tdkTestObj.setResultStatus("SUCCESS")
+                else:
+                    tdkTestObj.setResultStatus("FAILURE")
+                    print("Unable to terminate the app")
+        else:
+            print("\n Error while launching the app")
+            tdkTestObj.setResultStatus("FAILURE")
+            break
+        
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
