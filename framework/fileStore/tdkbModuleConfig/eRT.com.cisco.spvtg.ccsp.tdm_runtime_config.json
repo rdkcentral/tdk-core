@@ -1,0 +1,240 @@
+{
+    "Device.IP.Diagnostics.X_CISCO_COM_ARP.ARPTableNumberOfEntries": {
+        "ARPTableNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.X_CISCO_COM_ARP.ARPTable.{i}.IPAddress": {
+        "type": ["string(40)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.X_CISCO_COM_ARP.ARPTable.{i}.Static": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.X_CISCO_COM_ARP.ARPTable.{i}.MACAddress": {
+        "type": ["string(18)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.TraceRoute.RouteHopsNumberOfEntries": {
+        "RouteHopsNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.TraceRoute.RouteHops.{i}.Host": {
+        "type": ["string(256)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.TraceRoute.RouteHops.{i}.HostAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.TraceRoute.RouteHops.{i}.ErrorCode": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.TraceRoute.RouteHops.{i}.RTTimes": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.ResultNumberOfEntries": {
+        "ResultNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.Result.{i}.Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Success","Error_DNSServerNotAvailable","Error_HostNameNotResolved","Error_Timeout","Error_Other"],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.Result.{i}.AnswerType": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["None","Authoritative","NonAuthoritative"],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.Result.{i}.HostNameReturned": {
+        "type": ["string(256)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.Result.{i}.IPAddresses": {
+        "type": ["string(45)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.Result.{i}.DNSServerIP": {
+        "type": ["string(45)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.Result.{i}.ResponseTime": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": ["0"],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.CpuMemFragNumberOfEntries": {
+        "CpuMemFragNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.SelfHeal.CpuMemFrag.{i}.DMA": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.CpuMemFrag.{i}.DMA32": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.CpuMemFrag.{i}.Normal": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.CpuMemFrag.{i}.Highmem": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.CpuMemFrag.{i}.FragPercentage": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.ConnectivityTest.PingServerList.IPv4PingServerTableNumberOfEntries": {
+        "IPv4PingServerTableNumberOfEntries": "",
+        "table": "writableTable",
+        "flags": [""]
+    },
+    "Device.SelfHeal.ConnectivityTest.PingServerList.IPv4PingServerTable.{i}.X_RDKCENTRAL-COM_Ipv4PingServerURI": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.ConnectivityTest.PingServerList.IPv6PingServerTableNumberOfEntries": {
+        "IPv6PingServerTableNumberOfEntries": "",
+        "table": "writableTable",
+        "flags": [""]
+    },
+    "Device.SelfHeal.ConnectivityTest.PingServerList.IPv6PingServerTable.{i}.X_RDKCENTRAL-COM_Ipv6PingServerURI": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Thermal.FanNumberOfEntries": {
+        "FanNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifndef NO_FAN_FEATURE_SUPPORT"]
+    },
+    "Device.Thermal.Fan.{i}.Status": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef NO_FAN_FEATURE_SUPPORT"]
+    },
+    "Device.Thermal.Fan.{i}.Speed": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef NO_FAN_FEATURE_SUPPORT"]
+    },
+    "Device.Thermal.Fan.{i}.RotorLock": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Not_Applicable","True","False"],
+        "flags": ["ifndef NO_FAN_FEATURE_SUPPORT"]
+    },
+    "Device.Thermal.Fan.{i}.MaxOverride": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifndef NO_FAN_FEATURE_SUPPORT"],
+        "Set_type": "L2"
+    }
+}

@@ -1,0 +1,106 @@
+{
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_EnableXDNS": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.X_RDKCENTRAL-COM_XDNS.DefaultDeviceDnsIPv4": "75.75.75.75",
+                "Device.X_RDKCENTRAL-COM_XDNS.DefaultDeviceDnsIPv6": "2001:558:feed::7510"
+            },
+            "false": {
+                "Device.X_RDKCENTRAL-COM_XDNS.DefaultDeviceDnsIPv4": "75.75.75.75",
+                "Device.X_RDKCENTRAL-COM_XDNS.DefaultDeviceDnsIPv6": "2001:558:feed::7510"
+            }
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AvoidUnNecesaryXDNSretries.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_EnableXDNS": "true"
+            },
+            "false": {
+                "Device.DeviceInfo.X_RDKCENTRAL-COM_EnableXDNS": "true"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.DefaultDeviceDnsIPv4": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.DefaultDeviceDnsIPv6": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.DefaultSecondaryDeviceDnsIPv4": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "192.168.1.100"
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.DefaultSecondaryDeviceDnsIPv6": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "1080:0:0:800:ba98:3210:11aa:12dd"
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.DefaultDeviceTag": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "sample_dns_tag"
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.DNSSecEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.Data": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

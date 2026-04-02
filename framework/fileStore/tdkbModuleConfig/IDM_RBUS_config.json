@@ -1,0 +1,161 @@
+{
+    "Device.X_RDK_Remote.DeviceChange": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.DeviceNumberOfEntries": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT | RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.Port": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY |RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:65536]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDK_Connection.HelloInterval": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["10000"],
+        "expectedValues": ["[0:65536]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDK_Connection.HelloIPv4SubnetList": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Connection.HelloIPv6SubnetList": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Connection.DetectionWindow": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["30000"],
+        "expectedValues": ["[0:65536]"
+        ],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "60000"
+        }
+    },
+    "Device.X_RDK_Connection.Interface": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY | RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "Interface"
+        }
+    },
+    "Device.X_RDK_Connection.Port": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY |RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:65536]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDK_Remote.FileTransferMaxSize()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.AddDeviceCapabilities()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.RemoveDeviceCapabilities()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.ResetDeviceCapabilities()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.getFile()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.sendFile()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.FileTransferStatus()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT | RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.Invoke()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD | RBUS_ELEMENT_TYPE_EVENT"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Connection.Restart()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    }
+}

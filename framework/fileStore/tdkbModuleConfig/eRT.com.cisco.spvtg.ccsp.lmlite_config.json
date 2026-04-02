@@ -1,0 +1,450 @@
+{
+    "Device.Hosts.X_CISCO_COM_ConnectedDeviceNumber": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_CISCO_COM_ConnectedWiFiNumber": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_HostVersionId": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_HostCountPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:65535]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_LMHost_Sync": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_LMHost_Sync_From_MoCA": {
+        "type": ["string(2048)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_LMHost_Sync_From_WiFi": {
+        "type": ["string(2048)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_EthHost_Sync": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDK_PresenceDetectEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_WebPA_PresenceNotificationEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_AddPresenceNotificationMac": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_DeletePresenceNotificationMac": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_PresenceLeaveIPv4CheckInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_PresenceLeaveIPv4Retries": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_PresenceLeaveIPv6CheckInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_PresenceLeaveIPv6Retries": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.X_RDKCENTRAL-COM_BackgroundPresenceJoinInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.XHosts.X_CISCO_COM_ConnectedDeviceNumber": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.ReportingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["5","10","15","30","60","300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "5": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "10": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "15": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "30": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "60": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "300": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "900": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "1800": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "3600": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "10800": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "21600": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "43200": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "86400": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.PollingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["5","10","15","30","60","300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "5": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "10": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "15": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "30": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "60": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "300": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "900": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "1800": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "3600": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "10800": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "21600": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "43200": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            },
+            "86400": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Enabled": "false"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Schema": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.SchemaID": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Default.ReportingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Default.PollingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesStatus.Default.OverrideTTL": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.ReportingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["5","10","15","30","60","300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "5": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "10": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "15": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "30": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "60": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "300": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "900": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "1800": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "3600": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "10800": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "21600": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "43200": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "86400": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.PollingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["300"],
+        "expectedValues": ["5","10","15","30","60","300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "5": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "10": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "15": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "30": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "60": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "300": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "900": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "1800": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "3600": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "10800": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "21600": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "43200": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            },
+            "86400": {
+                "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Enabled": "false"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Schema": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.SchemaID": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Default.ReportingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Default.PollingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["300"],
+        "expectedValues": ["300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NetworkDevicesTraffic.Default.OverrideTTL": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

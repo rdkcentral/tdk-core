@@ -1,0 +1,38 @@
+{
+    "Device.X_RDK_DOCSIS.LinkStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  WAN_FAILOVER_SUPPORTED"]
+    },
+    "Device.X_RDK_DOCSIS.LinkDown": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  WAN_FAILOVER_SUPPORTED"]
+    },
+    "Device.X_RDK_DOCSIS.LinkDownTimeout": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  WAN_FAILOVER_SUPPORTED"]
+    },
+    "Device.X_RDKCENTRAL-COM_CableModem.CableRfSignalStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  WAN_FAILOVER_SUPPORTED"]
+    }
+}
