@@ -194,6 +194,11 @@
                 </resultGeneration>
             </testStep>
         </prerequisite>
+
+        <!-- PluginPreRequisite 8 -->
+        <prerequisite requisiteId="8" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+            <event pluginName="RDKWindowManager" eventName="Event_On_User_Inactivity"/>
+        </prerequisite>
     </pluginPreRequisite>
     
     <!-- Test case 01 -->
@@ -719,6 +724,170 @@
                 <param tag="clientId" value=""/>
             </params>
             <resultGeneration useMethodTag="rwm_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- RDKWindowManager L2 Testcases -->
+    <!-- Test case L2_01 -->
+    <testCase testCaseId="RWM_L2_01" testCaseName="RWM_Check_On_User_Inactivity_Event" desc="Test the user inactivity reporting by enabling it, setting a short inactivity interval, and verifying that the OnUserInactivity event is triggered after the specified interval of user inactivity">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Reset_Enable_Inactivity_Reporting">
+                <testStep testStepId="1" name="Reset_Inactivity_Time" method="Reset_Inactivity_Time">
+                    <resultGeneration useMethodTag="rwm_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="2" name="Enable_Inactivity_Reporting" method="Enable_Inactivity_Reporting" delay="3">
+                   <params>
+                        <param tag="enable" value="true"/>
+                    </params>
+                    <resultGeneration useMethodTag="rwm_null_result_validation"/>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Set_Inactivity_Interval" method="Set_Inactivity_Interval">
+            <params>
+                <param tag="interval" value="1"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_UserInactivity_Event" event="Event_On_User_Inactivity" action="eventListener" delay="80">
+            <resultGeneration useMethodTag="rwm_check_on_userinactivity_event" expectedValues="1"/>
+        </testStep>
+
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Disable_Inactivity_Reporting">
+                <testStep testStepId="1" name="Disable_Inactivity_Reporting" method="Enable_Inactivity_Reporting">
+                    <params>
+                        <param tag="enable" value="false"/>
+                    </params>
+                    <resultGeneration useMethodTag="rwm_null_result_validation"/>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
+
+    <!-- Test case L2_02 -->
+    <testCase testCaseId="RWM_L2_02" testCaseName="RWM_Check_User_Active" desc="Check device returns to active mode after user input via generateKey when it was previously inactive">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Reset_Enable_Inactivity_Reporting">
+                <testStep testStepId="1" name="Reset_Inactivity_Time" method="Reset_Inactivity_Time">
+                    <resultGeneration useMethodTag="rwm_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="2" name="Enable_Inactivity_Reporting" method="Enable_Inactivity_Reporting" delay="3">
+            `       <params>
+                        <param tag="enable" value="true"/>
+                    </params>
+                    <resultGeneration useMethodTag="rwm_null_result_validation"/>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Set_Inactivity_Interval" method="Set_Inactivity_Interval">
+            <params>
+                <param tag="interval" value="1"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_UserInactivity_Event" event="Event_On_User_Inactivity" action="eventListener" delay="80">
+            <resultGeneration useMethodTag="rwm_check_on_userinactivity_event" expectedValues="1"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="4" name="Generate_Key_Valid_Events" method="Generate_Key">
+            <params>
+                <param tag="clientId" usePreviousResult="true" Id="4" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="keyCode" value="13"/>
+                <param tag="modifiers" value="shift"/>
+                <param tag="delay" value="3"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+        <!-- Need to check whether empty event validation is required -->
+
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Disable_Inactivity_Reporting">
+                 <testStep testStepId="1" name="Disable_Inactivity_Reporting" method="Enable_Inactivity_Reporting">
+                    <params>
+                        <param tag="enable" value="false"/>
+                    </params>
+                    <resultGeneration useMethodTag="rwm_null_result_validation"/>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
+
+    <!-- Test case l2_03 -->
+    <testCase testCaseId="RWM_L2_03" testCaseName="RWM_Reset_Inactivity_Interval" desc="Test the resetInactivityTime method to ensure it resets the inactivity timer correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Reset_Enable_Inactivity_Reporting">
+                <testStep testStepId="1" name="Reset_Inactivity_Time" method="Reset_Inactivity_Time">
+                    <resultGeneration useMethodTag="rwm_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="2" name="Enable_Inactivity_Reporting" method="Enable_Inactivity_Reporting" delay="3">
+                    <params>
+                        <param tag="enable" value="true"/>
+                    </params>
+                    <resultGeneration useMethodTag="rwm_null_result_validation"/>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Set_Inactivity_Interval" method="Set_Inactivity_Interval">
+            <params>
+                <param tag="interval" value="2"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_UserInactivity_Event" event="Event_On_User_Inactivity" action="eventListener" delay="140">
+            <resultGeneration useMethodTag="rwm_check_on_userinactivity_event" expectedValues="2"/>
+        </testStep>
+        <testStep testStepId="3" name="Reset_Inactivity_Time" method="Reset_Inactivity_Time" delay="30">
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="4" name="Check_On_UserInactivity_Event" event="Event_On_User_Inactivity" action="eventListener" delay="140">
+            <resultGeneration useMethodTag="rwm_check_on_userinactivity_event" expectedValues="2"/>
+        </testStep>
+
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Disable_Inactivity_Reporting">
+                 <testStep testStepId="1" name="Disable_Inactivity_Reporting" method="Enable_Inactivity_Reporting">
+                    <params>
+                        <param tag="enable" value="false"/>
+                    </params>
+                    <resultGeneration useMethodTag="rwm_null_result_validation"/>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
+
+    <!-- Test case L2_04 -->
+    <testCase testCaseId="RWM_L2_04" testCaseName="RWM_Check_On_User_Inactivity_Event_Disabled_Reporting" desc="Checks whether the user inactivity reporting event is triggered when inactivity reporting is disabled">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Disable_Inactivity_Reporting">
+                <testStep testStepId="1" name="Disable_Inactivity_Reporting" method="Enable_Inactivity_Reporting">
+                    <params>
+                        <param tag="enable" value="false"/>
+                    </params>
+                    <resultGeneration useMethodTag="rwm_null_result_validation"/>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Set_Inactivity_Interval" method="Set_Inactivity_Interval">
+            <params>
+                <param tag="interval" value="1"/>
+            </params>
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_UserInactivity_Event_NoEvent" event="Event_On_User_Inactivity" action="eventListener" delay="80">
+            <resultGeneration useMethodTag="rwm_check_no_userinactivity_event" arguments="check_empty_event"/>
         </testStep>
     </testCase>
     
