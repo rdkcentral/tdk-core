@@ -3059,8 +3059,8 @@
                 <param tag="appId" defaultValue="null" type="int"/>
                 <param tag="launchArgs" defaultValue="null" type="string"/>
             </params>
-	</method>
-	<method name="Numeric_LaunchArgs_Preload_App" api="preloadApp" type="method" desc="Preloads an application instance.">
+        </method>
+        <method name="Numeric_LaunchArgs_Preload_App" api="preloadApp" type="method" desc="Preloads an application instance.">
             <params>
                 <param tag="appId" defaultValue="null" type="string"/>
                 <param tag="launchArgs" defaultValue="null" type="int"/>
@@ -3097,6 +3097,36 @@
             </params>
         </method>
         <method name="Numeric_Stop_System_App" api="stopSystemApp" type="method" desc="Stops the device application">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Activate_System_App" api="activateSystemApp" type="method" desc="Activates the device application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Activate_System_App" api="activateSystemApp" type="method" desc="Activates the device application">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Deactivate_System_App" api="deactivateSystemApp" type="method" desc="Deactivates the device application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Deactivate_System_App" api="deactivateSystemApp" type="method" desc="Deactivates the device application">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Hibernate_System_App" api="hibernateSystemApp" type="method" desc="Hibernates the device application">
+            <params>
+                <param tag="appId" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Hibernate_System_App" api="hibernateSystemApp" type="method" desc="Hibernates the device application">
             <params>
                 <param tag="appId" defaultValue="null" type="int"/>
             </params>
@@ -3155,7 +3185,16 @@
                 <param tag="key" defaultValue="null" type="string"/>
             </params>
         </method>
+        <method name="Numeric_Get_App_Property" api="getAppProperty" type="method" desc="Retrieve a specific property of an application">
+            <params>
+                <param tag="appId" defaultValue="null" type="int"/>
+                <param tag="key" defaultValue="null" type="int"/>
+            </params>
+        </method>
         <method name="Get_Max_Running_Apps" api="getMaxRunningApps" type="method" desc="Retrieves the maximum number of running applications allowed"/>
+
+        <!-- Event Definitions -->
+        <event name="Event_On_App_Lifecycle_State_Changed" eventName="onAppLifecycleStateChanged" eventId="client.events.1" type="event" desc="Triggered whenever there is a change in the lifecycle state of a running application"/>
     </plugin>
 
     <!-- RDKWindowManager Plugin Information -->
@@ -3264,8 +3303,8 @@
                 <param tag="clientId" defaultValue="null" type="string"/>
                 <param tag="zOrder" defaultValue="null" type="int"/>
             </params>
-	</method>
-	<method name="Negative_Set_Z_Order" api="setZOrder" type="method" desc="Sets the z-order of the specified app">
+        </method>
+        <method name="Negative_Set_Z_Order" api="setZOrder" type="method" desc="Sets the z-order of the specified app">
             <params>
                 <param tag="clientId" defaultValue="null" type="string"/>
                 <param tag="zOrder" defaultValue="null" type="string"/>
@@ -3276,6 +3315,9 @@
                 <param tag="clientId" defaultValue="null" type="string"/>
             </params>
         </method>
+
+        <!-- Event Definitions -->
+        <event name="Event_On_User_Inactivity" eventName="onUserInactivity" eventId="client.events.1" type="event" desc="Triggered when the user inactivity timer reaches the set interval"/>
     </plugin>
 
     <!-- LifecycleManager Plugin Information -->
@@ -3571,8 +3613,8 @@
             <params>
                 <param tag="appInstanceId" defaultValue="null" type="int"/>
             </params>
-	</method>
-	<method name="Runtime_annotate" api="annotate" type="method" desc="Annotates are sent to Dobby for recording">
+        </method>
+        <method name="Runtime_annotate" api="annotate" type="method" desc="Annotates are sent to Dobby for recording">
             <params>
                 <param tag="appInstanceId" defaultValue="null" type="string"/>
                 <param tag="key" defaultValue="null" type="string"/>

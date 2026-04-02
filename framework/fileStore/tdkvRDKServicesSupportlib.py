@@ -4395,6 +4395,19 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                             if appStatus != "TRUE":
                                 info["Test_Step_Status"] = "SUCCESS"
                         info["appStatus"] = appStatus
+                    elif len(arg) and arg[0] == "check_loaded_app_not_present":
+                        appStatus = "FALSE"
+                        if len(result) == 0:
+                            info["Test_Step_Status"] = "SUCCESS"
+                        elif len(result) > 0:
+                            for app in result:
+                                if app.get("appId") == arg[1]:
+                                    appStatus = "TRUE"
+                                    info["Test_Step_Status"] = "FAILURE"
+                                    break
+                            if appStatus != "TRUE":
+                                info["Test_Step_Status"] = "SUCCESS"
+                        info["appStatus"] = appStatus
                     else:
                         info["Test_Step_Status"] = "SUCCESS"
             except Exception as e:
@@ -4429,6 +4442,21 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "appmanager_non_empty_result_check":
+            try:
+                # Check for explicit error first
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                # Check for empty values
+                elif "TRUE" in has_empty_values(result):
+                    info["result"] = result
+                    info["Test_Step_Status"] = "FAILURE"
+                    info["message"] = "Empty values found in result"
             except Exception as e:
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
@@ -7963,7 +7991,7 @@ def checkNonEmptyResultData(resultData):
 def has_empty_values(data):
     status = "FALSE"
     # Direct empty check
-    if data in ("", [], {}):
+    if data in ("", [], {}, None, "NONE"):
         status = "TRUE"
     # Dictionary check
     if isinstance(data, dict):
