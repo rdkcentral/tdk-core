@@ -1,0 +1,41 @@
+{
+    "Device.WiFi.Events.VAP.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["bus_element_type_table"],
+        "table": "rbus_AddDelete",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    },
+    "Device.WiFi.Events.VAP.{i}.Frames.Data": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    },
+    "Device.WiFi.Events.VAP.{i}.Frames.Mgmt": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    },
+    "Device.WiFi.Events.Radio.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["bus_element_type_table"],
+        "table": "rbus_AddDelete",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    },
+    "Device.WiFi.Events.Radio.{i}.Temperature": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    }
+}
