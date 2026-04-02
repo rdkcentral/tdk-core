@@ -126,24 +126,9 @@ if expectedResult in result.upper():
     video_test_urls = getTestURLs(players_list,appArguments)
 
     print("\n Check Pre conditions")
-    webkit_instance = PerformanceTestVariables.webkit_instance
-    set_method = webkit_instance+'.1.url'
-    if webkit_instance in "WebKitBrowser":
-        webinspect_port = PerformanceTestVariables.webinspect_port
-    elif webkit_instance in "LightningApp":
-        webinspect_port = PerformanceTestVariables.lightning_app_webinspect_port
-    else:
-        webinspect_port = PerformanceTestVariables.html_app_webinspect_port
-    #No need to revert any values if the pre conditions are already set.
     revert="NO"
-    plugins_list = ["Cobalt",webkit_instance]
-    plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated"}
-    conf_file, status = get_configfile_name(obj);
-    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
-    for plugin in plugins_list[:]:
-        if plugin not in supported_plugins:
-            plugins_list.remove(plugin)
-            plugin_status_needed.pop(plugin)
+    plugins_list = ["DeviceInfo","org.rdk.PersistentStore"]
+    plugin_status_needed = {"org.rdk.PersistentStore":"activated","DeviceInfo":"activated"}
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(20)
     status = "SUCCESS"
@@ -158,148 +143,134 @@ if expectedResult in result.upper():
             status = "FAILURE"
     if status == "SUCCESS":
         print("\n Pre conditions for the test are set successfully");
-        print("\n Get the URL in {}".format(webkit_instance))
-        tdkTestObj = obj.createTestStep('rdkservice_getValue');
-        tdkTestObj.addParameter("method",set_method);
+        time.sleep(10)
+        tdkTestObj = obj.createTestStep('setPS_value');
+        tdkTestObj.addParameter("video_test_url",video_test_urls[0]);
         tdkTestObj.executeTestCase(expectedResult);
-        result = tdkTestObj.getResult()
-        current_url = tdkTestObj.getResultDetails();
-        if current_url != None and expectedResult in result:
+        result = tdkTestObj.getResult();
+        if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS");
-            webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
-            time.sleep(60)
-            print("\n Current URL:",current_url)
-            print("\n Set Lightning Application URL")
-            tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method",set_method);
-            tdkTestObj.addParameter("value",video_test_urls[0]);
+            print("\n Video test URL is set successfully");
+        #rdkv_performancelib.setPS_value(video_test_urls[0])
+            app_bundle_name=MediaValidationVariables.unified_player_app_download_url.split("/")[-1]
+            print(f"\nApp bundle name: {app_bundle_name}")
+            app_name = app_bundle_name.split("+")[0]
+            print(f"\nApp name: {app_name}")
+            app_download_url = MediaValidationVariables.unified_player_app_download_url.split(app_bundle_name)[0]
+            print("app_download_url", app_download_url)
             start_time = str(datetime.now()).split()[1]
-            tdkTestObj.executeTestCase(expectedResult);
-            result = tdkTestObj.getResult();
-            if expectedResult in result:
-                print("\n Validate if the URL is set successfully or not")
-                tdkTestObj = obj.createTestStep('rdkservice_getValue');
-                tdkTestObj.addParameter("method",set_method);
-                tdkTestObj.executeTestCase(expectedResult);
-                result = tdkTestObj.getResult()
-                new_url = tdkTestObj.getResultDetails();
-                if new_url in video_test_urls[0]and expectedResult in result:
-                    tdkTestObj.setResultStatus("SUCCESS");
-                    print("\n URL(",new_url,") is set successfully")
-                    if logging_method == "REST_API":
-                        app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
-                        continue_count = 0
-                        file_check_count = 0
-                        logging_flag = 0
-                        hang_detected = 0
-                        test_result = ""
-                        lastLine = None
-                        lastIndex = 0
-                        while True:
-                            if file_check_count > 60:
-                                print("\nREST API Logging is not happening properly. Exiting...")
-                                break;
-                            if os.path.exists(app_log_file):
-                                logging_flag = 1
-                                break;
-                            else:
-                                file_check_count += 1
-                                time.sleep(1);
-                        while logging_flag:
-                            if continue_count > 60:
-                                hang_detected = 1
-                                print("\nApp not proceeding for 60 secs. Exiting...")
-                                break;
-                            with open(app_log_file,'r') as f:
-                                lines = f.readlines()
-                            if lines:
-                                if len(lines) != lastIndex:
-                                    continue_count = 0
-                                    #print(lastIndex,len(lines))
-                                    for i in range(lastIndex,len(lines)):
-                                        print(lines[i])
-                                        if "URL Info:" in lines[i]:
-                                            test_result = lines[i]
-                                    lastIndex = len(lines)
-                                    if test_result != "":
-                                        break;
-                                else:
-                                    continue_count += 1
+            status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
+            if status == "SUCCESS":
+                if logging_method == "REST_API":
+                    app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
+                    continue_count = 0
+                    file_check_count = 0
+                    logging_flag = 0
+                    hang_detected = 0
+                    test_result = ""
+                    lastLine = None
+                    lastIndex = 0
+                    while True:
+                        if file_check_count > 60:
+                            print("\nREST API Logging is not happening properly. Exiting...")
+                            break;
+                        if os.path.exists(app_log_file):
+                            logging_flag = 1
+                            break;
+                        else:
+                            file_check_count += 1
+                            time.sleep(1);
+                    while logging_flag:
+                        if continue_count > 60:
+                            hang_detected = 1
+                            print("\nApp not proceeding for 60 secs. Exiting...")
+                            break;
+                        with open(app_log_file,'r') as f:
+                            lines = f.readlines()
+                        if lines:
+                            if len(lines) != lastIndex:
+                                continue_count = 0
+                                #print(lastIndex,len(lines))
+                                for i in range(lastIndex,len(lines)):
+                                    print(lines[i])
+                                    if "URL Info:" in lines[i]:
+                                        test_result = lines[i]
+                                lastIndex = len(lines)
+                                if test_result != "":
+                                    break;
                             else:
                                 continue_count += 1
+                        else:
+                            continue_count += 1
+                        time.sleep(1)
+                elif logging_method == "WEB_INSPECT":
+                    webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
+                    continue_count = 0
+                    test_result = ""
+                    while True:
+                        if continue_count > 60:
+                            print("Lightning Application is not launched within 60 seconds")
+                            break
+                        if (len(webkit_console_socket.getEventsBuffer())== 0):
                             time.sleep(1)
-                    elif logging_method == "WEB_INSPECT":
-                        continue_count = 0
-                        test_result = ""
-                        while True:
-                            if continue_count > 60:
-                                print("Lightning Application is not launched within 60 seconds")
-                                break
-                            if (len(webkit_console_socket.getEventsBuffer())== 0):
-                                time.sleep(1)
-                                continue_count += 1
-                                continue
-                            console_log = webkit_console_socket.getEventsBuffer().pop(0)
-                            if "URL Info:" in console_log or "Connection refused" in console_log:
-                                test_result = getConsoleMessage(console_log)
-                                break;
-                        webkit_console_socket.disconnect()
-                        time.sleep(30)
-                    if "URL Info:" in test_result:
-                        micosec_frm_start_time = int(start_time.split(".")[-1])
-                        start_time = start_time.replace(start_time.split(".")[-1],"")
-                        start_time = start_time.replace(".",":")
-                        start_time = start_time + str(micosec_frm_start_time//1000)
-                        print("\n Application URL set in {} at :{} (UTC)".format(webkit_instance,start_time))
-                        start_time_millisec = getTimeInMilliSeconds(start_time)
-                        end_time = getTimeFromMsg(test_result)
-                        print("\n Application launched at: {} (UTC)".format(end_time))
-                        end_time_millisec = getTimeInMilliSeconds(end_time)
-                        app_launch_time = end_time_millisec - start_time_millisec
-                        print("\n Time taken to launch the application: {} milliseconds \n".format(app_launch_time))
-                        conf_file,result = getConfigFileName(tdkTestObj.realpath)
-                        result1, app_launch_threshold_value = getDeviceConfigKeyValue(conf_file,"APP_LAUNCH_THRESHOLD_VALUE")
-                        Summ_list.append('APP_LAUNCH_THRESHOLD_VALUE :{}ms'.format(app_launch_threshold_value))
-                        result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
-                        Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
-                        Summ_list.append('Application Initiated  at :{}'.format(start_time))
-                        Summ_list.append('Application launched at :{}'.format(end_time))
-                        Summ_list.append('Time taken to launch the application :{}ms'.format(app_launch_time))
-                        if all (value != "" for value in (app_launch_threshold_value,offset)):
-                            print("\n Threshold value for time taken to launch the application: {} ms".format(app_launch_threshold_value))
-                            if 0 < int(app_launch_time) < (int(app_launch_threshold_value) + int(offset)):
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                print("\n The time taken to launch the app is within the expected limit\n")
-                            else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print("\n The time taken to launch the app is not within the expected limit \n")
+                            continue_count += 1
+                            continue
+                        console_log = webkit_console_socket.getEventsBuffer().pop(0)
+                        if "URL Info:" in console_log or "Connection refused" in console_log:
+                            test_result = getConsoleMessage(console_log)
+                            break;
+                    webkit_console_socket.disconnect()
+                    time.sleep(30)
+                if "URL Info:" in test_result:
+                    micosec_frm_start_time = int(start_time.split(".")[-1])
+                    start_time = start_time.replace(start_time.split(".")[-1],"")
+                    start_time = start_time.replace(".",":")
+                    start_time = start_time + str(micosec_frm_start_time//1000)
+                    print("\n Application URL set at :{} (UTC)".format(start_time))
+                    start_time_millisec = getTimeInMilliSeconds(start_time)
+                    end_time = getTimeFromMsg(test_result)
+                    print("\n Application launched at: {} (UTC)".format(end_time))
+                    end_time_millisec = getTimeInMilliSeconds(end_time)
+                    app_launch_time = end_time_millisec - start_time_millisec
+                    print("\n Time taken to launch the application: {} milliseconds \n".format(app_launch_time))
+                    conf_file,result = getConfigFileName(obj.realpath)
+                    result1, app_launch_threshold_value = getDeviceConfigKeyValue(conf_file,"APP_LAUNCH_THRESHOLD_VALUE")
+                    Summ_list.append('APP_LAUNCH_THRESHOLD_VALUE :{}ms'.format(app_launch_threshold_value))
+                    result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                    Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
+                    Summ_list.append('Application Initiated  at :{}'.format(start_time))
+                    Summ_list.append('Application launched at :{}'.format(end_time))
+                    Summ_list.append('Time taken to launch the application :{}ms'.format(app_launch_time))
+                    if all (value != "" for value in (app_launch_threshold_value,offset)):
+                        print("\n Threshold value for time taken to launch the application: {} ms".format(app_launch_threshold_value))
+                        if 0 < int(app_launch_time) < (int(app_launch_threshold_value) + int(offset)):
+                            tdkTestObj.setResultStatus("SUCCESS");
+                            print("\n The time taken to launch the app is within the expected limit\n")
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print("\n Failed to get the threshold value from config file")
+                            print("\n The time taken to launch the app is not within the expected limit \n")
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print("\n Error occured during application launch")
-                    #Set the URL back to previous
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue');
-                    tdkTestObj.addParameter("method",set_method);
-                    tdkTestObj.addParameter("value",current_url);
-                    tdkTestObj.executeTestCase(expectedResult);
-                    result = tdkTestObj.getResult();
-                    if result == "SUCCESS":
-                        print("\n URL is reverted successfully")
-                        tdkTestObj.setResultStatus("SUCCESS");
-                    else:
-                        print("\n Failed to revert the URL")
-                        tdkTestObj.setResultStatus("FAILURE");
+                        print("\n Failed to get the threshold value from config file")
                 else:
-                    print("\n Failed to load the URL, new URL: %s" %(new_url))
-                    tdkTestObj.setResultStatus("FAILURE");
+                    tdkTestObj.setResultStatus("FAILURE")
+                    print("\n Error occured during application launch")
             else:
-                print("\n Failed to set the URL")
-                tdkTestObj.setResultStatus("FAILURE");
+                tdkTestObj.setResultStatus("FAILURE")
+                print("Unable to set the video url value in PersistanceStorage")
+            print("\n Terminating the app")
+            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+            tdkTestObj.addParameter("app_id",app_name)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
+            if result == "SUCCESS":
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
+                print("Unable to terminate the app")
         else:
-            tdkTestObj.setResultStatus("FAILURE");
-            print("\n Unable to get the current URL loaded")
+            tdkTestObj.setResultStatus("FAILURE")
+            print("Failed to install or launch app")
     else:
         print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
