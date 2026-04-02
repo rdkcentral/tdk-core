@@ -1,0 +1,452 @@
+{
+    "Device.Hosts.HostNumberOfEntries": {
+        "HostNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.Alias": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.PhysAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.IPAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.DHCPClient": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.AssociatedDevice": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.Layer1Interface": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.Layer3Interface": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.VendorClassID": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef VENDOR_CLASS_ID"]
+    },
+    "Device.Hosts.Host.{i}.HostName": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.Active": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["false","true"],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.LeaseTimeRemaining": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(-1,2^31 - 1)"],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.X_CISCO_COM_ActiveTime": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.X_CISCO_COM_InactiveTime": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.RDK_PresenceActiveLastChange": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.X_COMCAST-COM_LastChange": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.AddressSource": {
+        "type": ["string(8)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["DHCP","Static","AutoIP","None"],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.Comments": {
+        "type": ["string(1024)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.X_CISCO_COM_RSSI": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.X_RDKCENTRAL-COM_Parent": {
+        "type": ["string(18)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.X_RDKCENTRAL-COM_DeviceType": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.X_RDKCENTRAL-COM_Layer1Interface": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.X_RDKCENTRAL-COM_PresenceNotificationEnabled": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.RDK_PresenceActive": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.IPv4AddressNumberOfEntries": {
+        "IPv4AddressNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.IPv4Address.{i}.IPAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.IPv6AddressNumberOfEntries": {
+        "IPv6AddressNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.IPv6Address.{i}.IPAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.XHosts.XHostNumberOfEntries": {
+        "XHostNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.Alias": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.PhysAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.IPAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.DHCPClient": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.AssociatedDevice": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.Layer1Interface": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.Layer3Interface": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.HostName": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.Active": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.LeaseTimeRemaining": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[-1:]"
+        ],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.X_CISCO_COM_ActiveTime": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.X_CISCO_COM_InactiveTime": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.X_COMCAST-COM_LastChange": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.AddressSource": {
+        "type": ["string(8)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.Comments": {
+        "type": ["string(1024)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.X_CISCO_COM_RSSI": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.X_RDKCENTRAL-COM_Parent": {
+        "type": ["string(18)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.X_RDKCENTRAL-COM_DeviceType": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.X_RDKCENTRAL-COM_Layer1Interface": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.XIPv4AddressNumberOfEntries": {
+        "XIPv4AddressNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.XIPv4Address.{i}.IPAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.XIPv6AddressNumberOfEntries": {
+        "XIPv6AddressNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.XHosts.XHost.{i}.XIPv6Address.{i}.IPAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.ManagementServer.ManageableDeviceNumberOfEntries": {
+        "ManageableDeviceNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.ManagementServer.ManageableDevice.{i}.ManufacturerOUI": {
+        "type": ["string(6)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.ManagementServer.ManageableDevice.{i}.SerialNumber": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.ManagementServer.ManageableDevice.{i}.ProductClass": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.ManagementServer.ManageableDevice.{i}.Host": {
+        "type": ["string(1024)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    }
+}

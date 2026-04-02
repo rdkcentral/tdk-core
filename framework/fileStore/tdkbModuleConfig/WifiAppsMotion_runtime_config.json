@@ -1,0 +1,37 @@
+{
+    "Device.WiFi.X_RDK_CSI.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["bus_element_type_table"],
+        "table": "rbus_AddDelete",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": ["ifdef ONEWIFI_MOTION_APP_SUPPORT"]
+    },
+    "Device.WiFi.X_RDK_CSI.{i}.data": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_MOTION_APP_SUPPORT"]
+    },
+    "Device.WiFi.X_RDK_CSI.{i}.ClientMaclist": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_MOTION_APP_SUPPORT"]
+    },
+    "Device.WiFi.X_RDK_CSI.{i}.Enable": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_MOTION_APP_SUPPORT"]
+    }
+}
