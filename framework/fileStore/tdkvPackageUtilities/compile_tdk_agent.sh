@@ -46,7 +46,7 @@ SRC_HDMICEC_HAL="https://github.com/rdkcentral/rdk-halif-hdmi_cec.git"
 SRC_BLUETOOTH_HAL="https://code.rdkcentral.com/r/rdk/components/generic/bluetooth"
 SRC_IARMMGRS="https://github.com/rdkcentral/iarmmgrs.git"
 SRC_WESTEROS="https://code.rdkcentral.com/r/components/opensource/westeros"
-SRC_EGL="https://github.com/KhronosGroup/EGL-Registry.git"
+SRC_EGL="https://github.com/raspberrypi/userland.git"
 SRC_RMF_AUDIO_CAPTURE="https://github.com/rdkcentral/rdk-halif-rmf_audio_capture.git"
 SRC_STORAGE_MGR="https://code.rdkcentral.com/r/rdk/components/generic/storagemanager"
 #SRC_STORAGE_MGR="git@github.com:rdk-e/storagemanager.git"
@@ -70,7 +70,7 @@ SRC_RFCAPI="https://github.com/rdkcentral/rfc.git"
 SRC_VULKAN="https://github.com/KhronosGroup/Vulkan-Headers.git"
 
 #Platformwise repositories
-SRC_RPI="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
+SRC_RPI4="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
 
 #Source Directory names
 DIR_MHD="libmicrohttpd-0.9.70"
@@ -110,8 +110,8 @@ if [[ "$PLATFORM_GIVEN" == "AMLOGIC" ]];then
     PLATFORM="AMLOGIC"
 elif [[ "$PLATFORM_GIVEN" == "BROADCOM" ]];then
     PLATFORM="BROADCOM"
-elif [[ "$PLATFORM_GIVEN" == "RPI" ]];then
-    PLATFORM="RPI"
+elif [[ "$PLATFORM_GIVEN" == "RPI4" ]];then
+    PLATFORM="RPI4"
 elif [[ "$PLATFORM_GIVEN" == "REALTEK" ]];then
     PLATFORM="REALTEK"
 else
@@ -181,7 +181,6 @@ download_source_code()
         DIR=DIR_$package
 	SRC_URL=SRC_$package
 	filename="$(basename ${!SRC_URL})"
-        #if [ -f "${!DIR}" ]; then
 	if [ -f $filename ];then
             echo "$package- $filename is already cloned in the current directory" 2>&1 | tee -a $LOG_FILE
     	    echo -e "\e[1;42m Download $package: SKIPPED \e[0m \n" 2>&1 | tee -a $LOG_FILE
@@ -522,7 +521,7 @@ install_packages()
     Packages="$(find $ROOT_DIR -iname Packages.tgz)"
     if [  -z "$Packages" ];then
 	echo -e "Packages.tgz not found"
-	exit
+	exit 1
     fi
     tar -xf Packages.tgz
     gstreamer_package="$(find $ROOT_DIR -iname gstreamer.tgz)"
@@ -587,7 +586,7 @@ install_packages()
         wayland_protocols_package_name=$(basename "$wayland_protocols_package")
 	cd usr/share
         tar -xf $wayland_protocols_package_name
-	find $SDKTARGETSYSROOT -iname wayland-protocols.pc
+        find $SDKTARGETSYSROOT -iname wayland-protocols.pc
         rm $SDKTARGETSYSROOT/usr/share/$wayland_protocols_package_name
     fi
     glm_package="$(find $ROOT_DIR -iname glm.tgz)"
@@ -669,17 +668,14 @@ compile_assimp()
 	git clone $SRC_ASSIMP >> $LOG_FILE 2>&1
 	cd assimp
 	git checkout 8f0c6b04b2257a520aaab38421b2e090204b69df  >> $LOG_FILE 2>&1
+	rm -rf build
 	mkdir build
 	cd build 
 	cmake .. \
-	    -DCMAKE_INSTALL_PREFIX=/usr \
-	    -DBUILD_SHARED_LIBS=ON \
-	    -DASSIMP_BUILD_TESTS=OFF \
-	    -DASSIMP_BUILD_ASSIMP_TOOLS=OFF \
-	    -DASSIMP_BUILD_SAMPLES=OFF \
-	    -DASSIMP_NO_EXPORT=ON \
-	    -DASSIMP_BUILD_ZLIB=ON  >> $LOG_FILE 2>&1
+	     -DCMAKE_INSTALL_PREFIX=/usr \
+	     -DASSIMP_BUILD_ASSIMP_TOOLS=OFF -DASSIMP_BUILD_TESTS=OFF >> $LOG_FILE 2>&1
         make -j$(nproc) >> $LOG_FILE 2>&1
+	$STRIP code/libassimp.so.5.0.0
 	DESTDIR=${SYSROOT} make install >> $LOG_FILE 2>&1
 	cd ${ROOT_DIR}
     fi
@@ -1000,10 +996,15 @@ compile_skeleton_libraries()
             cd ${TDK_SOURCE_DIR}/RDK_Source
             git clone $SRC_EGL >> $LOG_FILE 2>&1
             repo_name=$(basename "$SRC_EGL" .git)
+	    cd $repo_name
+	    git checkout c4fd1b8986c6d6d4ae5cd51e65a8bbeb495dfa4e  >> $LOG_FILE 2>&1
             mkdir -p $SYSROOT/usr/include/EGL
             mkdir -p $SYSROOT/usr/include/KHR
-            sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/api/EGL/*.h $SYSROOT/usr/include/EGL/
-            sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/api/KHR/khrplatform.h $SYSROOT/usr/include/KHR/
+	    mkdir -p $SYSROOT/usr/include/GLES2
+            sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/interface/khronos/include/EGL/*.h $SYSROOT/usr/include/EGL/
+	    sudo cp  -r ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/interface $SYSROOT/usr/include/
+            sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/interface/khronos/include/KHR/khrplatform.h $SYSROOT/usr/include/KHR/
+	    sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/interface/khronos/include/GLES2/*.h $SYSROOT/usr/include/GLES2
             rm -rf ${TDK_SOURCE_DIR}/RDK_Source/$repo_name
 	fi
 	if [[ $COMPONENT == "Essos" ]];then
@@ -1012,11 +1013,9 @@ compile_skeleton_libraries()
         if [[ $COMPONENT == "WesterosHal" ]];then
             if [[ $PLATFORM == "BROADCOM" ]];then
                 clone_and_move $SRC_WESTEROS $SRC_WESTEROS_HAL_HEADER_REVISION "WesterosHal_BRCM" "WESTEROS_LIB_VERSION" "brcm/westeros-gl"
-		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/GLES2 $SYSROOT/usr/include/
 		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/wayland-egl.h $SYSROOT/usr/include/
             else
                 clone_and_move $SRC_WESTEROS $SRC_WESTEROS_HAL_HEADER_REVISION "WesterosHal_DRM" "WESTEROS_LIB_VERSION" "drm/westeros-gl"
-		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/GLES2 $SYSROOT/usr/include/
 		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/wayland-egl.h $SYSROOT/usr/include/
             fi
         fi
@@ -1053,10 +1052,8 @@ compile_skeleton_libraries()
 		cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
             fi
 	    if [[ $PLATFORM == "BROADCOM" ]];then
-		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/GLES2 $SYSROOT/usr/include/
 		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/*.h $SYSROOT/usr/include/
 	    else
-	        sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/GLES2 $SYSROOT/usr/include/
 		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/*.h $SYSROOT/usr/include/
 	    fi
 	    cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
@@ -1100,6 +1097,10 @@ compile_skeleton_libraries()
 	    sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/tsb/api/*.h $SYSROOT/usr/include/
             sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/support/aampmetrics/*.h $SYSROOT/usr/include/
             sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/support/aampabr/*.h $SYSROOT/usr/include/
+
+	    cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
+            make >> $LOG_FILE 2>&1
+            sudo mv *.so* $SYSROOT/usr/lib/
 	fi
 	if [[ $COMPONENT == "cJSON" ]];then
 	    cd ${TDK_SOURCE_DIR}/RDK_Source/
@@ -1112,9 +1113,6 @@ compile_skeleton_libraries()
 	    git clone $SRC_UTIL_LINUX >> $LOG_FILE 2>&1
 	    sudo mkdir -p $SYSROOT/usr/include/uuid
 	    sudo cp util-linux/libuuid/src/uuid.h $SYSROOT/usr/include/uuid  
-            cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
-	    make >> $LOG_FILE 2>&1
-            sudo mv *.so* $SYSROOT/usr/lib/
 	fi
 	if [[ $COMPONENT == "DeviceSettings" ]];then
 	    cd ${TDK_SOURCE_DIR}/RDK_Source
@@ -1300,8 +1298,8 @@ compile_vkmark()
 
     if [[ -z "$PLATFORM" ]];then
 	echo "NO PLATFORM is selected for vkmark compilation"
-	echo "Setting PLATFORM to RPI"
-	PLATFORM="RPI"
+	echo "Setting PLATFORM to RPI4"
+	PLATFORM="RPI4"
     fi
 
     echo "Compiling vkmark for $PLATFORM platform"
@@ -1311,7 +1309,7 @@ compile_vkmark()
     ############################################
 
     case "$PLATFORM" in
-        RPI)
+        RPI4)
             VENDOR_MANIFEST_REPO=$RPI_VENDOR_MANIFEST_REPO
             VENDOR_VERSION="$RPI_VENDOR_VERSION"
 	    SOC_OSS_REPO="meta-oss-vendor-raspberrypi"
@@ -1469,7 +1467,10 @@ compile_vkmark()
             cp build/src/*.so vkmark_bins/usr/lib/vkmark/
 	    #Copy libassimp as well
 	    cp $SYSROOT/usr/lib/libassimp.so.5.0.0 vkmark_bins/usr/lib/
-
+	    cd vkmark_bins/usr/lib
+	    ln -sf libassimp.so.5.0.0 libassimp.so.5
+	    cd ../../..
+ 
             mkdir -p vkmark_bins/usr/share/vkmark
             cp -r data/models vkmark_bins/usr/share/vkmark/
             cp -r data/shaders vkmark_bins/usr/share/vkmark/
@@ -1503,7 +1504,7 @@ compile_tdkv()
     CONF_DEVICE=CONFIGURE_OPTIONS_$DEVICE_TYPE
     CONF_OPTIONS="${!CONF_DEVICE} $DISTRO_CONFIGURE $CONFIGURE_OPTIONS_VA  $CONFIGURE_OPTIONS_COMPONENTS"
     if [[ $FNCS_PACKAGE == "TRUE" ]];then
-        CONF_OPTIONS=" --enable-fncsPackage --enable-tdkgraphics "
+        CONF_OPTIONS=" --enable-fncsPackage --enable-tdkgraphics --enable-graphicstestapps"
 	echo "FNCS Package compilation enabled"
     fi
     if [[ $CONF_OPTIONS == *"enable-powermgrhal"* ]] || [[ $CONF_OPTIONS == *"enable-rdkfwupdater"* ]];then
@@ -1646,6 +1647,7 @@ pack_tdkv()
 	cp $ROOT_DIR/vkmark_$PLATFORM.tgz TDK_Package/
 	cd TDK_Package/
 	tar -xvf vkmark_$PLATFORM.tgz >> $LOG_FILE 2>&1
+	rm vkmark_$PLATFORM.tgz
 	cd $ROOT_DIR
 	rm vkmark_$PLATFORM.tgz
     fi
@@ -1700,7 +1702,28 @@ pack_tdkv()
 	cp FireboltCompliance_Validation/graphics_validation/Essos_TDKTestApp ../TDK_Package/usr/bin
         cp FireboltCompliance_Validation/graphics_validation/.libs/Westeros_TDKTestApp ../TDK_Package/usr/bin
 	cp FireboltCompliance_Validation/scripts/RunGraphicsTDKTest.sh ../TDK_Package/opt/TDK
+	cp Graphics_TestApplications/tiles_benchmark ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/motion_benchmark ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/vkmultithread ../TDK_Package/usr/bin
+	cp Graphics_TestApplications/oglmultithread ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/vkoverlay ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/ogloverlay ../TDK_Package/usr/bin
     fi
+    if [[ $CONF_OPTIONS == *"enable-graphicstestapps"* ]];then
+        shaders="$(find $ROOT_DIR -iname shaders.tgz)"
+        if [  -z "$shaders" ];then
+            echo -e "shaders.tgz not found"
+            exit 1
+        fi
+	cp $ROOT_DIR/shaders.tgz ../TDK_Package/opt/TDK
+	cd ../TDK_Package/opt/TDK
+	tar -xf shaders.tgz
+	rm shaders.tgz
+	cd $ROOT_DIR/$DIR_TDK
+    fi
+
+    ## NOTE : REMOVE THIS IN CASE TDK AGENT ENABLED COMPONENT IS COMPILED AS PART OF TDK PACKAGE
+    touch ../TDK_Package/opt/TDK/.no_tdk_agent
 
     if [ $SKIP_PLATFORM != "TRUE" ];then
 	cd ../
@@ -1774,9 +1797,9 @@ pack_tdkv()
     formatted_date=$(echo "$system_date" | awk '{ printf "%02d%02d%04d_%02d%02d%02d\n", $3, (index("JanFebMarAprMayJunJulAugSepOctNovDec", $2)+2)/3, $6, substr($4,1,2), substr($4,4,2), substr($4,7,2) }')
 
     if [ -z $PLATFORM ];then
-	PACKAGE_NAME="Generic_TDK_Package_${IMAGE_TYPE}_${formatted_date}.tar.gz"
+	PACKAGE_NAME="Generic_TDK_Package_${formatted_date}.tar.gz"
     else
-	PACKAGE_NAME="TDK_Package_${PLATFORM}_${IMAGE_TYPE}_${formatted_date}.tar.gz"
+	PACKAGE_NAME="TDK_Package_${PLATFORM}_${formatted_date}.tar.gz"
     fi
     tar -cvzf $PACKAGE_NAME -C TDK_Package . >> $LOG_FILE 2>&1
     if [ $? -eq 0 ]; then
@@ -1829,8 +1852,8 @@ cleanup()
     echo -e "Removing all the directories before exiting\n" 2>&1 | tee -a $LOG_FILE
     cd $ROOT_DIR
     cd -
-    rm -rf $ROOT_DIR/tdkv/temp
-    rm -rf $ROOT_DIR/tdkv/RDK_Source
+    rm -rf $ROOT_DIR/$DIR_TDK/temp
+    rm -rf $ROOT_DIR/$DIR_TDK/RDK_Source
     if [ $? -eq 0 ]; then
         echo -e "\e[1;42m REMOVE SOURCE CODE : SUCCESS \e[0m \n" 2>&1 | tee -a $LOG_FILE
     else

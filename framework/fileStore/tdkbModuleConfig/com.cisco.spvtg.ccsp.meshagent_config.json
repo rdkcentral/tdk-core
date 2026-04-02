@@ -1,0 +1,92 @@
+{
+    "Device.X_RDK_MeshAgent.MWO.SteeringProfileData": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef _RDKB_MESH_AGENT_C_","ifndef DBUS_SUPPORT"]
+    },
+    "Device.X_RDK_MeshAgent.MWO.ClientProfileData": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef _RDKB_MESH_AGENT_C_","ifndef DBUS_SUPPORT"]
+    },
+    "Device.X_RDK_MeshAgent.MeshWANLink.Status": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef _RDKB_MESH_AGENT_C_","ifndef DBUS_SUPPORT"]
+    },
+    "Device.X_RDK_MeshAgent.MeshWANLink.Interface.Name": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef _RDKB_MESH_AGENT_C_","ifndef DBUS_SUPPORT"]
+    },
+    "Device.X_RDK_MeshAgent.MeshBackHaul.Ifname": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef _RDKB_MESH_AGENT_C_","ifndef DBUS_SUPPORT"]
+    },
+    "Device.X_RDK_MeshAgent.EthernetBhaulUplink.Status": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef _RDKB_MESH_AGENT_C_","ifndef DBUS_SUPPORT"]
+    },
+    "Device.X_RDK_MeshAgent.Recorder.Enable": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef _RDKB_MESH_AGENT_C_","ifndef DBUS_SUPPORT"]
+    },
+    "Device.X_RDK_MeshAgent.Mesh.ChannelPlan.Data.KeepOut": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["none"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef _RDKB_MESH_AGENT_C_","ifndef DBUS_SUPPORT"]
+    },
+    "Device.X_RDK_MeshAgent.Mesh.ChannelPlan.Data.HDrecc": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef _RDKB_MESH_AGENT_C_","ifndef DBUS_SUPPORT"]
+    },
+    "Device.X_RDK_MeshAgent.Mesh.ChannelPlan.Commit": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef _RDKB_MESH_AGENT_C_","ifndef DBUS_SUPPORT"]
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "Device.X_RDK_WAN.Interface.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["RBUS_ELEMENT_TYPE_TABLE"],
+        "table": "rbus_AddDelete",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": [""]
+    },
+    "Device.X_RDK_WAN.Interface.{i}.Stats.DscpCountEnable": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["0","10","12","14","18","20","22","26","28","30","34","36","38","8","16","24","32","40","48","56","NULL","-1"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDK_WAN.Interface.{i}.Stats.DscpCountInterval": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["0"],
+        "expectedValues": ["[0:65535]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDK_WAN.Interface.{i}.Stats.DscpCountPerInterval": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_WAN.Interface.{i}.Stats.DscpCountTotal": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

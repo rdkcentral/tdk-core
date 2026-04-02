@@ -1,0 +1,472 @@
+{
+    "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.ReportingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["5","10","15","30","60","300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "5": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "10": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "15": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "30": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "60": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "300": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "900": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "1800": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "3600": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "10800": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "21600": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "43200": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "86400": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.PollingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["5","10","15","30","60","300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "5": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "10": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "15": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "30": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "60": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "300": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "900": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "1800": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "3600": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "10800": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "21600": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "43200": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            },
+            "86400": {
+                "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Enabled": "false"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Schema": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.SchemaID": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Default.ReportingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Default.PollingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.InterfaceDevicesWifi.Default.OverrideTTL": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.ReportingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["5","10","15","30","60","300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "5": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "10": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "15": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "30": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "60": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "300": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "900": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "1800": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "3600": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "10800": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "21600": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "43200": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "86400": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.PollingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["5","10","15","30","60","300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "5": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "10": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "15": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "30": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "60": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "300": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "900": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "1800": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "3600": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "10800": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "21600": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "43200": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            },
+            "86400": {
+                "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Enabled": "false"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Schema": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.SchemaID": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Default.ReportingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Default.PollingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["900"],
+        "expectedValues": ["300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.RadioInterfaceStatistics.Default.OverrideTTL": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.ReportingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["43200"],
+        "expectedValues": ["5","10","15","30","60","300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "5": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "10": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "15": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "30": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "60": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "300": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "900": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "1800": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "3600": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "10800": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "21600": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "43200": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "86400": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.PollingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["21600"],
+        "expectedValues": ["5","10","15","30","60","300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "5": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "10": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "15": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "30": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "60": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "300": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "900": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "1800": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "3600": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "10800": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "21600": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "43200": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            },
+            "86400": {
+                "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Enabled": "false"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Schema": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.SchemaID": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.OnDemandScan": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.LastScanData": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Default.ReportingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["43200"],
+        "expectedValues": ["300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Default.PollingPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["21600"],
+        "expectedValues": ["300","900","1800","3600","10800","21600","43200","86400"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDKCENTRAL-COM_Report.NeighboringAP.Default.OverrideTTL": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

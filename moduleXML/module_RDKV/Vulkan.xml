@@ -23,9 +23,21 @@
                 </parameters>
             </function>
             <function id="318c114e-a29f-470a-bc8d-d65bf66033bb" name="execute_binary">
-                <parameters/>
+                <parameters>
+                    <parameter id="b82cb8f5-4d09-463f-b44e-e3727f5eef1b" parameterName="present_mode" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d01e130e-9396-46e5-bd6e-1d4e234a15fd" name="run_test">
+                <parameters>
+                    <parameter id="cd192c2a-8a72-4314-9d19-a8304012318c" parameterName="command" parameterType="STRING" range="A-Z"/>
+                </parameters>
             </function>
             <function id="130b238a-9ebd-4923-ace0-8fb978fd08e3" name="set_prerequisites">
+                <parameters>
+                    <parameter id="78f34b60-2e02-44bb-8f8d-9569ad219021" parameterName="model" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="12a344e9-6aca-46d6-a935-55552377abb9" name="execute_postrequisites">
                 <parameters/>
             </function>
         </functions>
@@ -35,7 +47,15 @@
                 <id>49ec3b57-9419-47f6-85a3-8af0520b6f58</id>
                 <name>execute_binary</name>
                 <funName>execute_binary</funName>
-                <primitivetestparameters/>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b8e5873b-59ef-4c49-a22c-d61f713aa5ec</id>
+                        <parameterName>present_mode</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>fifo</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
             </primitivetest>
             <primitivetest>
                 <id>5d32fbb6-7ebb-428d-b053-f91c56cc71f1</id>
@@ -52,9 +72,37 @@
                 </primitivetestparameters>
             </primitivetest>
             <primitivetest>
+                <id>628104e7-04fe-4ec8-abfc-8fb5009a60f5</id>
+                <name>run_test</name>
+                <funName>run_test</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>950f250c-893f-47d8-80ce-4cbae05cb627</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>command</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
                 <id>6d67ecee-7928-4cba-be58-1f048704358e</id>
                 <name>set_prerequisites</name>
                 <funName>set_prerequisites</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7156f15b-eab6-4937-b9b4-14efa2be419b</id>
+                        <parameterName>model</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Video_Accelerator</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a28c0324-8826-4611-8cdb-ee204f53faa4</id>
+                <name>execute_postrequisites</name>
+                <funName>execute_postrequisites</funName>
                 <primitivetestparameters/>
             </primitivetest>
         </primitivetests>
