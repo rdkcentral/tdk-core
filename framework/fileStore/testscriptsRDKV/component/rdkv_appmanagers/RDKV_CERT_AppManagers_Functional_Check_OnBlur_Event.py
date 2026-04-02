@@ -250,7 +250,7 @@ if "SUCCESS" in result.upper():
                         for app in result["result"]:
                             if app["appId"] == application_name and app["lifecycleState"] == "APP_STATE_ACTIVE":
                                 print("SUCCESS : First application is in active state after launch")
-                                first_app_instnace_id = app["appInstanceId"]
+                                first_app_instance_id = app["appInstanceId"]
                                 launch_status_dict[application_name] = "TRUE"
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 break
@@ -300,7 +300,7 @@ if "SUCCESS" in result.upper():
                                                 inner = outer["params"]
                                                 #print("\nParsed Event : ", inner)
                                                 second_app_instance_Id = inner["appInstanceId"]
-                                                if second_app_instance_Id == first_app_instnace_id:
+                                                if second_app_instance_Id == first_app_instance_id:
                                                     print("SUCCESS : onBlur event received with correct appInstanceId for the first application")
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                     blur_status = "TRUE"

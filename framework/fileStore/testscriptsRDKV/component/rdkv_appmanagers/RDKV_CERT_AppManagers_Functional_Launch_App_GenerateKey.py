@@ -228,6 +228,7 @@ if "SUCCESS" in result.upper():
                             if appId == application_name and newState == "APP_STATE_ACTIVE" and errorReason == "APP_ERROR_NONE":
                                 print("SUCCESS : Application launch successful with correct lifecycle state")
                                 tdkTestObj.setResultStatus("SUCCESS")
+                                app_instance_id = inner["appInstanceId"]
                                 launch_status = "TRUE"
                                 break
                 
@@ -236,7 +237,7 @@ if "SUCCESS" in result.upper():
                             print("\n")
                             time.sleep(2)
                             method = "org.rdk.RDKWindowManager.1.generateKey"
-                            value = '{ "clientId": "'+application_name+'", "keys": [ { "keyCode": 13, "modifiers": [], "delay": 0.5 } ] }'
+                            value = '{ "clientId": "'+app_instance_id+'", "keys": [ { "keyCode": 13, "modifiers": [], "delay": 0.5 } ] }'
                             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
                             tdkTestObj.addParameter("method",method)
                             tdkTestObj.addParameter("value",value)

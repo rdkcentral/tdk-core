@@ -227,6 +227,7 @@ if "SUCCESS" in result.upper():
                             errorReason = inner["errorReason"]
                             if appId == application_name and newState == "APP_STATE_ACTIVE" and errorReason == "APP_ERROR_NONE":
                                 print("SUCCESS : Application launch successful with correct lifecycle state")
+                                app_instance_id = inner["appInstanceId"]
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 launch_status = "TRUE"
                                 break
@@ -236,7 +237,7 @@ if "SUCCESS" in result.upper():
                             print("\n")
                             time.sleep(2)
                             method = "org.rdk.RDKWindowManager.1.addKeyIntercepts"
-                            value = '{ "clientId": "'+application_name+'", "intercepts": [ { "keyCode": 13, "modifiers": [], "focusOnly": true, "propagate": false } ] }'
+                            value = '{ "clientId": "'+app_instance_id+'", "intercepts": [ { "keyCode": 13, "modifiers": [], "focusOnly": true, "propagate": false } ] }'
                             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
                             tdkTestObj.addParameter("method",method)
                             tdkTestObj.addParameter("value",value)
@@ -251,7 +252,7 @@ if "SUCCESS" in result.upper():
                                 print("\n")
                                 time.sleep(5)
                                 method = "org.rdk.RDKWindowManager.1.removeKeyIntercept"
-                                value = '{ "clientId": "'+application_name+'", "keyCode": 13, "modifiers": [] }'
+                                value = '{ "clientId": "'+app_instance_id+'", "keyCode": 13, "modifiers": [] }'
                                 tdkTestObj = obj.createTestStep('appmanagers_setvalue')
                                 tdkTestObj.addParameter("method",method)
                                 tdkTestObj.addParameter("value",value)
