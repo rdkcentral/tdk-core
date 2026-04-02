@@ -148,22 +148,9 @@ if expectedResult in result.upper():
     print("\n Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
-    webkit_instance = PerformanceTestVariables.webkit_instance
-    set_method = webkit_instance+'.1.url'
-    if webkit_instance in "WebKitBrowser":
-        webinspect_port = PerformanceTestVariables.webinspect_port
-    elif webkit_instance in "LightningApp":
-        webinspect_port = PerformanceTestVariables.lightning_app_webinspect_port
-    else:
-        webinspect_port = PerformanceTestVariables.html_app_webinspect_port
-    plugins_list = ["Cobalt",webkit_instance]
+    plugins_list = ["DeviceInfo","org.rdk.PersistentStore"]
+    plugin_status_needed = {"org.rdk.PersistentStore":"activated","DeviceInfo":"activated"}
     status = "SUCCESS"
-    plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated"}
-    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
-    for plugin in plugins_list[:]:
-        if plugin not in supported_plugins:
-            plugins_list.remove(plugin)
-            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(20)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
@@ -177,40 +164,33 @@ if expectedResult in result.upper():
             status = "FAILURE"
     if status == "SUCCESS":
         print("\n Pre conditions for the test are set successfully");
-        print("\n Get the URL in {}".format(webkit_instance))
-        tdkTestObj = obj.createTestStep('rdkservice_getValue');
-        tdkTestObj.addParameter("method",set_method);
+        time.sleep(10)
+        tdkTestObj = obj.createTestStep('setPS_value');
+        tdkTestObj.addParameter("video_test_url",video_test_urls[0]);
         tdkTestObj.executeTestCase(expectedResult);
-        current_url = tdkTestObj.getResultDetails();
-        result = tdkTestObj.getResult()
-        if current_url != None and expectedResult in result:
+        result = tdkTestObj.getResult();
+        if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS");
-            webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
-            time.sleep(60)
-            print("\n Current URL:",current_url)
-            print("\n Set Lightning Application URL")
-            tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method",set_method);
-            tdkTestObj.addParameter("value",video_test_urls[0]);
-            tdkTestObj.executeTestCase(expectedResult);
-            result = tdkTestObj.getResult();
-            if expectedResult in result:
-                print("\n Validate if the URL is set successfully or not")
-                tdkTestObj = obj.createTestStep('rdkservice_getValue');
-                tdkTestObj.addParameter("method",set_method);
-                tdkTestObj.executeTestCase(expectedResult);
-                new_url = tdkTestObj.getResultDetails();
-                if new_url in video_test_urls[0]:
-                    tdkTestObj.setResultStatus("SUCCESS");
-                    print("\n URL(",new_url,") is set successfully")
-                    if logging_method == "REST_API":
-                        expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result = testusingRestAPI(obj);
+            print("\n Video test URL is set successfully");
+        #rdkv_performancelib.setPS_value(video_test_urls[0])
+            app_bundle_name=MediaValidationVariables.unified_player_app_download_url.split("/")[-1]
+            print(f"\nApp bundle name: {app_bundle_name}")
+            app_name = app_bundle_name.split("+")[0]
+            print(f"\nApp name: {app_name}")
+            app_download_url = MediaValidationVariables.unified_player_app_download_url.split(app_bundle_name)[0]
+            print("app_download_url", app_download_url)
+            status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
+            if status == "SUCCESS":
+
+                if logging_method == "REST_API":
+                    expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result = testusingRestAPI(obj);
+                    evt_list = [expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result]
+                elif logging_method == "WEB_INSPECT":
+                    webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
+                    if current_url != None and expectedResult in result:
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result = testusingWebInspect(obj,webkit_console_socket);
                         evt_list = [expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result]
-                    elif logging_method == "WEB_INSPECT":
-                        if current_url != None and expectedResult in result:
-                            tdkTestObj.setResultStatus("SUCCESS");
-                            expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result = testusingWebInspect(obj,webkit_console_socket);
-                            evt_list = [expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result]
                 if ("SUCCESS" in test_result) and (not any(value == "" for value in evt_list)):
                     pausing_time = getTimeFromMsg(expected_pause_evt)
                     print("\n Pause initiated at {} (UTC)".format(pausing_time))
@@ -220,7 +200,7 @@ if expectedResult in result.upper():
                     paused_time_millisec = getTimeInMilliSeconds(paused_time)
                     pause_opn_time = paused_time_millisec - pausing_time_millisec
                     print("\n Time taken for pause operation: {} milleseconds \n".format(pause_opn_time))
-                    conf_file,result = getConfigFileName(tdkTestObj.realpath)
+                    conf_file,result = getConfigFileName(obj.realpath)
                     result1, pause_time_threshold_value = getDeviceConfigKeyValue(conf_file,"PAUSE_TIME_THRESHOLD_VALUE")
                     Summ_list.append('PAUSE_TIME_THRESHOLD_VALUE :{}ms'.format(pause_time_threshold_value))
                     result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
@@ -269,26 +249,24 @@ if expectedResult in result.upper():
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    tdkTestObj.setResultStatus("FAILURE");
+                    tdkTestObj.setResultStatus("FAILURE")
                     print("\n Error occured during video playback")
-                #Set the URL back to previous
-                tdkTestObj = obj.createTestStep('rdkservice_setValue');
-                tdkTestObj.addParameter("method",set_method);
-                tdkTestObj.addParameter("value",current_url);
-                tdkTestObj.executeTestCase(expectedResult);
-                result = tdkTestObj.getResult();
-                if result == "SUCCESS":
-                    print("\n URL is reverted successfully")
-                    tdkTestObj.setResultStatus("SUCCESS");
-                else:
-                    print("\n Failed to revert the URL")
-                    tdkTestObj.setResultStatus("FAILURE");
             else:
-                print("\n Failed to load the URL, new URL %s" %(new_url))
-                tdkTestObj.setResultStatus("FAILURE");
+                tdkTestObj.setResultStatus("FAILURE")
+                print("Unable to set the video url value in PersistanceStorage")
+            print("\n Terminating the app")
+            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+            tdkTestObj.addParameter("app_id",app_name)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
+            if result == "SUCCESS":
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
+                print("Unable to terminate the app")
         else:
-            print("\n Failed to set the URL")
-            tdkTestObj.setResultStatus("FAILURE");
+            tdkTestObj.setResultStatus("FAILURE")
+            print("Failed to install or launch app")
     else:
         print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
