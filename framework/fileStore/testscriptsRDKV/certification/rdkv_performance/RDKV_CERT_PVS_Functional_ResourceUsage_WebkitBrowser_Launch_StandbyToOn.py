@@ -113,36 +113,13 @@ if expectedResult in result.upper():
     continue_count = 0
     event_listener = None
     power_state = ""
-    #No need to revert any values if the pre conditions are already set.
-    revert="NO"
-    plugins_list = ["LightningApp","Cobalt","WebKitBrowser"]
-    plugin_status_needed = {"LightningApp":"deactivated","Cobalt":"deactivated","WebKitBrowser":"deactivated"}
-    conf_file, status = get_configfile_name(obj);
-    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
-    for plugin in plugins_list[:]:
-        if plugin not in supported_plugins:
-            plugins_list.remove(plugin)
-            plugin_status_needed.pop(plugin)
-    curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
-    status = "SUCCESS"
-    if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print("\n Error while getting the status of plugins")
-        status = "FAILURE"
-    elif curr_plugins_status_dict != plugin_status_needed:
-        revert = "YES"
-        status = set_plugins_status(obj,plugin_status_needed)
-        time.sleep(10)
-        new_status_dict = get_plugins_status(obj,plugins_list)
-        if new_status_dict != plugin_status_needed:
-            print("\n Unable to deactivate plugins")
-            status = "FAILURE"
     tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
     tdkTestObj.addParameter("realpath",obj.realpath)
     tdkTestObj.addParameter("deviceIP",obj.IP)
     tdkTestObj.executeTestCase(expectedResult)
     result = tdkTestObj.getResult()
     ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
-    if status == "SUCCESS" and expectedResult in result and ssh_param_dict != {}:
+    if expectedResult in result and ssh_param_dict != {}:
         time.sleep(10)
         print("\nPre conditions for the test are set successfully")
         if expectedResult in result:
@@ -194,31 +171,34 @@ if expectedResult in result.upper():
                         tdkTestObj.setResultStatus("SUCCESS")
                         print("\n Current power state : \n",current_power_state)
                         tdkTestObj.setResultStatus("SUCCESS")
-                        WebKitBrowser_launch_status,launch_time = launch_plugin(obj,"WebKitBrowser")
+                        #WebKitBrowser_launch_status,launch_time = launch_plugin(obj,"WebKitBrowser")
+                        app_bundle_name=PerformanceTestVariables.google_bundle
+                        app_name="com.rdkcentral.google"
+                        status = rdkservice_install_launch_app(obj, app_bundle_name, app_name)
                         time.sleep(10)
-                        if WebKitBrowser_launch_status == "SUCCESS":
+                        if status == "SUCCESS":
                             time.sleep(5)
-                            tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
-                            tdkTestObj.addParameter("plugin","WebKitBrowser")
+                            print("\n Validating resource usage:")
+                            tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                             tdkTestObj.executeTestCase(expectedResult)
-                            WebKitBrowser_status = tdkTestObj.getResultDetails()
+                            resource_usage = tdkTestObj.getResultDetails()
                             result = tdkTestObj.getResult()
-                            if WebKitBrowser_status == 'resumed' and expectedResult in result:
-                                print("\n WebKitBrowser resumed successfully")
-                                print("\n Validating resource usage:")
-                                tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
-                                tdkTestObj.executeTestCase(expectedResult)
-                                resource_usage = tdkTestObj.getResultDetails()
-                                result = tdkTestObj.getResult()
-                                if expectedResult in result and resource_usage != "ERROR":
-                                    print("\n Resource usage is within the expected limit")
-                                    tdkTestObj.setResultStatus("SUCCESS")
-                                else:
-                                    print("\n Error while validating resource usage")
-                                    tdkTestObj.setResultStatus("FAILURE")
+                            if expectedResult in result and resource_usage != "ERROR":
+                                print("\n Resource usage is within the expected limit")
+                                tdkTestObj.setResultStatus("SUCCESS")
                             else:
-                                print("\n Error while checking WebKitBrowser status, current status: ",WebKitBrowser_status)
+                                print("\n Error while validating resource usage")
                                 tdkTestObj.setResultStatus("FAILURE")
+                            print("\n Terminating the app")
+                            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                            tdkTestObj.addParameter("app_id",app_name)
+                            tdkTestObj.executeTestCase(expectedResult)
+                            result = tdkTestObj.getResult()
+                            if result == "SUCCESS":
+                                tdkTestObj.setResultStatus("SUCCESS")
+                            else:
+                                tdkTestObj.setResultStatus("FAILURE")
+                                print("Unable to terminate the app")
                         else:
                             print("\n Error while launching WebKitBrowser")
                             obj.setLoadModuleStatus("FAILURE")
@@ -231,25 +211,11 @@ if expectedResult in result.upper():
             else:
                 print("\n Error in setting up the current power state to StandBy")
                 obj.setLoadModuleStatus("FAILURE")
-            #Deactivate plugin
-            print("\n Exiting from WebKitBrowser")
-            tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
-            tdkTestObj.addParameter("plugin","WebKitBrowser")
-            tdkTestObj.addParameter("status","deactivate")
-            tdkTestObj.executeTestCase(expectedResult)
-            result = tdkTestObj.getResult()
-            if result == "SUCCESS":
-                tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                print("Unable to deactivate WebKitBrowser")
-                tdkTestObj.setResultStatus("FAILURE")
+
+
         else:
             print("\n Error in setting up the pre-condition")
             obj.setLoadModuleStatus("FAILURE")
-        #Revert the values
-        if revert=="YES":
-            print("\n Revert the values before exiting")
-            status = set_plugins_status(obj,curr_plugins_status_dict)
         obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
