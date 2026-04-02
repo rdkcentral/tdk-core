@@ -1,0 +1,34 @@
+{
+    "Device.NotifyComponent.Notifi_ParamName": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.NotifyComponent.SetNotifi_ParamName": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.NotifyComponent.X_RDKCENTRAL-COM_Connected-Client": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.NotifyComponent.X_RDKCENTRAL-COM_PresenceNotification": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

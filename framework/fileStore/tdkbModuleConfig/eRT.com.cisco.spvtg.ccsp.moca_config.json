@@ -1,0 +1,105 @@
+{
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_xOpsDeviceMgmt.Logging.xOpsDMMoCALogEnabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_xOpsDeviceMgmt.Logging.xOpsDMMoCALogPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["3600"],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "300"
+        }
+    },
+    "Device.MoCA.InterfaceNumberOfEntries": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.MoCA.X_CISCO_COM_ProvisioningFilename": {
+        "type": ["string(128)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "ProvisioningFilename"
+        }
+    },
+    "Device.MoCA.X_CISCO_COM_ProvisioningServerAddressType": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["IPv4","IPv6"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.MoCA.X_CISCO_COM_ProvisioningServerAddress": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "2011:0000:1F1F:000A:001B:0125:11A0:ADDF"
+        }
+    },
+    "Device.MoCA.MocaResetCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.MoCA.X_RDKCENTRAL-COM_MoCAHost_Sync": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.MoCA.Data": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.MoCA.X_RDKCENTRAL-COM_ForceEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.MoCA.X_RDKCENTRAL-COM_xOpsDeviceMgmt.Reset": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    }
+}

@@ -1,0 +1,153 @@
+{
+    "Device.X_RDK_WanManager.Interface.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["RBUS_ELEMENT_TYPE_TABLE"],
+        "table": "rbus_No_AddDelete",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.Selection.Enable": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.Alias": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.BaseInterfaceStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.VirtualInterface.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["RBUS_ELEMENT_TYPE_TABLE"],
+        "table": "rbus_No_AddDelete",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.CPEInterface.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["RBUS_ELEMENT_TYPE_TABLE"],
+        "table": "rbus_No_AddDelete",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.CPEInterface.{i}.Phy.Status": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.CPEInterface.{i}.Wan.Status": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.CPEInterface.{i}.Wan.LinkStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.VirtualInterface.{i}.IP.IPv4Address": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.VirtualInterface.{i}.IP.IPv6Address": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.VirtualInterface.{i}.IP.IPv6Prefix": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.VirtualInterface.{i}.Status": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.VirtualInterface.{i}.VlanStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.WanStart()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.WanStop()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.Activate()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_WanManager.Interface.{i}.Deactivate()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    }
+}
