@@ -1,0 +1,1002 @@
+{
+    "Device.X_CISCO_COM_MTA.DSXLogNumberOfEntries": {
+        "DSXLogNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.DSXLog.{i}.ID": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.DSXLog.{i}.Time": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.DSXLog.{i}.Description": {
+        "type": ["string(128)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.DSXLog.{i}.Level": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTableNumberOfEntries": {
+        "LineTableNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.LineNumber": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["On-Hook","Off-Hook"],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.HazardousPotential": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.ForeignEMF": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.ResistiveFaults": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.ReceiverOffHook": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.RingerEquivalency": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.TriggerDiagnostics": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.CAName": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.CAPort": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.MWD": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.OverCurrentFault": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Normal","Fault"],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.CALLP.LCState": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.CALLP.CallPState": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.CALLP.LoopCurrent": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.ResetStats": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.CallsNumberOfEntries": {
+        "CallsNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.Codec": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteCodec": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.CallEndTime": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.CallStartTime": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.CWErrorRate": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.PktLossConcealment": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.JitterBufferAdaptive": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.Originator": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteIPAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.CallDuration": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.CWErrors": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.SNR": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.MicroReflections": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.DownstreamPower": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.UpstreamPower": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.EQIAverage": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.EQIMinimum": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.EQIMaximum": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.EQIInstantaneous": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.MOS-LQ": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.MOS-CQ": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.EchoReturnLoss": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.SignalLevel": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.NoiseLevel": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.LossRate": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.DiscardRate": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.BurstDensity": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.GapDensity": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.BurstDuration": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.GapDuration": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RoundTripDelay": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.Gmin": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RFactor": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.ExternalRFactor": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.JitterBufRate": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.JBNominalDelay": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.JBMaxDelay": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.JBAbsMaxDelay": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteMOS-LQ": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteMOS-CQ": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteEchoReturnLoss": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteSignalLevel": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteNoiseLevel": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteLossRate": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemotePktLossConcealment": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteDiscardRate": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteBurstDensity": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteGapDensity": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteBurstDuration": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteGapDuration": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteRoundTripDelay": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteGmin": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteRFactor": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteExternalRFactor": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteJitterBufferAdaptive": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteJitterBufRate": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteJBNominalDelay": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteJBMaxDelay": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteJBAbsMaxDelay": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.TxPackets": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.TxOctets": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RxPackets": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RxOctets": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.PacketLoss": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.IntervalJitter": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.LineTable.{i}.VQM.Calls.{i}.RemoteIntervalJitter": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceClassNumberOfEntries": {
+        "ServiceClassNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceClass.{i}.ServiceClassName": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlowNumberOfEntries": {
+        "ServiceFlowNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.SFID": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.ServiceClassName": {
+        "type": ["string(256)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.Direction": {
+        "type": ["string(16)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.ScheduleType": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.DefaultFlow": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.NomGrantInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.UnsolicitGrantSize": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.TolGrantJitter": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.NomPollInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.MinReservedPkt": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.MaxTrafficRate": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.MinReservedRate": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.MaxTrafficBurst": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.TrafficType": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.ServiceFlow.{i}.NumberOfPackets": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.Dect.HandsetsNumberOfEntries": {
+        "HandsetsNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.Dect.Handsets.{i}.Status": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.Dect.Handsets.{i}.LastActiveTime": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.Dect.Handsets.{i}.HandsetName": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.Dect.Handsets.{i}.OperatingTN": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.Dect.Handsets.{i}.SupportedTN": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.Dect.Handsets.{i}.HandsetFirmware": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.MTALogNumberOfEntries": {
+        "MTALogNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.MTALog.{i}.Time": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.MTALog.{i}.Index": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.MTALog.{i}.EventID": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.MTALog.{i}.EventLevel": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.MTALog.{i}.Description": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.DECTLogNumberOfEntries": {
+        "DECTLogNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.DECTLog.{i}.Time": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.DECTLog.{i}.Index": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.DECTLog.{i}.EventID": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.DECTLog.{i}.EventLevel": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_MTA.DECTLog.{i}.Description": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

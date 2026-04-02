@@ -1,0 +1,29 @@
+{
+    "Device.X_RDKCENTRAL-COM_EthernetWAN.LinkStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  WAN_FAILOVER_SUPPORTED"]
+    },
+    "Device.X_RDKCENTRAL-COM_EthernetWAN.LinkDown": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  WAN_FAILOVER_SUPPORTED"]
+    },
+    "Device.X_RDKCENTRAL-COM_EthernetWAN.LinkDownTimeout": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  WAN_FAILOVER_SUPPORTED"]
+    }
+}
