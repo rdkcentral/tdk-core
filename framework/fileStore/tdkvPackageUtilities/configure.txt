@@ -24,7 +24,7 @@ SDK_INSTALL_SCRIPT=
 SDK_INSTALL_PATH=
 
 #Platform repo for tdk
-SRC_PLATFORM_RPI=https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk
+SRC_PLATFORM_RPI4=https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk
 SRC_PLATFORM_REALTEK=https://code.rdkcentral.com/r/collaboration/soc/realtek/rdk/tdk-video
 SRC_PLATFORM_AMLOGIC=https://code.rdkcentral.com/r/collaboration/soc/amlogic/rdk/tdk-video
 SRC_PLATFORM_BROADCOM=https://code.rdkcentral.com/r/collaboration/soc/broadcom/rdk/tdk-video
@@ -35,7 +35,7 @@ REALTEK_VENDOR_MANIFEST_REPO="https://code.rdkcentral.com/r/collaboration/soc/re
 BROADCOM_VENDOR_MANIFEST_REPO="https://code.rdkcentral.com/r/collaboration/soc/broadcom/vendor-manifest-rdke-broadcom"
 
 RPI_VENDOR_VERSION=4.9.1
-REALTEK_VENDOR_VERSION=4.3.0
+REALTEK_VENDOR_VERSION=4.4.0
 BROADCOM_VENDOR_VERSION=4.3.1
 
 MIDDLEWARE_VERSION=8.4.4.0
@@ -116,4 +116,4 @@ PARSEJSON_LIB_VERSION=0
 DWNLUTILS_LIB_VERSION=0
 RFCAPI_LIB_VERSION=0
 
-TDK_REVISION="TDK_M146"
+TDK_REVISION="TDK_M147"

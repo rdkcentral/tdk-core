@@ -1,0 +1,201 @@
+{
+    "Device.WiFi.STA.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["bus_element_type_table"],
+        "table": "rbus_AddDelete",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": [""]
+    },
+    "Device.WiFi.STA.{i}.Connection.Status": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["bytes"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.STA.{i}.InterfaceName": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.STA.{i}.Bssid": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["bytes"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["bus_element_type_table"],
+        "table": "rbus_AddDelete",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDK_deviceConnected": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDK_deviceDisconnected": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDK_deviceDeauthenticated": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDK_DiagData": {
+        "elementType": ["bus_element_type_event"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ForceApply": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.RawFrame.Mgmt.Action.Rx": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.RawFrame.Mgmt.Action.Tx": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.Radio.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["bus_element_type_table"],
+        "table": "rbus_AddDelete",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.Radio.{i}.ScanMode.on_channel.ChannelStats": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.Radio.{i}.ScanMode.off_channel.ChannelStats": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.Radio.{i}.ScanMode.full_channel.ChannelStats": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.Radio.{i}.ScanMode.on_channel.NeighborStats": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.Radio.{i}.ScanMode.off_channel.NeighborStats": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.Radio.{i}.ScanMode.full_channel.NeighborStats": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.Radio.{i}.RadioDiagnosticStats": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.Radio.{i}.RadioTemperatureStats": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.AccessPoint.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["bus_element_type_table"],
+        "table": "rbus_AddDelete",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": [""]
+    },
+    "Device.WiFi.CollectStats.AccessPoint.{i}.AssociatedDeviceStats": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

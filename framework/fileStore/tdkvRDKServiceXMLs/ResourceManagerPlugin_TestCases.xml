@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2026 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="ResourceManager" pluginVersion="1">
+    <pluginPreRequisite>
+        <!-- PluginPreRequisite 1 -->
+        <prerequisite requisiteId="1" requisiteName="Activate_AppStorageManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppStorageManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 2 -->
+        <prerequisite requisiteId="2" requisiteName="Activate_DownloadManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DownloadManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.DownloadManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.DownloadManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.DownloadManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DownloadManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 3 -->
+        <prerequisite requisiteId="3" requisiteName="Activate_PackageManagerRDKEMS_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.PackageManagerRDKEMS"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+        
+        <!-- PluginPreRequisite 4 -->
+        <prerequisite requisiteId="4" requisiteName="Activate_AppManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 5 -->
+        <prerequisite requisiteId="5" requisiteName="Activate_ResourceManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.ResourceManager" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.ResourceManager" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.ResourceManager" />
+                <params>
+                    <param tag="callsign" value="org.rdk.ResourceManager" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.ResourceManager" />
+                <params>
+                    <param tag="plugin" value="org.rdk.ResourceManager" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.ResourceManager" expectedValues="activated" />
+            </testStep>
+        </prerequisite>
+
+         <!-- PluginPreRequisite 6 -->
+        <prerequisite requisiteId="6" requisiteName="Check_Existing_Package_Before_Install">
+            <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
+                <resultGeneration useMethodTag="packagemanager_list_packages">
+                    <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="PackageManager" delay="10">
+                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+            </testStep>
+            <testStep testStepId="3" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                <params>
+                    <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                </params>
+                <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+            </testStep>
+            <testStep testStepId="4" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                    <arguments usePreviousResult="true" Id="3" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                <resultGeneration useMethodTag="check_downloaded_package_status">
+                    <arguments usePreviousResult="true" Id="4" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                    <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="Install" method="Install_Package" pluginName="PackageManager" delay="3">
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                    <param tag="fileLocator" usePreviousResult="true" Id="4" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                    <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                    <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="PackageManager" delay="5">
+                <resultGeneration useMethodTag="packagemanager_check_install_package">
+                    <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 7 -->
+        <prerequisite requisiteId="7" requisiteName="Launch_Application">
+            <testStep testStepId="1" name="Launch_App_Valid_Params" method="Launch_App" pluginName="AppManager">
+                <params>
+                    <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    <param tag="intent" value=""/>
+                    <param tag="launchArgs" value=""/>
+                </params>
+                <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="2" name="Check_App_Launched" method="Get_Loaded_Apps" pluginName="AppManager" delay="8">
+                <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                    <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+        </prerequisite>
+    </pluginPreRequisite>
+
+    <!-- TestCase 01-->
+    <testCase testCaseId="RM_01" testCaseName="ResourceManager_Set_AV_Blocked_Valid_AppId_True" desc="Verify the behavior of setAVBlocked when a valid appId is provided and blocked is set to true">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_AV_Blocked" method="Set_AV_Blocked">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="blocked" value="true" />
+            </params>
+            <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 02-->
+    <testCase testCaseId="RM_02" testCaseName="ResourceManager_Set_AV_Blocked_Valid_AppId_False" desc="Verify the behavior of setAVBlocked when a valid appId is provided and blocked is set to false">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_AV_Blocked" method="Set_AV_Blocked">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="blocked" value="false" />
+            </params>
+            <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 03-->
+    <testCase testCaseId="RM_03" testCaseName="ResourceManager_Set_AV_Blocked_Empty_AppId_True" desc="Verify the behavior of setAVBlocked when an empty string is passed as appId and blocked is set to true">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_AV_Blocked_Empty_AppId" method="Set_AV_Blocked">
+            <params>
+                <param tag="appId" value="" />
+                <param tag="blocked" value="true" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 04-->
+    <testCase testCaseId="RM_04" testCaseName="ResourceManager_Set_AV_Blocked_Empty_AppId_False" desc="Verify the behavior of setAVBlocked when an empty string is passed as appId and blocked is set to false">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_AV_Blocked_Empty_AppId_False" method="Set_AV_Blocked">
+            <params>
+                <param tag="appId" value="" />
+                <param tag="blocked" value="false" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 05-->
+    <testCase testCaseId="RM_05" testCaseName="ResourceManager_SetAVBlocked_SpecialCharacters_True" desc="Verify the behavior of setAVBlocked when appId contains special characters and blocked is set to true">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_AV_Blocked_Special_True" method="Set_AV_Blocked">
+            <params>
+                <param tag="appId" value="()^*!" />
+                <param tag="blocked" value="true" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 06-->
+    <testCase testCaseId="RM_06" testCaseName="ResourceManager_SetAVBlocked_SpecialChars_False" desc="Verify the behavior of setAVBlocked when appId contains special characters and blocked is set to false.">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_AV_Blocked_SpecialChars_False" method="Set_AV_Blocked">
+            <params>
+                <param tag="appId" value="()^*!" />
+                <param tag="blocked" value="false" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 07-->
+    <testCase testCaseId="RM_07" testCaseName="ResourceManager_SetAVBlocked_LongAppId_True" desc="Verify the behavior of setAVBlocked when appId is a very long string and blocked is set to true">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_AV_Blocked_LongAppId_True" method="Set_AV_Blocked">
+            <params>
+                <param tag="appId" value="VeryLongStringForAppIdTestingPurpose" />
+                <param tag="blocked" value="true" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 08-->
+    <testCase testCaseId="RM_08" testCaseName="ResourceManager_SetAVBlocked_LongAppId_False" desc="Verify the behavior of setAVBlocked when appId is a very long string and blocked is set to false.">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_AV_Blocked_LongAppId_False" method="Set_AV_Blocked">
+            <params>
+                <param tag="appId" value="VeryLongStringRepresentingAppId" />
+                <param tag="blocked" value="false" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 09-->
+    <testCase testCaseId="RM_09" testCaseName="ResourceManager_Check_Get_Blocked_List_API_Response" desc="Check that get blocked AV list API returns a well-formed blocked list">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Blocked_AV_Applications" method="Get_Blocked_AV_Applications">
+            <resultGeneration useMethodTag="check_result_values"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 10-->
+    <testCase testCaseId="RM_10" testCaseName="ResourceManager_Verify_Reserve_TTS_Resource_For_Apps" desc="Verify reserveTTSResourceForApps with a valid appids">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_For_Apps" method="Reserve_TTS_Resource_For_Apps">
+            <params>
+                <param tag="appids" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </params>
+            <resultGeneration useMethodTag="success_status_validation" />
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 11-->
+    <testCase testCaseId="RM_11" testCaseName="ResourceManager_Verify_Reserve_TTS_Resource_For_Apps_Empty_AppIds" desc="Verify reserveTTSResourceForApps with an empty string as appids">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_For_Apps_Empty_AppIds" method="Reserve_TTS_Resource_For_Apps">
+            <params>
+                <param tag="appids" value=""/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 12-->
+    <testCase testCaseId="RM_12" testCaseName="ResourceManager_Verify_Reserve_TTS_Resource_For_Apps_Numeric_AppIds" desc="Verify reserveTTSResourceForApps with a numeric value as appids">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_For_Apps_Numeric_AppIds" method="Reserve_TTS_Resource_For_Apps">
+            <params>
+                <param tag="appids" value="12345"/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 13-->
+    <testCase testCaseId="RM_13" testCaseName="ResourceManager_Verify_Reserve_TTS_Resource_For_Apps_Special_Char" desc="Verify reserveTTSResourceForApps with a special character string as appids">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_Special_Char" method="Reserve_TTS_Resource_For_Apps">
+            <params>
+                <param tag="appids" value="()^*!"/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 14-->
+    <testCase testCaseId="RM_14" testCaseName="ResourceManager_Verify_reserveTTSResourceForApps_Long_String" desc="Verify reserveTTSResourceForApps with a very long string as appids.">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Verify_reserveTTSResourceForApps" method="Reserve_TTS_Resource_For_Apps">
+            <params>
+                <param tag="appids" value="A_Very_Long_String_As_AppInstanceId_Example_1234567890_ABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 15-->
+    <testCase testCaseId="RM_15" testCaseName="ResourceManager_Verify_Reserve_TTS_Resource_For_Apps_With_Spaces" desc="Verify reserveTTSResourceForApps with a string containing spaces as appids">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_For_Apps_With_Spaces" method="Reserve_TTS_Resource_For_Apps">
+            <params>
+                <param tag="appids" value="App Instance ID With Spaces"/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 16-->
+    <testCase testCaseId="RM_16" testCaseName="ResourceManager_Verify_ReserveTTSResourceForApps_Mixed_Alphanumeric_SpecialChars" desc="Verify reserveTTSResourceForApps with a string containing mixed alphanumeric and special characters as appids">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_For_Apps" method="Reserve_TTS_Resource_For_Apps">
+            <params>
+                <param tag="appids" value="App123!@#"/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 17-->
+    <testCase testCaseId="RM_17" testCaseName="ResourceManager_Reserve_TTS_Resource_Valid_AppId" desc="Verify reserveTTSResource succeeds with a valid appId">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource" method="Reserve_TTS_Resource">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </params>
+            <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 18-->
+    <testCase testCaseId="RM_18" testCaseName="ResourceManager_Reserve_TTS_Resource_Empty_AppId" desc="Verify reserveTTSResource fails when appId is an empty string">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_Empty_AppId" method="Reserve_TTS_Resource">
+            <params>
+                <param tag="appId" value=""/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 19-->
+    <testCase testCaseId="RM_19" testCaseName="ResourceManager_Reserve_TTS_Resource_AppId_Numeric" desc="Verify reserveTTSResource fails when appId is numeric">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_AppId_Numeric" method="Numeric_Reserve_TTS_Resource">
+            <params>
+                <param tag="appId" value="12345"/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 20-->
+    <testCase testCaseId="RM_20" testCaseName="ResourceManager_Reserve_TTS_Resource_AppId_Invalid" desc="Verify reserveTTSResource fails when appId is invalid">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_AppId_Invalid" method="Reserve_TTS_Resource">
+            <params>
+                <param tag="appId" value="InvalidApp"/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 21-->
+    <testCase testCaseId="RM_21" testCaseName="ResourceManager_Reserve_TTS_Resource_AppId_Alphanumeric" desc="Verify reserveTTSResource fails when appId is alphanumeric">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_AppId_Alphanumeric" method="Reserve_TTS_Resource">
+            <params>
+                <param tag="appId" value="App123"/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 22-->
+    <testCase testCaseId="RM_22" testCaseName="ResourceManager_Reserve_TTS_Resource_AppId_SpecialChars" desc="Verify reserveTTSResource fails when appId contains special characters">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Reserve_TTS_Resource_AppId_SpecialChars" method="Reserve_TTS_Resource">
+            <params>
+                <param tag="appId" value="()^*!"/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <pluginPostRequisite>
+        <!-- PluginPostRequisite 1 -->
+        <postrequisite requisiteId="1" requisiteName="Uninstall_Package">
+            <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+                <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                    <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" pluginName="AppManager" delay="3">
+                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_Package_Info" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
+                <resultGeneration useMethodTag="packagemanager_list_packages">
+                    <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="4" name="Uninstall_Package" method="Uninstall_Package" pluginName="PackageManager" delay="3">
+                <conditionalExecution enable="true" Id="3" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+            </testStep>
+        </postrequisite>
+    </pluginPostRequisite>
+</testPlugin>
