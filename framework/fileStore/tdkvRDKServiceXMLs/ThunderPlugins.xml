@@ -3651,11 +3651,6 @@
                 <param tag="appInstanceId" defaultValue="null" type="int"/>
             </params>
         </method>
-        <method name="Runtime_Numeric_resume" api="resume" type="method" desc="Resume the application">
-            <params>
-                <param tag="appInstanceId" defaultValue="null" type="int"/>
-            </params>
-        </method>
         <method name="Runtime_wake" api="wake" type="method" desc="Wake the application">
             <params>
                 <param tag="appInstanceId" defaultValue="null" type="string"/>
