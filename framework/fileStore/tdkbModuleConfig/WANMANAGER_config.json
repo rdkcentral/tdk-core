@@ -1,0 +1,88 @@
+{
+    "Device.X_RDK_WanManager.CurrentActiveInterface": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.CurrentStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.CurrentStandbyInterface": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.InterfaceAvailableStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.InterfaceActiveStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.CurrentActiveDNS": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.InitialScanComplete": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.InterfaceIpStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE","ifdef WAN_MANAGER_UNIFICATION_ENABLED"]
+    },
+    "Device.X_RDK_WanManager.DisableAutoRouting()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_WanManager.EnableAutoRouting()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    }
+}

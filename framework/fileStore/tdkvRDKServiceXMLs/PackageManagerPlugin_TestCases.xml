@@ -1,0 +1,1153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2026 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="PackageManager" pluginVersion="1">
+    <pluginPreRequisite>
+        <!-- PluginPreRequisite 1 -->
+        <prerequisite requisiteId="1" requisiteName="Activate_AppStorageManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppStorageManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 2 -->
+        <prerequisite requisiteId="2" requisiteName="Activate_PackageManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.PackageManagerRDKEMS"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+	    <!-- Event Registration -->
+        <prerequisite requisiteId="3" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+            <event pluginName="PackageManager" eventName="Event_On_AppInstallationStatus"/>
+        </prerequisite>
+    </pluginPreRequisite>
+
+    <!-- TestCase 01 -->
+    <testCase testCaseId="PM_01" testCaseName="PackageManager_ListPackages_Functionality" desc="Verify that the listPackages method functions correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="ListPackages" method="List_Package_Info">
+            <resultGeneration useMethodTag="packagemanager_list_packages_validation" arguments="exceptional_cases"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 02 -->
+    <testCase testCaseId="PM_02" testCaseName="PackageManager_Install_ValidParameters" desc="Verify that the install method works correctly with valid parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <preRequisite requisiteId="1" requisiteName="Check_Existing_Package_Before_Install">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                        <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                </testStep>
+            </preRequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+            <params>
+                <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+            <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+            <resultGeneration useMethodTag="check_downloaded_package_status">
+                  <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                  <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+            </resultGeneration>
+	    </testStep>
+        <testStep testStepId="4" name="Install" method="Install_Package" delay="3">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="5" name="Verify_Installed_Package" method="List_Package_Info" delay="5">
+            <resultGeneration useMethodTag="packagemanager_check_install_package">
+                <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 03 -->
+    <testCase testCaseId="PM_03" testCaseName="PackageManager_Uninstall_ValidParameters" desc="Verify that the uninstall method works correctly with valid parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                        <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                </testStep>
+            </preRequisite>
+
+            <preRequisite requisiteId="2" requisiteName="Download_Install_Package">
+                <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                    <params>
+                        <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                    </params>
+                    <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+                </testStep>
+                <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                    <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                    <resultGeneration useMethodTag="check_downloaded_package_status">
+                        <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="4" name="Install" method="Install_Package" delay="3">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                        <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                        <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="5" name="Verify_Installed_Package" method="List_Package_Info" delay="5">
+                    <resultGeneration useMethodTag="packagemanager_check_install_package">
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </preRequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Uninstall" method="Uninstall_Package">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Verify_Uninstalled_Package" method="List_Package_Info" delay="5">
+            <resultGeneration useMethodTag="packagemanager_check_uninstall_package">
+                <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 04 -->
+    <testCase testCaseId="PM_04" testCaseName="PackageManager_GetPackageState_EmptyParameters" desc="Verify that the getPackageState method handles empty parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetPackageState_EmptyParameters" method="Package_State">
+            <params>
+                <param tag="packageId" value=""/>
+                <param tag="version" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+    
+    <!-- TestCase 05 -->
+    <testCase testCaseId="PM_05" testCaseName="PackageManager_GetPackageState_InvalidParameters" desc="Verify that the getPackageState method handles invalid parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetPackageState_InvalidParameters" method="Package_State">
+            <params>
+                <param tag="packageId" value="invalid_package_id"/>
+                <param tag="version" value="invalid_version"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 06 -->
+    <testCase testCaseId="PM_06" testCaseName="PackageManager_Uninstall_InvalidParameter" desc="Verify that the uninstall method handles invalid parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Uninstall_InvalidParameter" method="Uninstall_Package">
+            <params>
+                <param tag="packageId" value="invalid_package_id"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 07 -->
+    <testCase testCaseId="PM_07" testCaseName="PackageManager_Install_InvalidParameters" desc="Verify that the install method handles invalid parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Install_InvalidParameters" method="Install_Package">
+            <params>
+                <param tag="packageId" value="invalid_package_id"/>
+                <param tag="version" value="invalid_version"/>
+                <param tag="fileLocator" value="invalid_file_locator"/>
+                <param tag="name" value="invalid_name"/>
+                <param tag="value" value="invalid_value"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 08 -->
+    <testCase testCaseId="PM_08" testCaseName="PackageManager_Uninstall_EmptyParameters" desc="Verify that the uninstall method handles empty parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Uninstall_EmptyParameters" method="Uninstall_Package">
+            <params>
+                <param tag="packageId" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 09 -->
+    <testCase testCaseId="PM_09" testCaseName="PackageManager_Uninstall_InvalidParameters" desc="Verify that the uninstall method handles invalid parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Uninstall_InvalidParameters" method="Uninstall_Package">
+            <params>
+                <param tag="packageId" value="invalid_package_id"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 10 -->
+    <testCase testCaseId="PM_10" testCaseName="PackageManager_Unlock_Package_EmptyParameters" desc="Verify that the unlock method handles empty parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Unlock_Package_EmptyParameters" method="Unlock_Package">
+            <params>
+                <param tag="packageId" value=""/>
+                <param tag="version" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 11 -->
+    <testCase testCaseId="PM_11" testCaseName="PackageManager_Unlock_Package_InvalidPackageId_EmptyVersion" desc="Verify that the unlock method handles invalid packageId with empty version correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Unlock_Package_InvalidPackageId_EmptyVersion" method="Unlock_Package">
+            <params>
+                <param tag="packageId" value="invalid_package_id"/>
+                <param tag="version" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 12 -->
+    <testCase testCaseId="PM_12" testCaseName="PackageManager_Unlock_Package_EmptyPackageId_InvalidVersion" desc="Verify that the unlock method handles empty packageId with invalid version correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Unlock_Package_EmptyPackageId_InvalidVersion" method="Unlock_Package">
+            <params>
+                <param tag="packageId" value=""/>
+                <param tag="version" value="invalid_version"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 13 -->
+    <testCase testCaseId="PM_13" testCaseName="PackageManager_GetLockedInfo_EmptyParameters" desc="Verify that the getLockedInfo method handles empty parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetLockedInfo_EmptyParameters" method="Get_Locked_Info">
+            <params>
+                <param tag="packageId" value=""/>
+                <param tag="version" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 14 -->
+    <testCase testCaseId="PM_14" testCaseName="PackageManager_GetLockedInfo_InvalidPackageId_EmptyVersion" desc="Verify that the getLockedInfo method handles invalid packageId with empty version correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetLockedInfo_InvalidPackageId_EmptyVersion" method="Get_Locked_Info">
+            <params>
+                <param tag="packageId" value="invalid_package_id"/>
+                <param tag="version" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 15 -->
+    <testCase testCaseId="PM_15" testCaseName="PackageManager_GetLockedInfo_EmptyPackageId_InvalidVersion" desc="Verify that the getLockedInfo method handles empty packageId with invalid version correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetLockedInfo_EmptyPackageId_InvalidVersion" method="Get_Locked_Info">
+            <params>
+                <param tag="packageId" value=""/>
+                <param tag="version" value="invalid_version"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 16 -->
+    <testCase testCaseId="PM_16" testCaseName="PackageManager_Uninstall_TwoTimes" desc="Verify uninstall method with valid parameters and perform two consecutive uninstall operations">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                        <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                </testStep>
+            </preRequisite>
+
+            <preRequisite requisiteId="2" requisiteName="Download_Install_Package">
+                <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                    <params>
+                        <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                    </params>
+                    <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+                </testStep>
+                <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                    <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                    <resultGeneration useMethodTag="check_downloaded_package_status">
+                        <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="4" name="Install" method="Install_Package" delay="3">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                        <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                        <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="5" name="Verify_Installed_Package" method="List_Package_Info" delay="5">
+                    <resultGeneration useMethodTag="packagemanager_check_install_package">
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </preRequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="First_Uninstall" method="Uninstall_Package">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Verify_Uninstalled_Package" method="List_Package_Info" delay="5">
+            <resultGeneration useMethodTag="packagemanager_check_uninstall_package">
+                <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Second_Uninstall" method="Uninstall_Package">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 17 -->
+    <testCase testCaseId="PM_17" testCaseName="PackageManager_Install_EmptyParameters" desc="Verify that the install method handles empty parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Install_EmptyParameters" method="Install_Package">
+            <params>
+                <param tag="packageId" value=""/>
+                <param tag="version" value=""/>
+                <param tag="fileLocator" value=""/>
+                <param tag="name" value=""/>
+                <param tag="value" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="Requested version is not supported."/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 18 -->
+    <testCase testCaseId="PM_18" testCaseName="PackageManager_Lock_Package_EmptyParameters" desc="Verify that the lock method handles empty parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Lock_Package_EmptyParameters" method="Lock_Package">
+            <params>
+                <param tag="packageId" value=""/>
+                <param tag="version" value=""/>
+                <param tag="lockReason" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 19 -->
+    <testCase testCaseId="PM_19" testCaseName="PackageManager_Lock_Package_InvalidParameters" desc="Verify that the lock method handles invalid parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Lock_Package_InvalidParameters" method="Lock_Package">
+            <params>
+                <param tag="packageId" value="invalid_package_id"/>
+                <param tag="version" value="invalid_version"/>
+                <param tag="lockReason" value="invalid_reason"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+    
+    <!-- TestCase 20 -->
+    <testCase testCaseId="PM_20" testCaseName="PackageManager_Check_Package_State_After_Install" desc="Verify that the package state method works correctly after installing a package with valid parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                        <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                </testStep>
+            </preRequisite>
+
+            <preRequisite requisiteId="2" requisiteName="Download_Install_Package">
+                <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                    <params>
+                        <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                    </params>
+                    <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+                </testStep>
+                <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                    <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                    <resultGeneration useMethodTag="check_downloaded_package_status">
+                        <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="4" name="Install" method="Install_Package" delay="3">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                        <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                        <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+            </preRequisite>
+        </testCasePreRequisite>
+        
+        <testStep testStepId="1" name="Check_Package_State" method="Package_State">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_check_package_state" expectedValues="INSTALLED"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 21 -->
+    <testCase testCaseId="PM_21" testCaseName="PackageManager_Check_Package_State_After_Uninstall" desc="Verify that the package state method works correctly after uninstalling a package with valid parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                        <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                </testStep>
+            </preRequisite>
+
+            <preRequisite requisiteId="2" requisiteName="Download_Install_Package">
+                <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                    <params>
+                        <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                    </params>
+                    <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+                </testStep>
+                <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                    <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                    <resultGeneration useMethodTag="check_downloaded_package_status">
+                        <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="4" name="Install" method="Install_Package" delay="3">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                        <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                        <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="5" name="Verify_Installed_Package" method="List_Package_Info" delay="5">
+                    <resultGeneration useMethodTag="packagemanager_check_install_package">
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </preRequisite>
+        </testCasePreRequisite>
+        
+        <testStep testStepId="1" name="Uninstall" method="Uninstall_Package">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_Package_State" method="Package_State">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_check_package_state" expectedValues="UNINSTALLED"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 22 -->
+    <testCase testCaseId="PM_22" testCaseName="PackageManager_Config_ValidParameters" desc="Verify that the config method works correctly with valid parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <preRequisite requisiteId="1" requisiteName="Check_Existing_Package_Before_Install">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                        <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                </testStep>
+            </preRequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+            <params>
+                <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+            <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+            <resultGeneration useMethodTag="check_downloaded_package_status">
+                  <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                  <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+            </resultGeneration>
+	    </testStep>
+        <testStep testStepId="4" name="Install" method="Install_Package" delay="3">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="5" name="Verify_Installed_Package" method="List_Package_Info" delay="5">
+            <resultGeneration useMethodTag="packagemanager_check_install_package">
+                <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="6" name="Get_Installed_App_Config" method="config">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_non_empty_result_check"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 23 -->
+    <testCase testCaseId="PM_23" testCaseName="PackageManager_Config_EmptyParameters" desc="Verify that the config method handles empty parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Config_EmptyParameters" method="config">
+            <params>
+                <param tag="packageId" value=""/>
+                <param tag="version" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 24 -->
+    <testCase testCaseId="PM_24" testCaseName="PackageManager_Config_InvalidParameters" desc="Verify that the config method handles invalid parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Config_InvalidParameters" method="config">
+            <params>
+                <param tag="packageId" value="invalid_package_id"/>
+                <param tag="version" value="invalid_version"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 25 -->
+    <testCase testCaseId="PM_25" testCaseName="PackageManager_Config_EmptyPackageId_ValidVersion" desc="Verify that the config method handles empty packageId with valid version correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Config_EmptyPackageId_ValidVersion" method="config">
+            <params>
+                <param tag="packageId" value=""/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 26 -->
+    <testCase testCaseId="PM_26" testCaseName="PackageManager_Config_ValidPackageId_EmptyVersion" desc="Verify that the config method handles valid packageId with empty version correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Config_ValidPackageId_EmptyVersion" method="config">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 27 -->
+    <testCase testCaseId="PM_27" testCaseName="PackageManager_Lock_Package_ValidParameters" desc="Verify that the lock method works correctly with valid parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+           <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                        <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                </testStep>
+            </preRequisite>
+
+            <preRequisite requisiteId="2" requisiteName="Download_Install_Package">
+                <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                    <params>
+                        <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                    </params>
+                    <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+                </testStep>
+                <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                    <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                    <resultGeneration useMethodTag="check_downloaded_package_status">
+                        <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="4" name="Install" method="Install_Package" delay="3">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                        <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                        <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="5" name="Verify_Installed_Package" method="List_Package_Info" delay="5">
+                    <resultGeneration useMethodTag="packagemanager_check_install_package">
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </preRequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Lock_Package_ValidParameters" method="Lock_Package">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                <param tag="lockReason" value="TestingPurpose"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+        </testStep>
+    
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Unlock_Package_After_Lock">
+                <testStep testStepId="1" name="Unlock_Package" method="Unlock_Package">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
+
+    <!-- TestCase 28 -->
+    <testCase testCaseId="PM_28" testCaseName="PackageManager_Lock_Package_EmptyPackageId" desc="Verify that the lock method handles empty packageId correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Lock_Package_EmptyPackageId" method="Lock_Package">
+            <params>
+                <param tag="packageId" value=""/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                <param tag="lockReason" value="TestingPurpose"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 29 -->
+    <testCase testCaseId="PM_29" testCaseName="PackageManager_Lock_Package_EmptyVersion" desc="Verify that the lock method handles empty version correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Lock_Package_EmptyVersion" method="Lock_Package">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" value=""/>
+                <param tag="lockReason" value="TestingPurpose"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 30 -->
+    <testCase testCaseId="PM_30" testCaseName="PackageManager_Lock_Package_EmptyLockReason" desc="Verify that the lock method handles empty lockReason correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Lock_Package_EmptyLockReason" method="Lock_Package">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                <param tag="lockReason" value=""/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 31 -->
+    <testCase testCaseId="PM_31" testCaseName="PackageManager_Lock_Package_InvalidPackageId" desc="Verify that the lock method handles invalid packageId correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Lock_Package_InvalidPackageId" method="Lock_Package">
+            <params>
+                <param tag="packageId" value="invalid_package_id"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                <param tag="lockReason" value="TestingPurpose"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 32 -->
+    <testCase testCaseId="PM_32" testCaseName="PackageManager_Lock_Package_InvalidVersion" desc="Verify that the lock method handles invalid version correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Lock_Package_InvalidVersion" method="Lock_Package">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" value="invalid_version"/>
+                <param tag="lockReason" value="TestingPurpose"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 33 -->
+    <testCase testCaseId="PM_33" testCaseName="PackageManager_Lock_Package_NoParameters" desc="Verify that the lock method handles missing parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Lock_Package_NoParameters" method="Lock_Package">
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 34 -->
+    <testCase testCaseId="PM_34" testCaseName="PackageManager_Unlock_Package_ValidParameters" desc="Verify that the unlock method works correctly with valid parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                        <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                </testStep>
+            </preRequisite>
+
+            <preRequisite requisiteId="2" requisiteName="Download_Install_Package">
+                <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                    <params>
+                        <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                    </params>
+                    <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+                </testStep>
+                <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                    <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                    <resultGeneration useMethodTag="check_downloaded_package_status">
+                        <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="4" name="Install" method="Install_Package" delay="3">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                        <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                        <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="5" name="Verify_Installed_Package" method="List_Package_Info" delay="5">
+                    <resultGeneration useMethodTag="packagemanager_check_install_package">
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </preRequisite>
+
+            <preRequisite requisiteId="3" requisiteName="Lock_Package_Before_Unlock">
+                <testStep testStepId="1" name="Lock_Package_ValidParameters" method="Lock_Package">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                        <param tag="lockReason" value="TestingPurpose"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+            </preRequisite>
+        </testCasePreRequisite>
+        
+        <testStep testStepId="1" name="Unlock_Package" method="Unlock_Package">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 35 -->
+    <testCase testCaseId="PM_35" testCaseName="PackageManager_Unlock_Package_NoParameters" desc="Verify that the unlock method handles missing parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Unlock_Package_NoParameters" method="Unlock_Package">
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 36 -->
+    <testCase testCaseId="PM_36" testCaseName="PackageManager_GetLockedInfo_ValidParameters" desc="Verify that the getLockedInfo method works correctly with valid parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                        <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                </testStep>
+            </preRequisite>
+
+            <preRequisite requisiteId="2" requisiteName="Download_Install_Package">
+                <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                    <params>
+                        <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                    </params>
+                    <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+                </testStep>
+                <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                    <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                    <resultGeneration useMethodTag="check_downloaded_package_status">
+                        <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="4" name="Install" method="Install_Package" delay="3">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                        <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                        <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                        <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="5" name="Verify_Installed_Package" method="List_Package_Info" delay="5">
+                    <resultGeneration useMethodTag="packagemanager_check_install_package">
+                        <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </preRequisite>
+
+            <preRequisite requisiteId="3" requisiteName="Lock_Package_Before_GetLockedInfo">
+                <testStep testStepId="1" name="Lock_Package_ValidParameters" method="Lock_Package">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                        <param tag="lockReason" value="TestingPurpose"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+            </preRequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="GetLockedInfo_ValidParameters" method="Get_Locked_Info">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_non_empty_result_check"/>
+        </testStep>
+
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Unlock_Package_After_GetLockedInfo">
+                <testStep testStepId="1" name="Unlock_Package" method="Unlock_Package">
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
+
+    <!-- TestCase 37 -->
+    <testCase testCaseId="PM_37" testCaseName="PackageManager_GetLockedInfo_NoParameters" desc="Verify that the getLockedInfo method handles missing parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetLockedInfo_NoParameters" method="Get_Locked_Info">
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 38 -->
+    <testCase testCaseId="PM_38" testCaseName="PackageManager_Check_On_AppInstallationStatus_Event" desc="Verify that the appInstallationStatus event is triggered with correct status during app installation and uninstallation">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Check_Existing_Package_Before_Install">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                        <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <params>
+                        <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+            <params>
+                <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+            <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+            <resultGeneration useMethodTag="check_downloaded_package_status">
+                <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="4" name="Install" method="Install_Package" delay="3">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="5" name="GetPackageState_ValidParameters" method="Package_State" delay="5">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_check_package_state" expectedValues="INSTALLED"/>
+        </testStep>
+        <testStep testStepId="6" name="Check_Event_On_App_Installation_Status" event="Event_On_AppInstallationStatus" action="eventListener" delay="3">
+                <resultGeneration useMethodTag="packagemanager_check_appinstallationstatus_event">
+                    <expectedValues value="INSTALLED" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="7" name="Uninstall" method="Uninstall_Package" delay="5">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+        </testStep>
+        <testStep testStepId="8" name="GetPackageState_After_Uninstall" method="Package_State" delay ="5">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_check_package_state" expectedValues="UNINSTALLED"/>
+        </testStep>
+        <testStep testStepId="9" name="Check_Event_On_App_Installation_Status" event="Event_On_AppInstallationStatus" action="eventListener" delay="3">
+                <resultGeneration useMethodTag="packagemanager_check_appinstallationstatus_event">
+                    <expectedValues value="UNINSTALLED" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 39 -->
+    <testCase testCaseId="PM_39" testCaseName="PackageManager_GetPackageState_ValidPackageId_InvalidVersion" desc="Verify that the getPackageState method handles valid packageId with invalid version correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetPackageState_ValidPackageId_InvalidVersion" method="Package_State">
+            <params>
+                <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="version" value="invalid_version"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 40 -->
+    <testCase testCaseId="PM_40" testCaseName="PackageManager_GetPackageState_InvalidPackageId_ValidVersion" desc="Verify that the getPackageState method handles invalid packageId with valid version correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetPackageState_InvalidPackageId_ValidVersion" method="Package_State">
+            <params>
+                <param tag="packageId" value="invalid_package_id"/>
+                <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+            </params>
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 41 -->
+    <testCase testCaseId="PM_41" testCaseName="PackageManager_GetPackageState_NoParameters" desc="Verify that the getPackageState method handles missing parameters correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetPackageState_NoParameters" method="Package_State">
+            <resultGeneration useMethodTag="packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <pluginPostRequisite>
+        <!-- PluginPostRequisite 1 -->
+        <postrequisite requisiteId="1" requisiteName="Uninstall_Package">
+            <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" saveResult="true">
+                <resultGeneration useMethodTag="packagemanager_list_packages">
+                    <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" delay="10">
+                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+            </testStep>
+        </postrequisite>
+    </pluginPostRequisite>
+</testPlugin>

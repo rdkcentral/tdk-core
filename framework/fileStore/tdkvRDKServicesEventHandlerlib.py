@@ -191,8 +191,8 @@ class createEventListener(object):
     def on_message(self,ws,message):
         if self.trace:
             print("\n Received Event Response: %s" %(message))
-        if "\\" in message:
-            message = message.replace("\\","\\\\")
+        #if "\\" in message:
+            #message = message.replace("\\","\\\\")
         self.eventsbuffer.append(message)
     def on_error(self,ws,error):
         print(error)
@@ -1178,6 +1178,93 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
             if len(arg) and arg[0] == "check_empty_event":
                 if result:
                     info["Test_Step_Status"] = "FAILURE"
+
+        # RDKWindowManager Events response result parser steps
+        elif tag == "rwm_check_on_userinactivity_event":
+            if len(arg) and arg[0] == "check_empty_event":
+                if result:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                if int(float(result[0].get("minutes"))) == int(expectedValues[0]):
+                    info["minutes"] = int(float(result[0].get("minutes")))
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        # AppManager Events response result parser steps
+        elif tag == "appmanager_check_applifecyclestatechanged_event":
+            try:
+                if len(arg) and arg[0] == "check_applifecyclestatechanged_event_after_launch":
+                    launch_event = "FALSE"
+                    for data in result:
+                        if data.get("appId") == expectedValues[1] and data.get('newState') == expectedValues[0]:
+                            info["appId"] = data.get("appId")
+                            info["newState"] = data.get("newState")
+                            info["Test_Step_Status"] = "SUCCESS"
+                            launch_event = "TRUE"
+                            break
+                    if launch_event == "FALSE":
+                        message = "Did not receive expected appLifecycleStateChanged event after launching the app"
+                        info["message"] = message
+                        info["Test_Step_Status"] = "FAILURE"
+                elif len(arg) and arg[0] == "check_applifecyclestatechanged_event_after_close":
+                    close_event = "FALSE"
+                    for data in result:
+                        if data.get("appId") == expectedValues[1] and data.get('newState') == expectedValues[0]:
+                            info["appId"] = data.get("appId")
+                            info["newState"] = data.get("newState")
+                            info["Test_Step_Status"] = "SUCCESS"
+                            close_event = "TRUE"
+                            break
+                    if close_event == "FALSE":
+                        message = "Did not receive expected appLifecycleStateChanged event after closing the app"
+                        info["message"] = message
+                        info["Test_Step_Status"] = "FAILURE"
+                elif len(arg) and arg[0] == "check_applifecyclestatechanged_event_after_kill":
+                    kill_event = "FALSE"
+                    for data in result:
+                        if data.get("appId") == expectedValues[1] and data.get('newState') == expectedValues[0]:
+                            info["appId"] = data.get("appId")
+                            info["newState"] = data.get("newState")
+                            info["Test_Step_Status"] = "SUCCESS"
+                            kill_event = "TRUE"
+                            break
+                    if kill_event == "FALSE":
+                        message = "Did not receive expected appLifecycleStateChanged event after killing the app"
+                        info["message"] = message
+                        info["Test_Step_Status"] = "FAILURE"
+                elif len(arg) and arg[0] == "check_applifecyclestatechanged_event_after_terminate":
+                    terminate_event = "FALSE"
+                    for data in result:
+                        if data.get("appId") == expectedValues[1] and data.get('newState') == expectedValues[0]:
+                            info["appId"] = data.get("appId")
+                            info["newState"] = data.get("newState")
+                            info["Test_Step_Status"] = "SUCCESS"
+                            terminate_event = "TRUE"
+                            break
+                    if terminate_event == "FALSE":
+                        message = "Did not receive expected appLifecycleStateChanged event after terminating the app"
+                        info["message"] = message
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        # PackageManager Events response result parser steps
+        elif tag == "packagemanager_check_appinstallationstatus_event":
+            try:
+                if result:
+                    package_id = json.loads(result[0]["jsonresponse"])[0]["packageId"]
+                    state = json.loads(result[0]["jsonresponse"])[0]["state"]
+                    if str(package_id).lower() == str(expectedValues[1]).lower() and str(state).lower() == str(expectedValues[0]).lower():
+                        info["packageId"] = package_id
+                        info["state"] = state
+                        info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))

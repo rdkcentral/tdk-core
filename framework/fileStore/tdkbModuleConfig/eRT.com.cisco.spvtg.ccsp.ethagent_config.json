@@ -1,0 +1,101 @@
+{
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_AutowanFeatureSupport": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_xOpsDeviceMgmt.Logging.xOpsDMEthLogEnabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_xOpsDeviceMgmt.Logging.xOpsDMEthLogPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:65535]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.Ethernet.X_RDKCENTRAL-COM_EthHost_Sync": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.Ethernet.X_RDKCENTRAL-COM_WAN.Enabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.Ethernet.X_RDKCENTRAL-COM_WAN.Port": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["0","3"],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_EthernetWAN.SelectedOperationalMode": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["DOCSIS","Ethernet","Auto"],
+        "flags": ["ifdef AUTOWAN_ENABLE"]
+    },
+    "Device.X_RDKCENTRAL-COM_EthernetWAN.CurrentOperationalMode": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef AUTOWAN_ENABLE"]
+    },
+    "Device.X_RDKCENTRAL-COM_EthernetWAN.LastKnownOperationalMode": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef AUTOWAN_ENABLE"]
+    },
+    "Device.X_RDKCENTRAL-COM_EthernetWAN.ConfigureWan": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef AUTOWAN_ENABLE"]
+    },
+    "Device.X_RDKCENTRAL-COM_EthernetWAN.PostCfgWanFinalize": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef AUTOWAN_ENABLE"]
+    },
+    "Device.X_RDKCENTRAL-COM_EthernetWAN.RequestPhyStatus": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef AUTOWAN_ENABLE"]
+    }
+}

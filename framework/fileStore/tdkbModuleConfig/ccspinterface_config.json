@@ -1,0 +1,47 @@
+{
+    "Device.DCM.Setconfig": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DCM.Processconfig": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Telemetry.ReportProfiles.EventMarker": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": [""],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Telemetry.ReportProfiles.ProfilesUpdated": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Telemetry.OperationalStatus": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}
