@@ -1,0 +1,158 @@
+{
+    "Device.WiFi.WebConfig.Data.Subdoc.South": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.WebConfig.Data.Subdoc.North": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.WebConfig.Data.Init": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""],
+        "type": ["string"]
+    },
+    "Device.WiFi.WebConfig.Data.Init_dml": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""],
+        "type": ["string"]
+    },
+    "Device.WiFi.AssociatedClients": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""],
+        "type": ["string"]
+    },
+    "Device.WiFi.WiFiAPI.command": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.WiFiAPI.result": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CSI": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.MacFilter": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""],
+        "type": ["string"]
+    },
+    "Device.WiFi.Private": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Home": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.HotspotUp": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.HotspotDown": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.KickAssocDevices": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Null": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""],
+        "type": ["string"]
+    },
+    "Device.WiFi.X_RDK_STATriggerDisconnection": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""],
+        "type": ["unsignedInt"]
+    },
+    "Device.WiFi.STAConnectionTimeout": {
+        "elementType": ["bus_element_type_event"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AP.STA.AssocRequest": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AP.STA.GetAssocRequest": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CSABeaconFrameRecieved": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}
