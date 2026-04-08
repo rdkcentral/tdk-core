@@ -40,10 +40,12 @@ if expectedResult in result.upper():
 
     print("\n Check Pre conditions\n")
 
-    final_status = "SUCCESS"
-
-    app_id = application_name
-    app_download_url = application_url
+    app_download_url = PerformanceTestVariables.app_download_url
+    print("\napp_download_url", app_download_url)
+    app_bundle_name = PerformanceTestVariables.app_bundle_name
+    print(f"\nApp bundle name: {app_bundle_name}")
+    app_name = app_bundle_name.split("+")[0]
+    print(f"\nApp name: {app_name}")
 
     # ========================================================
     # DOWNLOAD APP
@@ -60,16 +62,11 @@ if expectedResult in result.upper():
     if result == "SUCCESS":
         print("App downloaded successfully")
         tdkTestObj.setResultStatus("SUCCESS")
-    else:
-        print("App download failed")
-        tdkTestObj.setResultStatus("FAILURE")
-        final_status = "FAILURE"
-
-    # ========================================================
-    # RESOURCE USAGE VALIDATION
-    # ========================================================
-    if final_status == "SUCCESS":
-
+        
+        # ========================================================
+        # RESOURCE USAGE VALIDATION
+        # ========================================================
+        
         print("\nWaiting before validation...\n")
         time.sleep(15)
 
@@ -87,19 +84,10 @@ if expectedResult in result.upper():
         else:
             print("\nResource usage validation failed\n")
             tdkTestObj.setResultStatus("FAILURE")
-            final_status = "FAILURE"
-
-    # ========================================================
-    # FINAL STATUS
-    # ========================================================
-    if final_status == "SUCCESS":
-        obj.setLoadModuleStatus("SUCCESS")
     else:
-        obj.setLoadModuleStatus("FAILURE")
+        print("App download failed")
+        tdkTestObj.setResultStatus("FAILURE")
 
-    # ========================================================
-    # CLEANUP
-    # ========================================================
     obj.unloadModule("rdkv_performance")
 
 else:

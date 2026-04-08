@@ -20,7 +20,6 @@
 import tdklib
 from StabilityTestUtility import *
 from rdkv_performancelib import *
-import json
 import time
 import os
 
@@ -45,9 +44,14 @@ if expectedResult in result.upper():
     print("\n Check Pre conditions\n")
 
     final_status = "SUCCESS"
+    
+    app_download_url = PerformanceTestVariables.app_download_url
+    print("\napp_download_url", app_download_url)
+    app_bundle_name = PerformanceTestVariables.app_bundle_name
+    print(f"\nApp bundle name: {app_bundle_name}")
+    app_name = app_bundle_name.split("+")[0]
+    print(f"\nApp name: {app_name}")
 
-    app_id = application_name
-    app_download_url = application_url
     memory_stress_process = None
     
     # ========================================================
@@ -74,71 +78,50 @@ if expectedResult in result.upper():
         status = rdkservice_install_launch_app(obj, app_id, app_id, app_download_url)
 
         if status != "SUCCESS":
-            print("App install/launch failed under low memory")
-            final_status = "FAILURE"
-
-    # ========================================================
-    # RESOURCE USAGE VALIDATION
-    # ========================================================
-    if final_status == "SUCCESS":
-
-        print("\nWaiting before validation...\n")
-        time.sleep(15)
-
-        print("\nValidating Resource Usage under low memory...\n")
-
-        tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
-        tdkTestObj.executeTestCase(expectedResult)
-
-        result = tdkTestObj.getResult()
-        resource_usage = tdkTestObj.getResultDetails()
-
-        if expectedResult in result and resource_usage != "ERROR":
-            print("\nResource usage validated successfully under low memory\n")
-            tdkTestObj.setResultStatus("SUCCESS")
-        else:
-            print("\nResource usage validation failed under low memory\n")
+            print("App install/launch failed under low memory")            
             tdkTestObj.setResultStatus("FAILURE")
-            final_status = "FAILURE"
+        else:
+            print("\nWaiting before validation...\n")
+            time.sleep(15)
 
-    # ========================================================
-    # TERMINATE APP
-    # ========================================================
-    print("\nTerminating app...\n")
+            print("\nValidating Resource Usage under low memory...\n")
 
-    tdkTestObj = obj.createTestStep('rdkservice_terminateApp')
-    tdkTestObj.addParameter("appId", app_id)
-    tdkTestObj.executeTestCase(expectedResult)
+            tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+            tdkTestObj.executeTestCase(expectedResult)
 
-    if tdkTestObj.getResult() == "SUCCESS":
-        print("App terminated successfully")
-        tdkTestObj.setResultStatus("SUCCESS")
-    else:
-        print("App termination failed")
-        tdkTestObj.setResultStatus("FAILURE")
+            result = tdkTestObj.getResult()
+            resource_usage = tdkTestObj.getResultDetails()
 
-    # ========================================================
-    # CLEANUP MEMORY STRESS
-    # ========================================================
-    print("\nCleaning up memory stress...\n")
+            if expectedResult in result and resource_usage != "ERROR":
+                print("\nResource usage validated successfully under low memory\n")
 
-    try:
-        os.system("killall stress")
-        print("Memory stress stopped")
-    except Exception as e:
-        print("Failed to stop memory stress:", str(e))
+            else:
+                print("\nResource usage validation failed under low memory\n")
+                tdkTestObj.setResultStatus("FAILURE")
 
-    # ========================================================
-    # FINAL STATUS
-    # ========================================================
-    if final_status == "SUCCESS":
-        obj.setLoadModuleStatus("SUCCESS")
-    else:
-        obj.setLoadModuleStatus("FAILURE")
+            print("\nTerminating app...\n")
+            tdkTestObj = obj.createTestStep('rdkservice_terminateApp')
+            tdkTestObj.addParameter("app_id", app_id)
+            tdkTestObj.executeTestCase(expectedResult)
 
-    # ========================================================
-    # CLEANUP
-    # ========================================================
+            if tdkTestObj.getResult() == "SUCCESS":
+                print("App terminated successfully")
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                print("App termination failed")
+                tdkTestObj.setResultStatus("FAILURE")
+
+            # ========================================================
+            # CLEANUP MEMORY STRESS
+            # ========================================================
+            print("\nCleaning up memory stress...\n")
+
+            try:
+                os.system("killall stress")
+                print("Memory stress stopped")
+            except Exception as e:
+                print("Failed to stop memory stress:", str(e))
+
     obj.unloadModule("rdkv_performance")
 
 else:

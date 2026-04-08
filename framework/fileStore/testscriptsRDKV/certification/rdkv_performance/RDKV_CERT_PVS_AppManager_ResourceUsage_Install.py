@@ -40,36 +40,22 @@ if expectedResult in result.upper():
 
     print("\n Check Pre conditions\n")
 
-    final_status = "SUCCESS"
-
-    app_id = application_name
-    app_download_url = application_url
-
-    # ========================================================
-    # INSTALL APP
-    # ========================================================
-    print("\nInstalling app...\n")
-
-    tdkTestObj = obj.createTestStep('rdkservice_installApp')
-    tdkTestObj.addParameter("appId", app_id)
-    tdkTestObj.addParameter("url", app_download_url)
-    tdkTestObj.executeTestCase(expectedResult)
-
-    result = tdkTestObj.getResult()
-
-    if result == "SUCCESS":
-        print("App installed successfully")
-        tdkTestObj.setResultStatus("SUCCESS")
-    else:
-        print("App installation failed")
-        tdkTestObj.setResultStatus("FAILURE")
-        final_status = "FAILURE"
+    app_download_url = PerformanceTestVariables.app_download_url
+    print("\napp_download_url", app_download_url)
+    app_bundle_name = PerformanceTestVariables.app_bundle_name
+    print(f"\nApp bundle name: {app_bundle_name}")
+    app_name = app_bundle_name.split("+")[0]
+    print(f"\nApp name: {app_name}")
 
     # ========================================================
-    # RESOURCE USAGE VALIDATION
+    # INSTALLING THE APP
     # ========================================================
-    if final_status == "SUCCESS":
 
+    print("\nInstalling and launching app...\n")
+
+    status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url, launch =True)
+
+    if status =i= "SUCCESS":
         print("\nWaiting before validation...\n")
         time.sleep(15)
 
@@ -87,19 +73,7 @@ if expectedResult in result.upper():
         else:
             print("\nResource usage validation failed\n")
             tdkTestObj.setResultStatus("FAILURE")
-            final_status = "FAILURE"
 
-    # ========================================================
-    # FINAL STATUS
-    # ========================================================
-    if final_status == "SUCCESS":
-        obj.setLoadModuleStatus("SUCCESS")
-    else:
-        obj.setLoadModuleStatus("FAILURE")
-
-    # ========================================================
-    # CLEANUP
-    # ========================================================
     obj.unloadModule("rdkv_performance")
 
 else:

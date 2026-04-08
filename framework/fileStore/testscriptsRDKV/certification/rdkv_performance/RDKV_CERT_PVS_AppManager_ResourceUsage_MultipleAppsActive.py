@@ -40,8 +40,6 @@ if expectedResult in result.upper():
 
     print("\n Check Pre conditions\n")
 
-    final_status = "SUCCESS"
-
     # Configure multiple apps
     app_list = multiple_application_names
     app_url_list = multiple_application_urls
@@ -55,9 +53,6 @@ if expectedResult in result.upper():
 
     for i in range(len(app_list)):
 
-        if final_status != "SUCCESS":
-            break
-
         app_id = app_list[i]
         app_download_url = app_url_list[i]
 
@@ -68,6 +63,45 @@ if expectedResult in result.upper():
         if status == "SUCCESS":
             print(f"App {app_id} installed and launched")
             launched_apps.append(app_id)
+
+            # ========================================================
+            # RESOURCE USAGE VALIDATION
+            # ========================================================
+            print("\nWaiting for system stabilization...\n")
+            time.sleep(20)
+
+            print("\nValidating Resource Usage with multiple apps active...\n")
+            
+            tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+            tdkTestObj.executeTestCase(expectedResult)
+
+            result = tdkTestObj.getResult()
+            resource_usage = tdkTestObj.getResultDetails()
+
+            if expectedResult in result and resource_usage != "ERROR":
+                print("\nResource usage validated successfully\n")
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                print("\nResource usage validation failed\n")
+                tdkTestObj.setResultStatus("FAILURE")
+
+            # ========================================================
+            # TERMINATE ALL APPS
+            # ========================================================
+            print("\nTerminating all launched apps...\n")
+
+            for app_id in launched_apps:
+                tdkTestObj = obj.createTestStep('rdkservice_terminateApp')
+                tdkTestObj.addParameter("appId", app_id)
+                tdkTestObj.executeTestCase(expectedResult)
+
+                if tdkTestObj.getResult() == "SUCCESS":
+                    print(f"App {app_id} terminated successfully")
+                    tdkTestObj.setResultStatus("SUCCESS")
+                else:
+                    print(f"Failed to terminate {app_id}")
+                    tdkTestObj.setResultStatus("FAILURE")
+
         else:
             print(f"Failed to install/launch {app_id}")
             final_status = "FAILURE"
@@ -76,59 +110,6 @@ if expectedResult in result.upper():
         # Delay to simulate realistic multi-app scenario
         time.sleep(5)
 
-    # ========================================================
-    # RESOURCE USAGE VALIDATION
-    # ========================================================
-    if final_status == "SUCCESS":
-
-        print("\nWaiting for system stabilization...\n")
-        time.sleep(20)
-
-        print("\nValidating Resource Usage with multiple apps active...\n")
-
-        tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
-        tdkTestObj.executeTestCase(expectedResult)
-
-        result = tdkTestObj.getResult()
-        resource_usage = tdkTestObj.getResultDetails()
-
-        if expectedResult in result and resource_usage != "ERROR":
-            print("\nResource usage validated successfully\n")
-            tdkTestObj.setResultStatus("SUCCESS")
-        else:
-            print("\nResource usage validation failed\n")
-            tdkTestObj.setResultStatus("FAILURE")
-            final_status = "FAILURE"
-
-    # ========================================================
-    # TERMINATE ALL APPS
-    # ========================================================
-    print("\nTerminating all launched apps...\n")
-
-    for app_id in launched_apps:
-
-        tdkTestObj = obj.createTestStep('rdkservice_terminateApp')
-        tdkTestObj.addParameter("appId", app_id)
-        tdkTestObj.executeTestCase(expectedResult)
-
-        if tdkTestObj.getResult() == "SUCCESS":
-            print(f"App {app_id} terminated successfully")
-            tdkTestObj.setResultStatus("SUCCESS")
-        else:
-            print(f"Failed to terminate {app_id}")
-            tdkTestObj.setResultStatus("FAILURE")
-
-    # ========================================================
-    # FINAL STATUS
-    # ========================================================
-    if final_status == "SUCCESS":
-        obj.setLoadModuleStatus("SUCCESS")
-    else:
-        obj.setLoadModuleStatus("FAILURE")
-
-    # ========================================================
-    # CLEANUP
-    # ========================================================
     obj.unloadModule("rdkv_performance")
 
 else:

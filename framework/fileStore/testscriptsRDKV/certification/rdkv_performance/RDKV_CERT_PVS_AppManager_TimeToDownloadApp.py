@@ -45,8 +45,6 @@ if expectedResult in result.upper():
 
     print("\n Check Pre conditions\n")
 
-    final_status = "SUCCESS"
-
     # ========================================================
     # FETCH APP DETAILS
     # ========================================================

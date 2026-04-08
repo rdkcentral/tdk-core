@@ -39,36 +39,34 @@ if expectedResult in result.upper():
 
     print("\n Check Pre conditions\n")
 
-    final_status = "SUCCESS"
+    app_download_url = PerformanceTestVariables.app_download_url
+    print("\napp_download_url", app_download_url)
+    app_bundle_name = PerformanceTestVariables.app_bundle_name
+    print(f"\nApp bundle name: {app_bundle_name}")
+    app_name = app_bundle_name.split("+")[0]
+    print(f"\nApp name: {app_name}")
 
-    app_id = application_name
-    app_download_url = application_url
 
     # ========================================================
     # INSTALL + LAUNCH APP
     # ========================================================
     print("\nInstalling and launching app...\n")
 
-    status = rdkservice_install_launch_app(obj, app_id, app_id, app_download_url)
+    status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
 
     if status != "SUCCESS":
         print("App install/launch failed")
-        final_status = "FAILURE"
-
-    # ========================================================
-    # STEADY STATE WAIT
-    # ========================================================
-    if final_status == "SUCCESS":
-
+    else:
+        # =======================================================
+        # STEADY STATE WAIT
+        # =======================================================
         print("\nWaiting for steady state...\n")
 
         # You can adjust this based on requirement
         time.sleep(60)
-
-    # ========================================================
-    # RESOURCE USAGE VALIDATION
-    # ========================================================
-    if final_status == "SUCCESS":
+        # ========================================================
+        # RESOURCE USAGE VALIDATION
+        # ========================================================
 
         print("\nValidating Resource Usage in steady state...\n")
 
@@ -85,34 +83,21 @@ if expectedResult in result.upper():
             print("\nResource usage validation failed\n")
             tdkTestObj.setResultStatus("FAILURE")
             final_status = "FAILURE"
+        # ========================================================
+        # TERMINATE APP
+        # ========================================================
+        print("\nTerminating app...\n")
+        tdkTestObj = obj.createTestStep('rdkservice_terminateApp')
+        tdkTestObj.addParameter("app_id", app_id)
+        tdkTestObj.executeTestCase(expectedResult)
 
-    # ========================================================
-    # TERMINATE APP
-    # ========================================================
-    print("\nTerminating app...\n")
+        if tdkTestObj.getResult() == "SUCCESS":
+            print("App terminated successfully")
+            tdkTestObj.setResultStatus("SUCCESS")
+        else:
+            print("App termination failed")
+            tdkTestObj.setResultStatus("FAILURE")
 
-    tdkTestObj = obj.createTestStep('rdkservice_terminateApp')
-    tdkTestObj.addParameter("appId", app_id)
-    tdkTestObj.executeTestCase(expectedResult)
-
-    if tdkTestObj.getResult() == "SUCCESS":
-        print("App terminated successfully")
-        tdkTestObj.setResultStatus("SUCCESS")
-    else:
-        print("App termination failed")
-        tdkTestObj.setResultStatus("FAILURE")
-
-    # ========================================================
-    # FINAL STATUS
-    # ========================================================
-    if final_status == "SUCCESS":
-        obj.setLoadModuleStatus("SUCCESS")
-    else:
-        obj.setLoadModuleStatus("FAILURE")
-
-    # ========================================================
-    # CLEANUP
-    # ========================================================
     obj.unloadModule("rdkv_performance")
 
 else:

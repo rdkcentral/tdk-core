@@ -1,0 +1,49 @@
+{
+    "Device.X_RDKCENTRAL-COM_XDNS.DNSMappingTableNumberOfEntries": {
+        "DNSMappingTableNumberOfEntries": "",
+        "table": "dynWritableTable",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.DNSMappingTable.{i}.MacAddress": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "60:d8:19:9b:c1:45": {
+                "Device.X_RDKCENTRAL-COM_XDNS.DNSMappingTable.{i}.DnsIPv4": "75.75.75.10",
+                "Device.X_RDKCENTRAL-COM_XDNS.DNSMappingTable.{i}.DnsIPv6": "2001:558:feed::7510",
+                "Device.X_RDKCENTRAL-COM_XDNS.DNSMappingTable.{i}.Tag": "test_xdns1"
+            }
+        }
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.DNSMappingTable.{i}.DnsIPv4": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.DNSMappingTable.{i}.DnsIPv6": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_XDNS.DNSMappingTable.{i}.Tag": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

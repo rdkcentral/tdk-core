@@ -120,6 +120,7 @@ multiple_application_urls =[]
 download_app_name = primary_app_name
 download_app_url  = primary_app_url
 
+
 # ------------------------------------------------------------
 # Threshold Variables (Optional – if not using device config)
 # ------------------------------------------------------------
@@ -128,3 +129,9 @@ app_switch_threshold = 7000        # ms
 app_download_threshold = 15000     # ms
 app_run_threshold = 6000           # ms
 app_stop_threshold = 4000          # ms
+#AppManager environment variables
+app_download_url = ""
+google_bundle=""
+channelchange_bundle=""
+keytest_bundle=""
+app_bundle_name=""

@@ -42,8 +42,12 @@ if expectedResult in result.upper():
 
     final_status = "SUCCESS"
 
-    app_id = application_name
-    app_download_url = application_url
+    app_download_url = PerformanceTestVariables.app_download_url
+    print("\napp_download_url", app_download_url)
+    app_bundle_name = PerformanceTestVariables.app_bundle_name
+    print(f"\nApp bundle name: {app_bundle_name}")
+    app_name = app_bundle_name.split("+")[0]
+    print(f"\nApp name: {app_name}")
 
     toggle_count = 5  # number of foreground/background switches
 
@@ -55,14 +59,9 @@ if expectedResult in result.upper():
     status = rdkservice_install_launch_app(obj, app_id, app_id, app_download_url)
 
     if status != "SUCCESS":
-        print("App install/launch failed")
-        final_status = "FAILURE"
-
-    # ========================================================
-    # FOREGROUND ↔ BACKGROUND TOGGLE
-    # ========================================================
-    if final_status == "SUCCESS":
-
+        print("App install and launch was failed")
+        tdkTestObj.setResultStatus("FAILURE")
+    else:
         print(f"\nToggling app between foreground and background {toggle_count} times...\n")
 
         for i in range(toggle_count):
@@ -80,7 +79,6 @@ if expectedResult in result.upper():
             else:
                 print("Failed to move to background")
                 tdkTestObj.setResultStatus("FAILURE")
-                final_status = "FAILURE"
                 break
 
             time.sleep(3)
@@ -93,65 +91,50 @@ if expectedResult in result.upper():
             if tdkTestObj.getResult() == "SUCCESS":
                 print("Moved to foreground")
                 tdkTestObj.setResultStatus("SUCCESS")
+                # ========================================================
+                # RESOURCE USAGE VALIDATION
+                # ========================================================
+
+                print("\nWaiting before validation...\n")
+                time.sleep(20)
+
+                print("\nValidating Resource Usage after FG/BG toggling...\n")
+
+                tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                tdkTestObj.executeTestCase(expectedResult)
+
+                result = tdkTestObj.getResult()
+                resource_usage = tdkTestObj.getResultDetails()
+
+                if expectedResult in result and resource_usage != "ERROR":
+                    print("\nResource usage validated successfully\n")
+                    tdkTestObj.setResultStatus("SUCCESS")
+                else:
+                    print("\nResource usage validation failed\n")
+                    tdkTestObj.setResultStatus("FAILURE")
+
             else:
                 print("Failed to move to foreground")
                 tdkTestObj.setResultStatus("FAILURE")
-                final_status = "FAILURE"
                 break
-
             time.sleep(3)
 
-    # ========================================================
-    # RESOURCE USAGE VALIDATION
-    # ========================================================
-    if final_status == "SUCCESS":
+        # ========================================================
+        # TERMINATE APP
+        # ========================================================
+        print("\nTerminating app...\n")
 
-        print("\nWaiting before validation...\n")
-        time.sleep(20)
-
-        print("\nValidating Resource Usage after FG/BG toggling...\n")
-
-        tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+        tdkTestObj = obj.createTestStep('rdkservice_terminateApp')
+        tdkTestObj.addParameter("appId", app_id)
         tdkTestObj.executeTestCase(expectedResult)
 
-        result = tdkTestObj.getResult()
-        resource_usage = tdkTestObj.getResultDetails()
-
-        if expectedResult in result and resource_usage != "ERROR":
-            print("\nResource usage validated successfully\n")
+        if tdkTestObj.getResult() == "SUCCESS":
+            print("App terminated successfully")
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print("\nResource usage validation failed\n")
+            print("App termination failed")
             tdkTestObj.setResultStatus("FAILURE")
-            final_status = "FAILURE"
 
-    # ========================================================
-    # TERMINATE APP
-    # ========================================================
-    print("\nTerminating app...\n")
-
-    tdkTestObj = obj.createTestStep('rdkservice_terminateApp')
-    tdkTestObj.addParameter("appId", app_id)
-    tdkTestObj.executeTestCase(expectedResult)
-
-    if tdkTestObj.getResult() == "SUCCESS":
-        print("App terminated successfully")
-        tdkTestObj.setResultStatus("SUCCESS")
-    else:
-        print("App termination failed")
-        tdkTestObj.setResultStatus("FAILURE")
-
-    # ========================================================
-    # FINAL STATUS
-    # ========================================================
-    if final_status == "SUCCESS":
-        obj.setLoadModuleStatus("SUCCESS")
-    else:
-        obj.setLoadModuleStatus("FAILURE")
-
-    # ========================================================
-    # CLEANUP
-    # ========================================================
     obj.unloadModule("rdkv_performance")
 
 else:
