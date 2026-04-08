@@ -107,7 +107,7 @@ if "SUCCESS" in result.upper():
             tdkTestObj.executeTestCase(expectedResult)
             result = tdkTestObj.getResultDetails()
             result = ast.literal_eval(result)
-            if "error" in result and "result" not in result and result["result"] in (None, '', 'NONE'):
+            if "error" in result and "result" not in result:
                 print("FAILURE : Failed to get the installation status of the package")
                 tdkTestObj.setResultStatus("FAILURE")
             if "error" not in result and "result" in result and result["result"] == False:
@@ -281,12 +281,13 @@ if "SUCCESS" in result.upper():
                                     print("Output of executing command : %s" %result)
                                     result = result.splitlines()
                                     for line in result:
-                                        if appInstanceId not in line.lower():
-                                            print("SUCCESS : Killed application is not running in container mode")
-                                            tdkTestObj.setResultStatus("SUCCESS")
+                                        if appInstanceId in line.lower():
                                             container_status = "TRUE"
                                             break
                                     if container_status != "TRUE":
+                                        print("SUCCESS : Killed application is not running in container mode")
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                    else:
                                         print("FAILURE : Killed application is still running in container mode")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:

@@ -104,7 +104,7 @@ if "SUCCESS" in result.upper():
             tdkTestObj.executeTestCase(expectedResult)
             result = tdkTestObj.getResultDetails()
             result = ast.literal_eval(result)
-            if "error" in result and "result" not in result and result["result"] in (None, '', 'NONE'):
+            if "error" in result and "result" not in result:
                 print("FAILURE : Failed to get the installation status of the package")
                 tdkTestObj.setResultStatus("FAILURE")
             if "error" not in result and "result" in result and result["result"] == False:
