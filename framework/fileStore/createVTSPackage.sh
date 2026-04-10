@@ -27,7 +27,7 @@ elif [[ "$platform" == "amlogic" ]];then
      platform_repo="https://code.rdkcentral.com/r/collaboration/soc/amlogic/rdk/tdk-video"
 elif [[ "$platform" == "broadcom" ]];then
      platform_repo="https://code.rdkcentral.com/r/collaboration/soc/broadcom/rdk/tdk-video"
-elif [[ "$platform" == "raspberrypi" ]];then
+elif [[ "$platform" == "rpi4" ]];then
      platform_repo="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
 else
      echo "ERROR : Unable to obtain platform repo for this vendor"
@@ -92,7 +92,7 @@ for dir in */; do
     if [[ "$dir" != "tdk_${platform}_repo/" ]];then
 	 echo -e "\nProcessing $dir"
 	 if [ -d "../tdk_${platform}_repo/VTS_profiles/RDK7/$dir" ];then
-	      echo -e "Copying VTS_profiles/RDK7/$dir yaml files"
+	      echo -e "Copying VTS_profiles/RDK8/$dir yaml files"
 	      cp ../tdk_${platform}_repo/VTS_profiles/RDK7/$dir/* $dir/
 	      rm -rf $dir/libraries.txt
 	      rm -rf $dir/lib/
