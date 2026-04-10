@@ -93,7 +93,7 @@ for dir in */; do
 	 echo -e "\nProcessing $dir"
 	 if [ -d "../tdk_${platform}_repo/VTS_profiles/RDK7/$dir" ];then
 	      echo -e "Copying VTS_profiles/RDK8/$dir yaml files"
-	      cp ../tdk_${platform}_repo/VTS_profiles/RDK7/$dir/* $dir/
+	      cp ../tdk_${platform}_repo/VTS_profiles/RDK8/$dir/* $dir/
 	      rm -rf $dir/libraries.txt
 	      rm -rf $dir/lib/
 	      if [ ! -f "libut_control.so" ];then
