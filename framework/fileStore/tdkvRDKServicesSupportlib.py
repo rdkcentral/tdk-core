@@ -7404,17 +7404,17 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
-
         elif tag == "system_check_and_create_configuration_rule":
             configParser = configparser.ConfigParser()
             configParser.read(r'%s' % deviceConfigFile)
             xconfurl = configParser.get('device.config', 'XCONF_SERVER_URL')
+            XCONF_AUTHORIZATION_TOKEN_KEY = configParser.get('device.config', 'XCONF_AUTHORIZATION_TOKEN_KEY')
 
             # Method to check and create model id
             if len(arg) and arg[0] == "system_check_model_id":
                 ruleId = 'TDK_'+str(arg[3]).upper()+'_TEST_MODEL'
                 if len(arg) and arg[1] == "existing_rule":
-                    command = 'curl -sX GET '+xconfurl+arg[2]+ruleId+' -H \'Content-Type: application/json\' -H \'Accept: application/json\''
+                    command = 'curl -sX GET '+xconfurl+arg[2]+ruleId+' -H \'Content-Type: application/json\' -H \'Accept: application/json\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"
                     output = executeCommandInTM(command)
                     output = json.loads(output)
                     if output.get('message'):
@@ -7432,7 +7432,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                             info["Test_Step_Status"] = "FAILURE"
 
                 elif len(arg) and arg[1] == "new_rule":
-                    command = 'curl -sX POST '+xconfurl+arg[2]+' -H \'Content-Type: application/json\' -H \'Accept: application/json\' -d \'{"id":"'+ruleId+'","description":"TDK '+arg[3]+' test model"}\''
+                    command = 'curl -sX POST '+xconfurl+arg[2]+' -H \'Content-Type: application/json\' -H \'Accept: application/json\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'{"id":"'+ruleId+'","description":"TDK '+arg[3]+' test model"}\''
                     output = executeCommandInTM(command)
                     output = json.loads(output)
                     ruleStatus = output["id"]
@@ -7455,7 +7455,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 ruleId = 'TDK_'+str(arg[3]).upper()+'_TEST_FIRMWARE_CONFIGURATION'
                 modelId = 'TDK_'+str(arg[3]).upper()+'_TEST_MODEL'
                 if len(arg) and arg[1] == "existing_rule":
-                    command = 'curl -sX GET '+xconfurl+arg[2]+modelId+'?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\''
+                    command = 'curl -sX GET '+xconfurl+arg[2]+modelId+'?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"
                     output = executeCommandInTM(command)
                     content = json.loads(output)
                     info["existing_firmware_configuration"] = content
@@ -7469,7 +7469,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                 info["Test_Step_Status"] = "SUCCESS"
                                 if str(output.get("firmwareFilename")).lower() != firmwareFilename.lower():
                                     firmwareConfigId = output.get("id")
-                                    command = 'curl -sX PUT '+xconfurl+'updates/firmwares?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\' -d \'{"id":"'+firmwareConfigId+'" ,"updated": 144757585,"supportedModelIds": ["TDK_'+str(arg[3]).upper()+'_TEST_MODEL"],"firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'","firmwareFilename": "'+firmwareFilename+'","firmwareVersion": "'+firmwareVersion+'","description":"'+ruleId+'","rebootImmediately": true}\''
+                                    command = 'curl -sX PUT '+xconfurl+'updates/firmwares?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'{"id":"'+firmwareConfigId+'" ,"updated": 144757585,"supportedModelIds": ["TDK_'+str(arg[3]).upper()+'_TEST_MODEL"],"firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'","firmwareFilename": "'+firmwareFilename+'","firmwareVersion": "'+firmwareVersion+'","description":"'+ruleId+'","rebootImmediately": true}\''
                                     output = executeCommandInTM(command)
                                     info["new_firmware_configuration"] = output
                                     output = json.loads(output)
@@ -7480,7 +7480,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                     break;
 
                 elif len(arg) and arg[1] == "new_rule":
-                    command = 'curl -sX POST '+xconfurl+arg[2]+'?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\' -d \'{"description":"'+ruleId+'","supportedModelIds": [ "TDK_'+str(arg[3]).upper()+'_TEST_MODEL" ], "firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'", "firmwareFilename": "'+firmwareFilename+'", "firmwareVersion": "'+firmwareVersion+'", "rebootImmediately": true}\''
+                    command = 'curl -sX POST '+xconfurl+arg[2]+'?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'{"description":"'+ruleId+'","supportedModelIds": [ "TDK_'+str(arg[3]).upper()+'_TEST_MODEL" ], "firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'", "firmwareFilename": "'+firmwareFilename+'", "firmwareVersion": "'+firmwareVersion+'", "rebootImmediately": true}\''
                     output = executeCommandInTM(command)
                     output = json.loads(output)
                     info["new_firmware_configuration"] = output
@@ -7497,7 +7497,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 firmwareconfigId = arg[4]
                 deviceMAC = arg[3]
                 if len(arg) and arg[1] == "existing_rule":
-                    command = 'curl -sX --location --request GET \''+xconfurl+'firmwarerule/filtered?name='+ruleId+'&applicationType=stb&templateId=MAC_RULE\''
+                    command = 'curl -sX --location --request GET \''+xconfurl+'firmwarerule/filtered?name='+ruleId+'&applicationType=stb&templateId=MAC_RULE\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+'\''
                     output = executeCommandInTM(command)
                     content = json.loads(output)
                     info["existing_firmware_rule"] = content
@@ -7514,7 +7514,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                 firmwarerulemacaddress = output["rule"]["condition"]["fixedArg"]["bean"]["value"]["java.lang.String"]
                                 if str(firmwarerulemacaddress).lower() != str(deviceMAC).lower():
                                     firmwareruleId = output['id']
-                                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id": "'+firmwareruleId+'","name":"'+firmwarerulename+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
+                                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'[{"id": "'+firmwareruleId+'","name":"'+firmwarerulename+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
                                     output = executeCommandInTM(command)
                                     info["new_firmware_rule_status"] = output
                                     output = json.loads(output)
@@ -7523,7 +7523,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                     else:
                                         info["Test_Step_Status"] = "FAILURE"
                 elif len(arg) and arg[1] == "new_rule":
-                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"name":"'+ruleId+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
+                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'[{"name":"'+ruleId+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
                     output = executeCommandInTM(command)
                     info["new_firmware_rule_status"] = output
                     output = json.loads(output)
@@ -7541,7 +7541,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 firmwareConfigId = arg[4]
                 deviceMAC = arg[3]
                 if len(arg) and arg[1] == "existing_rule":
-                    command = 'curl -sX --location --request GET \''+xconfurl+'firmwarerule/filtered?name='+ruleId+'&applicationType=stb&templateId=DOWNLOAD_LOCATION_FILTER\''
+                    command = 'curl -sX --location --request GET \''+xconfurl+'firmwarerule/filtered?name='+ruleId+'&applicationType=stb&templateId=DOWNLOAD_LOCATION_FILTER\'  -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+'\''
                     output = executeCommandInTM(command)
                     firmwareRule = json.loads(output)
                     info["existing_firmware_local_server_rule"] = firmwareRule
@@ -7558,7 +7558,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                 firmwareRuleDownloadLocation = output['applicableAction']['properties']["firmwareDownloadProtocol"]
                                 if str(firmwareRuleMacAddress).lower() != str(deviceMAC).lower() or str(firmwareRuleLocation).lower() != str(firmwareLocation).lower() or str(firmwareRuleDownloadLocation).lower() != str(firmwareDownloadProtocol).lower():
                                     firmwareRuleId = output['id']
-                                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+firmwareRuleId+'","name":"'+firmwareRuleName+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
+                                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'[{"id":"'+firmwareRuleId+'","name":"'+firmwareRuleName+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
                                     output = executeCommandInTM(command)
                                     info["new_firmware_local_server_rule_status"] = output
                                     output = json.loads(output)
@@ -7568,7 +7568,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                         info["Test_Step_Status"] = "FAILURE"
 
                 elif len(arg) and arg[1] == "new_rule":
-                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"name":"'+ruleId+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
+                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'[{"name":"'+ruleId+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
                     output = executeCommandInTM(command)
                     info["new_firmware_rule_status"] = output
                     output = json.loads(output)
