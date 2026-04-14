@@ -194,9 +194,26 @@ get_wlan_mac()
 # To delete the saved wifi connection in the wlan client
 delete_saved_wifi_connections()
 {
-        ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
-        ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
-        ls_6ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var4.nmconnection")"
+	if [ "$var2" = "$var3" ] && [ "$var3" = "$var4" ]; then
+	ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+
+	elif ["$var2" == "$var3" ]; then
+			ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+			ls_6ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var4.nmconnection")"
+
+	elif [ "$var2" == "$var4" ]; then
+			ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+			ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
+
+	elif [ "$var3" == "$var4" ]; then
+			ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+			ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
+
+	else
+			ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+			ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
+			ls_6ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var4.nmconnection")"
+	fi
 
         if [ -n "$ls_2ghz" ]; then
                 wifi_2ghz="$(rm -f /etc/NetworkManager/system-connections/"$var2.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
