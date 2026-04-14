@@ -848,7 +848,7 @@ def execute_binary(binary, present_mode):
         elif "vkmark" in binary:
             command = command + f" --winsys wayland --present-mode={present_mode}"
         else:
-            print("[ERROR} Invalid binary")
+            print("[ERROR] Invalid binary")
             return "FAILURE"
         print("[INFO] Using RDKWindowManager display 'test'")
     else:
@@ -862,7 +862,7 @@ def execute_binary(binary, present_mode):
         elif "vkmark" in binary:
             command = command + f" --winsys wayland --present-mode={present_mode}"
         else:
-            print("[ERROR} Invalid binary")
+            print("[ERROR] Invalid binary")
             return "FAILURE"
         print("[INFO] Using Westeros display - waiting for socket creation")
     
