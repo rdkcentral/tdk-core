@@ -18,7 +18,8 @@
 ##########################################################################
 
 # use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+import tdklib;
+from Vulkanlib import resolution, api
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
@@ -33,13 +34,18 @@ obj.configureTestCase(ip,port,'Vulkan_Overlay_Test');
 result = obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 expectedResult="SUCCESS"
-command="cd /opt/TDK ;  vkoverlay  --time 60"
+if api == "vulkan":
+    appname = "vkoverlay"
+else:
+    appname = "ogloverlay"
+command=f"cd /opt/TDK; {appname}  --time 60 --csv {appname}_{api}_{resolution}.csv"
 
 if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('set_prerequisites');
     boxtype = obj.getDeviceBoxType();
     if "RPI-Client" in boxtype:
         tdkTestObj.addParameter("model", "RPI")
+    tdkTestObj.addParameter("resolution", resolution)
     tdkTestObj.executeTestCase(expectedResult);
     details = tdkTestObj.getResultDetails()
     if "SUCCESS" in details:

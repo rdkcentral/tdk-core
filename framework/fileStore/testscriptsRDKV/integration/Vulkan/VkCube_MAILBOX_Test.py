@@ -19,7 +19,6 @@
 
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib; 
-from Vulkanlib import resolution, api
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
@@ -28,27 +27,26 @@ obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'Vulkan_Motion_Benchmark');
+obj.configureTestCase(ip,port,'VkCube_MAILBOX_Test');
 
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 expectedResult="SUCCESS"
-command=f"cd /opt/TDK; motion_benchmark  --api={api} --runtime 60 --csv motion_{api}_{resolution}.csv"
+mode="mailbox"
 
 if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('set_prerequisites');
     boxtype = obj.getDeviceBoxType();
     if "RPI-Client" in boxtype:
         tdkTestObj.addParameter("model", "RPI")
-    print("\nTesting Resolution ", resolution)
-    tdkTestObj.addParameter("resolution", resolution)
     tdkTestObj.executeTestCase(expectedResult);
     details = tdkTestObj.getResultDetails()
     if "SUCCESS" in details:
         print("PRE-REQUISITES SUCCESSFULLY SET")
-        tdkTestObj = obj.createTestStep('run_test')
-        tdkTestObj.addParameter("command",command)
+        tdkTestObj = obj.createTestStep('execute_binary')
+        tdkTestObj.addParameter("binary","vkcube")
+        tdkTestObj.addParameter("present_mode",mode)
         tdkTestObj.executeTestCase(expectedResult)
         details = tdkTestObj.getResultDetails()
         if "SUCCESS" in details:
