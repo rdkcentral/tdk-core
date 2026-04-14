@@ -46,14 +46,21 @@ from SSHUtility import *
 import SSHUtility
 
 # Global variables for device configuration and connection management
-deviceIP = ""                    # IP address of the device under test
-SSHConfigValues = {}             # SSH configuration parameters from config file
-deviceMAC = ""                   # MAC address of the device
-password = ""                    # SSH password for device access
-user_name = ""                   # SSH username for device access
-sshMethod = ""                   # SSH connection method (e.g., 'directSSH')
-runtime_dir = "/run"             # Runtime directory for Wayland display
-display_created = False          # Flag to track if display has been created
+deviceIP = ""                      # IP address of the device under test
+SSHConfigValues = {}               # SSH configuration parameters from config file
+deviceMAC = ""                     # MAC address of the device
+password = ""                      # SSH password for device access
+user_name = ""                     # SSH username for device access
+sshMethod = ""                     # SSH connection method (e.g., 'directSSH')
+runtime_dir = "/tmp"               # Runtime directory for Wayland display
+wayland_display = "test"           # Wayland display
+device_model = "Video_Accelerator" # Device Model
+display_created = False            # Flag to track if display has been created
+height = 0
+width = 0
+
+resolution="1080p"
+api="vulkan"
 
 #---------------------------------------------------------------------------------------
 # MODULE INITIALIZATION
@@ -565,10 +572,11 @@ def createDisplay():
         
         # JSON-RPC call to create display
         command = ('curl --header "Content-Type: application/json" '
-                  '--request POST --data \'{"jsonrpc":"2.0", "id":3, '
-                  '"method":"org.rdk.RDKWindowManager.1.createDisplay", '
-                  '"params" : {"displayParams" : { "client": "test", '
-                  '"displayName": "test" } }}\' http://127.0.0.1:9998/jsonrpc')
+                   '--request POST --data \'{"jsonrpc":"2.0", "id":3, '
+                   '"method":"org.rdk.RDKWindowManager.1.createDisplay", '
+                   f'"params" : {{"displayParams" : {{ "client": "test", '
+                   f'"displayName": "test", "displayWidth": {width}, "displayHeight" : {height}}} }}\' '
+                   'http://127.0.0.1:9998/jsonrpc')
         
         output = execute_Cmnd_InDUT(command)
         if output:
@@ -605,10 +613,19 @@ def run_test(command):
         str: "SUCCESS" on completion (currently always returns SUCCESS)
     
     """
-    test_command = f"export XDG_RUNTIME_DIR={runtime_dir}; export WAYLAND_DISPLAY=test; {command}"
-    
-    print("\n[INFO] Running test command...")
-    print(f"[DEBUG] Command: {command}")
+    global width
+    global height
+    global runtime_dir
+    global wayland_display
+    test_command = f"export XDG_RUNTIME_DIR={runtime_dir}; export WAYLAND_DISPLAY={wayland_display}; {command} "
+    if width and height:
+        test_command = f"export XDG_RUNTIME_DIR={runtime_dir}; export WAYLAND_DISPLAY={wayland_display}; {command} --width {width} --height {height} "
+
+    global device_model
+    # Add Raspberry Pi specific DRM card setting
+    if device_model == "RPI":
+        print("[INFO] Adding Raspberry Pi DRM card configuration")
+        test_command = "export WESTEROS_DRM_CARD=/dev/dri/card1; " + test_command
     
     output = execute_Cmnd_InDUT(test_command)
     
@@ -660,7 +677,7 @@ def execute_postrequisites():
 #-------------------------------------------------------------------
 # PREREQUISITE SETUP FOR VULKAN APPS TESTING
 #-------------------------------------------------------------------
-def set_prerequisites(model):
+def set_prerequisites(model, resolution):
     """
     Set up the required environment for VkMark testing.
     
@@ -675,6 +692,17 @@ def set_prerequisites(model):
         str: "SUCCESS" on successful setup, "FAILURE" on error
     """
     print("[INFO] Setting up prerequisites for Vulkan testing...")
+
+    resolutions = {
+            "720p": (1280, 720),
+            "1080p": (1920, 1080),
+            "2160p": (3840, 2160)
+    }
+    global width
+    global height
+    global device_model
+    width, height = resolutions.get(resolution, (1920, 1080))
+    device_model = model
     
     # Attempt to create display using RDKWindowManager
     createDisplay_result = createDisplay()
@@ -692,30 +720,14 @@ def set_prerequisites(model):
     print("\n[PRE-REQUISITE 1] Setting up Westeros display environment")
     
     global runtime_dir
-    
-    # Configure runtime directory based on device model
-    if model == "RPI":
-        runtime_dir = "/tmp"
-        print("[INFO] Raspberry Pi detected - using /tmp as runtime directory")
-    else:
-        runtime_dir = "/run"
-        print("[INFO] Standard device - using /run as runtime directory")
+    global wayland_display
+
+    wayland_display="main0"
     
     # Construct Westeros startup command with proper environment
-    westeros_cmd_parts = [
-        f"XDG_RUNTIME_DIR={runtime_dir}",
-        "WAYLAND_DISPLAY=main0",
-        "WESTEROS_GL_GRAPHICS_MAX_SIZE=1280x1024",
-        "LD_PRELOAD=/usr/lib/libwesteros_gl.so.0.0.0",
-        "westeros",
-        "--renderer /usr/lib/libwesteros_render_gl.so.0",
-        "--display=main0",
-        "--window-size 1280x1024",
-        "> /tmp/westeros.log 2>&1 &"
-    ]
-    
-    command = " ".join(westeros_cmd_parts)
-    
+    command = f"XDG_RUNTIME_DIR={runtime_dir} WAYLAND_DISPLAY={wayland_display} westeros --renderer libwesteros_render_embedded.so.0.0.0 --display main0 --embedded --animate --window-size {width}x{height} &"
+    command = "LD_PRELOAD=/usr/lib/libwesteros_gl.so.0 " + command
+
     # Add Raspberry Pi specific DRM card setting
     if model == "RPI":
         print("[INFO] Adding Raspberry Pi DRM card configuration")
@@ -730,76 +742,174 @@ def set_prerequisites(model):
     return "SUCCESS"
 
 #-------------------------------------------------------------------
+# PARSE VKCUBE OUTPUT
+#-------------------------------------------------------------------
+def parse_vkcube_output(output):
+    fps_values = []
+    cpu_values = []
+
+    # Extract per-frame FPS and CPU
+    pattern = r"FPS:\s*([\d.]+)\s*\|\s*CPU:\s*([\d.]+)%"
+
+    for line in output.splitlines():
+        match = re.search(pattern, line)
+        if match:
+            fps = float(match.group(1))
+            cpu = float(match.group(2))
+            fps_values.append(fps)
+            cpu_values.append(cpu)
+
+    # Extract reported averages (optional validation)
+    avg_fps_match = re.search(r"[VKCube] Average FPS\s*:\s*([\d.]+)", output)
+    avg_cpu_match = re.search(r"[VKCube] Average CPU usage\s*:\s*([\d.]+)%", output)
+
+    # ❌ Validation checks
+    if not fps_values or not cpu_values:
+        return {"status": "failure", "reason": "No FPS/CPU data found"}
+
+    if len(fps_values) != len(cpu_values):
+        return {"status": "failure", "reason": "Mismatch in FPS/CPU samples"}
+
+    # Compute averages
+    calc_avg_fps = sum(fps_values) / len(fps_values)
+    calc_avg_cpu = sum(cpu_values) / len(cpu_values)
+
+    # If reported averages exist, validate them (tolerance allowed)
+    if avg_fps_match:
+        reported_fps = float(avg_fps_match.group(1))
+        if abs(calc_avg_fps - reported_fps) > 5:  # tolerance
+            return {"status": "failure", "reason": "FPS average mismatch"}
+
+    if avg_cpu_match:
+        reported_cpu = float(avg_cpu_match.group(1))
+        if abs(calc_avg_cpu - reported_cpu) > 5:
+            return {"status": "failure", "reason": "CPU average mismatch"}
+
+    # Additional sanity checks
+    if calc_avg_fps <= 0 or calc_avg_cpu < 0:
+        return {"status": "failure", "reason": "Invalid values"}
+
+    return {
+        "status": "success",
+        "average_fps": round(calc_avg_fps, 2),
+        "average_cpu": round(calc_avg_cpu, 2)
+    }
+
+#-------------------------------------------------------------------
 # VKMARK BINARY EXECUTION
 #-------------------------------------------------------------------
-def execute_binary(present_mode):
+def execute_binary(binary, present_mode):
     """
-    Execute VkMark benchmark binary with specified present mode.
+    Execute Vulkan benchmark binary with specified present mode.
     
-    This function constructs and executes the appropriate VkMark command
+    This function constructs and executes the appropriate Vulkan binary command
     based on the display setup (RDKWindowManager vs Westeros) and parses
     the benchmark results.
     
     Args:
-        present_mode (str): VkMark present mode (e.g., 'fifo', 'immediate')
+        present_mode (str): Vulkan present mode (e.g., 'fifo', 'immediate')
     
     Returns:
         str: "SUCCESS" if benchmark completes and score is extracted,
              "FAILURE" if execution fails or no score is found
     """
-    global runtime_dir, display_created
+    global runtime_dir, display_created, wayland_display
+    global width, height
     
     # Validate input
     if not present_mode or not isinstance(present_mode, str):
         print("[ERROR] Invalid present_mode parameter")
         return "FAILURE"
     
-    print(f"[INFO] Executing VkMark benchmark in {present_mode} mode...")
-    
+    print(f"[INFO] Executing {binary} benchmark in {present_mode} mode...")
+
+    present_mode_enum = { "mailbox" : 1, "fifo" : 2 }
+
+    # Set present_mode for vkcube
+    if binary == "vkcube":
+        present_mode_key = present_mode
+        present_mode = present_mode_enum[present_mode_key]
+
+    # Set duration and enable metric collection in vkcube
+    if binary == "vkcube":
+        binary = binary + f" --duration 60 --fps --width {width} --height {height}"
+
+    # Add fullscreen mode for vkmark
+    if binary == "vkmark":
+        binary = binary + " --fullscreen "
+
+
     # Construct command based on display setup method
     if display_created:
         # Use RDKWindowManager created display
-        command = (f"XDG_RUNTIME_DIR={runtime_dir} WAYLAND_DISPLAY=test "
-                  f"vkmark --winsys wayland --present-mode={present_mode}")
+        command = f"XDG_RUNTIME_DIR={runtime_dir} WAYLAND_DISPLAY={wayland_display} {binary} "
+        if "vkcube" in binary:
+            command = command + f" --present_mode {present_mode}"
+        elif "vkmark" in binary:
+            command = command + f" --winsys wayland --present-mode={present_mode}"
+        else:
+            print("[ERROR] Invalid binary")
+            return "FAILURE"
         print("[INFO] Using RDKWindowManager display 'test'")
     else:
         # Use Westeros display - wait for socket creation
         command = (f"while ! ls {runtime_dir}/westeros* 1>/dev/null 2>&1; do sleep 1; done; "
                   f"export XDG_RUNTIME_DIR={runtime_dir}; "
-                  f"export WAYLAND_DISPLAY=$(ls {runtime_dir}/westeros* | head -n1); "
-                  f"vkmark --winsys-dir /usr/lib/vkmark/ --data-dir /usr/share/vkmark/ "
-                  f"--winsys wayland --present-mode={present_mode}")
+                  f"export WAYLAND_DISPLAY={wayland_display}; "
+                  f"{binary} ")
+        if "vkcube" in binary:
+            command = command + f" --present_mode {present_mode}"
+        elif "vkmark" in binary:
+            command = command + f" --winsys wayland --present-mode={present_mode}"
+        else:
+            print("[ERROR] Invalid binary")
+            return "FAILURE"
         print("[INFO] Using Westeros display - waiting for socket creation")
     
-    print(f"[DEBUG] VkMark command: {command}")
+    print(f"[DEBUG] vulkan binary command: {command}")
     
-    # Execute VkMark benchmark
+    # Execute vulkan binary benchmark
     output = execute_Cmnd_InDUT(command)
     
     if not output:
-        print("[ERROR] No output received from VkMark execution")
+        print("[ERROR] No output received from vulkan binary execution")
         return "FAILURE"
     
-    print("[INFO] VkMark execution completed")
+    print("[INFO] Vulkan binary execution completed")
     print(f"\n{output}\n")
-    # Parse benchmark score from output
-    score_match = re.search(r"vkmark Score:\s*(\d+)", output, re.IGNORECASE)
+
+    if "vkmark" in binary:
+        # Parse benchmark score from output
+        score_match = re.search(r"vkmark Score:\s*(\d+)", output, re.IGNORECASE)
+
+        # Check for errors or missing score
+        if "error" in output.lower() or not score_match:
+            print(f"[FAILURE] Unable to obtain VkMark score in {present_mode} mode")
+            if "error" in output.lower():
+                print("[DEBUG] Error detected in VkMark output")
+            else:
+                print("[DEBUG] No score pattern found in output")
+            return "FAILURE"
     
-    # Check for errors or missing score
-    if "error" in output.lower() or not score_match:
-        print(f"[FAILURE] Unable to obtain VkMark score in {present_mode} mode")
-        if "error" in output.lower():
-            print("[DEBUG] Error detected in VkMark output")
-        else:
-            print("[DEBUG] No score pattern found in output")
-        return "FAILURE"
-    
-    # Extract and display score
-    score = score_match.group(1)
-    print(f"[SUCCESS] VkMark score obtained in {present_mode} mode: {score}")
-    
+        # Extract and display score
+        score = score_match.group(1)
+        print(f"[SUCCESS] VkMark score obtained in {present_mode} mode: {score}")
+
+    if "vkcube" in binary:
+        result = parse_vkcube_output(output)
+        present_mode = present_mode_key
+        try:
+            score = result["average_fps"]
+            cpu_usage = result["average_cpu"]
+            print(f"[SUCCESS] VkCube score obtained in {present_mode} mode: {score}")
+        except:
+            print("[DEBUG] Error detected in VkCube output")
+            return "FAILURE"
+
     # Format and display results banner
     result_text = f"{present_mode.upper()} SCORE = {score}"
+    if "vkcube" in binary:
+        result_text = f"{result_text} CPU Usage = {cpu_usage}"
     banner_length = len(result_text) + 4  # Add padding
     
     print("\n" + "=" * banner_length)
