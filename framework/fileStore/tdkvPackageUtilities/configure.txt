@@ -24,7 +24,7 @@ SDK_INSTALL_SCRIPT=
 SDK_INSTALL_PATH=
 
 #Platform repo for tdk
-SRC_PLATFORM_RPI4=https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk
+SRC_PLATFORM_RPI4=https://github.com/rdkcentral/tdk-video-raspberrypi
 SRC_PLATFORM_REALTEK=https://code.rdkcentral.com/r/collaboration/soc/realtek/rdk/tdk-video
 SRC_PLATFORM_AMLOGIC=https://code.rdkcentral.com/r/collaboration/soc/amlogic/rdk/tdk-video
 SRC_PLATFORM_BROADCOM=https://code.rdkcentral.com/r/collaboration/soc/broadcom/rdk/tdk-video
