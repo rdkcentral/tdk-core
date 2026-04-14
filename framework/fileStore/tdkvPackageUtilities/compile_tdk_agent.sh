@@ -1528,7 +1528,7 @@ install_vulkan_headers() {
               VULKAN_VOLK_REQUIRED="true"
               ;;
                 *)
-              echo "Unsupported Vulkan version: $VULKAN_HEADER_VERSION"
+              echo "Unsupported Vulkan version: $VULKAN_VERSION"
               exit 1
               ;;
     esac
@@ -1579,7 +1579,7 @@ clone_vulkan_tools() {
               vulkan_tools_srcrev="74dd90abd69f813220b572e1d89c17bc7784972d"
               ;;
                 *)
-              echo "Unsupported Vulkan version: $VULKAN_HEADER_VERSION"
+              echo "Unsupported Vulkan version: $VULKAN_VERSION"
               exit 1
               ;;
     esac
@@ -1651,29 +1651,6 @@ static void demo_update_fps(struct demo *demo) {
     }
 }
 
-#ifdef _WIN32
-static void demo_update_cpu_usage(struct demo *demo) {
-    FILETIME idle_time, kernel_time, user_time;
-    if (GetSystemTimes(&idle_time, &kernel_time, &user_time)) {
-        uint64_t idle = ((uint64_t)idle_time.dwHighDateTime << 32) | idle_time.dwLowDateTime;
-        uint64_t kernel = ((uint64_t)kernel_time.dwHighDateTime << 32) | kernel_time.dwLowDateTime;
-        uint64_t user = ((uint64_t)user_time.dwHighDateTime << 32) | user_time.dwLowDateTime;
-        uint64_t total = kernel + user;
-
-        if (demo->last_cpu_time != 0) {
-            uint64_t total_diff = total - demo->last_cpu_time;
-            uint64_t idle_diff = idle - demo->last_cpu_idle_time;
-
-            if (total_diff > 0) {
-                demo->current_cpu_usage = ((double)(total_diff - idle_diff) / (double)total_diff) * 100.0;
-            }
-        }
-
-        demo->last_cpu_time = total;
-        demo->last_cpu_idle_time = idle;
-    }
-}
-#elif defined(__linux__) || defined(__unix__)
 static void demo_update_cpu_usage(struct demo *demo) {
     static uint64_t last_total = 0, last_idle = 0;
     static bool cpu_init = false;
@@ -1722,11 +1699,6 @@ static void demo_update_cpu_usage(struct demo *demo) {
 
     fclose(fp);
 }
-#else
-static void demo_update_cpu_usage(struct demo *demo) {
-    demo->current_cpu_usage = 0.0;
-}
-#endif
 
 static void demo_print_performance(struct demo *demo) {
     if (!demo->show_performance) return;
@@ -1959,9 +1931,9 @@ compile_shaders() {
     exit 1
 }
 
-########################################################
-# 12. Setting up glslangValidator for shader compialtion
-########################################################
+#########################################################
+# 12. Setting up glslangValidator for shader compilaltion
+#########################################################
 setup_glslang_validator() {
     # Navigate to parent directory to run the fetch script
     local ORIG_DIR=$(pwd)
