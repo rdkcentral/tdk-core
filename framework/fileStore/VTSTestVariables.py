@@ -150,7 +150,6 @@ HDMICEC_L1_SkipTestCaseList_RPI = {}
 HDMICEC_L2_List = []
 HDMICEC_L2_SkipTestCaseList = {}
 HDMICEC_L2_SkipTestCaseList_RPI = {}
-HDMICEC_L2_SkipTestCaseList_RPI["L2_LogicalAddressUnavailability"] = "Not applicable for RPI - REFPLTV-2570"
 
 # PowerManager HAL test configurations
 PowerManager_basePath = "power_manager/"
