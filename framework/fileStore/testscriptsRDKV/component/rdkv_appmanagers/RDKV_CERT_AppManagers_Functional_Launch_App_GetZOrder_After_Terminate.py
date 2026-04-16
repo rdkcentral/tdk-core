@@ -238,7 +238,7 @@ if "SUCCESS" in result.upper():
                             print("\n")
                             time.sleep(5)
                             method = "org.rdk.RDKWindowManager.1.getZOrder"
-                            value = '{"clientId ": "'+app_instance_id+'"}'
+                            value = '{"clientId": "'+app_instance_id+'"}'
                             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
                             tdkTestObj.addParameter("method",method)
                             tdkTestObj.addParameter("value",value)
@@ -268,7 +268,7 @@ if "SUCCESS" in result.upper():
                                     print("\n")
                                     time.sleep(5)
                                     method = "org.rdk.RDKWindowManager.1.getZOrder"
-                                    value = '{"clientId ": "'+app_instance_id+'"}'
+                                    value = '{"clientId": "'+app_instance_id+'"}'
                                     tdkTestObj = obj.createTestStep('appmanagers_setvalue')
                                     tdkTestObj.addParameter("method",method)
                                     tdkTestObj.addParameter("value",value)
@@ -344,6 +344,7 @@ if "SUCCESS" in result.upper():
         if installation_status == "TRUE":
             # Step 12 : Uninstall the package
             print("\n")
+            time.sleep(3)
             method = "org.rdk.PackageManagerRDKEMS.1.uninstall"
             value = '{ "packageId": "'+application_name+'"}'
             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
@@ -362,6 +363,7 @@ if "SUCCESS" in result.upper():
         if download_status == "TRUE":
             # Step 13 : Delete the package
             print("\n")
+            time.sleep(3)
             method = "org.rdk.DownloadManager.1.delete"
             value = '{"fileLocator": "'+filelocator_url+'"}'
             tdkTestObj = obj.createTestStep('appmanagers_setvalue')

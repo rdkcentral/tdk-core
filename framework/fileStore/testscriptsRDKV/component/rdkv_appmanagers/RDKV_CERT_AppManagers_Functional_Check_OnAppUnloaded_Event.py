@@ -334,6 +334,7 @@ if "SUCCESS" in result.upper():
         if installation_status == "TRUE":
             # Step 9 : Uninstall the package
             print("\n")
+            time.sleep(3)
             method = "org.rdk.PackageManagerRDKEMS.1.uninstall"
             value = '{ "packageId": "'+application_name+'"}'
             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
@@ -352,6 +353,7 @@ if "SUCCESS" in result.upper():
         if download_status == "TRUE":
             # Step 10 : Delete the package
             print("\n")
+            time.sleep(3)
             method = "org.rdk.DownloadManager.1.delete"
             value = '{"fileLocator": "'+filelocator_url+'"}'
             tdkTestObj = obj.createTestStep('appmanagers_setvalue')

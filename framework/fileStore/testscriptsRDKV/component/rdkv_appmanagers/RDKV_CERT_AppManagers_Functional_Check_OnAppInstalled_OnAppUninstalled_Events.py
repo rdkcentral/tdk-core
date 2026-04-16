@@ -366,6 +366,7 @@ if "SUCCESS" in result.upper():
         if download_status == "TRUE":
             # Step 11 : Delete the package
             print("\n")
+            time.sleep(3)
             method = "org.rdk.DownloadManager.1.delete"
             value = '{"fileLocator": "'+filelocator_url+'"}'
             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
