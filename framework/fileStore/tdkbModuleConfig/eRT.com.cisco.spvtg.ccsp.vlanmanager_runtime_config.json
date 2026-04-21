@@ -81,7 +81,7 @@
     },
     "Device.X_RDK_Ethernet.Link.{i}.MACAddrOffSet": {
         "type": ["unsignedInt"],
-        "writable": ["false"],
+        "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
