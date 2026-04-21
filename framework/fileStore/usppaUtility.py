@@ -617,7 +617,7 @@ def usppaPreRequisite(obj):
     print("\nChecking the PREREQUISITES")
     #Check for the usppa process
     print("Check if Usppa process is up and running in the device")
-    cmd= "pidof UspPa"
+    cmd= "pidof obuspa"
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     tdkTestObj.addParameter("command", cmd)
     tdkTestObj.executeTestCase(expectedresult)
