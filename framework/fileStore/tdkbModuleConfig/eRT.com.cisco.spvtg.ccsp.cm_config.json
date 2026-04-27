@@ -1,0 +1,587 @@
+{
+    "Device.X_CISCO_COM_CableModem.TelephonyDHCPStatus": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.TelephonyTftpStatus": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.TelephonyRegistrationStatus": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISDHCPAttempts": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISTftpAttempts": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.MaxCpeAllowed": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISConfigFileName": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.ToDStatus": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.UpstreamServiceFlowParams": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DownstreamServiceFlowParams": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISDownstreamDataRate": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISUpstreamDataRate": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.MACAddress": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.BPIState": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.NetworkAccess": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.UpgradeServerIP": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.Market": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.MDDIPOverride": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.IPAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.BootFileName": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.SubnetMask": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.Gateway": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.TFTPServer": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.TimeServer": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.TimeOffset": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.LeaseTimeRemaining": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.RebindTimeRemaining": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.RenewTimeRemaining": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.IPv6Address": {
+        "type": ["string(40)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.IPv6BootFileName": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.IPv6Prefix": {
+        "type": ["string(40)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.IPv6Router": {
+        "type": ["string(40)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.IPv6TFTPServer": {
+        "type": ["string(40)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.IPv6TimeServer": {
+        "type": ["string(40)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.IPv6LeaseTimeRemaining": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.IPv6RebindTimeRemaining": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.IPv6RenewTimeRemaining": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISVersion": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.CMStatus": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISDownstreamScanning": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISDownstreamRanging": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISUpstreamScanning": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISUpstreamRanging": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISTftpStatus": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISDataRegComplete": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.LoopDiagnosticsDetails": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.LoopDiagnosticsStart": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.CoreVersion": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DOCSISDHCPStatus": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.EnableLog": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_CISCO_COM_CableModem.LockedUpstreamChID": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(0,65536)"],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.StartDSFrequency": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.ProvIpType": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.CMResetCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.LocalResetCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.DocsisResetCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.ErouterResetCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_CISCO_COM_CableModem.RequestPhyStatus": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.X_CISCO_COM_CableModem.RequestOperationalStatus": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.X_CISCO_COM_CableModem.ConfigureWan": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.X_CISCO_COM_CableModem.PostCfgWanFinalize": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.X_CISCO_COM_CableModem.CustomWanConfigUpdate": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadStatus": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadProtocol": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadURL": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "https://rdkb-firm-download-url"
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareToDownload": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "firmware1"
+        }
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_CableRfSignalStatus": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.QOS.X_RDK_LldMarkingRules.Data": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_CableModem.LLD_Active": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_CableModem.DownstreamDiplexerSetting": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef _CM_HIGHSPLIT_SUPPORTED_"]
+    },
+    "Device.X_RDK_CableModem.UpstreamDiplexerSetting": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef _CM_HIGHSPLIT_SUPPORTED_"]
+    }
+}

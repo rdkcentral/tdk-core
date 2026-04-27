@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>fc4da0fb-c3c5-48a0-a891-133bb51650ee</moduleId>
+        <!-- Module name -->
+        <moduleName>RDKRemoteDebugger</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/rdklogs/logs]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[/rdklogs/logs]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="395fdcf0-dc6e-441a-aa82-f5d8bd0cac85" name="RDKRemoteDebugger_DoNothing">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>a2c92203-b9e5-43d4-9297-e7f00acb4ae7</id>
+                <name>RDKRemoteDebugger_DoNothing</name>
+                <funName>RDKRemoteDebugger_DoNothing</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

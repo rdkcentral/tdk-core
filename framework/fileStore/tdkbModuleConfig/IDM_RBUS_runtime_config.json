@@ -1,0 +1,73 @@
+{
+    "Device.X_RDK_Remote.Device.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["RBUS_ELEMENT_TYPE_TABLE"],
+        "table": "rbus_No_AddDelete",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.Device.{i}.Status": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT | RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.Device.{i}.MAC": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT | RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.Device.{i}.HelloInterval": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT | RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.Device.{i}.IPv4": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT | RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.Device.{i}.IPv6": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT | RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.Device.{i}.Capabilities": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT | RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Remote.Device.{i}.ModelNumber": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT | RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

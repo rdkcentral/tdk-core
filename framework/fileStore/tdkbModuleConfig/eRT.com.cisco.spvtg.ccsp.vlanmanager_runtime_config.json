@@ -1,0 +1,231 @@
+{
+    "Device.X_RDK_Ethernet.LinkNumberOfEntries": {
+        "LinkNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Up","Down","Unknown","Dormant","NotPresent","LowerLayerDown","Error"],
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.Alias": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "wanoe"
+        }
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.Name": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "wan_name"
+        }
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.LowerLayers": {
+        "type": ["string(1024)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "Layer_1"
+        }
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.X_RDK_BaseInterface": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "Interface_1"
+        }
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.MACAddress": {
+        "type": ["string(17)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.MACAddrOffSet": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.PriorityTagging": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.X_RDK_Refresh": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.X_RDK_MarkingNumberOfEntries": {
+        "X_RDK_MarkingNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.X_RDK_Marking.{i}.SKBPort": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.Link.{i}.X_RDK_Marking.{i}.EthernetPriorityMark": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.VLANTerminationNumberOfEntries": {
+        "VLANTerminationNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.VLANTermination.{i}.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDK_Ethernet.VLANTermination.{i}.Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Up","Down","Unknown","Dormant","NotPresent","LowerLayerDown","Error"],
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.VLANTermination.{i}.Alias": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "wanoe"
+        }
+    },
+    "Device.X_RDK_Ethernet.VLANTermination.{i}.Name": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "wan_name"
+        }
+    },
+    "Device.X_RDK_Ethernet.VLANTermination.{i}.LastChange": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_Ethernet.VLANTermination.{i}.LowerLayers": {
+        "type": ["string(1024)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "Layer_1"
+        }
+    },
+    "Device.X_RDK_Ethernet.VLANTermination.{i}.VLANID": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "-1000"
+        }
+    },
+    "Device.X_RDK_Ethernet.VLANTermination.{i}.TPID": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(0,65536)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.X_RDK_Ethernet.VLANTermination.{i}.X_RDK_BaseInterface": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "Interface_1"
+        }
+    }
+}

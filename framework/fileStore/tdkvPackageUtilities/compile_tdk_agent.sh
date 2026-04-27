@@ -46,7 +46,7 @@ SRC_HDMICEC_HAL="https://github.com/rdkcentral/rdk-halif-hdmi_cec.git"
 SRC_BLUETOOTH_HAL="https://code.rdkcentral.com/r/rdk/components/generic/bluetooth"
 SRC_IARMMGRS="https://github.com/rdkcentral/iarmmgrs.git"
 SRC_WESTEROS="https://code.rdkcentral.com/r/components/opensource/westeros"
-SRC_EGL="https://github.com/KhronosGroup/EGL-Registry.git"
+SRC_EGL="https://github.com/raspberrypi/userland.git"
 SRC_RMF_AUDIO_CAPTURE="https://github.com/rdkcentral/rdk-halif-rmf_audio_capture.git"
 SRC_STORAGE_MGR="https://code.rdkcentral.com/r/rdk/components/generic/storagemanager"
 #SRC_STORAGE_MGR="git@github.com:rdk-e/storagemanager.git"
@@ -67,10 +67,11 @@ SRC_AAMP="https://github.com/rdkcentral/aamp.git"
 SRC_RFC="https://github.com/rdkcentral/rfc.git"
 SRC_WDMP_C="https://github.com/xmidt-org/wdmp-c.git"
 SRC_RFCAPI="https://github.com/rdkcentral/rfc.git"
-SRC_VULKAN="https://github.com/KhronosGroup/Vulkan-Headers.git"
+SRC_VULKAN_HEADER="https://github.com/KhronosGroup/Vulkan-Headers.git"
+SRC_VULKAN_TOOLS="https://github.com/KhronosGroup/Vulkan-Tools.git"
 
 #Platformwise repositories
-SRC_RPI="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
+SRC_RPI4="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
 
 #Source Directory names
 DIR_MHD="libmicrohttpd-0.9.70"
@@ -92,7 +93,9 @@ COMPILE_SKELETON=false
 SYSROOT=${ROOT_DIR}/sysroots
 SKIP_PLATFORM="FALSE"
 SKIP_PACKAGES="FALSE"
+INSTALLED_VULKAN_HEADERS="FALSE"
 vkmark_compiled="FALSE"
+vkcube_compiled="FALSE"
 
 platform_arg=false
 for arg in "$@"
@@ -110,8 +113,8 @@ if [[ "$PLATFORM_GIVEN" == "AMLOGIC" ]];then
     PLATFORM="AMLOGIC"
 elif [[ "$PLATFORM_GIVEN" == "BROADCOM" ]];then
     PLATFORM="BROADCOM"
-elif [[ "$PLATFORM_GIVEN" == "RPI" ]];then
-    PLATFORM="RPI"
+elif [[ "$PLATFORM_GIVEN" == "RPI4" ]];then
+    PLATFORM="RPI4"
 elif [[ "$PLATFORM_GIVEN" == "REALTEK" ]];then
     PLATFORM="REALTEK"
 else
@@ -181,7 +184,6 @@ download_source_code()
         DIR=DIR_$package
 	SRC_URL=SRC_$package
 	filename="$(basename ${!SRC_URL})"
-        #if [ -f "${!DIR}" ]; then
 	if [ -f $filename ];then
             echo "$package- $filename is already cloned in the current directory" 2>&1 | tee -a $LOG_FILE
     	    echo -e "\e[1;42m Download $package: SKIPPED \e[0m \n" 2>&1 | tee -a $LOG_FILE
@@ -522,7 +524,7 @@ install_packages()
     Packages="$(find $ROOT_DIR -iname Packages.tgz)"
     if [  -z "$Packages" ];then
 	echo -e "Packages.tgz not found"
-	exit
+	exit 1
     fi
     tar -xf Packages.tgz
     gstreamer_package="$(find $ROOT_DIR -iname gstreamer.tgz)"
@@ -587,7 +589,7 @@ install_packages()
         wayland_protocols_package_name=$(basename "$wayland_protocols_package")
 	cd usr/share
         tar -xf $wayland_protocols_package_name
-	find $SDKTARGETSYSROOT -iname wayland-protocols.pc
+        find $SDKTARGETSYSROOT -iname wayland-protocols.pc
         rm $SDKTARGETSYSROOT/usr/share/$wayland_protocols_package_name
     fi
     glm_package="$(find $ROOT_DIR -iname glm.tgz)"
@@ -669,17 +671,14 @@ compile_assimp()
 	git clone $SRC_ASSIMP >> $LOG_FILE 2>&1
 	cd assimp
 	git checkout 8f0c6b04b2257a520aaab38421b2e090204b69df  >> $LOG_FILE 2>&1
+	rm -rf build
 	mkdir build
 	cd build 
 	cmake .. \
-	    -DCMAKE_INSTALL_PREFIX=/usr \
-	    -DBUILD_SHARED_LIBS=ON \
-	    -DASSIMP_BUILD_TESTS=OFF \
-	    -DASSIMP_BUILD_ASSIMP_TOOLS=OFF \
-	    -DASSIMP_BUILD_SAMPLES=OFF \
-	    -DASSIMP_NO_EXPORT=ON \
-	    -DASSIMP_BUILD_ZLIB=ON  >> $LOG_FILE 2>&1
+	     -DCMAKE_INSTALL_PREFIX=/usr \
+	     -DASSIMP_BUILD_ASSIMP_TOOLS=OFF -DASSIMP_BUILD_TESTS=OFF >> $LOG_FILE 2>&1
         make -j$(nproc) >> $LOG_FILE 2>&1
+	$STRIP code/libassimp.so.5.0.0
 	DESTDIR=${SYSROOT} make install >> $LOG_FILE 2>&1
 	cd ${ROOT_DIR}
     fi
@@ -1000,10 +999,15 @@ compile_skeleton_libraries()
             cd ${TDK_SOURCE_DIR}/RDK_Source
             git clone $SRC_EGL >> $LOG_FILE 2>&1
             repo_name=$(basename "$SRC_EGL" .git)
+	    cd $repo_name
+	    git checkout c4fd1b8986c6d6d4ae5cd51e65a8bbeb495dfa4e  >> $LOG_FILE 2>&1
             mkdir -p $SYSROOT/usr/include/EGL
             mkdir -p $SYSROOT/usr/include/KHR
-            sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/api/EGL/*.h $SYSROOT/usr/include/EGL/
-            sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/api/KHR/khrplatform.h $SYSROOT/usr/include/KHR/
+	    mkdir -p $SYSROOT/usr/include/GLES2
+            sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/interface/khronos/include/EGL/*.h $SYSROOT/usr/include/EGL/
+	    sudo cp  -r ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/interface $SYSROOT/usr/include/
+            sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/interface/khronos/include/KHR/khrplatform.h $SYSROOT/usr/include/KHR/
+	    sudo cp  ${TDK_SOURCE_DIR}/RDK_Source/$repo_name/interface/khronos/include/GLES2/*.h $SYSROOT/usr/include/GLES2
             rm -rf ${TDK_SOURCE_DIR}/RDK_Source/$repo_name
 	fi
 	if [[ $COMPONENT == "Essos" ]];then
@@ -1012,11 +1016,9 @@ compile_skeleton_libraries()
         if [[ $COMPONENT == "WesterosHal" ]];then
             if [[ $PLATFORM == "BROADCOM" ]];then
                 clone_and_move $SRC_WESTEROS $SRC_WESTEROS_HAL_HEADER_REVISION "WesterosHal_BRCM" "WESTEROS_LIB_VERSION" "brcm/westeros-gl"
-		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/GLES2 $SYSROOT/usr/include/
 		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/wayland-egl.h $SYSROOT/usr/include/
             else
                 clone_and_move $SRC_WESTEROS $SRC_WESTEROS_HAL_HEADER_REVISION "WesterosHal_DRM" "WESTEROS_LIB_VERSION" "drm/westeros-gl"
-		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/GLES2 $SYSROOT/usr/include/
 		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/wayland-egl.h $SYSROOT/usr/include/
             fi
         fi
@@ -1053,10 +1055,8 @@ compile_skeleton_libraries()
 		cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
             fi
 	    if [[ $PLATFORM == "BROADCOM" ]];then
-		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/GLES2 $SYSROOT/usr/include/
 		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/brcm-em/include/*.h $SYSROOT/usr/include/
 	    else
-	        sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/GLES2 $SYSROOT/usr/include/
 		sudo cp -r ${TDK_SOURCE_DIR}/RDK_Source/westeros_source/test/drm-em/include/*.h $SYSROOT/usr/include/
 	    fi
 	    cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
@@ -1100,6 +1100,10 @@ compile_skeleton_libraries()
 	    sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/tsb/api/*.h $SYSROOT/usr/include/
             sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/support/aampmetrics/*.h $SYSROOT/usr/include/
             sudo mv ${TDK_SOURCE_DIR}/RDK_Source/aamp_source/support/aampabr/*.h $SYSROOT/usr/include/
+
+	    cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
+            make >> $LOG_FILE 2>&1
+            sudo mv *.so* $SYSROOT/usr/lib/
 	fi
 	if [[ $COMPONENT == "cJSON" ]];then
 	    cd ${TDK_SOURCE_DIR}/RDK_Source/
@@ -1112,9 +1116,6 @@ compile_skeleton_libraries()
 	    git clone $SRC_UTIL_LINUX >> $LOG_FILE 2>&1
 	    sudo mkdir -p $SYSROOT/usr/include/uuid
 	    sudo cp util-linux/libuuid/src/uuid.h $SYSROOT/usr/include/uuid  
-            cd ${TDK_SOURCE_DIR}/RDK_Libraries/$COMPONENT
-	    make >> $LOG_FILE 2>&1
-            sudo mv *.so* $SYSROOT/usr/lib/
 	fi
 	if [[ $COMPONENT == "DeviceSettings" ]];then
 	    cd ${TDK_SOURCE_DIR}/RDK_Source
@@ -1300,8 +1301,8 @@ compile_vkmark()
 
     if [[ -z "$PLATFORM" ]];then
 	echo "NO PLATFORM is selected for vkmark compilation"
-	echo "Setting PLATFORM to RPI"
-	PLATFORM="RPI"
+	echo "Setting PLATFORM to RPI4"
+	PLATFORM="RPI4"
     fi
 
     echo "Compiling vkmark for $PLATFORM platform"
@@ -1311,20 +1312,23 @@ compile_vkmark()
     ############################################
 
     case "$PLATFORM" in
-        RPI)
+        RPI4)
             VENDOR_MANIFEST_REPO=$RPI_VENDOR_MANIFEST_REPO
             VENDOR_VERSION="$RPI_VENDOR_VERSION"
 	    SOC_OSS_REPO="meta-oss-vendor-raspberrypi"
+	    MAX_SOC_OSS_VERSION="4.1.3"
             ;;
         REALTEK)
             VENDOR_MANIFEST_REPO=$REALTEK_VENDOR_MANIFEST_REPO
             VENDOR_VERSION="$REALTEK_VENDOR_VERSION"
 	    SOC_OSS_REPO="meta-rdk-soc-realtek"
+	    MAX_SOC_OSS_VERSION="2.4.4"
             ;;
 	BROADCOM)
 	    VENDOR_MANIFEST_REPO=$BROADCOM_VENDOR_MANIFEST_REPO
             VENDOR_VERSION="$BROADCOM_VENDOR_VERSION"
             SOC_OSS_REPO="meta-vendor-rdke-broadcom-oss"
+	    MAX_SOC_OSS_VERSION="3.3.2"
             ;;
         *)
             echo "Unsupported platform: $PLATFORM"
@@ -1356,6 +1360,21 @@ compile_vkmark()
     OSS_VENDOR_REPO_NAME="${result%%|*}"
     tmp="${result#*|}"
     OSS_VENDOR_REPO_TAG="${tmp%%|*}"
+
+    ####################################################################################
+    # vkmark recipe is removed after MAX_SOC_OSS_VERSION version
+    # Check if OSS_VENDOR_REPO_TAG obtained is less than or equal to MAX_SOC_OSS_VERSION
+    # if greater, set OSS_VENDOR_REPO_TAG to MAX_SOC_OSS_VERSION
+    ####################################################################################
+    version_gt() {
+        [ "$(printf '%s\n' "$1" "$2" | sort -V | tail -n1)" = "$1" ] && [ "$1" != "$2" ]
+    }
+
+    if version_gt "$OSS_VENDOR_REPO_TAG" "$MAX_SOC_OSS_VERSION"; then
+        echo -e "vkmark is not available in $OSS_VENDOR_REPO_NAME - $OSS_VENDOR_REPO_TAG proceeding with $MAX_SOC_OSS_VERSION"
+        OSS_VENDOR_REPO_TAG="$MAX_SOC_OSS_VERSION"
+    fi
+
     OSS_VENDOR_REPO_URL="${result##*|}"
 
     cd ..
@@ -1365,6 +1384,7 @@ compile_vkmark()
     # Clone OSS Vendor Repo
     ############################################
 
+    echo -e "Proceeding with vkmark compilation for $PLATFORM with $OSS_VENDOR_REPO_NAME - $OSS_VENDOR_REPO_TAG"
     git clone ${OSS_VENDOR_REPO_URL}.git >> "$LOG_FILE" 2>&1
     cd "$OSS_VENDOR_REPO_NAME" 
     git checkout "$OSS_VENDOR_REPO_TAG" >> "$LOG_FILE" 2>&1
@@ -1431,17 +1451,10 @@ compile_vkmark()
     ############################################
     # Copy Vulkan headers into sysroot
     ############################################
-    git clone $SRC_VULKAN vulkan_source >> $LOG_FILE 2>&1
-    cd vulkan_source/
-    vulkan_srcrev="95a13d7b7118d3824f0ef236bb0438d9d51f3634"
-    git checkout $vulkan_srcrev >> $LOG_FILE 2>&1
-    cp -r include/vulkan $SYSROOT/usr/include/
-    cp -r include/vk_video $SYSROOT/usr/include/
-    mkdir -p $SYSROOT/usr/share/vulkan/registry
-    cp registry/vk.xml $SYSROOT/usr/share/vulkan/registry/
-    cd ..
-    rm -rf vulkan_source
-
+    if [ $INSTALLED_VULKAN_HEADERS != "TRUE" ];then
+        install_vulkan_headers
+    fi
+ 
     ############################################
     # Build
     ############################################
@@ -1469,7 +1482,10 @@ compile_vkmark()
             cp build/src/*.so vkmark_bins/usr/lib/vkmark/
 	    #Copy libassimp as well
 	    cp $SYSROOT/usr/lib/libassimp.so.5.0.0 vkmark_bins/usr/lib/
-
+	    cd vkmark_bins/usr/lib
+	    ln -sf libassimp.so.5.0.0 libassimp.so.5
+	    cd ../../..
+ 
             mkdir -p vkmark_bins/usr/share/vkmark
             cp -r data/models vkmark_bins/usr/share/vkmark/
             cp -r data/shaders vkmark_bins/usr/share/vkmark/
@@ -1485,9 +1501,514 @@ compile_vkmark()
 	    vkmark_compiled="TRUE"
         else
             echo -e "\e[1;41m VKMARK COMPILATION : FAILURE \e[0m" | tee -a "$LOG_FILE"
+	    exit 1
         fi
     fi
 }
+
+############################################
+# Copy Vulkan headers into sysroot
+############################################
+install_vulkan_headers() {
+    git clone $SRC_VULKAN_HEADER vulkan_source >> "$LOG_FILE" 2>&1
+    cd vulkan_source/
+    VAR_VULKAN_VERSION=${PLATFORM}_VULKAN_VERSION
+    VULKAN_VERSION="${!VAR_VULKAN_VERSION}"
+    VULKAN_VOLK_REQUIRED="false"
+    echo "VULKAN HEADER VERSION OBTAINED as $VULKAN_VERSION"
+    case "$VULKAN_VERSION" in
+        "1.3.247")
+              vulkan_header_srcrev="95a13d7b7118d3824f0ef236bb0438d9d51f3634"
+              ;;
+        "1.3.204")
+              vulkan_header_srcrev="1dace16d8044758d32736eb59802d171970e9448"
+              ;;
+        "1.3.296")
+              vulkan_header_srcrev="29f979ee5aa58b7b005f805ea8df7a855c39ff37"
+              VULKAN_VOLK_REQUIRED="true"
+              ;;
+                *)
+              echo "Unsupported Vulkan version: $VULKAN_VERSION"
+              exit 1
+              ;;
+    esac
+    git checkout $vulkan_header_srcrev >> "$LOG_FILE" 2>&1
+    cp -r include/vulkan $SDKTARGETSYSROOT/usr/include/
+    cp -r include/vk_video $SDKTARGETSYSROOT/usr/include/
+    mkdir -p $SDKTARGETSYSROOT/usr/share/vulkan/registry
+    cp registry/vk.xml $SDKTARGETSYSROOT/usr/share/vulkan/registry/
+    cd ..
+    rm -rf vulkan_source
+
+    if [ "$VULKAN_VOLK_REQUIRED" == "true" ]; then
+         echo "Volk is required , install volk headers in sysroot"
+         git clone https://github.com/zeux/volk.git >> "$LOG_FILE" 2>&1
+         cd volk
+         git checkout 59d26900f53c7621a8ba8ab0e3f18d3bd883fa9a >> "$LOG_FILE" 2>&1
+         cp volk.h $SDKTARGETSYSROOT/usr/include/
+         cp volk.c $SDKTARGETSYSROOT/usr/include/
+         cd ..
+         rm -rf volk
+    fi
+    INSTALLED_VULKAN_HEADERS="TRUE"
+}
+
+##########################################################
+# vkcube code start
+##########################################################
+
+############################################
+# 1. Clone vulkan tools
+############################################
+clone_vulkan_tools() {
+    VULKAN_VERSION=$1
+    PLATFORM=$2
+    rm -rf vulkan_tools_source_$PLATFORM
+    git clone https://github.com/KhronosGroup/Vulkan-Tools.git vulkan_tools_source_$PLATFORM >> "$LOG_FILE" 2>&1
+    cd vulkan_tools_source_$PLATFORM
+    VULKAN_TOOLS_DIR=$(pwd)
+    echo "VULKAN TOOLS VERSION OBTAINED as $VULKAN_VERSION"
+    case "$VULKAN_VERSION" in
+        "1.3.247")
+              vulkan_tools_srcrev="8bb9edd13f5027b6676f5229cb4a1822050b1f36"
+              ;;
+        "1.3.204")
+              vulkan_tools_srcrev="b9a87a24a814e443b1adfc5a6bc2e57243446f6c"
+              ;;
+        "1.3.296")
+              vulkan_tools_srcrev="74dd90abd69f813220b572e1d89c17bc7784972d"
+              ;;
+                *)
+              echo "Unsupported Vulkan version: $VULKAN_VERSION"
+              exit 1
+              ;;
+    esac
+    git checkout $vulkan_tools_srcrev >> "$LOG_FILE" 2>&1
+    CUBE_FILE="$VULKAN_TOOLS_DIR/cube/cube.c"
+}
+
+############################################
+# 2. Add struct members
+############################################
+add_struct_members() {
+    sed -i '/uint32_t queue_family_count;/a \
+\
+     // Duration limiting\
+     uint32_t duration_seconds;\
+     uint64_t start_time;\
+\
+     // Performance measurement\
+     uint64_t last_fps_time;\
+     uint32_t frame_count_for_fps;\
+     double current_fps;\
+     uint64_t last_cpu_time;\
+     uint64_t last_cpu_idle_time;\
+     double current_cpu_usage;\
+     bool show_performance;' "$CUBE_FILE"
+}
+
+############################################
+# 3. Add performance helper functions
+############################################
+add_performance_functions() {
+
+cat << 'EOF' > new_functions.txt
+static double total_cpu_percentage = 0;
+static double total_time = 0;
+static int32_t MIN_FRAMES = 10;
+static bool demo_check_duration_expired(struct demo *demo) {
+    if (demo->duration_seconds == 0) {
+        return false;
+    }
+
+    if (demo->start_time == 0) {
+        demo->start_time = getTimeInNanoseconds();
+        return false;
+    }
+
+    uint64_t current_time = getTimeInNanoseconds();
+    uint64_t elapsed_ns = current_time - demo->start_time;
+    uint64_t duration_ns = (uint64_t)demo->duration_seconds * 1000000000ULL;
+
+    return elapsed_ns >= duration_ns;
+}
+
+static void demo_update_fps(struct demo *demo) {
+    if (demo->last_fps_time == 0) {
+        demo->last_fps_time = getTimeInNanoseconds();
+        demo->frame_count_for_fps = 0;
+        return;
+    }
+
+    demo->frame_count_for_fps++;
+    uint64_t current_time = getTimeInNanoseconds();
+    uint64_t elapsed_ns = current_time - demo->last_fps_time;
+
+    if (elapsed_ns >= 1000000000ULL) {
+        demo->current_fps = (double)demo->frame_count_for_fps / ((double)elapsed_ns / 1000000000.0);
+        demo->last_fps_time = current_time;
+        demo->frame_count_for_fps = 0;
+    }
+}
+
+static void demo_update_cpu_usage(struct demo *demo) {
+    static uint64_t last_total = 0, last_idle = 0;
+    static bool cpu_init = false;
+    static uint64_t last_sample_time = 0;
+
+    uint64_t now = getTimeInNanoseconds();
+
+    // 👉 Only sample every 500ms (or 1 sec)
+    if (last_sample_time != 0 && (now - last_sample_time) < 500000000ULL) {
+        return;
+    }
+    last_sample_time = now;
+
+    FILE* fp = fopen("/proc/stat", "r");
+    if (fp == NULL) {
+        demo->current_cpu_usage = 0.0;
+        return;
+    }
+
+    char line[256];
+    if (fgets(line, sizeof(line), fp)) {
+        uint64_t user, nice, system, idle, iowait = 0, irq = 0, softirq = 0;
+
+        int fields = sscanf(line, "cpu %llu %llu %llu %llu %llu %llu %llu",
+                   &user, &nice, &system, &idle, &iowait, &irq, &softirq);
+
+        if (fields >= 4) {
+            uint64_t idle_all = idle + iowait;   // 🔥 IMPORTANT FIX
+            uint64_t total = user + nice + system + idle_all + irq + softirq;
+
+            if (cpu_init && total > last_total) {
+                uint64_t total_diff = total - last_total;
+                uint64_t idle_diff = idle_all - last_idle;
+
+                if (total_diff > 0 && idle_diff <= total_diff) {
+                    demo->current_cpu_usage =
+                        ((double)(total_diff - idle_diff) / total_diff) * 100.0;
+                }
+            }
+
+            last_total = total;
+            last_idle = idle_all;
+            cpu_init = true;
+        }
+    }
+
+    fclose(fp);
+}
+
+static void demo_print_performance(struct demo *demo) {
+    if (!demo->show_performance) return;
+
+    static uint64_t last_print_time = 0;
+    uint64_t current_time = getTimeInNanoseconds();
+    // Wait for 1 second before printing metrics
+    if ((current_time - demo->start_time) <= 1000000000ULL) {
+       return;
+    }
+    if (last_print_time == 0 || (current_time - last_print_time) >= 1000000000ULL) {
+       double fps = demo->current_fps;
+       double cpu = demo->current_cpu_usage;
+
+       if (fps < 0.0) fps = 0.0;
+       if (fps > 9999.0) fps = 9999.0;
+       if (cpu < 0.0) cpu = 0.0;
+       if (cpu > 100.0) cpu = 100.0;
+
+       printf("[VKCube] FPS: %.1f | CPU: %.1f%% | Frame: %d\n",
+               fps, cpu, demo->curFrame);
+       total_cpu_percentage += cpu;
+       total_time++;
+       fflush(stdout);
+       last_print_time = current_time;
+    }
+
+
+}
+
+static print_average(struct demo *demo) {
+    if (!demo->show_performance) return;
+
+    printf("[VKCube] Average FPS : %.1f\n", demo->curFrame/total_time);
+    printf("[VKCube] Average CPU usage :  %.1f%%\n", total_cpu_percentage/total_time);
+}
+
+EOF
+
+    sed -i '/static void demo_draw(struct demo \*demo) {/e cat new_functions.txt' "$CUBE_FILE"
+    rm new_functions.txt
+}
+
+############################################
+# 4. Hook performance update inside draw
+############################################
+add_performance_hook() {
+    sed -i '/static void demo_draw(struct demo \*demo) {/,/VkResult U_ASSERT_ONLY err;/ {
+        /VkResult U_ASSERT_ONLY err;/a \
+\
+    // Update performance metrics\
+    if (demo->show_performance) {\
+        demo_update_fps(demo);\
+        demo_update_cpu_usage(demo);\
+        demo_print_performance(demo);\
+    }
+}' "$CUBE_FILE"
+}
+
+############################################
+# 5. Add cleanup print
+############################################
+add_cleanup_update() {
+    #sed -i '/static void demo_cleanup(struct demo \*demo) {/,/uint32_t i;/ s/uint32_t i;/\/\/ Print final newline if performance monitoring was enabled\n    if (demo->show_performance) {\n        printf("\\n");\n        fflush(stdout);\n    }\n\n    uint32_t i;/' "$CUBE_FILE"
+    sed -i '/static void demo_cleanup(struct demo \*demo) {/,/uint32_t i;/ s/uint32_t i;/\/\/ Print final newline if performance monitoring was enabled\n    if (demo->show_performance) {\n        print_average(demo);\n        fflush(stdout);\n    }\n    printf("Exiting from application\\n");\n    uint32_t i;/' "$CUBE_FILE"
+}
+
+############################################
+# 6. Add duration-based exit
+############################################
+add_duration_exit() {
+    sed -i '/VK_USE_PLATFORM_WAYLAND_KHR/,/while (!demo->quit) {/ s/while (!demo->quit) {/while (!demo->quit) {\n        if (demo_check_duration_expired(demo)) {\n            demo->quit = true;\n            break;\n        }/' "$CUBE_FILE"
+}
+
+############################################
+# 7. Initialize fields
+############################################
+add_initialization() {
+    sed -i '/demo->height = 500;/a \
+    demo->duration_seconds = 0;\
+    demo->start_time = 0;\
+\
+    demo->last_fps_time = 0;\
+    demo->frame_count_for_fps = 0;\
+    demo->current_fps = 0.0;\
+    demo->last_cpu_time = 0;\
+    demo->last_cpu_idle_time = 0;\
+    demo->current_cpu_usage = 0.0;\
+    demo->show_performance = false;' "$CUBE_FILE"
+}
+
+############################################
+# 8. CLI arguments
+############################################
+add_arguments() {
+    sed -i '/if (strcmp(argv\[i\], "--force_errors") == 0) {/i \
+        if ((strcmp(argv[i], "--duration") == 0) && (i < argc - 1)) {\
+            demo->duration_seconds = atoi(argv[i + 1]);\
+            assert(demo->duration_seconds >= 0);\
+            i++;\
+            continue;\
+        }\
+        if (strcmp(argv[i], "--fps") == 0) {\
+            demo->show_performance = true;\
+            continue;\
+        }' "$CUBE_FILE"
+}
+
+############################################
+# 9. Wayland guards
+############################################
+add_wayland_guards() {
+    cd $VULKAN_TOOLS_DIR/
+    echo "Adding wayland guards"
+    # Add guards around xdg_wm_base check
+    local XDG_CHECK_LINE=$(grep -n "if (!demo->xdg_wm_base)" "$CUBE_FILE" | head -1 | cut -d: -f1)
+    if [ -n "$XDG_CHECK_LINE" ] && ! grep -q "XDG_WM_BASE_PROTO" "$CUBE_FILE"; then
+        local BEFORE_CHECK=$((XDG_CHECK_LINE - 1))
+        sed -i "${BEFORE_CHECK}a\\#if defined(XDG_WM_BASE_PROTO)" "$CUBE_FILE"
+
+        # Find the closing brace after exit(1); instead of just exit(1);
+        local CLOSING_BRACE_LINE=$(awk "NR>=$XDG_CHECK_LINE && /exit\\(1\\);/ {found=1} found && /^[ ]*}/ {print NR; exit}" "$CUBE_FILE")
+        [ -n "$CLOSING_BRACE_LINE" ] && {
+            sed -i "${CLOSING_BRACE_LINE}a\\#endif" "$CUBE_FILE"
+        }
+    fi
+
+    # Add guards around xdg_surface and decoration setup
+    local XDG_SURFACE_LINE=$(grep -n "demo->xdg_surface = xdg_wm_base_get_xdg_surface" "$CUBE_FILE" | head -1 | cut -d: -f1)
+    if [ -n "$XDG_SURFACE_LINE" ]; then
+        local BEFORE_SURFACE=$((XDG_SURFACE_LINE - 1))
+        sed -i "${BEFORE_SURFACE}a\\#if defined(XDG_WM_BASE_PROTO)" "$CUBE_FILE"
+
+        # Find wl_surface_commit to place the #endif before it
+        local COMMIT_LINE=$(grep -n "wl_surface_commit" "$CUBE_FILE" | head -1 | cut -d: -f1)
+        if [ -n "$COMMIT_LINE" ]; then
+            local ENDIF_LINE=$((COMMIT_LINE - 1))
+            sed -i "${ENDIF_LINE}a\\#endif" "$CUBE_FILE"
+        fi
+    fi
+
+    #Add wayland guard during cleanup
+    sed -i '/#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)/,/wl_registry_destroy/ {
+    /wl_seat_destroy/a #if defined(XDG_WM_BASE_PROTO)
+    /wl_compositor_destroy/i #endif
+    }' $CUBE_FILE
+}
+
+############################################
+# 10. GENERATE XDG DECORATOR FILES
+############################################
+generate_wayland_headers_minimal() {
+    cd $VULKAN_TOOLS_DIR/cube
+    # Find wayland protocols directory (cross-compilation aware)
+    local WAYLAND_PROTOCOLS_DIR=""
+    if [ -n "$PKG_CONFIG_SYSROOT_DIR" ]; then
+        for dir in "$PKG_CONFIG_SYSROOT_DIR/usr/share/wayland-protocols" \
+                   "$PKG_CONFIG_SYSROOT_DIR/usr/local/share/wayland-protocols"; do
+            [ -d "$dir" ] && { WAYLAND_PROTOCOLS_DIR="$dir"; break; }
+        done
+    fi
+
+    [ -z "$WAYLAND_PROTOCOLS_DIR" ] && {
+        for dir in /usr/share/wayland-protocols /usr/local/share/wayland-protocols; do
+            [ -d "$dir" ] && { WAYLAND_PROTOCOLS_DIR="$dir"; break; }
+        done
+    }
+
+    # Generate headers using wayland-scanner if available
+    if command -v wayland-scanner >/dev/null 2>&1 && [ -n "$WAYLAND_PROTOCOLS_DIR" ]; then
+        local XDG_SHELL_XML="$WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml"
+        local XDG_DECORATION_XML="$WAYLAND_PROTOCOLS_DIR/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml"
+
+        [ -f "$XDG_SHELL_XML" ] && {
+            wayland-scanner client-header "$XDG_SHELL_XML" xdg-shell-client-header.h 2>/dev/null
+            wayland-scanner private-code "$XDG_SHELL_XML" xdg-shell-protocol.c 2>/dev/null
+        }
+
+        [ -f "$XDG_DECORATION_XML" ] && {
+            wayland-scanner client-header "$XDG_DECORATION_XML" xdg-decoration-client-header.h 2>/dev/null
+            wayland-scanner private-code "$XDG_DECORATION_XML" xdg-decoration-protocol.c 2>/dev/null
+        }
+
+        [ -f "xdg-shell-client-header.h" ] && { echo "Generated Wayland headers"; return 0; }
+    fi
+
+    echo "Wayland headers not available - wayland-scanner or protocols missing"
+    exit 1
+}
+
+############################################
+# 11. Shader compilation
+############################################
+compile_shaders() {
+    cd $VULKAN_TOOLS_DIR/cube
+    # Check if shader .inc files already exist
+    [ -f "cube.vert.inc" ] && [ -f "cube.frag.inc" ] && return 0
+
+    # Look for glslangValidator in multiple locations
+    local GLSLANG_VALIDATOR=""
+
+    # Check standard paths
+    if command -v glslangValidator >/dev/null 2>&1; then
+        GLSLANG_VALIDATOR="glslangValidator"
+    # Check Vulkan-Tools local glslang directory
+    elif [ -f "../glslang/linux/bin/glslangValidator" ]; then
+        GLSLANG_VALIDATOR="../glslang/linux/bin/glslangValidator"
+    # Check if we can download it
+    elif [ -f "../scripts/fetch_glslangvalidator.py" ]; then
+        echo "Downloading glslangValidator..."
+        setup_glslang_validator
+        [ -f "../glslang/linux/bin/glslangValidator" ] && GLSLANG_VALIDATOR="../glslang/linux/bin/glslangValidator"
+    fi
+
+    # Compile shaders if we have glslangValidator
+    if [ -n "$GLSLANG_VALIDATOR" ]; then
+        echo "Compiling shaders with $GLSLANG_VALIDATOR..."
+        # Use -x flag to generate C header format directly (same as CMake)
+        $GLSLANG_VALIDATOR -V -x -o cube.vert.inc cube.vert 2>/dev/null
+        $GLSLANG_VALIDATOR -V -x -o cube.frag.inc cube.frag 2>/dev/null
+
+        [ -f "cube.vert.inc" ] && [ -f "cube.frag.inc" ] && {
+            echo "Compiled shaders to .inc files"
+            return 0
+        }
+    fi
+
+    echo "Error: Unable to compile shaders - glslangValidator not available"
+    echo "Install glslangValidator or ensure Vulkan-Tools fetch script works"
+    exit 1
+}
+
+#########################################################
+# 12. Setting up glslangValidator for shader compilaltion
+#########################################################
+setup_glslang_validator() {
+    # Navigate to parent directory to run the fetch script
+    local ORIG_DIR=$(pwd)
+    cd ..
+
+    # Try to determine the correct glslang release name
+    local RELEASE_NAME=""
+    if uname -s | grep -q "Linux"; then
+        RELEASE_NAME="glslang-master-linux-Release.zip"
+    elif uname -s | grep -q "Darwin"; then
+        RELEASE_NAME="glslang-master-osx-Release.zip"
+    else
+        echo "Unsupported platform for automatic glslang download"
+        cd "$ORIG_DIR"
+        exit 1
+    fi
+
+    # Try with python3, then python
+    if command -v python3 >/dev/null 2>&1; then
+        python3 scripts/fetch_glslangvalidator.py "$RELEASE_NAME" 2>/dev/null
+    elif command -v python >/dev/null 2>&1; then
+        python scripts/fetch_glslangvalidator.py "$RELEASE_NAME" 2>/dev/null
+    else
+        echo "Python not found - cannot auto-download glslangValidator"
+        cd "$ORIG_DIR"
+        exit 1
+    fi
+
+    cd "$ORIG_DIR"
+    echo "Downloaded glslangValidator"
+}
+
+############################################
+# 13. vkcube compilation main function
+############################################
+compile_vkcube()
+{
+    if [[ -z "$PLATFORM" ]];then
+        echo "NO PLATFORM is selected for vkcube compilation"
+        echo "Setting PLATFORM to RPI4"
+        PLATFORM="RPI4"
+    fi
+
+    echo -e "\nCompiling vkcube for $PLATFORM platform"
+    cd $ROOT_DIR
+    clone_vulkan_tools $VULKAN_VERSION $PLATFORM
+    if [ $INSTALLED_VULKAN_HEADERS != "TRUE" ];then
+        install_vulkan_headers
+    fi
+
+    add_struct_members
+    add_performance_functions
+    add_performance_hook
+    add_cleanup_update
+    add_duration_exit
+    add_initialization
+    add_arguments
+    add_wayland_guards
+    generate_wayland_headers_minimal
+    compile_shaders
+    cd $VULKAN_TOOLS_DIR/cube/
+    $CC cube.c xdg-shell-protocol.c xdg-decoration-protocol.c -o vkcube     -DVK_USE_PLATFORM_WAYLAND_KHR     -lvulkan -lwayland-client -lpthread -lm >> "$LOG_FILE" 2>&1
+    if [ -f $VULKAN_TOOLS_DIR/cube/vkcube ];then
+        echo "Binary available in $VULKAN_TOOLS_DIR/cube/vkcube"
+	echo -e "\e[1;42m VKCUBE COMPILATION : SUCCESS \e[0m" | tee -a "$LOG_FILE"
+	vkcube_compiled="TRUE"
+    else
+	echo -e "\e[1;41m VKCUBE COMPILATION : FAILURE \e[0m" | tee -a "$LOG_FILE"
+	exit 1
+    fi
+}
+
+##########################################################
+# vkcube code end
+##########################################################
 
 compile_tdkv()
 {
@@ -1503,7 +2024,7 @@ compile_tdkv()
     CONF_DEVICE=CONFIGURE_OPTIONS_$DEVICE_TYPE
     CONF_OPTIONS="${!CONF_DEVICE} $DISTRO_CONFIGURE $CONFIGURE_OPTIONS_VA  $CONFIGURE_OPTIONS_COMPONENTS"
     if [[ $FNCS_PACKAGE == "TRUE" ]];then
-        CONF_OPTIONS=" --enable-fncsPackage --enable-tdkgraphics "
+        CONF_OPTIONS=" --enable-fncsPackage --enable-tdkgraphics --enable-graphicstestapps"
 	echo "FNCS Package compilation enabled"
     fi
     if [[ $CONF_OPTIONS == *"enable-powermgrhal"* ]] || [[ $CONF_OPTIONS == *"enable-rdkfwupdater"* ]];then
@@ -1643,11 +2164,18 @@ pack_tdkv()
         fi
     fi
     if [[ $vkmark_compiled == "TRUE" ]];then
+	echo "Copying vkmark"
 	cp $ROOT_DIR/vkmark_$PLATFORM.tgz TDK_Package/
 	cd TDK_Package/
 	tar -xvf vkmark_$PLATFORM.tgz >> $LOG_FILE 2>&1
+	rm vkmark_$PLATFORM.tgz
 	cd $ROOT_DIR
 	rm vkmark_$PLATFORM.tgz
+    fi
+    if [[ $vkcube_compiled == "TRUE" ]];then
+	echo "Copying vkcube"
+	cp $VULKAN_TOOLS_DIR/cube/vkcube $ROOT_DIR/TDK_Package/usr/bin
+	rm -rf $VULKAN_TOOLS_DIR
     fi
     if [[ $FNCS_PACKAGE != "TRUE" ]];then
         mkdir -p TDK_Package/var/TDK/scripts
@@ -1700,7 +2228,28 @@ pack_tdkv()
 	cp FireboltCompliance_Validation/graphics_validation/Essos_TDKTestApp ../TDK_Package/usr/bin
         cp FireboltCompliance_Validation/graphics_validation/.libs/Westeros_TDKTestApp ../TDK_Package/usr/bin
 	cp FireboltCompliance_Validation/scripts/RunGraphicsTDKTest.sh ../TDK_Package/opt/TDK
+	cp Graphics_TestApplications/tiles_benchmark ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/motion_benchmark ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/vkmultithread ../TDK_Package/usr/bin
+	cp Graphics_TestApplications/oglmultithread ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/vkoverlay ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/ogloverlay ../TDK_Package/usr/bin
     fi
+    if [[ $CONF_OPTIONS == *"enable-graphicstestapps"* ]];then
+        shaders="$(find $ROOT_DIR -iname shaders.tgz)"
+        if [  -z "$shaders" ];then
+            echo -e "shaders.tgz not found"
+            exit 1
+        fi
+	cp $ROOT_DIR/shaders.tgz ../TDK_Package/opt/TDK
+	cd ../TDK_Package/opt/TDK
+	tar -xf shaders.tgz
+	rm shaders.tgz
+	cd $ROOT_DIR/$DIR_TDK
+    fi
+
+    ## NOTE : REMOVE THIS IN CASE TDK AGENT ENABLED COMPONENT IS COMPILED AS PART OF TDK PACKAGE
+    touch ../TDK_Package/opt/TDK/.no_tdk_agent
 
     if [ $SKIP_PLATFORM != "TRUE" ];then
 	cd ../
@@ -1774,9 +2323,9 @@ pack_tdkv()
     formatted_date=$(echo "$system_date" | awk '{ printf "%02d%02d%04d_%02d%02d%02d\n", $3, (index("JanFebMarAprMayJunJulAugSepOctNovDec", $2)+2)/3, $6, substr($4,1,2), substr($4,4,2), substr($4,7,2) }')
 
     if [ -z $PLATFORM ];then
-	PACKAGE_NAME="Generic_TDK_Package_${IMAGE_TYPE}_${formatted_date}.tar.gz"
+	PACKAGE_NAME="Generic_TDK_Package_${formatted_date}.tar.gz"
     else
-	PACKAGE_NAME="TDK_Package_${PLATFORM}_${IMAGE_TYPE}_${formatted_date}.tar.gz"
+	PACKAGE_NAME="TDK_Package_${PLATFORM}_${formatted_date}.tar.gz"
     fi
     tar -cvzf $PACKAGE_NAME -C TDK_Package . >> $LOG_FILE 2>&1
     if [ $? -eq 0 ]; then
@@ -1829,8 +2378,8 @@ cleanup()
     echo -e "Removing all the directories before exiting\n" 2>&1 | tee -a $LOG_FILE
     cd $ROOT_DIR
     cd -
-    rm -rf $ROOT_DIR/tdkv/temp
-    rm -rf $ROOT_DIR/tdkv/RDK_Source
+    rm -rf $ROOT_DIR/$DIR_TDK/temp
+    rm -rf $ROOT_DIR/$DIR_TDK/RDK_Source
     if [ $? -eq 0 ]; then
         echo -e "\e[1;42m REMOVE SOURCE CODE : SUCCESS \e[0m \n" 2>&1 | tee -a $LOG_FILE
     else
@@ -1890,6 +2439,8 @@ fi
 clone_tdk
 compile_skeleton_libraries
 compile_vkmark
+sleep_bar
+compile_vkcube
 sleep_bar
 compile_tdkv
 sleep_bar

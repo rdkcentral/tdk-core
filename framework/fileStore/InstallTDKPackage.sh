@@ -146,12 +146,16 @@ start_tdk() {
 
     setup_graphics_softlinks
 
-    echo -e "\nEnable TDK service\n"
-    systemctl enable tdk
-    sleep 1
-    echo -e "Going to start tdk service\n"
-    sleep 1
-    systemctl restart tdk
+    [ ! -f "/opt/TDK/.no_tdk_agent" ] && tdk_agent_present=1 || tdk_agent_present=0
+
+    if [ $tdk_agent_present -ne 0 ];then
+        echo -e "\nEnable TDK service\n"
+        systemctl enable tdk
+        sleep 1
+        echo -e "Going to start tdk service\n"
+        sleep 1
+        systemctl restart tdk
+    fi
 }
  
 # Check if TDK_Package.tar.gz is present in / folder.

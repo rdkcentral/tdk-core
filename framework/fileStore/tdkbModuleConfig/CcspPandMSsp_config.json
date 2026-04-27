@@ -1,0 +1,155 @@
+{
+    "Device.X_RDKCENTRAL-COM_DeviceControl.DeviceNetworkingMode": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.LAN.Bridge.1.Name": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.X_RDK_LANConfig.ManagedWiFiEnable": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.LAN.Bridge.1.WiFiInterfaces": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.DeviceInfo.X_COMCAST-COM_WAN_IP": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.DeviceInfo.X_COMCAST-COM_WAN_IPv6": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.RouterAdvertisement.X_RDK_PvD.Enable": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.RouterAdvertisement.X_RDK_PvD.H-Flag": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.RouterAdvertisement.X_RDK_PvD.Delay": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.RouterAdvertisement.X_RDK_PvD.SeqNumber": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.RouterAdvertisement.X_RDK_PvD.FQDN": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.X_RDK_Speedboost.Data": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.X_RDK_Speedboost.NumberConfiguredDevices": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.X_RDK_Speedboost.NumberEligibleDevices": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.X_RDK_Speedboost.CurrentDeviceList": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.X_RDK_Speedboost.PortRanges": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    },
+    "Device.X_RDK_Speedboost.NormalPortRange": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef  RBUS_WAN_IP"]
+    }
+}

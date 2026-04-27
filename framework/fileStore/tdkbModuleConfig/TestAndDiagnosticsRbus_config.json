@@ -1,0 +1,70 @@
+{
+    "Device.QOS.X_RDK_LatencyMeasure_IPv4Enable": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.QOS.X_RDK_LatencyMeasure_IPv6Enable": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.QOS.X_RDK_LatencyMeasure_PercentileCalc_Enable": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.QOS.X_RDK_LatencyMeasure_TCP_ReportInterval": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[1:1440]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.QOS.X_RDK_LatencyMeasure_TCP_Stats_Report": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.QOS.X_RDK_DscpControlPerClient.Data": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": [""],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef RDK_SCHEDULER_ENABLED"]
+    },
+    "Device.QOS.X_RDK_DscpControlPerClient.ActiveRules": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

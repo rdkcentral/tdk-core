@@ -108,7 +108,7 @@ if "SUCCESS" in result.upper():
     password = ssh_params[1]
 
     #Set module
-    modules = ["L1 dsHost", "L1 dsHost -- advanced"]
+    modules = ["L1 dsHost"]
     #Set binary name
     binaryName = DeviceSettings_binaryName
     #Set TestCase Config
@@ -118,7 +118,7 @@ if "SUCCESS" in result.upper():
     #SkipTestCaseList
     SkipTestCaseList = Host_L1_SkipTestCaseList
     boxtype = obj.getDeviceBoxType();
-    if (boxtype == "RPI-Client"):
+    if ("RPI-Client" in boxtype):
         SkipTestCaseList = Host_L1_SkipTestCaseList_RPI
 
     for module in modules:

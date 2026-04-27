@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2025 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib; 
-import re
+from Vulkanlib import resolution, api
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
@@ -28,38 +28,41 @@ obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'Vkmark_Benchmark_Score');
-
+obj.configureTestCase(ip,port,'Vulkan_Motion_Benchmark');
 
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 expectedResult="SUCCESS"
-
+command=f"cd /opt/TDK; motion_benchmark  --api={api} --runtime 60 --csv motion_{api}_{resolution}.csv"
 
 if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('set_prerequisites');
+    boxtype = obj.getDeviceBoxType();
+    if "RPI-Client" in boxtype:
+        tdkTestObj.addParameter("model", "RPI")
+    print("\nTesting Resolution ", resolution)
+    tdkTestObj.addParameter("resolution", resolution)
     tdkTestObj.executeTestCase(expectedResult);
     details = tdkTestObj.getResultDetails()
-
     if "SUCCESS" in details:
         print("PRE-REQUISITES SUCCESSFULLY SET")
-        tdkTestObj = obj.createTestStep('execute_binary')
-        #command = "while ! ls /run/westeros* 1>/dev/null 2>&1; do sleep 1; done; export XDG_RUNTIME_DIR=/run; export WAYLAND_DISPLAY=$(ls /run/westeros* | head -n1); vkmark --winsys-dir /usr/lib/vkmark/ --data-dir /usr/share/vkmark/ --winsys wayland --present-mode=fifo"
-        tdkTestObj.executeTestCase(expectedResult);
-        detail = tdkTestObj.getResultDetails()
-        
-        match = re.search(r"vkmark Score:\s*(\d+)", detail, re.IGNORECASE)
-
-        if not detail or "error" in detail.lower() or not match:
-            print ("FAILURE : Unable to obtain the Vkmark score")
-            tdkTestObj.setResultStatus("FAILURE")
-        else:
-            score = match.group(1)
-            print(f"Vkmark Score Obtained : {score}")
+        tdkTestObj = obj.createTestStep('run_test')
+        tdkTestObj.addParameter("command",command)
+        tdkTestObj.executeTestCase(expectedResult)
+        details = tdkTestObj.getResultDetails()
+        if "SUCCESS" in details:
             tdkTestObj.setResultStatus("SUCCESS")
+        else:
+            print ("Setting Result as FAILURE")
+            tdkTestObj.setResultStatus("FAILURE")
+
+        tdkTestObj = obj.createTestStep('execute_postrequisites')
+        tdkTestObj.executeTestCase(expectedResult)
+        details = tdkTestObj.getResultDetails()
+        print("POST-REQUISITES EXECUTION SUCCESSFUL")
+
     else:
         print("Unable to set PRE-REQUISITES")
 
 obj.unloadModule("Vulkan");
-
