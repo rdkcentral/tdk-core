@@ -1091,10 +1091,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
         elif tag == "system_check_negative_scenario":
-            info = result
-            if str(result.get("success")).lower() == "false":
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info = result
+                    if str(result.get("success")).lower() == "false":
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
         elif tag == "system_check_friendly_name":
             info = checkAndGetAllResultInfo(result,result.get("success"))
@@ -2678,10 +2686,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "framerate_check_negative_scenario":
-            info = result
-            if str(result.get("success")).lower() == "false":
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    if str(result.get("success")).lower() == "false":
+                        info = result
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "framerate_check_display_framerate":
@@ -2826,29 +2842,28 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         # Monitor Plugin Response result parser steps
         elif tag == "monitor_get_result_data":
-            if arg[1] =="yes":
-                if arg[0] == "get_status":
-                    measurements =  result[0].get("measurements")
-                    info["observable"] = result[0].get("observable")
-                    info["restart_limit"] = result[0].get("restart").get("limit")
-                    info["restart_window"] = result[0].get("restart").get("window")
-                elif arg[0] == "get_reset_statistics":
-                    measurements =  result.get("measurements")
-                    info["observable"] = result.get("observable")
-                    info["restart_limit"] = result.get("restart").get("limit")
-                    info["restart_window"] = result.get("restart").get("window")
-                status = []
-                measurement_detail = []
-                for key in measurements:
-                    detail_Values=[]
-                    detail_Values.append(measurements.get(key))
-                    status.append(checkNonEmptyResultData(detail_Values))
-                    measurement_detail.append(str(key)+": "+str(measurements.get(key)))
-                info["measurements"] =  measurement_detail
-                if "FALSE" not in status:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
+            if arg[0] == "get_status":
+                measurements =  result[0].get("measurements")
+                info["observable"] = result[0].get("observable")
+                info["restart_limit"] = result[0].get("restart").get("limit")
+                info["restart_window"] = result[0].get("restart").get("window")
+            elif arg[0] == "get_reset_statistics":
+                measurements =  result.get("measurements")
+                info["observable"] = result.get("observable")
+                info["restart_limit"] = result.get("restart").get("limit")
+                info["restart_window"] = result.get("restart").get("window")
+            status = []
+            measurement_detail = []
+            for key in measurements:
+                detail_Values=[]
+                detail_Values.append(measurements.get(key))
+                status.append(checkNonEmptyResultData(detail_Values))
+                measurement_detail.append(str(key)+": "+str(measurements.get(key)))
+            info["measurements"] =  measurement_detail
+            if "FALSE" not in status:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
         
         # ScreenCapture Plugin Response result parser steps
         elif tag == "screencapture_upload_screen":
@@ -4126,11 +4141,15 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "success_status_validation":
             try:
-                info["success"] = result.get("success")
-                if str(result.get("success")).lower() == "true":
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
                     info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["success"] = result.get("success")
+                    if str(result.get("success")).lower() == "true":
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
             except Exception as e:
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
@@ -4147,11 +4166,15 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "success_negative_status_validation":
             try:
-                info = result
-                if str(result.get("success")).lower() == "false":
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
                     info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info = result
+                    if str(result.get("success")).lower() == "false":
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
             except Exception as e:
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
@@ -4461,6 +4484,22 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "appmanger_check_appproperty_status":
+            try:
+                # Check if error info exists
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if int(result) == int(expectedValues[0]):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
         # RDKWindowManager Response result parser steps
         elif tag == "rwm_null_result_validation":
             try:
@@ -4579,8 +4618,9 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "downloadmanager_getstorage_details_validation":
             try:
                 info["result"] = result
-                status = checkNonEmptyResultData(result)
-                if "FALSE" not in status:
+                #Simple check: not empty and all values are non-zero
+                is_valid = bool(result) and all(value != 0 for value in result.values())
+                if is_valid:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
