@@ -67,9 +67,9 @@
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator</test_setup>
     <test_setup>RPI-Client</test_setup>
-    <pre_requisite>In the field of the RFC_XCONF_URL device configuration file, the Xconf server url must be given</pre_requisite>
+    <pre_requisite>In the device configuration file, the RFC_XCONF_URL and XCONF_AUTHORIZATION_TOKEN_KEY variables must be configured</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
-    <input_parameters>RFC_XCONF_URL</input_parameters>
+    <input_parameters>RFC_XCONF_URL and XCONF_AUTHORIZATION_TOKEN_KEY</input_parameters>
     <automation_approch>1: Check if the configured Xconf URL is accessible
 2: Enable the maintenancemanager plugin
 3: Check the presence of the partnerId3.dat file and ensure the 'community' string is included in it
@@ -104,23 +104,23 @@
 </xml>
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
-import tdklib;
+import tdklib
 import time
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("rdkvxconfrfc","1",standAlone=True);
+obj = tdklib.TDKScriptingLibrary("rdkvxconfrfc","1",standAlone=True)
 
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_RFC_ThunderSecurity_Enable');
+obj.configureTestCase(ip,port,'RDKV_RFC_ThunderSecurity_Enable')
 
 #Get the result of connection with test component and DUT
-result =obj.getLoadModuleResult();
-print("[LIB LOAD STATUS]  :  %s" %result);
+result =obj.getLoadModuleResult()
+print("[LIB LOAD STATUS]  :  %s" %result)
 
-obj.setLoadModuleStatus(result.upper());
+obj.setLoadModuleStatus(result.upper())
 expectedResult = "SUCCESS"
 Feature_Creation_Status="FAILURE"
 
@@ -144,7 +144,24 @@ if "SUCCESS" in result.upper():
         tdkTestObj.setResultStatus("SUCCESS")
 
         print("\n")
-        #Step 2: Enable the maintenancemanager plugin
+        #Step 2: Get the authorization token from the device configuration
+        tdkTestObj = obj.createTestStep('rfc_getDeviceConfig')
+        tdkTestObj.addParameter("basePath",obj.realpath)
+        tdkTestObj.addParameter("configKey","XCONF_AUTHORIZATION_TOKEN_KEY")
+        tdkTestObj.executeTestCase(expectedResult)
+        detail = tdkTestObj.getResultDetails()
+        if not detail:
+            print("FAILURE : Unable to get the authorization token")
+            tdkTestObj.setResultStatus("FAILURE")
+            obj.unloadModule('rdkvxconfrfc')
+            exit()
+
+        print("SUCCESS : Authorization token %s is obtained successfully" % detail)
+        XCONF_AUTHORIZATION_TOKEN_KEY = detail
+        tdkTestObj.setResultStatus("SUCCESS")
+
+        print("\n")
+        #Step 3: Enable the maintenancemanager plugin
         method = "org.rdk.MaintenanceManager"
         params = '{ "callsign": "org.rdk.MaintenanceManager" }'
         tdkTestObj = obj.createTestStep('rfc_enable_maintenance_manager')
@@ -156,7 +173,7 @@ if "SUCCESS" in result.upper():
             tdkTestObj.setResultStatus("SUCCESS")
 
             print("\n")
-            #Step 3: Check the presence of the partnerId3.dat file and ensure the 'community' string is included in it
+            #Step 4: Check the presence of the partnerId3.dat file and ensure the 'community' string is included in it
             tdkTestObj = obj.createTestStep('rfc_datfilechecker')
             tdkTestObj.executeTestCase(expectedResult)
             detail = tdkTestObj.getResultDetails()
@@ -164,7 +181,7 @@ if "SUCCESS" in result.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
 
                 print("\n")
-                #Step 4: Check the presence of the partners_defaults.json file and ensure the Xconf domain URL is included in it
+                #Step 5: Check the presence of the partners_defaults.json file and ensure the Xconf domain URL is included in it
                 tdkTestObj = obj.createTestStep('rfc_partnersdefaultschecker')
                 tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
                 tdkTestObj.executeTestCase(expectedResult)
@@ -173,7 +190,7 @@ if "SUCCESS" in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
 
                     print("\n")
-                    #Step 5: Check the RFC parameter value prior to making any changes
+                    #Step 6: Check the RFC parameter value prior to making any changes
                     tdkTestObj = obj.createTestStep('rfc_datamodelcheck')
                     rfcparameter="Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.ThunderSecurity.Enable"
                     tdkTestObj.addParameter("rfcparameter",rfcparameter)
@@ -183,7 +200,7 @@ if "SUCCESS" in result.upper():
                         tdkTestObj.setResultStatus("SUCCESS")
 
                         print("\n")
-                        #Step 6: Creating a feature name for configuration in the Xconf server
+                        #Step 7: Creating a feature name for configuration in the Xconf server
                         tdkTestObj = obj.createTestStep('rfc_formfeaturename')
                         feature_name="ThunderSecurity.Enable"
                         tdkTestObj.addParameter("feature_name",feature_name)
@@ -199,7 +216,7 @@ if "SUCCESS" in result.upper():
                             tdkTestObj.setResultStatus("SUCCESS")
 
                             print("\n")
-                            #Step 7: Creating a feature and its corresponding rule in the Xconf server
+                            #Step 8: Creating a feature and its corresponding rule in the Xconf server
                             tdkTestObj = obj.createTestStep('rfc_initializefeatures')
                             if  "true" in actualvalue:
                                 expectedvalue="false"
@@ -210,6 +227,7 @@ if "SUCCESS" in result.upper():
                             tdkTestObj.addParameter("feature_name",feature_name)
                             tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
                             tdkTestObj.addParameter("rfcparameter",rfcparameter)
+                            tdkTestObj.addParameter("XCONF_AUTHORIZATION_TOKEN_KEY",XCONF_AUTHORIZATION_TOKEN_KEY)
                             tdkTestObj.addParameter("expectedvalue",expectedvalue)
                             tdkTestObj.executeTestCase(expectedResult)
                             actualresult = tdkTestObj.getResultDetails()
@@ -219,7 +237,7 @@ if "SUCCESS" in result.upper():
 
                                 print("\n")
                                 time.sleep(60)
-                                #Step 8: Check the correctness of all settings created in the Xconf server
+                                #Step 9: Check the correctness of all settings created in the Xconf server
                                 tdkTestObj = obj.createTestStep('rfc_checkconfiguredata')
                                 tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
                                 tdkTestObj.addParameter("rfcparameter",rfcparameter)
@@ -231,7 +249,7 @@ if "SUCCESS" in result.upper():
                                     tdkTestObj.setResultStatus("SUCCESS")
 
                                     print("\n")
-                                    #Step 9: Disable and enable the maintenance manager plugin
+                                    #Step 10: Disable and enable the maintenance manager plugin
                                     method = "org.rdk.MaintenanceManager"
                                     params = '{ "callsign": "org.rdk.MaintenanceManager" }'
                                     tdkTestObj = obj.createTestStep('rfc_disable_enable_maintenance_manager')
@@ -243,7 +261,7 @@ if "SUCCESS" in result.upper():
                                         tdkTestObj.setResultStatus("SUCCESS")
 
                                         time.sleep(5)
-                                        #Step 10: Check if the Xconf RFC settings are applied on the device
+                                        #Step 11: Check if the Xconf RFC settings are applied on the device
                                         tdkTestObj = obj.createTestStep('rfc_check_setornot_configdata')
                                         tdkTestObj.addParameter("rfcparameter",rfcparameter)
                                         tdkTestObj.addParameter("expectedvalue",expectedvalue)
@@ -252,13 +270,14 @@ if "SUCCESS" in result.upper():
                                         if "FAILURE" not in actualresult:
                                             tdkTestObj.setResultStatus("SUCCESS")
 
-                                            #Step 11: Revert the RFC parameter to its original value
+                                            #Step 12: Revert the RFC parameter to its original value
                                             print("\nRevert the RFC parameter to its original value")
                                             print("=====================================\n")
                                             tdkTestObj = obj.createTestStep('rfc_initializefeatures')
                                             tdkTestObj.addParameter("feature_name",feature_name)
                                             tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
                                             tdkTestObj.addParameter("rfcparameter",rfcparameter)
+                                            tdkTestObj.addParameter("XCONF_AUTHORIZATION_TOKEN_KEY",XCONF_AUTHORIZATION_TOKEN_KEY)
                                             tdkTestObj.addParameter("expectedvalue",actualvalue)
                                             tdkTestObj.executeTestCase(expectedResult)
                                             actualresult = tdkTestObj.getResultDetails()
@@ -318,6 +337,7 @@ if "SUCCESS" in result.upper():
                                 print("\n")
                                 tdkTestObj = obj.createTestStep('rfc_deletefeaturerule')
                                 tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
+                                tdkTestObj.addParameter("XCONF_AUTHORIZATION_TOKEN_KEY",XCONF_AUTHORIZATION_TOKEN_KEY)
                                 tdkTestObj.executeTestCase(expectedResult)
                                 actualresult = tdkTestObj.getResultDetails()
                                 if expectedResult in actualresult:
@@ -325,6 +345,7 @@ if "SUCCESS" in result.upper():
                                     print("\n")
                                     tdkTestObj = obj.createTestStep('rfc_deletefeature')
                                     tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
+                                    tdkTestObj.addParameter("XCONF_AUTHORIZATION_TOKEN_KEY",XCONF_AUTHORIZATION_TOKEN_KEY)
                                     tdkTestObj.executeTestCase(expectedResult)
                                     actualresult = tdkTestObj.getResultDetails()
                                     if expectedResult in actualresult:
@@ -349,4 +370,4 @@ else:
     print("\nFAILURE : Module Loading Status Failure\n")
 
 #unload module
-obj.unloadModule('rdkvxconfrfc');
+obj.unloadModule('rdkvxconfrfc')
