@@ -194,26 +194,31 @@ get_wlan_mac()
 # To delete the saved wifi connection in the wlan client
 delete_saved_wifi_connections()
 {
-	if [ "$var2" == "$var3" ] && [ "$var3" == "$var4" ]; then
-		ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+        ls_2ghz=""
+        ls_5ghz=""
+        ls_6ghz=""
 
-	elif ["$var2" == "$var3" ]; then
-		ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
-		ls_6ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var4.nmconnection")"
+        if [ "$var2" = "$var3" ] && [ "$var3" = "$var4" ]; then
+                ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
 
-	elif [ "$var2" == "$var4" ]; then
-		ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
-		ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
+        elif [ "$var2" = "$var3" ]; then
+                ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+                ls_6ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var4.nmconnection")"
 
-	elif [ "$var3" == "$var4" ]; then
-		ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
-		ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
+        elif [ "$var2" = "$var4" ]; then
+                ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+                ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
 
-	else
-		ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
-		ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
-		ls_6ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var4.nmconnection")"
-	fi
+        elif [ "$var3" = "$var4" ]; then
+                ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+                ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
+
+        else
+                ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+                ls_5ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var3.nmconnection")"
+                ls_6ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var4.nmconnection")"
+        fi
+
 
         if [ -n "$ls_2ghz" ]; then
                 wifi_2ghz="$(rm -f /etc/NetworkManager/system-connections/"$var2.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
@@ -516,7 +521,8 @@ start_node()
 #To kill the selenium hub and node
 kill_selenium()
 {
-        sudo kill -9 `echo $(ps -ef | grep selenium | grep -v grep|awk '{print $2;}')`
+        value="$(sudo pkill -f "node" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+        echo "OUTPUT:$value"
 }
 
 #Triggering port
