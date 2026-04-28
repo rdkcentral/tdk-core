@@ -85,11 +85,11 @@
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import json
-from rdkv_performancelib import *
 from StabilityTestUtility import *
 import PerformanceTestVariables
 import rdkv_performancelib
 from web_socket_util import *
+from rdkv_performancelib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);

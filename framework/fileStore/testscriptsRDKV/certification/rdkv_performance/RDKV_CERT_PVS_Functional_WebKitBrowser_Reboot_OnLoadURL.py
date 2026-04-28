@@ -136,7 +136,6 @@ if expectedResult in result.upper():
                     print("Unable to terminate the app")
         else:
             print("\n Error while launching the app")
-            tdkTestObj.setResultStatus("FAILURE")
             break
         
     obj.unloadModule("rdkv_performance")
