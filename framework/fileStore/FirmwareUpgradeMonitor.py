@@ -49,7 +49,7 @@ def fw_upgrade_checker(dest_ip, initial_firmware, target_firmware, fw_binary):
     try:
         print(f"Revert the firmware to initial firmware version {initial_firmware}")
         revert_flag = True
-        revert_command = f'setsid sh -c "sleep 5;{revert_command}" > /dev/null 2>&1 &'
+        revert_command = f'setsid sh -c "sleep 5;{fw_binary}" > /dev/null 2>&1 &'
         print(f"Revert Command : {revert_command}")
         result = subprocess.run(["ssh", "-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-o", "ConnectTimeout=10", f"{username}@{hostname}", revert_command], capture_output=True, text=True)
     except Exception as e:
