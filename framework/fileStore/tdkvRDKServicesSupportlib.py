@@ -40,6 +40,7 @@ import IPChangeDetectionVariables
 import os
 import datetime
 import importlib 
+import html
 
 timeZones = []
 
@@ -3031,12 +3032,31 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
         elif tag == "persistentstore_check_value":
-            info["value"] = result.get("value")
-            success = str(result.get("success")).lower() == "true"
-            if success and str(result.get("value")) in expectedValues:
-                info["Test_Step_Status"] = "SUCCESS"
+            if len(arg) and arg[0] == "lightningapp_url_check":
+                try:
+                    if otherInfo and "error" in otherInfo:
+                        info["error_info"] = otherInfo["error"]
+                        info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["value"] = result.get("value")
+                        success = str(result.get("success")).lower() == "true"
+                        actual_url = str(result.get("value"))
+                        actual = html.unescape(actual_url.strip())
+                        expected = html.unescape(expectedValues[0].strip())
+                        if success and actual == expected:
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                except Exception as e:
+                    info["error"] = str(e)
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                info["value"] = result.get("value")
+                success = str(result.get("success")).lower() == "true"
+                if success and str(result.get("value")) in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
         elif tag == "persistentstore_get_keys":
             keys = result.get("keys")
             info["Keys"] = keys
@@ -3557,15 +3577,21 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
-        
-        #Fetch the complete configuration and save it
+
         elif tag == "controller_get_configuration":
-            status = checkNonEmptyResultData(result)
-            info["configuration"] = result
-            info["url"] = expectedValues[0]
-            if status:
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info = result
+                    status = checkNonEmptyResultData(result)
+                    if status:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error_info"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "controller_check_discovery_result":
@@ -6849,9 +6875,10 @@ def generateComplexTestInputParam(methodTag,testParams):
         elif tag == "rwm_generate_key":
             #print(testParams,"testParams")
             if "clientId" in testParams:
-                userGeneratedParam = { "keys": [{"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"delay": int(testParams.get("delay"))}],"clientId": testParams.get("clientId") }
+                userGeneratedParam = { "keys": [{"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"delay": float(testParams.get("delay"))}],"clientId": testParams.get("clientId") }
             else:
-                userGeneratedParam = { "keys": [{"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"delay": int(testParams.get("delay")) } ] }
+                userGeneratedParam = { "keys": [{"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"delay": float(testParams.get("delay")) } ] }
+                #userGeneratedParam = { "keys": json.dumps({ "keys": [{ "keyCode": int(testParams.get("keyCode")), "modifiers": testParams.get("modifiers"), "delay": float(testParams.get("delay")) }] }) }
         elif tag == "rwm_invalid_generate_key":
             #print(testParams,"testParams")
             userGeneratedParam = { "keys": [{"keyCode": testParams.get("keyCode"),"modifiers": testParams.get("modifiers"),"delay": testParams.get("delay"),"clientId": testParams.get("clientId") } ] }
