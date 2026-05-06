@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>022ff541-0b7d-4c8f-bd46-7e4999c343a8</moduleId>
+        <!-- Module name -->
+        <moduleName>rdkv_appmanagers</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>2</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="f9f05f04-3c8e-4786-9967-434e2a1e40fd" name="appmanagers_checkpluginstatus">
+                <parameters>
+                    <parameter id="7f60be68-102a-408b-b20f-ce09207e03d7" parameterName="pluginlist" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="5b722c41-9a0f-40a1-b720-76308dd3291f" name="appmanagers_getvalue">
+                <parameters>
+                    <parameter id="e29af163-d5ab-49c6-818d-d040a24dd483" parameterName="method" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="cf548fb2-8454-4f17-8a25-436311590b76" name="appmanagers_executeInDUT">
+                <parameters>
+                    <parameter id="a60fed36-5e51-41b5-8309-79f460410b59" parameterName="command" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="50136472-bef1-4877-8a9f-bb777335175c" name="appmanagers_setvalue">
+                <parameters>
+                    <parameter id="b63aab31-339f-4b34-9ad8-934db1375dd2" parameterName="method" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8557bc9f-feb3-4f38-b814-65d30ac94429" parameterName="value" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a5df5084-9e6f-4bf5-88d3-eebe973d2699" name="appmanagers_getdeviceconfig">
+                <parameters>
+                    <parameter id="0680889e-6fe1-4911-82fb-a5c44f264f27" parameterName="configkeylist" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>07f95335-d9b4-45ca-916d-27b235c2e429</id>
+                <name>appmanagers_setvalue</name>
+                <funName>appmanagers_setvalue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c6dd6972-4f06-4623-a2a7-5743d8f92adb</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>df763f2b-059b-4dea-ae29-35487a63d647</id>
+                        <parameterName>value</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>4b33df70-40dc-4d3c-a1b5-c56d9a054de6</id>
+                <name>appmanagers_executeInDUT</name>
+                <funName>appmanagers_executeInDUT</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>242affaf-d3c8-47d0-a6d1-3db83b76e0c1</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>8751b0d5-8719-420a-8d55-bb1924f793bb</id>
+                <name>appmanagers_checkpluginstatus</name>
+                <funName>appmanagers_checkpluginstatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>ffd3553a-4846-411c-aeb4-41b4bbcaced1</id>
+                        <parameterName>pluginlist</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>d5aaf9e4-ec68-48fe-86dd-5509d3b5683c</id>
+                <name>appmanagers_getdeviceconfig</name>
+                <funName>appmanagers_getdeviceconfig</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>acd31bcf-d4a9-4b8c-a639-d789bacd3541</id>
+                        <parameterName>configkeylist</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>f5a6d77e-09e1-45be-acb7-4d30df5160c9</id>
+                <name>appmanagers_getvalue</name>
+                <funName>appmanagers_getvalue</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c0d0c3aa-c561-49a5-9246-f0390c6767b5</id>
+                        <parameterName>method</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

@@ -1,0 +1,1299 @@
+{
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_PingTest.Run": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_PingTest.PartnerID": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_PingTest.ecmMAC": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_PingTest.DeviceID": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_PingTest.DeviceModel": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.IPPing.DiagnosticsState": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["None","Requested","Complete","Error_CannotResolveHostName","Error_Internal","Error_Other","Canceled"],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.IPPing.Interface": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.IPPing.Host": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.IPPing.NumberOfRepetitions": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["1","2","3","4"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.IPPing.Timeout": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[1:]"
+        ],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.IPPing.DataBlockSize": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(1,65536)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.IPPing.DSCP": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["0"],
+        "expectedValues": ["range(0,64)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.IPPing.SuccessCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.IPPing.FailureCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.IPPing.AverageResponseTime": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.IPPing.MinimumResponseTime": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.IPPing.MaximumResponseTime": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.TraceRoute.DiagnosticsState": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["None"],
+        "expectedValues": ["None","Requested","Complete","Error_CannotResolveHostName","Error_MaxHopCountExceeded","Canceled"],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.TraceRoute.Interface": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.TraceRoute.Host": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.TraceRoute.NumberOfTries": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["3"],
+        "expectedValues": ["1","2","3"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.TraceRoute.Timeout": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["5000"],
+        "expectedValues": ["[1:]"
+        ],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.TraceRoute.DataBlockSize": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["38"],
+        "expectedValues": ["range(1,65536)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.TraceRoute.DSCP": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["0"],
+        "expectedValues": ["range(0,64)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.TraceRoute.MaxHopCount": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["30"],
+        "expectedValues": ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.TraceRoute.ResponseTime": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.TraceRoute.RouteHopsNumberOfEntries": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.DiagnosticsState": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["None"],
+        "expectedValues": ["None","Requested","Completed","Error_InitConnectionFailed","Error_NoResponse","Error_TransferFailed","Error_PasswordRequestFailed","Error_LoginFailed","Error_NoTransferMode","Error_NoPASV","Error_IncorrectSize","Error_Timeout"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.Interface": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "Interface_new"
+        }
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.DownloadURL": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.DownloadTransports": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["HTTP","FTP"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.DSCP": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["0"],
+        "expectedValues": ["range(0,64)"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.EthernetPriority": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["0"],
+        "expectedValues": ["0","1","2","3","4","5","6","7"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.ROMTime": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.BOMTime": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.EOMTime": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.TestBytesReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.TotalBytesReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.TCPOpenRequestTime": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.DownloadDiagnostics.TCPOpenResponseTime": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.DiagnosticsState": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["None","Requested","Completed","Error_InitConnectionFailed","Error_NoResponse","Error_PasswordRequestFailed","Error_LoginFailed","Error_NoTransferMode","Error_NoPASV","Error_NoCWD","Error_NoSTOR","Error_NoTransferComplete"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.Interface": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "Interface_new"
+        }
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.UploadURL": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.UploadTransports": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["HTTP","FTP"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.DSCP": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["0"],
+        "expectedValues": ["range(0,64)"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.EthernetPriority": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["0"],
+        "expectedValues": ["0","1","2","3","4","5","6","7"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.TestFileLength": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.ROMTime": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.BOMTime": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.EOMTime": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.TotalBytesSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.TCPOpenRequestTime": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UploadDiagnostics.TCPOpenResponseTime": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"],
+        "Set_type": "L2",
+        "Dependencies": {
+            "true": {
+                "Device.IP.Diagnostics.UDPEchoConfig.SourceIPAddress": "0.0.0.0",
+                "Device.IP.Diagnostics.UDPEchoConfig.UDPPort": 69
+            }
+        }
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.Interface": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "Interface_new"
+        }
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.SourceIPAddress": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "0.0.0.0"
+        }
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.UDPPort": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": 69
+        }
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.EchoPlusEnabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.EchoPlusSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.PacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.PacketsResponded": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.BytesReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.BytesResponded": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.TimeFirstPacketReceived": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.UDPEchoConfig.TimeLastPacketReceived": {
+        "type": ["dateTime"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.IP.Diagnostics.X_RDK_SpeedTest.SubscriberUnPauseTimeOut": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["45"],
+        "expectedValues": ["[1:180]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.Enable_Speedtest": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.Run": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.Argument": {
+        "type": ["string(4096)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "uuid=1545840948926_OD_5CE30E50E7D7&testType=2&check=1&env=2"
+        }
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.ClientType": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[1:2]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.Authentication": {
+        "type": ["string(4096)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.ClientVersion": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.Status": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.Server.Capability": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.Server.Key": {
+        "type": ["string(1024)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "SpeedTestKey"
+        }
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.Server.Username": {
+        "type": ["string(12)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "SpeedTestUsername"
+        }
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.Server.Password": {
+        "type": ["string(12)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "SpeedTestPassword"
+        }
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.Manufacturer": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.FirmwareVersion": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.DeviceID": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.SerialNumber": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.Capacity": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.Model": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.HwVersion": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.LifeElapsedA": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.LifeElapsedB": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.PreEOLStateSystem": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.PreEOLStateEUDA": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.PreEOLStateMLC": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.DeviceTemperature": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.UncorrectableECC": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.Operational": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_eMMCFlash.Healthy": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef EMMC_DIAG_SUPPORT"]
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_RxTxStats.InterfaceList": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "brlan0,brlan1,brlan2,brlan3"
+        }
+    },
+    "Device.IP.Diagnostics.X_RDKCENTRAL-COM_RxTxStats.PortList": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "wl0.1,wl1.1"
+        }
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.DiagnosticsState": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["None"],
+        "expectedValues": ["None","Requested","Complete","Error_DNSServerNotResolved","Error_Internal","Error_Other"],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.Interface": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.HostName": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "www.google.com"
+        }
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.DNSServer": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "0.0.0.0"
+        }
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.Timeout": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.NumberOfRepetitions": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.SuccessCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DNS.Diagnostics.NSLookupDiagnostics.ResultNumberOfEntries": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_FreeMemThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_MemFragThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_CpuMemFragInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[1:120]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_MaxRebootCount": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": 100
+        }
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_MaxResetCount": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": 100
+        }
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_NoWaitLogSync": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_LogBackupThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["0"],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": 10000
+        }
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_DiagnosticMode": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_DiagMode_LogUploadFrequency": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": 60
+        }
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_DNS_PINGTEST_Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.SelfHeal.X_RDKCENTRAL-COM_DNS_URL": {
+        "type": ["string(512)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "www.google.com"
+        }
+    },
+    "Device.SelfHeal.ConnectivityTest.X_RDKCENTRAL-COM_PingInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[15:1440]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.SelfHeal.ConnectivityTest.X_RDKCENTRAL-COM_NumPingsPerServer": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.ConnectivityTest.X_RDKCENTRAL-COM_MinNumPingServer": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.ConnectivityTest.X_RDKCENTRAL-COM_PingRespWaitTime": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.ConnectivityTest.X_RDKCENTRAL-COM_CorrectiveAction": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.SelfHeal.ConnectivityTest.X_RDKCENTRAL-COM_LastReboot": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.ConnectivityTest.X_RDKCENTRAL-COM_RebootInterval": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["28800"],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.ConnectivityTest.X_RDKCENTRAL-COM_CurrentCount": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.ResourceMonitor.X_RDKCENTRAL-COM_UsageComputeWindow": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.ResourceMonitor.X_RDKCENTRAL-COM_AvgCPUThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.ResourceMonitor.X_RDKCENTRAL-COM_AvgMemoryThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.CPUProcAnalyzer.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.CPUProcAnalyzer.SleepInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["60"],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": 100
+        }
+    },
+    "Device.SelfHeal.CPUProcAnalyzer.TimeToRun": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["600"],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": 900
+        }
+    },
+    "Device.SelfHeal.CPUProcAnalyzer.DynamicProcess": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.SelfHeal.CPUProcAnalyzer.MonitorAllProcess": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.SelfHeal.CPUProcAnalyzer.MemoryLimit": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["1536"],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": 1600
+        }
+    },
+    "Device.SelfHeal.CPUProcAnalyzer.ProcessList": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "CcspTandDSsp"
+        }
+    },
+    "Device.SelfHeal.CPUProcAnalyzer.SystemStatsToMonitor": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "cpu,memory,fd"
+        }
+    },
+    "Device.SelfHeal.CPUProcAnalyzer.ProcessStatsToMonitor": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "cpu,fd"
+        }
+    },
+    "Device.SelfHeal.CPUProcAnalyzer.TelemetryOnly": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.LogBackup.X_RDKCENTRAL-COM_Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.LogBackup.X_RDKCENTRAL-COM_Interval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": 1000
+        }
+    },
+    "Device.LogBackup.X_RDKCENTRAL-COM_SyncandUploadLogs": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.PowerManagement.PciEPowerManagement": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.X_RDK_hwHealthTest.executeTest": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.X_RDK_hwHealthTest.Results": {
+        "type": ["string(512)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_AutomationTest.Run": {
+        "type": ["string(180)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_AutomationTest.Status": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_AutomationTest.Result": {
+        "type": ["string(512)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "Device.WiFi.X_RDK_CSINumberOfEntries": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_MOTION_APP_SUPPORT"]
+    }
+}

@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2026 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="RuntimeManager" pluginVersion="1">
+    <pluginPreRequisite>
+        <!-- PluginPreRequisite 1 -->
+        <prerequisite requisiteId="1" requisiteName="Activate_AppStorageManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppStorageManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 2 -->
+        <prerequisite requisiteId="2" requisiteName="Activate_DownloadManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DownloadManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.DownloadManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.DownloadManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.DownloadManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DownloadManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 3 -->
+        <prerequisite requisiteId="3" requisiteName="Activate_PackageManagerRDKEMS_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.PackageManagerRDKEMS"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+        
+        <!-- PluginPreRequisite 4 -->
+        <prerequisite requisiteId="4" requisiteName="Activate_AppManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+        
+        <!-- PluginPreRequisite 5 -->
+        <prerequisite requisiteId="5" requisiteName="Activate_RuntimeManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.RuntimeManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RuntimeManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RuntimeManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.RuntimeManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RuntimeManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.RuntimeManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RuntimeManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 6 -->
+        <prerequisite requisiteId="6" requisiteName="Check_Existing_Package_Before_Install">
+            <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
+                <resultGeneration useMethodTag="packagemanager_list_packages">
+                    <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="PackageManager" delay="10">
+                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+            </testStep>
+            <testStep testStepId="3" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                <params>
+                    <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                </params>
+                <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+            </testStep>
+            <testStep testStepId="4" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                    <arguments usePreviousResult="true" Id="3" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                <resultGeneration useMethodTag="check_downloaded_package_status">
+                    <arguments usePreviousResult="true" Id="4" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                    <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="Install" method="Install_Package" pluginName="PackageManager" delay="3">
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                    <param tag="fileLocator" usePreviousResult="true" Id="4" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                    <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                    <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="PackageManager" delay="5">
+                <resultGeneration useMethodTag="packagemanager_check_install_package">
+                    <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 7 -->
+        <prerequisite requisiteId="7" requisiteName="Launch_Application">
+            <testStep testStepId="1" name="Launch_App_Valid_Params" method="Launch_App" pluginName="AppManager">
+                <params>
+                    <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    <param tag="intent" value=""/>
+                    <param tag="launchArgs" value=""/>
+                </params>
+                <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="2" name="Check_App_Launched" method="Get_Loaded_Apps" pluginName="AppManager" delay="8">
+                <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                    <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+        </prerequisite>
+   </pluginPreRequisite>
+
+   <!-- TestCase 01 -->
+    <testCase testCaseId="RTM_01" testCaseName="RuntimeManager_GetInfo" desc="Check whether getInfo method returns non-empty result">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Get_Application_Info" method="Runtime_getInfo">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_non_empty_result_check"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 02 -->
+    <testCase testCaseId="RTM_02" testCaseName="RuntimeManager_GetInfo_EmptyAppId" desc="Test getInfo method with empty appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Application_Info_Empty_AppId" method="Runtime_getInfo">
+            <params>
+                <param tag="appInstanceId" value=""/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 03 -->
+    <testCase testCaseId="RTM_03" testCaseName="RuntimeManager_GetInfo_InvalidAppId" desc="Test getInfo method with invalid appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Application_Info_Invalid_AppId" method="Runtime_getInfo">
+            <params>
+                <param tag="appInstanceId" value="invalid_app_id"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 04 -->
+    <testCase testCaseId="RTM_04" testCaseName="RuntimeManager_GetInfo_SpecialCharsAppId" desc="Test getInfo method with special characters in appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Application_Info_SpecialChars_AppId" method="Runtime_getInfo">
+            <params>
+                <param tag="appInstanceId" value="()^*!"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 05 -->
+    <testCase testCaseId="RTM_05" testCaseName="RuntimeManager_GetInfo_Without_Parameter" desc="Test getInfo method without parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Application_Info_Without_Parameter" method="Runtime_getInfo">
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 06 -->
+    <testCase testCaseId="RTM_06" testCaseName="RuntimeManager_GetInfo_NumericAppId" desc="Test getInfo method with numeric only appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Application_Info_Numeric_AppId" method="Runtime_Numeric_getInfo">
+            <params>
+                <param tag="appInstanceId" value="123456789"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 07 -->
+    <testCase testCaseId="RTM_07" testCaseName="RuntimeManager_Annotate_ValidParameters" desc="Test annotate method with valid parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Annotate_Application_Valid_Params" method="Runtime_annotate">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="key" value="testKey"/>
+                <param tag="value" value="testValue"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 08 -->
+    <testCase testCaseId="RTM_08" testCaseName="RuntimeManager_Annotate_EmptyAppId" desc="Test annotate method with empty appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Annotate_Application_Empty_AppId" method="Runtime_annotate">
+            <params>
+                <param tag="appInstanceId" value=""/>
+                <param tag="key" value="testKey"/>
+                <param tag="value" value="testValue"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 09 -->
+    <testCase testCaseId="RTM_09" testCaseName="RuntimeManager_Annotate_InvalidAppId" desc="Test annotate method with invalid appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Annotate_Application_Invalid_AppId" method="Runtime_annotate">
+            <params>
+                <param tag="appInstanceId" value="invalid_app_id"/>
+                <param tag="key" value="testKey"/>
+                <param tag="value" value="testValue"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 10 -->
+    <testCase testCaseId="RTM_10" testCaseName="RuntimeManager_Annotate_EmptyKey" desc="Test annotate method with empty key parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Annotate_Application_Empty_Key" method="Runtime_annotate">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="key" value=""/>
+                <param tag="value" value="testValue"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 11 -->
+    <testCase testCaseId="RTM_11" testCaseName="RuntimeManager_Annotate_InvalidKey" desc="Test annotate method with invalid key parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Annotate_Application_Invalid_Key" method="Runtime_annotate">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="key" value="invalid_key"/>
+                <param tag="value" value="testValue"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 12 -->
+    <testCase testCaseId="RTM_12" testCaseName="RuntimeManager_Annotate_SpecialCharsKey" desc="Test annotate method with special characters in key">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Annotate_Application_SpecialChars_Key" method="Runtime_annotate">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="key" value="()^*!"/>
+                <param tag="value" value="testValue"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 13 -->
+    <testCase testCaseId="RTM_13" testCaseName="RuntimeManager_Annotate_EmptyValue" desc="Test annotate method with empty value parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Annotate_Application_Empty_Value" method="Runtime_annotate">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="key" value="testKey"/>
+                <param tag="value" value=""/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 14 -->
+    <testCase testCaseId="RTM_14" testCaseName="RuntimeManager_Annotate_SpecialCharsValue" desc="Test annotate method with special characters in value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Annotate_Application_SpecialChars_Value" method="Runtime_annotate">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="key" value="testKey"/>
+                <param tag="value" value="()^*!"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 15 -->
+    <testCase testCaseId="RTM_15" testCaseName="RuntimeManager_Annotate_InvalidParameter" desc="Test annotate method with invalid parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Annotate_Application_Invalid_Parameter" method="Runtime_annotate">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="key" value="testKey"/>
+                <param tag="invalidParam" value="invalidValue"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+     <!-- TestCase 16 -->
+    <testCase testCaseId="RTM_16" testCaseName="RuntimeManager_Annotate_Without_Parameters" desc="Test annotate method without parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Annotate_Application_Without_Parameters" method="Runtime_annotate">
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 17 -->
+    <testCase testCaseId="RTM_17" testCaseName="RuntimeManager_Hibernate_Application" desc="Test hibernate method with valid appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Hibernate_Application" method="Runtime_hibernate" delay="3">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 18 -->
+    <testCase testCaseId="RTM_18" testCaseName="RuntimeManager_Hibernate_EmptyAppId" desc="Test hibernate method with empty appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Hibernate_Application_Empty_AppId" method="Runtime_hibernate">
+            <params>
+                <param tag="appInstanceId" value=""/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 19 -->
+    <testCase testCaseId="RTM_19" testCaseName="RuntimeManager_Hibernate_InvalidAppId" desc="Test hibernate method with invalid appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Hibernate_Application_Invalid_AppId" method="Runtime_hibernate">
+            <params>
+                <param tag="appInstanceId" value="invalid_app_id"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 20 -->
+    <testCase testCaseId="RTM_20" testCaseName="RuntimeManager_Hibernate_SpecialCharsAppId" desc="Test hibernate method with special characters in appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Hibernate_Application_SpecialChars_AppId" method="Runtime_hibernate">
+            <params>
+                <param tag="appInstanceId" value="()^*!"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 21 -->
+    <testCase testCaseId="RTM_21" testCaseName="RuntimeManager_Hibernate_NumericAppId" desc="Test hibernate method with numeric only appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Hibernate_Application_Numeric_AppId" method="Runtime_Numeric_hibernate">
+            <params>
+                <param tag="appInstanceId" value="123456789"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 22 -->
+    <testCase testCaseId="RTM_22" testCaseName="RuntimeManager_Hibernate_Without_Parameter" desc="Test hibernate method without parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Hibernate_Application_Without_Parameter" method="Runtime_hibernate">
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 23 -->
+    <testCase testCaseId="RTM_23" testCaseName="RuntimeManager_Suspend_Application" desc="Test suspend method with valid appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Suspend_Application" method="Runtime_suspend" delay="3">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 24 -->
+    <testCase testCaseId="RTM_24" testCaseName="RuntimeManager_Suspend_EmptyAppId" desc="Test suspend method with empty appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Suspend_Application_Empty_AppId" method="Runtime_suspend">
+            <params>
+                <param tag="appInstanceId" value=""/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 25 -->
+    <testCase testCaseId="RTM_25" testCaseName="RuntimeManager_Suspend_InvalidAppId" desc="Test suspend method with invalid appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Suspend_Application_Invalid_AppId" method="Runtime_suspend">
+            <params>
+                <param tag="appInstanceId" value="invalid_app_id"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 26 -->
+    <testCase testCaseId="RTM_26" testCaseName="RuntimeManager_Suspend_SpecialCharsAppId" desc="Test suspend method with special characters in appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Suspend_Application_SpecialChars_AppId" method="Runtime_suspend">
+            <params>
+                <param tag="appInstanceId" value="()^*!"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 27 -->
+    <testCase testCaseId="RTM_27" testCaseName="RuntimeManager_Suspend_NumericAppId" desc="Test suspend method with numeric only appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Suspend_Application_Numeric_AppId" method="Runtime_Numeric_suspend">
+            <params>
+                <param tag="appInstanceId" value="123456789"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 28 -->
+    <testCase testCaseId="RTM_28" testCaseName="RuntimeManager_Suspend_Without_Parameter" desc="Test suspend method without parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Suspend_Application_Without_Parameter" method="Runtime_suspend">
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 29 -->
+    <testCase testCaseId="RTM_29" testCaseName="RuntimeManager_Resume_Application" desc="Test resume method with valid appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Resume_Application" method="Runtime_resume" delay="3">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 30 -->
+    <testCase testCaseId="RTM_30" testCaseName="RuntimeManager_Resume_EmptyAppId" desc="Test resume method with empty appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Resume_Application_Empty_AppId" method="Runtime_resume">
+            <params>
+                <param tag="appInstanceId" value=""/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 31 -->
+    <testCase testCaseId="RTM_31" testCaseName="RuntimeManager_Resume_InvalidAppId" desc="Test resume method with invalid appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Resume_Application_Invalid_AppId" method="Runtime_resume">
+            <params>
+                <param tag="appInstanceId" value="invalid_app_id"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 32 -->
+    <testCase testCaseId="RTM_32" testCaseName="RuntimeManager_Resume_SpecialCharsAppId" desc="Test resume method with special characters in appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Resume_Application_SpecialChars_AppId" method="Runtime_resume">
+            <params>
+                <param tag="appInstanceId" value="()^*!"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 33 -->
+    <testCase testCaseId="RTM_33" testCaseName="RuntimeManager_Resume_NumericAppId" desc="Test resume method with numeric only appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Resume_Application_Numeric_AppId" method="Runtime_Numeric_resume">
+            <params>
+                <param tag="appInstanceId" value="123456789"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 34 -->
+    <testCase testCaseId="RTM_34" testCaseName="RuntimeManager_Resume_Without_Parameter" desc="Test resume method without parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Resume_Application_Without_Parameter" method="Runtime_resume">
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 35 -->
+    <testCase testCaseId="RTM_35" testCaseName="RuntimeManager_Wake_Application" desc="Test wake method with valid appInstanceId and running state">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Wake_Application_Running_State" method="Runtime_wake" delay="3">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="state" value="running"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 36 -->
+    <testCase testCaseId="RTM_36" testCaseName="RuntimeManager_Wake_Application_Suspended_State" desc="Test wake method with valid appInstanceId and suspended state">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Wake_Application_Suspended_State" method="Runtime_wake" delay="3">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="state" value="suspended"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 37 -->
+    <testCase testCaseId="RTM_37" testCaseName="RuntimeManager_Wake_EmptyAppId" desc="Test wake method with empty appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Wake_Application_Empty_AppId" method="Runtime_wake">
+            <params>
+                <param tag="appInstanceId" value=""/>
+                <param tag="state" value="running"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 38 -->
+    <testCase testCaseId="RTM_38" testCaseName="RuntimeManager_Wake_InvalidAppId" desc="Test wake method with invalid appInstanceId parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Wake_Application_Invalid_AppId" method="Runtime_wake">
+            <params>
+                <param tag="appInstanceId" value="invalid_app_id"/>
+                <param tag="state" value="running"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 39 -->
+    <testCase testCaseId="RTM_39" testCaseName="RuntimeManager_Wake_SpecialCharsAppId" desc="Test wake method with special characters in appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Wake_Application_SpecialChars_AppId" method="Runtime_wake">
+            <params>
+                <param tag="appInstanceId" value="()^*!"/>
+                <param tag="state" value="running"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 40 -->
+    <testCase testCaseId="RTM_40" testCaseName="RuntimeManager_Wake_NumericAppId" desc="Test wake method with numeric only appInstanceId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Wake_Application_Numeric_AppId" method="Runtime_Numeric_AppId_wake">
+            <params>
+                <param tag="appInstanceId" value="123456789"/>
+                <param tag="state" value="running"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 41 -->
+    <testCase testCaseId="RTM_41" testCaseName="RuntimeManager_Wake_InvalidState" desc="Test wake method with invalid state parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Wake_Application_Invalid_State" method="Runtime_wake">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="state" value="invalid_state"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 42 -->
+    <testCase testCaseId="RTM_42" testCaseName="RuntimeManager_Wake_EmptyState" desc="Test wake method with empty state parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Wake_Application_Empty_State" method="Runtime_wake">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+                <param tag="state" value=""/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 43 -->
+    <testCase testCaseId="RTM_43" testCaseName="RuntimeManager_Wake_Without_Parameters" desc="Test wake method without parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Wake_Application_Without_Parameters" method="Runtime_wake">
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 44 -->
+    <testCase testCaseId="RTM_44" testCaseName="RuntimeManager_Wake_Without_State" desc="Test wake method without state parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
+                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Wake_Application_Without_State" method="Runtime_wake">
+            <params>
+                <param tag="appInstanceId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id_for_runtime"/>
+            </params>
+            <resultGeneration useMethodTag="runtimemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <pluginPostRequisite>
+        <!-- PluginPostRequisite 1 -->
+        <postrequisite requisiteId="1" requisiteName="Uninstall_Package">
+            <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+                <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                    <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" pluginName="AppManager" delay="3">
+                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_Package_Info" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
+                <resultGeneration useMethodTag="packagemanager_list_packages">
+                    <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="4" name="Uninstall_Package" method="Uninstall_Package" pluginName="PackageManager" delay="3">
+                <conditionalExecution enable="true" Id="3" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+            </testStep>
+        </postrequisite>
+    </pluginPostRequisite>
+</testPlugin>
