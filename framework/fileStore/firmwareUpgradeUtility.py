@@ -582,3 +582,31 @@ def monitorFirmwareUpgrade(obj, FirmwareFilename, FW_DOWNLOAD_PATH, step, scenar
 
     return tdkTestObj, monitor_flag
 ########## End of function #########
+
+# manageFirmwareUpgradeCronJob
+# Syntax      : manageFirmwareUpgradeCronJob(obj, step, enable=False)
+# Description : Function to enable or disable the firmware upgrade cron job
+# Parameters  : obj - module object
+#               step - test step number
+#               enable - True to enable (postrequisite), False to disable (prerequisite)
+# Return Value: flag - 1 if operation successful, else 0
+def manageFirmwareUpgradeCronJob(obj, step, enable=False):
+    flag = 0
+    action = "Enable" if enable else "Disable"
+    cron_command = f"crontab -l | sed '/fwupgrade/s/^{'#' if enable else ''}/{'#' if not enable else ''}/' | crontab -"
+    print(f"Command Details: {cron_command}")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, cron_command)
+    print(f"TEST STEP {step}: {action} firmware upgrade cron job")
+    print(f"EXPECTED RESULT {step}: Firmware upgrade cron job should be {action.lower()}d successfully")
+    if "SUCCESS" in actualresult and details.strip() == "":
+        flag = 1
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"Firmware upgrade cron job {action.lower()}d successfully.")
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"Failed to {action.lower()} firmware upgrade cron job.")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
+    return flag
+########## End of function #########
