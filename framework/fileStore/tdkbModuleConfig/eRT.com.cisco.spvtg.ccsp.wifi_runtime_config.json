@@ -2535,7 +2535,7 @@
     },
     "Device.WiFi.AccessPoint.{i}.WPS.X_CISCO_COM_CancelSession": {
         "type": ["boolean"],
-        "writable": ["false"],
+        "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": ["true","false"],
