@@ -128,7 +128,7 @@ if "SUCCESS" in result.upper():
                     download_id = result["result"]
                     print("SUCCESS : Package download initiated successfully and download ID is : ", download_id)
 
-                    # Wait for the installation status event and check the installation status
+                    # Wait for the download status event and check the download status
                     event_log = wait_for_event(event_listener)
                     if len(event_log) > 0:
                         for entry in event_log:
@@ -216,7 +216,7 @@ if "SUCCESS" in result.upper():
                 if "error" not in result and "result" in result and result["result"] in (None, '', 'NONE'):
                     print("SUCCESS : Application launched successfully")
 
-                    # Wait for the installation status event and check the installation status
+                    # Wait for the lifecycle status event and check the lifecycle status
                     event_log = wait_for_event(event_listener)
                     if len(event_log) > 0:
                         for entry in event_log:

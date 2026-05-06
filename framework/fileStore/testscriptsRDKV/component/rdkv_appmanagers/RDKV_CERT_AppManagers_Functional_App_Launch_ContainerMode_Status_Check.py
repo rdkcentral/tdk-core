@@ -127,7 +127,7 @@ if "SUCCESS" in result.upper():
                     download_id = result["result"]
                     print("SUCCESS : Package download initiated successfully and download ID is : ", download_id)
 
-                    # Wait for the installation status event and check the installation status
+                    # Wait for the download status event and check the download status
                     event_log = wait_for_event(event_listener)
                     if len(event_log) > 0:
                         for entry in event_log:
@@ -150,7 +150,6 @@ if "SUCCESS" in result.upper():
                             # Step 5 : Form filelocator URL and Install the package
                             print("\n")
                             time.sleep(int(download_time))
-                            #filelocator_url = filelocator_url + str(download_id)
                             method = "org.rdk.PackageManagerRDKEMS.1.install"
                             value = '{ "packageId": "'+application_name+'", "version": "'+application_version+'", "additionalMetadata": [ {"name": "'+additionalmetadata_name+'", "value": "'+additionalmetadata_value+'"} ], "fileLocator": "'+filelocator_url+'" }'
                             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
@@ -215,7 +214,7 @@ if "SUCCESS" in result.upper():
                 if "error" not in result and "result" in result and result["result"] in (None, '', 'NONE'):
                     print("SUCCESS : Application launched successfully")
 
-                    # Wait for the installation status event and check the installation status
+                    # Wait for the lifecycle status event and check the lifecycle status
                     event_log = wait_for_event(event_listener)
                     if len(event_log) > 0:
                         for entry in event_log:
@@ -235,7 +234,7 @@ if "SUCCESS" in result.upper():
                                 break
                 
                         if launch_status == "TRUE":
-                            # Step 7 : Verify whether the launched application is in top z-order
+                            # Step 7 : Verify whether the launched application is running in container mode
                             print("\n")
                             time.sleep(3)
                             command = "DobbyTool list"
@@ -259,7 +258,7 @@ if "SUCCESS" in result.upper():
                             print("FAILURE : Application launch failed or incorrect lifecycle state received in event")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        tdkTestObj.setResultStatus("FAILURE")                    
+                        tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print("FAILURE : Application launch failed")
                     tdkTestObj.setResultStatus("FAILURE")
