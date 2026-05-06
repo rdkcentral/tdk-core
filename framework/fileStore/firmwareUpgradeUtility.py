@@ -528,21 +528,21 @@ def triggerFirmwareDownload(obj, fw_binary, logFile, step, scenario=""):
         sleep(5)
         step += 1
         #Validate firmware download initiation from logs
-        command = f"grep -i 'Firmware upgrade is in progress' {logFile}"
+        command = f"grep -i 'failed' {logFile}"
         print(f"Command: {command}")
         tdkTestObj = obj.createTestStep('ExecuteCmd')
         actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
         print(f"Command Details: {details.strip()}")
         print(f"TEST STEP {step}: Validate firmware upgrade initiation from logs.")
         if scenario == "invalid":
-            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should fail")
+            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should fail and failure logs should be present")
         else:
-            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should be validated successfully.")
-        if actualresult in expectedresult and details.strip() != "":
+            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should be validated successfully without any failure logs")
+        if actualresult in expectedresult and details.strip() == "":
             fw_flag = 1
-            print(f"ACTUAL RESULT {step}: Firmware download initiation is validated from logs. Details : {details.strip()}")
+            print(f"ACTUAL RESULT {step}: Firmware download initiation is validated from logs.")
         else:
-            print(f"ACTUAL RESULT {step}: Failed to validate firmware download initiation from logs.")
+            print(f"ACTUAL RESULT {step}: Failed to validate firmware download initiation from logs. Details : {details.strip()}")
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print(f"ACTUAL RESULT {step}: Failed to trigger firmware download. Details : {details.strip()}")
@@ -581,4 +581,32 @@ def monitorFirmwareUpgrade(obj, FirmwareFilename, FW_DOWNLOAD_PATH, step, scenar
         print(f"ACTUAL RESULT {step}: Firmware is not found in the download location. Details : {details.strip()}")
 
     return tdkTestObj, monitor_flag
+########## End of function #########
+
+# manageFirmwareUpgradeCronJob
+# Syntax      : manageFirmwareUpgradeCronJob(obj, step, enable=False)
+# Description : Function to enable or disable the firmware upgrade cron job
+# Parameters  : obj - module object
+#               step - test step number
+#               enable - True to enable (postrequisite), False to disable (prerequisite)
+# Return Value: flag - 1 if operation successful, else 0
+def manageFirmwareUpgradeCronJob(obj, step, enable=False):
+    flag = 0
+    action = "Enable" if enable else "Disable"
+    cron_command = f"crontab -l | sed '/fwupgrade/s/^{'#' if enable else ''}/{'#' if not enable else ''}/' | crontab -"
+    print(f"Command Details: {cron_command}")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, cron_command)
+    print(f"TEST STEP {step}: {action} firmware upgrade cron job")
+    print(f"EXPECTED RESULT {step}: Firmware upgrade cron job should be {action.lower()}d successfully")
+    if "SUCCESS" in actualresult and details.strip() == "":
+        flag = 1
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"Firmware upgrade cron job {action.lower()}d successfully.")
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"Failed to {action.lower()} firmware upgrade cron job.")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
+    return flag
 ########## End of function #########
