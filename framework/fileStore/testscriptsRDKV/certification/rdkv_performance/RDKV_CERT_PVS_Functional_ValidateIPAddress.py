@@ -67,6 +67,7 @@
 import tdklib;
 from ip_change_detection_utility import *
 from StabilityTestUtility import *
+from rdkv_performancelib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);
