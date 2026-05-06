@@ -40,3 +40,6 @@ TR069_CERTIFICATE_LOCATION=""
 
 #URI of ACS server to be used for accessing API Interface
 ACS_NBI_URL=""
+
+#URL of Device Management server ACS
+ACS_URL=""
