@@ -50,4 +50,4 @@ To measure the time taken to uninstall an app
 
 **Priority** : High
 
-**Release Version** : M147<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Release Version** : M148<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
