@@ -613,16 +613,18 @@ def executeCommand(command):
 # Return Value: SUCCESS/FAILURE
 
     try:
+        print("Command : %s" %command)
         session.sendline(command)
         session.prompt()
         status=session.before
         status=status.decode('ascii', 'surrogateescape')
-        print("Command Output:%s" %status)
         status=status.strip()
         if "OUTPUT:" in status:
             status=status.split("OUTPUT:",1)[1]
         else:
             status = "FAILURE"
+        print("Command Output : %s" %status)
+
     except Exception as e:
         print(e);
         status = e;

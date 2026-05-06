@@ -944,7 +944,7 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
         elif tag == "devicediagnostics_onavdecoder_status_changed_event":
             info["Test_Step_Status"] = "FAILURE"
             for eventResult in result:
-                if str(eventResult.get("avDecoderStatusChange")).lower() == str(expectedValues[0]).lower():
+                if str(json.loads(eventResult['avDecoderStatusChange'])['avDecoderStatusChange']).lower() == str(expectedValues[0]).lower():
                     info = eventResult
                     info["Test_Step_Status"] = "SUCCESS"
                     break;
