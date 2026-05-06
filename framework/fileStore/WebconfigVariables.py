@@ -19,7 +19,7 @@
 
 #The values mentioned here are sample values for reference purpose only, whuich can be replaced as per the requirement
 
-WEBCONFIG_URL = "http://webconfig.rdkcentral.com"
+WEBCONFIG_URL = "https://webconfig.rdkcentral.com/app1/"
 
 #Lan Subdoc Configurations
 LAN_IP = "10.0.0.1"

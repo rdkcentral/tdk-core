@@ -58,7 +58,8 @@ def get_FirmwareFilename(obj):
 
             if expectedresult in actualresult and image_details != " ":
                 tdkTestObj.setResultStatus("SUCCESS");
-                imageName = image_details.split(":")[1];
+                imageName = image_details.split(":")[1].strip()
+                suffix = suffix.strip().strip('\\"')
                 FirmwareFilename = imageName + suffix;
             else:
                 tdkTestObj.setResultStatus("FAILURE");
