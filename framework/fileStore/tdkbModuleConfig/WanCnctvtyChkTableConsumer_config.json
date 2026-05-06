@@ -1,0 +1,43 @@
+{
+    "Device.Diagnostics.X_RDK_DNSInternet.Active": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Diagnostics.X_RDK_DNSInternet.TestURLNumberOfEntries": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Diagnostics.X_RDK_DNSInternet.WANInterfaceNumberOfEntries": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_DNSInternet.StartConnectivityCheck()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDK_DNSInternet.StopConnectivityCheck()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    }
+}

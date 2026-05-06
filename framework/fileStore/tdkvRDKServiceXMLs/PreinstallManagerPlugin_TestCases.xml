@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2026 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="PreinstallManager" pluginVersion="1">
+    <pluginPreRequisite>
+        <!-- PluginPreRequisite 1 -->
+        <prerequisite requisiteId="1" requisiteName="Activate_AppStorageManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppStorageManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 2 -->
+        <prerequisite requisiteId="2" requisiteName="Activate_DownloadManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DownloadManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.DownloadManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.DownloadManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.DownloadManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DownloadManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 3 -->
+        <prerequisite requisiteId="3" requisiteName="Activate_PackageManagerRDKEMS_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.PackageManagerRDKEMS"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+        
+        <!-- PluginPreRequisite 4 -->
+        <prerequisite requisiteId="4" requisiteName="Activate_AppManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 5 -->
+        <prerequisite requisiteId="5" requisiteName="Activate_PreinstallManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">                      <params>
+                    <param tag="plugin" value="org.rdk.PreinstallManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PreinstallManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PreinstallManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.PreinstallManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PreinstallManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.PreinstallManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PreinstallManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+    </pluginPreRequisite>
+
+    <!-- TestCases 01 -->
+    <testCase testCaseId="PIM_01" testCaseName="PreinstallManager_StartPreInstall_ForceInstall_True" desc="Check StartPreInstall method behavior when forceInstall is true">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="StartPreInstall_ForceInstall_True" method="StartPreInstall">
+            <params>
+                <param tag="forceInstall" value="true"/>
+            </params>
+            <resultGeneration useMethodTag="preinstallmanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCases 02 -->
+    <testCase testCaseId="PIM_02" testCaseName="PreinstallManager_StartPreInstall_ForceInstall_False" desc="Check StartPreInstall method behavior when forceInstall is false">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="StartPreInstall_ForceInstall_False" method="StartPreInstall">
+            <params>
+                <param tag="forceInstall" value="false"/>
+            </params>
+            <resultGeneration useMethodTag="preinstallmanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCases 03 -->
+    <testCase testCaseId="PIM_03" testCaseName="PreinstallManager_StartPreInstall_Empty" desc="Check StartPreInstall method behavior when forceInstall is empty">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="StartPreInstall_Empty" method="Sring_StartPreInstall">
+            <params>
+                <param tag="forceInstall" value=""/>
+            </params>
+            <resultGeneration useMethodTag="preinstallmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCases 04 -->
+    <testCase testCaseId="PIM_04" testCaseName="PreinstallManager_StartPreInstall_Invalid_String" desc="Check StartPreInstall method behavior when forceInstall is an invalid string">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="StartPreInstall_Invalid_String" method="Sring_StartPreInstall">
+            <params>
+                <param tag="forceInstall" value="invalid_string"/>
+            </params>
+            <resultGeneration useMethodTag="preinstallmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCases 05 -->
+    <testCase testCaseId="PIM_05" testCaseName="PreinstallManager_StartPreInstall_Number" desc="Check StartPreInstall method behavior when forceInstall is a number">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="StartPreInstall_Number" method="Numeric_StartPreInstall">
+            <params>
+                <param tag="forceInstall" value="123"/>
+            </params>
+            <resultGeneration useMethodTag="preinstallmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCases 06 -->
+    <testCase testCaseId="PIM_06" testCaseName="PreinstallManager_StartPreInstall_Without_Parameter" desc="Check StartPreInstall method behavior when called without parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="StartPreInstall_Without_Parameter" method="Sring_StartPreInstall">
+            <resultGeneration useMethodTag="preinstallmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCases 07 -->
+    <testCase testCaseId="PIM_07" testCaseName="PreinstallManager_StartPreInstall_Special_Characters" desc="Check StartPreInstall method behavior with special characters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="StartPreInstall_Special_Characters" method="Sring_StartPreInstall">
+            <params>
+                <param tag="forceInstall" value="()^*!"/>
+            </params>
+            <resultGeneration useMethodTag="preinstallmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCases 08 -->
+    <testCase testCaseId="PIM_08" testCaseName="PreinstallManager_StartPreInstall_Very_Long_String" desc="Check StartPreInstall method behavior with very long string parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="StartPreInstall_Very_Long_String" method="Sring_StartPreInstall">
+            <params>
+                <param tag="forceInstall" value="this_is_a_very_long_string_that_exceeds_normal_parameter_length_to_test_buffer_overflow_or_length_validation_mechanisms"/>
+            </params>
+            <resultGeneration useMethodTag="preinstallmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCases 09 -->
+    <testCase testCaseId="PIM_09" testCaseName="PreinstallManager_StartPreInstall_Null_Parameter" desc="Check StartPreInstall method behavior when forceInstall parameter is null">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="StartPreInstall_Null_Parameter" method="Sring_StartPreInstall">
+            <params>
+                <param tag="forceInstall" value="null"/>
+            </params>
+            <resultGeneration useMethodTag="preinstallmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCases 10 -->
+    <testCase testCaseId="PIM_10" testCaseName="PreinstallManager_StartPreInstall_CaseSensitive" desc="Check StartPreInstall method behavior with case variations of boolean">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="StartPreInstall_CaseSensitive_TRUE" method="Sring_StartPreInstall">
+            <params>
+                <param tag="forceInstall" value="TRUE"/>
+            </params>
+            <resultGeneration useMethodTag="preinstallmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+</testPlugin>

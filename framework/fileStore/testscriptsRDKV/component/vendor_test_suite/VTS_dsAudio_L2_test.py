@@ -120,7 +120,7 @@ if "SUCCESS" in result.upper():
     #SkipTestCaseList
     SkipTestCaseList = Audio_L2_SkipTestCaseList
     boxtype = obj.getDeviceBoxType();
-    if (boxtype == "RPI-Client"):
+    if ("RPI-Client" in boxtype):
         SkipTestCaseList = Audio_L2_SkipTestCaseList_RPI
 
     #Configuring plugin name

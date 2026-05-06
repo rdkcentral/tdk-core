@@ -498,36 +498,6 @@ def getXCONFServer_DeleteConfigCmd():
     return [build_curl(endpoint, "DELETE") for endpoint in delete_endpoints]
 
 ########## End of function #########
-# getPartitionCount
-# Syntax       : getPartitionCount(obj, step)
-# Description : Function to check the number of partitions in the device
-# Parameters   : obj - module object
-#                step - test step number
-# Return Value : partition_count - Number of required partitions if successful, else -1
-
-def getPartitionCount(obj, step):
-    # Initialize partition_count to 0
-    expectedresult = "SUCCESS"
-    # Command to the number of partitions in the device
-    command = f"ls {PARTITION_PATH} | wc -l"
-    print(f"Command: {command}")
-    tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-
-    print(f"TEST STEP {step}: Check the number of partitions in the device")
-    print(f"EXPECTED RESULT {step}: Should get the number of partitions in the device")
-    if expectedresult in actualresult:
-        tdkTestObj.setResultStatus("SUCCESS")
-        print(f"ACTUAL RESULT {step}: The number of partitions in the device is : {details.strip()}")
-        print("[TEST EXECUTION RESULT] : SUCCESS\n")
-        partition_count = int(details.strip())
-    else:
-        tdkTestObj.setResultStatus("FAILURE")
-        print(f"ACTUAL RESULT {step}: Failed to get the number of partitions in the device. Details : {details.strip()}")
-        print("[TEST EXECUTION RESULT] : FAILURE\n")
-        partition_count = -1
-    return partition_count
-########## End of function ##########
 
 # triggerFirmwareDownload
 # Syntax      : triggerFirmwareDownload(obj, fw_binary, logFile, step)
@@ -536,11 +506,12 @@ def getPartitionCount(obj, step):
 #               fw_binary - Firmware download binary command
 #               logFile - Log file to check for download initiation
 #               step - test step number
+#               scenario - "" if default scenario, "invalid" if the scenario is invalid
 # Return Value: tdkTestObj - test object
 #               fw_flag - 1 if firmware download is triggered and validated successfully, else 0
 #               step - updated test step number
 
-def triggerFirmwareDownload(obj, fw_binary, logFile, step):
+def triggerFirmwareDownload(obj, fw_binary, logFile, step, scenario=""):
     expectedresult = "SUCCESS"
     fw_flag = 0
     tdkTestObj = obj.createTestStep('ExecuteCmd')
@@ -563,7 +534,10 @@ def triggerFirmwareDownload(obj, fw_binary, logFile, step):
         actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
         print(f"Command Details: {details.strip()}")
         print(f"TEST STEP {step}: Validate firmware upgrade initiation from logs.")
-        print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should be validated successfully without any failure logs")
+        if scenario == "invalid":
+            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should fail and failure logs should be present")
+        else:
+            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should be validated successfully without any failure logs")
         if actualresult in expectedresult and details.strip() == "":
             fw_flag = 1
             print(f"ACTUAL RESULT {step}: Firmware download initiation is validated from logs.")
@@ -585,9 +559,10 @@ def triggerFirmwareDownload(obj, fw_binary, logFile, step):
 #               FirmwareFilename - Target Image name with suffix
 #               FW_DOWNLOAD_PATH - Path where firmware is downloaded in the device
 #               step - test step number
+#               scenario - "" if default scenario, "invalid" if the scenario is invalid
 # Return Value: tdkTestObj - test object
 #               monitor_flag - 1 if firmware file is found in the download location indicating download progress, else 0
-def monitorFirmwareUpgrade(obj, FirmwareFilename, FW_DOWNLOAD_PATH, step):
+def monitorFirmwareUpgrade(obj, FirmwareFilename, FW_DOWNLOAD_PATH, step, scenario=""):
     expectedresult = "SUCCESS"
     monitor_flag = 0
     command = f"find {FW_DOWNLOAD_PATH}/{FirmwareFilename}"
@@ -595,6 +570,10 @@ def monitorFirmwareUpgrade(obj, FirmwareFilename, FW_DOWNLOAD_PATH, step):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print(f"TEST STEP {step}: Monitor whether the firmware is present in the download location indicating download progress.")
+    if scenario == "invalid":
+        print(f"EXPECTED RESULT {step}: The firmware file should not be found in the download location")
+    else:
+        print(f"EXPECTED RESULT {step}: The firmware file should be found in the download location indicating download progress")
     if actualresult in expectedresult and details.strip() == f"{FW_DOWNLOAD_PATH}/{FirmwareFilename}":
         monitor_flag = 1
         print(f"ACTUAL RESULT {step}: Firmware is present in the download location indicating download progress. Details : {details.strip()}")
@@ -602,4 +581,32 @@ def monitorFirmwareUpgrade(obj, FirmwareFilename, FW_DOWNLOAD_PATH, step):
         print(f"ACTUAL RESULT {step}: Firmware is not found in the download location. Details : {details.strip()}")
 
     return tdkTestObj, monitor_flag
+########## End of function #########
+
+# manageFirmwareUpgradeCronJob
+# Syntax      : manageFirmwareUpgradeCronJob(obj, step, enable=False)
+# Description : Function to enable or disable the firmware upgrade cron job
+# Parameters  : obj - module object
+#               step - test step number
+#               enable - True to enable (postrequisite), False to disable (prerequisite)
+# Return Value: flag - 1 if operation successful, else 0
+def manageFirmwareUpgradeCronJob(obj, step, enable=False):
+    flag = 0
+    action = "Enable" if enable else "Disable"
+    cron_command = f"crontab -l | sed '/fwupgrade/s/^{'#' if enable else ''}/{'#' if not enable else ''}/' | crontab -"
+    print(f"Command Details: {cron_command}")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, cron_command)
+    print(f"TEST STEP {step}: {action} firmware upgrade cron job")
+    print(f"EXPECTED RESULT {step}: Firmware upgrade cron job should be {action.lower()}d successfully")
+    if "SUCCESS" in actualresult and details.strip() == "":
+        flag = 1
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"Firmware upgrade cron job {action.lower()}d successfully.")
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"Failed to {action.lower()} firmware upgrade cron job.")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
+    return flag
 ########## End of function #########

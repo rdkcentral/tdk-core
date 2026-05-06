@@ -1,0 +1,65 @@
+{
+    "Device.WiFi.X_RDK_CSI_LEVL.data": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    },
+    "Device.WiFi.X_RDK_CSI_LEVL.datafifo": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    },
+    "Device.WiFi.X_RDK_CSI_LEVL.clientMac": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    },
+    "Device.WiFi.X_RDK_CSI_LEVL.maxNumberCSIClients": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    },
+    "Device.WiFi.X_RDK_CSI_LEVL.Duration": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    },
+    "Device.WiFi.X_RDK_CSI_LEVL.clientMacData": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    },
+    "Device.WiFi.X_RDK_CSI_LEVL.soundingStatus": {
+        "elementType": ["bus_element_type_event"],
+        "type": [""],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef ONEWIFI_LEVL_APP_SUPPORT"]
+    }
+}

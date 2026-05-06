@@ -1,0 +1,32 @@
+{
+    "Device.CR.RegisterComponent()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.CR.IsComponentRegistered()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.CR.SystemReady": {
+        "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "eRT.com.cisco.spvtg.ccsp.CR.GetHealth()": {
+        "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    }
+}

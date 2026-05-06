@@ -79,6 +79,16 @@ def webpaQuery(obj, parameter, method="get"):
         name = parameter.get("name")
         payload = {"names": name}
         resp = requests.get(SERVER, headers=headers, params=payload)
+    elif method == "addTableRow":
+        # ADD operation
+        payload = {}
+        SERVER = SERVER + "/" + parameter.get("name")
+        resp = requests.post(SERVER, headers=headers, json=payload)
+    elif method == "deleteTableRow":
+        # DELETE operation
+        payload = {}
+        SERVER = SERVER + "/" + parameter.get("name")
+        resp = requests.delete(SERVER, headers=headers, json=payload)
 
     print(f"Status: {resp.status_code}")
     print(f"WEBPA response received as: {resp.text}")
@@ -96,35 +106,57 @@ def parseWebpaResponse(response, count, method="get"):
 #             : method - whether the method was get or set
 # Return Value: SUCCESS/FAILURE
 
-    responseDict = json.loads(response)
-    statusCode = responseDict['statusCode'];
+    try:
+        responseDict = json.loads(response)
+        if responseDict.get('statusCode') is not None:
+            statusCode = responseDict['statusCode']
+        elif responseDict.get('code') is not None:
+            statusCode = responseDict['code']
+    except Exception as e:
+        print("WEBPA response is empty!!!")
+        return ["FAILURE", f"Message: No WEBPA response, statusCode:  "]
 
     if statusCode == 200:
-        print("GET/SET success for parameter: ",list(responseDict["parameters"])[0]['name'])
-        msg = list(responseDict["parameters"])[0]['message']
-        if method == "get":
-            value = " "
-            param = webpaQuery.parameter_list[0]['name'].split(",");
-            for j in range(len(param)):
-                for i in range(count):
-                    if list(responseDict["parameters"])[i]['name'] == param[j]:
-                        value = value + list(responseDict["parameters"])[i]['value'] + "  "
-                    else:
-                        i=i+1;
-            value = value.strip()
-            print("Got parameter value as: ",value)
-            return ["SUCCESS",value]
-        else:
-            print("Set operation response is: ", msg)
+        if method == "get" or method == "set" or method == "dmlWriteAccess" or method == "dmlSetReadOnly" or method == "dmlSetInvalidType":
+            print("GET/SET success for parameter: ",list(responseDict["parameters"])[0]['name'])
+            msg = list(responseDict["parameters"])[0]['message']
+            if method == "get":
+                value = " "
+                param = webpaQuery.parameter_list[0]['name'].split(",");
+                for j in range(len(param)):
+                    for i in range(count):
+                        if list(responseDict["parameters"])[i]['name'] == param[j]:
+                            value = value + list(responseDict["parameters"])[i]['value'] + "  "
+                        else:
+                            i=i+1;
+                value = value.strip()
+                print("Got parameter value as: ",value)
+                return ["SUCCESS",value]
+            elif method == "set":
+                print("Set operation response is: ", msg)
+                return ["SUCCESS", msg]
+            elif method == "dmlWriteAccess" or method == "dmlSetReadOnly" or method == "dmlSetInvalidType":
+                returnMsg = "Message: " + msg + ", statusCode: " + str(statusCode)
+                return ["SUCCESS", returnMsg]
+        elif method == "addTableRow" or method == "deleteTableRow":
+            print("ADD/DEL success")
+            msg = "Message: " + responseDict['message'] + ", statusCode: " + str(statusCode)
             return ["SUCCESS", msg]
     else:
         if method == "get":
             msg = responseDict["message"]
         elif method == 'set':
             msg = list(responseDict["parameters"])[0]['message']
+        elif method == "dmlWriteAccess" or method == "dmlSetReadOnly" or method == "dmlSetInvalidType":
+            if statusCode != 404:
+                msg = "Message: " + list(responseDict["parameters"])[0]['message'] + ", statusCode: " + str(statusCode)
+            else:
+                msg = "Message: " + responseDict['message'] + ", statusCode: " + str(statusCode)
+        elif method == "addTableRow" or method == "deleteTableRow":
+            msg = "Message: " + responseDict['message'] + ", statusCode: " + str(statusCode)
         else:
             msg = responseDict["message"]
-        print("GET/SET operation failed. Response msg for failure: ",msg)
+        print("GET/SET/ADD/DELETE operation failed. Response msg for failure: ",msg)
         return ["FAILURE", msg]
 ########## End of Function ##########
 def webpaPreRequisite(obj):

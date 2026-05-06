@@ -123,7 +123,7 @@ if "SUCCESS" in result.upper():
     #SkipTestCaseList
     SkipTestCaseList = VideoPort_L2_SkipTestCaseList
     boxtype = obj.getDeviceBoxType();
-    if (boxtype == "RPI-Client"):
+    if ("RPI-Client" in boxtype):
         SkipTestCaseList = VideoPort_L2_SkipTestCaseList_RPI
 
     #Configuring plugin name

@@ -385,7 +385,8 @@ start_node()
 #To kill the selenium hub and node
 kill_selenium()
 {
-        sudo kill -9 `echo $(ps -ef | grep selenium | grep -v grep|awk '{print $2;}')`
+        value="$(sudo pkill -f "node" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+        echo "OUTPUT:$value"
 }
 
 #Triggering port

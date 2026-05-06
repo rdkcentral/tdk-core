@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2026 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="LifecycleManager" pluginVersion="1">
+    <pluginPreRequisite>
+        <!-- PluginPreRequisite 1 -->
+        <prerequisite requisiteId="1" requisiteName="Activate_AppStorageManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppStorageManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppStorageManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppStorageManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppStorageManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 2 -->
+        <prerequisite requisiteId="2" requisiteName="Activate_DownloadManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DownloadManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.DownloadManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.DownloadManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.DownloadManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.DownloadManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DownloadManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 3 -->
+        <prerequisite requisiteId="3" requisiteName="Activate_PackageManagerRDKEMS_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.PackageManagerRDKEMS"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+        
+        <!-- PluginPreRequisite 4 -->
+        <prerequisite requisiteId="4" requisiteName="Activate_AppManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.AppManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.AppManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 5 -->
+        <prerequisite requisiteId="5" requisiteName="Activate_LifecycleManager_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                    <param tag="plugin" value="org.rdk.LifecycleManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.LifecycleManager"/>
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.LifecycleManager"/>
+                <params>
+                    <param tag="callsign" value="org.rdk.LifecycleManager"/>
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.LifecycleManager"/>
+                <params>
+                    <param tag="plugin" value="org.rdk.LifecycleManager" indexOnly="true"/>
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.LifecycleManager" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+
+        <!-- PluginPreRequisite 6 -->
+        <prerequisite requisiteId="6" requisiteName="Check_Existing_Package_Before_Install">
+            <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
+                <resultGeneration useMethodTag="packagemanager_list_packages">
+                    <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="PackageManager" delay="10">
+                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+            </testStep>
+            <testStep testStepId="3" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
+                <params>
+                    <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                </params>
+                <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+            </testStep>
+            <testStep testStepId="4" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+                <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                    <arguments usePreviousResult="true" Id="3" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+                <resultGeneration useMethodTag="check_downloaded_package_status">
+                    <arguments usePreviousResult="true" Id="4" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                    <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="Install" method="Install_Package" pluginName="PackageManager" delay="3">
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
+                    <param tag="fileLocator" usePreviousResult="true" Id="4" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                    <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
+                    <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="PackageManager" delay="5">
+                <resultGeneration useMethodTag="packagemanager_check_install_package">
+                    <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+        </prerequisite>
+    </pluginPreRequisite>
+
+    <!-- TestCase 01 -->
+    <testCase testCaseId="LCM_01" testCaseName="Verify_AppReady_Valid_AppId" desc="Verify appReady with a valid appId string">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Launch_Application">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                        <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Launch_App_Valid_Params" method="Launch_App" pluginName="AppManager" delay="3">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status" arguments="launch_app"/>
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="intent" value=""/>
+                        <param tag="launchArgs" value=""/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="3" name="Check_App_Launched" method="Get_Loaded_Apps" pluginName="AppManager" delay="8">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status" arguments="launch_app"/>
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                        <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Verify_AppReady" method="App_Ready">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+        </testStep>
+
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Terminate_Application">
+                <testStep testStepId="1" name="Terminate_App_Valid_Param" method="Terminate_App" pluginName="AppManager" delay="3">
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
+
+    <!-- TestCase 02 -->
+    <testCase testCaseId="LCM_02" testCaseName="Verify_AppReady_Empty_AppId" desc="Verify appReady with an empty appId string">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Verify_AppReady" method="App_Ready">
+            <params>
+                <param tag="appId" value=""/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 03 -->
+    <testCase testCaseId="LCM_03" testCaseName="Verify_AppReady_Numeric_AppId" desc="Verify appReady with a numeric value for appId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Verify_AppReady" method="Numeric_App_Ready">
+            <params>
+                <param tag="appId" value="12345"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 04 -->
+    <testCase testCaseId="LCM_04" testCaseName="Verify_AppReady_Special_Char_AppId" desc="Verify appReady with a special character string as appId.">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Verify_AppReady_Special_Char" method="App_Ready">
+            <params>
+                <param tag="appId" value="!()*^"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 05 -->
+    <testCase testCaseId="LCM_05" testCaseName="Verify_AppReady_Long_String_AppId" desc="Verify appReady with a very long string as appId.">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Verify_AppReady_Long_String" method="App_Ready">
+            <params>
+                <param tag="appId" value="VeryLongStringForAppIdTestingPurpose"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 06 -->
+    <testCase testCaseId="LCM_06" testCaseName="LifecycleManager_Verify_AppReady_Boolean_AppId" desc="Verify appReady with a boolean value for appId">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Verify_AppReady_Boolean_AppId" method="Boolean_App_Ready">
+            <params>
+                <param tag="appId" value="true"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 07 -->
+    <testCase testCaseId="LCM_07" testCaseName="LifecycleManager_Verify_AppReady_Without_Parameters" desc="Verify appReady without any parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Verify_AppReady_No_Params" method="App_Ready">
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 08 -->
+    <testCase testCaseId="LCM_08" testCaseName="CloseApp_Valid_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with valid appId and USER_EXIT closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Launch_Application">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" delay="3" saveResult="true">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                        <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Launch_App_Valid_Params" method="Launch_App" pluginName="AppManager" delay="3">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status" arguments="launch_app"/>
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="intent" value=""/>
+                        <param tag="launchArgs" value=""/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="3" name="Check_App_Launched" method="Get_Loaded_Apps" pluginName="AppManager" delay="8">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status" arguments="launch_app"/>
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                        <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Close_App_Valid_Params" method="Close_App">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="closeReason" value="USER_EXIT"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 09 -->
+    <testCase testCaseId="LCM_09" testCaseName="CloseApp_Valid_AppId_ERROR_CloseReason" desc="Verify closeApp with valid appId and ERROR closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Launch_Application">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" delay="3" saveResult="true">
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                        <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Launch_App_Valid_Params" method="Launch_App" pluginName="AppManager" delay="3">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status" arguments="launch_app"/>
+                    <params>
+                        <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                        <param tag="intent" value=""/>
+                        <param tag="launchArgs" value=""/>
+                    </params>
+                    <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+                </testStep>
+                <testStep testStepId="3" name="Check_App_Launched" method="Get_Loaded_Apps" pluginName="AppManager" delay="8">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status" arguments="launch_app"/>
+                    <resultGeneration useMethodTag="appmanager_check_loaded_apps" arguments="check_loaded_app">
+                        <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                    </resultGeneration>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Close_App_ERROR_Reason" method="Close_App">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="closeReason" value="ERROR"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 12 -->
+    <testCase testCaseId="LCM_12" testCaseName="CloseApp_ValidAppId_EmptyCloseReason" desc="Verify closeApp with valid appId and empty closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_ValidAppId_EmptyCloseReason" method="Close_App">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="closeReason" value=""/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 13 -->
+    <testCase testCaseId="LCM_13" testCaseName="CloseApp_Empty_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with empty appId and USER_EXIT closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Empty_AppId" method="Close_App">
+            <params>
+                <param tag="appId" value=""/>
+                <param tag="closeReason" value="USER_EXIT"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 14 -->
+    <testCase testCaseId="LCM_14" testCaseName="CloseApp_Empty_AppId_ERROR_CloseReason" desc="Verify closeApp with empty appId and ERROR closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Empty_AppId_ERROR" method="Close_App">
+            <params>
+                <param tag="appId" value=""/>
+                <param tag="closeReason" value="ERROR"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 15 -->
+    <testCase testCaseId="LCM_15" testCaseName="CloseApp_Empty_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with empty appId and KILL_AND_RUN closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Empty_AppId_KILL_AND_RUN" method="Close_App">
+            <params>
+                <param tag="appId" value=""/>
+                <param tag="closeReason" value="KILL_AND_RUN"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 16 -->
+    <testCase testCaseId="LCM_16" testCaseName="CloseApp_Empty_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with empty appId and KILL_AND_ACTIVATE closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Empty_AppId_KILL_AND_ACTIVATE" method="Close_App">
+            <params>
+                <param tag="appId" value=""/>
+                <param tag="closeReason" value="KILL_AND_ACTIVATE"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 17 -->
+    <testCase testCaseId="LCM_17" testCaseName="LifecycleManager_CloseApp_Empty_Params" desc="Verify closeApp with empty appId and empty closeReason.">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Empty_Params" method="Close_App">
+            <params>
+                <param tag="appId" value=""/>
+                <param tag="closeReason" value=""/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 18 -->
+    <testCase testCaseId="LCM_18" testCaseName="CloseApp_Without_Parameters" desc="Verify closeApp without any parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_No_Params" method="Close_App">
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 19 -->
+    <testCase testCaseId="LCM_19" testCaseName="CloseApp_Invalid_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with invalid appId and USER_EXIT closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Invalid_AppId" method="Close_App">
+            <params>
+                <param tag="appId" value="InvalidAppID"/>
+                <param tag="closeReason" value="USER_EXIT"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 20 -->
+    <testCase testCaseId="LCM_20" testCaseName="CloseApp_Invalid_AppId_ERROR_CloseReason" desc="Verify closeApp with invalid appId and ERROR closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Invalid_AppId_ERROR" method="Close_App">
+            <params>
+                <param tag="appId" value="InvalidAppID"/>
+                <param tag="closeReason" value="ERROR"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 21 -->
+    <testCase testCaseId="LCM_21" testCaseName="CloseApp_Invalid_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with invalid appId and KILL_AND_RUN closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Invalid_AppId_KILL_AND_RUN" method="Close_App">
+            <params>
+                <param tag="appId" value="InvalidAppID"/>
+                <param tag="closeReason" value="KILL_AND_RUN"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 22 -->
+    <testCase testCaseId="LCM_22" testCaseName="CloseApp_Invalid_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with invalid appId and KILL_AND_ACTIVATE closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Invalid_AppId_KILL_AND_ACTIVATE" method="Close_App">
+            <params>
+                <param tag="appId" value="InvalidAppID"/>
+                <param tag="closeReason" value="KILL_AND_ACTIVATE"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 23 -->
+    <testCase testCaseId="LCM_23" testCaseName="CloseApp_Numeric_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with numeric value for appId and USER_EXIT closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Numeric_AppId" method="Numeric_AppId_Close_App">
+            <params>
+                <param tag="appId" value="12345"/>
+                <param tag="closeReason" value="USER_EXIT"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 24 -->
+    <testCase testCaseId="LCM_24" testCaseName="CloseApp_Numeric_AppId_ERROR_CloseReason" desc="Verify closeApp with numeric value for appId and ERROR closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Numeric_AppId_ERROR" method="Numeric_AppId_Close_App">
+            <params>
+                <param tag="appId" value="12345"/>
+                <param tag="closeReason" value="ERROR"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 25 -->
+    <testCase testCaseId="LCM_25" testCaseName="CloseApp_Numeric_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with numeric value for appId and KILL_AND_RUN closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Numeric_AppId_KILL_AND_RUN" method="Numeric_AppId_Close_App">
+            <params>
+                <param tag="appId" value="12345"/>
+                <param tag="closeReason" value="KILL_AND_RUN"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 26 -->
+    <testCase testCaseId="LCM_26" testCaseName="CloseApp_Numeric_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with numeric value for appId and KILL_AND_ACTIVATE closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Numeric_AppId_KILL_AND_ACTIVATE" method="Numeric_AppId_Close_App">
+            <params>
+                <param tag="appId" value="12345"/>
+                <param tag="closeReason" value="KILL_AND_ACTIVATE"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 27 -->
+    <testCase testCaseId="LCM_27" testCaseName="CloseApp_Special_Char_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with special character string as appId and USER_EXIT closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Special_Char_AppId" method="Close_App">
+            <params>
+                <param tag="appId" value="!()*^"/>
+                <param tag="closeReason" value="USER_EXIT"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 28 -->
+    <testCase testCaseId="LCM_28" testCaseName="CloseApp_Special_Char_AppId_ERROR_CloseReason" desc="Verify closeApp with special character string as appId and ERROR closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Special_Char_AppId_ERROR" method="Close_App">
+            <params>
+                <param tag="appId" value="!()*^"/>
+                <param tag="closeReason" value="ERROR"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 29 -->
+    <testCase testCaseId="LCM_29" testCaseName="CloseApp_Special_Char_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with special character string as appId and KILL_AND_RUN closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Special_Char_AppId_KILL_AND_RUN" method="Close_App">
+            <params>
+                <param tag="appId" value="!()*^"/>
+                <param tag="closeReason" value="KILL_AND_RUN"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 30 -->
+    <testCase testCaseId="LCM_30" testCaseName="CloseApp_Special_Char_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with special character string as appId and KILL_AND_ACTIVATE closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Special_Char_AppId_KILL_AND_ACTIVATE" method="Close_App">
+            <params>
+                <param tag="appId" value="!()*^"/>
+                <param tag="closeReason" value="KILL_AND_ACTIVATE"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 31 -->
+    <testCase testCaseId="LCM_31" testCaseName="CloseApp_Boolean_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with boolean value for appId and USER_EXIT closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Boolean_AppId" method="Boolean_AppId_Close_App">
+            <params>
+                <param tag="appId" value="true"/>
+                <param tag="closeReason" value="USER_EXIT"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 32 -->
+    <testCase testCaseId="LCM_32" testCaseName="CloseApp_Boolean_AppId_ERROR_CloseReason" desc="Verify closeApp with boolean value for appId and ERROR closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Boolean_AppId_ERROR" method="Boolean_AppId_Close_App">
+            <params>
+                <param tag="appId" value="true"/>
+                <param tag="closeReason" value="ERROR"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 33 -->
+    <testCase testCaseId="LCM_33" testCaseName="CloseApp_Boolean_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with boolean value for appId and KILL_AND_RUN closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Boolean_AppId_KILL_AND_RUN" method="Boolean_AppId_Close_App">
+            <params>
+                <param tag="appId" value="true"/>
+                <param tag="closeReason" value="KILL_AND_RUN"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 34 -->
+    <testCase testCaseId="LCM_34" testCaseName="CloseApp_Boolean_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with boolean value for appId and KILL_AND_ACTIVATE closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Boolean_AppId_KILL_AND_ACTIVATE" method="Boolean_AppId_Close_App">
+            <params>
+                <param tag="appId" value="true"/>
+                <param tag="closeReason" value="KILL_AND_ACTIVATE"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+        <!-- TestCase 35 -->
+    <testCase testCaseId="LCM_35" testCaseName="CloseApp_Long_String_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with very long string as appId and USER_EXIT closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Long_String_AppId" method="Close_App">
+            <params>
+                <param tag="appId" value="VeryLongStringForAppIdTestingPurpose"/>
+                <param tag="closeReason" value="USER_EXIT"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 36 -->
+    <testCase testCaseId="LCM_36" testCaseName="CloseApp_Long_String_AppId_ERROR_CloseReason" desc="Verify closeApp with very long string as appId and ERROR closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Long_String_AppId_ERROR" method="Close_App">
+            <params>
+                <param tag="appId" value="VeryLongStringForAppIdTestingPurpose"/>
+                <param tag="closeReason" value="ERROR"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 37 -->
+    <testCase testCaseId="LCM_37" testCaseName="CloseApp_Long_String_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with very long string as appId and KILL_AND_RUN closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Long_String_AppId_KILL_AND_RUN" method="Close_App">
+            <params>
+                <param tag="appId" value="VeryLongStringForAppIdTestingPurpose"/>
+                <param tag="closeReason" value="KILL_AND_RUN"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 38 -->
+    <testCase testCaseId="LCM_38" testCaseName="CloseApp_Long_String_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with very long string as appId and KILL_AND_ACTIVATE closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Long_String_AppId_KILL_AND_ACTIVATE" method="Close_App">
+            <params>
+                <param tag="appId" value="VeryLongStringForAppIdTestingPurpose"/>
+                <param tag="closeReason" value="KILL_AND_ACTIVATE"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 39 -->
+    <testCase testCaseId="LCM_39" testCaseName="CloseApp_Valid_AppId_Numeric_CloseReason" desc="Verify closeApp with valid appId and numeric value for closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Numeric_CloseReason" method="Numeric_CloseReason_Close_App">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="closeReason" value="12345"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 40 -->
+    <testCase testCaseId="LCM_40" testCaseName="CloseApp_Valid_AppId_Special_Char_CloseReason" desc="Verify closeApp with valid appId and special character string as closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Special_Char_CloseReason" method="Close_App">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="closeReason" value="!()*^"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 41 -->
+    <testCase testCaseId="LCM_41" testCaseName="CloseApp_Valid_AppId_Boolean_CloseReason" desc="Verify closeApp with valid appId and boolean value for closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Boolean_CloseReason" method="Boolean_CloseReason_Close_App">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="closeReason" value="true"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 42 -->
+    <testCase testCaseId="LCM_42" testCaseName="CloseApp_Valid_AppId_Long_String_CloseReason" desc="Verify closeApp with valid appId and very long string as closeReason">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Close_App_Long_String_CloseReason" method="Close_App">
+            <params>
+                <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                <param tag="closeReason" value="VeryLongStringForCloseReasonTestingPurpose"/>
+            </params>
+            <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <pluginPostRequisite>
+        <!-- PluginPostRequisite 1 -->
+        <postrequisite requisiteId="1" requisiteName="Uninstall_Package">
+            <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+                <resultGeneration useMethodTag="appmanager_check_loaded_apps">
+                    <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" pluginName="AppManager" delay="3">
+                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="appmanager_null_result_validation"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_Package_Info" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
+                <resultGeneration useMethodTag="packagemanager_list_packages">
+                    <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="4" name="Uninstall_Package" method="Uninstall_Package" pluginName="PackageManager" delay="3">
+                <conditionalExecution enable="true" Id="3" useMethodTag="packagemanager_check_app_status"/>
+                <params>
+                    <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+            </testStep>
+        </postrequisite>
+    </pluginPostRequisite>
+</testPlugin>

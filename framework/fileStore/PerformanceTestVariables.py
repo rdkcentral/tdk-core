@@ -81,3 +81,9 @@ SDRvideo_test_url = ""
 
 #URL used for Vimeo app
 vimeo_test_url="https://widgets.metrological.com/lightning/rdk/d431ce8577be56e82630650bf701c57d#app:com.metrological.app.VimeoRelease"
+
+#AppManager environment variables
+app_download_url = ""
+google_bundle=""
+channelchange_bundle=""
+keytest_bundle=""

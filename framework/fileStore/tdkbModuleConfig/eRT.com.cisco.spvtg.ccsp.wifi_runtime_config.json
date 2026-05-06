@@ -1,0 +1,3325 @@
+{
+    "Device.WiFi.X_RDKCENTRAL-COM_GASConfigNumberOfEntries": {
+        "X_RDKCENTRAL-COM_GASConfigNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASConfig.{i}.AdvertisementID": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASConfig.{i}.PauseForServerResponse": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASConfig.{i}.ResponseTimeout": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[1000:65535]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASConfig.{i}.ComeBackDelay": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:65535]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASConfig.{i}.ResponseBufferingTime": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:65535]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASConfig.{i}.QueryResponseLengthLimit": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[1:127]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASStatsNumberOfEntries": {
+        "X_RDKCENTRAL-COM_GASStatsNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASStats.{i}.Queries": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASStats.{i}.QueryRate": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASStats.{i}.Responses": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASStats.{i}.ResponseRate": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASStats.{i}.NoRequestOutstanding": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASStats.{i}.ResponsesDiscarded": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_GASStats.{i}.FailedResponses": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_Report.WifiClient.ActiveMeasurements.Plan.StepNumberOfEntries": {
+        "StepNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_Report.WifiClient.ActiveMeasurements.Plan.Step.{i}.StepID": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_Report.WifiClient.ActiveMeasurements.Plan.Step.{i}.SourceMac": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_Report.WifiClient.ActiveMeasurements.Plan.Step.{i}.DestMac": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.RadioNumberOfEntries": {
+        "RadioNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_RDK_OffChannelTscan": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:63]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_RDK_OffChannelNscan": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:15]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_RDK_OffChannelNchannel": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_RDK_OffChannelTidle": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:63]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Up","Down","Unknown","Dormant","NotPresent","LowerLayerDown","Error","DeepSleep"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Alias": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Name": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.LastChange": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.LowerLayers": {
+        "type": ["string(1024)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Upstream": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.MaxBitRate": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.SupportedFrequencyBands": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["2.4GHz","5GHz","5GHz Low","5GHz High","6GHz","60GHz"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.OperatingFrequencyBand": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.SupportedStandards": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["a","b","g","n","ac","ax","be"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.OperatingStandards": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["a","b","g","n","ac","ax","be"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.PossibleChannels": {
+        "type": ["string(1024)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.ChannelsInUse": {
+        "type": ["string(1024)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_ApChannelScan": {
+        "type": ["string(16384)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Channel": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(1,256)"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.AutoChannelSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["false","true"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.AutoChannelEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["false","true"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.AutoChannelRefreshPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "900"
+        }
+    },
+    "Device.WiFi.Radio.{i}.OperatingChannelBandwidth": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Auto","20MHz","40MHz","80MHz","160MHz","80_80MHz","320MHz"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.ExtensionChannel": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["AboveControlChannel","BelowControlChannel","Auto"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.GuardInterval": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["400nsec","800nsec","Auto","1600nsec","3200nsec"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.MCS": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[-1:15]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.TransmitPowerSupported": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "100"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.TransmitPower": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(-1,101)"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.IEEE80211hSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.IEEE80211hEnabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.RegulatoryDomain": {
+        "type": ["string(3)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[A-Z][A-Z][OI]"
+        ],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "INI"
+        }
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_RTSThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(0,2348)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_FragmentationThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(256,2347)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_DTIMInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(0,256)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST-COM_BeaconInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "150"
+        }
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_CTSProtectionMode": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Disabled","Auto"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_TxRate": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Auto","6000000","9000000","12000000","18000000","24000000","36000000","48000000","54000000"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_FrameBurst": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_APIsolation": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_BasicRate": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Default","1-2Mbps","All"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_MbssUserControl": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_AdminControl": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_OnOffPushButtonTime": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_ObssCoex": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_MulticastRate": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_ApplySetting": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_RDKCENTRAL-COM_AutoChannelRefreshPeriodSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_RDKCENTRAL-COM_RtsThresholdSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_RDKCENTRAL-COM_ReverseDirectionGrantSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_ReverseDirectionGrant": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_AggregationMSDU": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_AutoBlockAck": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_DeclineBARequest": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_STBCEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_11nGreenfieldEnabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_CISCO_COM_WirelessOnOffButton": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST_COM_DFSSupport": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST_COM_DFSEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST-COM_DCSSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST-COM_DCSEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST_COM_RadioUpTime": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST_COM_IGMPSnoopingEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST-COM_CarrierSenseThresholdRange": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST-COM_CarrierSenseThresholdInUse": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST-COM_ChannelSwitchingCount": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST-COM_AutoChannelRefreshPeriodSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST-COM_IEEE80211hSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST-COM_ReverseDirectionGrantSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST-COM_RtsThresholdSupported": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_RDKCENTRAL-COM_ChannelUtilThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_RDKCENTRAL-COM_ChanUtilSelfHealEnable": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.BeaconPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.BasicDataTransmitRates": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.SupportedDataTransmitRates": {
+        "type": ["string(256)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.OperationalDataTransmitRates": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.RadioResetCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_RDKCENTRAL-COM_clientInactivityTimeout": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_RDK_EcoPowerDown": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.X_COMCAST_COM_DFSTimer": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.BytesSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.BytesReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.PacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.PacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.ErrorsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.ErrorsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.DiscardPacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.DiscardPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.PLCPErrorCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.FCSErrorCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.InvalidMACCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.PacketsOtherReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_NoiseFloor": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.Noise": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_ChannelUtilization": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_ActivityFactor": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_RDKCENTRAL-COM_AF": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_RDKCENTRAL-COM_AFTX": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_RDKCENTRAL-COM_AFRX": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_CarrierSenseThreshold_Exceeded": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_RDKCENTRAL-COM_CSTE": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_RetransmissionMetric": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_MaximumNoiseFloorOnChannel": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_MinimumNoiseFloorOnChannel": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_MedianNoiseFloorOnChannel": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_RadioStatisticsMeasuringRate": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_RadioStatisticsMeasuringInterval": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_StatisticsStartTime": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_RadioStatisticsEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_ReceivedSignalLevelNumberOfEntries": {
+        "X_COMCAST-COM_ReceivedSignalLevelNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_ReceivedSignalLevel.{i}.ReceivedSignalLevel": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_BandSteering.BandSettingNumberOfEntries": {
+        "BandSettingNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_BandSteering.BandSetting.{i}.UtilizationThreshold": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_BandSteering.BandSetting.{i}.RSSIThreshold": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_BandSteering.BandSetting.{i}.PhyRateThreshold": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_BandSteering.BandSetting.{i}.OverloadInactiveTime": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_BandSteering.BandSetting.{i}.IdleInactiveTime": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSIDNumberOfEntries": {
+        "SSIDNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.SSID.{i}.Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": ["Down"],
+        "expectedValues": ["Up","Down","Unknown","Dormant","NotPresent","LowerLayerDown","Error"],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Alias": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Name": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.LastChange": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.LowerLayers": {
+        "type": ["string(1024)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.BSSID": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.MACAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.SSID": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "new_ssid_to_test123"
+        }
+    },
+    "Device.WiFi.SSID.{i}.X_COMCAST-COM_DefaultSSID": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.X_CISCO_COM_EnableOnline": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.SSID.{i}.X_CISCO_COM_RouterEnabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.SSID.{i}.Repurposed_VapName": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.BytesSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.BytesReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.PacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.PacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.ErrorsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.ErrorsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.UnicastPacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.UnicastPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.DiscardPacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.DiscardPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.MulticastPacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.MulticastPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.BroadcastPacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.BroadcastPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.UnknownProtoPacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.RetransCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.FailedRetransCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.RetryCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.MultipleRetryCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.ACKFailureCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.SSID.{i}.Stats.AggregatedPacketCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPointNumberOfEntries": {
+        "AccessPointNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["false"],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": ["Disabled"],
+        "expectedValues": ["Disabled","Enabled","Error_Misconfigured","Error"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Alias": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.SSIDReference": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.SSIDAdvertisementEnabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.RetryLimit": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["0","1","2","3","4","5","6","7"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_LongRetryLimit": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:255]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.WMMCapability": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.UAPSDCapability": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.WMMEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.UAPSDEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_WmmNoAck": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MulticastRate": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.IsolationEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_BssMaxNumSta": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_BssCountStaAsCpe": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_BssUserStatus": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_BssHotSpot": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_BeaconRate": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["1Mbps","2Mbps","5.5Mbps","11Mbps","6Mbps","12Mbps","24Mbps"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_KickAssocDevices": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.MaxAssociatedDevices": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["0"],
+        "expectedValues": ["range(0,65536)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_COMCAST-COM_AssociatedDevicesHighWatermarkThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(0,65536)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_COMCAST-COM_AssociatedDevicesHighWatermarkThresholdReached": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_COMCAST-COM_AssociatedDevicesHighWatermark": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_COMCAST-COM_AssociatedDevicesHighWatermarkDate": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingServiceCapability": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingServiceEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingApplySettings": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_COMCAST-COM_MAC_FilteringMode": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_ManagementFramePowerControl": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(-20,1)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_rapidReconnectCountEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_rapidReconnectMaxTime": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[15:1200]"
+        ],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_COMCAST-COM_TXOverflow": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_StatsEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_WirelessManagementImplemented": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_BSSTransitionImplemented": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_BSSTransitionActivated": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_NeighborReportActivated": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.Connected_Building_Enabled": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_HostapMgtFrameCtrl": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingElement.AccessNetworkType": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(0,65536)"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingElement.Internet": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingElement.ASRA": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingElement.ESR": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingElement.UESA": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingElement.HESSOptionPresent": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingElement.HESSID": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingElement.VenueInfo.Group": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(0,65536)"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingElement.VenueInfo.Type": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(0,65536)"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MACFilter.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MACFilter.FilterAsBlackList": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.ModesSupported": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["None","WPA-Personal","WPA2-Personal","WPA3-Personal","WPA-WPA2-Personal","WPA3-Personal-Transition","WPA-Enterprise","WPA2-Enterprise","WPA3-Enterprise","WPA-WPA2-Enterprise","Enhanced-Open","WPA3-Personal-Compatibility"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.ModeEnabled": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["None","WPA-Personal","WPA2-Personal","WPA3-Personal","WPA-WPA2-Personal","WPA3-Personal-Transition","WPA-Enterprise","WPA2-Enterprise","WPA3-Enterprise","WPA-WPA2-Enterprise","Enhanced-Open","WPA3-Personal-Compatibility"],
+        "flags": [""],
+        "Set_type": "L2",
+        "Dependencies": {
+            "WPA-Personal": {
+                "Device.WiFi.AccessPoint.{i}.Security.KeyPassphrase": "ABCD12345678",
+                "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_EncryptionMethod": "AES",
+                "Device.WiFi.ApplyAccessPointSettings": "true"
+            },
+            "WPA2-Personal": {
+                "Device.WiFi.AccessPoint.{i}.Security.KeyPassphrase": "ABCD12345678",
+                "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_EncryptionMethod": "AES",
+                "Device.WiFi.ApplyAccessPointSettings": "true"
+            },
+            "WPA-WPA2-Personal": {
+                "Device.WiFi.AccessPoint.{i}.Security.KeyPassphrase": "ABCD12345678",
+                "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_EncryptionMethod": "AES",
+                "Device.WiFi.ApplyAccessPointSettings": "true"
+            }
+        }
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.WEPKey": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_WEPKey": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_WEPKey": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.PreSharedKey": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.KeyPassphrase": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "password123qwertyuiop"
+        }
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_RDKCENTRAL-COM_TransitionDisable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.SAEPassphrase": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_DefaultKeyPassphrase": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_KeyPassphrase": {
+        "type": ["string(64)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "password123QWERTYUIOP"
+        }
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RekeyingInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["3600"],
+        "expectedValues": ["range(0,65536)"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_EncryptionMethod": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["TKIP","AES","AES+TKIP","AES+GCMP"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RadiusServerIPAddr": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RadiusServerPort": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["1812"],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RadiusSecret": {
+        "type": ["string(63)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.SecondaryRadiusServerIPAddr": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.SecondaryRadiusServerPort": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["1812"],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.SecondaryRadiusSecret": {
+        "type": ["string(63)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RadiusDASIPAddr": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RadiusDASPort": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RadiusDASSecret": {
+        "type": ["string(63)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_RadiusReAuthInterval": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_DefaultKey": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.MFPConfig": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["Disabled"],
+        "expectedValues": ["Disabled","Optional","Required"],
+        "flags": [""],
+        "Set_type": "L2"
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.Reset": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_WEPKey64BitNumberOfEntries": {
+        "X_CISCO_COM_WEPKey64BitNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_WEPKey64Bit.{i}.WEPKey": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_WEPKey128BitNumberOfEntries": {
+        "X_CISCO_COM_WEPKey128BitNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_CISCO_COM_WEPKey128Bit.{i}.WEPKey": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.RadiusServerRetries": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.RadiusServerRequestTimeout": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.PMKLifetime": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.PMKCaching": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.PMKCacheInterval": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.MaxAuthenticationAttempts": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.BlacklistTableTimeout": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.IdentityRequestRetryInterval": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.QuietPeriodAfterFailedAuthentication": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_RDKCENTRAL-COM_Authenticator.EAPOLKeyTimeout": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[100:5000]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_RDKCENTRAL-COM_Authenticator.EAPOLKeyRetries": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_RDKCENTRAL-COM_Authenticator.EAPIdentityRequestTimeout": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:5000]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_RDKCENTRAL-COM_Authenticator.EAPIdentityRequestRetries": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_RDKCENTRAL-COM_Authenticator.EAPRequestTimeout": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[10:5000]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.X_RDKCENTRAL-COM_Authenticator.EAPRequestRetries": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.ClientForceDisassociation": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.ClientDenyAssociation": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.TcmClientDenyAssociation": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.RssiUpThresholdSupported": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.RssiUpThreshold": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.SnrThresholdSupported": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.SnrThreshold": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.CuThresholdSupported": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.CuThreshold": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.BasicDataTransmitRates": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.OperationalDataTransmitRates": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.SupportedDataTransmitRates": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.MinimumAdvertisedMCS": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.6GOpInfoMinRate": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.TcmWaitTime": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.TcmMinMgmtFrames": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.TcmExpWeightage": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PreAssocDeny.TcmGradientThreshold": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PostAssocDisc.RssiUpThresholdSupported": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PostAssocDisc.RssiUpThreshold": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PostAssocDisc.SamplingIntervalSupported": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PostAssocDisc.SamplingInterval": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PostAssocDisc.SnrThresholdSupported": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PostAssocDisc.SnrThreshold": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PostAssocDisc.SamplingCountSupported": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PostAssocDisc.SamplingCount": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PostAssocDisc.CuThresholdSupported": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.ConnectionControl.PostAssocDisc.CuThreshold": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.WPS.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": ["true"],
+        "expectedValues": ["false","true"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.WPS.ConfigMethodsSupported": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.WPS.ConfigMethodsEnabled": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["USBFlashDrive","Ethernet","Label","Display","ExternalNFCToken","IntegratedNFCToken","NFCInterface","PushButton","PIN","PhysicalPushButton","PhysicalDisplay","VirtualPushButton","VirtualDisplay"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.WPS.X_CISCO_COM_WpsPushButton": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.WPS.X_CISCO_COM_Pin": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.WPS.X_CISCO_COM_ActivatePushButton": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.WPS.X_CISCO_COM_ClientPin": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.WPS.X_Comcast_com_Configured": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.WPS.X_CISCO_COM_CancelSession": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDeviceNumberOfEntries": {
+        "AssociatedDeviceNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.MACAddress": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.AuthenticationState": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["false","true"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.LastDataDownlinkRate": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[1000:600000]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.LastDataUplinkRate": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[1000:600000]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.SignalStrength": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(-200,1)"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Retransmissions": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(0,101)"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Active": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["false","true"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_OperatingStandard": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_OperatingChannelBandwidth": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_SNR": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:100]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_RDKCENTRAL-COM_SNR": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[0:100]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_InterferenceSources": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_DataFramesSentAck": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_DataFramesSentNoAck": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_BytesSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_BytesReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_RSSI": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_MinRSSI": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_MaxRSSI": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_Disassociations": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_COMCAST-COM_AuthenticationFailures": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats.InstantMeasurementsEnable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats.BytesSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats.BytesReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats.PacketsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats.PacketsReceived": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats.ErrorsSent": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats.RetransCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats.FailedRetransCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats.RetryCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats.MultipleRetryCount": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MacFilterTableNumberOfEntries": {
+        "X_CISCO_COM_MacFilterTableNumberOfEntries": "",
+        "table": "dynWritableTable",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MacFilterTable.{i}.MACAddress": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "AA:BB:CC:DD:EE:FF"
+        }
+    },
+    "Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MacFilterTable.{i}.DeviceName": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""],
+        "Set_type": "L2",
+        "set_value": {
+            "SET": "test_device"
+        }
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.Version": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[1:2]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.PrivateSigningKey": {
+        "type": ["string(512)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.PrivateReconfigAccessKey": {
+        "type": ["string(512)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STANumberOfEntries": {
+        "STANumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.ClientMac": {
+        "type": ["string(17)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.InitiatorBootstrapSubjectPublicKeyInfo": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.ResponderBootstrapSubjectPublicKeyInfo": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.Channels": {
+        "type": ["string(256)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.MaxRetryCount": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["[5:120]"
+        ],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.Activate": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.ActivationStatus": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.EnrolleeResponderStatus": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.Credential.KeyManagement": {
+        "type": ["string(32)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.Credential.psk_hex": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_DPP.STA.{i}.Credential.password": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_InterworkingService.Parameters": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_Passpoint.Capability": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_Passpoint.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["true","false"],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_Passpoint.Parameters": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_Passpoint.WANMetrics": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_Passpoint.Stats": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.ResultNumberOfEntries": {
+        "ResultNumberOfEntries": "",
+        "table": "dynamicTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.Radio": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.SSID": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.BSSID": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.Mode": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["AdHoc","Infrastructure"],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.Channel": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(1,256)"],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.SignalStrength": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(-200,1)"],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.SecurityModeEnabled": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["None","WEP","WPA","WPA2","WPA-WPA2","WPA-Enterprise","WPA2-Enterprise","WPA-WPA2-Enterprise","WPA3-SAE","WPA2-PSK-WPA3-SAE","WPA3-Enterprise","OWE"],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.EncryptionMode": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["TKIP","AES"],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.OperatingFrequencyBand": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["2.4GHz","5GHz","6GHz"],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.SupportedStandards": {
+        "type": ["string(64)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["a","b","g","n","ac","ax","be"],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.OperatingStandards": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.OperatingChannelBandwidth": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["20MHz","40MHz","80MHz","160MHz","320MHz-1","320MHz-2","Auto"],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.BeaconPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.Noise": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["range(-200,1)"],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.BasicDataTransferRates": {
+        "type": ["string(256)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.SupportedDataTransferRates": {
+        "type": ["string(256)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.DTIMPeriod": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.X_COMCAST-COM_ChannelUtilization": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_ATM.APGroupNumberOfEntries": {
+        "APGroupNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_ATM.APGroup.{i}.APList": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_ATM.APGroup.{i}.AirTimePercent": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_ATM.APGroup.{i}.StaNumberOfEntries": {
+        "StaNumberOfEntries": "",
+        "table": "writableTable",
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_ATM.APGroup.{i}.Sta.{i}.MACAddress": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.X_RDKCENTRAL-COM_ATM.APGroup.{i}.Sta.{i}.AirTimePercent": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.AMSDU_TIDNumberOfEntries": {
+        "AMSDU_TIDNumberOfEntries": "",
+        "table": "staticTable",
+        "addOperation": "No",
+        "removeOperation": "No",
+        "flags": [""]
+    },
+    "Device.WiFi.Radio.{i}.AMSDU_TID.{i}.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.MLD_Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.MLD_ID": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.MLD_Link_ID": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.MLD_Addr": {
+        "type": ["string(32)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.MLD_Apply": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.InteropNumSta": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.InteropTelemetryCtrl": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RepurposedRadiusServerIPAddr": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RepurposedRadiusServerPort": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RepurposedRadiusSecret": {
+        "type": ["string(63)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RepurposedSecondaryRadiusServerIPAddr": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RepurposedSecondaryRadiusServerPort": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.RepurposedSecondaryRadiusSecret": {
+        "type": ["string(63)"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.X_RDK_CapSpaStr": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    }
+}

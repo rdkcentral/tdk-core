@@ -120,7 +120,7 @@ if "SUCCESS" in result.upper():
     #SkipTestCaseList
     SkipTestCaseList = DeepSleep_L1_SkipTestCaseList
     boxtype = obj.getDeviceBoxType();
-    if (boxtype == "RPI-Client"):
+    if ("RPI-Client" in boxtype):
         SkipTestCaseList = DeepSleep_L1_SkipTestCaseList_RPI
 
     #Configuring plugin name
