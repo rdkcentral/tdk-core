@@ -89,7 +89,7 @@ if expectedResult in result.upper():
                             tdkTestObj.setResultStatus("SUCCESS")
                             break   
                 if  "APP_STATE_UNLOADED" in event:
-                    print("Received install event successfully")
+                    print("Received terminate event successfully")
                     tdkTestObj.setResultStatus("SUCCESS")
                     event_data = str(event).split("$$$")[1]
                     terminate_time = str(event).split("$$$")[0]

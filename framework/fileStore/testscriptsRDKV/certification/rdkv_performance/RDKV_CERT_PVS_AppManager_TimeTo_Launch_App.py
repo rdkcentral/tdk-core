@@ -89,7 +89,7 @@ if expectedResult in result.upper():
                             tdkTestObj.setResultStatus("SUCCESS")
                             break   
                 if  "APP_STATE_ACTIVE" in event:
-                    print("Received install event successfully")
+                    print("Received launch event successfully")
                     tdkTestObj.setResultStatus("SUCCESS")
                     event_data = str(event).split("$$$")[1]
                     launch_time = str(event).split("$$$")[0]
