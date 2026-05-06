@@ -36,7 +36,7 @@ def fw_upgrade_checker(dest_ip, initial_firmware, target_firmware, fw_binary):
         result = subprocess.run(["ssh", f"{username}@{hostname}", "-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", command], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         image_name = result.stdout.strip()
         upgraded_firmware= image_name.split(":",1)[1] if ':' in image_name else ""
-        print(f"Current Image Name : {upgraded_firmware}")
+        print(f"\nCurrent Image Name : {upgraded_firmware}")
         if upgraded_firmware == target_firmware:
             print(f"The firmware has been successfully upgraded to {upgraded_firmware}.")
         else:
@@ -47,9 +47,9 @@ def fw_upgrade_checker(dest_ip, initial_firmware, target_firmware, fw_binary):
 
     # Revert the firmware to its initial version
     try:
-        print(f"Revert the firmware to initial firmware version {initial_firmware}")
+        print(f"\nRevert the firmware to initial firmware version {initial_firmware}")
         revert_flag = True
-        revert_command = f"{fw_binary} recover"
+        revert_command = f'setsid sh -c "sleep 5; {fw_binary} recover" > /dev/null 2>&1 &'
         print(f"Revert Command : {revert_command}")
         result = subprocess.run(["ssh", "-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-o", "ConnectTimeout=10", f"{username}@{hostname}", revert_command], capture_output=True, text=True)
     except Exception as e:
@@ -59,6 +59,6 @@ def fw_upgrade_checker(dest_ip, initial_firmware, target_firmware, fw_binary):
     #Wait till device comes up after reboot
     print("Sleeping while waiting for the device to come up")
     time.sleep(600)
-    print("Returing to main code....\n")
+    print("Returning to main code....\n")
     # Return back to the script
     return revert_flag, upgraded_firmware

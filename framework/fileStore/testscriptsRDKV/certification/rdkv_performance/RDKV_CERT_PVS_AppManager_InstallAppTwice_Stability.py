@@ -47,11 +47,7 @@ if expectedResult in result.upper():
     print("\nCheck the status of AppManagers in the device")
 
     plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
-    plugin_status_needed = {
-        "org.rdk.DownloadManager":"activated",
-        "org.rdk.PackageManagerRDKEMS":"activated",
-        "org.rdk.AppManager":"activated"
-    }
+    plugin_status_needed = {"org.rdk.DownloadManager":"activated","org.rdk.PackageManagerRDKEMS":"activated","org.rdk.AppManager":"activated"}
 
     curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
 
@@ -84,33 +80,34 @@ if expectedResult in result.upper():
             if tdkTestObj.getResult() == "SUCCESS":
                 print(tdkTestObj.getResultDetails())
                 tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                print("Failed to fetch resource usage after first install")
-                tdkTestObj.setResultStatus("FAILURE")
-                status = "FAILURE"
 
-            # ------------------- Re-Install -------------------
-            if status == "SUCCESS":
+                # ------------------- Re-Install -------------------
                 print("\nInstalling app again (Second time)")
                 status = rdkservice_install_launch_app(obj,app_bundle_name,app_name,app_download_url,launch=False)
-
-                if status == "SUCCESS":
+                tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+                tdkTestObj.addParameter("app_name", app_name)
+                tdkTestObj.executeTestCase(expectedResult)
+                if tdkTestObj.getResult() == "SUCCESS":
                     print("Second install completed successfully (reinstall)")
                     # Resource usage after second install
                     print("\n[Second Install] Resource Usage")
 
                     tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                     tdkTestObj.executeTestCase(expectedResult)
-
                     if tdkTestObj.getResult() == "SUCCESS":
                         print(tdkTestObj.getResultDetails())
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
                         print("Failed to fetch resource usage after second install")
                         tdkTestObj.setResultStatus("FAILURE")
-
                 else:
-                    print("Second install failed (unexpected behavior)")
+                    print("Second Launch was failed")
+
+
+            else:
+                print("Failed to fetch resource usage after first install")
+                tdkTestObj.setResultStatus("FAILURE")
+                status = "FAILURE"
 
             print("\nFinal cleanup: Uninstalling app")
             

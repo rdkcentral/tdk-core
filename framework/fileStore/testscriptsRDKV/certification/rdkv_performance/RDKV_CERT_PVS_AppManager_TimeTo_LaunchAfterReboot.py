@@ -32,7 +32,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 ip = <ipaddress>
 port = <port>
 
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_TimeToLaunchAfterReboot')
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_TimeTo_LaunchAfterReboot')
 
 expectedResult = "SUCCESS"
 Summ_list = []
@@ -72,7 +72,7 @@ if expectedResult in result.upper():
 
             print("App installed successfully")
 
-            # í´¹ Reboot logic (same as your Lightning script)
+            # ï¿½ Reboot logic (same as your Lightning script)
             conf_file, file_status = getConfigFileName(obj.realpath)
             result1, rebootwaitTime = getDeviceConfigKeyValue(conf_file, "REBOOT_WAIT_TIME")
 
@@ -169,7 +169,7 @@ if expectedResult in result.upper():
 
                         print("\nTime taken to launch after reboot: {} ms".format(time_taken_ms))
 
-                        # í´¹ Threshold logic
+                        # ï¿½ Threshold logic
                         config_status, launch_threshold = getDeviceConfigKeyValue(conf_file, "APPMANAGER_LAUNCH_AFTER_REBOOT_THRESHOLD")
 
                         if not launch_threshold:
