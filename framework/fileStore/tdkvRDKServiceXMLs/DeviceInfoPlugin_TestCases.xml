@@ -126,11 +126,11 @@
             </testStep>
         </testCase>
 
-
-        <testCase testCaseId="DI_03" testCaseName= "DeviceInfo_Get_SocketInfo" desc="Gets all network interfacesn">
+        <!--The socketinfo API has been removed from the EntServices documentation, so the test case has been updated-->
+        <testCase testCaseId="DI_03" testCaseName= "DeviceInfo_Get_SocketInfo_Negative_Case" desc="Checks the negative scenario for Socket info API">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Socket_Info" method="Get_Socket_Info">
-                <resultGeneration useMethodTag="deviceinfo_get_socket_info" arguments="get_all_info" />
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Unknown method." />
             </testStep>
         </testCase>
 
