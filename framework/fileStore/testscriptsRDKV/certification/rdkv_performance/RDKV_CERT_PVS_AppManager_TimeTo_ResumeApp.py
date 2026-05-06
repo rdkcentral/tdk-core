@@ -154,22 +154,17 @@ if expectedResult in result.upper():
                 print(f"\n Checking current status of app {app_id}... \n")
                 
                 # Check if app is installed
-                tdkTestObj = obj.createTestStep('rdkservice_getValue')
-                tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getInstalledApps")
-                tdkTestObj.addParameter("value", "{}")
+                tdkTestObj = obj.createTestStep('rdkv_getInstalledPackages')
+                #tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getInstalledApps")
+                #tdkTestObj.addParameter("value", "{}")
                 tdkTestObj.executeTestCase(expectedResult)
                 installed_apps_result = tdkTestObj.getResult()
                 installed_apps_details = tdkTestObj.getResultDetails()
                 
                 app_installed = False
                 if installed_apps_result == "SUCCESS":
-                    try:
-                        installed_apps_data = json.loads(installed_apps_details)
-                        if "result" in installed_apps_data and "apps" in installed_apps_data["result"]:
-                            installed_app_ids = [app.get("id", "") for app in installed_apps_data["result"]["apps"]]
-                            app_installed = app_id in installed_app_ids
-                    except json.JSONDecodeError:
-                        print(f"\n Error parsing installed apps response \n")
+                    if app_id in installed_apps_details:
+                            app_installed = True
                         
                 # Check if app is running
                 app_running = False
@@ -177,7 +172,7 @@ if expectedResult in result.upper():
                 if app_installed:
                     tdkTestObj = obj.createTestStep('rdkservice_getValue')
                     tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getRunningApps") 
-                    tdkTestObj.addParameter("value", "{}")
+                    #tdkTestObj.addParameter("value", "{}")
                     tdkTestObj.executeTestCase(expectedResult)
                     running_apps_result = tdkTestObj.getResult()
                     running_apps_details = tdkTestObj.getResultDetails()
@@ -435,19 +430,19 @@ if expectedResult in result.upper():
                         
                         if 0 < time_taken_for_resume < (int(app_resume_threshold) + int(offset)):
                             print(f"\n Time taken for resuming {test_app_id} is within the expected range \n")
-                            tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                          #  tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
                             print(f"\n Time taken for resuming {test_app_id} is not within the expected range \n")
-                            tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                          #  tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
                         print("\n Please configure the APP_RESUME_THRESHOLD_VALUE in device configuration file \n")
-                        tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                     #   tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print(f"\n Resume operation failed for app {app_id} \n")
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                  #  tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.setResultStatus("FAILURE")
 
             # Disconnect event listener

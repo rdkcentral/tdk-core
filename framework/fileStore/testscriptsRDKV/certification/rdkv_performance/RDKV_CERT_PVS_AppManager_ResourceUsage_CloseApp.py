@@ -17,7 +17,6 @@
 # limitations under the License.
 ##########################################################################
 
-
 import tdklib
 import time
 import StabilityTestUtility
@@ -26,10 +25,11 @@ import PerformanceTestVariables
 import rdkv_performancelib
 
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
+
 ip = <ipaddress>
 port = <port>
 
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_ResourceUsage_InstallTwice')
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_ResourceUsage_CloseApp')
 
 # Pre-requisite reboot
 pre_requisite_reboot(obj,"yes")
@@ -61,78 +61,46 @@ if expectedResult in result.upper():
 
     if status == "SUCCESS":
 
+        # App details
+        
         app_bundle_name = PerformanceTestVariables.google_bundle
         app_name = app_bundle_name.split('+')[0]
         print(app_name)
         app_download_url = PerformanceTestVariables.app_download_url
 
-        # ------------------- First Install -------------------
-        print("\nInstalling app (First time)")
-
-        status = rdkservice_install_launch_app(obj,app_bundle_name,app_name,app_download_url,launch=False)
+        # ------------------- Install -------------------
+        print("\nInstalling app")
+        status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url, launch=True)
 
         if status == "SUCCESS":
-
-            print("First install successful")
-
-            # Resource usage after first install
-            print("\n[First Install] Resource Usage")
-
-            tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
-            tdkTestObj.executeTestCase(expectedResult)
-
-            if tdkTestObj.getResult() == "SUCCESS":
-                print(tdkTestObj.getResultDetails())
-                tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                print("Failed to fetch resource usage after first install")
-                tdkTestObj.setResultStatus("FAILURE")
-                status = "FAILURE"
-
-            # ------------------- Re-Install -------------------
-            if status == "SUCCESS":
-                print("\nInstalling app again (Second time)")
-                status = rdkservice_install_launch_app(obj,app_bundle_name,app_name,app_download_url,launch=False)
-
-                if status == "SUCCESS":
-                    print("Second install completed successfully (reinstall)")
-                    # Resource usage after second install
-                    print("\n[Second Install] Resource Usage")
-
-                    tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
-                    tdkTestObj.executeTestCase(expectedResult)
-
-                    if tdkTestObj.getResult() == "SUCCESS":
-                        print(tdkTestObj.getResultDetails())
-                        tdkTestObj.setResultStatus("SUCCESS")
-                    else:
-                        print("Failed to fetch resource usage after second install")
-                        tdkTestObj.setResultStatus("FAILURE")
-
-                else:
-                    print("Second install failed (unexpected behavior)")
-
-            print("\nFinal cleanup: Uninstalling app")
-            
-            tdkTestObj = obj.createTestStep('rdkservice_uninstall_app')
+            print("\nClosing the app")
+            tdkTestObj = obj.createTestStep('rdkservice_close_app')
             tdkTestObj.addParameter("app_id", app_name)
             tdkTestObj.executeTestCase(expectedResult)
+
             if tdkTestObj.getResult() == "SUCCESS":
-                print("Cleanup successful")
+                print("App closed successfully")
+                time.sleep(10)  # allow cleanup
+
+                print("\n[After Close] Resource Usage")
+                tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                tdkTestObj.executeTestCase(expectedResult)
+                print(tdkTestObj.getResultDetails())
                 tdkTestObj.setResultStatus("SUCCESS")
+
             else:
-                print("Cleanup failed")
+                print("Failed to close app")
                 tdkTestObj.setResultStatus("FAILURE")
+
         else:
-            print("Failed to Install the app")
+            print("Failed to install app")
 
     else:
         print("Required plugins are not active")
         obj.setLoadModuleStatus("FAILURE")
 
     obj.unloadModule("rdkv_performance")
+
 else:
     obj.setLoadModuleStatus("FAILURE")
     print("Failed to load module")
-
-

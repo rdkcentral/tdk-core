@@ -26,12 +26,13 @@ from web_socket_util import *
 import rdkv_performancelib
 from datetime import datetime, UTC
 
+# Test component
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 
 ip = <ipaddress>
 port = <port>
 
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_TimeTo_CloseApp')
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_TimeToRunApplication')
 
 expectedResult = "SUCCESS"
 Summ_list = []
@@ -62,8 +63,8 @@ if expectedResult in result.upper():
         print(app_name)
         app_download_url = PerformanceTestVariables.app_download_url
 
-        # Install + Launch
-        status = rdkservice_install_launch_app(obj,app_bundle_name,app_name,app_download_url,launch=True)
+        # Install app if needed
+        status = rdkservice_install_launch_app(obj,app_bundle_name,app_name,app_download_url,launch=False)
 
         if status == "SUCCESS":
 
@@ -75,27 +76,26 @@ if expectedResult in result.upper():
 
             time.sleep(3)
 
-            print(f"\nClosing {app_name}")
+            print(f"\nLaunching {app_name} for run-time measurement")
+
+            tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+            tdkTestObj.addParameter("app_name", app_name)
 
             # Start time
             start_time = datetime.now(UTC)
 
-            #Close using your lib function
-            status = rdkservice_close_app(app_name)
-            tdkTestObj = obj.createTestStep('rdkservice_close_app')
-            tdkTestObj.addParameter("app_id", app_name)
             tdkTestObj.executeTestCase(expectedResult)
-            if tdkTestObj.getResult() != "SUCCESS":
-                print("Failed to send close command")
-            else:
-                print("App closed successfully")
-                time.sleep(10)  # allow cleanup
+
+            status = tdkTestObj.getResult()
+
+            if status == "SUCCESS":
+
                 continue_count = 0
-                closed = False
+                launched = False
 
                 while True:
                     if continue_count > 120:
-                        print("Timeout waiting for close event")
+                        print("Timeout waiting for ACTIVE event")
                         break
 
                     if len(event_listener.getEventsBuffer()) == 0:
@@ -106,63 +106,68 @@ if expectedResult in result.upper():
                     event = event_listener.getEventsBuffer().pop(0)
                     print("\nEvent:", event)
 
-                    if app_name in event and "APP_STATE_DESTROYED" in event:
-                        print("Received close event")
-                        closed = True
+                    if app_name in event and "APP_STATE_ACTIVE" in event:
+                        print("App reached ACTIVE state")
+                        launched = True
                         break
 
-                if closed:
+                if launched:
 
-                    close_time_str = str(event).split("$$$")[0]
+                    # í´¹ Add stabilization delay
+                    time.sleep(3)
 
-                    end_time = datetime.strptime(close_time_str, "%H:%M:%S.%f")
-                    start_time_dt = datetime.strptime(str(start_time.time()), "%H:%M:%S.%f")
+                    end_time = datetime.now(UTC)
 
-                    time_taken = end_time - start_time_dt
+                    time_taken = end_time - start_time
                     time_taken_ms = time_taken.total_seconds() * 1000
 
-                    print("\nTime taken to close app: {} ms".format(time_taken_ms))
+                    print("\nTime taken to run application: {} ms".format(time_taken_ms))
 
                     # Threshold
                     conf_file, file_status = getConfigFileName(obj.realpath)
 
-                    config_status, close_threshold = getDeviceConfigKeyValue(conf_file, "APPMANAGER_CLOSE_THRESHOLD_VALUE")
+                    config_status, run_threshold = getDeviceConfigKeyValue(
+                        conf_file, "APPMANAGER_RUNAPP_THRESHOLD_VALUE"
+                    )
 
-                    if not close_threshold:
-                        print("Close threshold not found, using default (2000 ms)")
-                        close_threshold = "2000"
+                    if not run_threshold:
+                        print("Run threshold not found, using default (3500 ms)")
+                        run_threshold = "3500"
 
-                    config_status, offset = getDeviceConfigKeyValue(conf_file, "THRESHOLD_OFFSET")
+                    config_status, offset = getDeviceConfigKeyValue(
+                        conf_file, "THRESHOLD_OFFSET"
+                    )
 
                     if not offset:
                         offset = "500"
 
-                    threshold = int(close_threshold)
+                    threshold = int(run_threshold)
                     offset_val = int(offset)
 
-                    Summ_list.append(f"CLOSE_THRESHOLD : {threshold} ms")
+                    Summ_list.append(f"RUN_THRESHOLD : {threshold} ms")
                     Summ_list.append(f"OFFSET : {offset_val} ms")
                     Summ_list.append(f"Time taken : {time_taken_ms} ms")
 
                     if 0 < int(time_taken_ms) < (threshold + offset_val):
-                        print("\nClose time within threshold")
+                        print("\nRun time within threshold")
                         obj.setTestResult("SUCCESS")
                     else:
-                        print("\nClose time exceeded threshold")
+                        print("\nRun time exceeded threshold")
                         obj.setTestResult("FAILURE")
 
                     getSummary(Summ_list, obj)
 
-
                 else:
-                    print("Failed to receive close event")
-                    obj.setTestResult("FAILURE")
+                    print("ACTIVE state not reached")
+
+            else:
+                print("Launch failed")
+                obj.setTestResult("FAILURE")
 
             event_listener.disconnect()
 
-
         else:
-            print("Install/Launch failed")
+            print("App install failed")
 
     obj.unloadModule("rdkv_performance")
 
