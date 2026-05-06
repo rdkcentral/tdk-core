@@ -75,8 +75,8 @@ def tr069ACSPreRequisite(obj,sysobj):
             print("Enabled Device.ManagementServer.EnableCWMP parameter successfully")
             tdkTestObj_tr181.setResultStatus("SUCCESS")
 
-            print("Set the Device Management server URL as ",SERVER_URL)
-            actualresult, details = setTR181Value(tdkTestObj_tr181, "Device.ManagementServer.URL", SERVER_URL, "string")
+            print("Set the Device Management server URL as ",ACS_URL)
+            actualresult, details = setTR181Value(tdkTestObj_tr181, "Device.ManagementServer.URL", ACS_URL, "string")
             if expectedresult in actualresult:
                 print("Set the Device Management Server URL successfully")
                 tdkTestObj_tr181.setResultStatus("SUCCESS")

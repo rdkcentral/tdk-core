@@ -3244,7 +3244,7 @@
                 <param tag="clientId" defaultValue="null" type="string"/>
                 <param tag="keyCode" defaultValue="null" type="int"/>
                 <param tag="modifiers" defaultValue="null" type="list"/>
-                <param tag="delay" defaultValue="null" type="int"/>
+                <param tag="delay" defaultValue="null" type="float"/>
             </params>
         </method>
         <method name="Invalid_Generate_Key" api="generateKey" type="method" desc="Generates a key for the window manager">

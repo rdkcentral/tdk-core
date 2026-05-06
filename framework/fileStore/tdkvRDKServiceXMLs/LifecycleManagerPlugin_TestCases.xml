@@ -294,7 +294,7 @@
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Launch_Application">
-                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" delay="3" saveResult="true">
                     <resultGeneration useMethodTag="appmanager_check_loaded_apps">
                         <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                     </resultGeneration>
@@ -331,7 +331,7 @@
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Launch_Application">
-                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
+                <testStep testStepId="1" name="Check_Loaded_Apps" method="Get_Loaded_Apps" pluginName="AppManager" delay="3" saveResult="true">
                     <resultGeneration useMethodTag="appmanager_check_loaded_apps">
                         <arguments value="check_loaded_app_name" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                     </resultGeneration>

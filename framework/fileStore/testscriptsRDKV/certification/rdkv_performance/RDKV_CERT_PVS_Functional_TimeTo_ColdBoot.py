@@ -65,9 +65,9 @@
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
-from rdkv_performancelib import *
 from datetime import datetime
 from StabilityTestUtility import *
+from rdkv_performancelib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
