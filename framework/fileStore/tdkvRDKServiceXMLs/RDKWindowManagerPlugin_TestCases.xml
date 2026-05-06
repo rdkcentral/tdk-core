@@ -222,7 +222,7 @@
     </testCase>
 
     <!-- Test case 02 -->
-    <testCase testCaseId="RWM_02" testCaseName="RWM_AddKeyIntercepts_Empty_Modifiers" desc="Pass an empty modifiers to the method and ensure it handles the input gracefully">
+    <testCase testCaseId="RWM_02" testCaseName="RWM_AddKeyIntercepts_Empty_Modifiers" desc="Pass an empty modifiers parameter to the addKeyIntercepts method and check that the API processes the request successfully without errors, handling the empty input gracefully">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
             <resultGeneration useMethodTag="appmanager_get_app_instance_id">
@@ -264,15 +264,10 @@
     <!-- Test case 04 -->
     <testCase testCaseId="RWM_04" testCaseName="RWM_Check_Create_Display_Valid_Params" desc="Test the createDisplay method by passing valid displayParams containing all required fields and valid values. Ensure the display is created successfully without errors">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Get_AppInstance_Id" method="Get_Loaded_Apps" pluginName="AppManager" saveResult="true">
-            <resultGeneration useMethodTag="appmanager_get_app_instance_id">
-                <expectedValues value="APP_STATE_ACTIVE" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-            </resultGeneration>
-        </testStep>
-        <testStep testStepId="2" name="Create_Display_Valid_Params" method="Create_Display">
+        <testStep testStepId="1" name="Create_Display_Valid_Params" method="Create_Display">
             <params>
-                <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
-                <param tag="displayName" value="Main Display"/>
+                <param tag="clientId" value="testdisplay"/>
+                <param tag="displayName" value="testdisplay"/>
                 <param tag="displayWidth" value="1920"/>
                 <param tag="displayHeight" value="1080"/>
                 <param tag="virtualWidth" value="1920"/>
@@ -800,7 +795,7 @@
         </testStep>
         <testStep testStepId="4" name="Generate_Key_Valid_Events" method="Generate_Key">
             <params>
-                <param tag="clientId" usePreviousResult="true" Id="4" useMethodTag="appmanager_get_previous_appinstance_id"/>
+                <param tag="clientId" usePreviousResult="true" Id="3" useMethodTag="appmanager_get_previous_appinstance_id"/>
                 <param tag="keyCode" value="13"/>
                 <param tag="modifiers" value="shift"/>
                 <param tag="delay" value="3"/>

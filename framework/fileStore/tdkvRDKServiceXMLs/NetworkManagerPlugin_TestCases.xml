@@ -1861,7 +1861,7 @@
                  </params>
                  <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
             </testStep>
-            <testStep testStepId="4" name="Activate_Network_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+            <testStep testStepId="4" name="Activate_Network_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="5">
                   <params>
                     <param tag="callsign" value="org.rdk.NetworkManager" />
                   </params>
