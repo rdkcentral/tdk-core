@@ -164,9 +164,9 @@
     </testCase>
 
     <!-- TestCases 04 -->
-    <testCase testCaseId="PIM_04" testCaseName="PreinstallManager_StartPreInstall_String" desc="Check StartPreInstall method behavior when forceInstall is a string">
+    <testCase testCaseId="PIM_04" testCaseName="PreinstallManager_StartPreInstall_Invalid_String" desc="Check StartPreInstall method behavior when forceInstall is an invalid string">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="StartPreInstall_String" method="Sring_StartPreInstall">
+        <testStep testStepId="1" name="StartPreInstall_Invalid_String" method="Sring_StartPreInstall">
             <params>
                 <param tag="forceInstall" value="invalid_string"/>
             </params>
@@ -218,7 +218,7 @@
     <!-- TestCases 09 -->
     <testCase testCaseId="PIM_09" testCaseName="PreinstallManager_StartPreInstall_Null_Parameter" desc="Check StartPreInstall method behavior when forceInstall parameter is null">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="StartPreInstall_Null_Parameter" method="StartPreInstall">
+        <testStep testStepId="1" name="StartPreInstall_Null_Parameter" method="Sring_StartPreInstall">
             <params>
                 <param tag="forceInstall" value="null"/>
             </params>
@@ -229,7 +229,7 @@
     <!-- TestCases 10 -->
     <testCase testCaseId="PIM_10" testCaseName="PreinstallManager_StartPreInstall_CaseSensitive" desc="Check StartPreInstall method behavior with case variations of boolean">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="StartPreInstall_CaseSensitive_TRUE" method="StartPreInstall">
+        <testStep testStepId="1" name="StartPreInstall_CaseSensitive_TRUE" method="Sring_StartPreInstall">
             <params>
                 <param tag="forceInstall" value="TRUE"/>
             </params>

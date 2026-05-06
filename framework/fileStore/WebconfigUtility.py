@@ -89,7 +89,7 @@ def configureWebconfigSettings(obj, mac, values=None):
     getValue = []
     # If values is not provided, use default URL
     if values == None:
-        url = f"{WEBCONFIG_URL}:9007/api/v1/device/{mac}/config"
+        url = f"{WEBCONFIG_URL}/api/v1/device/{mac}/config"
         values = [url] * 2
 
     webconfig_params = dict(zip(params, values))
@@ -163,7 +163,7 @@ def CurlCommand(obj, subdoc_name, paramname, subdoc_info, mac):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
 
     command = (
-    f"curl -s -i \"{WEBCONFIG_URL}:9008/api/v1/device/{mac}/document/{subdoc_name}?param_name={paramname}\" "
+    f"curl -s -i \"{WEBCONFIG_URL}/api/v1/device/{mac}/document/{subdoc_name}?param_name={paramname}\" "
     f"-H 'Content-type: application/json' "
     f"--data '{json.dumps(subdoc_info)}' "
     f"-X POST")
