@@ -107,7 +107,7 @@ if expectedResult in result.upper():
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print("Unable to terminate the app")
+                        print("Unable to close the app")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     print("Unable to launch the app")

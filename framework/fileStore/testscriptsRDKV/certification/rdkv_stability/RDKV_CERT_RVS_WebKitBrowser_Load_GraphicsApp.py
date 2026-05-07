@@ -213,7 +213,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 print("Unable to terminate the app")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print("\n Unable to set the  URL in persistant store")
+            print("\n Unable to set the  URL in Persistent  Store")
     else:
         print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");

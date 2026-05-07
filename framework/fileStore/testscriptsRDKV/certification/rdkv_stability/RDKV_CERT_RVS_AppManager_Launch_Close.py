@@ -87,7 +87,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                         tdkTestObj.setResultStatus("SUCCESS")
                         print("Successfully launched the app")
                         time.sleep(10)
-                        print("Killing the app")
+                        print("Closing the app")
                         param = '{"appId": "' + app_name + '"}'
                         tdkTestObj = obj.createTestStep('rdkservice_close_app')
                         tdkTestObj.addParameter("app_id",app_name)
@@ -110,7 +110,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 break
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print(f"\nFailed to kill {app_name}")
+                            print(f"\nFailed to close {app_name}")
                             break
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
