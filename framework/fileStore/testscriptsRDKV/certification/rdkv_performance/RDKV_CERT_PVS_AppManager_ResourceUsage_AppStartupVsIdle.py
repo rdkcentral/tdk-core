@@ -83,7 +83,6 @@ if expectedResult in result.upper():
             print(f"\nApp Name: {app_name}")
 
             app_download_url = PerformanceTestVariables.app_download_url
-            app_download_url = app_download_url + "/" + app_bundle_name
 
             # ------------------- Install and Launch App -------------------
             status = rdkservice_install_launch_app(
