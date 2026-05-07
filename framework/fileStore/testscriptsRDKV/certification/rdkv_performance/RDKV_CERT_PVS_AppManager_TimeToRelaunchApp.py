@@ -93,103 +93,56 @@ if expectedResult in result.upper():
             tdkTestObj = obj.createTestStep('rdkv_terminate_app')
             tdkTestObj.addParameter("app_id", app_name)
             tdkTestObj.executeTestCase(expectedResult)
-
-            # ✅ Wait for APP_STATE_DESTROYED
-            continue_count = 0
-            terminated = False
-
-            while True:
-                if continue_count > 60:
-                    print("Timeout waiting for terminate event")
-                    break
-
-                if len(event_listener.getEventsBuffer()) == 0:
-                    time.sleep(1)
-                    continue_count += 1
-                    continue
-
-                event = event_listener.getEventsBuffer().pop(0)
-                print("\nTerminate Event:", event)
-
-                if app_name in event and "APP_STATE_DESTROYED" in event:
-                    print("App fully terminated")
-                    terminated = True
-                    break
-
-            if not terminated:
-                print("App did not terminate properly")
-
-            time.sleep(2)  # small buffer
-
-            print(f"\nRelaunching {app_name}")
-
-            # Relaunch
-            tdkTestObj = obj.createTestStep('rdkservice_launch_app')
-            tdkTestObj.addParameter("app_name", app_name)
-
-            start_time = datetime.now(UTC)
-
-            tdkTestObj.executeTestCase(expectedResult)
-
             status = tdkTestObj.getResult()
-
             if status == "SUCCESS":
+                print("App is terminated Successfully")
+                time.sleep(2)
 
-                continue_count = 0
-                launch_success = False
-
-                while True:
-                    if continue_count > 120:
-                        print("Timeout waiting for relaunch event")
-                        break
-
-                    if len(event_listener.getEventsBuffer()) == 0:
-                        time.sleep(1)
-                        continue_count += 1
-                        continue
-
-                    event = event_listener.getEventsBuffer().pop(0)
-                    print("\nRelaunch Event:", event)
-
-                    if app_name in event and "APP_STATE_ACTIVE" in event:
-                        print("Received relaunch ACTIVE event")
-                        launch_success = True
-                        break
-
-                if launch_success:
-
+                print(f"\nRelaunching {app_name}")
+                # Relaunch
+                tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+                tdkTestObj.addParameter("app_name", app_name)
+                start_time = datetime.now(UTC)
+                tdkTestObj.executeTestCase(expectedResult)
+                status = tdkTestObj.getResult()
+                if status == "SUCCESS":
+                    continue_count = 0
+                    launch_success = False
+                    while True:
+                        if continue_count > 120:
+                            print("Timeout waiting for relaunch event")
+                            break
+                        if len(event_listener.getEventsBuffer()) == 0:
+                            time.sleep(1)
+                            continue_count += 1
+                            continue
+                        event = event_listener.getEventsBuffer().pop(0)
+                        print("\nRelaunch Event:", event)
+                        if app_name in event and "APP_STATE_ACTIVE" in event:
+                            print("Received relaunch ACTIVE event")
+                            launch_success = True
+                            break
                     relaunch_time_str = str(event).split("$$$")[0]
-
                     end_time = datetime.strptime(relaunch_time_str, "%H:%M:%S.%f")
                     start_time_dt = datetime.strptime(str(start_time.time()), "%H:%M:%S.%f")
-
                     time_taken = end_time - start_time_dt
                     time_taken_ms = time_taken.total_seconds() * 1000
-
                     print("\nTime taken to relaunch app: {} ms".format(time_taken_ms))
-
-                    # =========================
+                    # ========================
                     # Threshold Logic (Fallback)
                     # =========================
                     conf_file, file_status = getConfigFileName(obj.realpath)
-
-                    config_status, relaunch_threshold = getDeviceConfigKeyValue(
-                        conf_file, "APPMANAGER_RELAUNCH_THRESHOLD_VALUE"
-                    )
+                    config_status, relaunch_threshold = getDeviceConfigKeyValue(conf_file, "APPMANAGER_RELAUNCH_THRESHOLD_VALUE")
 
                     if not relaunch_threshold:
                         print("Relaunch threshold not found, using launch threshold")
-                        config_status, relaunch_threshold = getDeviceConfigKeyValue(
-                            conf_file, "APPMANAGER_LAUNCH_THRESHOLD_VALUE"
-                        )
+                        config_status, relaunch_threshold = getDeviceConfigKeyValue(conf_file, "APPMANAGER_LAUNCH_THRESHOLD_VALUE")
 
                     if not relaunch_threshold:
                         print("Launch threshold not found, using default (3000 ms)")
                         relaunch_threshold = "3000"
 
-                    config_status, offset = getDeviceConfigKeyValue(
-                        conf_file, "THRESHOLD_OFFSET"
-                    )
+                    config_status, offset = getDeviceConfigKeyValue(conf_file, "THRESHOLD_OFFSET")
 
                     if not offset:
                         print("Offset not found, using default (500 ms)")
@@ -213,12 +166,12 @@ if expectedResult in result.upper():
                     getSummary(Summ_list, obj)
 
                 else:
-                    print("Failed to receive APP_STATE_ACTIVE event")
+                    print("Failed Relaunch the App")
                     tdkTestObj.setResultStatus("FAILURE")
 
             else:
-                print("Failed to relaunch app")
-
+                print("Terminate the App")
+                tdkTestObj.setResultStatus("FAILURE")
             event_listener.disconnect()
 
         else:

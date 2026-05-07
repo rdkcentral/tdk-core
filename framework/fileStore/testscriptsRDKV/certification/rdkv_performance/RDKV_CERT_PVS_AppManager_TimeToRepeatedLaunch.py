@@ -116,106 +116,61 @@ if expectedResult in result.upper():
                     if app_name in event and "APP_STATE_ACTIVE" in event:
                         launched = True
                         break
+                    # Calculate launch time
+                    launch_time_str = str(event).split("$$$")[0]
+
+                    end_time = datetime.strptime(launch_time_str, "%H:%M:%S.%f")
+                    start_time_dt = datetime.strptime(str(start_time.time()), "%H:%M:%S.%f")
+
+                    time_taken = end_time - start_time_dt
+                    time_taken_ms = time_taken.total_seconds() * 1000
+
+                    print(f"Launch time (Iteration {i+1}): {time_taken_ms} ms")
+
+                    launch_times.append(time_taken_ms)
+
+                    #Terminate app
+                    print("Terminating app...")
+
+                    tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                    tdkTestObj.addParameter("app_id", app_name)
+                    tdkTestObj.executeTestCase(expectedResult)
+
+                    result = tdkTestObj.getResult()
+
+                    if result != "SUCCESS":
+                        print("Failed to terminate app")
+                        obj.setTestResult("FAILURE")
+                    else:
+                        #Validate results
+                        if len(launch_times) > 0:
+                            print("\nAll Launch Times:", launch_times)
+                            conf_file, file_status = getConfigFileName(obj.realpath)
+                            config_status, launch_threshold = getDeviceConfigKeyValue(conf_file, "APPMANAGER_LAUNCH_THRESHOLD_VALUE")
+                            if not launch_threshold:
+                                launch_threshold = "3000"
+                                config_status, offset = getDeviceConfigKeyValue(conf_file, "THRESHOLD_OFFSET")
+                            if not offset:
+                                offset = "500"
+                            threshold = int(launch_threshold)
+                            offset_val = int(offset)
+                            all_pass = True
+                            for t in launch_times:
+                                if not (0 < int(t) < (threshold + offset_val)):
+                                    all_pass = False
+                                    break
+                            Summ_list.append(f"Launch times : {launch_times}")
+                            Summ_list.append(f"Threshold : {threshold} ms")
+                            if all_pass:
+                                print("\nAll launches within threshold")
+                                obj.setTestResult("SUCCESS")
+                            else:
+                                print("\nOne or more launches exceeded threshold")
+                                obj.setTestResult("FAILURE")
 
                 if not launched:
                     print("Launch event not received")
                     break
-
-                # Calculate launch time
-                launch_time_str = str(event).split("$$$")[0]
-
-                end_time = datetime.strptime(launch_time_str, "%H:%M:%S.%f")
-                start_time_dt = datetime.strptime(str(start_time.time()), "%H:%M:%S.%f")
-
-                time_taken = end_time - start_time_dt
-                time_taken_ms = time_taken.total_seconds() * 1000
-
-                print(f"Launch time (Iteration {i+1}): {time_taken_ms} ms")
-
-                launch_times.append(time_taken_ms)
-
-                #Terminate app
-                print("Terminating app...")
-
-                tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-                tdkTestObj.addParameter("app_id", app_name)
-                tdkTestObj.executeTestCase(expectedResult)
-
-                result = tdkTestObj.getResult()
-
-                if result != "SUCCESS":
-                    print("Failed to terminate app")
-                    obj.setTestResult("FAILURE")
-                    break
-
-                # Wait for DESTROYED
-                continue_count = 0
-                destroyed = False
-
-                while True:
-                    if continue_count > 120:
-                        print("Timeout waiting for destroy event")
-                        break
-
-                    if len(event_listener.getEventsBuffer()) == 0:
-                        time.sleep(1)
-                        continue_count += 1
-                        continue
-
-                    event = event_listener.getEventsBuffer().pop(0)
-                    print("\nEvent:", event)
-
-                    if app_name in event and "APP_STATE_DESTROYED" in event:
-                        destroyed = True
-                        break
-
-                if not destroyed:
-                    print("Destroy event not received")
-                    obj.setTestResult("FAILURE")
-                    break
-
-                time.sleep(3)
-
-            #Validate results
-            if len(launch_times) > 0:
-
-                print("\nAll Launch Times:", launch_times)
-
-                conf_file, file_status = getConfigFileName(obj.realpath)
-
-                config_status, launch_threshold = getDeviceConfigKeyValue(
-                    conf_file, "APPMANAGER_LAUNCH_THRESHOLD_VALUE"
-                )
-
-                if not launch_threshold:
-                    launch_threshold = "3000"
-
-                config_status, offset = getDeviceConfigKeyValue(
-                    conf_file, "THRESHOLD_OFFSET"
-                )
-
-                if not offset:
-                    offset = "500"
-
-                threshold = int(launch_threshold)
-                offset_val = int(offset)
-
-                all_pass = True
-
-                for t in launch_times:
-                    if not (0 < int(t) < (threshold + offset_val)):
-                        all_pass = False
-                        break
-
-                Summ_list.append(f"Launch times : {launch_times}")
-                Summ_list.append(f"Threshold : {threshold} ms")
-
-                if all_pass:
-                    print("\nAll launches within threshold")
-                    obj.setTestResult("SUCCESS")
-                else:
-                    print("\nOne or more launches exceeded threshold")
-                    obj.setTestResult("FAILURE")
 
                 getSummary(Summ_list, obj)
 

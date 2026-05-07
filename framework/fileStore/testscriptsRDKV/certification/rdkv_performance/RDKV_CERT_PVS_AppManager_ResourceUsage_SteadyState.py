@@ -63,9 +63,9 @@ if expectedResult in result.upper():
         status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url,launch =True)
         if status == "SUCCESS":
             print("\nApp installation and launch was successfull")
-            # í¿¢ Important step: Wait for steady state
+            #Important step: Wait for steady state
             print("\nWaiting for app to reach steady state...")
-            time.sleep(20)   # allow CPU/memory to stabilize
+            time.sleep(600)   # allow CPU/memory to stabilize
 
             print("\nValidating resource usage in steady state...")
             tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")

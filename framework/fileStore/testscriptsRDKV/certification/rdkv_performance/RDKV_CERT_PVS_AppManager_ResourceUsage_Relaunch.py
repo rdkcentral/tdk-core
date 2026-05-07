@@ -91,54 +91,53 @@ if expectedResult in result.upper():
                 if tdkTestObj.getResult() == "SUCCESS":
                     print(tdkTestObj.getResultDetails())
                     tdkTestObj.setResultStatus("SUCCESS")
+                    
+                    print("\nTerminating the app")
+                    tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                    tdkTestObj.addParameter("app_id", app_name)
+                    tdkTestObj.executeTestCase(expectedResult)                    
+                    if tdkTestObj.getResult() == "SUCCESS":
+                        print("App terminated successfully")
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        time.sleep(5)
+                        print(f"\nRe-launching {app_name} (Second Launch)")
+                        tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+                        tdkTestObj.addParameter("app_name", app_name)
+                        tdkTestObj.executeTestCase(expectedResult)
+                        if tdkTestObj.getResult() == "SUCCESS":
+                            print("App launched successfully (Second Launch)")
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            time.sleep(10)
+                            # Resource usage after second launch
+                            print("\n[Second Launch] Resource Usage")
+                            tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                            tdkTestObj.executeTestCase(expectedResult)
+                            if tdkTestObj.getResult() == "SUCCESS":
+                                print(tdkTestObj.getResultDetails())
+                                tdkTestObj.setResultStatus("SUCCESS")
+                            else:
+                                print("Failed to fetch resource usage")
+                                tdkTestObj.setResultStatus("FAILURE")
+                            print("\nFinal cleanup: Terminating the app")
+                            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                            tdkTestObj.addParameter("app_id", app_name)
+                            tdkTestObj.executeTestCase(expectedResult)
+                            if tdkTestObj.getResult() == "SUCCESS":
+                                print("Cleanup successful")
+                                tdkTestObj.setResultStatus("SUCCESS")
+                            else:
+                                print("Cleanup failed")
+                                tdkTestObj.setResultStatus("FAILURE")
+                        else:
+                            print("Failed to launch app (Second Launch)")
+                            tdkTestObj.setResultStatus("FAILURE")
+                    else:
+                        print("Failed to terminate app")
+                        tdkTestObj.setResultStatus("FAILURE")                        
                 else:
                     print("Failed to fetch resource usage")
                     tdkTestObj.setResultStatus("FAILURE")
                     status = "FAILURE"
-                print("\nTerminating the app")
-                tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-                tdkTestObj.addParameter("app_id", app_name)
-                tdkTestObj.executeTestCase(expectedResult)
-
-                if tdkTestObj.getResult() == "SUCCESS":
-                    print("App terminated successfully")
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    time.sleep(5)
-
-                    print(f"\nRe-launching {app_name} (Second Launch)")
-                    tdkTestObj = obj.createTestStep('rdkservice_launch_app')
-                    tdkTestObj.addParameter("app_name", app_name)
-                    tdkTestObj.executeTestCase(expectedResult)
-                    if tdkTestObj.getResult() == "SUCCESS":
-                        print("App launched successfully (Second Launch)")
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        time.sleep(10)
-                        # Resource usage after second launch
-                        print("\n[Second Launch] Resource Usage")
-                        tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
-                        tdkTestObj.executeTestCase(expectedResult)
-                        if tdkTestObj.getResult() == "SUCCESS":
-                            print(tdkTestObj.getResultDetails())
-                            tdkTestObj.setResultStatus("SUCCESS")
-                        else:
-                            print("Failed to fetch resource usage")
-                            tdkTestObj.setResultStatus("FAILURE")
-                        print("\nFinal cleanup: Terminating the app")
-                        tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-                        tdkTestObj.addParameter("app_id", app_name)
-                        tdkTestObj.executeTestCase(expectedResult)
-                        if tdkTestObj.getResult() == "SUCCESS":
-                            print("Cleanup successful")
-                            tdkTestObj.setResultStatus("SUCCESS")
-                        else:
-                            print("Cleanup failed")
-                            tdkTestObj.setResultStatus("FAILURE")
-                    else:
-                        print("Failed to launch app (Second Launch)")
-                        tdkTestObj.setResultStatus("FAILURE")
-                else:
-                    print("Failed to terminate app")
-                    tdkTestObj.setResultStatus("FAILURE")
             else:
                 print("Failed to launch app (First Launch)")
                 tdkTestObj.setResultStatus("FAILURE")

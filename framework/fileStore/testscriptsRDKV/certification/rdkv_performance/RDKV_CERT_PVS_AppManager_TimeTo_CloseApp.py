@@ -81,7 +81,6 @@ if expectedResult in result.upper():
             start_time = datetime.now(UTC)
 
             #Close using your lib function
-            status = rdkservice_close_app(app_name)
             tdkTestObj = obj.createTestStep('rdkservice_close_app')
             tdkTestObj.addParameter("app_id", app_name)
             tdkTestObj.executeTestCase(expectedResult)

@@ -17,451 +17,245 @@
 # limitations under the License.
 ##########################################################################
 
-# use tdklib library,which provides a wrapper for tdk testcase script
-import tdklib;
+import tdklib
+import time
+import StabilityTestUtility
 from StabilityTestUtility import *
-from PerformanceTestVariables import *
+import PerformanceTestVariables
 from web_socket_util import *
-from rdkv_performancelib import *
 import rdkv_performancelib
-import json
-from datetime import datetime
+from datetime import datetime, UTC
 
-#Test component to be tested
+# Test component
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 
-#IP and Port of box, No need to change,
-#This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_TimeTo_ResumeApp')
 
-#The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
-#configured as "Yes".
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_TimeToResumeApp')
+
 pre_requisite_reboot(obj,"no")
 
-#Execution summary variable
-Summ_list=[]
+expectedResult = "SUCCESS"
+Summ_list = []
 
-#Get the result of connection with test component and DUT
-result =obj.getLoadModuleResult()
-print("[LIB LOAD STATUS]  :  %s" %result)
+# Load module
+result = obj.getLoadModuleResult()
+print("[LIB LOAD STATUS]  :  %s" % result)
 obj.setLoadModuleStatus(result)
 
-expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    #No need to revert any values if the pre conditions are already set.
-    revert="NO"
+
     status = "SUCCESS"
-    event_listener = None
-    app_instance_id = ""
-    test_app_id = ""
 
-    # Required AppManager plugins
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated", "org.rdk.AppManager":"activated"}
-    conf_file, status = get_configfile_name(obj)
-    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
-    
-    # Check if essential AppManager plugins are available
-    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
-    missing_plugins = [plugin for plugin in essential_plugins if plugin not in supported_plugins]
-    
-    if missing_plugins:
-        print(f"\n Essential AppManager plugins not available on this device: {missing_plugins}")
-        print("\n This test requires AppManager functionality which is not supported on this device")
-        print(f"\n Available plugins: {supported_plugins}")
-        status = "FAILURE"
-        obj.setLoadModuleStatus("FAILURE")
-    else:
-        # Remove unsupported plugins from the list
-        for plugin in plugins_list[:]:
-            if plugin not in supported_plugins:
-                plugins_list.remove(plugin)
-                plugin_status_needed.pop(plugin)
+    # ---------------- Plugin Validation ----------------
+    plugins_list = [
+        "org.rdk.DownloadManager",
+        "org.rdk.PackageManagerRDKEMS",
+        "org.rdk.AppManager"
+    ]
 
-        # Get initial plugin status using library function
-        curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
+    plugin_status_needed = {
+        "org.rdk.DownloadManager":"activated",
+        "org.rdk.PackageManagerRDKEMS":"activated",
+        "org.rdk.AppManager":"activated"
+    }
+
+    curr_plugins_status_dict = get_plugins_status(obj, plugins_list)
+
+    if curr_plugins_status_dict != plugin_status_needed:
+        status = set_plugins_status(obj, plugin_status_needed)
+        time.sleep(10)
+
+    if status == "SUCCESS":
+
+
+        app_bundle_1 = PerformanceTestVariables.google_bundle
+        app1_name = app_bundle_1.split('+')[0]
+        app_bundle_2 = PerformanceTestVariables.keytest_bundle
+        app2_name_name = app_bundle_2.split('+')[0]
+        app_download_url = PerformanceTestVariables.app_download_url
         
-        print(f"\n Current plugin status: {curr_plugins_status_dict}")
-        print(f"\n Plugins being checked: {plugins_list}")
-        print(f"\n Required plugin status: {plugin_status_needed}")
+        print("\nInstalling apps")
+        rdkservice_install_launch_app(obj,app_bundle_1,app1_name,app_download_url,launch=False)
+        rdkservice_install_launch_app(obj,_bundle,app2_name,app_download_url,launch=False)
 
-        # Check for failed plugin status
-        failed_plugins = [plugin for plugin in plugins_list if curr_plugins_status_dict.get(plugin, "FAILURE") == "FAILURE"]
-        if failed_plugins:
-            print(f"\n Failed to get status for plugins: {failed_plugins}")
-            print("\n Error while getting status of AppManager plugins")
-            status = "FAILURE"
-        elif curr_plugins_status_dict != plugin_status_needed:
-            revert = "YES"
-            status = set_plugins_status(obj,plugin_status_needed)
-            time.sleep(10)
-            new_plugins_status_dict = get_plugins_status(obj,plugins_list)
-            if new_plugins_status_dict != plugin_status_needed:
-                status = "FAILURE"
-        else:
-            print("\n AppManager plugins are already in the required state \n")
+        # ---------------- Event Listener ----------------
+        thunder_port = rdkv_performancelib.devicePort
+        event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 9,"method": "org.rdk.AppManager.1.register","params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1" }}'],"/jsonrpc",False)
+        time.sleep(3)
 
-        if status == "SUCCESS":
-            print("\n AppManager plugins are available and activated successfully \n")
+        # ---------------- Launch App A ----------------
+        print(f"\nLaunching {app1_name}")
 
-            # Setup event listener for lifecycle changes, download status, and app installation
-            thunder_port = rdkv_performancelib.devicePort
-            lifecycle_event = '{"jsonrpc": "2.0","id": 7,"method": "org.rdk.LifecycleManager.1.register","params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1" }}'
-            download_event = '{"jsonrpc": "2.0","id": 8,"method": "org.rdk.DownloadManager.1.register","params": {"event": "onAppDownloadStatus", "id": "client.events.2" }}'
-            install_event = '{"jsonrpc": "2.0","id": 9,"method": "org.rdk.AppManager.1.register","params": {"event": "onAppInstalled", "id": "client.events.3" }}'
-            event_listener = createEventListener(ip, thunder_port, [lifecycle_event, download_event, install_event], "/jsonrpc", False)
-            time.sleep(5)
+        tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+        tdkTestObj.addParameter("app_name", app1_name)
+        tdkTestObj.executeTestCase(expectedResult)
 
-            # Get app download URL and app name from configuration file
-            config_status, app_download_url = getDeviceConfigKeyValue(conf_file, "PACKAGEMANAGER_APPLICATION_HOSTEDURL")
-            app_name_status, app_id = getDeviceConfigKeyValue(conf_file, "PACKAGEMANAGER_APPLICATION_NAME")
+        # Wait ACTIVE
+        while True:
 
-            if config_status != "SUCCESS" or not app_download_url:
-                print("\n PACKAGEMANAGER_APPLICATION_HOSTEDURL not configured in device configuration file \n")
-                status = "FAILURE"
-            elif app_name_status != "SUCCESS" or not app_id:
-                print("\n PACKAGEMANAGER_APPLICATION_NAME not configured in device configuration file \n")
-                status = "FAILURE"
+            if len(event_listener.getEventsBuffer()) == 0:
+                time.sleep(1)
+                continue
+
+            event = event_listener.getEventsBuffer().pop(0)
+
+            print("\nEvent:", event)
+
+            if app1_name in event and "APP_STATE_ACTIVE" in event:
+                print("App A ACTIVE")
+                break
+
+        time.sleep(2)
+
+        # ---------------- Launch App B ----------------
+        print(f"\nLaunching {app2_name}")
+
+        tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+        tdkTestObj.addParameter("app_name", app2_name)
+        tdkTestObj.executeTestCase(expectedResult)
+
+        background = False
+
+        while True:
+
+            if len(event_listener.getEventsBuffer()) == 0:
+                time.sleep(1)
+                continue
+
+            event = event_listener.getEventsBuffer().pop(0)
+
+            print("\nEvent:", event)
+
+            if app1_name in event and (
+                "APP_STATE_BACKGROUND" in event or
+                "APP_STATE_SUSPENDED" in event
+            ):
+                print("App A moved to background")
+                background = True
+                break
+
+        if not background:
+            print("\nFailed to move App A to background")
+            obj.setTestResult("FAILURE")
+            event_listener.disconnect()
+            obj.unloadModule("rdkv_performance")
+            exit()
+
+        time.sleep(2)
+
+        # ---------------- Clear Buffer ----------------
+        event_listener.getEventsBuffer().clear()
+
+        # ---------------- Resume App A ----------------
+        print(f"\nResuming {app1_name}")
+
+        tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+        tdkTestObj.addParameter("app_name", app1_name)
+
+        start_time = datetime.now(UTC).time()
+
+        tdkTestObj.executeTestCase(expectedResult)
+
+        continue_count = 0
+        resumed = False
+        event = ""
+
+        while True:
+
+            if continue_count > 120:
+                print("\nTimeout waiting for resume event")
+                obj.setTestResult("FAILURE")
+                break
+
+            if len(event_listener.getEventsBuffer()) == 0:
+                time.sleep(1)
+                continue_count += 1
+                continue
+
+            event = event_listener.getEventsBuffer().pop(0)
+
+            print("\nEvent:", event)
+
+            if app1_name in event and "APP_STATE_ACTIVE" in event:
+                resumed = True
+                print("App resumed successfully")
+                break
+
+        if resumed:
+
+            resume_time = str(event).split("$$$")[0]
+
+            start_dt = datetime.strptime(str(start_time), "%H:%M:%S.%f")
+            end_dt = datetime.strptime(str(resume_time), "%H:%M:%S.%f")
+
+            time_taken = end_dt - start_dt
+            time_taken_ms = time_taken.total_seconds() * 1000
+
+            print("\nTime taken to resume app: {} ms".format(time_taken_ms))
+
+            # ---------------- Threshold ----------------
+            conf_file, _ = getConfigFileName(obj.realpath)
+
+            _, threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_LAUNCH_THRESHOLD_VALUE")
+            _, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+            if not threshold:
+                threshold = "2000"
+
+            if not offset:
+                offset = "10"
+
+            allowed_time = int(threshold) + int(offset)
+
+            print(f"\nThreshold : {threshold} ms")
+            print(f"Offset    : {offset} ms")
+            print(f"Allowed   : {allowed_time} ms")
+
+            # ---------------- Validation ----------------
+            if 0 < int(time_taken_ms) < allowed_time:
+
+                print("\nResume time within expected range")
+                print(f"Measured: {time_taken_ms} ms | Allowed: {allowed_time} ms")
+
+                obj.setTestResult("SUCCESS")
+
             else:
-                print(f"\n App download URL: {app_download_url} \n")
-                print(f"\n App ID for resume test: {app_id} \n")
 
-                # Use TDK test steps for complete app lifecycle management
-                download_timeout = 120  # 2 minutes
-                install_timeout = 120   # 2 minutes
-                launch_timeout = 120    # 2 minutes
-                suspend_timeout = 60    # 1 minute
-                resume_timeout = 60     # 1 minute
-                
-                # Initialize results dictionary
-                results_dict = {
-                    "download_time": 0,
-                    "install_time": 0,
-                    "launch_time": 0,
-                    "suspend_time": 0,
-                    "resume_time": 0,
-                    "app_instance_id": "",
-                    "download_success": False,
-                    "install_success": False,
-                    "launch_success": False,
-                    "suspend_success": False,
-                    "resume_success": False
-                }
+                diff = int(time_taken_ms) - allowed_time
 
-                # Step 0: Check current app status (installed, running, suspended)
-                print(f"\n Checking current status of app {app_id}... \n")
-                
-                # Check if app is installed
-                tdkTestObj = obj.createTestStep('rdkv_getInstalledPackages')
-                #tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getInstalledApps")
-                #tdkTestObj.addParameter("value", "{}")
-                tdkTestObj.executeTestCase(expectedResult)
-                installed_apps_result = tdkTestObj.getResult()
-                installed_apps_details = tdkTestObj.getResultDetails()
-                
-                app_installed = False
-                if installed_apps_result == "SUCCESS":
-                    if app_id in installed_apps_details:
-                            app_installed = True
-                        
-                # Check if app is running
-                app_running = False
-                app_suspended = False
-                if app_installed:
-                    tdkTestObj = obj.createTestStep('rdkservice_getValue')
-                    tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getRunningApps") 
-                    #tdkTestObj.addParameter("value", "{}")
-                    tdkTestObj.executeTestCase(expectedResult)
-                    running_apps_result = tdkTestObj.getResult()
-                    running_apps_details = tdkTestObj.getResultDetails()
-                    
-                    if running_apps_result == "SUCCESS":
-                        try:
-                            running_apps_data = json.loads(running_apps_details)
-                            if "result" in running_apps_data and "apps" in running_apps_data["result"]:
-                                for running_app in running_apps_data["result"]["apps"]:
-                                    if running_app.get("id") == app_id:
-                                        app_running = True
-                                        app_state = running_app.get("state", "").lower()
-                                        if app_state in ["suspended", "paused"]:
-                                            app_suspended = True
-                                        break
-                        except json.JSONDecodeError:
-                            print(f"\n Error parsing running apps response \n")
+                print("\nResume time exceeded threshold")
+                print(f"Measured : {time_taken_ms} ms")
+                print(f"Allowed  : {allowed_time} ms")
+                print(f"Exceeded by: {diff} ms")
 
-                print(f"\n App Status - Installed: {app_installed}, Running: {app_running}, Suspended: {app_suspended} \n")
+                obj.setTestResult("FAILURE")
 
-                # Step 1: Install app if not installed (prerequisite)
-                if not app_installed:
-                    print(f"\n App {app_id} not installed, downloading and installing as prerequisite... \n")
-                    
-                    # Download app
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method", "org.rdk.DownloadManager.1.download")
-                    tdkTestObj.addParameter("value", '{"url": "' + app_download_url + '", "appId": "' + app_id + '"}')
-                    download_start_time = str(datetime.utcnow()).split()[1]
-                    tdkTestObj.executeTestCase(expectedResult)
-                    download_result = tdkTestObj.getResult()
-                    
-                    if download_result == "SUCCESS":
-                        # Wait for download completion
-                        continue_count = 0
-                        download_success = False
-                        
-                        while continue_count < download_timeout:
-                            if len(event_listener.getEventsBuffer()) == 0:
-                                continue_count += 1
-                                time.sleep(1)
-                                continue
-                                
-                            event_log = event_listener.getEventsBuffer().pop(0)
-                            if app_id in event_log and "onAppDownloadStatus" in str(event_log):
-                                event_data = json.loads(event_log.split('$$$')[1])
-                                if event_data.get("status") == "Downloaded":
-                                    download_success = True
-                                    results_dict["download_success"] = True
-                                    break
-                                    
-                        if download_success:
-                            # Install app
-                            tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                            tdkTestObj.addParameter("method", "org.rdk.PackageManagerRDKEMS.1.install")
-                            tdkTestObj.addParameter("value", '{"appId": "' + app_id + '"}')
-                            tdkTestObj.executeTestCase(expectedResult)
-                            install_result = tdkTestObj.getResult()
-                            
-                            if install_result == "SUCCESS":
-                                # Wait for installation completion
-                                continue_count = 0
-                                install_success = False
-                                
-                                while continue_count < install_timeout:
-                                    if len(event_listener.getEventsBuffer()) == 0:
-                                        continue_count += 1
-                                        time.sleep(1)
-                                        continue
-                                        
-                                    event_log = event_listener.getEventsBuffer().pop(0)
-                                    if app_id in event_log and "onAppInstalled" in str(event_log):
-                                        install_success = True
-                                        results_dict["install_success"] = True
-                                        break
-                                        
-                                if not install_success:
-                                    print(f"\n Failed to install app {app_id} \n")
-                                    status = "FAILURE"
-                            else:
-                                print(f"\n Failed to initiate installation for {app_id} \n")
-                                status = "FAILURE"
-                        else:
-                            print(f"\n Failed to download app {app_id} \n")
-                            status = "FAILURE"
-                    else:
-                        print(f"\n Failed to initiate download for {app_id} \n")
-                        status = "FAILURE"
+            Summ_list.append(f"Resume time : {time_taken_ms} ms")
+            Summ_list.append(f"Allowed time : {allowed_time} ms")
 
-                # Step 2: Launch app if not running (prerequisite)
-                if status == "SUCCESS" and not app_running:
-                    print(f"\n App {app_id} not running, launching as prerequisite... \n")
-                    
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method", "org.rdk.AppManager.1.launchApp")
-                    tdkTestObj.addParameter("value", '{"appId": "' + app_id + '"}')
-                    launch_start_time = str(datetime.utcnow()).split()[1]
-                    tdkTestObj.executeTestCase(expectedResult)
-                    launch_result = tdkTestObj.getResult()
-                    
-                    if launch_result == "SUCCESS":
-                        # Wait for launch completion
-                        continue_count = 0
-                        launch_success = False
-                        
-                        while continue_count < launch_timeout:
-                            if len(event_listener.getEventsBuffer()) == 0:
-                                continue_count += 1
-                                time.sleep(1)
-                                continue
-                                
-                            event_log = event_listener.getEventsBuffer().pop(0)
-                            if app_id in event_log and "onAppLifecycleStateChanged" in str(event_log):
-                                event_data = json.loads(event_log.split('$$$')[1])
-                                if event_data.get("state", "").lower() in ["running", "launched", "started"]:
-                                    launch_success = True
-                                    results_dict["launch_success"] = True
-                                    app_instance_id = event_data.get("instanceId", "")
-                                    break
-                                    
-                        if not launch_success:
-                            print(f"\n Failed to launch app {app_id} \n")
-                            status = "FAILURE"
-                    else:
-                        print(f"\n Failed to initiate launch for {app_id} \n")
-                        status = "FAILURE"
+            getSummary(Summ_list, obj)
 
-                # Step 3: Suspend app if not already suspended (prerequisite)
-                if status == "SUCCESS" and not app_suspended:
-                    print(f"\n App {app_id} not suspended, suspending as prerequisite... \n")
-                    
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method", "org.rdk.AppManager.1.suspendApp")
-                    tdkTestObj.addParameter("value", '{"appId": "' + app_id + '"}')
-                    suspend_start_time = str(datetime.utcnow()).split()[1]
-                    tdkTestObj.executeTestCase(expectedResult)
-                    suspend_result = tdkTestObj.getResult()
-                    
-                    if suspend_result == "SUCCESS":
-                        # Wait for suspend completion
-                        continue_count = 0
-                        suspend_success = False
-                        
-                        while continue_count < suspend_timeout:
-                            if len(event_listener.getEventsBuffer()) == 0:
-                                continue_count += 1
-                                time.sleep(1)
-                                continue
-                                
-                            event_log = event_listener.getEventsBuffer().pop(0)
-                            if app_id in event_log and "onAppLifecycleStateChanged" in str(event_log):
-                                event_data = json.loads(event_log.split('$$$')[1])
-                                if event_data.get("state", "").lower() in ["suspended", "paused"]:
-                                    suspend_success = True
-                                    results_dict["suspend_success"] = True
-                                    break
-                                    
-                        if not suspend_success:
-                            print(f"\n Failed to suspend app {app_id} \n")
-                            status = "FAILURE"
-                    else:
-                        print(f"\n Failed to initiate suspend for {app_id} \n")
-                        status = "FAILURE"
-                
-                # Step 4: Resume the app (Main focus of this test)
-                if status == "SUCCESS":
-                    print(f"\n Starting app resume for {app_id}... \n")
-                    
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method", "org.rdk.AppManager.1.resumeApp")
-                    tdkTestObj.addParameter("value", '{"appId": "' + app_id + '"}')
-                    resume_start_time = str(datetime.utcnow()).split()[1]
-                    tdkTestObj.executeTestCase(expectedResult)
-                    resume_result = tdkTestObj.getResult()
-                    
-                    if resume_result == "SUCCESS":
-                        print(f"\n Resume initiated successfully for {app_id} \n")
-                        
-                        # Wait for resume completion
-                        continue_count = 0
-                        resumed_time = ""
-                        resume_success = False
-                        
-                        while continue_count < resume_timeout:
-                            if len(event_listener.getEventsBuffer()) == 0:
-                                continue_count += 1
-                                time.sleep(1)
-                                continue
-                                
-                            event_log = event_listener.getEventsBuffer().pop(0)
-                            print(f"\n Resume event: {event_log} \n")
-                            
-                            if app_id in event_log and "onAppLifecycleStateChanged" in str(event_log):
-                                event_data = json.loads(event_log.split('$$$')[1])
-                                app_state = event_data.get("state", "").lower()
-                                
-                                if app_state in ["running", "resumed", "active", "started"]:
-                                    print(f"\n Event: App lifecycle changed to {app_state} for {app_id} \n")
-                                    resumed_time = event_log.split('$$$')[0]
-                                    resume_success = True
-                                    break
-                                    
-                        if resumed_time and resume_success:
-                            resume_start_time_in_millisec = getTimeInMilliSec(resume_start_time)
-                            resumed_time_in_millisec = getTimeInMilliSec(resumed_time)
-                            resume_time_taken = resumed_time_in_millisec - resume_start_time_in_millisec
-                            results_dict["resume_time"] = resume_time_taken
-                            results_dict["resume_success"] = True
-                            status = "SUCCESS"
-                            print(f"\n App resume completed successfully in {resume_time_taken}ms \n")
-                        else:
-                            print(f"\n App resume event not received or resume failed for {app_id} \n")
-                            tdkTestObj.setResultStatus("FAILURE")
-                            status = "FAILURE"
-                    else:
-                        print(f"\n Failed to initiate resume for {app_id} \n")
-                        tdkTestObj.setResultStatus("FAILURE")
-                        status = "FAILURE"
-                
-                if status == "SUCCESS" and results_dict["resume_success"]:
-                    test_app_id = app_id
-                    time_taken_for_resume = results_dict["resume_time"]
-                    
-                    print(f"\n Resume Time: {time_taken_for_resume}ms \n")
-                    
-                    Summ_list.append(f'Time taken to resume app: {time_taken_for_resume}ms')
-                    
-                    # Add prerequisite operation times to summary if performed
-                    if results_dict["download_time"] > 0:
-                        print(f"\n Download Time (prerequisite): {results_dict['download_time']}ms \n")
-                        Summ_list.append(f'Time taken to download app (prerequisite): {results_dict["download_time"]}ms')
-                    
-                    if results_dict["install_time"] > 0:
-                        print(f"\n Install Time (prerequisite): {results_dict['install_time']}ms \n")
-                        Summ_list.append(f'Time taken to install app (prerequisite): {results_dict["install_time"]}ms')
-                        
-                    if results_dict["launch_time"] > 0:
-                        print(f"\n Launch Time (prerequisite): {results_dict['launch_time']}ms \n")
-                        Summ_list.append(f'Time taken to launch app (prerequisite): {results_dict["launch_time"]}ms')
-                        
-                    if results_dict["suspend_time"] > 0:
-                        print(f"\n Suspend Time (prerequisite): {results_dict['suspend_time']}ms \n")
-                        Summ_list.append(f'Time taken to suspend app (prerequisite): {results_dict["suspend_time"]}ms')
+        # ---------------- Cleanup ----------------
+        print("\nCleaning up apps")
 
-                    # Validate performance against thresholds
-                    config_status, app_resume_threshold = getDeviceConfigKeyValue(conf_file, "APP_RESUME_THRESHOLD_VALUE")
-                    offset_status, offset = getDeviceConfigKeyValue(conf_file, "THRESHOLD_OFFSET")
-                    
-                    Summ_list.append('APP_RESUME_THRESHOLD_VALUE: {}ms'.format(app_resume_threshold))
-                    Summ_list.append('THRESHOLD_OFFSET: {}ms'.format(offset))
-                    
-                    if all(value != "" for value in (app_resume_threshold, offset)):
-                        print(f"\n Threshold value for time taken to resume app: {app_resume_threshold} ms")
-                        print("\n Validate the time: \n")
-                        
-                        if 0 < time_taken_for_resume < (int(app_resume_threshold) + int(offset)):
-                            print(f"\n Time taken for resuming {test_app_id} is within the expected range \n")
-                          #  tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                            tdkTestObj.setResultStatus("SUCCESS")
-                        else:
-                            print(f"\n Time taken for resuming {test_app_id} is not within the expected range \n")
-                          #  tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                            tdkTestObj.setResultStatus("FAILURE")
-                    else:
-                        print("\n Please configure the APP_RESUME_THRESHOLD_VALUE in device configuration file \n")
-                     #   tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                        tdkTestObj.setResultStatus("FAILURE")
-                else:
-                    print(f"\n Resume operation failed for app {app_id} \n")
-                  #  tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.setResultStatus("FAILURE")
+        for app in [app1_name, app2_name]:
 
-            # Disconnect event listener
-            if event_listener:
-                print("\n Disconnecting event listener \n")
-                event_listener.disconnect()
+            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+            tdkTestObj.addParameter("app_id", app)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
+            if result == "SUCCESS":
+                print("App terminated successfully")
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                print("Unable to terminate the app")
+                tdkTestObj.setResultStatus("FAILURE")
 
-        else:
-            print("\n AppManager plugins preconditions are not met \n")
-            obj.setLoadModuleStatus("FAILURE")
-                
-    getSummary(Summ_list, obj)
-
-    #Revert the values
-    if revert == "YES":
-        print("Revert the plugin status before exiting")
-        status = set_plugins_status(obj,curr_plugins_status_dict)
+        event_listener.disconnect()
 
     obj.unloadModule("rdkv_performance")
+
 else:
     obj.setLoadModuleStatus("FAILURE")
     print("Failed to load module")

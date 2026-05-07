@@ -101,57 +101,63 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult)
                 print(tdkTestObj.getResultDetails())
                 tdkTestObj.setResultStatus("SUCCESS")
+
+                # ------------------- Switch to App2 -------------------
+                print(f"\nSwitching to {app2_name}")
+
+                tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+                tdkTestObj.addParameter("app_name", app2_name)
+                tdkTestObj.executeTestCase(expectedResult)
+
+                if tdkTestObj.getResult() == "SUCCESS":
+                    print("App2 launched (App1 moved to background)")
+                    time.sleep(10)
+
+                    print("\n[App2 Foreground / App1 Background] Resource Usage")
+                    tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                    tdkTestObj.executeTestCase(expectedResult)
+                    print(tdkTestObj.getResultDetails())
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    # ------------------- Switch back to App1 -------------------
+                    print(f"\nSwitching back to {app1_name}")
+
+                    tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+                    tdkTestObj.addParameter("app_name", app1_name)
+                    tdkTestObj.executeTestCase(expectedResult)
+
+                    if tdkTestObj.getResult() == "SUCCESS":
+                        print("App1 resumed to foreground")
+                        time.sleep(10)
+
+                        print("\n[App1 Foreground Again] Resource Usage")
+                        tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                        tdkTestObj.executeTestCase(expectedResult)
+                        print(tdkTestObj.getResultDetails())
+                        tdkTestObj.setResultStatus("SUCCESS")
+                    else:
+                        print("Failed to relaunch App1")
+                        tdkTestObj.setResultStatus("FAILURE")
+
+                    # ------------------- Cleanup -------------------
+                    print("\nCleaning up apps")
+
+                    for app in [app1_name, app2_name]:
+                        tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                        tdkTestObj.addParameter("app_id", app)
+                        tdkTestObj.executeTestCase(expectedResult)
+                        result = tdkTestObj.getResult()
+                        if result == "SUCCESS":
+                            print("App Terminated Successfully")
+                            tdkTestObj.setResultStatus("SUCCESS")
+                        else:
+                            print("Failed to terminate app")
+                            obj.setTestResult("FAILURE")
+                else:
+                    print("Failed to launch App2")
+                    tdkTestObj.setResultStatus("FAILURE")
             else:
                 print("Failed to launch App1")
                 tdkTestObj.setResultStatus("FAILURE")
-
-            # ------------------- Switch to App2 -------------------
-            print(f"\nSwitching to {app2_name}")
-
-            tdkTestObj = obj.createTestStep('rdkservice_launch_app')
-            tdkTestObj.addParameter("app_name", app2_name)
-            tdkTestObj.executeTestCase(expectedResult)
-
-            if tdkTestObj.getResult() == "SUCCESS":
-                print("App2 launched (App1 moved to background)")
-                time.sleep(10)
-
-                print("\n[App2 Foreground / App1 Background] Resource Usage")
-                tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
-                tdkTestObj.executeTestCase(expectedResult)
-                print(tdkTestObj.getResultDetails())
-                tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                print("Failed to launch App2")
-                tdkTestObj.setResultStatus("FAILURE")
-
-            # ------------------- Switch back to App1 -------------------
-            print(f"\nSwitching back to {app1_name}")
-
-            tdkTestObj = obj.createTestStep('rdkservice_launch_app')
-            tdkTestObj.addParameter("app_name", app1_name)
-            tdkTestObj.executeTestCase(expectedResult)
-
-            if tdkTestObj.getResult() == "SUCCESS":
-                print("App1 resumed to foreground")
-                time.sleep(10)
-
-                print("\n[App1 Foreground Again] Resource Usage")
-                tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
-                tdkTestObj.executeTestCase(expectedResult)
-                print(tdkTestObj.getResultDetails())
-                tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                print("Failed to relaunch App1")
-                tdkTestObj.setResultStatus("FAILURE")
-
-            # ------------------- Cleanup -------------------
-            print("\nCleaning up apps")
-
-            for app in [app1_name, app2_name]:
-                tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-                tdkTestObj.addParameter("app_id", app)
-                tdkTestObj.executeTestCase(expectedResult)
 
     obj.unloadModule("rdkv_performance")
 

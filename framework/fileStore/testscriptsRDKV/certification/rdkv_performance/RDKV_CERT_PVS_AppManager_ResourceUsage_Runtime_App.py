@@ -91,11 +91,6 @@ if expectedResult in result.upper():
                         tdkTestObj.setResultStatus("FAILURE")
 
                     time.sleep(interval)
-                print("\nRuntime monitoring completed")
-
-                print("\nValidating runtime stability...")
-
-                print("\nNo abnormal spikes observed during runtime")
                 tdkTestObj.setResultStatus("SUCCESS")
 
 
