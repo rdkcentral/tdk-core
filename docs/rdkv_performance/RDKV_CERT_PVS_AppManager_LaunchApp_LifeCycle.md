@@ -38,7 +38,7 @@ To validate AppManager launch lifecycle events for an app after successful insta
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video_Accelerator, BCM
+**Supported Models** : Video_Accelerator, RPI-Client
 
 **Estimated duration** : 5
 

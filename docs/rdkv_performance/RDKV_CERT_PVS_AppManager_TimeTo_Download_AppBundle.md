@@ -40,9 +40,9 @@ start_time = datetime.now(UTC).time() | Should save the current time  |
 {"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download","params": {"url":"<download url>"}}
  | The app bundle should get downloaded successfully and the API should return success |
 | 6 | Step 6 | Check if onAppDownloadStatus event is received on success download of the bundle | Should receive the event successfully
-{"jsonrpc":"2.0","method":"client.events.1.onAppDownloadStatus","params":{"downloadStatus":"[{\\"downloadId\\":\\"2001\\",\\"fileLocator\\":\\"\\\\\\/opt\\\\\\/CDL\\\\\\/package2001\\"}]"}} |
+{"jsonrpc":"2.0","method":"client.events.1.onAppDownloadStatus","params":{"downloadStatus":"[{\\"downloadId\\":\\"2001\\",\\"fileLocator\\":<PACKAGEMANAGER_FILE_LOCATOR>}]"}} |
 | 7 | Step 7 | Get the time when the event is received 
-time_taken_for_download = downloaded_time - download_start_time | Event: 03:13:54.408570$$${"jsonrpc":"2.0","method":"client.events.1.onAppDownloadStatus","params":{"downloadStatus":"[{\\"downloadId\\":\\"2001\\",\\"fileLocator\\":\\"\\\\\\/opt\\\\\\/CDL\\\\\\/package2001\\"}]"}} |
+time_taken_for_download = downloaded_time - download_start_time | Event: 03:13:54.408570$$${"jsonrpc":"2.0","method":"client.events.1.onAppDownloadStatus","params":{"downloadStatus":"[{\\"downloadId\\":\\"2001\\",\\"fileLocator\\":<PACKAGEMANAGER_FILE_LOCATOR>"}]"}} |
 | 8 | Step 8 | Calculate the time taken to download the app bundle using the start time and event time
  | The time taken for download should be less than the configured threshold value |
 

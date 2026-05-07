@@ -38,7 +38,7 @@ To validate AppManager terminate app lifecycle transition events for a launched 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video_Accelerator, BCM
+**Supported Models** : Video_Accelerator, RPI-Client
 
 **Estimated duration** : 5
 
