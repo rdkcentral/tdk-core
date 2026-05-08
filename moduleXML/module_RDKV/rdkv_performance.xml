@@ -17,14 +17,36 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="2b30a2e2-2ebd-40f2-974f-10789a9d20e9" name="rdkservice_getBrowserScore_CSS3">
+            <function id="31bad264-68c6-4203-8f6f-de808bc00b88" name="rdkservice_getBrowserScore_AnimationBenchmark">
                 <parameters/>
             </function>
-            <function id="e0efe2f1-45d7-4c0e-abb4-29184ea066d8" name="rdkservice_getBrowserScore_HTML5">
+            <function id="6acbca16-c590-4780-9e4d-b654c870648f" name="rdkservice_uninstall_app">
+                <parameters>
+                    <parameter id="bb51d674-1ab4-4abb-a643-b3a4aa408b11" parameterName="app_id" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2e39d106-b329-42b3-bc71-738a1cbd095e" name="rdkservice_install_app">
+                <parameters>
+                    <parameter id="3c3e1c03-b7b0-4611-871c-008ef25b77e0" parameterName="app_id" parameterType="STRING" range="A-Z"/>
+                    <parameter id="8d6f644e-08b6-4070-811d-6e859976580e" parameterName="fileLocator" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="7dca4de2-acbd-465d-bc02-7b1cfccf5f73" name="rdkservice_getBrowserScore_MotionMark">
                 <parameters/>
             </function>
-            <function id="82350588-b38b-42f5-9d2b-4c85e19646ea" name="rdkservice_getBrowserScore_Smashcat">
-                <parameters/>
+            <function id="aa7e34e2-8126-420c-b1f9-f860b4150874" name="rdkservice_setPluginStatus">
+                <parameters>
+                    <parameter id="90bf366d-4cd5-4b81-812b-2e2f1dc1e8c8" parameterName="status" parameterType="STRING" range="a-z"/>
+                    <parameter id="56a96f77-eb6b-461e-8f2c-d1d6ed621082" parameterName="uri" parameterType="STRING" range="a-z"/>
+                    <parameter id="1387120b-6868-4168-84b0-05fd9780686b" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="1cb038b2-3aae-4374-8d5a-cba787eac86a" name="rdkservice_validatePluginFunctionality">
+                <parameters>
+                    <parameter id="d06d58bb-53ee-4085-9603-148660973a05" parameterName="operations" parameterType="STRING" range="a-z"/>
+                    <parameter id="bfb87ed4-267c-4a31-97d3-4dcba4228da0" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                    <parameter id="d1ac674a-b377-4cb0-8ca9-73ccb753863b" parameterName="validation_details" parameterType="STRING" range="a-z"/>
+                </parameters>
             </function>
             <function id="a27eceec-67e1-4908-bf63-6503440d8b06" name="rdkservice_getSupportedPlugins">
                 <parameters>
@@ -34,103 +56,34 @@
             </function>
             <function id="bc94a93c-551b-48ea-9f2d-88fe5da7e364" name="rdkv_install_app">
                 <parameters>
+                    <parameter id="1d35c2d2-42d8-4758-b8dc-3dce2594034a" parameterName="install_timeout" parameterType="STRING" range="a-z"/>
                     <parameter id="2d153cb3-3f5c-48b4-997d-de53bbf49020" parameterName="app_id" parameterType="STRING" range="a-z"/>
                     <parameter id="ca2eb4cd-ea81-47ed-83be-63b7d40a93c6" parameterName="event_listener" parameterType="STRING" range="a-z"/>
-                    <parameter id="1d35c2d2-42d8-4758-b8dc-3dce2594034a" parameterName="install_timeout" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="e1cf80fe-62e3-48d1-b158-52af114537e1" name="rdkservice_setPluginState">
+            <function id="93989dc4-82d8-4f63-a85f-0bdb24fe711a" name="rdkservice_getValue">
                 <parameters>
-                    <parameter id="5323121f-d690-4c34-80e9-ba69590a9249" parameterName="state" parameterType="STRING" range="a-z"/>
-                    <parameter id="a008c90f-f303-4905-be42-b8b5230a6dbc" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                    <parameter id="766b412c-f169-405f-8727-a689e0570457" parameterName="method" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="7b6d96d2-e93a-4d45-a5ef-73c1bdb9d935" name="rdkservice_getBrowserScore_SunSpider">
+            <function id="f24039e8-d5bd-4ebc-9577-935da4734ad0" name="rdkservice_getNoOfPlugins">
                 <parameters/>
             </function>
-            <function id="d54c0445-003c-456a-ae3c-d258b8299f23" name="rdkv_launch_app_with_timing">
-                <parameters>
-                    <parameter id="0f28f81d-5cc2-4efb-9762-1e66e6730457" parameterName="app_id" parameterType="STRING" range="a-z"/>
-                    <parameter id="347c3f85-d958-4b00-a55c-ad330328e3df" parameterName="launch_timeout" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="d672002e-3789-4161-978a-f9aa23ec4c77" parameterName="event_listener" parameterType="STRING" range="a-z"/>
-                </parameters>
+            <function id="ed9bb87f-23ed-4dce-86d8-81aaba36c8a4" name="rdkservice_getAllPluginStatus">
+                <parameters/>
             </function>
             <function id="2009c9e1-b8c7-46ab-bbb3-bfdce2f6cc39" name="rdkservice_getMaxResponseTime">
                 <parameters>
                     <parameter id="f8e7068c-6543-42a8-83d5-1bfb46804e8d" parameterName="method" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="fc2e9856-8ca4-4f5f-bbc3-e72714882dd9" name="rdkservice_getBrowserScore_Kraken">
+            <function id="1844a3f6-b3b0-4525-b6d6-fa122774ed4b" name="rdkservice_getBrowserURL">
+                <parameters>
+                    <parameter id="661574a6-1b12-42d0-9574-f40b54f56f30" parameterName="webinspect_port" parameterType="STRING" range="0-9"/>
+                </parameters>
+            </function>
+            <function id="e0efe2f1-45d7-4c0e-abb4-29184ea066d8" name="rdkservice_getBrowserScore_HTML5">
                 <parameters/>
-            </function>
-            <function id="82a1c01d-63b0-4383-9381-c4ebf2764833" name="rdkservice_getPluginStatus">
-                <parameters>
-                    <parameter id="d5197182-3940-450f-8c91-9a7173e55729" parameterName="plugin" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="8ca2bf81-cdf2-460a-afce-d631d49f7150" name="rdkservice_download_app_bundle">
-                <parameters>
-                    <parameter id="43e27162-8b8b-413e-9e4d-e811543d839f" parameterName="download_url" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="aa7e34e2-8126-420c-b1f9-f860b4150874" name="rdkservice_setPluginStatus">
-                <parameters>
-                    <parameter id="1387120b-6868-4168-84b0-05fd9780686b" parameterName="plugin" parameterType="STRING" range="a-z"/>
-                    <parameter id="56a96f77-eb6b-461e-8f2c-d1d6ed621082" parameterName="uri" parameterType="STRING" range="a-z"/>
-                    <parameter id="90bf366d-4cd5-4b81-812b-2e2f1dc1e8c8" parameterName="status" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="1cb038b2-3aae-4374-8d5a-cba787eac86a" name="rdkservice_validatePluginFunctionality">
-                <parameters>
-                    <parameter id="d1ac674a-b377-4cb0-8ca9-73ccb753863b" parameterName="validation_details" parameterType="STRING" range="a-z"/>
-                    <parameter id="bfb87ed4-267c-4a31-97d3-4dcba4228da0" parameterName="plugin" parameterType="STRING" range="a-z"/>
-                    <parameter id="d06d58bb-53ee-4085-9603-148660973a05" parameterName="operations" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="42f0dfbf-b259-4abb-b7c6-35c7fc23e3c8" name="rdkservice_getBluetoothMac">
-                <parameters/>
-            </function>
-            <function id="f24039e8-d5bd-4ebc-9577-935da4734ad0" name="rdkservice_getNoOfPlugins">
-                <parameters/>
-            </function>
-            <function id="31bad264-68c6-4203-8f6f-de808bc00b88" name="rdkservice_getBrowserScore_AnimationBenchmark">
-                <parameters/>
-            </function>
-            <function id="f65e5397-7312-4b49-8371-7e1695ac35f3" name="setPS_value">
-                <parameters>
-                    <parameter id="f693ab27-e394-4ad4-8a42-1f4b51f76a49" parameterName="video_test_url" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="a92b9968-d914-451e-ac8b-9bfdada1afa6" name="rdkv_download_app">
-                <parameters>
-                    <parameter id="00e85730-0b4a-4e9c-93b6-0544f4521ea5" parameterName="app_download_url" parameterType="STRING" range="a-z"/>
-                    <parameter id="b261bcc5-5acd-4a67-8530-f879625ad14b" parameterName="download_timeout" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="e35fbd86-aa8c-4cac-9fea-f590173af04a" parameterName="event_listener" parameterType="STRING" range="a-z"/>
-                    <parameter id="f672e6a0-7f2d-44d4-a687-e4e223b65379" parameterName="app_id" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="2b1b97b7-e7e5-483b-95b9-9feaeb5e8f14" name="rdkv_terminate_app">
-                <parameters>
-                    <parameter id="b3998832-1a02-4e62-81cb-6bebcb44b723" parameterName="app_id" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="a68fe371-b540-44ec-a641-92d666a6cb47" name="rdkv_getInstalledPackages">
-                <parameters/>
-            </function>
-            <function id="e2366e6e-8fa7-47a6-bf09-111de915d97e" name="rdkservice_getBrowserScore_Speedometer">
-                <parameters/>
-            </function>
-            <function id="b5b04a31-46b1-45a0-ad80-1bd69336e412" name="rdkservice_getReqValueFromResult">
-                <parameters>
-                    <parameter id="4e7e7b4c-442b-46d5-a16e-0e467238f13d" parameterName="reqValue" parameterType="STRING" range="a-z"/>
-                    <parameter id="6ed5581a-c1c0-4d9b-b3e9-fb3386c012d9" parameterName="method" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="e6d2a9b7-344d-450d-b5c4-c951edbc7f48" name="rdkservice_getSSHParams">
-                <parameters>
-                    <parameter id="f44bae51-87cb-426e-89f7-26cae957be3d" parameterName="realpath" parameterType="STRING" range="a-z"/>
-                    <parameter id="51dcb18e-234b-4f3c-9977-c2a41959e6f1" parameterName="deviceIP" parameterType="STRING" range="a-z"/>
-                </parameters>
             </function>
             <function id="57c1f704-dd65-47a5-856c-a093d52e92db" name="validate_time_with_threshold">
                 <parameters>
@@ -142,45 +95,8 @@
             </function>
             <function id="a94c6a47-0238-4d43-8495-f52e1bb5426b" name="rdkservice_setValue">
                 <parameters>
-                    <parameter id="282a2f4e-a5ef-4d2c-8c56-825be4910dc1" parameterName="value" parameterType="STRING" range="A-Z"/>
                     <parameter id="50a5290e-0ad5-4442-9245-dabdf9899fb5" parameterName="method" parameterType="STRING" range="A-Z"/>
-                </parameters>
-            </function>
-            <function id="639eb3e0-8941-4245-8b0f-eb9fa0662761" name="rdkservice_getValueWithParams">
-                <parameters>
-                    <parameter id="564f2ee9-2081-4667-a651-277967fa4830" parameterName="method" parameterType="STRING" range="a-z"/>
-                    <parameter id="d32d94c8-1e21-4fab-9622-f146bf1f8297" parameterName="params" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="38fbc7d4-1aa5-420e-beb0-b97d88123435" name="get_threshold_values">
-                <parameters/>
-            </function>
-            <function id="56539038-42f8-401f-a03a-5603a7f344e2" name="measure_app_launch_time">
-                <parameters>
-                    <parameter id="e11cb8ee-1419-41e5-b1bc-551c30c3d904" parameterName="timeout" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="ebe1d75a-8347-445d-a6ad-cd8d16d2ca94" parameterName="launch_start_time" parameterType="INTEGER" range="0-100"/>
-                    <parameter id="478b957d-eebf-49fc-a2d9-92a0fb04df06" parameterName="event_listener" parameterType="STRING" range="a-z"/>
-                    <parameter id="d22a5093-8f5e-4a13-a1f8-12ec038bd9d5" parameterName="app_id" parameterType="STRING" range="a-z"/>
-                    <parameter id="dd3c5584-c2df-47be-b08a-fe4e217e81c4" parameterName="obj" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
-            <function id="d39d9512-7daa-4ac6-8331-604cdd273b53" name="getDeviceIP_and_Status">
-                <parameters/>
-            </function>
-            <function id="e9966a26-0b65-4f0b-9d4b-117a13ad450e" name="rdkservice_getBrowserScore_Octane">
-                <parameters/>
-            </function>
-            <function id="7dca4de2-acbd-465d-bc02-7b1cfccf5f73" name="rdkservice_getBrowserScore_MotionMark">
-                <parameters/>
-            </function>
-            <function id="1844a3f6-b3b0-4525-b6d6-fa122774ed4b" name="rdkservice_getBrowserURL">
-                <parameters>
-                    <parameter id="661574a6-1b12-42d0-9574-f40b54f56f30" parameterName="webinspect_port" parameterType="STRING" range="0-9"/>
-                </parameters>
-            </function>
-            <function id="93989dc4-82d8-4f63-a85f-0bdb24fe711a" name="rdkservice_getValue">
-                <parameters>
-                    <parameter id="766b412c-f169-405f-8727-a689e0570457" parameterName="method" parameterType="STRING" range="a-z"/>
+                    <parameter id="282a2f4e-a5ef-4d2c-8c56-825be4910dc1" parameterName="value" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="a725dc67-c2b3-45a3-aa89-8dc447f7128f" name="rdkservice_launch_app">
@@ -188,21 +104,118 @@
                     <parameter id="67ebba41-fad8-4615-b628-fa0d37495b7d" parameterName="app_name" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="2e39d106-b329-42b3-bc71-738a1cbd095e" name="rdkservice_install_app">
+            <function id="82350588-b38b-42f5-9d2b-4c85e19646ea" name="rdkservice_getBrowserScore_Smashcat">
+                <parameters/>
+            </function>
+            <function id="56539038-42f8-401f-a03a-5603a7f344e2" name="measure_app_launch_time">
                 <parameters>
-                    <parameter id="3c3e1c03-b7b0-4611-871c-008ef25b77e0" parameterName="app_id" parameterType="STRING" range="A-Z"/>
-                    <parameter id="8d6f644e-08b6-4070-811d-6e859976580e" parameterName="fileLocator" parameterType="STRING" range="A-Z"/>
+                    <parameter id="478b957d-eebf-49fc-a2d9-92a0fb04df06" parameterName="event_listener" parameterType="STRING" range="a-z"/>
+                    <parameter id="e11cb8ee-1419-41e5-b1bc-551c30c3d904" parameterName="timeout" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="dd3c5584-c2df-47be-b08a-fe4e217e81c4" parameterName="obj" parameterType="STRING" range="a-z"/>
+                    <parameter id="d22a5093-8f5e-4a13-a1f8-12ec038bd9d5" parameterName="app_id" parameterType="STRING" range="a-z"/>
+                    <parameter id="ebe1d75a-8347-445d-a6ad-cd8d16d2ca94" parameterName="launch_start_time" parameterType="INTEGER" range="0-100"/>
+                </parameters>
+            </function>
+            <function id="f65e5397-7312-4b49-8371-7e1695ac35f3" name="setPS_value">
+                <parameters>
+                    <parameter id="f693ab27-e394-4ad4-8a42-1f4b51f76a49" parameterName="video_test_url" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="1fef7446-9b06-4693-a057-01e19ccaf201" name="rdkservice_getRequiredLog">
                 <parameters>
-                    <parameter id="aec497b7-6ded-4075-992f-dc11bc8c68f7" parameterName="ssh_method" parameterType="STRING" range="a-z"/>
                     <parameter id="9d7e1a95-a915-4c9f-88ac-1f635d4dcd24" parameterName="command" parameterType="STRING" range="a-z"/>
                     <parameter id="03633352-6f5f-4bf0-b0ee-d8b0ee934dd3" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                    <parameter id="aec497b7-6ded-4075-992f-dc11bc8c68f7" parameterName="ssh_method" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="ed9bb87f-23ed-4dce-86d8-81aaba36c8a4" name="rdkservice_getAllPluginStatus">
+            <function id="d39d9512-7daa-4ac6-8331-604cdd273b53" name="getDeviceIP_and_Status">
                 <parameters/>
+            </function>
+            <function id="a92b9968-d914-451e-ac8b-9bfdada1afa6" name="rdkv_download_app">
+                <parameters>
+                    <parameter id="b261bcc5-5acd-4a67-8530-f879625ad14b" parameterName="download_timeout" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="e35fbd86-aa8c-4cac-9fea-f590173af04a" parameterName="event_listener" parameterType="STRING" range="a-z"/>
+                    <parameter id="f672e6a0-7f2d-44d4-a687-e4e223b65379" parameterName="app_id" parameterType="STRING" range="a-z"/>
+                    <parameter id="00e85730-0b4a-4e9c-93b6-0544f4521ea5" parameterName="app_download_url" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="e9966a26-0b65-4f0b-9d4b-117a13ad450e" name="rdkservice_getBrowserScore_Octane">
+                <parameters/>
+            </function>
+            <function id="88956684-3823-4d7b-9c60-c62e2181f136" name="rdkservice_terminateApp">
+                <parameters/>
+            </function>
+            <function id="2b1b97b7-e7e5-483b-95b9-9feaeb5e8f14" name="rdkv_terminate_app">
+                <parameters>
+                    <parameter id="b3998832-1a02-4e62-81cb-6bebcb44b723" parameterName="app_id" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a68fe371-b540-44ec-a641-92d666a6cb47" name="rdkv_getInstalledPackages">
+                <parameters/>
+            </function>
+            <function id="b5b04a31-46b1-45a0-ad80-1bd69336e412" name="rdkservice_getReqValueFromResult">
+                <parameters>
+                    <parameter id="6ed5581a-c1c0-4d9b-b3e9-fb3386c012d9" parameterName="method" parameterType="STRING" range="a-z"/>
+                    <parameter id="4e7e7b4c-442b-46d5-a16e-0e467238f13d" parameterName="reqValue" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="38fbc7d4-1aa5-420e-beb0-b97d88123435" name="get_threshold_values">
+                <parameters/>
+            </function>
+            <function id="42f0dfbf-b259-4abb-b7c6-35c7fc23e3c8" name="rdkservice_getBluetoothMac">
+                <parameters/>
+            </function>
+            <function id="fc2e9856-8ca4-4f5f-bbc3-e72714882dd9" name="rdkservice_getBrowserScore_Kraken">
+                <parameters/>
+            </function>
+            <function id="7b6d96d2-e93a-4d45-a5ef-73c1bdb9d935" name="rdkservice_getBrowserScore_SunSpider">
+                <parameters/>
+            </function>
+            <function id="9421a3f7-e452-4258-af87-97699d3902d9" name="rdkservice_close_app">
+                <parameters>
+                    <parameter id="cee471a7-956a-42c5-acab-3a0421dfdf3d" parameterName="app_id" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d54c0445-003c-456a-ae3c-d258b8299f23" name="rdkv_launch_app_with_timing">
+                <parameters>
+                    <parameter id="d672002e-3789-4161-978a-f9aa23ec4c77" parameterName="event_listener" parameterType="STRING" range="a-z"/>
+                    <parameter id="347c3f85-d958-4b00-a55c-ad330328e3df" parameterName="launch_timeout" parameterType="INTEGER" range="0-100"/>
+                    <parameter id="0f28f81d-5cc2-4efb-9762-1e66e6730457" parameterName="app_id" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="82a1c01d-63b0-4383-9381-c4ebf2764833" name="rdkservice_getPluginStatus">
+                <parameters>
+                    <parameter id="d5197182-3940-450f-8c91-9a7173e55729" parameterName="plugin" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="2b30a2e2-2ebd-40f2-974f-10789a9d20e9" name="rdkservice_getBrowserScore_CSS3">
+                <parameters/>
+            </function>
+            <function id="8ca2bf81-cdf2-460a-afce-d631d49f7150" name="rdkservice_download_app_bundle">
+                <parameters>
+                    <parameter id="43e27162-8b8b-413e-9e4d-e811543d839f" parameterName="download_url" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="e2366e6e-8fa7-47a6-bf09-111de915d97e" name="rdkservice_getBrowserScore_Speedometer">
+                <parameters/>
+            </function>
+            <function id="e6d2a9b7-344d-450d-b5c4-c951edbc7f48" name="rdkservice_getSSHParams">
+                <parameters>
+                    <parameter id="f44bae51-87cb-426e-89f7-26cae957be3d" parameterName="realpath" parameterType="STRING" range="a-z"/>
+                    <parameter id="51dcb18e-234b-4f3c-9977-c2a41959e6f1" parameterName="deviceIP" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="639eb3e0-8941-4245-8b0f-eb9fa0662761" name="rdkservice_getValueWithParams">
+                <parameters>
+                    <parameter id="d32d94c8-1e21-4fab-9622-f146bf1f8297" parameterName="params" parameterType="STRING" range="a-z"/>
+                    <parameter id="564f2ee9-2081-4667-a651-277967fa4830" parameterName="method" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="e1cf80fe-62e3-48d1-b158-52af114537e1" name="rdkservice_setPluginState">
+                <parameters>
+                    <parameter id="5323121f-d690-4c34-80e9-ba69590a9249" parameterName="state" parameterType="STRING" range="a-z"/>
+                    <parameter id="a008c90f-f303-4905-be42-b8b5230a6dbc" parameterName="plugin" parameterType="STRING" range="a-z"/>
+                </parameters>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->
@@ -318,6 +331,34 @@
                 <name>rdkv_getInstalledPackages</name>
                 <funName>rdkv_getInstalledPackages</funName>
                 <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>4a27edb6-e40e-43da-8999-81a317988cb2</id>
+                <name>rdkservice_uninstall_app</name>
+                <funName>rdkservice_uninstall_app</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>fcbdd66e-310d-4635-9965-68a05abbe8a6</id>
+                        <parameterName>app_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>60995c0a-4f8b-479e-9e6e-c4a0c6f9f1ce</id>
+                <name>rdkservice_close_app</name>
+                <funName>rdkservice_close_app</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>fd165d03-4a25-42eb-9111-d161eff1602f</id>
+                        <parameterName>app_id</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
             </primitivetest>
             <primitivetest>
                 <id>68ee7571-e08c-4b44-a662-2eb2b2813f84</id>
