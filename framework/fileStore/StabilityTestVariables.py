@@ -244,3 +244,12 @@ methods = [
     "org.rdk.DisplaySettings.getVolumeLevel",
     "org.rdk.NetworkManager.1.GetPublicIP"
 ]
+
+#Configurations for AppManager tests
+install_uninstall_count= 100
+launch_terminate_count = 100
+launch_kill_count = 100
+launch_close_count = 100
+lifecyclecount=100
+appmanager_test_apps=[]
+lifecycle_count=100
