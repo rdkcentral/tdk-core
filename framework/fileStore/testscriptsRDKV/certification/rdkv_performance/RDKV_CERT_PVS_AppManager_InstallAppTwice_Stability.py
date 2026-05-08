@@ -29,7 +29,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 ip = <ipaddress>
 port = <port>
 
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_ResourceUsage_InstallTwice')
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_InstallAppTwice_Stability')
 
 # Pre-requisite reboot
 pre_requisite_reboot(obj,"yes")
