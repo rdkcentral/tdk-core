@@ -130,7 +130,7 @@ if expectedResult in result.upper():
     # Setting the pre-requites for media test. Launching the webkit instance via RDKShell and
     # moving it to the front, opening a socket connection to the webkit inspect page and
     # getting the details for proc validation from config file
-    pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,webkit_instance)
+    pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.unified_player_app_id,MediaValidationVariables.unified_player_app_download_url)
     if pre_requisite_status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS");
         print("Pre conditions for the test are set successfully")
@@ -166,7 +166,8 @@ if expectedResult in result.upper():
         #url=<hls_h264_url>.m3u8&operations=seekfwd(10),fastfwd(10),fastfwd(10),playnow(10),pause(10),play(10),seekbwd(10),fastfwd(10)&options=checkInterval(5),loop&autotest=true
 
         # Setting the video test url in webkit instance using RDKShell
-        launch_status = launchPlugin(obj,webkit_instance,video_test_url)
+        setPS_value(video_test_url)
+        launch_status = launchApp(obj,MediaValidationVariables.unified_player_app_id)
         if "SUCCESS" in launch_status:
             # Monitoring the app progress, checking whether app plays the video properly or any hang detected in between,
             # performing proc entry check and getting the test result from the app
@@ -194,7 +195,7 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult);
         # Setting the post-requites for media test.Removing app url from webkit instance and
         # moving next high z-order app to front (residentApp if its active)
-        post_requisite_status = setMediaTestPostRequisites(obj,webkit_instance,webkit_console_socket)
+        post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.unified_player_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")
             tdkTestObj.setResultStatus("SUCCESS");

@@ -131,6 +131,8 @@ if expectedResult in result.upper():
     elif current_interface == "eth0":
         print("Current interface is ethernet. Please connect to WiFi and run the test")
         status = "FAILURE"
+        print("Current interface is ethernet. Please connect to WiFi and run the test")
+        status = "FAILURE"
     else:
         print("\n Current interface is WIFI \n")
     if status == "SUCCESS":
@@ -141,7 +143,21 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
         if expectedResult in result and ssh_param_dict != {}:
+    if status == "SUCCESS":
+        tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+        tdkTestObj.addParameter("realpath",obj.realpath)
+        tdkTestObj.addParameter("deviceIP",obj.IP)
+        tdkTestObj.executeTestCase(expectedResult)
+        result = tdkTestObj.getResult()
+        ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+        if expectedResult in result and ssh_param_dict != {}:
         #Take the channel change URL and replace TM-IP with actual TestManager IP
+        # channel_change_url = PerformanceTestVariables.channel_change_url
+        # tm_url = obj.url.split("/")[2]
+        # channel_change_url=channel_change_url.replace("TM-IP",tm_url)
+        # channel_change_url = PerformanceTestVariables.channel_change_url
+        # tm_url = obj.url.split("/")[2]
+        # channel_change_url=channel_change_url.replace("TM-IP",tm_url)
         # channel_change_url = PerformanceTestVariables.channel_change_url
         # tm_url = obj.url.split("/")[2]
         # channel_change_url=channel_change_url.replace("TM-IP",tm_url)
@@ -230,9 +246,48 @@ if expectedResult in result.upper():
                                 total_time += time_taken
                                 result = "SUCCESS"
                         else:
-                            print("Channel change logs are not present in logs")
+                            print("Channel chnage logs are not present in logs")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
+                        print("\n Playing logs not present in logs")
+                        tdkTestObj.setResultStatus("FAILURE")
+                else:
+                    print("Tuning logs are not present in logs")
+                    tdkTestObj.setResultStatus("FAILURE")
+                    result = "FAILURE"
+                if result == "SUCCESS":
+                    print("\nSuccessfully completed {} channel changes\n".format(max_channel_change_count))
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    avg_time = total_time/5
+                    print("\nAverage time taken for channel change: {} ms\n".format(avg_time))
+                    Summ_list.append('Average time taken for channel change :{}ms'.format(avg_time))
+                    conf_file,result = getConfigFileName(tdkTestObj.realpath)
+                    result1, channelchange_time_threshold_value = getDeviceConfigKeyValue(conf_file,"CHANNEL_CHANGE_TIME_THRESHOLD_VALUE")
+                    Summ_list.append('CHANNEL_CHANGE_TIME_THRESHOLD_VALUE :{}ms'.format(channelchange_time_threshold_value))
+                    result2,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                    Summ_list.append('THRESHOLD_OFFSET :{}'.format(offset))
+                    if all (value != "" for value in (channelchange_time_threshold_value,offset)):
+                        print("\n Threshold value for average time taken for channel change : {} ms".format(channelchange_time_threshold_value))
+                        if 0 < int(avg_time) < (int(channelchange_time_threshold_value) + int(offset)):
+                            tdkTestObj.setResultStatus("SUCCESS");
+                            print("\n The channel change time is within the expected limit\n")
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE");
+                            print("\n The channel change time is not within the expected limit \n")
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print("Failed to get the threshold value from config file")
+                else:
+                    print("\nchannel change didn't happen after {}channel changes\n".format(channel_change_count))
+                    tdkTestObj.setResultStatus("FAILURE")
+                    time.sleep(30)
+                print("\n Terminating the app")
+                tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                tdkTestObj.addParameter("app_id",app_name)
+                tdkTestObj.executeTestCase(expectedResult)
+                result = tdkTestObj.getResult()
+                if result == "SUCCESS":
+                    tdkTestObj.setResultStatus("SUCCESS")
                         print("\n Playing logs not present in logs")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
@@ -275,10 +330,16 @@ if expectedResult in result.upper():
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     print("Unable to terminate the app")
+                    tdkTestObj.setResultStatus("FAILURE")
+                    print("Unable to terminate the app")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print("Failed to install or launch the app")
+                tdkTestObj.setResultStatus("FAILURE")
+                print("Failed to install or launch the app")
         else:
+            print("Failed to get SSH connection details")
+            tdkTestObj.setResultStatus("FAILURE")
             print("Failed to get SSH connection details")
             tdkTestObj.setResultStatus("FAILURE")
     else:
