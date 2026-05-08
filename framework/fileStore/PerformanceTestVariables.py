@@ -17,8 +17,7 @@
 # limitations under the License.
 #########################################################################
 
-#Web inspect port,The port must be 9998 for thunder builds and 9224 for rdkservice builds
-webinspect_port = "9224"
+webinspect_port = ""
 
 #Video player app URL, sample URL: http://<TM-IP>:8080/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?player=VIDEO
 lightning_video_test_app_url = ""

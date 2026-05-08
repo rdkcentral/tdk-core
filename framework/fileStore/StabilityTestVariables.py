@@ -17,7 +17,6 @@
 # limitations under the License.
 #########################################################################
 
-#The port must be 9224 for rdkservice builds and 9998 for thunder builds
 webinspect_port = ""
 
 #no of channel changes to perform
@@ -103,3 +102,13 @@ methods = [
     "org.rdk.DisplaySettings.getVolumeLevel",
     "org.rdk.NetworkManager.1.GetPublicIP"
 ]
+
+
+#Configurations for AppManager tests
+install_uninstall_count= 100
+launch_terminate_count = 100
+launch_kill_count = 100
+launch_close_count = 100
+lifecyclecount=100
+appmanager_test_apps=[]
+lifecycle_count=100
