@@ -86,6 +86,7 @@
 import tdklib
 import StabilityTestVariables
 from StabilityTestUtility import *
+import MediaValidationVariables
 from rdkv_performancelib import *
 
 #Test component to be tested
@@ -120,14 +121,8 @@ if expectedResult in (result.upper() and pre_condition_status):
     print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
-    plugins_list = ["WebKitBrowser","Cobalt","DeviceInfo"]
-    plugin_status_needed = {"WebKitBrowser":"resumed","Cobalt":"deactivated","DeviceInfo":"activated"}
-    conf_file, status = get_configfile_name(obj);
-    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
-    for plugin in plugins_list[:]:
-        if plugin not in supported_plugins:
-            plugins_list.remove(plugin)
-            plugin_status_needed.pop(plugin)
+    plugins_list = ["DeviceInfo","org.rdk.PersistentStore"]
+    plugin_status_needed = {"org.rdk.PersistentStore":"activated","DeviceInfo":"activated"}
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(20)
     status = "SUCCESS"
@@ -145,19 +140,20 @@ if expectedResult in (result.upper() and pre_condition_status):
     test_url = StabilityTestVariables.graphics_app_url
     if status == "SUCCESS" and test_url != "":
         print("\nPre conditions for the test are set successfully");
-        print("\nGet the URL in WebKitBrowser")
-        tdkTestObj = obj.createTestStep('rdkservice_getValue')
-        tdkTestObj.addParameter("method","WebKitBrowser.1.url")
-        tdkTestObj.executeTestCase(expectedResult)
-        current_url = tdkTestObj.getResultDetails()
-        result = tdkTestObj.getResult()
-        if current_url != None and expectedResult in result:
-            tdkTestObj.setResultStatus("SUCCESS")
-            tdkTestObj = obj.createTestStep('rdkservice_setValue')
-            tdkTestObj.addParameter("method","WebKitBrowser.1.url")
-            tdkTestObj.addParameter("value",test_url)
-            tdkTestObj.executeTestCase(expectedResult)
-            result = tdkTestObj.getResult()
+        tdkTestObj = obj.createTestStep('setPS_value');
+        tdkTestObj.addParameter("video_test_url",test_url);
+        tdkTestObj.executeTestCase(expectedResult);
+        result = tdkTestObj.getResult();
+        if result == "SUCCESS":
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("\n Video test URL is set successfully");
+            app_bundle_name=MediaValidationVariables.animation_graphics_app_download_url.split("/")[-1]
+            print(f"\nApp bundle name: {app_bundle_name}")
+            app_name = app_bundle_name.split("+")[0]
+            print(f"\nApp name: {app_name}")
+            app_download_url = MediaValidationVariables.animation_graphics_app_download_url.split(app_bundle_name)[0]
+            print("app_download_url", app_download_url)
+            status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
             if result == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
                 time.sleep(60)
@@ -166,15 +162,11 @@ if expectedResult in (result.upper() and pre_condition_status):
                 time_limit = int(round(time.time() * 1000)) + test_time_in_millisec
                 iteration = 1
                 while int(round(time.time() * 1000)) < time_limit:
-                    print("\n Check whether URL is loaded")
-                    tdkTestObj = obj.createTestStep('rdkservice_getValue')
-                    tdkTestObj.addParameter("method","WebKitBrowser.1.url")
-                    tdkTestObj.executeTestCase(expectedResult)
-                    webkit_url = tdkTestObj.getResultDetails()
-                    result = tdkTestObj.getResult()
-                    if webkit_url and test_url in webkit_url and expectedResult in result:
+                    print("\n Check whether app is loaded")
+                    app_ids = rdkservice_get_loaded_apps()
+                    if app_name in app_ids:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print("\n URL: {} is present in WebKitBrowser".format(test_url))
+                        print("\n App is still loaded and running".format(test_url))
                         result_dict = {}
                         print("\n ##### Validating CPU load and memory usage #####\n")
                         print("Iteration : ", iteration)
@@ -197,7 +189,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                             break
                         time.sleep(test_interval)
                     else:
-                        print("\n Unable to set the video URL in WebkitBrowser, current URL: ",webkit_url)
+                        print("\n The app has terminated in between the test")
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                 else:
@@ -206,23 +198,22 @@ if expectedResult in (result.upper() and pre_condition_status):
                 json.dump(cpu_mem_info_dict,json_file)
                 json_file.close()
             else:
-                print("\n Error while setting video URL in WebKitBrowser")
+                print("\n Error while launching the app")
                 tdkTestObj.setResultStatus("FAILURE")
             #Set the URL back to previous
-            tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method","WebKitBrowser.1.url");
-            tdkTestObj.addParameter("value",current_url);
-            tdkTestObj.executeTestCase(expectedResult);
-            result = tdkTestObj.getResult();
+            print("\n Terminating the app")
+            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+            tdkTestObj.addParameter("app_id",app_name)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
             if result == "SUCCESS":
-                print("\n URL is reverted successfully")
-                tdkTestObj.setResultStatus("SUCCESS");
+                tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print("\n Failed to revert the URL")
-                tdkTestObj.setResultStatus("FAILURE");
+                tdkTestObj.setResultStatus("FAILURE")
+                print("Unable to terminate the app")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print("\n Unable to get the current URL loaded in webkit")
+            print("\n Unable to set the  URL in Persistent  Store")
     else:
         print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
