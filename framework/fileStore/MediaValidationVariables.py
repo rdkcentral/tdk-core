@@ -23,6 +23,10 @@
 # Eg. lightning_apps_loc = "http://<TM_IP>:8080/rdk-test-tool/fileStore/lightning-apps/"
 lightning_apps_loc = ""
 
+# Bolt packages location url
+# Eg. bolt_packages_base_path = "http://<TM_IP>:8443/images/"
+bolt_packages_base_path = ""
+
 
 # Test Streams Base URL
 # This is the location under webapps directory in TDK Test Manager Machine where the test streams zip is extracted
@@ -111,7 +115,6 @@ lightning_video_test_app_url     = lightning_apps_loc + "unifiedplayer/build/ind
 lightning_shaka_test_app_url     = lightning_apps_loc + "unifiedplayer/build/index.html?player=shaka"
 lightning_uve_test_app_url       = lightning_apps_loc + "unifiedplayer/build/index.html?player=aamp"
 
-
 lightning_animation_test_app_url = lightning_apps_loc + "animations/build/index.html"
 lightning_multianimation_test_app_url    = lightning_apps_loc + "multianimations/build/index.html"
 lightning_objects_animation_test_app_url = lightning_apps_loc + "objectanimations/build/index.html"
@@ -121,6 +124,13 @@ html_video_test_app_url = lightning_apps_loc + "htmlplayer.html"
 html_dash_test_app_url    = lightning_apps_loc + "UnifiedMediaHTMLPlayer.html?player=dashjs"
 html_hls_test_app_url     = lightning_apps_loc + "UnifiedMediaHTMLPlayer.html?player=hls"
 html_shaka_test_app_url   = lightning_apps_loc + "UnifiedMediaHTMLPlayer.html?player=shaka"
+
+#bolt packages config
+unified_player_app_id = "com.rdkcentral.lightning-unified-player"
+unified_player_app_download_url = bolt_packages_base_path + "com.rdkcentral.lightning-unified-player+0.1.0.bolt"
+html_player_app_id = "com.rdkcentral.html-player"
+html_player_app_download_url = bolt_packages_base_path + "com.rdkcentral.html-player+0.1.0.bolt"
+
 
 #************************************************************************
 #         DIFFERENT AV CODEC HLS/DASH URLs FOR CODEC TESTING

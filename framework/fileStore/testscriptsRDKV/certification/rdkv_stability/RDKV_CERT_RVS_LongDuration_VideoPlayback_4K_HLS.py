@@ -84,6 +84,7 @@ from web_socket_util import *
 from MediaValidationUtility import *
 from StabilityTestUtility import *
 import StabilityTestVariables
+from rdkv_performancelib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True);

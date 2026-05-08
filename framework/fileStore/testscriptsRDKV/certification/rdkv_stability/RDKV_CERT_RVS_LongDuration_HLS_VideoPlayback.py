@@ -86,8 +86,9 @@
 import tdklib;
 from web_socket_util import *
 from MediaValidationUtility import *
-from StabilityTestUtility import *
 import StabilityTestVariables
+from StabilityTestUtility import *
+from rdkv_performancelib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True);
@@ -154,19 +155,8 @@ if expectedResult in (result.upper() and pre_condition_status):
     started = False
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
-    webkit_instance = StabilityTestVariables.webkit_instance
-    set_method = webkit_instance+'.1.url'
-    plugins_list = ["Cobalt","DeviceInfo",webkit_instance]
-    if webkit_instance in "WebKitBrowser":
-        webinspect_port = StabilityTestVariables.webinspect_port
-    else:
-        webinspect_port = StabilityTestVariables.lightning_app_webinspect_port
-    plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated","DeviceInfo":"activated"}
-    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
-    for plugin in plugins_list[:]:
-        if plugin not in supported_plugins:
-            plugins_list.remove(plugin)
-            plugin_status_needed.pop(plugin)
+    plugins_list = ["DeviceInfo","org.rdk.PersistentStore"]
+    plugin_status_needed = {"org.rdk.PersistentStore":"activated","DeviceInfo":"activated"}
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(20)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
@@ -180,64 +170,40 @@ if expectedResult in (result.upper() and pre_condition_status):
             status = "FAILURE"
     if status == "SUCCESS":
         print("\nPre conditions for the test are set successfully");
-        print("\nGet the URL in {}".format(webkit_instance))
-        tdkTestObj = obj.createTestStep('rdkservice_getValue');
-        tdkTestObj.addParameter("method",set_method);
+        time.sleep(10)
+        tdkTestObj = obj.createTestStep('setPS_value');
+        tdkTestObj.addParameter("video_test_url",video_test_urls[0]);
         tdkTestObj.executeTestCase(expectedResult);
-        current_url = tdkTestObj.getResultDetails();
         result = tdkTestObj.getResult();
-        if current_url != None and expectedResult in result:
+        if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS");
+            print("\n Video test URL is set successfully");
             time.sleep(10)
-            print("\nCurrent URL:",current_url)
-            print("\nSet Lightning Application URL")
-            tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method",set_method);
-            tdkTestObj.addParameter("value",video_test_urls[0]);
-            tdkTestObj.executeTestCase(expectedResult);
-            result = tdkTestObj.getResult();
-            if expectedResult in result:
-                print("\nValidate if the URL is set successfully or not")
-                tdkTestObj.setResultStatus("SUCCESS")
-                tdkTestObj = obj.createTestStep('rdkservice_getValue');
-                tdkTestObj.addParameter("method",set_method);
-                tdkTestObj.executeTestCase(expectedResult);
-                new_url = tdkTestObj.getResultDetails();
-                result = tdkTestObj.getResult();
-                if new_url in video_test_urls[0] and expectedResult in result:
-                    tdkTestObj.setResultStatus("SUCCESS");
-                    print("\n URL(",new_url,") is set successfully \n")
-                    if logging_method == "REST_API":
-                        result_dict_list = testUsingRestAPI(obj,result_dict_list);
-                    elif logging_method == "WEB_INSPECT":
-                        webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
-                        result_dict_list = testUsingWebInspect(obj,webkit_console_socket,result_dict_list);
-                        webkit_console_socket.disconnect()
-                    time.sleep(5)
-                    cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
-                    json.dump(cpu_mem_info_dict,json_file)
-                    json_file.close()
-                    #Set the URL back to previous
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue');
-                    tdkTestObj.addParameter("method",set_method);
-                    tdkTestObj.addParameter("value",current_url);
-                    tdkTestObj.executeTestCase(expectedResult);
-                    result = tdkTestObj.getResult();
-                    if result == "SUCCESS":
-                        print("\n URL is reverted successfully \n")
-                        tdkTestObj.setResultStatus("SUCCESS");
-                    else:
-                        print("\n Failed to revert the URL")
-                        tdkTestObj.setResultStatus("FAILURE");
-                else:
-                    print("\n Failed to load the URL,new URL: %s" %(new_url))
-                    tdkTestObj.setResultStatus("FAILURE");
+            app_bundle_name=MediaValidationVariables.unified_player_app_download_url.split("/")[-1]
+            print(f"\nApp bundle name: {app_bundle_name}")
+            app_name = app_bundle_name.split("+")[0]
+            print(f"\nApp name: {app_name}")
+            app_download_url = MediaValidationVariables.unified_player_app_download_url.split(app_bundle_name)[0]
+            print("app_download_url", app_download_url)
+            status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
+            if status == "SUCCESS":
+                if logging_method == "REST_API":
+                    result_dict_list = testUsingRestAPI(obj,result_dict_list);
+                elif logging_method == "WEB_INSPECT":
+                    webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
+                    result_dict_list = testUsingWebInspect(obj,webkit_console_socket,result_dict_list);
+                    webkit_console_socket.disconnect()
+                time.sleep(5)
+                cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
+                json.dump(cpu_mem_info_dict,json_file)
+                json_file.close()
+                
             else:
-                print("\n Failed to set the URL")
+                print("\n Failed to launch the app")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print("\n Unable to get the current URL")
+            print("\n Unable to set the URL in persistant store")
     else:
         print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
