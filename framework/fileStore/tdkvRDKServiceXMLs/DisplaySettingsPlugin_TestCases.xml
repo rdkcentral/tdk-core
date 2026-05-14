@@ -224,9 +224,26 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_11" testCaseName= "Set_And_Get_VideoPort_Status_InStandby" desc="Check whether video port status to be used in stand by mode is able to set and get" >
-            <testCaseInfo testCaseType="loop" revert="true" />
+        <testCase testCaseId="DS_11" testCaseName= "Set_And_Get_VideoPort_Status_InStandby_Negative_Case" desc="Checks the negative scenario for video port status in standby" >
+            <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" >
+                  <resultGeneration useMethodTag="display_connected_status" />
+            </testStep>
+            <testStep testStepId="2" name="Get_VideoPort_Status_InStandby"  method="Get_VideoPort_Status_InStandby">
+                <params>
+                  <param tag="portName" usePreviousResult="true" Id="1" useMethodTag="set_video_display" />
+                </params>
+              <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Unknown method."/>
+            </testStep>
+            <testStep testStepId="3" name="Set_VideoPort_Status_InStandby" method="Set_VideoPort_Status_InStandby">
+                  <params>
+                    <param tag="portName" usePreviousResult="true" Id="1" useMethodTag="set_video_display" />
+                    <param tag="enabled" value="True"/>
+                  </params>
+                  <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Unknown method."/>
+            </testStep>
+            <!--Platform team confirmed that the Get and Set methods for video port status in standby are deprecated, hence commenting the below steps-->
+            <!--testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" >
                   <resultGeneration useMethodTag="display_connected_status" />
             </testStep>
             <testStep testStepId="2" name="Get_VideoPort_Status_InStandby"  method="Get_VideoPort_Status_InStandby" saveResult="true" revertGet="yes" >
@@ -251,7 +268,7 @@
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
               </subtestStep>
-            </testStep>
+            </testStep-->
         </testCase>
 
         <testCase testCaseId="DS_12" testCaseName= "Set_And_Get_MS12_Audio_Compression" desc="Check whether MS12 audio compression values are able to set and get" >
@@ -2441,14 +2458,14 @@
                 <params>
                   <param tag="portName" value="Invalid0" />
                 </params>
-                <resultGeneration useMethodTag="check_video_port_status_standby" arguments="check_for_invalid_port" expectedValues="internal error,bus failure" />
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Unknown method."/>
             </testStep>
             <testStep testStepId="2" name="Set_VideoPort_Status_InStandby" method="Set_VideoPort_Status_InStandby" >
                 <params>
                   <param tag="portName" value="Invalid0"/>
                   <param tag="enabled" value="True" />
                 </params>
-                <resultGeneration useMethodTag="check_video_port_status_standby" arguments="check_for_invalid_port" expectedValues="internal error,bus failure" />
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Unknown method."/>
             </testStep>
         </testCase>
 
@@ -4464,6 +4481,30 @@
        <!-- Test case 82 -->
        <testCase testCaseId="DS_82" testCaseName="DisplaySettings_Using_KeyCode_Verify_MuteStatus_After_Increasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (increase) using keycode on HDMI0">
             <testCaseInfo testCaseType="direct" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
+	          <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Activate_RDKWindowManager_Plugin">
+                    <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                        <params>
+                            <param tag="plugin" value="org.rdk.RDKWindowManager" indexOnly="true"/>
+                        </params>
+                        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKWindowManager"/>
+                    </testStep>
+                    <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKWindowManager"/>
+                        <params>
+                            <param tag="callsign" value="org.rdk.RDKWindowManager"/>
+                        </params>
+                    </testStep>
+                    <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKWindowManager"/>
+                        <params>
+                            <param tag="plugin" value="org.rdk.RDKWindowManager" indexOnly="true"/>
+                        </params>
+                        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKWindowManager" expectedValues="activated"/>
+                    </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                   <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
             </testStep>
@@ -4473,14 +4514,14 @@
                   </params>
                   <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
             </testStep>
-            <testStep testStepId="3" name="Set_Volume_Level"  method="GenerateKey" pluginName="RDKShell">
+            <testStep testStepId="3" name="Set_Volume_Level"  method="Generate_Key" pluginName="RDKWindowManager">
                   <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_keycode_decrease_volume_level"/>
                   <params>
                     <param tag="keyCode" value="174" />
-                    <param tag="modifiers" useDefault="true" />
+                    <param tag="modifiers" value=""/>
                     <param tag="delay" value="1.0"/>
                   </params>
-                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                  <resultGeneration useMethodTag="rwm_null_result_validation"/>
             </testStep>
             <testStep testStepId="4" name="Get_Volume_Level" method="Get_Volume_Level">
                   <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_keycode_decrease_volume_level"/>
@@ -4518,13 +4559,13 @@
                   </params>
                   <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
             </testStep>
-            <testStep testStepId="9" name="Set_Volume_Level_Using_KeyCode"  method="GenerateKey" pluginName="RDKShell">
+            <testStep testStepId="9" name="Set_Volume_Level_Using_KeyCode"  method="Generate_Key" pluginName="RDKWindowManager">
                   <params>
                     <param tag="keyCode" value="175"/>
-                    <param tag="modifiers" useDefault="true"/>
+                    <param tag="modifiers" value=""/>
                     <param tag="delay" value="1.0"/>
                   </params>
-                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                  <resultGeneration useMethodTag="rwm_null_result_validation"/>
             </testStep>
             <testStep testStepId="10" name="Get_Volume_Level" method="Get_Volume_Level">
                   <params>
@@ -4541,40 +4582,64 @@
                   <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
             </testStep>
 
-       <testCasePostRequisite>
-         <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
-            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
-                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
-            </testStep>
-            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
-                  <params>
-                    <param tag="audioPort"  value="HDMI0" />
-                  </params>
-                  <resultGeneration useMethodTag="check_muted"/>
-            </testStep>
-            <testStep testStepId="3" name="Set_Muted"  method="Set_Muted">
-                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
-                  <params>
-                    <param tag="audioPort"  value="HDMI0" />
-                    <param tag="muted" value="False"/>
-                  </params>
-                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
-            </testStep>
-            <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
-                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
-                  <params>
-                    <param tag="audioPort"  value="HDMI0" />
-                  </params>
-                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
-            </testStep>
-         </postrequisite>
-       </testCasePostRequisite>
+            <testCasePostRequisite>
+                  <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
+                        <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                              <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0"/>
+                        </testStep>
+                        <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
+                              <params>
+                                    <param tag="audioPort" value="HDMI0" />
+                              </params>
+                              <resultGeneration useMethodTag="check_muted"/>
+                        </testStep>
+                        <testStep testStepId="3" name="Set_Muted" method="Set_Muted">
+                              <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                              <params>
+                                    <param tag="audioPort" value="HDMI0" />
+                                    <param tag="muted" value="False"/>
+                              </params>
+                              <resultGeneration useMethodTag="display_settings_check_set_operation" />
+                        </testStep>
+                        <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
+                              <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                              <params>
+                                    <param tag="audioPort" value="HDMI0" />
+                              </params>
+                              <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+                        </testStep>
+                  </postrequisite>
+            </testCasePostRequisite>
        </testCase>
 
        <!-- Test case 83 -->
        <testCase testCaseId="DS_83" testCaseName="DisplaySettings_Using_KeyCode_Verify_MuteStatus_After_decreasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (decrease) using keycode on HDMI0">
-            <testCaseInfo testCaseType="direct" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
-            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+	          <testCaseInfo testCaseType="direct" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
+            <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Activate_RDKWindowManager_Plugin">
+                    <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                        <params>
+                            <param tag="plugin" value="org.rdk.RDKWindowManager" indexOnly="true"/>
+                        </params>
+                        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKWindowManager"/>
+                    </testStep>
+                    <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKWindowManager"/>
+                        <params>
+                            <param tag="callsign" value="org.rdk.RDKWindowManager"/>
+                        </params>
+                    </testStep>
+                    <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKWindowManager"/>
+                        <params>
+                            <param tag="plugin" value="org.rdk.RDKWindowManager" indexOnly="true"/>
+                        </params>
+                        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKWindowManager" expectedValues="activated"/>
+                    </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+
+	          <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                   <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
             </testStep>
             <testStep testStepId="2" name="Get_Volume_Level" method="Get_Volume_Level" saveResult="true">
@@ -4583,14 +4648,14 @@
                   </params>
                   <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
             </testStep>
-            <testStep testStepId="3" name="Set_Volume_Level"  method="GenerateKey" pluginName="RDKShell">
+            <testStep testStepId="3" name="Set_Volume_Level"  method="Generate_Key" pluginName="RDKWindowManager">
                   <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_keycode_increase_volume_level"/>
                   <params>
                     <param tag="keyCode" value="175" />
-                    <param tag="modifiers" useDefault="true" />
+                    <param tag="modifiers" value=""/>
                     <param tag="delay" value="1.0"/>
                   </params>
-                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                  <resultGeneration useMethodTag="rwm_null_result_validation"/>
             </testStep>
             <testStep testStepId="4" name="Get_Volume_Level" method="Get_Volume_Level">
                   <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_keycode_increase_volume_level"/>
@@ -4628,13 +4693,13 @@
                   </params>
                   <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
             </testStep>
-            <testStep testStepId="9" name="Set_Volume_Level_Using_KeyCode"  method="GenerateKey" pluginName="RDKShell">
+            <testStep testStepId="9" name="Set_Volume_Level_Using_KeyCode"  method="Generate_Key" pluginName="RDKWindowManager">
                   <params>
                     <param tag="keyCode" value="174"/>
-                    <param tag="modifiers" useDefault="true"/>
+                    <param tag="modifiers" value=""/>
                     <param tag="delay" value="1.0"/>
                   </params>
-                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                  <resultGeneration useMethodTag="rwm_null_result_validation"/>
             </testStep>
             <testStep testStepId="10" name="Get_Volume_Level" method="Get_Volume_Level">
                   <params>
@@ -4649,41 +4714,65 @@
                     <param tag="audioPort"  value="HDMI0" />
                   </params>
                   <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
-            </testStep>
+	          </testStep>
 
-       <testCasePostRequisite>
-         <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
-            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
-                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
-            </testStep>
-            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
-                  <params>
-                    <param tag="audioPort"  value="HDMI0" />
-                  </params>
-                  <resultGeneration useMethodTag="check_muted"/>
-            </testStep>
-            <testStep testStepId="3" name="Set_Muted"  method="Set_Muted">
-                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
-                  <params>
-                    <param tag="audioPort"  value="HDMI0" />
-                    <param tag="muted" value="False"/>
-                  </params>
-                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
-            </testStep>
-            <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
-                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
-                  <params>
-                    <param tag="audioPort"  value="HDMI0" />
-                  </params>
-                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
-            </testStep>
-         </postrequisite>
-       </testCasePostRequisite>
+	          <testCasePostRequisite>
+                  <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
+                        <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                              <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0"/>
+                        </testStep>
+                        <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
+                              <params>
+                                    <param tag="audioPort" value="HDMI0" />
+                              </params>
+                              <resultGeneration useMethodTag="check_muted"/>
+                        </testStep>
+                        <testStep testStepId="3" name="Set_Muted" method="Set_Muted">
+                              <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                              <params>
+                                    <param tag="audioPort" value="HDMI0" />
+                                    <param tag="muted" value="False"/>
+                              </params>
+                              <resultGeneration useMethodTag="display_settings_check_set_operation" />
+                        </testStep>
+                        <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
+                              <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                              <params>
+                                    <param tag="audioPort" value="HDMI0" />
+                              </params>
+                              <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+                        </testStep>
+                  </postrequisite>
+            </testCasePostRequisite>
        </testCase>
 
        <!-- Test case 84 -->
        <testCase testCaseId="DS_84" testCaseName="DisplaySettings_Using_KeyCode_Verify_MuteStatus_HDMI0" desc="Verify the mute status using keycode on HDMI0">
             <testCaseInfo testCaseType="direct" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
+            <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Activate_RDKWindowManager_Plugin">
+                    <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                        <params>
+                            <param tag="plugin" value="org.rdk.RDKWindowManager" indexOnly="true"/>
+                        </params>
+                        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKWindowManager"/>
+                    </testStep>
+                    <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKWindowManager"/>
+                        <params>
+                            <param tag="callsign" value="org.rdk.RDKWindowManager"/>
+                        </params>
+                    </testStep>
+                    <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKWindowManager"/>
+                        <params>
+                            <param tag="plugin" value="org.rdk.RDKWindowManager" indexOnly="true"/>
+                        </params>
+                        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKWindowManager" expectedValues="activated"/>
+                    </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                   <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
             </testStep>
@@ -4693,13 +4782,13 @@
                   </params>
                   <resultGeneration useMethodTag="check_muted"/>
             </testStep>
-            <testStep testStepId="3" name="Set_Mute_Status_Using_KeyCode"  method="GenerateKey" pluginName="RDKShell">
+            <testStep testStepId="3" name="Set_Mute_Status_Using_KeyCode"  method="Generate_Key" pluginName="RDKWindowManager">
                   <params>
                     <param tag="keyCode" value="173"/>
-                    <param tag="modifiers" useDefault="true"/>
+                    <param tag="modifiers" value=""/>
                     <param tag="delay" value="1.0"/>
                   </params>
-                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                  <resultGeneration useMethodTag="rwm_null_result_validation"/>
             </testStep>
             <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
                   <params>
@@ -4710,34 +4799,34 @@
                   </resultGeneration>
             </testStep>
 
-       <testCasePostRequisite>
-         <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
-            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
-                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
-            </testStep>
-            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
-                  <params>
-                    <param tag="audioPort"  value="HDMI0" />
-                  </params>
-                  <resultGeneration useMethodTag="check_muted"/>
-            </testStep>
-            <testStep testStepId="3" name="Set_Muted"  method="Set_Muted">
-                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
-                  <params>
-                    <param tag="audioPort"  value="HDMI0" />
-                    <param tag="muted" value="False"/>
-                  </params>
-                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
-            </testStep>
-            <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
-                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
-                  <params>
-                    <param tag="audioPort"  value="HDMI0" />
-                  </params>
-                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
-            </testStep>
-         </postrequisite>
-       </testCasePostRequisite>
+            <testCasePostRequisite>
+                  <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
+                        <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                              <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0"/>
+                        </testStep>
+                        <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
+                              <params>
+                                    <param tag="audioPort" value="HDMI0" />
+                              </params>
+                              <resultGeneration useMethodTag="check_muted"/>
+                        </testStep>
+                        <testStep testStepId="3" name="Set_Muted" method="Set_Muted">
+                              <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                              <params>
+                                    <param tag="audioPort" value="HDMI0" />
+                                    <param tag="muted" value="False"/>
+                              </params>
+                              <resultGeneration useMethodTag="display_settings_check_set_operation" />
+                        </testStep>
+                        <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
+                              <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                              <params>
+                                    <param tag="audioPort" value="HDMI0" />
+                              </params>
+                              <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+                        </testStep>
+                  </postrequisite>
+            </testCasePostRequisite>
        </testCase>
 	   
 	<!-- Test case 85 -->

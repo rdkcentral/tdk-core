@@ -100,50 +100,15 @@ obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print("Check Pre conditions")
-    status = "SUCCESS"
+    current_interface="eth0"
+    ssid_freq = "2.4"
     revert_plugins_dict = {}
-    connected_to_5ghz = True
-    ssid_freq = ""
-    revert_wifi_ssid = False
-    revert_if  = revert_device_info = revert_plugins = "NO"
-    #Check current interface
     current_interface,revert_nw = check_current_interface(obj)
-    if revert_nw == "YES":
-        revert_plugins_dict = {"org.rdk.NetworkManager":"deactivated"}
-    if current_interface == "EMPTY":
-        status = "FAILURE"
-    elif current_interface == "eth0":
-        revert_if = "YES"
-        wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(obj,"5",False)
-        if revert_plugins == "YES":
-            revert_plugins_dict.update(plugins_status_dict)
-        if wifi_connect_status == "FAILURE":
-            status = "FAILURE"
-    elif current_interface == "wlan0":
+    if current_interface == "wlan0":
         print("\n Current interface is WIFI \n")
-        plugin_status,plugins_status_dict,revert = set_plugins(obj)
-        if plugin_status == "SUCCESS":
-            revert_plugins_dict.update(plugins_status_dict)
-            print("\n Check frequency of Connected SSID")
-            ssid_freq = check_cur_ssid_freq(obj)
-            if ssid_freq == "FAILURE":
-                status = "FAILURE"
-        else:
-            status = "FAILURE"
-    if status == "SUCCESS":
-        if current_interface == "wlan0" and ssid_freq == "2.4":
-            revert_wifi_ssid = True
-            url_status,complete_url = get_lightning_app_url(obj)
-            status = launch_lightning_app(obj,complete_url)
-            time.sleep(20)
-            if "SUCCESS" == (url_status and status):
-                connect_wifi_status,deviceAvailability = connect_wifi(obj,"5")
-                if connect_wifi_status == "FAILURE":
-                    connected_to_5ghz = False
-            else:
-                connected_to_5ghz = False
-        if connected_to_5ghz:
+        print("\n Check frequency of Connected SSID")
+        ssid_freq = check_cur_ssid_freq(obj)          
+    if current_interface == "wlan0" and ssid_freq == "5":
             #Get DeviceInfo Plugin status
             plugin = "DeviceInfo"
             device_info_activated = False
@@ -221,35 +186,15 @@ if expectedResult in result.upper():
                 else:
                     print("\n Unable to get the memory usage")
                     tdkTestObj.setResultStatus("FAILURE")
-                if revert_wifi_ssid:
-                    print("\n Reconnecting to 2.4 GHZ SSID")
-                    connect_wifi_status,deviceAvailability = connect_wifi(obj,"2.4")
-                    if connect_wifi_status == "FAILURE":
-                        print("\n Error while reconnecting to 2.4 GHZ SSID")
-                        tdkTestObj.setResultStatus("FAILURE")
             else:
                 print("\n Preconditions are not met")
                 tdkTestObj.setResultStatus("FAILURE")
-        else:
-            print("\n Error while connecting to 5GHZ SSID")
-            obj.setLoadModuleStatus("FAILURE")
     else:
         print("\n Preconditions are not met ")
+        print("Please connect to 5Ghz SSID")
         obj.setLoadModuleStatus("FAILURE")
-    if deviceAvailability == "Yes":
-        if revert_if == "YES" and status == "SUCCESS":
-            time.sleep(70)
-            interface_status,deviceAvailability = set_default_interface(obj,"eth0")
-            if interface_status == "SUCCESS":
-                print("\n Successfully reverted to ETHERNET")
-                status = close_lightning_app(obj)
-            else:
-                print("\n Error while reverting to ETHERNET")
-                obj.setLoadModuleStatus("FAILURE")
         if revert_plugins_dict != {}:
             status = set_plugins_status(obj,revert_plugins_dict)
-    else:
-        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");

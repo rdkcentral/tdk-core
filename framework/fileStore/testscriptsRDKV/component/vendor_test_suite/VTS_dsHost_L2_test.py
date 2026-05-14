@@ -83,6 +83,7 @@
 import tdklib;
 from VTSTestVariables import * 
 from vendor_test_suitelib import *
+from SSHUtility import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("vendor_test_suite","1",standAlone=True);
@@ -120,8 +121,31 @@ if "SUCCESS" in result.upper():
 
     testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
 
+    socIDerror = False
+    hostConfigFile = basePath + "/" + binaryConfig
+    sshMethod = "directSSH"
+    checkSoCID_command = fr"[ -f {hostConfigFile} ] && sed -n '/socID:[[:space:]]*$/c\empty' {hostConfigFile} || echo 'File not found'"
+    print("checkSoCID_command : " , checkSoCID_command)
+    output = ssh_and_execute (sshMethod, ip, username, password, checkSoCID_command).splitlines()[-1]
+    print("checkSoCID_command output : ",output)
+    if "empty" in output:
+        print("SoC ID must be updated for this device")
+        boxtype = obj.getDeviceBoxType();
+        if ("RPI-Client" in boxtype):
+            getSoCID_command = "cat /sys/firmware/devicetree/base/serial-number"
+            socIDFromDUT = ssh_and_execute (sshMethod, ip, username, password, getSoCID_command).splitlines()[-1]
+            print("getSoCID_command output : ", socIDFromDUT)
+            if socIDFromDUT:
+                updateSoCID_command = fr"sed -i 's/socID:[[:space:]]*$/socID: \"{socIDFromDUT}\"/' {hostConfigFile}"
+                print("updateSoCID_command : ", updateSoCID_command)
+                output = ssh_and_execute (sshMethod, ip, username, password, updateSoCID_command)
+                print("Updated socID in config file")
+            else:
+                print("ERROR : Unable to obtain socIDFromDUT")
+                socIDerror = True
+
     try:
-        if testList:
+        if testList and not socIDerror:
             print("\n####################################################################################")
             print("            PLUGIN NAME :  ",plugin_name)
             print("####################################################################################")
@@ -133,7 +157,8 @@ if "SUCCESS" in result.upper():
    
             failed_testCases = printTestSummary(executionSummary, plugin_name)
         else:
-            print("ERROR : NO TESTS FOUND")
+            if not socIDerror:
+                print("ERROR : NO TESTS FOUND")
             failed_testCases = "ERROR"
     except:
         failed_testCases = "ERROR"

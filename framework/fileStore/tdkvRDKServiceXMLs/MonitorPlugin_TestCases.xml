@@ -14,304 +14,324 @@
  limitations under the License.
 -->
 <testPlugin pluginName="Monitor" pluginVersion="1">
-        <pluginPreRequisite>
-          <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
-            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                <params>
-                  <param tag="plugin" value="Monitor" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" />
-            </testStep>
-            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
-                <params>
-                  <param tag="callsign" value="Monitor" />
-                </params>
-            </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
-                <params>
-                  <param tag="plugin" value="Monitor" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
-            </testStep>
-          </prerequisite>
+  <pluginPreRequisite>
+    <prerequisite requisiteId="1" requisiteName="Activate_Monitor_Plugin">
+      <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+        <params>
+          <param tag="plugin" value="Monitor" indexOnly="true" />
+        </params>
+        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" />
+      </testStep>
+      <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
+        <params>
+          <param tag="callsign" value="Monitor" />
+        </params>
+      </testStep>
+      <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
+        <params>
+          <param tag="plugin" value="Monitor" indexOnly="true" />
+        </params>
+        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
+      </testStep>
+    </prerequisite>
 
-	  <prerequisite requisiteId="2" requisiteName="Activate_RDKShell_Plugin">
-            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                <params>
-                  <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" />
-            </testStep>
-            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
-                <params>
-                  <param tag="callsign" value="org.rdk.RDKShell" />
-                </params>
-            </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
-                <params>
-                  <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" expectedValues="activated"/>
-            </testStep>
-          </prerequisite>
-	  
-	  <prerequisite requisiteId="3" requisiteName="Deactivate_And_Activate_Plugins">
-            <testStep testStepId="1" name="Check_And_Deactivate_Plugins" testStepType="loop">
-              <subtestStep subtestStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
-                <params>
-                  <param tag="callsign"  iteration="true" useConfigFile="true" key="MONITOR_PREREQ_PLUGINS" />
-                </params>
-              </subtestStep>
-              <subtestStep subtestStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" >
-                <params>
-                  <param tag="plugin" useIterable="true" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" expectedValues="deactivated">
-                  <arguments value="check_status" useIterableArg="true"/>
-                </resultGeneration>
-              </subtestStep>
-              <subtestStep subtestStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller">
-                <params>
-                  <param tag="callsign" useIterable="true" />
-                </params>
-              </subtestStep>
-              <subtestStep subtestStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
-                <params>
-                  <param tag="plugin" useIterable="true" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" expectedValues="activated,suspended,resumed">
-                  <arguments value="check_status" useIterableArg="true"/>
-                </resultGeneration>
-              </subtestStep>
-            </testStep>
-          </prerequisite>
-	  
-	  <prerequisite requisiteId="4" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
-		  <event pluginName="Controller" eventName="Event_Controller_State_Changed"/>
-		  <event pluginName="Controller" eventName="Event_Controller_All"/>
-	  </prerequisite>
-        </pluginPreRequisite>
+    <prerequisite requisiteId="2" requisiteName="Activate_NetworkManager_Plugin">
+      <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+        <params>
+          <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+        </params>
+        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+      </testStep>
+      <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.NetworkManager" />
+        <params>
+          <param tag="callsign" value="org.rdk.NetworkManager" />
+        </params>
+      </testStep>
+      <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.NetworkManager" />
+        <params>
+          <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+        </params>
+        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="activated"/>
+      </testStep>
+    </prerequisite>
 
-        <testCase testCaseId="MN_01" testCaseName= "Monitor_Reset_Statistics_WebKitBrowser"  desc="Resets memory and process statistics for a single service">
-            <testCaseInfo testCaseType="direct" />
-	    <testStep testStepId="1" name="Check_WebKitBrowser_Details_Presence"  action="externalFnCall" saveResult="true">
-		<resultGeneration useMethodTag="check_webkit_presence">
-                        <arguments useConfigFile="true" key="MONITOR_JSON_FILE_LOCATION"/>
-                </resultGeneration>
-            </testStep>
-	    <testStep testStepId="2" name="Reset_Statistics" method="Reset_Statistics">
-                <params>
-                  <param tag="callsign"  value="WebKitBrowser"/>
-                </params>
-		<resultGeneration useMethodTag="monitor_get_result_data">
-			<arguments value="get_reset_statistics" usePreviousResult="true" Id="1" useMethodTag="monitor_get_webkit_presence"/>
-		</resultGeneration>
-            </testStep>
-        </testCase>
+    <!-- prerequisite requisiteId="2" requisiteName="Activate_RDKShell_Plugin">
+      <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+        <params>
+          <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
+        </params>
+        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" />
+      </testStep>
+      <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
+        <params>
+          <param tag="callsign" value="org.rdk.RDKShell" />
+        </params>
+      </testStep>
+      <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
+        <params>
+          <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
+        </params>
+        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" expectedValues="activated"/>
+      </testStep>
+    </prerequisite -->
 
-        <testCase testCaseId="MN_02" testCaseName= "Monitor_Get_Status_WebKitBrowser"  desc="Lists the service statistics">
-            <testCaseInfo testCaseType="direct" />
-	    <testStep testStepId="1" name="Check_WebKitBrowser_Details_Presence"  action="externalFnCall" saveResult="true">
-		<resultGeneration useMethodTag="check_webkit_presence">
-			<arguments useConfigFile="true" key="MONITOR_JSON_FILE_LOCATION"/>
-		</resultGeneration>
-            </testStep>
-	    <testStep testStepId="2" name="Get_Status" method="Get_Status" saveResult="true">
-                <params>
-                  <param tag="plugin" value="WebKitBrowser" indexOnly="true"/>
-                </params>
-		<resultGeneration useMethodTag="monitor_get_result_data">
-			<arguments value="get_status" usePreviousResult="true" Id="1" useMethodTag="monitor_get_webkit_presence"/>
-                </resultGeneration>
-            </testStep>
-        </testCase>
+    <!-- prerequisite requisiteId="3" requisiteName="Deactivate_And_Activate_Plugins">
+      <testStep testStepId="1" name="Check_And_Deactivate_Plugins" testStepType="loop">
+        <subtestStep subtestStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin" pluginName="Controller">
+          <params>
+            <param tag="callsign" iteration="true" useConfigFile="true" key="MONITOR_PREREQ_PLUGINS" />
+          </params>
+        </subtestStep>
+        <subtestStep subtestStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+          <params>
+            <param tag="plugin" useIterable="true" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" expectedValues="deactivated">
+            <arguments value="check_status" useIterableArg="true"/>
+          </resultGeneration>
+        </subtestStep>
+        <subtestStep subtestStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+          <params>
+            <param tag="callsign" useIterable="true" />
+          </params>
+        </subtestStep>
+        <subtestStep subtestStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+          <params>
+            <param tag="plugin" useIterable="true" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" expectedValues="activated,suspended,resumed">
+            <arguments value="check_status" useIterableArg="true"/>
+          </resultGeneration>
+        </subtestStep>
+      </testStep>
+    </prerequisite -->
 
-        <testCase testCaseId="MN_03" testCaseName= "Monitor_Restart_Limits_WebKitBrowser"  desc="Sets new restart limits for a service">
-            <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Restart_Limits" method="Restart_Limits" saveResult="true">
-                <params>
-                  <param tag="callsign"  value="WebKitBrowser"/>
-                  <param tag="limit"  value="3"/>
-                  <param tag="window"  value="60"/>
-                </params>
-            </testStep>
-        </testCase>
+    <prerequisite requisiteId="3" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+      <event pluginName="Controller" eventName="Event_Controller_State_Changed"/>
+      <event pluginName="Controller" eventName="Event_Controller_All"/>
+    </prerequisite>
+  </pluginPreRequisite>
 
-	<!-- Test case 04 -->
-	<testCase testCaseId="MN_04" testCaseName="Monitor_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
-            <testCaseInfo testCaseType="direct" />
-            <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="Monitor" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" />
-                   </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
-                     <params>
-                       <param tag="callsign" value="Monitor" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
-                     <params>
-                       <param tag="plugin" value="Monitor" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
-            </testCasePreRequisite>
-            <testStep testStepId="1" name="Deactivate_Monitor_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
-                  <params>
-                    <param tag="callsign"  value="Monitor" />
-                  </params>
-            </testStep>
-            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
-              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="monitor,deactivated,requested"/>
-            </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                 <params>
-                     <param tag="plugin" value="Monitor" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="deactivated"/>
-            </testStep>
-            <testStep testStepId="4" name="Activate_Monitor_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
-                  <params>
-                    <param tag="callsign" value="Monitor" />
-                  </params>
-            </testStep>
-            <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
-              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="monitor,activated,requested"/>
-            </testStep>
-            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
-                 <params>
-                     <param tag="plugin" value="Monitor" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
-            </testStep>
-       </testCase>
-       
-       <!-- Test case 05 -->
-       <testCase testCaseId="MN_05" testCaseName="Monitor_ActivateDeactivate_All_Event_Test" desc="Validates all event on Activating/deactivating the plugin">
-            <testCaseInfo testCaseType="direct" />
-            <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="Monitor" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" />
-                   </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
-                     <params>
-                       <param tag="callsign" value="Monitor" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
-                     <params>
-                       <param tag="plugin" value="Monitor" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
-            </testCasePreRequisite>
+  <testCase testCaseId="MN_01" testCaseName="Monitor_Reset_Statistics_NetworkManager" desc="Resets memory and process statistics for a single service">
+    <testCaseInfo testCaseType="direct" />
+    <!-- testStep testStepId="1" name="Check_WebKitBrowser_Details_Presence" action="externalFnCall" saveResult="true">
+      <resultGeneration useMethodTag="check_webkit_presence">
+        <arguments useConfigFile="true" key="MONITOR_JSON_FILE_LOCATION"/>
+      </resultGeneration>
+    </testStep -->
+    <testStep testStepId="1" name="Reset_Statistics" method="Reset_Statistics">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager"/>
+      </params>
+      <resultGeneration useMethodTag="monitor_get_result_data" arguments="get_reset_statistics"/>
+    </testStep>
+  </testCase>
 
-            <testStep testStepId="1" name="Deactivate_Monitor_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
-                  <params>
-                    <param tag="callsign"  value="Monitor" />
-                  </params>
-            </testStep>
-            <testStep testStepId="2" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" pluginName="Controller">
-              <resultGeneration useMethodTag="controller_check_all_event" expectedValues="monitor,deactivated,requested"/>
-            </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                 <params>
-                     <param tag="plugin" value="Monitor" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="deactivated"/>
-            </testStep>
-            <testStep testStepId="4" name="Activate_Monitor_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
-                  <params>
-                    <param tag="callsign" value="Monitor" />
-                  </params>
-            </testStep>
-            <testStep testStepId="5" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" pluginName="Controller">
-              <resultGeneration useMethodTag="controller_check_all_event" expectedValues="monitor,activated,requested"/>
-            </testStep>
-            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
-                 <params>
-                     <param tag="plugin" value="Monitor" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
-            </testStep>
-       </testCase>	   
-       
-       <!--- Test case 06 -->
-       <testCase testCaseId="MN_06" testCaseName="Monitor_Verify_restartlimits_Info_Error" desc="Verify that the restartlimits method returns an error when the plugin is in a deactivated state">
-            <testCaseInfo testCaseType="direct" />
-            <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="Monitor" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" />
-                   </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
-                     <params>
-                       <param tag="callsign" value="Monitor" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
-                     <params>
-                       <param tag="plugin" value="Monitor" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
-            </testCasePreRequisite>
-            <testStep testStepId="1" name="Deactivate_Monitor_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
-                  <params>
-                    <param tag="callsign"  value="Monitor" />
-                  </params>
-            </testStep>
-            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
-              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="monitor,deactivated,requested"/>
-            </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                 <params>
-                     <param tag="plugin" value="Monitor" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="deactivated"/>
-            </testStep>
-            <testStep testStepId="4" name="Check_Monitor_restartlimits_API_Response" method="Restart_Limits">
-                <resultGeneration useMethodTag="controller_check_error_message" arguments="deactivate_check_error_message">
-                    <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!." />
-                </resultGeneration>
-            </testStep>
-            <testStep testStepId="5" name="Activate_Monitor_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
-                  <params>
-                    <param tag="callsign" value="Monitor" />
-                  </params>
-            </testStep>
-            <testStep testStepId="6" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
-              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="monitor,activated,requested"/>
-            </testStep>
-            <testStep testStepId="7" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
-                 <params>
-                     <param tag="plugin" value="Monitor" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
-            </testStep>
-       </testCase>
+  <testCase testCaseId="MN_02" testCaseName="Monitor_Get_Status_NetworkManager" desc="Lists the service statistics">
+    <testCaseInfo testCaseType="direct" />
+    <!-- testStep testStepId="1" name="Check_WebKitBrowser_Details_Presence" action="externalFnCall" saveResult="true">
+      <resultGeneration useMethodTag="check_webkit_presence">
+        <arguments useConfigFile="true" key="MONITOR_JSON_FILE_LOCATION"/>
+      </resultGeneration>
+    </testStep -->
+    <testStep testStepId="1" name="Get_Status" method="Get_Status" saveResult="true">
+      <params>
+        <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true"/>
+      </params>
+      <resultGeneration useMethodTag="monitor_get_result_data" arguments="get_status"/>
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_03" testCaseName="Monitor_Restart_Limits_NetworkManager" desc="Sets new restart limits for a service">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits" method="Restart_Limits" saveResult="true">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager"/>
+        <param tag="limit" value="3"/>
+        <param tag="window" value="60"/>
+      </params>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 04 -->
+  <testCase testCaseId="MN_04" testCaseName="Monitor_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+    <testCaseInfo testCaseType="direct" />
+    <testCasePreRequisite>
+      <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+        <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+          <params>
+            <param tag="plugin" value="Monitor" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" />
+        </testStep>
+        <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+          <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
+          <params>
+            <param tag="callsign" value="Monitor" />
+          </params>
+        </testStep>
+        <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+          <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
+          <params>
+            <param tag="plugin" value="Monitor" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
+        </testStep>
+      </prerequisite>
+    </testCasePreRequisite>
+
+    <testStep testStepId="1" name="Deactivate_Monitor_Plugin" method="Deactivate_Plugin" pluginName="Controller">
+      <params>
+        <param tag="callsign" value="Monitor" />
+      </params>
+    </testStep>
+    <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+      <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="monitor,deactivated,requested"/>
+    </testStep>
+    <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+      <params>
+        <param tag="plugin" value="Monitor" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="deactivated"/>
+    </testStep>
+    <testStep testStepId="4" name="Activate_Monitor_Plugin" method="Activate_Plugin" pluginName="Controller" delay="1">
+      <params>
+        <param tag="callsign" value="Monitor" />
+      </params>
+    </testStep>
+    <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+      <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="monitor,activated,requested"/>
+    </testStep>
+    <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes">
+      <params>
+        <param tag="plugin" value="Monitor" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 05 -->
+  <testCase testCaseId="MN_05" testCaseName="Monitor_ActivateDeactivate_All_Event_Test" desc="Validates all event on Activating/deactivating the plugin">
+    <testCaseInfo testCaseType="direct" />
+    <testCasePreRequisite>
+      <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+        <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+          <params>
+            <param tag="plugin" value="Monitor" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" />
+        </testStep>
+        <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+          <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
+          <params>
+            <param tag="callsign" value="Monitor" />
+          </params>
+        </testStep>
+        <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+          <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
+          <params>
+            <param tag="plugin" value="Monitor" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
+        </testStep>
+      </prerequisite>
+    </testCasePreRequisite>
+
+    <testStep testStepId="1" name="Deactivate_Monitor_Plugin" method="Deactivate_Plugin" pluginName="Controller">
+      <params>
+        <param tag="callsign" value="Monitor" />
+      </params>
+    </testStep>
+    <testStep testStepId="2" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" pluginName="Controller">
+      <resultGeneration useMethodTag="controller_check_all_event" expectedValues="monitor,deactivated,requested"/>
+    </testStep>
+    <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+      <params>
+        <param tag="plugin" value="Monitor" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="deactivated"/>
+    </testStep>
+    <testStep testStepId="4" name="Activate_Monitor_Plugin" method="Activate_Plugin" pluginName="Controller" delay="1">
+      <params>
+        <param tag="callsign" value="Monitor" />
+      </params>
+    </testStep>
+    <testStep testStepId="5" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" pluginName="Controller">
+      <resultGeneration useMethodTag="controller_check_all_event" expectedValues="monitor,activated,requested"/>
+    </testStep>
+    <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes">
+      <params>
+        <param tag="plugin" value="Monitor" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 06 -->
+  <testCase testCaseId="MN_06" testCaseName="Monitor_Verify_restartlimits_Info_Error" desc="Verify that the restartlimits method returns an error when the plugin is in a deactivated state">
+    <testCaseInfo testCaseType="direct" />
+    <testCasePreRequisite>
+      <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+        <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+          <params>
+            <param tag="plugin" value="Monitor" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" />
+        </testStep>
+        <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+          <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
+          <params>
+            <param tag="callsign" value="Monitor" />
+          </params>
+        </testStep>
+        <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+          <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
+          <params>
+            <param tag="plugin" value="Monitor" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
+        </testStep>
+      </prerequisite>
+    </testCasePreRequisite>
+
+    <testStep testStepId="1" name="Deactivate_Monitor_Plugin" method="Deactivate_Plugin" pluginName="Controller">
+      <params>
+        <param tag="callsign" value="Monitor" />
+      </params>
+    </testStep>
+    <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+      <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="monitor,deactivated,requested"/>
+    </testStep>
+    <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+      <params>
+        <param tag="plugin" value="Monitor" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="deactivated"/>
+    </testStep>
+    <testStep testStepId="4" name="Check_Monitor_restartlimits_API_Response" method="Restart_Limits">
+      <resultGeneration useMethodTag="controller_check_error_message" arguments="deactivate_check_error_message">
+        <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!." />
+      </resultGeneration>
+    </testStep>
+    <testStep testStepId="5" name="Activate_Monitor_Plugin" method="Activate_Plugin" pluginName="Controller" delay="1">
+      <params>
+        <param tag="callsign" value="Monitor" />
+      </params>
+    </testStep>
+    <testStep testStepId="6" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+      <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="monitor,activated,requested"/>
+    </testStep>
+    <testStep testStepId="7" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes">
+      <params>
+        <param tag="plugin" value="Monitor" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
+    </testStep>
+  </testCase>
 </testPlugin>

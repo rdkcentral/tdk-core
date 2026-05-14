@@ -72,11 +72,11 @@ The time should be within the expected range.</expected_output>
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import rdkv_performancelib
-from rdkv_performancelib import *
 from datetime import datetime
 from StabilityTestUtility import *
 from web_socket_util import *
 import PerformanceTestVariables
+from rdkv_performancelib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);

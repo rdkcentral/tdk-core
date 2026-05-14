@@ -17,14 +17,10 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="e9e5d120-6a1b-4329-bb1a-5c077b43f33f" name="execute_Cmnd_InDUT">
-                <parameters>
-                    <parameter id="f69838c4-e48c-4866-aa9b-ef5bd6875456" parameterName="command" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
             <function id="318c114e-a29f-470a-bc8d-d65bf66033bb" name="execute_binary">
                 <parameters>
                     <parameter id="b82cb8f5-4d09-463f-b44e-e3727f5eef1b" parameterName="present_mode" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d2b06bb6-f717-4289-9bc5-4b3f1e145b48" parameterName="binary" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="d01e130e-9396-46e5-bd6e-1d4e234a15fd" name="run_test">
@@ -32,8 +28,14 @@
                     <parameter id="cd192c2a-8a72-4314-9d19-a8304012318c" parameterName="command" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
+            <function id="e9e5d120-6a1b-4329-bb1a-5c077b43f33f" name="execute_Cmnd_InDUT">
+                <parameters>
+                    <parameter id="f69838c4-e48c-4866-aa9b-ef5bd6875456" parameterName="command" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
             <function id="130b238a-9ebd-4923-ace0-8fb978fd08e3" name="set_prerequisites">
                 <parameters>
+                    <parameter id="687e9ff8-6e44-48be-88a8-e5713dfd62bd" parameterName="resolution" parameterType="STRING" range="A-Z"/>
                     <parameter id="78f34b60-2e02-44bb-8f8d-9569ad219021" parameterName="model" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
@@ -54,6 +56,13 @@
                         <parameterType>STRING</parameterType>
                         <range>A-Z</range>
                         <value>fifo</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dd70b2ae-b7ba-4099-a44c-4ef5c33b836e</id>
+                        <parameterName>binary</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>vkmark</value>
                     </primitiveTestParameter>
                 </primitivetestparameters>
             </primitivetest>
@@ -96,6 +105,13 @@
                         <parameterType>STRING</parameterType>
                         <range>A-Z</range>
                         <value>Video_Accelerator</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>87bf16bf-b007-4b58-942a-2592036ba15f</id>
+                        <parameterName>resolution</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>1080p</value>
                     </primitiveTestParameter>
                 </primitivetestparameters>
             </primitivetest>

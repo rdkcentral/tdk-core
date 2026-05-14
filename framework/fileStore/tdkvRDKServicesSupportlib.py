@@ -40,6 +40,7 @@ import IPChangeDetectionVariables
 import os
 import datetime
 import importlib 
+import html
 
 timeZones = []
 
@@ -1091,10 +1092,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
         elif tag == "system_check_negative_scenario":
-            info = result
-            if str(result.get("success")).lower() == "false":
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info = result
+                    if str(result.get("success")).lower() == "false":
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
         elif tag == "system_check_friendly_name":
             info = checkAndGetAllResultInfo(result,result.get("success"))
@@ -2678,10 +2687,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "framerate_check_negative_scenario":
-            info = result
-            if str(result.get("success")).lower() == "false":
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    if str(result.get("success")).lower() == "false":
+                        info = result
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "framerate_check_display_framerate":
@@ -2826,29 +2843,28 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         # Monitor Plugin Response result parser steps
         elif tag == "monitor_get_result_data":
-            if arg[1] =="yes":
-                if arg[0] == "get_status":
-                    measurements =  result[0].get("measurements")
-                    info["observable"] = result[0].get("observable")
-                    info["restart_limit"] = result[0].get("restart").get("limit")
-                    info["restart_window"] = result[0].get("restart").get("window")
-                elif arg[0] == "get_reset_statistics":
-                    measurements =  result.get("measurements")
-                    info["observable"] = result.get("observable")
-                    info["restart_limit"] = result.get("restart").get("limit")
-                    info["restart_window"] = result.get("restart").get("window")
-                status = []
-                measurement_detail = []
-                for key in measurements:
-                    detail_Values=[]
-                    detail_Values.append(measurements.get(key))
-                    status.append(checkNonEmptyResultData(detail_Values))
-                    measurement_detail.append(str(key)+": "+str(measurements.get(key)))
-                info["measurements"] =  measurement_detail
-                if "FALSE" not in status:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
+            if arg[0] == "get_status":
+                measurements =  result[0].get("measurements")
+                info["observable"] = result[0].get("observable")
+                info["restart_limit"] = result[0].get("restart").get("limit")
+                info["restart_window"] = result[0].get("restart").get("window")
+            elif arg[0] == "get_reset_statistics":
+                measurements =  result.get("measurements")
+                info["observable"] = result.get("observable")
+                info["restart_limit"] = result.get("restart").get("limit")
+                info["restart_window"] = result.get("restart").get("window")
+            status = []
+            measurement_detail = []
+            for key in measurements:
+                detail_Values=[]
+                detail_Values.append(measurements.get(key))
+                status.append(checkNonEmptyResultData(detail_Values))
+                measurement_detail.append(str(key)+": "+str(measurements.get(key)))
+            info["measurements"] =  measurement_detail
+            if "FALSE" not in status:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
         
         # ScreenCapture Plugin Response result parser steps
         elif tag == "screencapture_upload_screen":
@@ -3016,12 +3032,31 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
         elif tag == "persistentstore_check_value":
-            info["value"] = result.get("value")
-            success = str(result.get("success")).lower() == "true"
-            if success and str(result.get("value")) in expectedValues:
-                info["Test_Step_Status"] = "SUCCESS"
+            if len(arg) and arg[0] == "lightningapp_url_check":
+                try:
+                    if otherInfo and "error" in otherInfo:
+                        info["error_info"] = otherInfo["error"]
+                        info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["value"] = result.get("value")
+                        success = str(result.get("success")).lower() == "true"
+                        actual_url = str(result.get("value"))
+                        actual = html.unescape(actual_url.strip())
+                        expected = html.unescape(expectedValues[0].strip())
+                        if success and actual == expected:
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                except Exception as e:
+                    info["error"] = str(e)
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                info["value"] = result.get("value")
+                success = str(result.get("success")).lower() == "true"
+                if success and str(result.get("value")) in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
         elif tag == "persistentstore_get_keys":
             keys = result.get("keys")
             info["Keys"] = keys
@@ -3542,15 +3577,21 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
-        
-        #Fetch the complete configuration and save it
+
         elif tag == "controller_get_configuration":
-            status = checkNonEmptyResultData(result)
-            info["configuration"] = result
-            info["url"] = expectedValues[0]
-            if status:
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info = result
+                    status = checkNonEmptyResultData(result)
+                    if status:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error_info"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "controller_check_discovery_result":
@@ -4126,11 +4167,15 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "success_status_validation":
             try:
-                info["success"] = result.get("success")
-                if str(result.get("success")).lower() == "true":
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
                     info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["success"] = result.get("success")
+                    if str(result.get("success")).lower() == "true":
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
             except Exception as e:
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
@@ -4147,11 +4192,15 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "success_negative_status_validation":
             try:
-                info = result
-                if str(result.get("success")).lower() == "false":
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
                     info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info = result
+                    if str(result.get("success")).lower() == "false":
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
             except Exception as e:
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
@@ -4461,6 +4510,22 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "appmanger_check_appproperty_status":
+            try:
+                # Check if error info exists
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if int(result) == int(expectedValues[0]):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
         # RDKWindowManager Response result parser steps
         elif tag == "rwm_null_result_validation":
             try:
@@ -4579,8 +4644,9 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "downloadmanager_getstorage_details_validation":
             try:
                 info["result"] = result
-                status = checkNonEmptyResultData(result)
-                if "FALSE" not in status:
+                #Simple check: not empty and all values are non-zero
+                is_valid = bool(result) and all(value != 0 for value in result.values())
+                if is_valid:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
@@ -6809,9 +6875,10 @@ def generateComplexTestInputParam(methodTag,testParams):
         elif tag == "rwm_generate_key":
             #print(testParams,"testParams")
             if "clientId" in testParams:
-                userGeneratedParam = { "keys": [{"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"delay": int(testParams.get("delay"))}],"clientId": testParams.get("clientId") }
+                userGeneratedParam = { "keys": [{"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"delay": float(testParams.get("delay"))}],"clientId": testParams.get("clientId") }
             else:
-                userGeneratedParam = { "keys": [{"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"delay": int(testParams.get("delay")) } ] }
+                userGeneratedParam = { "keys": [{"keyCode": int(testParams.get("keyCode")),"modifiers": testParams.get("modifiers"),"delay": float(testParams.get("delay")) } ] }
+                #userGeneratedParam = { "keys": json.dumps({ "keys": [{ "keyCode": int(testParams.get("keyCode")), "modifiers": testParams.get("modifiers"), "delay": float(testParams.get("delay")) }] }) }
         elif tag == "rwm_invalid_generate_key":
             #print(testParams,"testParams")
             userGeneratedParam = { "keys": [{"keyCode": testParams.get("keyCode"),"modifiers": testParams.get("modifiers"),"delay": testParams.get("delay"),"clientId": testParams.get("clientId") } ] }
@@ -7404,17 +7471,17 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
-
         elif tag == "system_check_and_create_configuration_rule":
             configParser = configparser.ConfigParser()
             configParser.read(r'%s' % deviceConfigFile)
             xconfurl = configParser.get('device.config', 'XCONF_SERVER_URL')
+            XCONF_AUTHORIZATION_TOKEN_KEY = configParser.get('device.config', 'XCONF_AUTHORIZATION_TOKEN_KEY')
 
             # Method to check and create model id
             if len(arg) and arg[0] == "system_check_model_id":
                 ruleId = 'TDK_'+str(arg[3]).upper()+'_TEST_MODEL'
                 if len(arg) and arg[1] == "existing_rule":
-                    command = 'curl -sX GET '+xconfurl+arg[2]+ruleId+' -H \'Content-Type: application/json\' -H \'Accept: application/json\''
+                    command = 'curl -sX GET '+xconfurl+arg[2]+ruleId+' -H \'Content-Type: application/json\' -H \'Accept: application/json\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"
                     output = executeCommandInTM(command)
                     output = json.loads(output)
                     if output.get('message'):
@@ -7432,7 +7499,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                             info["Test_Step_Status"] = "FAILURE"
 
                 elif len(arg) and arg[1] == "new_rule":
-                    command = 'curl -sX POST '+xconfurl+arg[2]+' -H \'Content-Type: application/json\' -H \'Accept: application/json\' -d \'{"id":"'+ruleId+'","description":"TDK '+arg[3]+' test model"}\''
+                    command = 'curl -sX POST '+xconfurl+arg[2]+' -H \'Content-Type: application/json\' -H \'Accept: application/json\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'{"id":"'+ruleId+'","description":"TDK '+arg[3]+' test model"}\''
                     output = executeCommandInTM(command)
                     output = json.loads(output)
                     ruleStatus = output["id"]
@@ -7455,7 +7522,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 ruleId = 'TDK_'+str(arg[3]).upper()+'_TEST_FIRMWARE_CONFIGURATION'
                 modelId = 'TDK_'+str(arg[3]).upper()+'_TEST_MODEL'
                 if len(arg) and arg[1] == "existing_rule":
-                    command = 'curl -sX GET '+xconfurl+arg[2]+modelId+'?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\''
+                    command = 'curl -sX GET '+xconfurl+arg[2]+modelId+'?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"
                     output = executeCommandInTM(command)
                     content = json.loads(output)
                     info["existing_firmware_configuration"] = content
@@ -7469,7 +7536,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                 info["Test_Step_Status"] = "SUCCESS"
                                 if str(output.get("firmwareFilename")).lower() != firmwareFilename.lower():
                                     firmwareConfigId = output.get("id")
-                                    command = 'curl -sX PUT '+xconfurl+'updates/firmwares?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\' -d \'{"id":"'+firmwareConfigId+'" ,"updated": 144757585,"supportedModelIds": ["TDK_'+str(arg[3]).upper()+'_TEST_MODEL"],"firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'","firmwareFilename": "'+firmwareFilename+'","firmwareVersion": "'+firmwareVersion+'","description":"'+ruleId+'","rebootImmediately": true}\''
+                                    command = 'curl -sX PUT '+xconfurl+'updates/firmwares?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'{"id":"'+firmwareConfigId+'" ,"updated": 144757585,"supportedModelIds": ["TDK_'+str(arg[3]).upper()+'_TEST_MODEL"],"firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'","firmwareFilename": "'+firmwareFilename+'","firmwareVersion": "'+firmwareVersion+'","description":"'+ruleId+'","rebootImmediately": true}\''
                                     output = executeCommandInTM(command)
                                     info["new_firmware_configuration"] = output
                                     output = json.loads(output)
@@ -7480,7 +7547,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                     break;
 
                 elif len(arg) and arg[1] == "new_rule":
-                    command = 'curl -sX POST '+xconfurl+arg[2]+'?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\' -d \'{"description":"'+ruleId+'","supportedModelIds": [ "TDK_'+str(arg[3]).upper()+'_TEST_MODEL" ], "firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'", "firmwareFilename": "'+firmwareFilename+'", "firmwareVersion": "'+firmwareVersion+'", "rebootImmediately": true}\''
+                    command = 'curl -sX POST '+xconfurl+arg[2]+'?applicationType=stb -H \'Content-Type: application/json\' -H \'Accept: application/json\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'{"description":"'+ruleId+'","supportedModelIds": [ "TDK_'+str(arg[3]).upper()+'_TEST_MODEL" ], "firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'", "firmwareFilename": "'+firmwareFilename+'", "firmwareVersion": "'+firmwareVersion+'", "rebootImmediately": true}\''
                     output = executeCommandInTM(command)
                     output = json.loads(output)
                     info["new_firmware_configuration"] = output
@@ -7497,7 +7564,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 firmwareconfigId = arg[4]
                 deviceMAC = arg[3]
                 if len(arg) and arg[1] == "existing_rule":
-                    command = 'curl -sX --location --request GET \''+xconfurl+'firmwarerule/filtered?name='+ruleId+'&applicationType=stb&templateId=MAC_RULE\''
+                    command = 'curl -sX --location --request GET \''+xconfurl+'firmwarerule/filtered?name='+ruleId+'&applicationType=stb&templateId=MAC_RULE\' -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+'\''
                     output = executeCommandInTM(command)
                     content = json.loads(output)
                     info["existing_firmware_rule"] = content
@@ -7514,7 +7581,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                 firmwarerulemacaddress = output["rule"]["condition"]["fixedArg"]["bean"]["value"]["java.lang.String"]
                                 if str(firmwarerulemacaddress).lower() != str(deviceMAC).lower():
                                     firmwareruleId = output['id']
-                                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id": "'+firmwareruleId+'","name":"'+firmwarerulename+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
+                                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'[{"id": "'+firmwareruleId+'","name":"'+firmwarerulename+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
                                     output = executeCommandInTM(command)
                                     info["new_firmware_rule_status"] = output
                                     output = json.loads(output)
@@ -7523,7 +7590,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                     else:
                                         info["Test_Step_Status"] = "FAILURE"
                 elif len(arg) and arg[1] == "new_rule":
-                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"name":"'+ruleId+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
+                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'[{"name":"'+ruleId+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
                     output = executeCommandInTM(command)
                     info["new_firmware_rule_status"] = output
                     output = json.loads(output)
@@ -7541,7 +7608,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 firmwareConfigId = arg[4]
                 deviceMAC = arg[3]
                 if len(arg) and arg[1] == "existing_rule":
-                    command = 'curl -sX --location --request GET \''+xconfurl+'firmwarerule/filtered?name='+ruleId+'&applicationType=stb&templateId=DOWNLOAD_LOCATION_FILTER\''
+                    command = 'curl -sX --location --request GET \''+xconfurl+'firmwarerule/filtered?name='+ruleId+'&applicationType=stb&templateId=DOWNLOAD_LOCATION_FILTER\'  -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+'\''
                     output = executeCommandInTM(command)
                     firmwareRule = json.loads(output)
                     info["existing_firmware_local_server_rule"] = firmwareRule
@@ -7558,7 +7625,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                 firmwareRuleDownloadLocation = output['applicableAction']['properties']["firmwareDownloadProtocol"]
                                 if str(firmwareRuleMacAddress).lower() != str(deviceMAC).lower() or str(firmwareRuleLocation).lower() != str(firmwareLocation).lower() or str(firmwareRuleDownloadLocation).lower() != str(firmwareDownloadProtocol).lower():
                                     firmwareRuleId = output['id']
-                                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+firmwareRuleId+'","name":"'+firmwareRuleName+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
+                                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'[{"id":"'+firmwareRuleId+'","name":"'+firmwareRuleName+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
                                     output = executeCommandInTM(command)
                                     info["new_firmware_local_server_rule_status"] = output
                                     output = json.loads(output)
@@ -7568,7 +7635,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                         info["Test_Step_Status"] = "FAILURE"
 
                 elif len(arg) and arg[1] == "new_rule":
-                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"name":"'+ruleId+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
+                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll?applicationType=stb -H "Content-Type: application/json" -H "Accept: application/json" -H \'X-API-KEY: '+XCONF_AUTHORIZATION_TOKEN_KEY+"\'"+' -d \'[{"name":"'+ruleId+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
                     output = executeCommandInTM(command)
                     info["new_firmware_rule_status"] = output
                     output = json.loads(output)

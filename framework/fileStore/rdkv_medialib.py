@@ -195,3 +195,20 @@ def rdkv_media_readUIData(elementExpandXpath,dataXpath,count):
         ui_data = "Unable to get the data from the web UI"
         driver.quit()
     return ui_data
+
+#---------------------------------------------------------------------------------------------
+# Function to set the PersistentStore value 'MVS:lightningURL' via JSON-RPC using curl command
+#---------------------------------------------------------------------------------------------
+def setPS_value(video_test_url):
+    # Format the lightning URL to escape special characters
+    lightning_url = video_test_url.replace("\\", "\\\\").replace('"', '\\"')
+    device_url = f"http://{deviceIP}:{devicePort}/jsonrpc"
+    payload = ('{"jsonrpc":"2.0","id":1,''"method":"org.rdk.PersistentStore.setValue",''"params":{''"namespace":"MVS",''"key":"lightningURL",'f'"value":"{lightning_url}"''}}')
+    curl_command = ["curl", "-H", "Content-Type: application/json", "-d", payload, device_url]
+    print("\nSetting the value of lightningURL in PersistentStore: ", curl_command)
+    try:
+        result = subprocess.run(curl_command, capture_output=True, text=True, timeout=30)
+        return result.stdout
+    except Exception as e:
+        print("Failed to set the PersistentStore value: ", e)
+        return None
