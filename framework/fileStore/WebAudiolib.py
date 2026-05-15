@@ -26,7 +26,7 @@ import time
 import configparser
 import importlib
 import re
-import ast
+
 import WebAudioVariables
 import web_socket_util
 from web_socket_util import *
@@ -371,113 +371,15 @@ def webaudio_launch_testApp(obj, url,browser):
 #-----------------------------------------------------------------------------------------
 #TO PRESS KEYS IN UI USING RDKSHELL
 #-----------------------------------------------------------------------------------------
-def webaudio_keypress(obj,app_name,keys):
-    if len(keys) >1:
-        key_navigate = keys[0]
-        key_select = keys[1]
-    else:
-        key_navigate = keys
-
+def webaudio_keypress(obj,browser,keys):
     result="FAILURE"
     param='['
     index=0
-    expectedResult= "SUCCESS"
-    print(f"Getting the app instance id of {app_name}")
-    tdkTestObj = obj.createTestStep('rdkservice_getValue')
-    tdkTestObj.addParameter("method","org.rdk.AppManager.getLoadedApps")
-    tdkTestObj.executeTestCase(expectedResult)
-    result = tdkTestObj.getResultDetails()
-    status = tdkTestObj.getResult()
-    if status == expectedResult and app_name in result:
-        appinstanceid=""
-        result = ast.literal_eval(result)
-        for item in result:
-            if isinstance(item, dict) and item.get("appId") == app_name:
-                appinstanceid = item.get("appInstanceId")
-        if appinstanceid != "":
-            for key in key_navigate:
-                if ":" in key:
-                    #params = '{"client":"'+appinstanceid + '","keys":"{\\"keys\\":[{\\"keyCode\\":50,\\"modifiers\\":[],\\"delay\\":0}]}"}'
-                    param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": ['+ key.split(":")[0] +'],\\"delay\\":0.1}'
-                else:
-                    param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": [],\\"delay\\":0.1}'
-                if index != (len(key_navigate)-1):
-                    param = param + ','
-                else:
-                    param = param + ']'
-                index +=1
-
-            params = '{"client":' + appinstanceid + ',"keys":"{\\"keys\\":'+ param + '}"'
-
-
-            tdkTestObj = obj.createTestStep('webaudio_setValue')
-            tdkTestObj.addParameter("method","org.rdk.RDKWindowManager.generateKey")
-            tdkTestObj.addParameter("value",params)
-            tdkTestObj.executeTestCase(expectedResult)
-            result = tdkTestObj.getResult()
-            if expectedResult in result:
-                tdkTestObj.setResultStatus("SUCCESS")
-                print("SUCCESS: Navigated through UI and started the test")
-                result = "SUCCESS"
-                time.sleep(3)
-                if key_select !=[]:
-                    param='['
-                    index=0
-                    for key in key_select:
-                        if ":" in key:
-                            param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": ['+ key.split(":")[0] +'],\\"delay\\":0.1}'
-                        else:
-                            param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": [],\\"delay\\":0.1}'
-                        if index != (len(key_select)-1):
-                            param = param + ','
-                        else:
-                            param = param + ']'
-                        index +=1
-                    params = '{"client":' + appinstanceid + ',"keys":"{\\"keys\\":'+ param + '}"'
-                    tdkTestObj = obj.createTestStep('webaudio_setValue')
-                    tdkTestObj.addParameter("method","org.rdk.RDKWindowManager.generateKey")
-                    tdkTestObj.addParameter("value",params)
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResult()
-                    if expectedResult in result:
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        print("SUCCESS: Navigated through UI and started the test")
-                        result = "SUCCESS"
-                    else:
-                        tdkTestObj.setResultStatus("FAILURE")
-                        print("FAILURE : Failed to navigate through UI")
-            else:
-                tdkTestObj.setResultStatus("FAILURE")
-                print("FAILURE : Failed to start the test by navigating through UI")
-        else:
-            print("Failed to get appinstanceId")
-            tdkTestObj.setResultStatus("FAILURE")
-    else:
-        print("Failed to get the loaded apps")
-        tdkTestObj.setResultStatus("FAILURE")
-    return result
-
-def back_webaudio_keypress(obj,browser,keys):
-    result="FAILURE"
-    param='['
-    index=0
-    print(f"Getting the app instance id of {app_name}")
-    tdkTestObj = obj.createTestStep('rdkservice_getValue')
-    tdkTestObj.addParameter("method","org.rdk.AppManager.getLoadedApps")
-    tdkTestObj.executeTestCase(expectedResult)
-    result = tdkTestObj.getResultDetails()
-    status = tdkTestObj.getResult()
-    if status == expectedResult and app_name in result:
-       appinstanceid=""
-       result = ast.literal_eval(result)
-       for item in result:
-          if isinstance(item, dict) and item.get("appId") == app_name:
-             appinstanceid = item.get("appInstanceId")
     for key in keys:
         if ":" in key:
-            param = param + '{"keyCode": ' + key + ',"modifiers": ['+ key.split(":")[0] +'],"delay":0.1,'+ '"callsign":' +browser+',"client":' + browser+ '}'
+            param = param + '{"keyCode": ' + key + ',"modifiers": ['+ key.split(":")[0] +'],"delay":1.0,'+ '"callsign":' +browser+',"client":' + browser+ '}'
         else:
-            param = param + '{"keyCode": ' + key + ',"modifiers": [],"delay":0.1,'+ '"callsign":' +browser+',"client":' + browser+ '}'
+            param = param + '{"keyCode": ' + key + ',"modifiers": [],"delay":1.0,'+ '"callsign":' +browser+',"client":' + browser+ '}'
         if index != (len(keys)-1):
             param = param + ','
         else:
@@ -501,9 +403,9 @@ def back_webaudio_keypress(obj,browser,keys):
 
 
 #-----------------------------------------------------------------------------------------
-#GET LOGS FROM WEBINSPECT PAGE
+#GET LOGS FROM WEBINSPECT PAGE 
 #-----------------------------------------------------------------------------------------
-def webaudio_getLogs_webinspectpage(obj,app_name,keys=[]):
+def webaudio_getLogs_webinspectpage(obj, url, browser,keys=[]):
     log_message = []
     continue_count = 0
 
@@ -523,7 +425,7 @@ def webaudio_getLogs_webinspectpage(obj,app_name,keys=[]):
             key = key.strip('" ')
             key=key.replace("\\", "")
             key=key.replace('"','')
-            value = value.strip('" ')
+            value = value.strip('" ') 
             value = value.replace('\\',"")
             value = value.replace('"','')
             # Add key-value pair to the dictionary
@@ -535,10 +437,11 @@ def webaudio_getLogs_webinspectpage(obj,app_name,keys=[]):
         print("SUCCESS: Successfully established websocket connection to webinspect page of the device")
         time.sleep(30)
 
-
+        print("\n Launch webaudio test url in ", browser)
+        result = webaudio_launch_testApp(obj,url,browser)
         if keys !=[] and expectedResult in result:
             print ("\n Navigate through webaudio test UI and start test ")
-            result=webaudio_keypress(obj,app_name,keys)
+            result=webaudio_keypress(obj,browser,keys)
         if expectedResult in result:
             print("\n Get logs from the webinspect page")
             while True:
@@ -636,24 +539,28 @@ def getTimeInMilliSec(time_string):
 #------------------------------------------------------------------------------------
 #GET LOGS FROM WPEFRAMEWORK LOGS FILE
 #------------------------------------------------------------------------------------
-def webaudio_getLogs_fromDevicelogs(obj,app_name,grep_line,keys=[]):
+def webaudio_getLogs_fromDevicelogs(obj,url,browser,grep_line,keys=[]):
    log_message=""
-   print("\n Check for required configurations to ssh to the device")
+   print("\n Check for required configurations to ssh to the device") 
    tdkTestObj = obj.createTestStep('webaudio_getSSHParams')
    tdkTestObj.executeTestCase(expectedResult)
    result = tdkTestObj.getResult()
    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
    if ssh_param_dict != {} and expectedResult in result:
        tdkTestObj.setResultStatus("SUCCESS")
+       print("\n Launch webaudio test url in ", browser)
+       utc_time = datetime.utcnow()
+       start_time = utc_time.strftime("%H:%M:%S.%f")[:-3]
+       result = webaudio_launch_testApp(obj,url,browser)
        time.sleep(20)
        if keys !=[] and expectedResult in result:
             print ("\n Navigate through webaudio test UI and start test ")
-            result=webaudio_keypress(obj,app_name,keys)
+            result=webaudio_keypress(obj,browser,keys)
             time.sleep(60)
        if expectedResult in result:
            time.sleep(10)
            print ("\n Check for the logs in wpeframework logs")
-           command = "cat /opt/logs/dacapp.log | grep -inr 'TDK_LOGS'| grep " + grep_line
+           command = "cat /opt/logs/wpeframework.log | grep -inr 'TDK_LOGS'| grep " + grep_line
            tdkTestObj = obj.createTestStep('webaudio_getRequiredLog')
            tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
            tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
@@ -664,7 +571,15 @@ def webaudio_getLogs_fromDevicelogs(obj,app_name,grep_line,keys=[]):
            if output != "EXCEPTION" and expectedResult in result:
                log_line = output.split('\n')[1]
                if log_line != "":
-                    log_message=log_line
+                   log_time = getTimeStampFromString(log_line)
+                   start_time_millisec = getTimeInMilliSec(start_time)
+                   log_line_time_millisec = getTimeInMilliSec(log_time)
+                   islogcurrent = log_line_time_millisec - start_time_millisec
+                   if float(islogcurrent) >0 :
+                       log_message=log_line
+                   else:
+                       print("FAILURE : Failed to get the logs from wpeframework logs")
+                       tdkTestObj.setResultStatus("FAILURE")
                else:
                    print("FAILURE : Failed to get the logs from wpeframework logs ")
                    tdkTestObj.setResultStatus("FAILURE")
