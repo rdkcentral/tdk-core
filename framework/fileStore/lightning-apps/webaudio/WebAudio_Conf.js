@@ -18,7 +18,7 @@
 */
 
 window.AppConfig = {
-    STREAM_BASE_URL: "https://tdktest.rdkcentral.com:8443/images/teststreams/webaudio/",
+    STREAM_BASE_URL: "",
 
     streams: {
         mp3_audio_url: "TDK_Asset_Sunrise_MP3.mp3",

@@ -228,6 +228,23 @@ def webaudio_getPluginStatus(plugin):
     else:
         return result;
 
+
+#-------------------------------------------------------------------
+#GET THE VALUE OF A METHOD
+#-------------------------------------------------------------------
+def webaudio_getValue(method):
+    data = '"method": "'+method+'"'
+    result = execute_step(data)
+    return result
+
+#------------------------------------------------------------------
+#SET VALUE FOR A METHOD
+#------------------------------------------------------------------
+def webaudio_setValue(method,value):
+    data = '"method": "'+method+'","params": '+value
+    result = execute_step(data)
+    return result
+
 #--------------------------------------------------------------------------------
 #CREATE WEBSOCKET CONNECTION TO WEBINSPECT PAGE
 #---------------------------------------------------------------------------------
@@ -275,44 +292,9 @@ def webaudio_create_socket_connection():
 
     return result, driver, webkit_console_socket
 
-#-----------------------------------------------------------------------------------------
-#LAUNCH WEBAUDIO TEST APP IN BROWSER TO START THE TEST
-#-----------------------------------------------------------------------------------------
-def webaudio_launch_testApp(obj, url,browser):
-    result = "FAILURE"
-    browser_method = browser+".1.url"
-
-    tdkTestObj = obj.createTestStep('webaudio_setPluginStatus')
-    tdkTestObj.addParameter("plugin",browser)
-    tdkTestObj.addParameter("status","activate")
-    tdkTestObj.addParameter("uri",url)
-    tdkTestObj.executeTestCase(expectedResult)
-    result = tdkTestObj.getResult()
-    if expectedResult in result:
-        print("SUCCESS: Launching ",browser, " with ",url, "returned success")
-        tdkTestObj.setResultStatus("SUCCESS")
-
-        print("\n Verify the URL in ", browser)
-        time.sleep(10)
-        tdkTestObj = obj.createTestStep("webaudio_getValue")
-        tdkTestObj.addParameter("method",browser_method)
-        tdkTestObj.executeTestCase(expectedResult)
-        new_url=tdkTestObj.getResultDetails()
-        result = tdkTestObj.getResult()
-        if expectedResult in result and new_url == url:
-            print("SUCCESS: Successfully loaded ",url," in ", browser)
-            tdkTestObj.setResultStatus("SUCCESS")
-            result = "SUCCESS"
-        else:
-            print("FAILURE: Failed to load", url , " in ", browser)
-            tdkTestObj.setResultStatus("FAILURE")
-    else:
-        print("FAILURE: Failed to launch ", browser , " with ", url)
-        tdkTestObj.setResultStatus("FAILURE")
-    return result
 
 #-----------------------------------------------------------------------------------------
-#TO PRESS KEYS IN UI USING RDKSHELL
+#TO PRESS KEYS IN UI USING APP MANAGER 
 #-----------------------------------------------------------------------------------------
 def webaudio_keypress(obj,app_name,keys):
     if len(keys) >1:

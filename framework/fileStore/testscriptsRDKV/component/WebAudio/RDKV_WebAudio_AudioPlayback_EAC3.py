@@ -85,7 +85,6 @@ print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
-browser = WebAudioVariables.browser_instance
 log_check_method = WebAudioVariables.log_check_method
 app_bundle_name=WebAudioVariables.app_bundle_name
 
