@@ -228,63 +228,6 @@ def webaudio_getPluginStatus(plugin):
     else:
         return result;
 
-#----------------------------------------------------------------------------
-#CHECK THE STATUS OF RDKSHELL PLUGIN AND ACTIVATE IF NEEDED
-#----------------------------------------------------------------------------
-def webaudio_rdkshellStatus():
-    activated = False
-    rdkshell_status = webaudio_getPluginStatus("org.rdk.RDKShell")
-    if "activated" == rdkshell_status:
-        activated = True
-    elif "deactivated" == rdkshell_status:
-        set_status = webaudio_setPluginStatus("org.rdk.RDKShell","activate")
-        time.sleep(2)
-        rdkshell_status = webaudio_getPluginStatus("org.rdk.RDKShell")
-        if "activated" in rdkshell_status:
-            activated = True
-        else:
-            print("\n Unable to activate RDKShell plugin")
-    else:
-        print("\n RDKShell status in DUT:",rdkshell_status)
-    return activated
-
-#-----------------------------------------------------------------------------
-#LAUNCH PLUGIN INSTANCE IN DEVICE
-#-----------------------------------------------------------------------------
-def webaudio_setPluginStatus(plugin,status,uri=''):
-    data = ''
-    rdkshell_activated = webaudio_rdkshellStatus()
-    if rdkshell_activated:
-        if status in "activate":
-            data = '"method":"org.rdk.RDKShell.1.launch", "params":{"callsign": "'+plugin+'", "type":"", "uri":"'+uri+'","configuration":{"webaudio":true}}'
-        else:
-            data = '"method":"org.rdk.RDKShell.1.destroy", "params":{"callsign": "'+plugin+'","configuration":{"webaudio":true}}'
-        if data !='':
-            result = execute_step(data)
-        else:
-            print ("ERROR : Failed to create the json data to launch the plugin")
-            result = "EXCEPTION OCCURRED"
-    else:
-        print ("ERROR: Failed to activate RDKShell to launch the plugin")
-        result = "EXCEPTION OCCURRED"
-    return result
-
-#-------------------------------------------------------------------
-#GET THE VALUE OF A METHOD
-#-------------------------------------------------------------------
-def webaudio_getValue(method):
-    data = '"method": "'+method+'"'
-    result = execute_step(data)
-    return result
-
-#------------------------------------------------------------------
-#SET VALUE FOR A METHOD
-#------------------------------------------------------------------
-def webaudio_setValue(method,value):
-    data = '"method": "'+method+'","params": '+value
-    result = execute_step(data)
-    return result
-
 #--------------------------------------------------------------------------------
 #CREATE WEBSOCKET CONNECTION TO WEBINSPECT PAGE
 #---------------------------------------------------------------------------------
@@ -397,7 +340,6 @@ def webaudio_keypress(obj,app_name,keys):
         if appinstanceid != "":
             for key in key_navigate:
                 if ":" in key:
-                    #params = '{"client":"'+appinstanceid + '","keys":"{\\"keys\\":[{\\"keyCode\\":50,\\"modifiers\\":[],\\"delay\\":0}]}"}'
                     param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": ['+ key.split(":")[0] +'],\\"delay\\":0.1}'
                 else:
                     param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": [],\\"delay\\":0.1}'
@@ -455,48 +397,6 @@ def webaudio_keypress(obj,app_name,keys):
     else:
         print("Failed to get the loaded apps")
         tdkTestObj.setResultStatus("FAILURE")
-    return result
-
-def back_webaudio_keypress(obj,browser,keys):
-    result="FAILURE"
-    param='['
-    index=0
-    print(f"Getting the app instance id of {app_name}")
-    tdkTestObj = obj.createTestStep('rdkservice_getValue')
-    tdkTestObj.addParameter("method","org.rdk.AppManager.getLoadedApps")
-    tdkTestObj.executeTestCase(expectedResult)
-    result = tdkTestObj.getResultDetails()
-    status = tdkTestObj.getResult()
-    if status == expectedResult and app_name in result:
-       appinstanceid=""
-       result = ast.literal_eval(result)
-       for item in result:
-          if isinstance(item, dict) and item.get("appId") == app_name:
-             appinstanceid = item.get("appInstanceId")
-    for key in keys:
-        if ":" in key:
-            param = param + '{"keyCode": ' + key + ',"modifiers": ['+ key.split(":")[0] +'],"delay":0.1,'+ '"callsign":' +browser+',"client":' + browser+ '}'
-        else:
-            param = param + '{"keyCode": ' + key + ',"modifiers": [],"delay":0.1,'+ '"callsign":' +browser+',"client":' + browser+ '}'
-        if index != (len(keys)-1):
-            param = param + ','
-        else:
-            param = param + ']'
-        index +=1
-
-    params = '{"keys":'+ param + '}'
-    tdkTestObj = obj.createTestStep('webaudio_setValue')
-    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
-    tdkTestObj.addParameter("value",params)
-    tdkTestObj.executeTestCase(expectedResult)
-    result = tdkTestObj.getResult()
-    if expectedResult in result:
-        tdkTestObj.setResultStatus("SUCCESS")
-        print("SUCCESS: Navigated through UI and started the test")
-        result = "SUCCESS"
-    else:
-        tdkTestObj.setResultStatus("FAILURE")
-        print("FAILURE : Failed to start the test by navigating through UI")
     return result
 
 

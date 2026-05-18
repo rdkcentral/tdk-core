@@ -149,6 +149,9 @@ if expectedResult in result.upper():
                 else:
                     print("FAILURE: Failed to fetch the logs from Html test App \n")
                     tdkTestObj.setResultStatus("FAILURE")
+            else:
+                print("FAILURE: The logs from the browser came as empty") 
+                tdkTestObj.setResultStatus("FAILURE")
             print("\n Terminating the app")
             tdkTestObj = obj.createTestStep('rdkv_terminate_app')
             tdkTestObj.addParameter("app_id",app_name)
