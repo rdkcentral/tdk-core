@@ -28,7 +28,7 @@ obj = tdklib.TDKScriptingLibrary("rdkvxconfrfc","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_RFC_DAB_Enable')
+obj.configureTestCase(ip,port,'RDKV_RFC_SpeedTest_Run')
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
@@ -106,7 +106,7 @@ if "SUCCESS" in result.upper():
                     print("\n")
                     #Step 6: Check the RFC parameter value prior to making any changes
                     tdkTestObj = obj.createTestStep('rfc_datamodelcheck')
-                    rfcparameter="Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.DAB.Enable"
+                    rfcparameter="Device.IP.Diagnostics.X_RDKCENTRAL-COM_SpeedTest.Run"
                     tdkTestObj.addParameter("rfcparameter",rfcparameter)
                     tdkTestObj.executeTestCase(expectedResult)
                     actualvalue = tdkTestObj.getResultDetails()
@@ -116,7 +116,7 @@ if "SUCCESS" in result.upper():
                         print("\n")
                         #Step 7: Creating a feature name for configuration in the Xconf server
                         tdkTestObj = obj.createTestStep('rfc_formfeaturename')
-                        feature_name="DAB.Enable"
+                        feature_name="SpeedTest.Run"
                         tdkTestObj.addParameter("feature_name",feature_name)
                         tdkTestObj.executeTestCase(expectedResult)
                         detail=tdkTestObj.getResultDetails()

@@ -183,8 +183,6 @@
             <testStep testStepId="1" name="Launch_App_Valid_Params" method="Launch_App" pluginName="AppManager">
                 <params>
                     <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                    <param tag="intent" value=""/>
-                    <param tag="launchArgs" value=""/>
                 </params>
                 <resultGeneration useMethodTag="appmanager_null_result_validation"/>
             </testStep>
