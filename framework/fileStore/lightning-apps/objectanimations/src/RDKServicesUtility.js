@@ -30,12 +30,18 @@ export class RDKServicesInterface extends Lightning.Component {
     this.diagnosticsInfo = {}
     this.cpuList = []
     this.fpsList = []
+    this.latestFPS = "NA";
+    this._frameCount = 0;
+    this._lastFPSTime = 0;
+    this._fpsInterval = null;
+    this._fpsRAFStarted = false;
     this.thunderJS = "";
     logMsg("RDKServicesInterface  _constructer Called")
   }
 
   _init() {
     logMsg("RDKServicesInterface _init Called");
+    this._startFPSCounter();
   }
 
   rdkservicesInterfaceInit() {
@@ -56,6 +62,36 @@ export class RDKServicesInterface extends Lightning.Component {
       logMsg("Updated settings for RDKServicesInterface")
   }
 
+  // Calculate the fps using requestAnimationFrame method
+  _startFPSCounter() {
+    if (this._fpsRAFStarted) {
+      return;
+    }
+
+    tag = this;
+    this._fpsRAFStarted = true;
+    this._lastFPSTime = performance.now();
+
+    const rafLoop = () => {
+      tag._frameCount++;
+      requestAnimationFrame(rafLoop);
+    };
+
+    this._fpsInterval = setInterval(() => {
+      const now = performance.now();
+      const delta = now - tag._lastFPSTime;
+
+      if (delta > 0) {
+        tag.latestFPS = Math.round((tag._frameCount * 1000) / delta);
+      }
+
+      tag._frameCount = 0;
+      tag._lastFPSTime = now;
+    }, 1000);
+
+    requestAnimationFrame(rafLoop);
+  }
+
   getDiagnosticsInfo(){
       this.thunderJS.DeviceInfo.systeminfo()
       .then((result) => { tag = this
@@ -67,15 +103,16 @@ export class RDKServicesInterface extends Lightning.Component {
       .catch(function(error) {
           logMsg(error)
       })
-      this.thunderJS.LightningApp.fps()
-      .then((result) => { tag = this
-          tag.settings.consumer.tag(tag.settings.fpsholder).text.text = "FPS : " + result
-          tag.diagnosticsInfo["fps"] = result
-          tag.fpsList.push(result)
-      })
-      .catch(function(error) {
-          console.log(error)
-      })
+
+      tag = this;
+      tag.settings.consumer.tag(tag.settings.fpsholder).text.text =
+        "FPS : " + tag.latestFPS;
+      tag.diagnosticsInfo["fps"] = tag.latestFPS;
+
+      if (tag.latestFPS !== "NA") {
+        tag.fpsList.push(tag.latestFPS);
+      }
+      
       logMsg("[DiagnosticInfo]: CPU Load: "     + this.diagnosticsInfo.cpu + " , "
                                  + "FPS: "      + this.diagnosticsInfo.fps + " , "
                                  + "MEM Used: " + this.diagnosticsInfo.mem)

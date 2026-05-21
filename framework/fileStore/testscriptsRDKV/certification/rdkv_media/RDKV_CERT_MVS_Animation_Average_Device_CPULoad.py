@@ -118,10 +118,10 @@ if expectedResult in result.upper():
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     setWebKitSocketPort(webinspect_port_lightning)
-    # Setting the pre-requites for media test. Launching the wekit instance via RDKShell and
+    # Setting the pre-requisites for media test. Launching the webkit instance via RDKShell and
     # moving it to the front, openning a socket connection to the webkit inspect page and
     # disabling proc validation
-    pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,"LightningApp",False)
+    pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.animation_app_id,MediaValidationVariables.animation_app_download_url)
     if pre_requisite_status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS");
         print("Pre conditions for the test are set successfully")
@@ -143,7 +143,8 @@ if expectedResult in result.upper():
         animation_test_url = getTestURL(appURL,appArguments)
 
         # Setting the animation test url in webkit instance using RDKShell
-        launch_status = launchPlugin(obj,"LightningApp",animation_test_url)
+        setPS_value(animation_test_url)
+        launch_status = launchApp(obj,MediaValidationVariables.animation_app_id)
         if "SUCCESS" in launch_status:
             # Monitoring the app progress, checking whether app performs animation properly or any hang detected in between,
             # and getting the test result from the app
@@ -175,9 +176,9 @@ if expectedResult in result.upper():
         print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
-        # Setting the post-requites for media test.Removing app url from webkit instance and
+        # Setting the post-requisites for media test.Removing app url from webkit instance and
         # moving next high z-order app to front (residentApp if its active)
-        post_requisite_status = setMediaTestPostRequisites(obj,"LightningApp",webkit_console_socket)
+        post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.animation_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")
             tdkTestObj.setResultStatus("SUCCESS");
