@@ -60,8 +60,6 @@ mode_revert = False
 auto_mode = 0
 # Global variable to store proc validation mode
 proc_check_mode = None
-# Global variable to store process to be excluded
-excluded_process_list = PerformanceTestVariables.excluded_process_list
 # Global variable to store events
 evt_lst = []
 

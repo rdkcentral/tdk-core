@@ -55,7 +55,6 @@ securityEnabled=False
 deviceToken=""
 
 graphical_plugins_list = PerformanceTestVariables.graphical_plugins_list
-excluded_process_list = PerformanceTestVariables.excluded_process_list
 #METHODS
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
@@ -818,7 +817,6 @@ def rdkservice_validatePluginFunctionality(plugin,operations,validation_details)
             zorder_result = rdkservice_getValue("org.rdk.RDKShell.1.getZOrder")
             if zorder_result != "EXCEPTION OCCURRED":
                 zorder = zorder_result["clients"]
-                zorder = exclude_from_zorder(zorder)
                 if plugin.lower() in zorder:
                     if zorder[0].lower() != plugin.lower():
                         param = '{"client": "'+plugin+'"}'
@@ -969,7 +967,6 @@ def move_plugin(obj,plugin,method):
         zorder_status = tdkTestObj.getResult()
         if expectedResult in zorder_status :
             zorder = ast.literal_eval(zorder)["clients"]
-            zorder = exclude_from_zorder(zorder)
             print("zorder: ",zorder)
             if  plugin.lower() in zorder and plugin.lower() == zorder[0]:
                 result_val = "SUCCESS"
@@ -985,13 +982,6 @@ def move_plugin(obj,plugin,method):
         print("\n Error while executing {} method".format(method))
         tdkTestObj.setResultStatus("FAILURE")
     return result_val
-
-#-------------------------------------------------------------------
-#REMOVE UNWANTED PROCESSES FROM ZORDER AND RETURN UPDATED ZORDER
-#-------------------------------------------------------------------
-def exclude_from_zorder(zorder):
-    new_zorder = [ element for element in zorder if element not in excluded_process_list ]
-    return new_zorder
 
 #-------------------------------------------------------------------------
 #Utility functions for Hardware Performance threshold validation - START
