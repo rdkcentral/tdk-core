@@ -20,38 +20,13 @@
 #Configurable Path for WebAudio Related Test Cases
 wpe_webkit_testcases_path = ""
 
-#Browser instance to be used for WebAudio testing. (HtmlApp/LightningApp/WebKitBrowser)
-browser_instance="HtmlApp"
-
-#Port number for the Web inspect page of the selected browser instance(10004/10002/9224)
-webinspect_port="10001"
-
 #Path of chromedriver executable is stored in test manager. Please add : before path.( :/home/tdk/)
 chromedriver_path=""
 
-#Mention how the script should validate the webaudio logs. (WebinspectPageLogs/WpeframeworkLogs)
-log_check_method="WebinspectPageLogs"
+#Mention how the script should validate the webaudio logs. (WebinspectPageLogs/deviceLogs)
+log_check_method="deviceLogs"
 
-#Mention the url to the audio stream for testing
-#Path of the TM with IP and port, where the stream is hosted
-stream_path = ""
-
-mp3_audio_url=stream_path+"TDK_Asset_Sunrise_MP3.mp3"
-
-wav_audio_url=stream_path+"TDK_Asset_Sunrise_WAV_Audio.wav"
-
-m4a_audio_url=stream_path+"TDK_Asset_Sunrise_M4A.m4a"
-
-dts_audio_url=stream_path+"TDK_Asset_Sunrise_DTS.dts"
-
-aac_audio_url=stream_path+"atfms_291_dash_tdk_avc_aac_fmp4_audio_1.mp4"
-
-eac3_audio_url=stream_path+"atfms_291_dash_tdk_avc_eac3_fmp4_ac3.mp4"
-
-webm_opus_audio_url=stream_path+"audio.webm"
-
-video_url=stream_path+"TDK_Asset_Sunrise_23fps.mp4"
-
+app_bundle_name=""
 #Give Stream details in the order codec/No.ofChannels/SampleRate/Duration
 mp3_stream_info="mpeg,2,44100,540.7"
 m4a_stream_info="mp4,2,44100,540.6"
@@ -63,3 +38,5 @@ wav_stream_info="wav,2,44100,540.6"
 ss_voice_index="3,5"
 #Voice name to be selected for Speech Synthesis
 ss_voice_name="Microsoft Adri Online (Natural) - Afrikaans (South Africa),Microsoft Anila Online (Natural) - Albanian (Albania)"
+
+ 
