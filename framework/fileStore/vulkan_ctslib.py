@@ -224,7 +224,7 @@ def run_vulkan_cts_command(info_filename=None):
 #--------------------------------------------------------------------------------------
 # GET THE QPA FILE NAME FROM THE INFO FILE
 #---------------------------------------------------------------------------------------
-def copy_file(qpa_folder_path, result_dir, qpa_file_name):
+'''def copy_file(qpa_folder_path, result_dir, qpa_file_name):
     print("\n Executing copy file function \n")
     print("Folder path : %s" % qpa_folder_path)
     print("Result directory : %s" % result_dir)
@@ -280,17 +280,92 @@ def copy_file(qpa_folder_path, result_dir, qpa_file_name):
         print(f"[FAILURE] QPA file not found after {max_wait_time}s.")
         file_status = "FAILURE"
 
+    return file_status'''
+
+def copy_file(qpa_folder_path, result_dir, qpa_file_name):
+
+    print("\n Executing copy file function using SCP \n")
+    print("Folder path : %s" % qpa_folder_path)
+    print("Result directory : %s" % result_dir)
+    print("QPA file name : %s" % qpa_file_name)
+
+    file_status = "SUCCESS"
+
+    global deviceIP
+    global SSHConfigValues
+
+    print("\n Copy QPA file from DUT to Docker container \n")
+
+    if not qpa_file_name:
+        print(f"[FAILURE] No .qpa file found in {qpa_folder_path}")
+        return "FAILURE"
+
+    # Get SSH credentials
+    if not SSHConfigValues:
+        credentials = obtainCredentials()
+    else:
+        credentials = SSHConfigValues
+
+    if not isinstance(credentials, dict):
+        print("[FAILURE] Unable to retrieve SSH credentials")
+        return "FAILURE"
+
+    user_name = credentials.get("SSH_USERNAME")
+    password = credentials.get("SSH_PASSWORD")
+
+    qpa_file_name_only = os.path.basename(qpa_file_name)
+
+    # Remote file path in DUT
+    remote_file_path = os.path.join(qpa_folder_path, qpa_file_name_only)
+
+    # Local destination path inside docker
+    local_file_path = os.path.join(result_dir, qpa_file_name_only)
+
+    print(f"[INFO] Remote DUT file : {remote_file_path}")
+    print(f"[INFO] Local docker path : {local_file_path}")
+
+    try:
+
+        # Change to destination folder and copy file
+        scp_command = (f"cd {result_dir} && "f"scp -O -o StrictHostKeyChecking=no "f"{user_name}@{deviceIP}:{remote_file_path} .")
+
+        print(f"[INFO] Constructed SCP command: {scp_command}")
+
+        print("[INFO] Starting SCP transfer...")
+
+        child = pexpect.spawn("/bin/bash", ["-c", scp_command], timeout=300)
+
+        index = child.expect(["password:",pexpect.EOF,pexpect.TIMEOUT])
+
+        if index == 0:
+            child.sendline(password)
+            child.expect(pexpect.EOF)
+
+        child.close()
+
+        print(f"[INFO] SCP Exit Status : {child.exitstatus}")
+
+        if child.exitstatus == 0 and os.path.exists(local_file_path):
+            print(f"[SUCCESS] QPA file copied successfully : {local_file_path}")
+        else:
+            print("[FAILURE] SCP file transfer failed")
+            file_status = "FAILURE"
+
+    except Exception as e:
+        print(f"[ERROR] Exception during SCP transfer: {e}")
+        file_status = "FAILURE"
+
     return file_status
 
 #---------------------------------------------------------------------------------------
 # GENERATE EXCEL REPORT FROM QPA FILE
 #---------------------------------------------------------------------------------------
-def report_generation(result_dir):
+def report_generation(result_dir,obj):
     excel_status = "SUCCESS"
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
-    excel_output = os.path.join(result_dir, f"vulkan_CTS_{os.path.basename(result_dir).split('.')[0]}_{timestamp}.xlsx")
+    excel_output = os.path.join(libObj.logpath,f"{libObj.execID}_{libObj.execDevId}_{libObj.resultId}_vulkan_CTS.xlsx")
 
     print(f"[INFO] Generating Excel report using {result_dir}")
     try:
