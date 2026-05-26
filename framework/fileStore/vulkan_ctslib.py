@@ -224,64 +224,6 @@ def run_vulkan_cts_command(info_filename=None):
 #--------------------------------------------------------------------------------------
 # GET THE QPA FILE NAME FROM THE INFO FILE
 #---------------------------------------------------------------------------------------
-'''def copy_file(qpa_folder_path, result_dir, qpa_file_name):
-    print("\n Executing copy file function \n")
-    print("Folder path : %s" % qpa_folder_path)
-    print("Result directory : %s" % result_dir)
-    print("QPA file name : %s" % qpa_file_name)
-
-    file_status = "SUCCESS"
-    global deviceIP
-    devicePort = 8080
-
-    print("\n Copy QPA file from DUT to TDK Server \n") 
-
-    if not qpa_file_name:
-        print(f"[FAILURE] No .qpa file found in {qpa_folder_path}")
-        file_status = "FAILURE"
-
-    qpa_file_name_only = os.path.basename(qpa_file_name)
-    print(f"[INFO] Using QPA file: {qpa_file_name_only}")
-
-    start_cmd = f"cd {qpa_folder_path} && nohup python3 -m http.server {devicePort} >/dev/null 2>&1 &"
-    executeCmnd_InDUT(start_cmd)
-    sleep(3)
-
-    download_url = f"http://{deviceIP}:{devicePort}/{qpa_file_name_only}"
-    output_path = os.path.join(result_dir, qpa_file_name_only)
-    print(f"[INFO] Downloading from {download_url}")
-
-    max_wait_time = 120
-    interval = 5
-    waited = 0
-    success = False
-    
-
-    while waited < max_wait_time:
-        try:
-            result = subprocess.run(["wget", "-O", output_path, download_url],
-                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            if result.returncode == 0 and os.path.exists(output_path):
-                print(f"[SUCCESS] QPA file downloaded: {output_path}")
-                success = True
-                break
-            else:
-                print(f"[INFO] QPA not ready, retrying in {interval}s...")
-        except Exception as e:
-            print(f"[ERROR] wget failed: {e}")
-
-        sleep(interval)
-        waited += interval
-
-    executeCmnd_InDUT("ps -ef | grep 'http.server' | grep -v grep | awk '{print $2}' | xargs kill -9")
-    print("[INFO] HTTP server stopped on DUT")
-
-    if not success:
-        print(f"[FAILURE] QPA file not found after {max_wait_time}s.")
-        file_status = "FAILURE"
-
-    return file_status'''
-
 def copy_file(qpa_folder_path, result_dir, qpa_file_name):
 
     print("\n Executing copy file function using SCP \n")
