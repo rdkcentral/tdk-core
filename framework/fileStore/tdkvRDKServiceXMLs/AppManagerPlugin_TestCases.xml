@@ -1671,7 +1671,7 @@
     </testCase>
 
     <!-- TestCase 109-->
-    <testCase testCaseId="AM_109" testCaseName="AppManager_Max_Inactive_Ramusage" desc="Verify the successful retrieval of the maximum inactuve ram usage">
+    <testCase testCaseId="AM_109" testCaseName="AppManager_Max_Inactive_Ramusage" desc="Verify the successful retrieval of the maximum inactive ram usage">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Get_Max_Inactive_Ramusage" method="Get_Max_Inactive_Ramusage">
             <resultGeneration useMethodTag="appmanager_getmaxrunningapps_status"/>

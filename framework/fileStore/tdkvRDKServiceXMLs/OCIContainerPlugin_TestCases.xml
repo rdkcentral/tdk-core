@@ -484,7 +484,7 @@
         </testCase>
 
         <!-- Test Case 08 -->
-        <testCase testCaseId="OCIContainer_08" testCaseName="OCIContainer_Start_with_Empty_Bundle_Path" desc="To Start  container by passing empty budle path and check the container status">
+        <testCase testCaseId="OCIContainer_08" testCaseName="OCIContainer_Start_with_Empty_Bundle_Path" desc="To Start  container by passing empty bundle path and check the container status">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Start_Container" method="Start_Container">
                 <params>
