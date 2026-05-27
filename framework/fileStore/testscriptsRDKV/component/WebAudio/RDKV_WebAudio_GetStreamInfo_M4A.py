@@ -67,6 +67,7 @@ All the variables in WebAudioVariables.py must be filled.</pre_requisite>
 import tdklib;
 import WebAudioVariables;
 import WebAudiolib
+from rdkv_performancelib import *
 
 import time;
 import re;
@@ -86,69 +87,30 @@ print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
-browser = WebAudioVariables.browser_instance
-stream_url= WebAudioVariables.m4a_audio_url
-webaudio_test_url = obj.url+"/fileStore/lightning-apps/webaudio/GetStreamInfoTest.html?streamUrl="+stream_url
-browser_method = browser+".1.url"
 stream_info = WebAudioVariables.m4a_stream_info
 log_check_method = WebAudioVariables.log_check_method
-current_url=''
+app_bundle_name=WebAudioVariables.app_bundle_name
 
 if expectedResult in result.upper():
     print("\nCheck prerequisites")
     tdkTestObj = obj.createTestStep('webaudio_prerequisite')
-    tdkTestObj.addParameter("VariableList","browser_instance,webinspect_port,chromedriver_path,log_check_method,m4a_audio_url,m4a_stream_info")
+    tdkTestObj.addParameter("VariableList","log_check_method,app_bundle_name")
     tdkTestObj.executeTestCase(expectedResult)
     pre_req_status=tdkTestObj.getResultDetails()
     if expectedResult in pre_req_status:
         print("SUCCESS: All the prerequisites are completed")
         tdkTestObj.setResultStatus("SUCCESS")
-
-        print("\n Check current status of browser instance")
-        tdkTestObj = obj.createTestStep('webaudio_getPluginStatus')
-        tdkTestObj.addParameter("plugin", browser)
-        tdkTestObj.executeTestCase(expectedResult)
-        browser_status = tdkTestObj.getResultDetails()
-        result = tdkTestObj.getResult()
-        if expectedResult in result:
-            if browser_status == "resumed":
-                print("SUCCESS: ", browser," is already in resumed state")
-                tdkTestObj.setResultStatus("SUCCESS")
-
-                print("Get the current URL loaded in ",browser)
-                tdkTestObj = obj.createTestStep('webaudio_getValue')
-                tdkTestObj.addParameter("method",browser_method)
-                tdkTestObj.executeTestCase(expectedResult)
-                current_url=tdkTestObj.getResultDetails()
-                result = tdkTestObj.getResult()
-                if expectedResult in result:
-                    print("SUCCESS: Current URL in ", browser, " is ",current_url)
-                    tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                print("SUCCESS: ", browser," is in deactivated state")
-                
-                print ("\n Launching ", browser)
-                tdkTestObj = obj.createTestStep('webaudio_setPluginStatus')
-                tdkTestObj.addParameter("plugin",browser)
-                tdkTestObj.addParameter("status","activate")
-                tdkTestObj.executeTestCase(expectedResult)
-                result = tdkTestObj.getResult()
-                if expectedResult in result:
-                    print("SUCCESS: ", browser ," has launched successfully")
-                    tdkTestObj.setResultStatus("SUCCESS")
-                else:
-                    print("FAILURE : Failed to launch ", browser, " in device \n")
-                    tdkTestObj.setResultStatus("FAILURE")
-                    obj.unloadModule("webaudio_test");
-                    exit()
+        app_name="com.rdkcentral.webaudio"
+        status = rdkservice_install_launch_app(obj, app_bundle_name, app_name)
+        if status == "SUCCESS" :
             if log_check_method == "WebinspectPageLogs":
                 print("\n Script is directly taking the browser webinspect page console logs to validate the webaudio")
-                webinspect_logs=WebAudiolib.webaudio_getLogs_webinspectpage(obj,webaudio_test_url,browser)
+                webinspect_logs=WebAudiolib.webaudio_getLogs_webinspectpage(obj,app_name, [["9","9","9","9","13"],[]])
                 webinspect_logs = ', '.join(webinspect_logs)
             else:
                 print("\n Script is using wpeframework log to validate the webaudio test")
                 grep_line="'GetStreamInfoTest' | tail -4 | tr '\\n' ','"
-                webinspect_logs = WebAudiolib.webaudio_getLogs_fromDevicelogs(obj,webaudio_test_url,browser,grep_line)
+                webinspect_logs = WebAudiolib.webaudio_getLogs_fromDevicelogs(obj,app_name,grep_line,[["9","9","9","9","13"],[]])
             if webinspect_logs != "":
                 if "TDK_LOGS" in webinspect_logs and "GetStreamInfoTest" in webinspect_logs:
                     print("\n ", webinspect_logs)
@@ -157,9 +119,7 @@ if expectedResult in result.upper():
 
                     #Remove timestamp and other unnecessary string from the logs
                     webinspect_logs = re.sub(r'\d+:\d+ [A-Za-z]+ \d+ \d+:\d+:\d+\.\d+ ', '', webinspect_logs)
-                    webinspect_logs=webinspect_logs.replace('TDK_LOGS: GetStreamInfoTest : ', '')
-                    webinspect_logs=re.sub(r'WPEFramework\[\d+\]:', '', webinspect_logs)
-                    webinspect_logs=re.sub(r'\['+browser+'\]:\d+', '', webinspect_logs)
+                    webinspect_logs = webinspect_logs.split("TDK_LOGS: GetStreamInfoTest : ")[-1].strip()
 
                     success_logs=["Codec Information","Number of Channels", "Sample Rate", "Duration"]
                     stream_info= stream_info.split(",")
@@ -190,32 +150,23 @@ if expectedResult in result.upper():
                     print("FAILURE: Failed to fetch the logs from Html test App \n")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print("FAILURE: The logs from the browser came as empty")
+                print("FAILURE: The logs from the browser came as empty") 
                 tdkTestObj.setResultStatus("FAILURE")
-            print("\n Revert everything before exiting the script")
-            if current_url !='':
-                tdkTestObj = obj.createTestStep('webaudio_setPluginStatus')
-                tdkTestObj.addParameter("plugin",browser)
-                tdkTestObj.addParameter("status","activate")
-                tdkTestObj.addParameter("uri",current_url)
-                tdkTestObj.executeTestCase(expectedResult)
-                result = tdkTestObj.getResult()
-            else:
-                tdkTestObj = obj.createTestStep('webaudio_setPluginStatus')
-                tdkTestObj.addParameter("plugin",browser)
-                tdkTestObj.addParameter("status","deactivate")
-                tdkTestObj.executeTestCase(expectedResult)
-                result = tdkTestObj.getResult()
-            if expectedResult in result:
+            print("\n Terminating the app")
+            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+            tdkTestObj.addParameter("app_id",app_name)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
+            if result == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
-                print("SUCCESS: Successfully reverted everything")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print("FAILURE: Failed to revert the status of ", browser)
+                print("Unable to terminate the app")
         else:
-            print("FAILURE: Failed to get the status of ", browser)
+            print("Failed to launch the app")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print("FAILURE: Pre-requsites are not met")
+        print("Preconditions are not met")
         tdkTestObj.setResultStatus("FAILURE")
+
 obj.unloadModule("WebAudio");
