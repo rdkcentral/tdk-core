@@ -1266,6 +1266,22 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
+        # PreinstallManager Events response result parser steps
+        elif tag == "preinstallmanager_app_installation_status_event_validation":
+            try:
+                info["message"] = result
+                if len(arg) and arg[0] == "check_empty_event":
+                    if result:
+                        info["Test_Step_Status"] = "FAILURE"
+                else:
+                    if result:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"

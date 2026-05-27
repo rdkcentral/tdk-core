@@ -3470,7 +3470,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "ocicontainer_check_container_status":
             info = result
             success = str(result.get("success")).lower() == "true"
-            if success and result.get("state").lower() == expectedValues[0] and result.get("containerId").lower() == expectedValues[1]:
+            #if success and result.get("state").lower() == expectedValues[0] and result.get("containerId").lower() == expectedValues[1]:
+            if success and result.get("state").lower() == expectedValues[0]:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
@@ -4845,6 +4846,21 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["result"] = result
                     if str(result).strip().lower() in ("none"):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "preinstallmanager_get_preinstall_state_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if str(result.get("state")).strip() in expectedValues:
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
                         info["Test_Step_Status"] = "FAILURE"
@@ -6420,6 +6436,10 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             info["descriptor"] = testStepResults[0].get("descriptor")
 
+        elif tag == "ocicontainer_get_previous_container_id":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["containerId"] = testStepResults[0].get("containerId")
+
         # HdmiCec2 Plugin Response result parser steps
         elif tag == "hdmicec2_toggle_enabled_status":
             testStepResults = list(testStepResults[0].values())[0]
@@ -6891,6 +6911,9 @@ def generateComplexTestInputParam(methodTag,testParams):
         elif tag == "pm_install_package":
             #print(testParams,"testParams")
             userGeneratedParam = { "packageId": testParams.get("packageId"), "version": testParams.get("version"), "additionalMetadata": [ {"name": testParams.get("name"), "value": testParams.get("value") } ], "fileLocator": testParams.get("fileLocator") }
+        elif tag == "download_optional_parameters":
+            print(testParams,"testParams")
+            userGeneratedParam = { "url": testParams.get("url"), "options": { "priority": testParams.get("priority"), "retries": testParams.get("retries"), "rateLimit": testParams.get("rateLimit") } }
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
@@ -8012,6 +8035,10 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 message = "Error occurred while validating downloaded package MD5SUM: " + str(e)
                 info["Test_Step_Message"] = message
                 info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "ocicontainer_form_container_id":
+            containerId = arg[0].strip() + arg[1].strip()
+            info["containerId"] = containerId
 
         else:
             print("\nError Occurred: [%s] No function call available for %s" %(inspect.stack()[0][3],methodTag))

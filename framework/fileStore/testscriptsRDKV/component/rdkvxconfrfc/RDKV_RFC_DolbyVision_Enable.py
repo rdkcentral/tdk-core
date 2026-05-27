@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ obj = tdklib.TDKScriptingLibrary("rdkvxconfrfc","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_RFC_DAB_Enable')
+obj.configureTestCase(ip,port,'RDKV_RFC_DolbyVision_Enable')
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
@@ -106,7 +106,7 @@ if "SUCCESS" in result.upper():
                     print("\n")
                     #Step 6: Check the RFC parameter value prior to making any changes
                     tdkTestObj = obj.createTestStep('rfc_datamodelcheck')
-                    rfcparameter="Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.DAB.Enable"
+                    rfcparameter="Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.DolbyVision.Enable"
                     tdkTestObj.addParameter("rfcparameter",rfcparameter)
                     tdkTestObj.executeTestCase(expectedResult)
                     actualvalue = tdkTestObj.getResultDetails()
@@ -116,7 +116,7 @@ if "SUCCESS" in result.upper():
                         print("\n")
                         #Step 7: Creating a feature name for configuration in the Xconf server
                         tdkTestObj = obj.createTestStep('rfc_formfeaturename')
-                        feature_name="DAB.Enable"
+                        feature_name="DolbyVision_Enable"
                         tdkTestObj.addParameter("feature_name",feature_name)
                         tdkTestObj.executeTestCase(expectedResult)
                         detail=tdkTestObj.getResultDetails()
