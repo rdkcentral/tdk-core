@@ -100,7 +100,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_media","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_MVS_Video_HTML_Play_OGG')
+obj.configureTestCase(ip,port,'RDKV_CERT_MVS_Video_HTML_Play_Vorbis_Webm')
 
 webkit_console_socket = None
 
@@ -129,7 +129,7 @@ if expectedResult in result.upper():
         # Setting proc validation mode as audio-only
         setProcCheckMode("audio-only")
         appURL    = MediaValidationVariables.html_video_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_direct_ogg
+        videoURL  = MediaValidationVariables.video_src_url_vorbis_webm
         # Setting VideoPlayer Operations
         setOperation("close",MediaValidationVariables.close_interval)
         operations = getOperations()
