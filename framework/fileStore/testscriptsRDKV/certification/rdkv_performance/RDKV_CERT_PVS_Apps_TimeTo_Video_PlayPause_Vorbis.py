@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2022 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,69 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-'''
-<?xml version='1.0' encoding='utf-8'?>
-<xml>
-  <id></id>
-  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>4</version>
-  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_OGG</name>
-  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id> </primitive_test_id>
-  <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>rdkservice_setValue</primitive_test_name>
-  <!--  -->
-  <primitive_test_version>1</primitive_test_version>
-  <!--  -->
-  <status>FREE</status>
-  <!--  -->
-  <synopsis>This script is to get the performance of the Lightning application by calculating the time taken for play and pause operations of ogg video.</synopsis>
-  <!--  -->
-  <groups_id />
-  <!--  -->
-  <execution_time>6</execution_time>
-  <!--  -->
-  <long_duration>false</long_duration>
-  <!--  -->
-  <advanced_script>false</advanced_script>
-  <!-- execution_time is the time out time for test execution -->
-  <remarks></remarks>
-  <!-- Reason for skipping the tests if marked to skip -->
-  <skip>false</skip>
-  <!--  -->
-  <box_types>
-    <box_type>Video_Accelerator</box_type>
-    <!--  -->
-  </box_types>
-  <rdk_versions>
-    <rdk_version>RDK2.0</rdk_version>
-    <!--  -->
-  </rdk_versions>
-  <test_cases>
-    <test_case_id>RDKV_PERFORMANCE_121</test_case_id>
-    <test_objective>This script is to get the performance of the Lightning application by calculating the time taken for play and pause operations of ogg video.</test_objective>
-    <test_type>Positive</test_type>
-    <test_setup>RPI,Accelerator</test_setup>
-    <pre_requisite>1. Wpeframework process should be up and running in the device.
-</pre_requisite>
-    <api_or_interface_used>None</api_or_interface_used>
-    <input_parameters>1. The URL of the application to be launched.</input_parameters>
-    <automation_approch>1. As a pre requisite disable all other plugins and enable webkitinstance plugin.
-2. Set the application URL
-3. Play and pause the video from the application
-3. Get the time taken to play/pause the video</automation_approch>
-    <expected_output>The video must play and pause within expected range of ms.</expected_output>
-    <priority>High</priority>
-    <test_stub_interface>rdkv_performance</test_stub_interface>
-    <test_script>RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_OGG</test_script>
-    <skipped>No</skipped>
-    <release_version>M99</release_version>
-    <remarks></remarks>
-  </test_cases>
-  <script_tags />
-</xml>
-'''
+
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from web_socket_util import *
@@ -95,7 +33,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_OGG');
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_Vorbis');
 
 webkit_console_socket = None
 
@@ -115,8 +53,8 @@ if expectedResult in result.upper():
     conf_file, status = get_configfile_name(obj);
     result, logging_method = getDeviceConfigKeyValue(conf_file,"LOGGING_METHOD")
     setDeviceConfigFile(conf_file)
-    videoURL  = MediaValidationVariables.video_src_url_ogg
-    videoURL_type = MediaValidationVariables.ogg_url_type
+    videoURL  = MediaValidationVariables.video_src_url_vorbis
+    videoURL_type = MediaValidationVariables.vp9_url_type
     setURLArgument("execID",str(obj.execID))
     setURLArgument("execDevId",str(obj.execDevId))
     setURLArgument("resultId",str(obj.resultId))
