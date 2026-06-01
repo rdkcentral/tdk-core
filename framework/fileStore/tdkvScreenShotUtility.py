@@ -84,10 +84,10 @@ def getScreenShot(obj):
         screenCaptureMechanism = getConfig(obj,"SCREEN_CAPTURE_MECHANISM")
         print("Got screenCapture Mechanism as ", screenCaptureMechanism)
     except:
-        screenCaptureMechanism = "RDKSHELL"
+        screenCaptureMechanism = "RDKWindowManager"
 
     screenCaptureMechanism = screenCaptureMechanism.lower()
-    if screenCaptureMechanism == "rdkshell":
+    if screenCaptureMechanism == "rdkwindowmanager":
         image_name = base_path + "_" + device_name
         result = getSnapShot(screenCaptureMechanism,DUT_IP,base_path,image_name)
     elif screenCaptureMechanism == "screencaptureservice":
@@ -103,5 +103,3 @@ def getScreenShot(obj):
         result = "FAILURE"
     print("Result from tdkvScreenShotUtility - ",result)
     return result
-
-
