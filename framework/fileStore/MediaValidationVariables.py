@@ -130,7 +130,12 @@ unified_player_app_id = "com.rdkcentral.lightning-unified-player"
 unified_player_app_download_url = bolt_packages_base_path + "com.rdkcentral.lightning-unified-player+0.1.0.bolt"
 html_player_app_id = "com.rdkcentral.html-player"
 html_player_app_download_url = bolt_packages_base_path + "com.rdkcentral.html-player+0.1.0.bolt"
-
+animation_app_id = "com.rdkcentral.animation-app"
+animation_app_download_url = bolt_packages_base_path + "com.rdkcentral.animation-app+0.1.0.bolt"
+multi_animation_app_id = "com.rdkcentral.multi-animation-app"
+multi_animation_app_download_url = bolt_packages_base_path + "com.rdkcentral.multi-animation-app+0.1.0.bolt"
+object_animation_app_id = "com.rdkcentral.object-animation-app"
+object_animation_app_download_url = bolt_packages_base_path + "com.rdkcentral.object-animation-app+0.1.0.bolt"
 
 #************************************************************************
 #         DIFFERENT AV CODEC HLS/DASH URLs FOR CODEC TESTING
@@ -370,8 +375,8 @@ mkv_4k_url_type ="mkv"
 vp9_4k_url_type  = "webm"
 vp9_url_type_fps = "webm"
 
-# direct ogg & webm container streams without ABR (not hls/dash)
-video_src_url_direct_ogg  = test_streams_base_path + "TDK_Asset_Sunrise_OGG.webm"
+# Direct webm container streams without ABR (not hls/dash)
+video_src_url_vorbis_webm = test_streams_base_path + "TDK_Asset_Sunrise_Vorbis.webm"
 video_src_url_direct_webm = test_streams_base_path + "TDK_Asset_Sunrise_VP9_Opus.webm"
 
 # Different MPD Variant streams

@@ -93,14 +93,14 @@ def on_message(ws, message):
             print("SNAPS COMPLETED: %d/%d"%(snapCount,snaps))
         else:
             upload_to_cgi = "FAILURE"
-    elif screen_capture_mechanism == "rdkshell":
+    elif screen_capture_mechanism == "rdkwindowmanager":
         start = time.time()
         snapCount= snapCount + 1
         dataPath = snapCount
         global encoded_data
         data = json.loads(message)
         encoded_data = data["params"]["imageData"]
-        with open("rdkshell_data.txt","w") as file:
+        with open("rdkwindowmanager_data.txt","w") as file:
             file.write(encoded_data)
         if not encoded_data:
             print("FAILURE : Not enough image data")
@@ -139,7 +139,7 @@ def on_close(ws, close_status_code, close_msg):
 #
 # Method to start websocket instance
 #
-#  Method registers for event on RDKShell plugin
+#  Method registers for event on RDKWindowManager plugin
 #
 #  ws      : websocket instance
 #############################################################
@@ -147,7 +147,7 @@ def on_open(ws):
     def run(*args):
         global event
         if event == "onScreenshotComplete":
-            service = "org.rdk.RDKShell.1"
+            service = "org.rdk.RDKWindowManager"
         elif event == "uploadComplete":
             service = "org.rdk.ScreenCapture"
         else:
@@ -235,7 +235,7 @@ def registerEvent_(IP,event):
 #
 # Method to capture screenshot
 #
-#  Method Triggers curl command of method : getScreenshot plugin : RDKShell
+#  Method Triggers curl command of method : getScreenshot plugin : RDKWindowManager
 #  Wait for the event to be captured and the encoded data to be written into file
 #  Once encoded data is written into file, decode and save it as png
 #
@@ -243,16 +243,18 @@ def registerEvent_(IP,event):
 #  png_path            : Path of png in which image should be written
 #  snapNumber          : Number of screenshots required
 ###########################################################################################
-def RDKShellScreenshot(IP,png_path,snapNumber):
+def RDKWindowManagerScreenshot(IP,png_path,snapNumber):
     global snapCount
     global TIMEOUT
     global THUNDERPORT
     current_time = datetime.now().strftime("%H:%M:%S")
     print("\n\nTriggering getScreenshot at ",current_time)
-    screenshot_command = "curl -s -S --header \"Content-Type: application/json\" --request POST --data '{\"jsonrpc\": \"2.0\",\"id\": 42,\"method\": \"org.rdk.RDKShell.1.getScreenshot\"}' http://" + str(IP) + ":" + str(THUNDERPORT) + "/jsonrpc"
+    screenshot_command = "curl -s -S --header \"Content-Type: application/json\" --request POST --data '{\"jsonrpc\": \"2.0\",\"id\": 42,\"method\": \"org.rdk.RDKWindowManager.getScreenshot\"}' http://" + str(IP) + ":" + str(THUNDERPORT) + "/jsonrpc"
     output = triggerCommand(screenshot_command)
-    status = json.loads(output)["result"]["success"]
-    if status:
+    #status = json.loads(output)["result"]["success"]
+    #if status:
+    status = json.loads(output)["result"]
+    if status in (None, '', 'NONE'):
         print("SUCCESS : getScreenshot call was successfull")
     else:
         print("FAILURE : getScreenshot call failed")
@@ -281,7 +283,7 @@ def RDKShellScreenshot(IP,png_path,snapNumber):
     saveAsPng.decodeAndSaveDirectly(encoded_data,width,height,png_path)
     time_elapsed = time.time() - start
     print("Time elapsed for decoding image : %s seconds"%(str(time_elapsed)))
-    
+
 
 ###########################################################################################################
 #
@@ -289,9 +291,9 @@ def RDKShellScreenshot(IP,png_path,snapNumber):
 #
 #  Method verifies if device is accessible via Thunder port (THUNDERPORT)
 #  Obtains registerEventThread after starting websocket instance for listening onScreenshotComplete/uploadComplete event
-#  Sets the imageName according to number of snap and calls RDKShellScreenshot/ScreenCaptureScreenshot
+#  Sets the imageName according to number of snap and calls RDKWindowManagerScreenshot/ScreenCaptureScreenshot
 #
-#  screenshot_mechanism   : Mechanism to be used for capturing screenshot - rdkshell or screencaptureservice
+#  screenshot_mechanism   : Mechanism to be used for capturing screenshot - rdkwindowmanager or screencaptureservice
 #  IP                     : IP of the device to capture screenshot
 #  base_path              : base path wherer all the images to be stored
 #  clicks                 : Number of screenshots required
@@ -311,14 +313,14 @@ def getSnapShot(screenshot_mechanism, IP,base_path,imageName="",clicks=1,interva
     global screen_capture_mechanism
     screen_capture_mechanism=screenshot_mechanism
     if not timeout:
-        if screen_capture_mechanism == "rdkshell":
+        if screen_capture_mechanism == "rdkwindowmanager":
             TIMEOUT = 120
         elif screen_capture_mechanism == "screencaptureservice":
             TIMEOUT = 20
     BasePath=base_path
     snaps=clicks
     image_name=imageName
-    if screen_capture_mechanism == "rdkshell":
+    if screen_capture_mechanism == "rdkwindowmanager":
         registerEventThread= registerEvent_(IP,"onScreenshotComplete")
     elif screen_capture_mechanism == "screencaptureservice":
         registerEventThread= registerEvent_(IP,"uploadComplete")
@@ -329,8 +331,8 @@ def getSnapShot(screenshot_mechanism, IP,base_path,imageName="",clicks=1,interva
         cgi_server_url = base_path
         print ("CGI server URL : ",cgi_server_url)
     def thread_function(png_path,snapNumber):
-        if screen_capture_mechanism == "rdkshell":
-            RDKShellScreenshot(IP, png_path,snapNumber)
+        if screen_capture_mechanism == "rdkwindowmanager":
+            RDKWindowManagerScreenshot(IP, png_path,snapNumber)
         elif screen_capture_mechanism == "screencaptureservice":
             ScreenCaptureScreenshot(IP, cgi_server_url, png_path, snapNumber)
         else:
@@ -355,8 +357,8 @@ def getSnapShot(screenshot_mechanism, IP,base_path,imageName="",clicks=1,interva
             if screen_capture_mechanism != "screencaptureservice":
                 png_path = BasePath + png_path
         if clicks==1:
-            if screen_capture_mechanism == "rdkshell":
-                RDKShellScreenshot(IP, png_path,snap)
+            if screen_capture_mechanism == "rdkwindowmanager":
+                RDKWindowManagerScreenshot(IP, png_path,snap)
             elif screen_capture_mechanism == "screencaptureservice":
                 ScreenCaptureScreenshot(IP, cgi_server_url, png_path,snap)
             else:
@@ -409,8 +411,10 @@ def ScreenCaptureScreenshot(IP,cgi_server_url,image_name,snapNumber):
     print("\n\nTriggering getScreenshot at ",current_time)
     screenshot_command = "curl -s -S --header \"Content-Type: application/json\" --request POST --data '{\"jsonrpc\": \"2.0\",\"id\": 42,\"method\": \"org.rdk.ScreenCapture.1.uploadScreenCapture\" , \"params\": {\"url\":\"" + cgi_server_url + "?fileName=" + image_name + "\"}}' http://" + str(IP) + ":" + str(THUNDERPORT) + "/jsonrpc"
     output = triggerCommand(screenshot_command)
-    status = json.loads(output)["result"]["success"]
-    if status:
+    #status = json.loads(output)["result"]["success"]
+    #if status:
+    status = json.loads(output)["result"]
+    if status in (None, '', 'NONE'):
         print("SUCCESS : getScreenshot call was successfull")
     else:
         print("FAILURE : getScreenshot call failed")
@@ -706,8 +710,8 @@ if __name__ == "__main__":
         print ("*"*100)
         print ("Screenshot Capture Example")
         print ("*"*100)
-        print ("Usage example: python screenCaptureUtility.py capture_screenshot method=rdkshell/screencaptureservice ip=1.2.3.4 base_path=/home/tdk/ server=http://server:port/cgi-bin/upload.cgi/ snaps=3 interval=4")
-        print ("\tmethod -> screenshot mechanism rdkshell / screencaptureservice , default -> rdkshell")
+        print ("Usage example: python screenCaptureUtility.py capture_screenshot method=rdkwindowmanager/screencaptureservice ip=1.2.3.4 base_path=/home/tdk/ server=http://server:port/cgi-bin/upload.cgi/ snaps=3 interval=4")
+        print ("\tmethod -> screenshot mechanism rdkwindowmanager / screencaptureservice , default -> rdkwindowmanager")
         print ("\tip -> IP of the device\n\tbase_path -> Path of the machine where snapshots and encoded data should be stored")
         print ("\tsnaps -> Number of screenshots required\n\tinterval -> Interval between successive screenshots")
         print ("\nIncase you are anticipating a network delay and need tht event thread to run for a longer time:\n\tAdditionial argument \"timeout\" can be passed")
@@ -788,19 +792,19 @@ if __name__ == "__main__":
             print ("CGI server url configured as        : ",base_path)
         else:
             print ("Base path configured as        : ",base_path)
-        if "rdkshell" in screencapturemechanism  and "screencaptureservice" not in screencapturemechanism:
-            print ("RDKShell screenshot mechanism is selected")
-            screencapturemechanism = "rdkshell"
-        elif "rdkshell" not in screencapturemechanism and "screencaptureservice" in screencapturemechanism:
+        if "rdkwindowmanager" in screencapturemechanism  and "screencaptureservice" not in screencapturemechanism:
+            print ("RDKWindowManager screenshot mechanism is selected")
+            screencapturemechanism = "rdkwindowmanager"
+        elif "rdkwindowmanager" not in screencapturemechanism and "screencaptureservice" in screencapturemechanism:
             print ("ScreenCaptureService mechanism is selected")
             screencapturemechanism = "screencaptureservice"
             image_naming_convention = "image"
             base_path = server_url
         else:
-            print ("Default screenshot mechanism : rdkshell is selected")
-            screencapturemechanism = "rdkshell"
+            print ("Default screenshot mechanism : rdkwindowmanager is selected")
+            screencapturemechanism = "rdkwindowmanager"
 
-        if screencapturemechanism == "rdkshell":
+        if screencapturemechanism == "rdkwindowmanager":
             image_naming_convention=""
 
         if clicks > 1:
