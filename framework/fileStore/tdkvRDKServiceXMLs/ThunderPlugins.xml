@@ -3316,9 +3316,11 @@
                 <param tag="clientId" defaultValue="null" type="string"/>
             </params>
         </method>
+        <method name="Get_Screenshot" api="getScreenshot" type="method" desc="Captures a screenshot of the current display"/>
 
         <!-- Event Definitions -->
         <event name="Event_On_User_Inactivity" eventName="onUserInactivity" eventId="client.events.1" type="event" desc="Triggered when the user inactivity timer reaches the set interval"/>
+        <event name="Event_On_Screenshot_Complete" eventName="onScreenshotComplete" eventId="client.events.1" type="event" desc="Triggered when a screenshot is captured"/>
     </plugin>
 
     <!-- LifecycleManager Plugin Information -->

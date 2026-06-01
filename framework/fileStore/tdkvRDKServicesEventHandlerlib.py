@@ -1191,6 +1191,16 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "rwm_check_on_screenshot_complete_event":
+            try:
+                info["Test_Step_Status"] = "FAILURE"
+                if str(result[0]['success']).lower() == "true" and result[0]["imageData"]:
+                    info["message"] = result
+                    info["Test_Step_Status"] = "SUCCESS"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
         # AppManager Events response result parser steps
         elif tag == "appmanager_check_applifecyclestatechanged_event":
             try:
