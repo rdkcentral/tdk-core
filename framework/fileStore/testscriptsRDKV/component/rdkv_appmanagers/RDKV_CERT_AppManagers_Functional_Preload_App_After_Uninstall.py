@@ -65,7 +65,7 @@ if "SUCCESS" in result.upper():
         if "SUCCESS" in result:
             tdkTestObj.setResultStatus("SUCCESS")
             
-            # Step 3 : Check whether the package is already installed if installed proceed wuth uninstallation step
+            # Step 3 : Check whether the package is already installed if installed proceed with uninstallation step
             print("\n")
             time.sleep(3)
             method = "org.rdk.AppManager.1.isInstalled"
