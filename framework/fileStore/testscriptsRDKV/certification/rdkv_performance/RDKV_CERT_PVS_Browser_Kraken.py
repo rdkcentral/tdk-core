@@ -122,6 +122,7 @@ if expectedResult in result.upper():
 
     status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url)
     if status == "SUCCESS":
+        # tdkTestObj.setResultStatus("SUCCESS")
         time.sleep(900)
         tdkTestObj = obj.createTestStep('rdkservice_getBrowserScore_Kraken')
         tdkTestObj.executeTestCase(expectedResult)
