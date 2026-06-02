@@ -37,7 +37,7 @@ To validate device stability by continuously pairing and unpairing a Bluetooth e
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 2400
 

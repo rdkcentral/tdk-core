@@ -37,7 +37,7 @@ To validate WebKitBrowser stability by continuously suspending and resuming the 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 420
 

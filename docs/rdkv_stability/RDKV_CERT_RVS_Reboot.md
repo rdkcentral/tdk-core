@@ -44,7 +44,7 @@ To validate device stability by rebooting the device a configured number of time
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 4000
 

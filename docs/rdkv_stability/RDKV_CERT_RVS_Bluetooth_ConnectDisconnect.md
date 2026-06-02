@@ -44,7 +44,7 @@ To validate device stability by continuously connecting and disconnecting a Blue
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 2000
 

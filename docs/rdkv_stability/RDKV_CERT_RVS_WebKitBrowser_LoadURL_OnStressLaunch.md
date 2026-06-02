@@ -38,7 +38,7 @@ To validate that WebKitBrowser can successfully load a URL after 99 continuous l
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-HYB, RPI-Client, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 120
 

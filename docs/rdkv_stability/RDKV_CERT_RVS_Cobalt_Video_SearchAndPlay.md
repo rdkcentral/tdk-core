@@ -39,7 +39,7 @@ To validate device stability by repeatedly navigating to the Cobalt search featu
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 4000
 

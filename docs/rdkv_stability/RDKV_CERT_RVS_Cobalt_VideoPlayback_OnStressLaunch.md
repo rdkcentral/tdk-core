@@ -38,7 +38,7 @@ To validate that Cobalt can successfully play video after 99 continuous launch-a
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 120
 

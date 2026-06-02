@@ -41,7 +41,7 @@ To validate device stability by repeatedly switching the WiFi connection between
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 3000
 

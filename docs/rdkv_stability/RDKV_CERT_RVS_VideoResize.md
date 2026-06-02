@@ -41,7 +41,7 @@ To validate device stability by repeatedly resizing the video window via RDKShel
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 720
 

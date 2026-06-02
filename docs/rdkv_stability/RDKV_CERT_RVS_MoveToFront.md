@@ -40,7 +40,7 @@ To validate the RDKShell moveToFront functionality by launching both Cobalt and 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 720
 

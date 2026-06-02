@@ -39,7 +39,7 @@ To validate WebKitBrowser URL setting stability by repeatedly setting two differ
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 360
 

@@ -38,7 +38,7 @@ To validate Cobalt navigation stability by sending 1000 key navigation events an
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-HYB, RPI-Client, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 60
 

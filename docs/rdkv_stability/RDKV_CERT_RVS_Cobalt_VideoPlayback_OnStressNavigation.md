@@ -40,7 +40,7 @@ To validate that Cobalt can successfully play video after 99 stress navigation k
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-HYB, RPI-Client, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 120
 

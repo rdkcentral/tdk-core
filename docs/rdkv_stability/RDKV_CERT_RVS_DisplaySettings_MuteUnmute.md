@@ -38,7 +38,7 @@ To validate device stability by repeatedly muting and unmuting audio on connecte
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-HYB, RPI-Client, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 600
 

@@ -39,7 +39,7 @@ To validate device stability by playing a 4K HLS video stream via webkit_instanc
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 740
 

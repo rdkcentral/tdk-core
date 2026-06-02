@@ -38,7 +38,7 @@ To validate device stability by playing an encrypted video in Cobalt and perform
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 1460
 

@@ -38,7 +38,7 @@ To validate device stability by launching Cobalt to play a video and continuousl
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, RPI-HYB, Video_Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 620
 
