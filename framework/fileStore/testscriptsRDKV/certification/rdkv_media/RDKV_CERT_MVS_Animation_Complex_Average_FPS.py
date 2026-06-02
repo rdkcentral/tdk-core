@@ -121,9 +121,8 @@ if expectedResult in result.upper():
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     setWebKitSocketPort(webinspect_port_lightning)
-    # Setting the pre-requites for media test. Launching the wekit insatnce via RDKShell and
-    # moving it to the front, openning a socket connection to the webkit inspect page and
-    # disabling proc validation
+    # Setting the pre-requisites for media test. Launching the required test app via AppManager and
+    # getting the details for proc validation from config file
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.object_animation_app_id,MediaValidationVariables.object_animation_app_download_url)
     config_status = "SUCCESS"
     conf_file,result = getDeviceConfigFile(obj.realpath)
@@ -191,8 +190,7 @@ if expectedResult in result.upper():
         print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
-        # Setting the post-requites for media test.Removing app url from webkit instance and
-        # moving next high z-order app to front (residentApp if its active)
+        # Setting the post-requisites for media test. Terminating the bolt app.
         post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.object_animation_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")
