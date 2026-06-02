@@ -155,7 +155,7 @@ if expectedResult in result.upper():
         # Getting the complete test app URL
         animation_test_url = getTestURL(appURL,appArguments)
 
-        # Setting the animation test url in webkit instance using RDKShell
+        # Setting the animation test url in PersistentStore and launching the animation test app using AppManager
         setPS_value(animation_test_url)
         launch_status = launchApp(obj,MediaValidationVariables.object_animation_app_id)
         if "SUCCESS" in launch_status:
