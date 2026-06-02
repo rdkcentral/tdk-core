@@ -43,6 +43,7 @@ import ast
 import urllib.request, urllib.parse, urllib.error
 from SecurityTokenUtility import *
 import web_socket_util
+import StabilityTestUtility
 
 deviceIP=""
 devicePort=""
@@ -54,7 +55,6 @@ securityEnabled=False
 deviceToken=""
 
 graphical_plugins_list = PerformanceTestVariables.graphical_plugins_list
-excluded_process_list = PerformanceTestVariables.excluded_process_list
 #METHODS
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
@@ -79,6 +79,44 @@ def init_module(libobj,port,deviceInfo):
     except Exception as e:
         print("\nException Occurred while getting MAC \n")
         print(e)
+
+#-------------------------------------------------------------------
+#GET THE WEBINSPECT PORT FROM THE DEVICE LOG VIA SSH
+#-------------------------------------------------------------------
+def get_webinspect_port():
+    try:
+        # Get SSH parameters from configuration file
+        ssh_params = rdkservice_getSSHParams(libObj.realpath, deviceIP)
+        if ssh_params == "" or ssh_params == "{}":
+            raise Exception("Failed to get SSH parameters from configuration")
+        
+        ssh_params_dict = json.loads(ssh_params)
+        ssh_method = ssh_params_dict.get("ssh_method")
+        credentials = ssh_params_dict.get("credentials")
+        
+        if not ssh_method or not credentials:
+            raise Exception("SSH method or credentials not found in configuration")
+        
+        # Execute command on DUT to get inspector port from dacapp.log
+        cmd = "cat /opt/logs/dacapp.log | grep 'inspector port set to'"
+        output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+        
+        if output == "EXCEPTION" or output == "":
+            raise Exception("Failed to retrieve log output from DUT")
+        
+        # Parse the port number from output
+        for line in output.splitlines():
+            match = re.search(r'inspector port set to\s+(\d+)', line, re.IGNORECASE)
+            if match:
+                return match.group(1)
+        
+        # If no port found in output
+        raise Exception("Inspector port not found in dacapp.log output")
+                
+    except Exception as e:
+        print("Unable to get webinspect port from dacapp.log:", e)
+        raise
+
 
 #---------------------------------------------------------------
 #POST CURL REQUEST USING PYTHON REQUESTS
@@ -343,7 +381,33 @@ def rdkservice_getBrowserScore_CSS3():
     try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.css3_test_subcategory_list
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+        
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -386,7 +450,34 @@ def rdkservice_getBrowserScore_Octane():
     try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.octane_test_subcategory_list
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+        
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+        
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -817,7 +908,6 @@ def rdkservice_validatePluginFunctionality(plugin,operations,validation_details)
             zorder_result = rdkservice_getValue("org.rdk.RDKShell.1.getZOrder")
             if zorder_result != "EXCEPTION OCCURRED":
                 zorder = zorder_result["clients"]
-                zorder = exclude_from_zorder(zorder)
                 if plugin.lower() in zorder:
                     if zorder[0].lower() != plugin.lower():
                         param = '{"client": "'+plugin+'"}'
@@ -968,7 +1058,6 @@ def move_plugin(obj,plugin,method):
         zorder_status = tdkTestObj.getResult()
         if expectedResult in zorder_status :
             zorder = ast.literal_eval(zorder)["clients"]
-            zorder = exclude_from_zorder(zorder)
             print("zorder: ",zorder)
             if  plugin.lower() in zorder and plugin.lower() == zorder[0]:
                 result_val = "SUCCESS"
@@ -984,13 +1073,6 @@ def move_plugin(obj,plugin,method):
         print("\n Error while executing {} method".format(method))
         tdkTestObj.setResultStatus("FAILURE")
     return result_val
-
-#-------------------------------------------------------------------
-#REMOVE UNWANTED PROCESSES FROM ZORDER AND RETURN UPDATED ZORDER
-#-------------------------------------------------------------------
-def exclude_from_zorder(zorder):
-    new_zorder = [ element for element in zorder if element not in excluded_process_list ]
-    return new_zorder
 
 #-------------------------------------------------------------------------
 #Utility functions for Hardware Performance threshold validation - START
@@ -1109,7 +1191,32 @@ def rdkservice_getBrowserScore_AnimationBenchmark():
     fps_list = []
     try:
         browser_score_dict = {}
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(20)
@@ -1166,11 +1273,39 @@ def get_graphical_plugins(conf_file):
 def rdkservice_getBrowserScore_Speedometer():
     try:
         browser_score_dict = {}
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
-            action = ActionChains(driver)
+            action = ActionChains(driver)       
+            time.sleep(5)
             html = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/li[2]/span/span/span[1]')
             source = action.move_to_element(html).move_by_offset(-30,0).click().key_down(Keys.ALT).click().perform()
             time.sleep(20)
@@ -1192,7 +1327,34 @@ def rdkservice_getBrowserScore_Speedometer():
 def rdkservice_getBrowserScore_MotionMark():
     try:
         browser_score_dict = {}
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1225,7 +1387,34 @@ def rdkservice_getBrowserScore_MotionMark():
 def rdkservice_getBrowserScore_Smashcat():
     try:
         browser_score_dict = {}
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1265,7 +1454,34 @@ def rdkservice_getBrowserScore_Smashcat():
 def rdkservice_getBrowserScore_Kraken():
     try:
         browser_score_dict = {}
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1286,6 +1502,7 @@ def rdkservice_getBrowserScore_Kraken():
         driver.quit()
     browser_score_dict = json.dumps(browser_score_dict)
     return browser_score_dict
+
 #--------------------------------------------------------
 # OPEN A LOG FILE TO REDIRECT THE LOGS
 #--------------------------------------------------------
@@ -1464,3 +1681,621 @@ def testusingWebInspect(obj,webkit_console_socket):
     webkit_console_socket.disconnect()
     time.sleep(5)
     return expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result
+
+#---------------------------------------------------------------
+#COMMON PERFORMANCE TEST UTILITY FUNCTIONS
+#---------------------------------------------------------------
+
+#---------------------------------------------------------------
+#VALIDATE TIME AGAINST THRESHOLD WITH OFFSET
+#---------------------------------------------------------------
+def validate_time_with_threshold(time_taken, conf_file, threshold_key, offset_key="THRESHOLD_OFFSET"):
+    """
+    Common function to validate time taken against threshold + offset
+    Returns: (is_valid, threshold_value, offset_value)
+    """
+    config_status, threshold_value = getDeviceConfigKeyValue(conf_file, threshold_key)
+    offset_status, offset_value = getDeviceConfigKeyValue(conf_file, offset_key)
+    
+    if all(value != "" for value in (threshold_value, offset_value)):
+        max_allowed_time = int(threshold_value) + int(offset_value)
+        is_valid = 0 < time_taken < max_allowed_time
+        return is_valid, threshold_value, offset_value
+    else:
+        print(f"\n Please configure {threshold_key} and {offset_key} in device configuration file \n")
+        return False, "", ""
+
+#---------------------------------------------------------------
+#MEASURE APP LAUNCH TIME USING LIFECYCLE EVENTS
+#---------------------------------------------------------------
+def measure_app_launch_time(app_id, launch_start_time, event_listener, timeout=120):
+    """
+    Common function to measure app launch time using lifecycle events
+    Returns: (success, launched_time, launch_time_ms)
+    """
+    continue_count = 0
+    launched_time = ""
+    app_active = False
+    
+    while continue_count < timeout:
+        if len(event_listener.getEventsBuffer()) == 0:
+            continue_count += 1
+            time.sleep(1)
+            continue
+            
+        event_log = event_listener.getEventsBuffer().pop(0)
+        print("\n Lifecycle Event Received: ", event_log, "\n")
+        
+        if app_id in str(event_log) and "onAppLifecycleStateChanged" in str(event_log):
+            try:
+                event_parts = str(event_log).split('$$$')
+                if len(event_parts) > 1:
+                    event_timestamp = event_parts[0]
+                    event_data_str = event_parts[1]
+                    event_data = json.loads(event_data_str)
+                    
+                    if "params" in event_data:
+                        params = event_data["params"]
+                        app_id_from_event = params.get("appId", "")
+                        new_state = params.get("newLifecycleState", "")
+                        
+                        if app_id_from_event == app_id and new_state == "ACTIVE":
+                            launched_time = event_timestamp
+                            app_active = True
+                            break
+            except Exception as e:
+                print(f"Error parsing event: {e}")
+                continue
+        continue_count += 1
+    
+    if app_active and launched_time:
+        launch_start_time_ms = getTimeInMilliSec(launch_start_time)
+        launched_time_ms = getTimeInMilliSec(launched_time)
+        time_taken = launched_time_ms - launch_start_time_ms
+        return True, launched_time, time_taken
+    else:
+        return False, "", 0
+
+#---------------------------------------------------------------
+#GET THRESHOLD AND OFFSET VALUES FROM CONFIG
+#---------------------------------------------------------------
+def get_threshold_values(conf_file, threshold_key, offset_key="THRESHOLD_OFFSET"):
+    """
+    Common function to get threshold and offset values from config
+    Returns: (status, threshold_value, offset_value)
+    """
+    config_status, threshold_value = getDeviceConfigKeyValue(conf_file, threshold_key)
+    offset_status, offset_value = getDeviceConfigKeyValue(conf_file, offset_key) 
+    
+    if all(value != "" for value in (threshold_value, offset_value)):
+        return "SUCCESS", threshold_value, offset_value
+    else:
+        return "FAILURE", "", ""
+
+#---------------------------------------------------------------
+#DOWNLOAD, INSTALL AND LAUNCH APP WITH PERFORMANCE MEASUREMENT
+#---------------------------------------------------------------
+#DOWNLOAD APP USING DOWNLOAD MANAGER
+#---------------------------------------------------------------
+def rdkv_download_app(event_listener, app_download_url, app_id, download_timeout=120):
+    """
+    Download an app using Download Manager
+    Returns: (status, download_time_ms)
+    """
+    try:
+        print(f"\n Starting app download for {app_id}... \n")
+        download_start_time = str(datetime.utcnow()).split()[1]
+
+        download_params = '{"url":"' + app_download_url + '", "appId":"' + app_id + '"}'
+        result = rdkservice_setValue("org.rdk.DownloadManager.1.download", download_params)
+        
+        if result == "EXCEPTION OCCURRED":
+            print(f"\n Error while initiating app download for {app_id} \n")
+            return "FAILURE", 0
+
+        print(f"\n App download initiated successfully for {app_id} \n")
+
+        # Wait for download completion using events
+        download_success = False
+        download_count = 0
+        download_time_ms = 0
+
+        while download_count < download_timeout:
+            if len(event_listener.getEventsBuffer()) == 0:
+                download_count += 1
+                time.sleep(1)
+                continue
+
+            event_log = event_listener.getEventsBuffer().pop(0)
+            
+            if app_id in str(event_log) and "onAppDownloadStatus" in str(event_log):
+                try:
+                    event_parts = str(event_log).split('$$$')
+                    if len(event_parts) > 1:
+                        event_data_str = event_parts[1]
+                        event_data = json.loads(event_data_str)
+
+                        if "params" in event_data:
+                            params = event_data["params"]
+                            download_id = params.get("downloadId", "")
+                            file_locator = params.get("fileLocator", "")
+                            fail_reason = params.get("failReason", "")
+
+                            if app_id in str(download_id) or app_id in str(file_locator):
+                                if fail_reason == "" or fail_reason is None:
+                                    download_success = True
+                                    download_end_time = str(datetime.utcnow()).split()[1]
+                                    download_time_ms = getTimeInMilliSec(download_end_time) - getTimeInMilliSec(download_start_time)
+                                    print(f"\n App download completed successfully in {download_time_ms}ms \n")
+                                else:
+                                    print(f"\n App download failed with reason: {fail_reason} \n")
+                                break
+                except Exception as e:
+                    print(f"Error parsing download event: {e}")
+                    continue
+            download_count += 1
+
+        if download_success:
+            return "SUCCESS", download_time_ms
+        else:
+            print(f"\n Download did not complete within timeout period ({download_timeout} seconds) \n")
+            return "FAILURE", 0
+
+    except Exception as e:
+        print(f"\n Exception occurred during app download: {e} \n")
+        return "FAILURE", 0
+
+#---------------------------------------------------------------
+#INSTALL APP USING PACKAGE MANAGER
+#---------------------------------------------------------------
+def rdkv_install_app(event_listener, app_id, install_timeout=120):
+    """
+    Install an app using Package Manager
+    Returns: (status, install_time_ms, app_instance_id)
+    """
+    try:
+        print(f"\n Starting app installation for {app_id}... \n")
+        install_start_time = str(datetime.utcnow()).split()[1]
+
+        install_params = '{"appId":"' + app_id + '"}'
+        result = rdkservice_setValue("org.rdk.PackageManagerRDKEMS.1.install", install_params)
+
+        if result == "EXCEPTION OCCURRED":
+            print(f"\n Error while initiating app installation for {app_id} \n")
+            return "FAILURE", 0, ""
+
+        print(f"\n App installation initiated successfully for {app_id} \n")
+
+        # Wait for installation completion using onAppInstalled event
+        install_success = False
+        install_count = 0
+        app_instance_id = ""
+        install_time_ms = 0
+
+        while install_count < install_timeout:
+            if len(event_listener.getEventsBuffer()) == 0:
+                install_count += 1
+                time.sleep(1)
+                continue
+
+            event_log = event_listener.getEventsBuffer().pop(0)
+
+            if app_id in str(event_log) and "onAppInstalled" in str(event_log):
+                try:
+                    event_parts = str(event_log).split('$$$')
+                    if len(event_parts) > 1:
+                        event_data_str = event_parts[1]
+                        event_data = json.loads(event_data_str)
+
+                        if "params" in event_data:
+                            params = event_data["params"]
+                            installed_app_id = params.get("appId", "")
+                            app_instance_id = params.get("appInstanceId", "")
+
+                            if installed_app_id == app_id:
+                                install_success = True
+                                install_end_time = str(datetime.utcnow()).split()[1]
+                                install_time_ms = getTimeInMilliSec(install_end_time) - getTimeInMilliSec(install_start_time)
+                                print(f"\n App {app_id} installed successfully in {install_time_ms}ms \n")
+                                print(f"\n App Instance ID: {app_instance_id} \n")
+                                break
+                except Exception as e:
+                    print(f"Error parsing installation event: {e}")
+                    continue
+            install_count += 1
+
+        if install_success:
+            return "SUCCESS", install_time_ms, app_instance_id
+        else:
+            print(f"\n Installation did not complete within timeout period ({install_timeout} seconds) \n")
+            return "FAILURE", 0, ""
+
+    except Exception as e:
+        print(f"\n Exception occurred during app installation: {e} \n")
+        return "FAILURE", 0, ""
+
+#---------------------------------------------------------------
+#LAUNCH APP USING APP MANAGER
+#---------------------------------------------------------------
+def rdkv_launch_app_with_timing(event_listener, app_id, launch_timeout=120):
+    """
+    Launch an app using App Manager and measure launch time
+    Returns: (status, launch_time_ms, launched_time)
+    """
+    try:
+        launch_start_time = str(datetime.utcnow()).split()[1]
+        print(f"\n Launching app {app_id} at: {launch_start_time} \n")
+
+        launch_params = '{"appId":"' + app_id + '"}'
+        result = rdkservice_setValue("org.rdk.AppManager.1.launchApp", launch_params)
+
+        if result == "EXCEPTION OCCURRED":
+            print(f"\n Error while launching app {app_id} \n")
+            return "FAILURE", 0, ""
+
+        print(f"\n App launch request submitted successfully for {app_id} \n")
+
+        # Measure app launch time using existing library function
+        success, launched_time, time_taken_for_launch = measure_app_launch_time(app_id, launch_start_time, event_listener, launch_timeout)
+
+        if success and launched_time:
+            print(f"\n App {app_id} launched successfully in {time_taken_for_launch}ms \n")
+            return "SUCCESS", time_taken_for_launch, launched_time
+        else:
+            print(f"\n App {app_id} did not become ACTIVE within timeout period \n")
+            return "FAILURE", 0, ""
+
+    except Exception as e:
+        print(f"\n Exception occurred during app launch: {e} \n")
+        return "FAILURE", 0, ""
+
+#---------------------------------------------------------------
+#TERMINATE APP USING APP MANAGER
+#---------------------------------------------------------------
+def rdkv_terminate_app(app_id):
+    """
+    Common function to terminate an app using App Manager
+    Returns: status (SUCCESS/FAILURE)
+    """
+    try:
+        print(f"\n Terminating app {app_id} \n")
+        
+        terminate_params = '{"appId":"' + app_id + '"}'
+        result = rdkservice_setValue("org.rdk.AppManager.1.terminateApp", terminate_params)
+        
+        if result != "EXCEPTION OCCURRED":
+            print(f"\n App {app_id} terminated successfully \n")
+            return "SUCCESS"
+        else:
+            print(f"\n Unable to terminate app {app_id} \n")
+            return "FAILURE"
+            
+    except Exception as e:
+        print(f"\n Exception occurred while terminating app {app_id}: {e} \n")
+        return "FAILURE"
+
+#---------------------------------------------------------------
+#VALIDATE APP PERFORMANCE AGAINST THRESHOLDS
+#---------------------------------------------------------------
+def validate_app_performance_thresholds(conf_file, results_dict, threshold_keys):
+    """
+    Common function to validate app performance metrics against thresholds
+    threshold_keys: dict with keys like {"launch": "APP_LAUNCH_THRESHOLD_VALUE", "download": "APP_DOWNLOAD_THRESHOLD_VALUE"}
+    Returns: (overall_status, validation_results)
+    """
+    validation_results = {}
+    overall_status = "SUCCESS"
+    
+    try:
+        for metric, threshold_key in threshold_keys.items():
+            if metric + "_time" in results_dict and results_dict[metric + "_success"]:
+                time_taken = results_dict[metric + "_time"]
+                is_valid, threshold_value, offset = validate_time_with_threshold(time_taken, conf_file, threshold_key)
+                
+                validation_results[metric] = {
+                    "time_taken": time_taken,
+                    "threshold": threshold_value,
+                    "offset": offset,
+                    "is_valid": is_valid,
+                    "status": "SUCCESS" if is_valid else "FAILURE"
+                }
+                
+                print(f"\n {metric.capitalize()} Time: {time_taken}ms, Threshold: {threshold_value}ms, Valid: {is_valid} \n")
+                
+                if not is_valid:
+                    overall_status = "FAILURE"
+            else:
+                validation_results[metric] = {
+                    "status": "FAILURE",
+                    "error": f"{metric} operation failed"
+                }
+                overall_status = "FAILURE"
+        
+        return overall_status, validation_results
+        
+    except Exception as e:
+        print(f"\n Exception occurred during threshold validation: {e} \n")
+        return "FAILURE", {}
+
+#---------------------------------------------------------------
+# GET THE LIST OF INSTALLED PACKAGES USING PACKAGE MANAGER
+#---------------------------------------------------------------
+def rdkv_getInstalledPackages():
+    """
+    Function to get the list of installed packages in device using Package Manager
+    Returns: status (SUCCESS/FAILURE), package_ids (if SUCCESS, else empty list)
+    """
+    try:
+        print(f"\nGetting the list of installed packages")
+
+        result = rdkservice_getValue("org.rdk.PackageManagerRDKEMS.1.listPackages")
+        if result != "EXCEPTION OCCURRED":
+            package_ids = [item["packageId"] for item in result if item["state"] == "INSTALLED"]
+            print(f"\nList of packages installed in device: {package_ids}")
+            return "SUCCESS", package_ids
+        else:
+            print(f"\nFailed to get the list of installed packages")
+            return "FAILURE", []
+
+    except Exception as e:
+        print(f"\nException occurred while getting the list of installed packages: {e}")
+        return "FAILURE", []
+
+#---------------------------------------------------------------
+# DOWNLOAD THE APP BUNDLE FROM THE URL
+#---------------------------------------------------------------
+def rdkservice_download_app_bundle(download_url):
+    if download_url:
+        print(f"Going to download the bundle {download_url}")
+        download_params = '{"url":"' + download_url + '"}'
+        result = rdkservice_setValue("org.rdk.DownloadManager.1.download", download_params)
+    else:
+        print("Please provide valid download URL")
+        result = "EXCEPTION OCCURRED"
+    return result
+
+#---------------------------------------------------------------
+#INSTALL THE DOWNLOADED APP BUNDLE
+#---------------------------------------------------------------
+def rdkservice_install_app(fileLocator, app_id):
+    params = '{ "packageId": "' +app_id+ '", "version": "0.1.0", "additionalMetadata": [ {"name": "type", "value": "native/dac-app"} ], "fileLocator":"' + fileLocator +'" }'
+    print(params)
+    result = rdkservice_setValue("org.rdk.PackageManagerRDKEMS.install",params)
+    return result
+
+#---------------------------------------------------------------
+#LAUNCH INSTALLED APP
+#---------------------------------------------------------------
+def rdkservice_launch_app(app_name):
+    params='{"appId": "' + app_name +'", "intent": "", "launchArgs": ""}'
+    result = rdkservice_setValue("org.rdk.AppManager.launchApp", params)
+    return result
+
+#---------------------------------------------------------------
+#GET LOADED APPS
+#---------------------------------------------------------------
+def rdkservice_get_loaded_apps():
+    result = rdkservice_getValue("org.rdk.AppManager.getLoadedApps")
+    app_ids =[]
+    if result != "EXCEPTION OCCURRED":
+        app_ids = [item["appId"] for item in result if item["lifecycleState"] == "APP_STATE_ACTIVE"]
+    return app_ids
+
+#---------------------------------------------------------------
+# FULL WORKFLOW OF APP LAUNCH USING APPMANAGER
+#---------------------------------------------------------------
+def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_url = PerformanceTestVariables.app_download_url,launch =True):
+    expectedResult="SUCCESS"
+    print(f"\nCheck if {app_name} is installed in the device")
+    tdkTestObj = obj.createTestStep('rdkv_getInstalledPackages')
+    tdkTestObj.executeTestCase(expectedResult)
+    status = tdkTestObj.getResult()
+    details = tdkTestObj.getResultDetails()
+    if status == "SUCCESS" and app_name in details:
+        tdkTestObj.setResultStatus("SUCCESS")
+        print("\nApp is already installed. Skipping the installation")
+        Isinstalled = True
+    elif status == "FAILURE":
+        tdkTestObj.setResultStatus("FAILURE")
+        return status
+    else:
+        Isinstalled = False
+        tdkTestObj.setResultStatus("SUCCESS")
+        print("\nApp is not installed in the device")
+        status = "SUCCESS"
+        print("\nCheck the status of AppManagers in the device")
+        plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
+        plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated", "org.rdk.AppManager":"activated"}
+        curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
+        if curr_plugins_status_dict != plugin_status_needed:
+            revert = "YES"
+            status = StabilityTestUtility.set_plugins_status(obj,plugin_status_needed)
+            time.sleep(10)
+        if status == "SUCCESS":
+            print(f"Download {app_bundle_name} from {app_download_url} to install")
+            app_download_url = app_download_url + "/" + app_bundle_name
+            tdkTestObj = obj.createTestStep('rdkservice_download_app_bundle')
+            tdkTestObj.addParameter("download_url", app_download_url)
+            tdkTestObj.executeTestCase(expectedResult)
+            status = tdkTestObj.getResult()
+            details = tdkTestObj.getResultDetails()
+            if status == "SUCCESS":
+                tdkTestObj.setResultStatus("SUCCESS")
+                time.sleep(10)
+                print(f"Successfully downloaded {app_bundle_name}")
+                print(f"Installing {app_bundle_name}")
+                conf_file,result = getConfigFileName(libObj.realpath)
+                fileLocator = ""
+                if result == "SUCCESS":
+                    status,fileLocator = getDeviceConfigKeyValue(conf_file,"PACKAGEMANAGER_FILE_LOCATOR")
+                if fileLocator != "":
+                    fileLocator = fileLocator + str(details)
+                    print (fileLocator)
+                    tdkTestObj = obj.createTestStep('rdkservice_install_app')
+                    tdkTestObj.addParameter("fileLocator", fileLocator)
+                    tdkTestObj.addParameter("app_id", app_name)
+
+                    tdkTestObj.executeTestCase(expectedResult)
+                    status = tdkTestObj.getResult()
+                    details = tdkTestObj.getResultDetails()
+                    if status == "SUCCESS":
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print(f"Check if the app is installed successfully")
+                        tdkTestObj = obj.createTestStep('rdkv_getInstalledPackages')
+                        tdkTestObj.executeTestCase(expectedResult)
+                        status = tdkTestObj.getResult()
+                        details = tdkTestObj.getResultDetails()
+                        if status == "SUCCESS" and app_name in details:
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            print(f"Successfully installed {app_bundle_name} as {app_name}")
+                            Isinstalled=True
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE")
+                            print(f"{app_bundle_name} is not listed in the packages even after installing")
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE")
+                        print(f"Failed to install {app_bundle_name}")
+                else:
+                    tdkTestObj.setResultStatus("FAILURE")
+                    print(f"Failed to get file locator for {app_bundle_name}")
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
+                print(f"Failed to download {app_bundle_name}")
+        else:
+            tdkTestObj.setResultStatus("FAILURE")
+            print("Unable to activate the AppManagers")
+            status ="FAILURE"
+    if Isinstalled and launch:
+        
+        print(f"\nLaunching {app_name}")
+        tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+        tdkTestObj.addParameter("app_name", app_name)
+
+        tdkTestObj.executeTestCase(expectedResult)
+        status = tdkTestObj.getResult()
+        details = tdkTestObj.getResultDetails()
+
+        if status == "SUCCESS":
+            tdkTestObj.setResultStatus("SUCCESS")
+            time.sleep(20)
+            print(f"\nCheck if {app_name} is launched")
+            app_ids = rdkservice_get_loaded_apps()
+            if app_name in app_ids:
+                print(f"\nSuccessfully launched {app_name}")
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                status = "FAILURE"
+                tdkTestObj.setResultStatus("FAILURE")
+                print(f"{app_name} is not listed as loadedapps")
+        else:
+            tdkTestObj.setResultStatus("FAILURE")
+            print(f"\nFailed to launch {app_name}")
+    return status
+#---------------------------------------------------------------------------------------------
+# Function to set the PersistentStore value 'MVS:lightningURL' via JSON-RPC using curl command
+#---------------------------------------------------------------------------------------------
+def setPS_value(video_test_url):
+    # Format the lightning URL to escape special characters
+    lightning_url = video_test_url.replace("\\", "\\\\").replace('"', '\\"')
+    device_url = f"http://{deviceIP}:{devicePort}/jsonrpc"
+    payload = ('{"jsonrpc":"2.0","id":1,''"method":"org.rdk.PersistentStore.setValue",''"params":{''"namespace":"MVS",''"key":"lightningURL",'f'"value":"{lightning_url}"''}}')
+    curl_command = ["curl", "-H", "Content-Type: application/json", "-d", payload, device_url]
+    print("\nSetting the value of lightningURL in PersistentStore: ", curl_command)
+    try:
+        result = subprocess.run(curl_command, capture_output=True, text=True, timeout=30)
+        return result.stdout
+    except Exception as e:
+        print("Failed to set the PersistentStore value: ", e)
+        return None
+
+
+
+#-----------------------------------------------------------------------------------------
+#TO PRESS KEYS IN UI USING APP MANAGER 
+#-----------------------------------------------------------------------------------------
+def browsertest_keypress(obj,app_name,keys):
+    if len(keys) >1:
+        key_navigate = keys[0]
+        key_select = keys[1]
+    else:
+        key_navigate = keys
+
+    result="FAILURE"
+    param='['
+    index=0
+    expectedResult= "SUCCESS"
+    print(f"Getting the app instance id of {app_name}")
+    tdkTestObj = obj.createTestStep('rdkservice_getValue')
+    tdkTestObj.addParameter("method","org.rdk.AppManager.getLoadedApps")
+    tdkTestObj.executeTestCase(expectedResult)
+    result = tdkTestObj.getResultDetails()
+    status = tdkTestObj.getResult()
+    if status == expectedResult and app_name in result:
+        appinstanceid=""
+        result = ast.literal_eval(result)
+        for item in result:
+            if isinstance(item, dict) and item.get("appId") == app_name:
+                appinstanceid = item.get("appInstanceId")
+        if appinstanceid != "":
+            print("####App instance id of the launched app is: ", appinstanceid)
+            for key in key_navigate:
+                if ":" in key:
+                    param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": ['+ key.split(":")[0] +'],\\"delay\\":0.1}'
+                else:
+                    param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": [],\\"delay\\":0.1}'
+                if index != (len(key_navigate)-1):
+                    param = param + ','
+                else:
+                    param = param + ']'
+                index +=1
+
+            params = '{"client":' + appinstanceid + ',"keys":"{\\"keys\\":'+ param + '}"'
+
+
+            tdkTestObj = obj.createTestStep('rdkservice_setValue')
+            tdkTestObj.addParameter("method","org.rdk.RDKWindowManager.generateKey")
+            tdkTestObj.addParameter("value",params)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
+            if expectedResult in result:
+                tdkTestObj.setResultStatus("SUCCESS")
+                print("SUCCESS: Navigated through UI and started the test")
+                result = "SUCCESS"
+                time.sleep(3)
+                if key_select !=[]:
+                    param='['
+                    index=0
+                    for key in key_select:
+                        if ":" in key:
+                            param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": ['+ key.split(":")[0] +'],\\"delay\\":0.1}'
+                        else:
+                            param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": [],\\"delay\\":0.1}'
+                        if index != (len(key_select)-1):
+                            param = param + ','
+                        else:
+                            param = param + ']'
+                        index +=1
+                    params = '{"client":' + appinstanceid + ',"keys":"{\\"keys\\":'+ param + '}"'
+                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                    tdkTestObj.addParameter("method","org.rdk.RDKWindowManager.generateKey")
+                    tdkTestObj.addParameter("value",params)
+                    tdkTestObj.executeTestCase(expectedResult)
+                    result = tdkTestObj.getResult()
+                    if expectedResult in result:
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print("SUCCESS: Navigated through UI and started the test")
+                        result = "SUCCESS"
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE")
+                        print("FAILURE : Failed to navigate through UI")
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
+                print("FAILURE : Failed to start the test by navigating through UI")
+        else:
+            print("Failed to get appinstanceId")
+            tdkTestObj.setResultStatus("FAILURE")
+    else:
+        print("Failed to get the loaded apps")
+        tdkTestObj.setResultStatus("FAILURE")
+    return result    
+
