@@ -1856,3 +1856,176 @@ def setSecurityModeEnabledConfig(obj, modeToSet, index, config, currMode = ""):
     actualresult = tdkTestObj.getResult()
 
     return tdkTestObj, actualresult
+
+def set_ACLprerequisites_allRadios(obj,step):
+
+# set_ACLprerequisites_allRadios
+
+# Syntax      : set_ACLprerequisites_allRadios(obj,step)
+# Description : Function to set prerequisites for wifi ACL testing
+# Parameters  : obj - module object
+#             : step - current test step count
+# Return Value: tdkTestObj - test object
+#             : preStatus - SUCCESS/FAILURE
+#             : step - current test step count
+    print("\n***********************Setting the ACL test prerequisites***************************")
+    preStatus = "SUCCESS"
+    expectedResult = "SUCCESS"
+    for index in range(1,4):
+        print(f"\n******For radio index : {index}*******")
+        step+=1
+        param1 = "Device.WiFi.AccessPoint." + str(index) + ".X_CISCO_COM_MACFilter.Enable"
+        print(f"\nTEST STEP {step}: Set Mac Filter Enable {param1} to true.")
+        print(f"EXPECTED RESULT {step}: Should set Mac Filter Enable to true.")
+        tdkTestObj = obj.createTestStep("tdkb_e2e_Set")
+        tdkTestObj.addParameter("paramName",param1)
+        tdkTestObj.addParameter("paramValue","true")
+        tdkTestObj.addParameter("paramType","bool")
+        tdkTestObj.executeTestCase(expectedresult)
+        actualresult = tdkTestObj.getResult()
+        details = tdkTestObj.getResultDetails()
+        if expectedResult in actualresult:
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS")
+            print(f"ACTUAL RESULT {step}: Set Mac Filter Enable {param1} to true successfully")
+            #Get the result of execution
+            print("[TEST EXECUTION RESULT] : SUCCESS")
+
+            step+=1
+            param2 = "Device.WiFi.AccessPoint." + str(index) + ".X_CISCO_COM_MACFilter.FilterAsBlackList"
+            print(f"\nTEST STEP {step}: Set Mac FilterAsBlacklist {param2} to false ")
+            print(f"EXPECTED RESULT {step}: Should set Mac FilterAsBlacklist {param2} to false successfully")
+            tdkTestObj = obj.createTestStep("tdkb_e2e_Set")
+            tdkTestObj.addParameter("paramName",param2)
+            tdkTestObj.addParameter("paramValue","false")
+            tdkTestObj.addParameter("paramType","bool")
+            tdkTestObj.executeTestCase(expectedresult)
+            actualresult = tdkTestObj.getResult()
+            details = tdkTestObj.getResultDetails()
+            if expectedresult in actualresult:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS")
+                print(f"ACTUAL RESULT {step}: Set Mac FilterAsBlacklist {param2} to false successfully")
+                #Get the result of execution
+                print("[TEST EXECUTION RESULT] : SUCCESS")
+
+                step+=1
+                param3 = "Device.WiFi.AccessPoint." + str(index) + ".X_COMCAST-COM_MAC_FilteringMode"
+                print(f"\nTEST STEP {step}: Verify that Mac Filtering mode {param3} is 'Allow' when Mac filter is enabled and FilterAsBlacklist set to false")
+                print(f"EXPECTED RESULT {step}: Mac Filtering mode {param3} should be 'Allow' when Mac filter is enabled and FilterAsBlacklist set to false successfully")
+                tdkTestObj = obj.createTestStep("tdkb_e2e_Get")
+                tdkTestObj.addParameter("paramName",param3)
+                tdkTestObj.executeTestCase(expectedresult)
+                actualresult = tdkTestObj.getResult()
+                details = tdkTestObj.getResultDetails()
+                mode=details.split("VALUE:")[1].split(' ')[0]
+                if expectedresult in actualresult and mode == "Allow" :
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    print(f"ACTUAL RESULT {step}: Mac Filtering mode {param3} is '{mode}' when Mac filter is enabled and FilterAsBlacklist set to false successfully")
+                    #Get the result of execution
+                    print("[TEST EXECUTION RESULT] : SUCCESS")
+                else:
+                    preStatus = "FAILURE"
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("FAILURE")
+                    print(f"ACTUAL RESULT {step}: Mac Filtering mode {param3} is '{mode}' which is not expected when Mac filter is enabled and FilterAsBlacklist set to false.")
+                    #Get the result of execution
+                    print("[TEST EXECUTION RESULT] : FAILURE")
+            else:
+                preStatus = "FAILURE"
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE")
+                print(f"ACTUAL RESULT {step}: Failed to set Mac FilterAsBlacklist {param2} to false.")
+                #Get the result of execution
+                print("[TEST EXECUTION RESULT] : FAILURE")
+        else:
+            preStatus = "FAILURE"
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE")
+            print(f"ACTUAL RESULT {step}: Failed to set Mac Filter Enable {param1} to true.")
+            #Get the result of execution
+            print("[TEST EXECUTION RESULT] : FAILURE")
+
+    return tdkTestObj,preStatus,step
+
+########## End of Function ##########
+
+def revert_ACLprerequisites_allRadios(obj,step):
+
+# revert_ACLprerequisites_allRadios
+
+# Syntax      : revert_ACLprerequisites_allRadios(obj,step)
+# Description : Function to revert prerequisites for wifi ACL testing
+# Parameters  : obj - module object
+#             : step - current test step count
+# Return Value: None
+
+    print("\n***************************Reverting the ACL test prerequisites***************************")
+    postStatus = "SUCCESS"
+    expectedresult = "SUCCESS"
+    for index in range(1,4):
+        print(f"\n*********For radio index : {index}**********")
+        step+=1
+        param2 = "Device.WiFi.AccessPoint." + str(index) + ".X_CISCO_COM_MACFilter.FilterAsBlackList"
+        print(f"\nTEST STEP {step}: Set Mac FilterAsBlacklist {param2} to true ")
+        print(f"EXPECTED RESULT {step}: Should set Mac FilterAsBlacklist {param2} to true successfully")
+        tdkTestObj = obj.createTestStep("tdkb_e2e_Set")
+        tdkTestObj.addParameter("paramName",param2)
+        tdkTestObj.addParameter("paramValue","true")
+        tdkTestObj.addParameter("paramType","bool")
+        tdkTestObj.executeTestCase(expectedresult)
+        actualresult = tdkTestObj.getResult()
+        details = tdkTestObj.getResultDetails()
+        if expectedresult in actualresult:
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS")
+            print(f"ACTUAL RESULT {step}: Set Mac FilterAsBlacklist {param2} to true successfully")
+            #Get the result of execution
+            print("[TEST EXECUTION RESULT] : SUCCESS")
+
+            step+=1
+            param1 = "Device.WiFi.AccessPoint." + str(index) + ".X_CISCO_COM_MACFilter.Enable"
+            print(f"\nTEST STEP {step}: Set Mac Filter Enable {param1} to false.")
+            print(f"EXPECTED RESULT {step}: Should set Mac Filter Enable to false.")
+            tdkTestObj = obj.createTestStep("tdkb_e2e_Set")
+            tdkTestObj.addParameter("paramName",param1)
+            tdkTestObj.addParameter("paramValue","false")
+            tdkTestObj.addParameter("paramType","bool")
+            tdkTestObj.executeTestCase(expectedresult)
+            actualresult = tdkTestObj.getResult()
+            details = tdkTestObj.getResultDetails()
+            if expectedresult in actualresult:
+               #Set the result status of execution
+               tdkTestObj.setResultStatus("SUCCESS")
+               print(f"ACTUAL RESULT {step}: Set Mac Filter Enable {param1} to false successfully")
+               #Get the result of execution
+               print("[TEST EXECUTION RESULT] : SUCCESS")
+            else:
+                postStatus = "FAILURE"
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE")
+                print(f"ACTUAL RESULT {step}: Failed to set Mac Filter Enable {param1} to false.")
+                #Get the result of execution
+                print("[TEST EXECUTION RESULT] : FAILURE")
+        else:
+            postStatus = "FAILURE"
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE")
+            print(f"ACTUAL RESULT {step}: Failed to set Mac FilterAsBlacklist {param2} to true.")
+            #Get the result of execution
+            print("[TEST EXECUTION RESULT] : FAILURE")
+    step=step+1
+    print(f"\nTEST STEP {step} : Revert the values of ACL parameters during prerequisite check")
+    print(f"EXPECTED RESULT {step} : The values of ACL parameters should be reverted successfully")
+    if postStatus == "SUCCESS":
+        print(f"ACTUAL RESULT {step}: Reverted the value of modified ACL datamodels successfully")
+        tdkTestObj.setResultStatus("SUCCESS")
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
+
+    else:
+        print(f"ACTUAL RESULT {step}: Failed to revert the values of modified ACL datamodels")
+        tdkTestObj.setResultStatus("FAILURE")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
+
+########## End of Function ##########
