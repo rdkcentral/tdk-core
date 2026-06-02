@@ -63,6 +63,17 @@ resolution="1080p"
 api="vulkan"
 
 #---------------------------------------------------------------------------------------
+# THRESHOLD VALUES FOR VALIDATION
+#---------------------------------------------------------------------------------------
+MIN_FIFO_SCORE=60
+MIN_MAILBOX_SCORE=250
+RPI_MIN_MAILBOX_SCORE=180
+FPS_THRESHOLD=10
+MAX_CPU_USAGE=10
+CPU_USAGE_THRESHOLD=50
+RPI_CPU_USAGE_THRESHOLD=85
+
+#---------------------------------------------------------------------------------------
 # MODULE INITIALIZATION
 #---------------------------------------------------------------------------------------
 def init_module(libobj, port, deviceInfo):
@@ -304,7 +315,11 @@ def parse_tiles_stats(output):
     if not output:
         print("FAILURE: No output to parse")
         return "FAILURE"
-    
+
+    global MIN_FIFO_SCORE
+    global FPS_THRESHOLD
+    global MAX_CPU_USAGE
+    MIN_FPS= MIN_FIFO_SCORE - FPS_THRESHOLD
     fps_match = re.search(r"\[VK\]\s*Average FPS\s*([\d\.]+)", output)
     cpu_match = re.search(r"\[VK\]\s*Average CPU\s*([\d\.]+)", output)
 
@@ -320,6 +335,19 @@ def parse_tiles_stats(output):
         print(f"Average FPS: {avg_fps}")
         print(f"Average CPU: {avg_cpu}%")
         print("SUCCESS: Parsed and validated FPS and CPU usage from tiles_benchmark")
+
+        print("===THRESHOLD VALIDATION===")
+        fail=False
+        if avg_fps < MIN_FPS:
+            print(f"FAILURE : FPS is less than threshold {MIN_FPS}")
+            fail=True
+        if avg_cpu > MAX_CPU_USAGE:
+            print(f"FAILURE : CPU Usage is greater than threshold {MAX_CPU_USAGE}")
+            fail=True
+        if fail:
+            return "FAILURE"
+
+        print("SUCCESS : FPS and CPU Usage is within expected range")
         return "SUCCESS"
     except ValueError as e:
         print(f"FAILURE: Error converting parsed values to float: {e}")
@@ -360,9 +388,26 @@ def parse_motion_stats(output):
         final_fps = float(match.group(1))
         final_cpu = float(match.group(2))
         
+        global MIN_FIFO_SCORE
+        global MAX_CPU_USAGE
+        MIN_FPS = MIN_FIFO_SCORE - 1
         print(f"Final FPS: {final_fps}%")
         print(f"Final CPU: {final_cpu}%")
         print("SUCCESS: Parsed and validated FPS and CPU usage from motion_benchmark")
+
+        print("===THRESHOLD VALIDATION===")
+        fail=False
+        if final_fps < MIN_FPS:
+            print(f"FAILURE : FPS is less than threshold {MIN_FPS}")
+            fail=True
+        if final_cpu > MAX_CPU_USAGE:
+            print(f"FAILURE : CPU Usage is greater than threshold {MAX_CPU_USAGE}")
+            fail=True
+        if fail:
+            return "FAILURE"
+
+        print("SUCCESS : FPS and CPU Usage is within expected range")
+
         return "SUCCESS"
     except ValueError as e:
         print(f"FAILURE: Error converting parsed values to float: {e}")
@@ -470,7 +515,18 @@ def parse_fps_cpu_stats(output):
         print(f"Average FPS: {avg_fps}")
         print(f"Average CPU: {avg_cpu}%")
         print(f"SUCCESS: Parsed and validated {appname} benchmark statistics")
-        
+
+        global MIN_FIFO_SCORE
+        MIN_FPS = MIN_FIFO_SCORE
+        global MAX_CPU_USAGE
+        global CPU_USAGE_THRESHOLD
+        global RPI_CPU_USAGE_THRESHOLD
+        if appname == "multithread":
+            MAX_CPU_USAGE = CPU_USAGE_THRESHOLD
+            global device_model
+            if device_model == "RPI":
+                MAX_CPU_USAGE = RPI_CPU_USAGE_THRESHOLD
+
         # Optional: Log performance thresholds for analysis
         if avg_fps > 0:
             performance_rating = "High" if avg_fps >= 30 else "Medium" if avg_fps >= 15 else "Low"
@@ -483,7 +539,20 @@ def parse_fps_cpu_stats(output):
             print(f"[INFO] CPU efficiency: High load ({avg_cpu}% usage)")
         else:
             print(f"[WARNING] CPU efficiency: Critical load ({avg_cpu}% usage)")
-        
+
+        print("===THRESHOLD VALIDATION===")
+        fail=False
+        if avg_fps < MIN_FPS:
+            print(f"FAILURE : FPS is less than threshold {MIN_FPS}")
+            fail=True
+        if avg_cpu > MAX_CPU_USAGE:
+            print(f"FAILURE : CPU Usage is greater than threshold {MAX_CPU_USAGE}")
+            fail=True
+        if fail:
+            return "FAILURE"
+
+        print("SUCCESS : FPS and CPU Usage is within expected range")
+
         return "SUCCESS"
         
     except ValueError as e:
@@ -915,5 +984,24 @@ def execute_binary(binary, present_mode):
     print("\n" + "=" * banner_length)
     print(f"  {result_text}")
     print("=" * banner_length + "\n")
+
+    print("===THRESHOLD VALIDATION===")
+    global MIN_FIFO_SCORE
+    global MIN_MAILBOX_SCORE
+    global RPI_MIN_MAILBOX_SCORE
+    global device_model
+    if device_model == "RPI":
+        MIN_MAILBOX_SCORE = RPI_MIN_MAILBOX_SCORE
+
+    if "FIFO" in present_mode.upper():
+        if float(score) < MIN_FIFO_SCORE:
+            print(f"FAILURE : FPS is not in the expected range")
+            print(f"EXPECTED : {MIN_FIFO_SCORE} ACTUAL : {score}")
+            return "FAILURE"
+    elif float(score) < MIN_MAILBOX_SCORE:
+        print(f"FAILURE : FPS is not in the expected range")
+        print(f"EXPECTED : {MIN_MAILBOX_SCORE} ACTUAL : {score}")
+        return "FAILURE"
     
+    print("SUCCESS : FPS score is within expected range")
     return "SUCCESS"
