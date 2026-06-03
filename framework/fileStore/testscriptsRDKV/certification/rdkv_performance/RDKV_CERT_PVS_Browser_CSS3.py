@@ -99,7 +99,7 @@ obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     app_bundle_name=BrowserPerformanceVariables.css3_app_bundle_name
-    app_download_url=BrowserPerformanceVariables.css3_app_download_url
+    app_download_url=BrowserPerformanceVariables.app_download_url
     browser_subcategory_list = BrowserPerformanceVariables.css3_test_subcategory_list
     app_name = "com.rdkcentral.css3"
     status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url)
@@ -156,6 +156,7 @@ if expectedResult in result.upper():
             print("Unable to terminate the app")
     else:
         print("Failed to launch the app")        
+        obj.setLoadModuleStatus("FAILURE")
 
     getSummary(Summ_list,obj)
     obj.unloadModule("rdkv_performance");

@@ -2254,12 +2254,8 @@ def setPS_value(video_test_url):
 #TO PRESS KEYS IN UI USING APP MANAGER 
 #-----------------------------------------------------------------------------------------
 def browsertest_keypress(obj,app_name,keys):
-    if len(keys) >1:
-        key_navigate = keys[0]
-        key_select = keys[1]
-    else:
-        key_navigate = keys
-
+   
+    key_navigate = keys
     result="FAILURE"
     param='['
     index=0
@@ -2301,33 +2297,6 @@ def browsertest_keypress(obj,app_name,keys):
                 tdkTestObj.setResultStatus("SUCCESS")
                 print("SUCCESS: Navigated through UI and started the test")
                 result = "SUCCESS"
-                time.sleep(3)
-                if key_select !=[]:
-                    param='['
-                    index=0
-                    for key in key_select:
-                        if ":" in key:
-                            param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": ['+ key.split(":")[0] +'],\\"delay\\":0.1}'
-                        else:
-                            param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": [],\\"delay\\":0.1}'
-                        if index != (len(key_select)-1):
-                            param = param + ','
-                        else:
-                            param = param + ']'
-                        index +=1
-                    params = '{"client":' + appinstanceid + ',"keys":"{\\"keys\\":'+ param + '}"'
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method","org.rdk.RDKWindowManager.generateKey")
-                    tdkTestObj.addParameter("value",params)
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResult()
-                    if expectedResult in result:
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        print("SUCCESS: Navigated through UI and started the test")
-                        result = "SUCCESS"
-                    else:
-                        tdkTestObj.setResultStatus("FAILURE")
-                        print("FAILURE : Failed to navigate through UI")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print("FAILURE : Failed to start the test by navigating through UI")

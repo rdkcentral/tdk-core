@@ -117,7 +117,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     app_bundle_name=BrowserPerformanceVariables.animation_app_bundle_name
-    app_download_url=BrowserPerformanceVariables.animation_app_download_url
+    app_download_url=BrowserPerformanceVariables.app_download_url
     app_name = "com.rdkcentral.animation"
 
     status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url)
@@ -159,7 +159,8 @@ if expectedResult in result.upper():
             tdkTestObj.setResultStatus("FAILURE");
             print("Unable to terminate the app")
     else:
-        print("Failed to launch the app")        
+        print("Failed to launch the app")
+        obj.setLoadModuleStatus("FAILURE")        
 
     getSummary(Summ_list,obj)
     obj.unloadModule("rdkv_performance")
