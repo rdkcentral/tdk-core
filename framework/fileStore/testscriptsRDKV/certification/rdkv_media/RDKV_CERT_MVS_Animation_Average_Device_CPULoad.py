@@ -118,8 +118,7 @@ if expectedResult in result.upper():
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     setWebKitSocketPort(webinspect_port_lightning)
-    # Setting the pre-requisites for media test. Launching the webkit instance via RDKShell and
-    # moving it to the front, openning a socket connection to the webkit inspect page and
+    # Setting the pre-requisites for media test. Launching the required test app via AppManager and
     # disabling proc validation
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.animation_app_id,MediaValidationVariables.animation_app_download_url)
     if pre_requisite_status == "SUCCESS":
@@ -142,7 +141,7 @@ if expectedResult in result.upper():
         # Getting the complete test app URL
         animation_test_url = getTestURL(appURL,appArguments)
 
-        # Setting the animation test url in webkit instance using RDKShell
+        # Setting the animation test url in PersistentStore and launching the animation test app using AppManager
         setPS_value(animation_test_url)
         launch_status = launchApp(obj,MediaValidationVariables.animation_app_id)
         if "SUCCESS" in launch_status:
@@ -176,8 +175,7 @@ if expectedResult in result.upper():
         print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
-        # Setting the post-requisites for media test.Removing app url from webkit instance and
-        # moving next high z-order app to front (residentApp if its active)
+        # Setting the post-requisites for media test. Terminating the bolt app.
         post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.animation_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")
