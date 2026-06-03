@@ -881,7 +881,7 @@
             <resultGeneration useMethodTag="rwm_null_result_validation"/>
         </testStep>
         <testStep testStepId="2" name="Check_On_UserInactivity_Event_NoEvent" event="Event_On_User_Inactivity" action="eventListener" delay="80">
-            <resultGeneration useMethodTag="rwm_check_no_userinactivity_event" arguments="check_empty_event"/>
+            <resultGeneration useMethodTag="rwm_check_on_userinactivity_event" arguments="check_empty_event"/>
         </testStep>
     </testCase>
 
