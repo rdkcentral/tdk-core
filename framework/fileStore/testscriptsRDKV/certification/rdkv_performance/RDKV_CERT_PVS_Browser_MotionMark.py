@@ -152,7 +152,8 @@ if expectedResult in result.upper():
                 print("Failed to get the browser score")
         else:
             print("\n Error while executing generate key method")
-            
+            obj.setLoadModuleStatus("FAILURE")
+
             print("\n Terminating the app")
             tdkTestObj = obj.createTestStep('rdkv_terminate_app');
             tdkTestObj.addParameter("app_id",app_name)
