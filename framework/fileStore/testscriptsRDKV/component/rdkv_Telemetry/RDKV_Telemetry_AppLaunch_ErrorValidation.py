@@ -117,13 +117,6 @@ if profile_set:
     print("Current Log Line :", start_line)
 
     print("\n[TEST STEP 3] : Launch Application")
-
-    #tdkTestObj = obj.createTestStep('rdkservice_launch_app')
-    #tdkTestObj.addParameter("app_name",app_name)
-    #tdkTestObj.executeTestCase(expectedResult)
-    #status = tdkTestObj.getResult()
-    #details = tdkTestObj.getResultDetails()
-    #print(details)
     status = rdkservice_install_launch_app(obj,app_bundle_name,app_name,app_download_url,launch=True)
 
     if status == "SUCCESS":
