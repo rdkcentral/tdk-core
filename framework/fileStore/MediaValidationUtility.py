@@ -321,6 +321,8 @@ def launchApp(obj,app_id):
     if status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"\nChecking if {app_id} is launched successfully")
+        # Wait for 2 seconds to load the app
+        time.sleep(2)
         app_ids = rdkservice_get_loaded_apps()
         if app_id in app_ids:
             print(f"\nSuccessfully launched the app: {app_id}")
@@ -981,6 +983,8 @@ def setMediaTestPreRequisites(obj,app_id,app_download_url,get_proc_info=True):
                 result = rdkservice_download_app_bundle(app_download_url)
                 if result != "EXCEPTION OCCURRED":
                     print("\nThe package is downloaded successfully\n")
+                    # Adding 5 seconds sleep to avoid file access issues while installing the app immediately after download
+                    time.sleep(5)
                     config_file, status = get_configfile_name(obj)
                     status, file_locator = rdkv_performancelib.getDeviceConfigKeyValue(config_file,"PACKAGEMANAGER_FILE_LOCATOR")
                     if status:
@@ -1188,8 +1192,7 @@ def monitorAnimationTestUsingRestAPI(obj,check_pattern,timeout):
     animation_test_result = ""
     lastLine = None
     lastIndex = 0
-    # app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
-    app_log_file = obj.logpath+"/"+"1111"+"/"+"1111"+"_"+"2222"+"_"+"3333"+"_mvs_applog.txt"
+    app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
 
     while True:
         if file_check_count > 60:

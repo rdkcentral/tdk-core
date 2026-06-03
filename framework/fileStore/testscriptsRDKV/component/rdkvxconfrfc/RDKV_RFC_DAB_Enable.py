@@ -16,92 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-'''
-<?xml version='1.0' encoding='utf-8'?>
-<xml>
-  <id></id>
-  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>1</version>
-  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_RFC_DAB_Enable</name>
-  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id></primitive_test_id>
-  <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>rfc_urlvalidate</primitive_test_name>
-  <!--  -->
-  <primitive_test_version>1</primitive_test_version>
-  <!--  -->
-  <status>FREE</status>
-  <!--  -->
-  <synopsis>RDK Feature Control by Xconf Server</synopsis>
-  <!--  -->
-  <groups_id />
-  <!--  -->
-  <execution_time>10</execution_time>
-  <!--  -->
-  <long_duration>false</long_duration>
-  <!--  -->
-  <advanced_script>false</advanced_script>
-  <!-- execution_time is the time out time for test execution -->
-  <remarks></remarks>
-  <!-- Reason for skipping the tests if marked to skip -->
-  <skip>false</skip>
-  <!--  -->
-  <box_types>
-    <box_type>RDKTV</box_type>
-    <!--  -->
-    <box_type>RPI-Client</box_type>
-    <!--  -->
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
-    <box_type>Video_Accelerator</box_type>
-    <!--  -->
-  </box_types>
-  <rdk_versions>
-    <rdk_version>RDK2.0</rdk_version>
-    <!--  -->
-  </rdk_versions>
-  <test_cases>
-    <test_case_id>rdkvxconfrfc_19</test_case_id>
-    <test_objective>Verify if the xconf server setting for Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.DAB.Enable is correctly applied on the device</test_objective>
-    <test_type>Positive</test_type>
-    <test_setup>Video_Accelerator and RPI</test_setup>
-    <pre_requisite>In the device configuration file, the RFC_XCONF_URL and XCONF_AUTHORIZATION_TOKEN_KEY variables must be configured</pre_requisite>
-    <api_or_interface_used>None</api_or_interface_used>
-    <input_parameters>RFC_XCONF_URL and XCONF_AUTHORIZATION_TOKEN_KEY</input_parameters>
-    <automation_approch>1: Check if the configured Xconf URL is accessible
-2: Enable the maintenancemanager plugin
-3: Check the presence of the partnerId3.dat file and ensure the 'community' string is included in it
-4: Check the presence of the partners_defaults.json file and ensure the Xconf domain URL is included in it
-5: Check the RFC parameter value prior to making any changes
-6: Creating a feature name for configuration in the Xconf server
-7: Creating a feature and its corresponding rule in the Xconf server
-8: Check the correctness of all settings created in the Xconf server
-9: Disable and enable the maintenance manager plugin
-10: Check if the Xconf RFC settings are applied on the device
-11: Revert the RFC parameter to its original value
-12. Deleting  a feature and its corresponding rule in the Xconf server</automation_approch>
-    <expected_output>1: Xconf URL must be accessible and return HTTP 200 OK
-2: MaintenanceManager plugin must be enabled successfully
-3: partnerId3.dat file must exist and must contain the string 'community'
-4: partners_defaults.json file must exist and must include the Xconf domain URL
-5: DAB.Enable RFC parameter value should be checked and noted before making changes
-6: Feature name must be created in the Xconf server
-7: Feature and corresponding rule must be created in the Xconf server
-8: All settings in the Xconf server must be verified for correctness
-9: MaintenanceManager plugin should be disabled and re-enabled to confirm functionality
-10: Confirm that the value set for the DAB.Enable RFC parameter on the Xconf server is correctly applied and reflected in the device
-11: DAB.Enable RFC parameter value must be reverted to its original state
-12: Feature and its corresponding rule must be deleted from the Xconf server</expected_output>
-    <priority>Medium</priority>
-    <test_stub_interface></test_stub_interface>
-    <test_script>RDKV_RFC_DAB_Enable</test_script>
-    <skipped>No</skipped>
-    <release_version>M128</release_version>
-    <remarks></remarks>
-  </test_cases>
-</xml>
-'''
+
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import time
@@ -270,59 +185,62 @@ if "SUCCESS" in result.upper():
                                             tdkTestObj.setResultStatus("SUCCESS")
 
                                             #Step 12: Revert the RFC parameter to its original value
-                                            print("\nRevert the RFC parameter to its original value")
-                                            print("=====================================\n")
-                                            tdkTestObj = obj.createTestStep('rfc_initializefeatures')
-                                            tdkTestObj.addParameter("feature_name",feature_name)
-                                            tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
-                                            tdkTestObj.addParameter("rfcparameter",rfcparameter)
-                                            tdkTestObj.addParameter("XCONF_AUTHORIZATION_TOKEN_KEY",XCONF_AUTHORIZATION_TOKEN_KEY)
-                                            tdkTestObj.addParameter("expectedvalue",actualvalue)
-                                            tdkTestObj.executeTestCase(expectedResult)
-                                            actualresult = tdkTestObj.getResultDetails()
-                                            if expectedResult in actualresult.upper():
-                                                Feature_Creation_Status="SUCCESS"
-                                                tdkTestObj.setResultStatus("SUCCESS")
-
-                                                print("\n")
-                                                time.sleep(60)
-                                                tdkTestObj = obj.createTestStep('rfc_checkconfiguredata')
+                                            if len(actualvalue) == 0:
+                                                print("\nINFO : Since the actual value of the "+rfcparameter+" RFC parameter is empty, therefore no revert action is required")
+                                            else:
+                                                print("\nRevert the RFC parameter to its original value")
+                                                print("=====================================\n")
+                                                tdkTestObj = obj.createTestStep('rfc_initializefeatures')
+                                                tdkTestObj.addParameter("feature_name",feature_name)
                                                 tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
                                                 tdkTestObj.addParameter("rfcparameter",rfcparameter)
+                                                tdkTestObj.addParameter("XCONF_AUTHORIZATION_TOKEN_KEY",XCONF_AUTHORIZATION_TOKEN_KEY)
                                                 tdkTestObj.addParameter("expectedvalue",actualvalue)
-                                                tdkTestObj.addParameter("feature_name",feature_name)
                                                 tdkTestObj.executeTestCase(expectedResult)
                                                 actualresult = tdkTestObj.getResultDetails()
                                                 if expectedResult in actualresult.upper():
+                                                    Feature_Creation_Status="SUCCESS"
                                                     tdkTestObj.setResultStatus("SUCCESS")
 
                                                     print("\n")
-                                                    method = "org.rdk.MaintenanceManager"
-                                                    params = '{ "callsign": "org.rdk.MaintenanceManager" }'
-                                                    tdkTestObj = obj.createTestStep('rfc_disable_enable_maintenance_manager')
-                                                    tdkTestObj.addParameter("method",method)
-                                                    tdkTestObj.addParameter("params",params)
+                                                    time.sleep(60)
+                                                    tdkTestObj = obj.createTestStep('rfc_checkconfiguredata')
+                                                    tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
+                                                    tdkTestObj.addParameter("rfcparameter",rfcparameter)
+                                                    tdkTestObj.addParameter("expectedvalue",actualvalue)
+                                                    tdkTestObj.addParameter("feature_name",feature_name)
                                                     tdkTestObj.executeTestCase(expectedResult)
-                                                    result = tdkTestObj.getResultDetails()
-                                                    if "SUCCESS" in result:
+                                                    actualresult = tdkTestObj.getResultDetails()
+                                                    if expectedResult in actualresult.upper():
                                                         tdkTestObj.setResultStatus("SUCCESS")
 
-                                                        time.sleep(5)
-                                                        tdkTestObj = obj.createTestStep('rfc_check_setornot_configdata')
-                                                        tdkTestObj.addParameter("rfcparameter",rfcparameter)
-                                                        tdkTestObj.addParameter("expectedvalue",actualvalue)
+                                                        print("\n")
+                                                        method = "org.rdk.MaintenanceManager"
+                                                        params = '{ "callsign": "org.rdk.MaintenanceManager" }'
+                                                        tdkTestObj = obj.createTestStep('rfc_disable_enable_maintenance_manager')
+                                                        tdkTestObj.addParameter("method",method)
+                                                        tdkTestObj.addParameter("params",params)
                                                         tdkTestObj.executeTestCase(expectedResult)
-                                                        actualresult = tdkTestObj.getResultDetails()
-                                                        if "FAILURE" not in actualresult:
+                                                        result = tdkTestObj.getResultDetails()
+                                                        if "SUCCESS" in result:
                                                             tdkTestObj.setResultStatus("SUCCESS")
+
+                                                            time.sleep(5)
+                                                            tdkTestObj = obj.createTestStep('rfc_check_setornot_configdata')
+                                                            tdkTestObj.addParameter("rfcparameter",rfcparameter)
+                                                            tdkTestObj.addParameter("expectedvalue",actualvalue)
+                                                            tdkTestObj.executeTestCase(expectedResult)
+                                                            actualresult = tdkTestObj.getResultDetails()
+                                                            if "FAILURE" not in actualresult:
+                                                                tdkTestObj.setResultStatus("SUCCESS")
+                                                            else:
+                                                                tdkTestObj.setResultStatus("FAILURE")
                                                         else:
                                                             tdkTestObj.setResultStatus("FAILURE")
                                                     else:
                                                         tdkTestObj.setResultStatus("FAILURE")
                                                 else:
                                                     tdkTestObj.setResultStatus("FAILURE")
-                                            else:
-                                                tdkTestObj.setResultStatus("FAILURE")
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:

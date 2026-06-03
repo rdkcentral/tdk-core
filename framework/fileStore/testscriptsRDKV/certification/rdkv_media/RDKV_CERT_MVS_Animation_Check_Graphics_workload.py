@@ -123,7 +123,7 @@ if expectedResult in result.upper():
     # Setting the pre-requites for media test. Launching the wekit instance via RDKShell and
     # moving it to the front, openning a socket connection to the webkit inspect page and
     # disabling proc validation
-    pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,"LightningApp",False)
+    pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.multi_animation_app_id,MediaValidationVariables.multi_animation_app_download_url)
     config_status = "SUCCESS"
     conf_file,result = getDeviceConfigFile(obj.realpath)
     result1, expected_fps  = readDeviceConfigKeyValue(conf_file,"EXPECTED_FPS")
@@ -156,7 +156,8 @@ if expectedResult in result.upper():
         animation_test_url = getTestURL(appURL,appArguments)
 
         # Setting the animation test url in webkit instance using RDKShell
-        launch_status = launchPlugin(obj,"LightningApp",animation_test_url)
+        setPS_value(animation_test_url)
+        launch_status = launchApp(obj,MediaValidationVariables.multi_animation_app_id)
         if "SUCCESS" in launch_status:
             continue_count = 0
             avgerage_fps_list = []
@@ -259,7 +260,7 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult);
         # Setting the post-requites for media test.Removing app url from webkit instance and
         # moving next high z-order app to front (residentApp if its active)
-        post_requisite_status = setMediaTestPostRequisites(obj,"LightningApp",webkit_console_socket)
+        post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.multi_animation_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")
             tdkTestObj.setResultStatus("SUCCESS");

@@ -193,8 +193,6 @@
                     <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status" arguments="launch_app"/>
                     <params>
                         <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                        <param tag="intent" value=""/>
-                        <param tag="launchArgs" value=""/>
                     </params>
                     <resultGeneration useMethodTag="appmanager_null_result_validation"/>
                 </testStep>
@@ -303,8 +301,6 @@
                     <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status" arguments="launch_app"/>
                     <params>
                         <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                        <param tag="intent" value=""/>
-                        <param tag="launchArgs" value=""/>
                     </params>
                     <resultGeneration useMethodTag="appmanager_null_result_validation"/>
                 </testStep>
@@ -340,8 +336,6 @@
                     <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status" arguments="launch_app"/>
                     <params>
                         <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                        <param tag="intent" value=""/>
-                        <param tag="launchArgs" value=""/>
                     </params>
                     <resultGeneration useMethodTag="appmanager_null_result_validation"/>
                 </testStep>
