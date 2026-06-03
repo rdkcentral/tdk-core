@@ -116,13 +116,13 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     app_bundle_name=BrowserPerformanceVariables.motion_app_bundle_name
-    app_download_url=BrowserPerformanceVariables.motion_app_download_url
+    app_download_url=BrowserPerformanceVariables.app_download_url
     sub_category_failure = False
 
     app_name = "com.rdkcentral.motion"
     status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url)
     if status == "SUCCESS": 
-        result = browsertest_keypress(obj,app_name,[["9","13"],[]])
+        result = browsertest_keypress(obj,app_name,["9","13"])
         if result == expectedResult:
             time.sleep(420)
             tdkTestObj = obj.createTestStep('rdkservice_getBrowserScore_MotionMark')
@@ -165,6 +165,7 @@ if expectedResult in result.upper():
                 print("Unable to terminate the app")
     else:
         print("Failed to launch the app")
+        obj.setLoadModuleStatus("FAILURE")
 
     getSummary(Summ_list,obj)
     obj.unloadModule("rdkv_performance")

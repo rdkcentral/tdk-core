@@ -92,7 +92,7 @@ print("[LIB LOAD STATUS]  :  %s" %result.upper());
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    app_bundle_name=BrowserPerformanceVariables.app_bundle_name
+    app_bundle_name=BrowserPerformanceVariables.octane_app_bundle_name
     app_download_url=BrowserPerformanceVariables.app_download_url
     browser_subcategory_list = BrowserPerformanceVariables.octane_test_subcategory_list
     sub_category_failure = False
@@ -152,7 +152,8 @@ if expectedResult in result.upper():
             tdkTestObj.setResultStatus("FAILURE");
             print("Unable to terminate the app")
     else:
-        print("Failed to launch the app")    
+        print("Failed to launch the app")  
+        obj.setLoadModuleStatus("FAILURE")  
             
     getSummary(Summ_list,obj)
     obj.unloadModule("rdkv_performance");
