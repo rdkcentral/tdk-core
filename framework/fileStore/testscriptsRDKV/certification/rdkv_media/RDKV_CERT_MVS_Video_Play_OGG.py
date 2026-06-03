@@ -68,7 +68,7 @@
     <input_parameters>Lightning player App URL: string
 webkit_instance:string
 webinspect_port: string
-video_src_url_ogg: string
+video_src_url_vorbis: string
 ogg_url_type:string
 close_interval: int
 </input_parameters>
@@ -127,7 +127,7 @@ if expectedResult in result.upper():
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
         #appURL    = MediaValidationVariables.lightning_video_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_ogg
+        videoURL  = MediaValidationVariables.video_src_url_vorbis
         # Setting VideoPlayer Operations
         setOperation("close",MediaValidationVariables.close_interval)
         operations = getOperations()

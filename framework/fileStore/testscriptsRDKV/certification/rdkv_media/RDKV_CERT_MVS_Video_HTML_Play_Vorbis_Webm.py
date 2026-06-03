@@ -68,7 +68,7 @@
     <input_parameters>HTML player App URL: string
 webkit_instance:string
 webinspect_port: string
-video_src_url_ogg: string
+video_src_url_vorbis_webm: string
 close_interval: int</input_parameters>
     <automation_approch>1. As pre requisite, launch webkit instance via RDKShell, open websocket conntion to webinspect page
 2. Store the details of other launched apps. Move the webkit instance to front, if its z-order is low.
