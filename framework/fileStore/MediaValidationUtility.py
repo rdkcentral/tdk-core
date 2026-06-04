@@ -31,8 +31,10 @@ from StabilityTestUtility import *
 
 # Device specific config file
 deviceConfigFile = ""
+
 # Global variable to store all the operations
 all_operations = ""
+
 # Global variable to store all the url arguments
 all_arguments  = {}
 
@@ -41,28 +43,32 @@ logging_method = None
 
 # Global variable to store websocket conn feature
 webkit_socket_conn = True
+
 # Global variable to store default webinspect port
 webkit_socket_port = webinspect_port
-
 expectedResult = "SUCCESS"
+
 # Global variable to store client with high z-order
 next_z_order_client = None
 
 # Global variables to store default AV port
 video_port = None
 audio_port = None
+
 # Global variables to store resolution info
 current_resolution = None
 resolution_revert = False
+
 # Global variables to store sound modes
 current_mode = None
 mode_revert = False
 auto_mode = 0
+
 # Global variable to store proc validation mode
 proc_check_mode = None
+
 # Global variable to store events
 evt_lst = []
-
 
 
 #************************************************************************************************************#
@@ -110,7 +116,6 @@ def getURLArguments():
             url_arguments += "&"
         url_arguments += args + "=" + str(all_arguments[args])
     return url_arguments
-
 
 # Function to form the complete test app url
 def getTestURL(appURL,URLarguments):
@@ -172,7 +177,6 @@ def updateLibOptions(val):
         #result,uselib = rdkv_performancelib.getDeviceConfigKeyValue(deviceConfigFile,"LOAD_USING_HLSLIB")
         updateOptions(lib_key+"("+uselib+")")
 
-
 # Function to parser the web inspect json message and display the
 # console log
 def dispConsoleMessage(log):
@@ -188,7 +192,6 @@ def dispConsoleMessage(log):
 def dispConsoleLog(log):
     console_methods = ["Console.messagesCleared","Console.messageRepeatCountUpdated"]
     try:
-
         #if "Console.messageAdded" in log:
         #    dispConsoleMessage(log)
         if "%" not in log:
@@ -233,12 +236,12 @@ def socketConnectionEnableDisable(flag):
     global webkit_socket_conn
     webkit_socket_conn = flag
 
-# Function to update webnspect port
+# Function to update webinspect port
 def setWebKitSocketPort(port):
     global webkit_socket_port
     webkit_socket_port = port
 
-# Function to create websocket connection to webki webinspect page
+# Function to create websocket connection to webinspect page
 def createWebKitSocket(obj):
     print("\nInitiate Connection to Webinspect page (port:%s)..." %(webkit_socket_port))
     socket = createEventListener(obj.IP,webkit_socket_port,[],"/devtools/page/1",False)
@@ -246,9 +249,7 @@ def createWebKitSocket(obj):
     status = socket.getConnectionStatus()
     return status,socket
 
-
 # Function to set Pre/Post requisites for executing media tests
-
 def checkPluginStatus(obj,plugin):
     print("\nChecking %s Plugin Status..." %(plugin))
     tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus');
@@ -275,44 +276,8 @@ def setPluginState(obj,plugin,state):
         tdkTestObj.setResultStatus("FAILURE");
         return "FAILURE"
 
-def launchPlugin(obj,plugin,url):
-    print("\nLaunching %s using RDKShell..." %(plugin))
-    url = url.replace('\"',"")
-    try:
-        result,base_path_from_config = rdkv_performancelib.getDeviceConfigKeyValue(deviceConfigFile,"TEST_STREAMS_BASE_PATH")
-    except:
-        base_path_from_config = ""
-    if base_path_from_config :
-        url = url.replace(test_streams_base_path,base_path_from_config);
-    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-    params = '{"callsign":"'+plugin+'", "type":"'+plugin+'", "uri":"'+url+'"}'
-    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.launch")
-    tdkTestObj.addParameter("value",params)
-    tdkTestObj.executeTestCase(expectedResult);
-    result = tdkTestObj.getResult();
-    info = tdkTestObj.getResultDetails();
-    if "SUCCESS" in result:
-        print("Resumed %s plugin " %(plugin))
-        tdkTestObj.setResultStatus("SUCCESS")
-        time.sleep(3)
-        tdkTestObj = obj.createTestStep('rdkservice_getValue');
-        tdkTestObj.addParameter("method",plugin+".1.url");
-        tdkTestObj.executeTestCase(expectedResult);
-        result = tdkTestObj.getResult()
-        new_url = tdkTestObj.getResultDetails();
-        print("%s Plugin current url: %s" %(plugin,new_url))
-        if "SUCCESS" in result and (new_url in url or url in new_url):
-            tdkTestObj.setResultStatus("SUCCESS")
-            return "SUCCESS"
-        else:
-            tdkTestObj.setResultStatus("FAILURE")
-            return "FAILURE"
-    else:
-        print("Unable to Resume %s plugin " %(plugin))
-        tdkTestObj.setResultStatus("FAILURE")
-        return result
-
 def launchApp(obj,app_id):
+    max_retries = 2
     print(f"\nLaunching the app: {app_id}")
     tdkTestObj = obj.createTestStep('rdkservice_launch_app')
     tdkTestObj.addParameter("app_name", app_id)
@@ -321,101 +286,20 @@ def launchApp(obj,app_id):
     if status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"\nChecking if {app_id} is launched successfully")
-        # Wait for 2 seconds to load the app
-        time.sleep(2)
-        app_ids = rdkservice_get_loaded_apps()
-        if app_id in app_ids:
-            print(f"\nSuccessfully launched the app: {app_id}")
-            tdkTestObj.setResultStatus("SUCCESS")
-            return "SUCCESS"
-        else:
-            tdkTestObj.setResultStatus("FAILURE")
-            print(f"\nThe app {app_id} is not listed in LoadedApps, hence failed to launch\n")
-            return "FAILURE"
+        for attempt in range(max_retries):
+            if app_id in rdkservice_get_loaded_apps():
+                print(f"\nSuccessfully launched the app: {app_id}")
+                tdkTestObj.setResultStatus("SUCCESS")
+                return "SUCCESS"
+            if attempt < max_retries - 1:
+                time.sleep(3)
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"\nThe app {app_id} is not listed in LoadedApps, hence failed to launch the app\n")
+        return "FAILURE"
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print(f"\nFailed to launch the app: {app_id}\n")
         return "FAILURE"
-
-def checkRDKShellClients(obj,plugin):
-    print("\nChecking RDKShell Clients...")
-    tdkTestObj = obj.createTestStep('rdkservice_getValue');
-    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getClients");
-    tdkTestObj.executeTestCase("SUCCESS");
-    result  = tdkTestObj.getResult();
-    details = tdkTestObj.getResultDetails();
-    check_client = ""
-    if "SUCCESS" in result:
-        clients_list = ast.literal_eval(details)["clients"]
-        print("RDKShell Clients: %s" %(clients_list))
-        for client in clients_list:
-            if client.lower() == plugin.lower():
-                check_client = client
-                break;
-        if check_client != "":
-            tdkTestObj.setResultStatus("SUCCESS")
-        else:
-            tdkTestObj.setResultStatus("FAILURE")
-    else:
-        print("Unable to get RDKShell Clients")
-        tdkTestObj.setResultStatus("FAILURE")
-
-    return result,check_client
-
-def checkClientZOrder(obj,client):
-    print("\nChecking Clients Z-Order...")
-    tdkTestObj = obj.createTestStep('rdkservice_getValue');
-    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder");
-    tdkTestObj.executeTestCase("SUCCESS");
-    result  = tdkTestObj.getResult();
-    details = tdkTestObj.getResultDetails();
-    client_z_order_status = None
-    global next_z_order_client
-    next_z_order_client   = None
-    if "SUCCESS" in result:
-        clients_list = ast.literal_eval(details)["clients"]
-        # remove unwanted process from z-order list
-        clients_list = exclude_from_zorder(clients_list)
-        print("Clients Z-Order: %s" %(clients_list))
-        if len(clients_list) > 0:
-            tdkTestObj.setResultStatus("SUCCESS")
-            if clients_list[0] == client:
-                client_z_order_status = True
-                if len(clients_list) > 1:
-                    next_z_order_client = clients_list[1]
-            else:
-                client_z_order_status = False
-        else:
-            print("Clients Z-Order list is empty")
-            tdkTestObj.setResultStatus("FAILURE")
-    else:
-        print("Unable to get Clients Z-Order")
-        tdkTestObj.setResultStatus("FAILURE")
-
-    return result,client_z_order_status
-
-#remove unwanted processes from z-order list
-def exclude_from_zorder(zorder):
-    new_zorder = [ element for element in zorder if element not in excluded_process_list ]
-    return new_zorder
-
-def checkWebkitReadyState(obj,result,webkit_client,webkit_z_order_status):
-    if "SUCCESS" in result and not webkit_z_order_status:
-        move_status = moveToFrontClient(obj,webkit_client)
-        if "SUCCESS" in move_status:
-            result,webkit_z_order_status = checkClientZOrder(obj,webkit_client)
-            if "SUCCESS" in result and webkit_z_order_status:
-                webkit_ready = True
-            else:
-                webkit_ready = False
-        else:
-            webkit_ready = False
-    elif "SUCCESS" in result and webkit_z_order_status:
-        webkit_ready = True
-    else:
-        webkit_ready = False
-
-    return webkit_ready
 
 def checkProcEntry(obj,validation_dict):
     tdkTestObj = obj.createTestStep('rdkv_media_checkProcEntry')
@@ -437,49 +321,6 @@ def checkProcEntry(obj,validation_dict):
     info = tdkTestObj.getResultDetails();
     tdkTestObj.setResultStatus(result);
     return info
-
-def moveToFrontClient(obj,client):
-    print("\nMoving %s to front..." %(client))
-    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-    params = '{"client":"'+client+'"}'
-    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.moveToFront")
-    tdkTestObj.addParameter("value",params)
-    tdkTestObj.executeTestCase(expectedResult);
-    result = tdkTestObj.getResult();
-    info = tdkTestObj.getResultDetails();
-    time.sleep(3)
-    if "SUCCESS" in result:
-        print("%s plugin moved to front" %(client))
-        tdkTestObj.setResultStatus("SUCCESS");
-        return "SUCCESS"
-    else:
-        print("Unable to move %s plugin to front" %(client))
-        tdkTestObj.setResultStatus("FAILURE");
-        return "FAILURE"
-
-# Function to send key code inputs to the RDKShell client
-# Values must follow the pattern KeyName:KeyCode seperated by comma. Eg [ArrowLeft:37,ArrowDown:40]
-def sendKeysToClient(obj,client,key_sequence):
-    status = "SUCCESS"
-    for key_info in key_sequence.split(","):
-        key_name = key_info.split(":")[0]
-        key_code = key_info.split(":")[1]
-        time.sleep(10)
-        tdkTestObj = obj.createTestStep('rdkservice_setValue')
-        params = '{"keys":[{"keyCode":'+key_code+',"modifiers": ["'+key_name+'"],"delay": 1.0,"callsign": "'+client+'"}]}'
-        tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
-        tdkTestObj.addParameter("value",params)
-        tdkTestObj.executeTestCase(expectedResult);
-        result = tdkTestObj.getResult();
-        if "SUCCESS" in result:
-            print("Key: %s KeyCode: %s sent successfully" %(key_name,key_code))
-            tdkTestObj.setResultStatus("SUCCESS");
-        else:
-            print("Key: %s KeyCode: %s sending failed" %(key_name,key_code))
-            tdkTestObj.setResultStatus("FAILURE");
-            status = "FAILURE"
-    return status
-
 
 def checkDRMSupported(obj,drm):
     result,ocdm_status = checkPluginStatus(obj,"OCDM");
@@ -517,7 +358,6 @@ def checkDRMSupported(obj,drm):
     else:
         print("OCDM plugin not available. DRM not supported")
         return "NA"
-
 
 def getConnectedVideoDisplay(obj):
     global video_port
@@ -618,7 +458,6 @@ def checkSupportedAudioModes(obj,mode):
     tdkTestObj.setResultStatus(check_status)
     return mode,check_status
 
-
 def checkSupportedAudioCapabilities(obj,mode):
     print("\nChecking Supported Audio capabilities...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
@@ -648,7 +487,6 @@ def checkSupportedAudioCapabilities(obj,mode):
 
     tdkTestObj.setResultStatus(check_status)
     return check_status
-
 
 def checkSupportedResolution(obj,res):
     print("\nChecking Supported Resolutions...")
@@ -813,7 +651,6 @@ def setCurrentResolution(obj,res):
             set_status = "FAILURE"
             tdkTestObj.setResultStatus("FAILURE")
             print("Unable to set the resolution")
-
     return set_status
 
 def setAudioAtmosOutputMode(obj,enable):
@@ -832,7 +669,6 @@ def setAudioAtmosOutputMode(obj,enable):
         print("Unable to set audio atmos o/p enable as %s" %(enable))
         tdkTestObj.setResultStatus("FAILURE");
         return "FAILURE"
-
 
 # Function to set the resolution pre-requisites
 def setResolutionPreRequisites(obj,res):
@@ -905,7 +741,6 @@ def setSoundModePostRequisites(obj):
     else:
         return True
 
-
 # Function to set the atmos o/p mode pre-requisites
 def setAudioAtmosOutputModePreRequisites(obj,mode):
     result,ds_status = checkPluginStatus(obj,"org.rdk.DisplaySettings");
@@ -930,7 +765,6 @@ def setAudioAtmosOutputModePreRequisites(obj,mode):
             return False
     else:
         return False
-
 
 # Function to set the primary pre-requisites
 def setMediaTestPreRequisites(obj,app_id,app_download_url,get_proc_info=True):
@@ -1014,7 +848,6 @@ def setMediaTestPreRequisites(obj,app_id,app_download_url,get_proc_info=True):
 
     return pre_requisite_status,webkit_console_socket,validation_dict
 
-
 def monitorVideoTest(obj,webkit_console_socket,validation_dict,check_pattern,timeout=60):
     video_test_result = ""
     proc_check_list  = []
@@ -1022,9 +855,7 @@ def monitorVideoTest(obj,webkit_console_socket,validation_dict,check_pattern,tim
         video_test_result,proc_check_list = monitorVideoTestUsingWebInspect(obj,webkit_console_socket,validation_dict,check_pattern,timeout)
     elif logging_method == "REST_API":
         video_test_result,proc_check_list = monitorVideoTestUsingRestAPI(obj,validation_dict,check_pattern,timeout)
-
     return video_test_result,proc_check_list
-
 
 def monitorVideoTestUsingRestAPI(obj,validation_dict,check_pattern,timeout):
     wait_time = timeout/60
@@ -1113,7 +944,6 @@ def monitorVideoTestUsingRestAPI(obj,validation_dict,check_pattern,timeout):
 
     return video_test_result,proc_check_list
 
-
 # Function to monitor video test app progress and get the result
 def monitorVideoTestUsingWebInspect(obj,webkit_console_socket,validation_dict,check_pattern,timeout=60):
     wait_time = timeout/60
@@ -1168,8 +998,6 @@ def monitorVideoTestUsingWebInspect(obj,webkit_console_socket,validation_dict,ch
 
     return video_test_result,proc_check_list
 
-
-
 # Function to monitor animation test app progress and get the result
 def monitorAnimationTest(obj,webkit_console_socket,check_pattern,timeout=60):
     animation_test_result = ""
@@ -1179,7 +1007,6 @@ def monitorAnimationTest(obj,webkit_console_socket,check_pattern,timeout=60):
     elif logging_method == "REST_API":
         animation_test_result,diagnosis_info = monitorAnimationTestUsingRestAPI(obj,check_pattern,timeout)
     return animation_test_result,diagnosis_info
-
 
 def monitorAnimationTestUsingRestAPI(obj,check_pattern,timeout):
     wait_time = timeout/60
@@ -1249,8 +1076,6 @@ def monitorAnimationTestUsingRestAPI(obj,check_pattern,timeout):
 
     return animation_test_result,diagnosis_info
 
-
-
 # Function to monitor animation test app progress and get the result
 def monitorAnimationTestUsingWebInspect(obj,webkit_console_socket,check_pattern,timeout=60):
     wait_time = timeout/60
@@ -1287,9 +1112,6 @@ def monitorAnimationTestUsingWebInspect(obj,webkit_console_socket,check_pattern,
         animation_test_result = "FAILURE"
 
     return animation_test_result,diagnosis_info
-
-
-
 
 # Function to monitor conformance test app progress and get the result
 def monitorConformanceTest(obj,webkit_console_socket,timeout=60):
@@ -1397,7 +1219,6 @@ def getTestURLs(players_list,appArguments):
         test_urls.append(test_url)
     return test_urls
 
-
 # Function to set the primary post-requisites
 def setMediaTestPostRequisites(app_id):
     post_requisite_status = "SUCCESS"
@@ -1406,7 +1227,6 @@ def setMediaTestPostRequisites(app_id):
     if "FAILURE" in terminate_status:
         post_requisite_status = "FAILURE"
     return post_requisite_status
-
 
 # Function to validate the Latency time
 def validateLatency(obj):
@@ -1432,24 +1252,6 @@ def validateLatency(obj):
         print("\n Please Configure the PLAYBACK_START_THRESHOLD_VALUE in config file \n")
         test_result = "FAILURE"
     return test_result
-
-def destroyPlugin(obj,plugin):
-    print("\nDestroying %s using RDKShell..." %(plugin))
-    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-    params = '{"callsign":"'+plugin+'"}'
-    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.destroy")
-    tdkTestObj.addParameter("value",params)
-    tdkTestObj.executeTestCase(expectedResult);
-    result = tdkTestObj.getResult();
-    info = tdkTestObj.getResultDetails();
-    if "SUCCESS" in result:
-        print("Destroyed %s plugin " %(plugin))
-        tdkTestObj.setResultStatus("SUCCESS")
-        return "SUCCESS"
-    else:
-        print("Unable to Destroy %s plugin " %(plugin))
-        tdkTestObj.setResultStatus("FAILURE")
-        return "FAILURE"
 
 def stop_nginx():
     """Stops Nginx running in the Nginx container via SSH."""
@@ -1558,7 +1360,7 @@ def printDRMObservation(app_log_file, observe_duration=60):
         print("[DRM OBSERVE] Playback did NOT reach clear duration")
 
     print("[DRM OBSERVE] NOTE:")
-    print("  'Video Player Encrypted' indicates DRM presence")
-    print("  NOT actual encrypted segment playback")
+    print("'Video Player Encrypted' indicates DRM presence")
+    print("NOT actual encrypted segment playback")
     print("--------------------------------------------------")
 
