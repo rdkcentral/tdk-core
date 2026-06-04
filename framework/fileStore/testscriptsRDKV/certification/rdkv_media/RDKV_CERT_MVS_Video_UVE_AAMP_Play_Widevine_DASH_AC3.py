@@ -112,8 +112,7 @@ if expectedResult in result.upper():
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     # Checking whether widevine DRM is supported
-    # Setting the pre-requites for media test. Launching the wekit instance via RDKShell and
-    # moving it to the front, openning a socket connection to the webkit inspect page and
+    # Setting the pre-requisites for media test. Launching the required test app via AppManager and
     # getting the details for proc validation from config file
     drm_pre_requisite_status = checkDRMSupported(obj,"Widevine")
     if drm_pre_requisite_status == "TRUE":
@@ -149,7 +148,7 @@ if expectedResult in result.upper():
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkuveaampplayer/build/index.html?
         #url=<video_ac3_url>.mpd&drmconfigs=com.widevine(<license_url>)&operations=close(60)&autotest=true
 
-        # Setting the video test url in webkit instance using RDKShell
+        # Setting the video test url in PersistentStore and launching the test app using AppManager
         setPS_value(video_test_url)
         launch_status = launchApp(obj,MediaValidationVariables.unified_player_app_id)
         if "SUCCESS" in launch_status:
@@ -177,8 +176,7 @@ if expectedResult in result.upper():
         print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
-        # Setting the post-requites for media test.Removing app url from webkit instance and
-        # moving next high z-order app to front (residentApp if its active)
+        # Setting the post-requisites for media test. Terminating the bolt app.
         post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.unified_player_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")
