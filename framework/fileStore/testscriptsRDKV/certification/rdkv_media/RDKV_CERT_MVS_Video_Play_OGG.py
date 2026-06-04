@@ -68,7 +68,7 @@
     <input_parameters>Lightning player App URL: string
 webkit_instance:string
 webinspect_port: string
-video_src_url_ogg: string
+video_src_url_vorbis: string
 ogg_url_type:string
 close_interval: int
 </input_parameters>
@@ -115,8 +115,7 @@ if expectedResult in result.upper():
     print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
-    # Setting the pre-requites for media test. Launching the wekit instance via RDKShell and
-    # moving it to the front, openning a socket connection to the webkit inspect page and
+    # Setting the pre-requisites for media test. Launching the required test app via AppManager and
     # getting the details for proc validation from config file
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.unified_player_app_id,MediaValidationVariables.unified_player_app_download_url)
     if pre_requisite_status == "SUCCESS":
@@ -128,7 +127,7 @@ if expectedResult in result.upper():
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
         #appURL    = MediaValidationVariables.lightning_video_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_ogg
+        videoURL  = MediaValidationVariables.video_src_url_vorbis
         # Setting VideoPlayer Operations
         setOperation("close",MediaValidationVariables.close_interval)
         operations = getOperations()
@@ -151,7 +150,7 @@ if expectedResult in result.upper():
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<video_ogg_url>.mpd&operations=close(60)&autotest=true&type=dash
 
-        # Setting the video test url in webkit instance using RDKShell
+        # Setting the video test url in PersistentStore and launching the test app using AppManager
         for video_test_url in video_test_urls:
             setPS_value(video_test_url)
             launch_status = launchApp(obj,MediaValidationVariables.unified_player_app_id)
@@ -174,10 +173,6 @@ if expectedResult in result.upper():
                     print("Video not playing fine")
                     print("[TEST EXECUTION RESULT]: FAILURE")
                     tdkTestObj.setResultStatus("FAILURE");
-
-                if test_counter < len(video_test_urls):
-                    launch_status = launchPlugin(obj,webkit_instance,"about:blank")
-                    time.sleep(3)
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 print("Unable to load the video Test URL in Webkit\n")
@@ -185,8 +180,7 @@ if expectedResult in result.upper():
         print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
-        # Setting the post-requites for media test.Removing app url from webkit instance and
-        # moving next high z-order app to front (residentApp if its active)
+        # Setting the post-requisites for media test. Terminating the bolt app.
         post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.unified_player_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")

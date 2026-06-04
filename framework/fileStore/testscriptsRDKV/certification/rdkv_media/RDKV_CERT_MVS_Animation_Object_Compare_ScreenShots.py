@@ -117,8 +117,7 @@ if expectedResult in result.upper():
     print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
-    # Setting the pre-requites for media test. Launching the wekit instance via RDKShell and
-    # moving it to the front, openning a socket connection to the webkit inspect page and
+    # Setting the pre-requisites for media test. Launching the required test app via AppManager and
     # disabling proc validation
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.object_animation_app_id,MediaValidationVariables.object_animation_app_download_url)
 
@@ -184,7 +183,7 @@ if expectedResult in result.upper():
         # Getting the complete test app URL
         animation_test_url = getTestURL(appURL,appArguments)
 
-        # Setting the animation test url in webkit instance using RDKShell
+        # Setting the animation test url in PersistentStore and launching the animation test app using AppManager
         setPS_value(animation_test_url)
         launch_status = launchApp(obj,MediaValidationVariables.object_animation_app_id)
         if "SUCCESS" in launch_status:
@@ -241,7 +240,7 @@ if expectedResult in result.upper():
             print("\nSet post conditions...")
             tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
             tdkTestObj.executeTestCase(expectedResult);
-            # Setting the post-requites for media test.Removing app url from webkit instance and
+            # Setting the post-requisites for media test.Removing app url from webkit instance and
             # moving next high z-order app to front (residentApp if its active)
             post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.object_animation_app_id)
             if post_requisite_status == "SUCCESS":

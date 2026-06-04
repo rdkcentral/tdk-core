@@ -137,10 +137,6 @@ for video_test_url in video_test_urls:
         tdkTestObj.executeTestCase(expectedResult)
         tdkTestObj.setResultStatus("FAILURE")
 
-        # Cleanup before next iteration
-        launchPlugin(obj, webkit_instance, "about:blank")
-        time.sleep(3)
-        continue
     # ------------------------------------------------------------------
     # FAIL IF VIDEO DID NOT PLAY TILL close() TIME
     # ------------------------------------------------------------------
@@ -161,11 +157,6 @@ for video_test_url in video_test_urls:
         tdkTestObj = obj.createTestStep('rdkv_media_test')
         tdkTestObj.executeTestCase(expectedResult)
         tdkTestObj.setResultStatus("FAILURE")
-
-        # Cleanup before next iteration
-        launchPlugin(obj, webkit_instance, "about:blank")
-        time.sleep(3)
-
         continue
 
     # ==========================================================
@@ -183,10 +174,6 @@ for video_test_url in video_test_urls:
     tdkTestObj = obj.createTestStep('rdkv_media_test')
     tdkTestObj.executeTestCase(expectedResult)
     tdkTestObj.setResultStatus("SUCCESS")
-
-    # Cleanup between players
-    launchPlugin(obj, webkit_instance, "about:blank")
-    time.sleep(3)
 
 # ------------------------------------------------------------------------------
 # POST-CONDITIONS

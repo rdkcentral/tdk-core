@@ -121,8 +121,7 @@ if expectedResult in result.upper():
     tdkTestObj.executeTestCase(expectedResult);
     res = "480p"
     # Setting the required display resolution
-    # Setting the pre-requites for media test. Launching the webkit instance via RDKShell and
-    # moving it to the front, openning a socket connection to the webkit inspect page and
+    # Setting the pre-requisites for media test. Launching the required test app via AppManager and
     # getting the details for proc validation from config file
     res_pre_requisite_status = setResolutionPreRequisites(obj,res)
     if res_pre_requisite_status:
@@ -164,7 +163,7 @@ if expectedResult in result.upper():
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<video_url>.m3u8&operations=close(60)&autotest=true&type=hls
 
-        # Setting the video test url in webkit instance using RDKShell
+        # Setting the video test url in PersistentStore and launching the test app using AppManager
         for video_test_url in video_test_urls:
             setPS_value(video_test_url)
             launch_status = launchApp(obj,MediaValidationVariables.unified_player_app_id)
@@ -187,10 +186,6 @@ if expectedResult in result.upper():
                     print("Video not playing fine")
                     print("[TEST EXECUTION RESULT]: FAILURE")
                     tdkTestObj.setResultStatus("FAILURE");
-
-                if test_counter < len(video_test_urls):
-                    launch_status = launchPlugin(obj,webkit_instance,"about:blank")
-                    time.sleep(3)
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 print("Unable to load the video Test URL in Webkit\n")
@@ -198,8 +193,7 @@ if expectedResult in result.upper():
         print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
-        # Setting the post-requites for media test.Removing app url from webkit instance and
-        # moving next high z-order app to front (residentApp if its active)
+        # Setting the post-requisites for media test. Terminating the bolt app.
         # Reverting the display Resolution
         post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.unified_player_app_id)
         res_post_requisite_status = setResolutionPostRequisites(obj)
