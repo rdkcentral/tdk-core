@@ -1670,6 +1670,14 @@
         </testStep>
     </testCase>
 
+    <!-- TestCase 109-->
+    <testCase testCaseId="AM_109" testCaseName="AppManager_Max_Inactive_Ramusage" desc="Verify the successful retrieval of the maximum inactive ram usage">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Max_Inactive_Ramusage" method="Get_Max_Inactive_Ramusage">
+            <resultGeneration useMethodTag="appmanager_getmaxrunningapps_status"/>
+        </testStep>
+    </testCase>
+
     <!-- AppManager L2 Testcases -->
     <!-- TestCase L2_01 -->
     <testCase testCaseId="AM_L2_01" testCaseName="AppManager_App_Lock_Launch_Terminate_Unlock_Operations" desc="Verify that an app can be launched successfully after performing lock operation on the device">

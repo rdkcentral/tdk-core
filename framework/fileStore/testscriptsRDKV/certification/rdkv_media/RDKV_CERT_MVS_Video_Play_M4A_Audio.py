@@ -104,7 +104,7 @@ if expectedResult in result.upper():
     print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
-    # Setting the pre-requites for media test. Launching the webkit instance via RDKShell and
+    # Setting the pre-requisites for media test. Launching the webkit instance via RDKShell and
     # moving it to the front, opening a socket connection to the webkit inspect page and
     # getting the details of proc validation from config file
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.unified_player_app_id,MediaValidationVariables.unified_player_app_download_url)
@@ -141,7 +141,7 @@ if expectedResult in result.upper():
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<audio_url>.m4a&operations=close(60)&autotest=true&type=m4a
 
-        # Setting the video test url in webkit instance using RDKShell
+        # Setting the video test url in PersistentStore and launching the test app using AppManager
         for video_test_url in video_test_urls:
             setPS_value(video_test_url)
             launch_status = launchApp(obj,MediaValidationVariables.unified_player_app_id)
@@ -164,10 +164,6 @@ if expectedResult in result.upper():
                     print("Audio not playing fine")
                     print("[TEST EXECUTION RESULT]: FAILURE")
                     tdkTestObj.setResultStatus("FAILURE");
-
-                if test_counter < len(video_test_urls):
-                    launch_status = launchPlugin(obj,webkit_instance,"about:blank")
-                    time.sleep(3)
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 print("Unable to load the video Test URL in Webkit\n")
@@ -175,8 +171,7 @@ if expectedResult in result.upper():
         print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
-        # Setting the post-requites for media test.Removing app url from webkit instance and
-        # moving next high z-order app to front (residentApp if its active)
+        # Setting the post-requisites for media test. Terminating the bolt app.
         post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.unified_player_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")

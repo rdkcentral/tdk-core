@@ -119,8 +119,7 @@ if expectedResult in result.upper():
     print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
-    # Setting the pre-requites for media test. Launching the wekit instance via RDKShell and
-    # moving it to the front, openning a socket connection to the webkit inspect page and
+    # Setting the pre-requisites for media test. Launching the required test app via AppManager and
     # disabling proc validation
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.unified_player_app_id,MediaValidationVariables.unified_player_app_download_url)
     if pre_requisite_status == "SUCCESS":
@@ -180,10 +179,6 @@ if expectedResult in result.upper():
                     print("Video not playing fine")
                     print("[TEST EXECUTION RESULT]: FAILURE")
                     tdkTestObj.setResultStatus("FAILURE");
-
-                if test_counter < len(video_test_urls):
-                    launch_status = launchPlugin(obj,webkit_instance,"about:blank")
-                    time.sleep(3)
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 print("Unable to load the video Test URL in Webkit\n")
@@ -191,7 +186,7 @@ if expectedResult in result.upper():
         print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
-        # Setting the post-requites for media test.Removing app url from webkit webkit_instance and
+        # Setting the post-requisites for media test.Removing app url from webkit webkit_instance and
         # moving next high z-order app to front (residentApp if its active)
         post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.unified_player_app_id)
         if post_requisite_status == "SUCCESS":
