@@ -123,6 +123,7 @@ supported = tdkTestObj.getResultDetails();
 if supported == "no":
     print("4x is not supported by the device as set in config file\n");
     obj.setAsNotApplicable();
+    tdkTestObj.setResultStatus("N/A")
 
 if "SUCCESS" in result.upper() and supported != "no":
     
