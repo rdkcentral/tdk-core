@@ -3183,6 +3183,35 @@ def postExecutionCleanup():
 
 ######### End of Function ##########
 
+def wifiConnectBssid(ssidName,ssidPwd,bssid,securityType):
+# wifiConnectBssid
+# Syntax      : wifiConnectBssid()
+# Description : Function to connect to the WIFI SSID from the WLAN client with bssid to force to respective radio.
+# Parameters  : ssidName - SSID Name
+#               ssidPwd - SSID password
+#               bssid  - BSSID of respective radio
+#               securityType - Protected/Open security mode
+# Return Value: SUCCESS/FAILURE
+
+    try:
+        if wlan_os_type == "UBUNTU":
+            if securityType == "Protected":
+                command="sudo sh %s wifi_ssid_bssid_connect %s %s %s" %(wlan_script,ssidName,bssid,ssidPwd)
+            else:
+                command="sudo sh %s wifi_ssid_connect_openSecurity %s" %(wlan_script,ssidName)
+            status = executeCommand(command)
+        else:
+            status = "Only UBUNTU platform supported!!!"
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("WIFI connect status:%s" %status);
+    return status;
+
+########## End of Function ##########
+
+
 def wlanConnectWifiSsidBssid(ssidName,ssidPwd,bssid,wlanInterface,securityType= "Protected"):
 
 # wlanConnectWifiSsidBssid
@@ -3205,7 +3234,7 @@ def wlanConnectWifiSsidBssid(ssidName,ssidPwd,bssid,wlanInterface,securityType= 
             status = checkSsidAvailable(ssidName)
             if ssidName in status:
                 status = wifiConnectBssid(ssidName,ssidPwd,bssid,securityType)
-                if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status or wlan_2ghz_public_ssid_connect_status in status or wlan_5ghz_public_ssid_connect_status in status or wlan_6ghz_public_ssid_connect_status:
+                if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status:
                     sleep(60);
                     status = getConnectedSsidName(wlanInterface)
                     if ssidName in status:
@@ -3221,13 +3250,13 @@ def wlanConnectWifiSsidBssid(ssidName,ssidPwd,bssid,wlanInterface,securityType= 
     except Exception as e:
         print(e);
         return e;
-########## End of Function ##########
 
-def getWlanMACAddress_SSH(wlanInterface):
 
-# getWlanMACAddress_SSH
+def connectWlanGetMACAddress(wlanInterface):
 
-# Syntax      : getWlanMACAddress_SSH(wlanInterface)
+# connectWlanGetMACAddress
+
+# Syntax      : connectWlanGetMACAddress(wlanInterface)
 # Description : Function to get the MAC address of the wlan client on the given interface via SSH
 # Parameters  : wlanInterface - wlan interface name
 # Return Value: status - MAC Address of the WLAN client
