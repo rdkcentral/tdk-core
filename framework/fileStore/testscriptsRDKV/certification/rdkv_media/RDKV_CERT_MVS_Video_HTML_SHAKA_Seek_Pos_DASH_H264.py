@@ -43,8 +43,7 @@ if expectedResult in result.upper():
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     setWebKitSocketPort(webinspect_port_html)
-    # Setting the pre-requisites for media test. Launching the webkit instance via RDKShell and
-    # moving it to the front, Opening a socket connection to the webkit inspect page and
+    # Setting the pre-requisites for media test. Launching the required test app via AppManager and
     # getting the details for proc validation from config file
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.html_player_app_id,MediaValidationVariables.html_player_app_download_url)
     if pre_requisite_status == "SUCCESS":
@@ -78,7 +77,7 @@ if expectedResult in result.upper():
         #http://*testManagerIP*/tdkservice/fileStore/lightning-apps/UnifiedMediaHTMLPlayer.html?
         #url=<video_dash_h264_url>&operations=seekpos(30:120),seekpos(30:80),close(30)
 
-        # Setting the video test url in webkit instance using RDKShell
+        # Setting the video test url in PersistentStore and launching the test app using AppManager
         setPS_value(video_test_url)
         launch_status = launchApp(obj,MediaValidationVariables.html_player_app_id)
         if "SUCCESS" in launch_status:
@@ -106,8 +105,7 @@ if expectedResult in result.upper():
         print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
-        # Setting the post-requisites for media test.Removing app url from webkit instance and
-        # moving next high z-order app to front (residentApp if its active)
+        # Setting the post-requisites for media test. Terminating the bolt app.
         post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.html_player_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")

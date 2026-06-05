@@ -58,7 +58,7 @@ if expectedresult in result.upper():
         tdkTestObj = obj.createTestStep('copy_file')
         tdkTestObj.addParameter("qpa_folder_path", qpa_folder_path)
         tdkTestObj.addParameter("qpa_file_name", qpa_file_name)
-        tdkTestObj.addParameter("result_dir", result_dir)
+        tdkTestObj.addParameter("result_dir",obj.realpath)
         tdkTestObj.executeTestCase(expectedresult)
         result = tdkTestObj.getResultDetails()
         print ("Copy File Function Execution : %s" %result)
@@ -69,7 +69,7 @@ if expectedresult in result.upper():
 
             # Excel Report Generation
             tdkTestObj = obj.createTestStep('report_generation')
-            tdkTestObj.addParameter("result_dir", result_dir)
+            tdkTestObj.addParameter("result_dir",obj.realpath)
             tdkTestObj.executeTestCase(expectedresult)
             result = tdkTestObj.getResultDetails()
             print ("Excel Report Generation : %s" %result)

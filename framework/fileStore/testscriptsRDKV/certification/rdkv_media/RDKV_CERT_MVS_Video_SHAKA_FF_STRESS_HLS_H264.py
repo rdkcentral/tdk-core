@@ -114,8 +114,7 @@ if expectedResult in result.upper():
     print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
-    # Setting the pre-requites for media test. Launching the webkit instance via RDKShell and
-    # moving it to the front, opening a socket connection to the webkit inspect page and
+    # Setting the pre-requisites for media test. Launching the required test app via AppManager and
     # getting the details for proc validation from config file
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,MediaValidationVariables.unified_player_app_id,MediaValidationVariables.unified_player_app_download_url)
     if pre_requisite_status == "SUCCESS":
@@ -151,7 +150,7 @@ if expectedResult in result.upper():
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<video_hls_h264_url>.m3u8&operations=fastfwd(10),repeat(3),playnow(10),repeat(1),fastfwd(10),repeat(3),playnow(10)&options=checkInterval(5),loop&autotest=true
 
-        # Setting the video test url in webkit instance using RDKShell
+        # Setting the video test url in PersistentStore and launching the test app using AppManager
         setPS_value(video_test_url)
         launch_status = launchApp(obj,MediaValidationVariables.unified_player_app_id)
         if "SUCCESS" in launch_status:
@@ -179,8 +178,7 @@ if expectedResult in result.upper():
         print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
-        # Setting the post-requites for media test.Removing app url from webkit instance and
-        # moving next high z-order app to front (residentApp if its active)
+        # Setting the post-requisites for media test. Terminating the bolt app.
         post_requisite_status = setMediaTestPostRequisites(MediaValidationVariables.unified_player_app_id)
         if post_requisite_status == "SUCCESS":
             print("Post conditions for the test are set successfully\n")

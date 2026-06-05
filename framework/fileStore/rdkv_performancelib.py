@@ -80,6 +80,44 @@ def init_module(libobj,port,deviceInfo):
         print("\nException Occurred while getting MAC \n")
         print(e)
 
+#-------------------------------------------------------------------
+#GET THE WEBINSPECT PORT FROM THE DEVICE LOG VIA SSH
+#-------------------------------------------------------------------
+def get_webinspect_port():
+    try:
+        # Get SSH parameters from configuration file
+        ssh_params = rdkservice_getSSHParams(libObj.realpath, deviceIP)
+        if ssh_params == "" or ssh_params == "{}":
+            raise Exception("Failed to get SSH parameters from configuration")
+        
+        ssh_params_dict = json.loads(ssh_params)
+        ssh_method = ssh_params_dict.get("ssh_method")
+        credentials = ssh_params_dict.get("credentials")
+        
+        if not ssh_method or not credentials:
+            raise Exception("SSH method or credentials not found in configuration")
+        
+        # Execute command on DUT to get inspector port from dacapp.log
+        cmd = "cat /opt/logs/dacapp.log | grep 'inspector port set to'"
+        output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+        
+        if output == "EXCEPTION" or output == "":
+            raise Exception("Failed to retrieve log output from DUT")
+        
+        # Parse the port number from output
+        for line in output.splitlines():
+            match = re.search(r'inspector port set to\s+(\d+)', line, re.IGNORECASE)
+            if match:
+                return match.group(1)
+        
+        # If no port found in output
+        raise Exception("Inspector port not found in dacapp.log output")
+                
+    except Exception as e:
+        print("Unable to get webinspect port from dacapp.log:", e)
+        raise
+
+
 #---------------------------------------------------------------
 #POST CURL REQUEST USING PYTHON REQUESTS
 #---------------------------------------------------------------
@@ -343,7 +381,34 @@ def rdkservice_getBrowserScore_CSS3():
     try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.css3_test_subcategory_list
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -386,7 +451,33 @@ def rdkservice_getBrowserScore_Octane():
     try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.octane_test_subcategory_list
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -478,8 +569,32 @@ def rdkservice_getBrowserScore_HTML5():
     try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.html5_test_subcategory_list
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
-        print("url:",webinspectURL)
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -524,7 +639,32 @@ def rdkservice_getBrowserScore_SunSpider():
         browser_score = ''
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.sunspider_test_subcategory_list
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(60)
@@ -1100,7 +1240,33 @@ def rdkservice_getBrowserScore_AnimationBenchmark():
     fps_list = []
     try:
         browser_score_dict = {}
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(20)
@@ -1157,7 +1323,33 @@ def get_graphical_plugins(conf_file):
 def rdkservice_getBrowserScore_Speedometer():
     try:
         browser_score_dict = {}
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1183,7 +1375,33 @@ def rdkservice_getBrowserScore_Speedometer():
 def rdkservice_getBrowserScore_MotionMark():
     try:
         browser_score_dict = {}
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1216,7 +1434,33 @@ def rdkservice_getBrowserScore_MotionMark():
 def rdkservice_getBrowserScore_Smashcat():
     try:
         browser_score_dict = {}
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
+
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1256,7 +1500,32 @@ def rdkservice_getBrowserScore_Smashcat():
 def rdkservice_getBrowserScore_Kraken():
     try:
         browser_score_dict = {}
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
+        # Get webinspect port with error handling
+        try:
+            webinspect_port = get_webinspect_port()
+            print("\nWebinspect port retrieved: ", webinspect_port)
+        except Exception as e:
+            print("\nFailed to retrieve webinspect port:", e)
+            browser_score_dict["main_score"] = "Unable to get the browser score"
+            browser_score_dict = json.dumps(browser_score_dict)
+            return browser_score_dict
+        
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
+        print("\nWebinspect URL:", webinspectURL)
+        
+        # Test basic connectivity before opening browser
+        try:
+            print("\nTesting connection to webinspect server...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((deviceIP, int(webinspect_port)))
+            sock.close()
+            if result == 0:
+                print("Connection to webinspect server successful")
+            else:
+                print("Connection to webinspect server failed (code: %d)" % result)
+        except Exception as e:
+            print("Connection test error:", e)
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1836,6 +2105,22 @@ def rdkservice_install_app(fileLocator, app_id):
     print(params)
     result = rdkservice_setValue("org.rdk.PackageManagerRDKEMS.install",params)
     return result
+#---------------------------------------------------------------
+#UNINSTALL APP
+#---------------------------------------------------------------
+def rdkservice_uninstall_app(app_id):
+    params = '{ "packageId": "' +app_id+ '" }'
+    print(params)
+    result = rdkservice_setValue("org.rdk.PackageManagerRDKEMS.uninstall",params)
+    return result
+#---------------------------------------------------------------
+#CLOSE APP
+#---------------------------------------------------------------
+def rdkservice_close_app(app_id):
+    params = '{ "appId": "' +app_id+ '" }'
+    print(params)
+    result = rdkservice_setValue("org.rdk.AppManager.closeApp",params)
+    return result
 
 #---------------------------------------------------------------
 #LAUNCH INSTALLED APP
@@ -1951,6 +2236,7 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
 
         if status == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
+            time.sleep(10)
             print(f"\nCheck if {app_name} is launched")
             app_ids = rdkservice_get_loaded_apps()
             if app_name in app_ids:
@@ -1980,3 +2266,62 @@ def setPS_value(video_test_url):
     except Exception as e:
         print("Failed to set the PersistentStore value: ", e)
         return None
+
+#-----------------------------------------------------------------------------------------
+#TO PRESS KEYS IN UI USING APP MANAGER 
+#-----------------------------------------------------------------------------------------
+def browsertest_keypress(obj,app_name,keys):
+   
+    key_navigate = keys
+    result="FAILURE"
+    param='['
+    index=0
+    expectedResult= "SUCCESS"
+    print(f"Getting the app instance id of {app_name}")
+    tdkTestObj = obj.createTestStep('rdkservice_getValue')
+    tdkTestObj.addParameter("method","org.rdk.AppManager.getLoadedApps")
+    tdkTestObj.executeTestCase(expectedResult)
+    result = tdkTestObj.getResultDetails()
+    status = tdkTestObj.getResult()
+    if status == expectedResult and app_name in result:
+        appinstanceid=""
+        result = ast.literal_eval(result)
+        for item in result:
+            if isinstance(item, dict) and item.get("appId") == app_name:
+                appinstanceid = item.get("appInstanceId")
+        if appinstanceid != "":
+            print("####App instance id of the launched app is: ", appinstanceid)
+            for key in key_navigate:
+                if ":" in key:
+                    param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": ['+ key.split(":")[0] +'],\\"delay\\":0.1}'
+                else:
+                    param = param + '{\\"keyCode\\": ' + key + ',\\"modifiers\\": [],\\"delay\\":0.1}'
+                if index != (len(key_navigate)-1):
+                    param = param + ','
+                else:
+                    param = param + ']'
+                index +=1
+
+            params = '{"client":' + appinstanceid + ',"keys":"{\\"keys\\":'+ param + '}"'
+
+
+            tdkTestObj = obj.createTestStep('rdkservice_setValue')
+            tdkTestObj.addParameter("method","org.rdk.RDKWindowManager.generateKey")
+            tdkTestObj.addParameter("value",params)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
+            if expectedResult in result:
+                tdkTestObj.setResultStatus("SUCCESS")
+                print("SUCCESS: Navigated through UI and started the test")
+                result = "SUCCESS"
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
+                print("FAILURE : Failed to start the test by navigating through UI")
+        else:
+            print("Failed to get appinstanceId")
+            tdkTestObj.setResultStatus("FAILURE")
+    else:
+        print("Failed to get the loaded apps")
+        tdkTestObj.setResultStatus("FAILURE")
+    return result  
+    
