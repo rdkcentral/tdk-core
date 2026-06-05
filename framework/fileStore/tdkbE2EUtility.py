@@ -25,6 +25,7 @@
 #------------------------------------------------------------------------------
 import os
 import sys
+import time
 import pexpect
 from pexpect import pxssh
 import configparser
@@ -35,6 +36,7 @@ import webpaUtility;
 from webpaUtility import *
 import subprocess
 from time import gmtime, strftime
+from tdkutility import *
 
 #Global variable to check whether login session is active
 isSessionActive = False
@@ -166,6 +168,24 @@ def parseDeviceConfig(obj):
 
         global wlan_6ghz_public_ssid_disconnect_status
         wlan_6ghz_public_ssid_disconnect_status = config.get(deviceConfig, "WLAN_6GHZ_PUBLIC_SSID_DISCONNECT_STATUS")
+
+        global wlan2_ip
+        wlan2_ip = config.get(deviceConfig, 'SECOND_WLAN_IP')
+
+        global wlan2_username
+        wlan2_username = config.get(deviceConfig, "SECOND_WLAN_USERNAME")
+
+        global wlan2_password
+        wlan2_password = config.get(deviceConfig, "SECOND_WLAN_PASSWORD")
+
+        global wlan2_2ghz_interface
+        wlan2_2ghz_interface = config.get(deviceConfig, "SECOND_WLAN_2GHZ_INTERFACE")
+
+        global wlan2_5ghz_interface
+        wlan2_5ghz_interface = config.get(deviceConfig, "SECOND_WLAN_5GHZ_INTERFACE")
+
+        global wlan2_6ghz_interface
+        wlan2_6ghz_interface = config.get(deviceConfig, "SECOND_WLAN_6GHZ_INTERFACE")
 
         global lan_os_type
         lan_os_type = config.get(deviceConfig, 'LAN_OS_TYPE')
@@ -594,6 +614,15 @@ def parseDeviceConfig(obj):
         global tftpfile
         tftpfile = config.get(deviceConfig, "PT_TFTPFILE")
 
+        global second_wlan_ip
+        second_wlan_ip = config.get(deviceConfig, "SECOND_WLAN_IP")
+
+        global second_wlan_username
+        second_wlan_username = config.get(deviceConfig, "SECOND_WLAN_USERNAME")
+
+        global second_wlan_password
+        second_wlan_password = config.get(deviceConfig, "SECOND_WLAN_PASSWORD")
+
     except Exception as e:
         print(e);
         status = "Failed to parse the device specific configuration file"
@@ -658,6 +687,8 @@ def clientConnect(clientType):
             isSessionActive = session.login(lan_ip,lan_username,lan_password)
         elif clientType == "WAN":
             isSessionActive = session.login(wan_ip,wan_username,wan_password)
+        elif clientType == "WLAN_2":
+            isSessionActive = session.login(second_wlan_ip,second_wlan_username,second_wlan_password)
         else:
             status = "Invalid client type"
     except Exception as e:
@@ -780,17 +811,18 @@ def getConnectedSsidName(wlanInterface):
 ########## End of Function ##########
 
 
-def wifiDisconnect(wlanInterface):
+def wifiDisconnect(wlanInterface, clientType = "WLAN"):
 
 # wifiDisconnect
 
-# Syntax      : OBJ.wifiDisconnect()
+# Syntax      : OBJ.wifiDisconnect(wlanInterface, clientType)
 # Description : Function to disconnect the WLAN from the WIFI SSID
 # Parameters  : wlanInterface - wlan interface name
+#               clientType: WLAN/LAN/WAN/WLAN_2
 # Return Value: SUCCESS/FAILURE
 
     try:
-        status = clientConnect("WLAN")
+        status = clientConnect(clientType)
         if status == "SUCCESS":
             if wlan_os_type == "UBUNTU":
                 status = getConnectedSsidName(wlanInterface)
@@ -814,7 +846,7 @@ def wifiDisconnect(wlanInterface):
 ######### End of Function ##########
 
 
-def wlanConnectWifiSsid(ssidName,ssidPwd,wlanInterface,securityType= "Protected"):
+def wlanConnectWifiSsid(ssidName,ssidPwd,wlanInterface,securityType= "Protected",clientType = "WLAN"):
 
 # wlanConnectWifiSsid
 
@@ -824,10 +856,11 @@ def wlanConnectWifiSsid(ssidName,ssidPwd,wlanInterface,securityType= "Protected"
 #               ssidPwd - SSID password
 #               wlanInterface - wlan interface name
 #               securityType - Protected/Open security mode
+#               clientType: WLAN/LAN/WAN/WLAN_2
 # Return Value: SUCCESS/FAILURE
 
     try:
-        status = clientConnect("WLAN")
+        status = clientConnect(clientType)
         if status == "SUCCESS":
             command="sudo sh %s refresh_wifi_network" %(wlan_script)
             executeCommand(command)
@@ -1332,7 +1365,7 @@ def getParameterValue(obj,param):
 # Parameters  : obj - module object
 #             : param - TR-181 parameter name
 # Return Value: SUCCESS/FAILURE
-
+    value = ""
     if setup_type == "TDK":
         expectedresult="SUCCESS";
 
@@ -2119,6 +2152,8 @@ def initServer(destination,dest_ip,connectivityType):
                     command="sudo sh %s tcp_init_server %s %s" %(dest_script_name,tmp_file_lan,dest_ip)
             elif connectivityType == "UDP":
                 command="sudo sh %s udp_init_server %s" %(dest_script_name,dest_ip)
+            elif connectivityType == "UDP_iperf3":
+                command="sudo sh %s udp_iperf3_init_server %s" %(dest_script_name,dest_ip)
             status = executeCommand(command)
         else:
             status = "Failed to connect to client"
@@ -2556,7 +2591,6 @@ def triggerPort(dest_ip, trigger_port, trigger_protocol, source="LAN"):
 
     print("Status of triggerPort:%s" %status);
     return status;
-
 ########## End of Function ##########
 
 def PTinitServer(serverType, serverBindAddr, serverPort, protocol, logFile, source, serverMsg="None"):
@@ -3166,19 +3200,418 @@ def DeletePTRule(obj1, instance, step):
 
 ########## End of Function ##########
 
-def postExecutionCleanup():
+def postExecutionCleanup(clientType="WLAN"):
 
 # postExecutionCleanup
 
-# Syntax      : postExecutionCleanup()
+# Syntax      : postExecutionCleanup(clientType)
 # Description : Function to perform any post execution cleanup
-# Parameters  : None
+# Parameters  : clientType - type of client (WLAN/LAN/WAN/WLAN_2)
 # Return Value: None
 
-    wifiDisconnect(wlan_2ghz_interface);
-    wifiDisconnect(wlan_5ghz_interface);
-    wifiDisconnect(wlan_6ghz_interface);
+    wifiDisconnect(wlan_2ghz_interface, clientType);
+    wifiDisconnect(wlan_5ghz_interface, clientType);
+    wifiDisconnect(wlan_6ghz_interface, clientType);
     deleteSavedWifiConnections();
     clientDisconnect();
 
 ######### End of Function ##########
+
+
+# downlinkUDPThroughputTest
+
+# Description: Function to perform the downlink UDP throughput test with port triggering
+# Syntax: downlinkUDPThroughputTest(obj, step, server_ip, duration, bitrate, iter_count, logFile, client2_status, client2_interface, client2_ssid = "", client2_password = "")
+# Parameters: obj - module object,
+#             step - current test step count,
+#             server_ip - IP address of the server to which client needs to connect,
+#             duration - duration for UDP throughput test,
+#             bitrate - bitrate for UDP throughput test,
+#             iter_count - number of iterations for which test needs to be executed,
+#             logFile - log file to which the output of iperf client command is redirected,
+#             client2_status - connection status of second wlan client to the DUT,
+#             client2_interface - wlan interface via which second client is connected to the DUT,
+#             client2_ssid - SSID of the wifi network to which second client is connected,
+#             client2_password - password of the wifi network to which second client is connected
+# Return Value: downlink_flag - whether downlink UDP throughput test with port triggering is successful,
+#               step - updated test step count after execution
+
+def downlinkUDPThroughputTest(obj, step, server_ip, duration, bitrate, iter_count, logFile, client2_status, client2_interface, client2_ssid = "", client2_password = ""):
+    #Start the iperf server in the first wlan client
+    expectedresult = "SUCCESS"
+    serverStatus = ""
+    downlink_flag = False
+    print(f"\nTEST STEP {step}: Start the IPERF server in the first wlan client")
+    print(f"EXPECTED RESULT {step}: The IPERF server should be started successfully in the first wlan client")
+    serverStatus = initServer("WLAN", server_ip, connectivityType="UDP_iperf3")
+    print(f"Server status: {serverStatus}")
+    if serverStatus == "SUCCESS":
+        print(f"ACTUAL RESULT {step}: IPERF server started successfully in the first wlan client")
+        print(f"TEST EXECUTION RESULT: SUCCESS")
+
+        downlink_status = []
+        for i in range(iter_count):
+            print(f"**********************Attempt {i+1}*****************************")
+            # Connect the iperf client [DUT] to the server and start the throughput test
+            step += 1
+            clientStatus = ""
+            print(f"\nConnecting the IPERF client in DUT to the server and starting the UDP throughput test for iteration {i+1}")
+            tdkTestObj, clientStatus = iperf3ClientConnect(obj, server_ip, bitrate, duration, logFile, step)
+            if clientStatus:
+                print(f"The IPERF client in DUT connected to server and UDP throughput test started successfully for iteration {i+1}\n")
+                #Wait for 5 minutes
+                # time.sleep(300)
+                time.sleep(10)
+
+                #Toggle the wlan client 2 connection status to the DUT
+                step += 1
+                print(f"\nTEST STEP {step}: Toggle the connection status of second wlan client to the DUT.")
+                print(f"EXPECTED RESULT {step}: The connection status of second wlan client should be toggled successfully")
+                print(f"Current Client Connection Status : {client2_status}")
+                if client2_status == "CONNECTED":
+                    status = wlanDisconnectWifiSsid(client2_interface)
+                    if status == "SUCCESS":
+                        client2_status = "DISCONNECTED"
+                    print(f"ACTUAL RESULT {step}: Second wlan client disconnected successfully")
+                elif client2_status == "DISCONNECTED":
+                    status = wlanConnectWifiSsid(client2_ssid, client2_password, client2_interface)
+                    if status == "SUCCESS":
+                        client2_status = "CONNECTED"
+                    print(f"ACTUAL RESULT {step}: Second wlan client connected successfully")
+
+                #Wait for 10 more minutes
+                # time.sleep(600)
+                time.sleep(15)
+
+                step += 1
+                # Get the packet loss ratio and packet loss percentage for both sender and receiver from the log file and validate whether the loss percentage is less than 0.01%
+                print(f"Getting the packet loss ratio and packet loss percentage for both sender and receiver from the log file for iteration {i+1}")
+                tdkTestObj, metrics = getPacketLossMetricsFromLog(obj, logFile, step)
+                if metrics:
+                    print(f"Successfully retrieved the packet loss metrics from the log file for iteration {i+1}")
+                    step += 1
+                    #Validate whether the packet loss percentage for both sender and receiver is less than 0.01%
+                    print(f"Validating the packet loss percentage for both sender and receiver for iteration {i+1}")
+                    tdkTestObj, validation_flag = validateUDPThroughputTest(tdkTestObj, 0.01, metrics, step)
+                    if validation_flag:
+                        print(f"Validation successful for iteration {i+1}")
+                        downlink_status.append("SUCCESS")
+                    else:
+                        downlink_status.append("FAILURE")
+                        print(f"Validation failed for iteration {i+1}")
+                #Remove the Server Log File
+                step += 1
+                removeServerLogFile(obj, logFile, step)
+            else:
+                print(f"The IPERF client in DUT failed to connect to server and start UDP throughput test for iteration {i+1}\n")
+                downlink_status.append("FAILURE")
+            sleep(5)
+        if "FAILURE" not in downlink_status:
+            downlink_flag = True
+
+        #Kill the iperf server
+        step += 1
+        print(f"\nTEST STEP {step}: Kill the IPERF server in the first wlan client")
+        print(f"EXPECTED RESULT {step}: The IPERF server in the first wlan client should be killed successfully")
+        kill_status = iperf3Sever_kill("WLAN", wlan_script)
+        if kill_status == "SUCCESS":
+            tdkTestObj.setResultStatus("SUCCESS")
+            print(f"ACTUAL RESULT {step}: IPERF server in the first wlan client killed successfully")
+            print(f"TEST EXECUTION RESULT: SUCCESS")
+        else:
+            tdkTestObj.setResultStatus("FAILURE")
+            print(f"ACTUAL RESULT {step}: Failed to kill the IPERF server in the first wlan client")
+            print(f"TEST EXECUTION RESULT: FAILURE")
+    else:
+        print(f"ACTUAL RESULT {step}: Failed to start IPERF server in the first wlan client")
+        print(f"TEST EXECUTION RESULT: FAILURE")
+    return downlink_flag, step
+######## End of Function ######
+
+# iperf3ClientConnect
+
+# Syntax      : iperf3ClientConnect(obj, dest_ip, bitrate, duration, logFile, step)
+# Description : Function to connect the iperf client in DUT to the server and start the UDP throughput test
+# Parameters  : obj - module object
+#             : dest_ip - IP address of the server to which client needs to connect
+#             : bitrate - bitrate for UDP throughput test
+#             : duration - duration for UDP throughput test
+#             : logFile - log file to which the output of iperf client command is redirected
+#             : step - current test step count
+# Return Value: tdkTestObj - test object
+#             : init_flag - whether iperf client connected and test started successfully or not
+
+def iperf3ClientConnect(obj, dest_ip, bitrate, duration, logFile, step):
+    expectedresult = "SUCCESS"
+    init_flag = 0
+    print(f"\nTEST STEP {step}: Connect the IPERF client in DUT to the server and start the UDP throughput test for duration {duration} seconds with bitrate {bitrate}")
+    print(f"EXPECTED RESULT {step}: The IPERF client in DUT should connect to the server and UDP throughput test should start successfully")
+    command = f"iperf3 -c {dest_ip} -u -b {bitrate} -R -t {duration} --omit 2 > {logFile} 2>&1"
+    print(f"Command : {command}")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    print(f"Command Output: {details}")
+    if expectedresult in actualresult:
+        init_flag = 1
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"ACTUAL RESULT {step}: IPERF client in DUT connected to server and UDP throughput test started successfully")
+        print(f"TEST EXECUTION RESULT: SUCCESS")
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"ACTUAL RESULT {step}: Failed to start IPERF client in DUT and start UDP throughput test")
+        print(f"TEST EXECUTION RESULT: FAILURE")
+    return tdkTestObj,init_flag
+######## End of Function ######
+
+# getPacketLossMetricsFromLog
+
+# Syntax      : getPacketLossMetricsFromLog(obj, client_logFile, step)
+# Description : Function to get the packet loss ratio and packet loss percentage for both sender and receiver from the log file
+# Parameters  : obj - module object,
+#             : client_logFile - log file to which the output of iperf client command is redirected,
+#             : step - current test step count
+# Return Value: tdkTestObj - test object,
+#               metrics - dictionary containing packet loss ratio and packet loss percentage for both sender and receiver
+def getPacketLossMetricsFromLog(obj, client_logFile, step):
+    expectedresult = "SUCCESS"
+    metrics = {}
+    # Get the packet los ratio and packet loss percentage for both sender and receiver from the log file
+    print(f"\nTEST STEP {step}: Get the packet loss ratio and packet loss percentage for both sender and receiver from the log file")
+    print(f"EXPECTED RESULT {step}: Should get the packet loss ratio and packet loss percentage for both sender and receiver from the log file successfully")
+    command = f"""awk '/sender/{{
+        sender_ratio=$(NF-2);
+        split($(NF-1),b,"[()%]");
+        sender_pct=b[2]
+    }}
+    /receiver/{{
+        receiver_ratio=$(NF-2);
+        split($(NF-1),b,"[()%]");
+        receiver_pct=b[2]
+    }}
+    END{{
+        printf "sender_packetloss_ratio=%s ,sender_losspercentage=%s ,receiver_packetloss_ratio=%s ,receiver_losspercentage=%s\\n",
+        sender_ratio, sender_pct, receiver_ratio, receiver_pct
+    }}' {client_logFile}"""
+
+    print(f"Command : {command}")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    print(f"Command Output: {details}")
+    if "No such file or directory" in details:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"ACTUAL RESULT {step}: Log file not found")
+    elif expectedresult in actualresult and details != "":
+        tdkTestObj.setResultStatus("SUCCESS")
+        try:
+            metrics = dict(item.strip().split("=") for item in details.strip().split(" ,"))
+        except Exception as e:
+            print(f"Error while parsing metrics from log output: {e}")
+            metrics = {}
+
+        print(f"ACTUAL RESULT {step}: Retrieved packet loss ratio and packet loss percentage for both sender and receiver from the log file successfully")
+        print(f"TEST EXECUTION RESULT: SUCCESS")
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"ACTUAL RESULT {step}: Failed to retrieve packet loss ratio and packet loss percentage for both sender and receiver from the log file")
+        print(f"TEST EXECUTION RESULT: FAILURE")
+    return tdkTestObj, metrics
+######## End of Function ######
+
+# validateUDPThroughputTest
+
+# Syntax      : validateUDPThroughputTest(tdkTestObj, max_loss_percent, metrics, step)
+# Description : Function to validate whether the packet loss percentage for both sender and receiver is less than a specified value
+# Parameters  : tdkTestObj - test object,
+#             : max_loss_percent - maximum acceptable packet loss percentage,
+#             : metrics - dictionary containing packet loss ratio and packet loss percentage for both sender and receiver,
+#             : step - current test step count
+# Return Value: tdkTestObj - test object,
+#               validation_flag - whether the packet loss percentage for both sender and receiver is less than the
+
+def validateUDPThroughputTest(tdkTestObj, max_loss_percent, metrics, step):
+    validation_flag = 0
+    step += 1
+    print(f"\nTEST STEP {step}: Validate whether the packet loss percentage for both sender and receiver is less than {max_loss_percent}%")
+    print(f"EXPECTED RESULT {step}: The packet loss percentage for both sender and receiver should be less than {max_loss_percent}%")
+    try:
+        sender_loss = float(metrics.get("sender_losspercentage"))
+        receiver_loss = float(metrics.get("receiver_losspercentage"))
+        if sender_loss < max_loss_percent and receiver_loss < max_loss_percent:
+            tdkTestObj.setResultStatus("SUCCESS")
+            validation_flag = 1
+            print(f"ACTUAL RESULT {step}: UDP throughput test successful with packet loss percentage less than {max_loss_percent}% for both sender and receiver")
+            print(f"TEST EXECUTION RESULT: SUCCESS")
+        else:
+            tdkTestObj.setResultStatus("FAILURE")
+            print(f"ACTUAL RESULT {step}: UDP throughput test failed with packet loss percentage greater than {max_loss_percent}% for either sender or receiver")
+            print(f"TEST EXECUTION RESULT: FAILURE")
+    except (ValueError, TypeError) as e:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"ACTUAL RESULT {step}: Failed to validate UDP throughput test due to invalid packet loss percentage value")
+        print(f"TEST EXECUTION RESULT: FAILURE")
+    return tdkTestObj, validation_flag
+######## End of Function ######
+
+#setOperatingStandard
+
+# Syntax      : setOperatingStandard(obj, ssidName, wifi_band, operating_standard, step, revert_flag)
+# Description : Function to set the operating standard of the wifi radio based on the wifi band and validate the set operation
+# Parameters  : obj - module object,
+#             : ssidName - SSID name to which the client is connected,
+#             : wifi_band - wifi band (2.4GHz/5GHz/6GHz) for which the operating standard needs to be set,
+#             : operating_standard - operating standard to which the wifi radio needs to be set,
+#             : step - current test step count,
+#             : revert_flag - whether the function is called for reverting the operating standard to initial value
+# Return Value: set_flag - whether setting operating standard and validation is successful,
+#               initial_operating_std - initial operating standard value before setting,
+#               final_operating_std - final operating standard value after setting,
+#               step - updated test step count after execution
+def setOperatingStandard(obj, ssidName, wifi_band, operating_standard, step, revert_flag=False):
+
+    set_flag = False
+    expectedresult = "SUCCESS"
+    initial_operating_std = ""
+    final_operating_std = ""
+
+    if wifi_band == "2.4GHz":
+        param = "Device.WiFi.Radio.1.OperatingStandards"
+    elif wifi_band == "5GHz":
+        param = "Device.WiFi.Radio.2.OperatingStandards"
+    elif wifi_band == "6GHz":
+        param = "Device.WiFi.Radio.3.OperatingStandards"
+    else:
+        param = ''
+
+    print(f"*****Debug: Param {param} and standard {operating_standard}*******")
+    if param == '' or operating_standard == '':
+        print(f"\nInvalid wifi band {wifi_band} or unable to determine operating standard from SSID name {ssidName}")
+
+    else:
+        if revert_flag != True:
+            #Get the initial Operating Standard values
+            value = ""
+            get_flag = False
+            print(f"\nTEST STEP {step}: Get the initial Operating Standard of {wifi_band} radio - {param}")
+            print(f"EXPECTED RESULT {step}: The initial Operating Standard of {wifi_band} radio")
+            tdkTestObj, actualresult, initial_operating_std = getParameterValue(obj, param)
+            if expectedresult in actualresult and initial_operating_std != "":
+                tdkTestObj.setResultStatus("SUCCESS")
+                get_flag = True
+                print(f"ACTUAL RESULT {step}: Initial Operating Standard of {wifi_band} radio is : {initial_operating_std}")
+                print(f"TEST EXECUTION RESULT: SUCCESS")
+            else:
+                print(f"ACTUAL RESULT {step}: Failed to get initial Operating Standard of {wifi_band} radio")
+                tdkTestObj.setResultStatus("FAILURE")
+                print(f"TEST EXECUTION RESULT: FAILURE")
+            step += 1
+        else:
+            initial_operating_std = operating_standard
+
+        #Set the Operating Standard to the one retrieved from the DUT
+        print(f"\nTEST STEP {step}: Set the Operating Standard of {wifi_band} radio to {operating_standard}")
+        print(f"EXPECTED RESULT {step}: Should set the Operating Standard of {wifi_band} radio to {operating_standard} successfully")
+        tdkTestObj, actualresult, details = setParameterValue(obj, param, operating_standard, "string")
+        print(f"*******Debug - details : {details} and actual result {actualresult}********")
+        if expectedresult in actualresult and details != "":
+            tdkTestObj.setResultStatus("SUCCESS")
+            print(f"ACTUAL RESULT {step}: Operating Standard of {wifi_band} radio set to {operating_standard} successfully")
+            print(f"TEST EXECUTION RESULT: SUCCESS")
+
+            step += 1
+            #Validate whether the set value is reflecting in get
+            print(f"\nTEST STEP {step}: Get the Operating Standard of {wifi_band} radio and check if it is {operating_standard}")
+            print(f"EXPECTED RESULT {step}: The Operating Standard of {wifi_band} radio should be {operating_standard}")
+            tdkTestObj, actualresult, final_operating_std = getParameterValue(obj, param)
+            if expectedresult in actualresult and final_operating_std == operating_standard:
+                set_flag = True
+                print(f"ACTUAL RESULT {step}: Operating Standard of {wifi_band} radio is {final_operating_std} as expected")
+                tdkTestObj.setResultStatus("SUCCESS")
+                print(f"TEST EXECUTION RESULT: SUCCESS")
+            else:
+                print(f"ACTUAL RESULT {step}: Operating Standard of {wifi_band} radio is {final_operating_std}. Expected value is {operating_standard}")
+                tdkTestObj.setResultStatus("FAILURE")
+                print(f"TEST EXECUTION RESULT: FAILURE")
+        else:
+            print(f"ACTUAL RESULT {step}: Failed to set Operating Standard of {wifi_band} radio to {operating_standard}")
+            tdkTestObj.setResultStatus("FAILURE")
+            print(f"TEST EXECUTION RESULT: FAILURE")
+
+
+    return set_flag, initial_operating_std, final_operating_std, step
+########## End of Function ##########
+
+# setParameterValue
+
+# Syntax      : setParameterValue(obj, param, value, param_type)
+# Description : Function to set the parameter value using tdkb_e2e_Set test step
+# Parameters  : obj - tdkb_e2e object
+#            : param - parameter name which needs to be set
+#           : value - value to which the parameter needs to be set
+#          : param_type - type of the parameter which needs to be set
+# Return Value: tdkTestObj - test object
+#            : actualresult - whether setting parameter value is SUCCESS/FAILURE
+#          : details - details of setting parameter value
+
+def setParameterValue(obj, param, value, param_type):
+    tdkTestObj = obj.createTestStep("tdkb_e2e_Set")
+    tdkTestObj.addParameter("paramName",param)
+    tdkTestObj.addParameter("paramValue",value)
+    tdkTestObj.addParameter("paramType",param_type)
+    tdkTestObj.executeTestCase("SUCCESS")
+    actualresult = tdkTestObj.getResult()
+    details = tdkTestObj.getResultDetails()
+    return tdkTestObj, actualresult, details
+########### End of Function ##########
+
+#iperf3Sever_kill
+
+# Syntax      : iperf3Sever_kill(clientType, dest_script)
+# Description : Function to kill the iperf server in the client machine
+# Parameters  : clientType - type of client (WLAN/LAN/WAN/WLAN
+#             : dest_script - script in the client machine which has the command to kill the iperf server
+# Return Value: status - whether killing iperf server is SUCCESS/FAILURE
+def iperf3Sever_kill(clientType, dest_script):
+    try:
+        #Post Requisite: Kill iperf pid
+        status_server = clientConnect(clientType)
+        if status_server == "SUCCESS":
+            command=f"sudo sh {dest_script} kill_iperf3"
+            print(f"Command : {command}")
+            status_server = executeCommand(command)
+        if status_server == "SUCCESS":
+            status = "SUCCESS"
+        else:
+            status = "FAILURE"
+    except Exception as e:
+        print(e)
+        status = e
+    print(f"Status of tcp_udpInClients : {status}")
+    return status
+########### End of Function ##########
+
+# removeServerLogFile
+
+# Syntax      : removeServerLogFile(obj, logFile, step)
+# Description : Function to remove the server log file
+# Parameters  : obj - tdkb_e2e object
+#            : logFile - path of the log file to be removed
+#            : step - test step number
+# Return Value: None
+def removeServerLogFile(obj, logFile, step):
+    expectedresult = "SUCCESS"
+    print(f"\nTEST STEP {step}: Remove the server log file {logFile}")
+    print(f"EXPECTED RESULT {step}: Should remove the server log file successfully")
+    command = f"rm -rf {logFile}"
+    print(f"Command : {command}")
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    print(f"Command Output: {details}")
+    if expectedresult in actualresult:
+        tdkTestObj.setResultStatus("SUCCESS")
+        print(f"ACTUAL RESULT {step}: Server log file removed successfully")
+        print(f"TEST EXECUTION RESULT: SUCCESS")
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print(f"ACTUAL RESULT {step}: Failed to remove server log file")
+        print(f"TEST EXECUTION RESULT: FAILURE")
+########### End of Function ##########
