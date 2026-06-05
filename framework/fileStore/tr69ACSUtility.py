@@ -102,7 +102,7 @@ def tr069ACSPreRequisite(obj,sysobj):
                         print("Set the Tr069 ACS configuration values successfully")
                         ConfigStatus = "SUCCESS"
                     else:
-                        tdkTestObj_tr181.setResultStatus("SUCCESS")
+                        tdkTestObj_tr181.setResultStatus("FAILURE")
                         print("Failed to set the Tr069 ACS configuration values")
                 else:
                     tdkTestObj_tr181.setResultStatus("FAILURE")
@@ -450,10 +450,11 @@ def parseTR69ACSResponse(response,parameters,method):
 # Return Value: None
 def revertPrerequisite(obj,initialValues,step):
     step=step+1
-    if len(initialValues) == 3:
+    expectedresult = "SUCCESS"
+    tdkTestObj_tr181 = obj.createTestStep("TDKB_TR181Stub_SetMultiple")
+    if len(initialValues) == 3 and all(v is not None for v in initialValues)::
         print("\nTEST STEP %d : Revert the values of Tr069 Data models Enable CWMP, Device Management server url and Tr69CertLocation modified during prerequisite check" %step)
         print("EXPECTED RESULT %d : The modified values of TR069 Data models should be reverted successfully" %step)
-        tdkTestObj_tr181 = obj.createTestStep("TDKB_TR181Stub_SetMultiple")
         tdkTestObj_tr181.addParameter("paramList","Device.ManagementServer.EnableCWMP|%s|bool|Device.ManagementServer.URL|%s|string|Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation|%s|string" %(initialValues[0],initialValues[1],initialValues[2]))
         tdkTestObj_tr181.executeTestCase(expectedresult)
         actualresult = tdkTestObj_tr181.getResult()
