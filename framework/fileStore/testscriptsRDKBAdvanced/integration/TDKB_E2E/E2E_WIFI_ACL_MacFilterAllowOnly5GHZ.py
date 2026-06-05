@@ -28,52 +28,58 @@ from tdkbE2EUtility import *
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1")
 obj1 = tdklib.TDKScriptingLibrary("advancedconfig","RDKB")
+obj2 = tdklib.TDKScriptingLibrary("wifiagent","1")
 
 #IP and Port of box, No need to change,
 #This will be replaced with correspoing Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'E2E_WIFI_ACL_MacFilterAllowOnly5GHZ_WIFIClient')
-obj1.configureTestCase(ip,port,'E2E_WIFI_ACL_MacFilterAllowOnly5GHZ_WIFIClient')
+obj.configureTestCase(ip,port,'E2E_WIFI_ACL_MacFilterAllowOnly5GHZ')
+obj1.configureTestCase(ip,port,'E2E_WIFI_ACL_MacFilterAllowOnly5GHZ')
+obj2.configureTestCase(ip,port,'E2E_WIFI_ACL_MacFilterAllowOnly5GHZ')
 
 #Get the result of connection with test component
 loadmodulestatus =obj.getLoadModuleResult()
 loadmodulestatus1 =obj1.getLoadModuleResult()
+loadmodulestatus2 =obj2.getLoadModuleResult()
 print(f"[LIB LOAD STATUS]  :  {loadmodulestatus}")
 print(f"[LIB LOAD STATUS]  :  {loadmodulestatus1}")
+print(f"[LIB LOAD STATUS]  :  {loadmodulestatus2}")
 
-if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper():
+
+if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper() and "SUCCESS" in loadmodulestatus2.upper():
     obj.setLoadModuleStatus("SUCCESS")
     obj1.setLoadModuleStatus("SUCCESS")
+    obj2.setLoadModuleStatus("SUCCESS")
     expectedresult = "SUCCESS"
     step = 0
 
-    #Check for ACL test prerequisites
-    tdkTestObj,preRequisiteStatus, step = tdkutility.set_ACLprerequisites_allRadios(obj,step)
-    if "SUCCESS" in preRequisiteStatus:
-        print("\n*******************ACL test prerequisites are SUCCESS************************")
+    # Parse the device configuration file
+    step+=1
+    print(f"\nTEST STEP {step}: Parse the device configuration file.")
+    print(f"EXPECTED RESULT {step}: Device configuration file should be parsed successfully.")
+    status = tdkbE2EUtility.parseDeviceConfig(obj)
+    if expectedresult in status:
+        obj.setLoadModuleStatus("SUCCESS")
+        print(f"ACTUAL RESULT {step}: Parsed the device configuration file successfully.")
+        print("[TEST EXECUTION RESULT] : SUCCESS")
 
-        # Parse the device configuration file
-        step+=1
-        print(f"\nTEST STEP {step}: Parse the device configuration file.")
-        print(f"EXPECTED RESULT {step}: Device configuration file should be parsed successfully.")
-        status = tdkbE2EUtility.parseDeviceConfig(obj)
-        if expectedresult in status:
-            obj.setLoadModuleStatus("SUCCESS")
-            print(f"ACTUAL RESULT {step}: Parsed the device configuration file successfully.")
-            print("[TEST EXECUTION RESULT] : SUCCESS")
+        #Check for ACL test prerequisites
+        tdkTestObj,preRequisiteStatus,ap_indices,orgMacFilterEnables,orgFilterAsBlacklists,step = tdkutility.set_ACLprerequisites_allRadios(obj2,step)
+        if "SUCCESS" in preRequisiteStatus:
+            print("\n*******************ACL test prerequisites are SUCCESS************************")
 
             # Get the MacAddress of wlan client
             step+=1
             print(f"\nTEST STEP {step}: Get MAC address of WLAN client.")
             print(f"EXPECTED RESULT {step}: Should get MAC address of WLAN client.")
-            macAddress = tdkbE2EUtility.getWlanMACAddress_SSH(tdkbE2EUtility.wlan_5ghz_interface)
+            macAddress = tdkbE2EUtility.connectWlanGetMACAddress(tdkbE2EUtility.wlan_5ghz_interface)
             if macAddress and (re.match("^[0-9a-f]{2}([-:])[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", macAddress.lower()) is not None):
                 tdkTestObj.setResultStatus("SUCCESS")
                 print(f"ACTUAL RESULT {step}: MAC address of WLAN client is {macAddress}.")
                 print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                # Adding a new MACFilter rule for 5 GHz
+                # Adding a new MACFilter rule for 5GHz
                 step+=1
                 tdkTestObj = obj1.createTestStep("AdvancedConfig_AddObject")
                 tdkTestObj.addParameter("paramName","Device.WiFi.AccessPoint.%s.X_CISCO_COM_MacFilterTable." %tdkbE2EUtility.ssid_5ghz_index)
@@ -82,7 +88,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                 tdkTestObj.executeTestCase(expectedresult)
                 actualresult = tdkTestObj.getResult()
                 details = tdkTestObj.getResultDetails()
-                if expectedresult in actualresult:
+                if expectedresult in actualresult and details !="":
                     #Set the result status of execution
                     tdkTestObj.setResultStatus("SUCCESS")
                     print(f"ACTUAL RESULT {step}: {details}")
@@ -123,50 +129,46 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                             #Assign the WIFI parameters names to a variable
                             ssidName = "Device.WiFi.SSID.%s.SSID" %tdkbE2EUtility.ssid_5ghz_index
                             keyPassPhrase = "Device.WiFi.AccessPoint.%s.Security.KeyPassphrase" %tdkbE2EUtility.ssid_5ghz_index
-                            radioEnable = "Device.WiFi.Radio.%s.Enable" %tdkbE2EUtility.radio_5ghz_index
-                            securityMode = "Device.WiFi.AccessPoint.%s.Security.ModeEnabled" %tdkbE2EUtility.ssid_5ghz_index
 
                             step+=1
                             #Get the value of the wifi parameters that are currently set.
-                            paramList=[ssidName,keyPassPhrase,securityMode]
-                            print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase and securityMode.")
-                            print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase and securityMode.")
+                            paramList=[ssidName,keyPassPhrase]
+                            print(f"\nTEST STEP {step}: Get the current ssid and keypassphrase.")
+                            print(f"EXPECTED RESULT {step}: Should retrieve the current ssid and keypassphrase.")
                             tdkTestObj,status,orgValue = tdkbE2EUtility.getMultipleParameterValues(obj,paramList)
-                            if expectedresult in status:
+                            if expectedresult in status and orgValue != "":
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                print(f"ACTUAL RESULT {step}: Got the current ssid,keypassphrase and securityMode as {orgValue}.")
+                                print(f"ACTUAL RESULT {step}: Got the current ssid and keypassphrase as {orgValue}.")
                                 print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                                # Set securityMode for 5ghz
-                                setValuesList = [tdkbE2EUtility.ssid_5ghz_name,tdkbE2EUtility.ssid_5ghz_pwd,'WPA2-Personal']
+                                setValuesList = [tdkbE2EUtility.ssid_5ghz_name,tdkbE2EUtility.ssid_5ghz_pwd]
                                 print("\nWIFI parameter values that are set: %s" %setValuesList)
 
                                 list1 = [ssidName,tdkbE2EUtility.ssid_5ghz_name,'string']
                                 list2 = [keyPassPhrase,tdkbE2EUtility.ssid_5ghz_pwd,'string']
-                                list3 = [securityMode,'WPA2-Personal','string']
 
                                 #Concatenate the lists with the elements separated by pipe
-                                setParamList = list1 + list2 + list3
+                                setParamList = list1 + list2
                                 setParamList = "|".join(map(str, setParamList))
 
                                 step+=1
-                                print(f"\nTEST STEP {step}: Set the ssid,keypassphrase and securityMode.")
-                                print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase and securityMode.")
+                                print(f"\nTEST STEP {step}: Set the ssid and keypassphrase.")
+                                print(f"EXPECTED RESULT {step}: Should set the ssid and keypassphrase.")
                                 tdkTestObj,actualresult,details = tdkbE2EUtility.setMultipleParameterValues(obj,setParamList)
-                                if expectedresult in actualresult:
+                                if expectedresult in actualresult and details != "":
                                     tdkTestObj.setResultStatus("SUCCESS")
                                     print(f"ACTUAL RESULT {step}: {details}")
                                     print("[TEST EXECUTION RESULT] : SUCCESS")
 
                                     #Retrieve the values after set and compare
                                     step+=1
-                                    newParamList=[ssidName,keyPassPhrase,securityMode]
-                                    print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase and securityMode.")
-                                    print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase and securityMode.")
+                                    newParamList=[ssidName,keyPassPhrase]
+                                    print(f"\nTEST STEP {step}: Get the current ssid and keypassphrase.")
+                                    print(f"EXPECTED RESULT {step}: Should retrieve the current ssid and keypassphrase.")
                                     tdkTestObj,status,newValues = tdkbE2EUtility.getMultipleParameterValues(obj,newParamList)
                                     if expectedresult in status and setValuesList == newValues:
                                         tdkTestObj.setResultStatus("SUCCESS")
-                                        print(f"ACTUAL RESULT {step}: Got the current ssid,keypassphrase and securityMode as {newValues}.")
+                                        print(f"ACTUAL RESULT {step}: Got the current ssid and keypassphrase as {newValues}.")
                                         print("[TEST EXECUTION RESULT] : SUCCESS")
 
                                         #Wait for the changes to reflect in client device
@@ -231,7 +233,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                             print("[TEST EXECUTION RESULT] : FAILURE")
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE")
-                                        print(f"ACTUAL RESULT {step}: Failed to get the current ssid,keypassphrase and securityMode as {newValues}.")
+                                        print(f"ACTUAL RESULT {step}: Failed to get the current ssid and keypassphrase as {newValues}.")
                                         print("[TEST EXECUTION RESULT] : FAILURE")
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE")
@@ -241,19 +243,18 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                 #Prepare the list of parameter values to be reverted
                                 list1 = [ssidName,orgValue[0],'string']
                                 list2 = [keyPassPhrase,orgValue[1],'string']
-                                list3 = [securityMode,orgValue[2],'string']
 
                                 #Concatenate the lists with the elements separated by pipe
-                                revertParamList = list1 + list2 + list3
+                                revertParamList = list1 + list2
                                 revertParamList = "|".join(map(str, revertParamList))
 
                                 step+=1
                                 #Revert the values to original
-                                print(f"\nTEST STEP {step}: Set the original ssid,keypassphrase,securityMode.")
-                                print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase,securityMode.")
+                                print(f"\nTEST STEP {step}: Set the original ssid and keypassphrase.")
+                                print(f"EXPECTED RESULT {step}: Should set the original ssid and keypassphrase.")
                                 tdkTestObj,actualresult,details = tdkbE2EUtility.setMultipleParameterValues(obj,revertParamList)
                                 details = tdkTestObj.getResultDetails()
-                                if expectedresult in actualresult:
+                                if expectedresult in actualresult and details != "":
                                     tdkTestObj.setResultStatus("SUCCESS")
                                     print(f"ACTUAL RESULT {step}: {details}")
                                     print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -263,7 +264,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                     print("[TEST EXECUTION RESULT] : FAILURE")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print(f"ACTUAL RESULT {step}: Failed to get the current ssid,keypassphrase and securityMode.")
+                                print(f"ACTUAL RESULT {step}: Failed to get the current ssid,keypassphrase.")
                                 print("[TEST EXECUTION RESULT] : FAILURE")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
@@ -284,7 +285,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     tdkTestObj.executeTestCase(expectedresult)
                     actualresult = tdkTestObj.getResult()
                     details = tdkTestObj.getResultDetails()
-                    if expectedresult in actualresult:
+                    if expectedresult in actualresult and details != "":
                         #Set the result status of execution
                         tdkTestObj.setResultStatus("SUCCESS")
                         print(f"ACTUAL RESULT {step}: Added table entry for 5Ghz deleted successfully :{details}")
@@ -301,22 +302,25 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                 tdkTestObj.setResultStatus("FAILURE")
                 print(f"ACTUAL RESULT {step}: Failed to get MAC address of WLAN client : {macAddress}.")
                 print("[TEST EXECUTION RESULT] : FAILURE")
+            #Handle any post execution cleanup required
+            print("\nPerforming the post wifi E2E execution cleanup.")
+            tdkbE2EUtility.postExecutionCleanup()
+            tdkutility.revert_ACLprerequisites_allRadios(obj2,ap_indices,orgMacFilterEnables,orgFilterAsBlacklists,step)
         else:
-            obj.setLoadModuleStatus("FAILURE")
-            print(f"ACTUAL RESULT {step}: Failed to parse the device configuration file.")
+            tdkTestObj.setResultStatus("FAILURE")
+            print("\nFailed to set ACL test prerequisites. Please check.")
             print("[TEST EXECUTION RESULT] : FAILURE")
-        #Handle any post execution cleanup required
-        print("\nPerforming the post wifi E2E execution cleanup.")
-        tdkbE2EUtility.postExecutionCleanup()
-        tdkutility.revert_ACLprerequisites_allRadios(obj,step)
     else:
-        tdkTestObj.setResultStatus("FAILURE")
-        print("\nFailed to set ACL test prerequisites. Please check.")
+        obj.setLoadModuleStatus("FAILURE")
+        print(f"ACTUAL RESULT {step}: Failed to parse the device configuration file.")
         print("[TEST EXECUTION RESULT] : FAILURE")
 
     obj.unloadModule("tdkb_e2e")
     obj1.unloadModule("advancedconfig")
+    obj2.unloadModule("wifiagent")
 else:
-    print("Failed to load tdkb_e2e and advancedconfig module.")
+    print("Failed to load tdkb_e2e , advancedconfig  and wifiagent module.")
     obj.setLoadModuleStatus("FAILURE")
+    obj1.setLoadModuleStatus("FAILURE")
+    obj2.setLoadModuleStatus("FAILURE")
     print("Module loading failed.")
