@@ -342,7 +342,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
             tdkutility.revert_ACLprerequisites_allRadios(obj2,ap_indices,orgMacFilterEnables,orgFilterAsBlacklists,step)
         else:
             tdkTestObj.setResultStatus("FAILURE")
-[O            print("\nFailed to set ACL test prerequisites. Please check.")
+            print("\nFailed to set ACL test prerequisites. Please check.")
             print("[TEST EXECUTION RESULT] : FAILURE")
     else:
         obj.setLoadModuleStatus("FAILURE")

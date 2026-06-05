@@ -203,7 +203,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                 #Connect to the wifi ssid from wlan client
                                                 step+=1
                                                 print(f"\nTEST STEP {step} : From wlan client, Connect to the wifi ssid via 2.4Ghz.")
-                                                print(f"EXPECTED RESULT {step} : Connection attempt should success via 2.4Ghz.")
+                                                print(f"EXPECTED RESULT {step} : Connection attempt should be success via 2.4Ghz.")
                                                 status = tdkbE2EUtility.wlanConnectWifiSsidBssid(tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,bssid,tdkbE2EUtility.wlan_2ghz_interface)
 
                                                 if expectedresult in status:
