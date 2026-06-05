@@ -34,6 +34,13 @@ wifi_ssid_connect()
 	printf "OUTPUT:$value"
 }
 
+# Connect to the WIFI SSID,wlan interface and BSSID
+wifi_ssid_bssid_connect()
+{
+        value="$(nmcli device wifi connect $var2 bssid $var3 password $var4 | tr -cd [:print:])"
+        printf "OUTPUT:$value"
+}
+
 # Connect to the WIFI SSID with security mode None
 wifi_ssid_connect_openSecurity()
 {
@@ -82,6 +89,13 @@ get_connected_ssid_name()
 get_channel_number()
 {
         value="$(nmcli device wifi list |grep $var2| awk '{ print $5 }')"
+        echo "OUTPUT:$value"
+}
+
+# Get the current channel number of the WIFI connected with same ssid and different bssid
+get_channel_number_bssid()
+{
+        value="$(nmcli device wifi | awk '/^\*/ {print $5}')"
         echo "OUTPUT:$value"
 }
 
@@ -597,6 +611,8 @@ var6=$6
 case $event in
    "wifi_ssid_connect")
         wifi_ssid_connect;;
+   "wifi_ssid_bssid_connect")
+        wifi_ssid_bssid_connect;;
    "wifi_ssid_connect_openSecurity")
         wifi_ssid_connect_openSecurity;;
    "wifi_ssid_disconnect")
@@ -611,6 +627,8 @@ case $event in
         is_ssid_available;;
    "get_channel_number")
         get_channel_number;;
+   "get_channel_number_bssid")
+        get_channel_number_bssid;;
    "get_bit_rate")
         get_bit_rate;;
    "get_security_mode")
