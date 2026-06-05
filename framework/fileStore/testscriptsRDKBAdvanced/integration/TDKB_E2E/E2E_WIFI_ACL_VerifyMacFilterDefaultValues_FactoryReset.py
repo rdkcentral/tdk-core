@@ -57,7 +57,7 @@ if "SUCCESS" in loadmodulestatus.upper():
         #Initiate Factory reset
         step +=1
         print(f"\nTEST STEP {step}: Initiate factory reset on DUT")
-        print(f"EXPECTED RESULT {step}: Factory reset  should be initiated on DUT succesfully")
+        print(f"EXPECTED RESULT {step}: Factory reset  should be initiated on DUT successfully")
         tdkTestObj = obj.createTestStep('tdkb_e2e_Set')
         tdkTestObj.addParameter("paramName","Device.X_CISCO_COM_DeviceControl.FactoryReset")
         tdkTestObj.addParameter("paramValue","Router,Wifi,VoIP,Dect,MoCA")
