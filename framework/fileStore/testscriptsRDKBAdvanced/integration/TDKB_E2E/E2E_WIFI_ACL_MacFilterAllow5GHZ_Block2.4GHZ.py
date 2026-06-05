@@ -46,7 +46,7 @@ print(f"[LIB LOAD STATUS]  :  {loadmodulestatus}")
 print(f"[LIB LOAD STATUS]  :  {loadmodulestatus1}")
 print(f"[LIB LOAD STATUS]  :  {loadmodulestatus2}")
 
-if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper():
+if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper() and "SUCCESS" in loadmodulestatus2.upper():
     obj.setLoadModuleStatus("SUCCESS")
     obj1.setLoadModuleStatus("SUCCESS")
     obj2.setLoadModuleStatus("SUCCESS")

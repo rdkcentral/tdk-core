@@ -356,9 +356,9 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     print(f"ACTUAL RESULT {step}: Failed to revert Mac FilterAsBlacklist of 2.4Ghz to false .")
                     print("[TEST EXECUTION RESULT] : FAILURE")
             else:
-                tdkTestObj.setResultStatus("SUCCESS")
-                print(f"ACTUAL RESULT {step}: Set Mac FilterAsBlacklist of 2.4Ghz to true successfully.")
-                print("[TEST EXECUTION RESULT] : SUCCESS")
+                tdkTestObj.setResultStatus("FAILURE")
+                print(f"ACTUAL RESULT {step}: Failed to set Mac FilterAsBlacklist of 2.4Ghz to true .")
+                print("[TEST EXECUTION RESULT] : FAILURE")
 
             #Handle any post execution cleanup required
             print("\nPerforming the post wifi E2E execution cleanup.")
