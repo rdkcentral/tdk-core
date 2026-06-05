@@ -33,6 +33,7 @@ from tdkutility import *
 #             : sysobj - Object of tdk library.
 # Return Value: tdkTestObj_tr181 - Object of tdk library.
 #             : username - Connection request username that uniquely identify the DUT.
+#             : initialValues - List of original values of the modified Tr69 DMs.
 #             : returnStatus - SUCCESS/FAILURE
 def tr069ACSPreRequisite(obj,sysobj):
     tdkTestObj = sysobj.createTestStep('ExecuteCmd')
@@ -41,7 +42,7 @@ def tr069ACSPreRequisite(obj,sysobj):
     tr069paStatus = "FAILURE"
     ConfigStatus = "FAILURE"
     ConnectionStatus = "FAILURE"
-
+    initialValues = []
     print("\nChecking the PREREQUISITES")
     #Check for the tr069 process
     print("Check if tr069 process is up and listening to port 7547")
@@ -68,35 +69,53 @@ def tr069ACSPreRequisite(obj,sysobj):
             sleep(60)
     if tr069paStatus == "SUCCESS":
         #Onboard the device to ACS server.
-        print("Enable Device.ManagementServer.EnableCWMP parameter")
-        tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Set')
-        actualresult, details = setTR181Value(tdkTestObj_tr181, "Device.ManagementServer.EnableCWMP", "true", "bool")
+        print("Get the initial value of Device.ManagementServer.EnableCWMP")
+        tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Get')
+        actualresult, details = getTR181Value(tdkTestObj_tr181,"Device.ManagementServer.EnableCWMP")
         if expectedresult in actualresult:
-            print("Enabled Device.ManagementServer.EnableCWMP parameter successfully")
             tdkTestObj_tr181.setResultStatus("SUCCESS")
+            print("Got the parameter value of Device.ManagementServer.EnableCWMP as %s successfully" %details)
+            initialValues.append(details)
 
-            print("Set the Device Management server URL as ",ACS_URL)
-            actualresult, details = setTR181Value(tdkTestObj_tr181, "Device.ManagementServer.URL", ACS_URL, "string")
+            print("Get the initial value of Device Management server URL")
+            actualresult, details = getTR181Value(tdkTestObj_tr181,"Device.ManagementServer.URL")
             if expectedresult in actualresult:
-                print("Set the Device Management Server URL successfully")
                 tdkTestObj_tr181.setResultStatus("SUCCESS")
+                print("Got the parameter value of Device.ManagementServer.URL as %s successfully" %details)
+                initialValues.append(details)
 
-                print("Set Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation as ", TR069_CERTIFICATE_LOCATION)
-                actualresult, details = setTR181Value(tdkTestObj_tr181, "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation", TR069_CERTIFICATE_LOCATION, "string")
+                print("Get the initial value of Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation")
+                actualresult, details = getTR181Value(tdkTestObj_tr181,"Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation")
                 if expectedresult in actualresult:
-                    print("Set Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation successfully")
                     tdkTestObj_tr181.setResultStatus("SUCCESS")
-                    ConfigStatus = "SUCCESS"
-                else:
-                    print("Failed to set Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation")
-                    tdkTestObj_tr181.setResultStatus("FAILURE")
-            else:
-                print("Failed to set Device Management server URL")
-                tdkTestObj_tr181.setResultStatus("FAILURE")
-        else :
-            print("Failed to enable Device.ManagementServer.EnableCWMP")
-            tdkTestObj_tr181.setResultStatus("FAILURE")
+                    print("Got the parameter value of Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation as %s successfully" %details)
+                    initialValues.append(details)
 
+                    print("Set the Enable CWMP, Device ManagementServer URL and TR69CertLocation for configuring the DUT with ACS server")
+                    tdkTestObj_tr181 = obj.createTestStep("TDKB_TR181Stub_SetMultiple");
+                    tdkTestObj_tr181.addParameter("paramList","Device.ManagementServer.EnableCWMP|%s|bool|Device.ManagementServer.URL|%s|string|Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation|%s|string" %("true",ACS_URL,TR069_CERTIFICATE_LOCATION))
+                    tdkTestObj_tr181.executeTestCase(expectedresult)
+                    actualresult = tdkTestObj_tr181.getResult()
+                    details = tdkTestObj_tr181.getResultDetails()
+                    if expectedresult in actualresult:
+                        tdkTestObj_tr181.setResultStatus("SUCCESS")
+                        print("Set the Tr069 ACS configuration values successfully")
+                        ConfigStatus = "SUCCESS"
+                    else:
+                        tdkTestObj_tr181.setResultStatus("FAILURE")
+                        print("Failed to set the Tr069 ACS configuration values")
+                else:
+                    tdkTestObj_tr181.setResultStatus("FAILURE")
+                    print("Failed to get the value of Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation")
+                    initialValues.append(None)
+            else:
+                tdkTestObj_tr181.setResultStatus("FAILURE")
+                print("Failed to get the value of Device Management server URL")
+                initialValues.append(None)
+        else:
+            tdkTestObj_tr181.setResultStatus("FAILURE")
+            print("Failed to get the value of Device.ManagementServer.EnableCWMP")
+            initialValues.append(None)
     if tr069paStatus == "SUCCESS" and ConfigStatus == "SUCCESS":
         # Get the connection request username required for DUT to connect with ACS
         print("Get the Username for connection request")
@@ -116,9 +135,10 @@ def tr069ACSPreRequisite(obj,sysobj):
         #Prerequisite success check
         returnStatus = "SUCCESS"
         print("PREREQUISITES are success\n")
-        return tdkTestObj_tr181,username,returnStatus
+        return tdkTestObj_tr181,username,initialValues,returnStatus
     else:
-        return None,None,returnStatus
+        return None,None,initialValues,returnStatus
+
 ########## End of function ##########
 
 # gettr069ACS
@@ -419,3 +439,33 @@ def parseTR69ACSResponse(response,parameters,method):
             print("Error parsing search response:", str(e))
             return None
 ########## End of function ##########
+
+
+# revertPrerequisite()
+# Syntax      : revertPrerequisite(obj,initialValues,step)
+# Description : Function to revert the DMs changed during prerequisite
+# Parameters  : obj -  Object of tdk library
+#             : initialValues - List of initial values of DMs
+#             : step - Current test step count
+# Return Value: None
+def revertPrerequisite(obj,initialValues,step):
+    step=step+1
+    expectedresult = "SUCCESS"
+    tdkTestObj_tr181 = obj.createTestStep("TDKB_TR181Stub_SetMultiple")
+    if len(initialValues) == 3 and all(v is not None for v in initialValues)::
+        print("\nTEST STEP %d : Revert the values of Tr069 Data models Enable CWMP, Device Management server url and Tr69CertLocation modified during prerequisite check" %step)
+        print("EXPECTED RESULT %d : The modified values of TR069 Data models should be reverted successfully" %step)
+        tdkTestObj_tr181.addParameter("paramList","Device.ManagementServer.EnableCWMP|%s|bool|Device.ManagementServer.URL|%s|string|Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation|%s|string" %(initialValues[0],initialValues[1],initialValues[2]))
+        tdkTestObj_tr181.executeTestCase(expectedresult)
+        actualresult = tdkTestObj_tr181.getResult()
+        details = tdkTestObj_tr181.getResultDetails()
+        if expectedresult in actualresult:
+            tdkTestObj_tr181.setResultStatus("SUCCESS")
+            print(f"ACTUAL RESULT {step}: Reverted the modified Tr069 ACS configuration values successfully")
+        else:
+            tdkTestObj_tr181.setResultStatus("FAILURE")
+            print(f"ACTUAL RESULT {step}: Failed to revert the Tr069 ACS configuration values.")
+    else:
+        print("\n Required initial values of modified Tr69 configuration parameters are missing")
+        tdkTestObj_tr181.setResultStatus("FAILURE")
+
