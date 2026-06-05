@@ -261,7 +261,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                             step+=1
                                                             print(f"\nTEST STEP {step} : From wlan client, Connect to the  wifi ssid via 5Ghz.")
                                                             print(f"EXPECTED RESULT {step} : Connection attempt should be success via 5Ghz.")
-                                                            status = tdkbE2EUtility.wlanConnectWifiSsidBssid(tdkbE2EUtility.ssid_5ghz_name,tdkbE2EUtility.ssid_5ghz_pwd,bssid1,tdkbE2EUtility.wlan_5ghz_interface)
+                                                            status = tdkbE2EUtility.wlanConnectWifiSsidBssid(tdkbE2EUtility.ssid_5ghz_name,tdkbE2EUtility.ssid_5ghz_pwd,bssid2,tdkbE2EUtility.wlan_5ghz_interface)
                                                             if expectedresult in status:
                                                                 tdkTestObj.setResultStatus("SUCCESS")
                                                                 print(f"ACTUAL RESULT {step} : Connection from client succeed via 5Ghz as expected  : {status}.")
@@ -319,7 +319,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                             step+=1
                                                             print(f"\nTEST STEP {step} : From wlan client, Connect to the  wifi ssid via 2.4Ghz.")
                                                             print(f"EXPECTED RESULT {step} : Connection attempt should fail via 2.4Ghz.")
-                                                            status = tdkbE2EUtility.wlanConnectWifiSsidBssid(tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,bssid2,tdkbE2EUtility.wlan_2ghz_interface)
+                                                            status = tdkbE2EUtility.wlanConnectWifiSsidBssid(tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,bssid1,tdkbE2EUtility.wlan_2ghz_interface)
                                                             if expectedresult not in status:
                                                                 tdkTestObj.setResultStatus("SUCCESS")
                                                                 print(f"ACTUAL RESULT {step} : Connection attempt failed via 2.4Ghz as expected  : {status}.")

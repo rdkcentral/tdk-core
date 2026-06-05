@@ -1857,6 +1857,7 @@ def setSecurityModeEnabledConfig(obj, modeToSet, index, config, currMode = ""):
 
     return tdkTestObj, actualresult
 
+
 # set_ACLprerequisites_allRadios
 
 # Syntax      : set_ACLprerequisites_allRadios(obj,step)
@@ -1873,6 +1874,9 @@ def set_ACLprerequisites_allRadios(obj,step):
     print("\n***********************Setting the ACL test prerequisites***************************")
     preStatus = "SUCCESS"
     expectedresult = "SUCCESS"
+    orgMacFilterEnables = []
+    orgFilterAsBlacklists = []
+    ap_indices = []
     #Get the number of radios
     step+=1
     print(f"\nTEST STEP {step} : Get the number of radio entries.")
@@ -1891,13 +1895,10 @@ def set_ACLprerequisites_allRadios(obj,step):
             ap_indices = [1,2,17]
         elif radioCount == 2:
             ap_indices = [1,2]
-        elif radioCount == 1:
-            ap_indices = [1]
         else:
-            raise ValueError(f"Unknown radio count: {radioCount}")
-
-        orgMacFilterEnables = []
-        orgFilterAsBlacklists = []
+            preStatus = "FAILURE"
+            print(f"Unknown radio count: {radioCount}")
+            return tdkTestObj,preStatus,ap_indices,orgMacFilterEnables,orgFilterAsBlacklists,step
         for index in ap_indices:
             setflag1=0
             setflag2=0
@@ -2023,6 +2024,7 @@ def set_ACLprerequisites_allRadios(obj,step):
                 print("[TEST EXECUTION RESULT] : FAILURE")
 
     else:
+        preStatus = "FAILURE"
         #Set the result of execution
         tdkTestObj.setResultStatus("FAILURE")
         print(f"ACTUAL RESULT {step}: Failed to get the number of radio entries .")
@@ -2048,11 +2050,11 @@ def revert_ACLprerequisites_allRadios(obj,ap_indices,orgMacFilterEnables,orgFilt
         print(f"\n*********For radio index : {index}**********")
         step+=1
         param2 = "Device.WiFi.AccessPoint." + str(index) + ".X_CISCO_COM_MACFilter.FilterAsBlackList"
-        print(f"\nTEST STEP {step}: Set Mac FilterAsBlacklist {param2} to true ")
-        print(f"EXPECTED RESULT {step}: Should set Mac FilterAsBlacklist {param2} to true successfully")
+        print(f"\nTEST STEP {step}: Revert Mac FilterAsBlacklist {param2} to initial value ")
+        print(f"EXPECTED RESULT {step}: Should revert Mac FilterAsBlacklist {param2} to initial value successfully")
         tdkTestObj = obj.createTestStep("WIFIAgent_Set_Get")
         tdkTestObj.addParameter("paramName",param2)
-        tdkTestObj.addParameter("paramValue",orgMacFilterEnables[itr])
+        tdkTestObj.addParameter("paramValue",orgFilterAsBlacklists[itr])
         tdkTestObj.addParameter("paramType","bool")
         tdkTestObj.executeTestCase(expectedresult)
         actualresult = tdkTestObj.getResult()
@@ -2060,17 +2062,17 @@ def revert_ACLprerequisites_allRadios(obj,ap_indices,orgMacFilterEnables,orgFilt
         if expectedresult in actualresult:
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS")
-            print(f"ACTUAL RESULT {step}: Set Mac FilterAsBlacklist {param2} to true successfully")
+            print(f"ACTUAL RESULT {step}: Reverted Mac FilterAsBlacklist {param2} to initial value successfully")
             #Get the result of execution
             print("[TEST EXECUTION RESULT] : SUCCESS")
 
             step+=1
             param1 = "Device.WiFi.AccessPoint." + str(index) + ".X_CISCO_COM_MACFilter.Enable"
-            print(f"\nTEST STEP {step}: Set Mac Filter Enable {param1} to false.")
-            print(f"EXPECTED RESULT {step}: Should set Mac Filter Enable to false.")
+            print(f"\nTEST STEP {step}: Revert Mac Filter Enable {param1} to initial value.")
+            print(f"EXPECTED RESULT {step}: Should revert Mac Filter Enable to initial value.")
             tdkTestObj = obj.createTestStep("WIFIAgent_Set_Get")
             tdkTestObj.addParameter("paramName",param1)
-            tdkTestObj.addParameter("paramValue",orgFilterAsBlacklists[itr])
+            tdkTestObj.addParameter("paramValue",orgMacFilterEnables[itr])
             tdkTestObj.addParameter("paramType","bool")
             tdkTestObj.executeTestCase(expectedresult)
             actualresult = tdkTestObj.getResult()
@@ -2078,26 +2080,26 @@ def revert_ACLprerequisites_allRadios(obj,ap_indices,orgMacFilterEnables,orgFilt
             if expectedresult in actualresult:
                #Set the result status of execution
                tdkTestObj.setResultStatus("SUCCESS")
-               print(f"ACTUAL RESULT {step}: Set Mac Filter Enable {param1} to false successfully")
+               print(f"ACTUAL RESULT {step}: Revert Mac Filter Enable {param1} to initial value successfully")
                #Get the result of execution
                print("[TEST EXECUTION RESULT] : SUCCESS")
             else:
                 postStatus = "FAILURE"
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("FAILURE")
-                print(f"ACTUAL RESULT {step}: Failed to set Mac Filter Enable {param1} to false.")
+                print(f"ACTUAL RESULT {step}: Failed to revert Mac Filter Enable {param1} to initial value.")
                 #Get the result of execution
                 print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             postStatus = "FAILURE"
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE")
-            print(f"ACTUAL RESULT {step}: Failed to set Mac FilterAsBlacklist {param2} to true.")
+            print(f"ACTUAL RESULT {step}: Failed to revert Mac FilterAsBlacklist {param2} to initial value.")
             #Get the result of execution
             print("[TEST EXECUTION RESULT] : FAILURE")
     step=step+1
-    print(f"\nTEST STEP {step} : Revert the values of ACL parameters changed during prerequisite check")
-    print(f"EXPECTED RESULT {step} : The values of modified ACL parameters should be reverted successfully")
+    print(f"\nTEST STEP {step} : Revert the values of ACL parameters during prerequisite check")
+    print(f"EXPECTED RESULT {step} : The values of ACL parameters should be reverted successfully")
     if postStatus == "SUCCESS":
         print(f"ACTUAL RESULT {step}: Reverted the value of modified ACL datamodels successfully")
         tdkTestObj.setResultStatus("SUCCESS")
