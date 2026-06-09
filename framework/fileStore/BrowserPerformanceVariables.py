@@ -17,24 +17,22 @@
 # limitations under the License.
 #########################################################################
 
-app_download_url = ""
-
 strike_app_bundle_name = ""
 
-octane_app_bundle_name = ""
+octane_app_bundle_name = "com.rdkcentral.octane+0.1.0.bolt"
 octane_test_subcategory_list = ["Crypto","EarleyBoyer","Splay","SplayLatency","pdf.js","CodeLoad"]
 
-animation_app_bundle_name = ""
+animation_app_bundle_name = "com.rdkcentral.animation+0.1.0.bolt"
 
-kraken_app_bundle_name = ""
+kraken_app_bundle_name = "com.rdkcentral.kraken+0.1.0.bolt"
 
-smashcat_app_bundle_name = ""
+smashcat_app_bundle_name = "com.rdkcentral.smashcat+0.1.0.bolt"
 
-motion_app_bundle_name = ""
+motion_app_bundle_name = "com.rdkcentral.motion+0.1.0.bolt"
 
-speedometer_app_bundle_name = ""
+speedometer_app_bundle_name = "com.rdkcentral.speedometer+0.1.0.bolt"
 
-css3_app_bundle_name = ""
+css3_app_bundle_name = "com.rdkcentral.css3+0.1.0.bolt"
 css3_test_subcategory_list = ["Animations Level 1", "Backgrounds and Borders Level 3", "Backgrounds and Borders Level 4", "Basic User Interface Level 3", "Basic User Interface Level 4", "Box Alignment Level 3", "Cascading and Inheritance Level 3", "Cascading and Inheritance Level 4", "Compositing and Blending Level 1", "Custom Properties for Cascading Variables Level 1", "Filter Effects Level 1", "Flexible Box Layout Level 1", "Fonts Level 3", "Fonts Level 4", "Generated Content Level 3", "Grid Layout Level 1", "Grid Layout Level 2", "Grid Layout Level 3", "Images Level 3", "Lists Level 3", "Masking Level 1", "Media Queries Level 3", "Media Queries Level 4", "Media Queries Level 5", "Pointer Events Level 1", "Pointer Events Level 3", "Positioned Layout Level 3", "Ruby Layout Level 1", "Scroll Snap Level 1", "Shadow Parts", "Shapes Level 1", "SVG 2 Coordinate Systems, Transformations and Units", "SVG 2 Geometry Properties", "SVG 2 Paint Servers", "SVG 2 Painting", "SVG 2 Scripting and Interactivity", "SVG 2 Text", "Text Decoration Level 3", "Text Decoration Level 4", "Transforms Level 1", "Transforms Level 2", "Transitions", "Will Change Level 1"]
 
 
@@ -47,6 +45,7 @@ display_variable=":0"
 #Give the path where the chromedriver executable is available
 
 ##########################Test Environment Dependent Variables############
+app_download_url = ""
 path_of_browser_executable=""
 #The port must be 9998 for thunder builds and 9224 for rdkservice builds
 webinspect_port=""
