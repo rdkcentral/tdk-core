@@ -609,4 +609,110 @@
             <resultGeneration useMethodTag="downloadmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
+
+    <!-- TestCase 22 -->
+    <testCase testCaseId="DM_22" testCaseName="DownloadManager_Download_Optional_Parameters" desc="Verify that the download method works correctly with optional parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" saveResult="true">
+            <params>
+                <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_HOSTEDURL"/>
+                <param tag="priority" value="true"/>
+                <param tag="retries" value="0"/>
+                <param tag="rateLimit" value="0"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+            <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Check_Package_Status_Before_Install" action="externalFnCall" delayKey="PACKAGEMANAGER_APPLICATION_DOWNLOAD_TIME">
+            <resultGeneration useMethodTag="check_downloaded_package_status">
+                  <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                  <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
+            </resultGeneration>
+	    </testStep>
+        <testStep testStepId="4" name="Delete_Package" method="Delete_Package" delay="3">
+            <params>
+                <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_null_result_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- TestCase 23-->
+    <testCase testCaseId="DM_23" testCaseName="DownloadManager_Download_Ratelimit_Pause_Resume_Delete_Package" desc="Verify download, ratelimit, pause, resume and delete package functionality">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Download_ValidParameters" method="Download_Package" saveResult="true">
+            <params>
+                <param tag="url" useConfigFile="true" key="PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_downloadid_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Form_Package_FileLocator_URL" action="externalFnCall" saveResult="true">
+            <resultGeneration useMethodTag="downloadmanager_form_filelocator_url">
+                <arguments usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Progress_Check_During_Download" method ="Progress_Download" delay="10">
+            <params>
+                <param tag="downloadId" usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_download_progress_validation"/>
+        </testStep>
+        <testStep testStepId="4" name="Apply_Rate_Limit" method="Rate_Limit">
+            <params>
+                <param tag="downloadId" usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+                <param tag="rateLimit" value="0"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="5" name="Pause_Download" method="Pause_Download" delay="5">
+            <params>
+                <param tag="downloadId" usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="6" name="Check_Download_Paused_Status" method ="Progress_Download" delay="10" saveResult="true">
+            <params>
+                <param tag="downloadId" usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_download_progress_validation"/>
+        </testStep>
+        <testStep testStepId="7" name="Confirm_Download_Remains_Paused" method ="Progress_Download" delay="10" saveResult="true">
+            <params>
+                <param tag="downloadId" usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_confirm_download_paused_validation">
+                <expectedValues usePreviousResult="true" Id="6" useMethodTag="downloadmanager_get_previous_download_progress"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="8" name="Resume_Download" method="Resume_Download" delay="10">
+            <params>
+                <param tag="downloadId" usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="9" name="Progress_Check_After_Resume" method ="Progress_Download" delay="10">
+            <params>
+                <param tag="downloadId" usePreviousResult="true" Id="1" useMethodTag="downloadmanager_get_previous_downloadid"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_progress_check_after_resume_validation">
+                <arguments usePreviousResult="true" Id="7" useMethodTag="downloadmanager_get_previous_download_progress"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="10" name="Check_Package_Download_Completion" action="externalFnCall" delayKey="PACKAGEMANAGER_LARGE_APPLICATION_DOWNLOAD_TIME">
+            <resultGeneration useMethodTag="check_downloaded_package_status">
+                  <arguments usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+                  <expectedValues useConfigFile="true" key="PACKAGEMANAGER_LARGE_APPLICATION_MD5SUM_VALUE"/>
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="11" name="Delete_Package" method="Delete_Package" delay="10">
+            <params>
+                <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
+            </params>
+            <resultGeneration useMethodTag="downloadmanager_null_result_validation"/>
+        </testStep>
+    </testCase>
 </testPlugin>

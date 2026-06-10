@@ -3182,3 +3182,124 @@ def postExecutionCleanup():
     clientDisconnect();
 
 ######### End of Function ##########
+
+def wifiConnectBssid(ssidName,ssidPwd,bssid,securityType):
+# wifiConnectBssid
+# Syntax      : wifiConnectBssid()
+# Description : Function to connect to the WIFI SSID from the WLAN client with bssid to force to respective radio.
+# Parameters  : ssidName - SSID Name
+#               ssidPwd - SSID password
+#               bssid  - BSSID of respective radio
+#               securityType - Protected/Open security mode
+# Return Value: SUCCESS/FAILURE
+
+    try:
+        if wlan_os_type == "UBUNTU":
+            if securityType == "Protected":
+                command="sudo sh %s wifi_ssid_bssid_connect %s %s %s" %(wlan_script,ssidName,bssid,ssidPwd)
+            else:
+                command="sudo sh %s wifi_ssid_connect_openSecurity %s" %(wlan_script,ssidName)
+            status = executeCommand(command)
+        else:
+            status = "Only UBUNTU platform supported!!!"
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("WIFI connect status:%s" %status);
+    return status;
+
+########## End of Function ##########
+
+
+def wlanConnectWifiSsidBssid(ssidName,ssidPwd,bssid,wlanInterface,securityType= "Protected"):
+
+# wlanConnectWifiSsidBssid
+
+# Syntax      : wlanConnectWifiSsidBssid()
+# Description : Function to connect wlan to the wifi ssid and bssid
+# Parameters  : ssidName - SSID Name
+#               ssidPwd - SSID password
+#               wlanInterface - wlan interface name
+#               bssid - bssid of respective radio
+#               securityType - Protected/Open security mode
+# Return Value: SUCCESS/FAILURE
+
+    try:
+        status = clientConnect("WLAN")
+        if status == "SUCCESS":
+            command="sudo sh %s refresh_wifi_network" %(wlan_script)
+            executeCommand(command)
+            sleep(20);
+            status = checkSsidAvailable(ssidName)
+            if ssidName in status:
+                status = wifiConnectBssid(ssidName,ssidPwd,bssid,securityType)
+                if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status:
+                    sleep(60);
+                    status = getConnectedSsidName(wlanInterface)
+                    if ssidName in status:
+                        return "SUCCESS"
+                    else:
+                        return "Failed to get the connected SSID Name"
+                else:
+                    return "Failed to connect to wifi ssid and bssid"
+            else:
+                return "Couldn't find the SSID in available SSIDs list"
+        else:
+            return "Failed to connect to wlan client"
+    except Exception as e:
+        print(e);
+        return e;
+
+
+def connectWlanGetMACAddress(wlanInterface):
+
+# connectWlanGetMACAddress
+
+# Syntax      : connectWlanGetMACAddress(wlanInterface)
+# Description : Function to get the MAC address of the wlan client on the given interface via SSH
+# Parameters  : wlanInterface - wlan interface name
+# Return Value: status - MAC Address of the WLAN client
+
+    try:
+        status = clientConnect("WLAN")
+        if status == "SUCCESS":
+            if wlan_os_type == "UBUNTU":
+                command="sudo sh %s get_wlan_mac %s" %(wlan_script,wlanInterface)
+                status = executeCommand(command)
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to wlan client"
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("WLAN MAC Address after accessing wlan client via SSH :%s" %status);
+    return status;
+
+########## End of Function ##########
+
+def getChannelNumberBssid():
+
+# getChannelNumberBssid
+
+# Syntax      : getChannelNumberBssid()
+# Description : Function to get the channel number of the WIFI connected
+# Parameters  : None
+# Return Value: Returns the channel number
+
+    try:
+        if wlan_os_type == "UBUNTU":
+            command="sudo sh %s get_channel_number_bssid" %(wlan_script)
+            status = executeCommand(command)
+        else:
+            status = "Only UBUNTU platform supported!!!"
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("Connected WIFI's channel number:%s" %status);
+    return status;
+
+########## End of Function ##########

@@ -3192,6 +3192,7 @@
             </params>
         </method>
         <method name="Get_Max_Running_Apps" api="getMaxRunningApps" type="method" desc="Retrieves the maximum number of running applications allowed"/>
+        <method name="Get_Max_Inactive_Ramusage" api="getMaxInactiveRamUsage" type="method" desc="Gets the max amount of ram available for inactive apps"/>
 
         <!-- Event Definitions -->
         <event name="Event_On_App_Lifecycle_State_Changed" eventName="onAppLifecycleStateChanged" eventId="client.events.1" type="event" desc="Triggered whenever there is a change in the lifecycle state of a running application"/>
@@ -3315,9 +3316,11 @@
                 <param tag="clientId" defaultValue="null" type="string"/>
             </params>
         </method>
+        <method name="Get_Screenshot" api="getScreenshot" type="method" desc="Captures a screenshot of the current display"/>
 
         <!-- Event Definitions -->
         <event name="Event_On_User_Inactivity" eventName="onUserInactivity" eventId="client.events.1" type="event" desc="Triggered when the user inactivity timer reaches the set interval"/>
+        <event name="Event_On_Screenshot_Complete" eventName="onScreenshotComplete" eventId="client.events.1" type="event" desc="Triggered when a screenshot is captured"/>
     </plugin>
 
     <!-- LifecycleManager Plugin Information -->
@@ -3525,6 +3528,20 @@
                 <param tag="version" defaultValue="null" type="string"/>
             </params>
         </method>
+        <method name="Download_Optional_Parameters" api="download" type="method" desc="Start downloading a file from a specified URL with custom options">
+            <params paramType="userGenerate" useMethodTag="download_optional_parameters">
+                <param tag="url" defaultValue="null" type="string"/>
+                <param tag="priority" defaultValue="null" type="bool"/>
+                <param tag="retries" defaultValue="null" type="int"/>
+                <param tag="rateLimit" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Rate_Limit" api="rateLimit" type="method" desc="RateLimit Set rate limiting for a specific download session">
+            <params>
+                <param tag="downloadId" defaultValue="null" type="string"/>
+                <param tag="rateLimit" defaultValue="null" type="int"/>
+            </params>
+        </method>
     </plugin>
 
     <!-- PackageManager Plugin Information -->
@@ -3599,6 +3616,10 @@
                 <param tag="forceInstall" defaultValue="null" type="int"/>
             </params>
         </method>
+        <method name="GetPreInstallState" api="getPreinstallState" type="method" desc="Retrieves the current state of the preinstall process"/>
+
+        <!-- Event Definitions -->
+        <event name="Event_On_AppInstallationStatus" eventName="onAppInstallationStatus" eventId="client.events.1" type="event" desc="Emitted when the installation of a preinstalled app succeeds or fails"/>
     </plugin>
 
     <!-- RuntimeManager Plugin Information -->

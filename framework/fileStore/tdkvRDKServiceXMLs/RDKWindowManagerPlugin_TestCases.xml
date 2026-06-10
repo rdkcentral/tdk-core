@@ -183,8 +183,6 @@
             <testStep testStepId="1" name="Launch_App_Valid_Params" method="Launch_App" pluginName="AppManager">
                 <params>
                     <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
-                    <param tag="intent" value=""/>
-                    <param tag="launchArgs" value=""/>
                 </params>
                 <resultGeneration useMethodTag="appmanager_null_result_validation"/>
             </testStep>
@@ -198,6 +196,7 @@
         <!-- PluginPreRequisite 8 -->
         <prerequisite requisiteId="8" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
             <event pluginName="RDKWindowManager" eventName="Event_On_User_Inactivity"/>
+            <event pluginName="RDKWindowManager" eventName="Event_On_Screenshot_Complete"/>
         </prerequisite>
     </pluginPreRequisite>
     
@@ -882,10 +881,21 @@
             <resultGeneration useMethodTag="rwm_null_result_validation"/>
         </testStep>
         <testStep testStepId="2" name="Check_On_UserInactivity_Event_NoEvent" event="Event_On_User_Inactivity" action="eventListener" delay="80">
-            <resultGeneration useMethodTag="rwm_check_no_userinactivity_event" arguments="check_empty_event"/>
+            <resultGeneration useMethodTag="rwm_check_on_userinactivity_event" arguments="check_empty_event"/>
         </testStep>
     </testCase>
-    
+
+    <!-- Test case L2_05 -->
+    <testCase testCaseId="RWM_L2_05" testCaseName="RWM_Check_On_Screenshot_Complete_Event" desc="Checks whether the screenshot complete event is triggered when a screenshot is captured">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Capture_Screenshot" method="Get_Screenshot">
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_Screenshot_Complete_Event" event="Event_On_Screenshot_Complete" action="eventListener" delay="120">
+            <resultGeneration useMethodTag="rwm_check_on_screenshot_complete_event"/>
+        </testStep>
+    </testCase>
+
     <pluginPostRequisite>
         <!-- PluginPostRequisite 1 -->
         <postrequisite requisiteId="1" requisiteName="Uninstall_Package">

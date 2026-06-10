@@ -44,8 +44,7 @@ if expectedResult in result.upper():
     tdkTestObj.executeTestCase(expectedResult);
 
     # Setting the required display resolution
-    # Setting the pre-requites for media test. Launching the webkit instance via RDKShell and
-    # moving it to the front, openning a socket connection to the webkit inspect page and
+    # Setting the pre-requisites for media test. Launching the required test app via AppManager and
     # getting the details for proc validation from config file
     res = "1080p"
     res_pre_requisite_status = setResolutionPreRequisites(obj,res)
@@ -82,7 +81,7 @@ if expectedResult in result.upper():
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
         #url=<video_src_url_hls>&operations=close(60)&autotest=true
 
-        # Setting the video test url in webkit instance using RDKShell
+        # Setting the video test url in PersistentStore and launching the test app using AppManager
         setPS_value(video_test_url)
         launch_status = launchApp(obj,MediaValidationVariables.unified_player_app_id)
         if "SUCCESS" in launch_status:

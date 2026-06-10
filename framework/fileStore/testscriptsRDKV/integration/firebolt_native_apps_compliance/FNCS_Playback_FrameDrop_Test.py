@@ -118,7 +118,7 @@ if "SUCCESS" in result.upper():
     #The test name specifies the test case to be executed from the mediapipeline test suite
     test_name = "test_frameDrop"
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
-    test_url = MediaValidationVariables.video_src_url_mp4_frameDrop
+    test_url = MediaValidationVariables.video_src_url_mp4_frameDrop_h264
 
     #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     tdkTestObj = obj.createTestStep('getDeviceConfigValue')
