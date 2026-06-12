@@ -1,0 +1,48 @@
+## TestCase ID
+RDKV_PERFORMANCE_116
+## TestCase Name
+RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_Direct_WEBM
+<a name="head.TOC"></a>
+## Table Of Contents
+- [Objective](#head.Objective)
+- [Precondition](#head.Precondition)
+- [Test Steps](#head.TestSteps)
+- [Test Attributes](#head.Attributes)
+
+<a name="head.Objective"></a>
+## Objective
+To validate that the time taken for play and pause operations on a direct WEBM video in a Lightning application is within the expected performance threshold.
+
+<a name="head.Precondition"></a>
+## Preconditions
+|#|Conditions|
+|-|----------|
+|1|WPEFramework process should be up and running in the device.|
+|2|WebKitBrowser and DeviceInfo plugins should be available in the build.|
+|3|Direct WEBM video URL must be configured in `MediaValidationVariables`.|
+|4|`LOGGING_METHOD` must be configured in the device config file.|
+|5|Device should be rebooted before test execution if `pre_req_reboot_pvs` is configured as `Yes` in device config.|
+
+<a name="head.TestSteps"></a>
+## Test Steps
+
+|#|StepName | Step Description| Expected Result|
+|-|---------|-----------------|----------------|
+| 1 | Reboot Pre-requisite | Reboot the device before test execution if `pre_req_reboot_pvs` is configured as `Yes` in device config, using `Controller.1.harakiri`. | Device reboots and comes back online. |
+| 2 | Check Plugin Status | Check and activate WebKitBrowser and DeviceInfo, deactivate Cobalt. | Plugins confirmed in required state. |
+| 3 | Configure Video Player URL | Build the test app URL with direct WEBM source and operations (pause 10s, play 10s). | Test app URL constructed. |
+| 4 | Launch Video Player App | Load the video player application in WebKitBrowser with direct WEBM video. | Video player launches and WEBM video starts playing. |
+| 5 | Perform Play/Pause Operations | Video player automatically performs pause and play operations; timestamps recorded for each. | Play/pause operations complete successfully. |
+| 6 | Validate Play/Pause Time | Calculate the time taken for play and pause on direct WEBM video. Compare against threshold. | Time taken for play/pause on direct WEBM video is within the expected threshold. |
+| 7 | Revert Plugin Status | Restore original plugin states. | Plugins reverted to original state. |
+
+<a name="head.Attributes"></a>
+## Test Attributes
+
+**Supported Models** : RPI-Client, Video Accelerator
+
+**Estimated duration** : 6
+
+**Priority** : High
+
+**Release Version** : M99<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
