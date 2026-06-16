@@ -422,5 +422,5 @@ accessible via JSON-RPC under the callsign `org.rdk.ResourceManager` (version 1)
 |-----------|-------|
 | Supported Models | Video Accelerator, RPI Client |
 | Estimated Duration | 20 minutes |
-| Priority | High |
+| Priority | Medium |
 | TDK Release Version | M147 |

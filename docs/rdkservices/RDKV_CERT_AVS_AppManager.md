@@ -133,7 +133,7 @@
 The **AppManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 
-**API Coverage:**
+**API Coverage**
 
 - **State / Query APIs**: `getAppProperty`, `getInstalledApps`, `getLoadedApps`, `getMaxRunningApps`, `isInstalled`
 - **Lifecycle / Control APIs**: `activateSystemApp`, `closeApp`, `deactivateSystemApp`, `hibernateSystemApp`, `killApp`, `launchApp`, `preloadApp`, `sendIntent`, `startSystemApp`, `stopSystemApp`, `terminateApp`
@@ -2128,5 +2128,5 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 |-----------|-------|
 | Supported Models | Video Accelerator, RPI Client |
 | Estimated Duration | 15 minutes |
-| Priority | High |
+| Priority | Medium |
 | TDK Release Version | M147 |

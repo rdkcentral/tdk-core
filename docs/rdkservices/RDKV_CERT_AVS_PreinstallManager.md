@@ -215,7 +215,7 @@ accessible via JSON-RPC under the callsign `org.rdk.PreinstallManager` (version 
 
 ## Post-conditions
 
-_No plugin-level post-conditions defined._
+_No plugin-level post-conditions defined_
 
 ---
 
@@ -225,5 +225,5 @@ _No plugin-level post-conditions defined._
 |-----------|-------|
 | Supported Models | Video Accelerator, RPI Client |
 | Estimated Duration | 20 minutes |
-| Priority | High |
+| Priority | Medium |
 | TDK Release Version | M147 |
