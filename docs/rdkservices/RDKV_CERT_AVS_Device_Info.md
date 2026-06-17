@@ -454,7 +454,7 @@ accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get Device SocName | Invoke `socname` on `DeviceInfo`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.socname"}' http://127.0.0.1:9998/jsonrpc` | The information retrieved from the socname API must not be empty` |
+| 1 | Get Device SocName | Invoke `socname` on `DeviceInfo`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.socname"}' http://127.0.0.1:9998/jsonrpc` | The information retrieved from the socname API must not be empty |
 
 ---
 
