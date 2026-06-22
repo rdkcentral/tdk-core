@@ -1230,24 +1230,28 @@ def setMediaTestPostRequisites(app_id):
         print("Failed to terminate the bolt app\n")
         return "FAILURE"
 
-    print("\nWaiting for app unload event...")
-    max_wait = 20
-    waited = 0
-    event_received = False
-    while waited < max_wait:
-        events = event_listener.getEventsBuffer()
-        if not events:
-            time.sleep(0.1)
-            waited += 1
-            continue
-        event = events.pop(0)
-        if (app_id in str(event) and "onAppLifecycleStateChanged" in str(event) and "APP_STATE_UNLOADED" in str(event)):
-            print("\nSuccess: app unload event received")
-            print(f"\nReceived event details: {event}")
-            event_received = True
-            break
+    if 'event_listener' in globals() and event_listener is not None:
+        print("\nWaiting for app unload event...")
+        max_wait = 20
+        waited = 0
+        event_received = False
+        while waited < max_wait:
+            events = event_listener.getEventsBuffer()
+            if not events:
+                time.sleep(0.1)
+                waited += 1
+                continue
+            event = events.pop(0)
+            if (app_id in str(event) and "onAppLifecycleStateChanged" in str(event) and "APP_STATE_UNLOADED" in str(event)):
+                print("\nSuccess: app unload event received")
+                print(f"\nReceived event details: {event}")
+                event_received = True
+                break
+        event_listener.disconnect()
+    else:
+        print("\nEvent listener is not initialized. Failed to terminate the bolt app\n")
+        return "FAILURE"
 
-    event_listener.disconnect()
     if event_received:
         print("\nSuccessfully terminated the bolt app & received app unload event\n")
         return "SUCCESS"
