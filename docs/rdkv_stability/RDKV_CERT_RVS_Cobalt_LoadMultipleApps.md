@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_218
+RDKV_STABILITY_16
 ## TestCase Name
 RDKV_CERT_RVS_Cobalt_LoadMultipleApps
 <a name="head.TOC"></a>
