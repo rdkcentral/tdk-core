@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_220
+RDKV_STABILITY_32
 ## TestCase Name
 RDKV_CERT_RVS_LightningApp_LoadMultipleApps
 <a name="head.TOC"></a>

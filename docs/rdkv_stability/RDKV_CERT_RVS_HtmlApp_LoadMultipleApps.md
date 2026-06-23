@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_219
+RDKV_STABILITY_31
 ## TestCase Name
 RDKV_CERT_RVS_HtmlApp_LoadMultipleApps
 <a name="head.TOC"></a>

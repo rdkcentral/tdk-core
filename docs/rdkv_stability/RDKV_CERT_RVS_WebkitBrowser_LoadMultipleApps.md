@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_221
+RDKV_STABILITY_63
 ## TestCase Name
 RDKV_CERT_RVS_WebkitBrowser_LoadMultipleApps
 <a name="head.TOC"></a>
