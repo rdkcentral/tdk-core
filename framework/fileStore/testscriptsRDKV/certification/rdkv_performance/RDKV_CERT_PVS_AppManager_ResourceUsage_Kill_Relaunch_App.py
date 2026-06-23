@@ -105,15 +105,15 @@ if expectedResult in result.upper():
                             else:
                                 print("Failed to fetch resource usage")
                                 tdkTestObj.setResultStatus("FAILURE")
-                            print("\nFinal cleanup: Terminating the app")
+                            print("\nTerminating the app")
                             tdkTestObj = obj.createTestStep('rdkv_terminate_app')
                             tdkTestObj.addParameter("app_id", app_name)
                             tdkTestObj.executeTestCase(expectedResult)
                             if tdkTestObj.getResult() == "SUCCESS":
-                                print("Cleanup successful")
+                                print("App is terminated successfully")
                                 tdkTestObj.setResultStatus("SUCCESS")
                             else:
-                                print("Cleanup failed")
+                                print("Failed to terminate the app")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
                             print("Failed to launch app (Second Launch)")

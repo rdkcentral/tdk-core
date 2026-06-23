@@ -68,8 +68,10 @@ if expectedResult in result.upper():
                 tdkTestObj.addParameter("app_id",app_name)
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
+
                 if result == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
+
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method", "org.rdk.AppManager.clearAppData")
                     tdkTestObj.addParameter("value", '{"appId": "' + app_name + '"}')
@@ -89,9 +91,11 @@ if expectedResult in result.upper():
                         else:
                             print("\n Error while validating resource usage")
                             tdkTestObj.setResultStatus("FAILURE")
+
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
                         print(f"\nFailed to clear app data for {app_name}")
+
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     print("Unable to terminate the app")

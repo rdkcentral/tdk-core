@@ -161,6 +161,7 @@ if expectedResult in result.upper():
 
         else:
             print("Failed to install the app")
+            obj.setLoadModuleStatus("FAILURE")
     else:
         print("The download manager is not active")
         obj.setLoadModuleStatus("FAILURE")
