@@ -62,18 +62,14 @@ if expectedResult in result.upper():
             if expectedResult in result and resource_usage != "ERROR":
                 print("\n Resource usage is within the expected limit")
                 tdkTestObj.setResultStatus("SUCCESS")
-
                 time.sleep(5)
-
                 print("\n Terminating the app")
                 tdkTestObj = obj.createTestStep('rdkv_terminate_app')
                 tdkTestObj.addParameter("app_id",app_name)
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
-
                 if result == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
-
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method", "org.rdk.AppManager.clearAppData")
                     tdkTestObj.addParameter("value", '{"appId": "' + app_name + '"}')
@@ -93,11 +89,9 @@ if expectedResult in result.upper():
                         else:
                             print("\n Error while validating resource usage")
                             tdkTestObj.setResultStatus("FAILURE")
-
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
                         print(f"\nFailed to clear app data for {app_name}")
-
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     print("Unable to terminate the app")
@@ -106,6 +100,7 @@ if expectedResult in result.upper():
                 tdkTestObj.setResultStatus("FAILURE")
 
         else:
+            obj.setLoadModuleStatus("FAILURE")
             print("Failed to Launch the app")
     else:
         print("The download manager is not active")

@@ -55,14 +55,12 @@ if expectedResult in result.upper():
         status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
         if status == "SUCCESS":
             time.sleep(10)
-
             print(f"Killing {app_name} and validating the resource usage")
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method", "org.rdk.AppManager.killApp")
             tdkTestObj.addParameter("value", '{"appId": "' + app_name + '"}')
             tdkTestObj.executeTestCase(expectedResult)
-            status = tdkTestObj.getResult()
-            
+            status = tdkTestObj.getResult()  
             if status == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
                 print("\n Validating resource usage:")
@@ -75,12 +73,10 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
                     print("\n Error while validating resource usage")
-                    tdkTestObj.setResultStatus("FAILURE")
-                    
+                    tdkTestObj.setResultStatus("FAILURE")             
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print(f"\nFailed to Kill {app_name}")
-
                 print("\n Terminating the app")
                 tdkTestObj = obj.createTestStep('rdkv_terminate_app')
                 tdkTestObj.addParameter("app_id",app_name)
@@ -91,9 +87,9 @@ if expectedResult in result.upper():
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     print("Unable to terminate the app")
-
         else:
             print("Failed to Launch the app")
+            obj.setLoadModuleStatus("FAILURE")
     else:
         print("The download manager is not active")
         obj.setLoadModuleStatus("FAILURE")

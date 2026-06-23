@@ -103,19 +103,6 @@ if expectedResult in result.upper():
                         conf_file,file_status = getConfigFileName(obj.realpath)
                         config_status,kill_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_KILL_THRESHOLD_VALUE")
                         config_status,kill_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
-                        # Provide safe defaults if config lookup fails or returns non-numeric/empty values
-                        try:
-                            if kill_threshold is None or str(kill_threshold).strip() == "" or not str(kill_threshold).strip().isdigit():
-                                print("Using default kill threshold value 2000ms")
-                                kill_threshold = "2000"
-                        except Exception:
-                            kill_threshold = "2000"
-                        try:
-                            if kill_offset is None or str(kill_offset).strip() == "" or not str(kill_offset).strip().isdigit():
-                                print("Using default threshold offset value 10ms")
-                                kill_offset = "10"
-                        except Exception:
-                            kill_offset = "10"
                         Summ_list.append('APP_KILL_THRESHOLD_VALUE :{}ms'.format(kill_threshold))
                         Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(kill_offset))
                         Summ_list.append('App Kill initiated at :{}'.format(start_time))

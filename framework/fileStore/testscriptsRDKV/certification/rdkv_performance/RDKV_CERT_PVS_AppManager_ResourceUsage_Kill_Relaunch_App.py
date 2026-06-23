@@ -54,39 +54,29 @@ if expectedResult in result.upper():
         time.sleep(10)
 
     if status == "SUCCESS":
-
         app_bundle_name = PerformanceTestVariables.google_bundle
         app_name = app_bundle_name.split('+')[0]
         print(app_name)
         app_download_url = PerformanceTestVariables.app_download_url
 
         status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url, launch=False)
-
         if status == "SUCCESS":
             print("Successfully installed the app")
-
             print(f"\nLaunching {app_name} (First Launch)")
-
             tdkTestObj = obj.createTestStep('rdkservice_launch_app')
             tdkTestObj.addParameter("app_name", app_name)
             tdkTestObj.executeTestCase(expectedResult)
-
             if tdkTestObj.getResult() == "SUCCESS":
                 print("App launched successfully (First Launch)")
                 tdkTestObj.setResultStatus("SUCCESS")
                 time.sleep(10)
-
                 # Resource usage after first launch
                 print("\n[First Launch] Resource Usage")
-
                 tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                 tdkTestObj.executeTestCase(expectedResult)
-
                 if tdkTestObj.getResult() == "SUCCESS":
                     print(tdkTestObj.getResultDetails())
                     tdkTestObj.setResultStatus("SUCCESS")
-                    
-                    print("\nKilling the app")
                     print(f"Killing {app_name} ")
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method", "org.rdk.AppManager.killApp")
@@ -134,13 +124,12 @@ if expectedResult in result.upper():
                 else:
                     print("Failed to fetch resource usage")
                     tdkTestObj.setResultStatus("FAILURE")
-                    status = "FAILURE"
             else:
                 print("Failed to launch app (First Launch)")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
             print("Failed to install the app")
-
+            obj.setLoadModuleStatus("FAILURE")
     else:
         print("Required plugins are not active")
         obj.setLoadModuleStatus("FAILURE")
