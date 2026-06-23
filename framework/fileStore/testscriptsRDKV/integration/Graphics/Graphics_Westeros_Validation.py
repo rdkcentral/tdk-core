@@ -26,7 +26,7 @@ obj = tdklib.TDKScriptingLibrary("Graphics","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'FNCS_Westeros_Validation');
+obj.configureTestCase(ip,port,'Graphics_Westeros_Validation');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
