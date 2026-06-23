@@ -60,13 +60,11 @@ if expectedResult in result.upper():
         print(app_name)
         app_download_url = PerformanceTestVariables.app_download_url
 
-        # ------------------- Install App (Same as your reference) -------------------
         status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url, launch=False)
 
         if status == "SUCCESS":
             print("Successfully installed the app")
 
-            # ------------------- First Launch -------------------
             print(f"\nLaunching {app_name} (First Launch)")
 
             tdkTestObj = obj.createTestStep('rdkservice_launch_app')
