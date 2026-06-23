@@ -641,11 +641,11 @@ def createDisplay():
         
         # JSON-RPC call to create display
         command = ('curl --header "Content-Type: application/json" '
-                   '--request POST --data \'{"jsonrpc":"2.0", "id":3, '
-                   '"method":"org.rdk.RDKWindowManager.1.createDisplay", '
-                   f'"params" : {{"displayParams" : {{ "client": "test", '
-                   f'"displayName": "test", "displayWidth": {width}, "displayHeight" : {height}}} }}\' '
-                   'http://127.0.0.1:9998/jsonrpc')
+           '--request POST --data \'{"jsonrpc":"2.0", "id":3, '
+           '"method":"org.rdk.RDKWindowManager.1.createDisplay", '
+           f'"params" : {{"clientId": "test", '
+           f'"displayName": "test", "displayWidth": {width}, "displayHeight": {height}}}\' '
+           'http://127.0.0.1:9998/jsonrpc')
         
         output = execute_Cmnd_InDUT(command)
         if output:
@@ -1005,3 +1005,62 @@ def execute_binary(binary, present_mode):
     
     print("SUCCESS : FPS score is within expected range")
     return "SUCCESS"
+
+#-------------------------------------------------------------------
+# Parse Graphics Test Execution Output
+#-------------------------------------------------------------------
+def parse_graphics_output(graphics_output,test_app):
+    #Remove wpeframework.service related prints from log
+    formatted_output = [line for line in graphics_output.splitlines() if "wpeframework.service" not in line]
+    output = '\n'.join(formatted_output)
+    print(output)
+    print ("*" * 80)
+    #If test application is Waymetric, obtain speed indices
+    if test_app == "Waymetric":
+        if "Waymetric Package is not installed" in output:
+            print ("FAILURE: Waymetric not installed in DUT")
+            print ("*" * 80)
+            return "FAILURE"
+        waymetric_report = " cat /tmp/waymetric-report.txt "
+        output = execute_Cmnd_InDUT(waymetric_report)
+        speed_indices = [line for line in output.splitlines() if "speed index" in line]
+        if not speed_indices:
+            print ("FAILURE: Unable to obtain speed index\nExecution Failed")
+            print ("*" * 80)
+            return "FAILURE"
+        else:
+            print (speed_indices)
+            print ("SUCCESS: Waymetric execution was successfull")
+            print ("*" * 80)
+            return "SUCCESS"
+    #Check if app exited gracefully without any crash
+    if ("Exiting from the test app" not in output) and ("westeros_test: exit" not in output):
+        print ("FAILURE: Test Application was not exited gracefully")
+        print ("*" * 80)
+        return "FAILURE"
+    #If test application is Westeros_TDKTestApp , validate error statements
+    if test_app == "Westeros_TDKTestApp":
+        #ignore "error opening device: /dev/input/event0" as output
+        if "error" in output and "error opening device" not in output:
+            print ("FAILURE: ERROR observed in execution")
+            print ("*" * 80)
+            return "FAILURE"
+        else:
+            print ("SUCCESS: WesterosTDKTestApp execution was successfull")
+            print ("*" * 80)
+            return "SUCCESS"
+    #Check if all APIs are validated successfully
+    #13 APIs must be validated for EssosTDKTestApp
+    validation_success = output.count("VALIDATION SUCCESS");
+    if validation_success == 13:
+        print ("SUCCESS : All Essos APIs validated successfully")
+        print ("*" * 80)
+        return "SUCCESS"
+    else:
+        print ("FAILURE: VALIDATION ERROR observed")
+        print ("*" * 80)
+        validation_error_strings = [line for line in output.splitlines() if "VALIDATION ERROR" in line]
+        print("ERROR Observed:")
+        for matched_line in validation_error_strings:
+             print(matched_line)
+        return "FAILURE"

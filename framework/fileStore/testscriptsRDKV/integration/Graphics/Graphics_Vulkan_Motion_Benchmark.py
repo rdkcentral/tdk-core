@@ -19,10 +19,10 @@
 
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib; 
-from Vulkanlib import resolution, api
+from Graphicslib import resolution, api
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
+obj = tdklib.TDKScriptingLibrary("Graphics","1",standAlone=True);
 
 #IP and Port of device type, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
@@ -65,4 +65,4 @@ if "SUCCESS" in result.upper():
     else:
         print("Unable to set PRE-REQUISITES")
 
-obj.unloadModule("Vulkan");
+obj.unloadModule("Graphics");
