@@ -21,10 +21,6 @@ import tdklib
 import time
 import StabilityTestUtility
 from StabilityTestUtility import *
-import PerformanceTestVariables
-from web_socket_util import *
-import rdkv_performancelib
-from datetime import datetime, UTC
 
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 

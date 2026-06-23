@@ -22,9 +22,6 @@ import tdklib;
 import time
 import StabilityTestUtility
 from StabilityTestUtility import *
-import PerformanceTestVariables
-import rdkv_performancelib
-import BrowserPerformanceVariables
 
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 #IP and Port of box, No need to change,

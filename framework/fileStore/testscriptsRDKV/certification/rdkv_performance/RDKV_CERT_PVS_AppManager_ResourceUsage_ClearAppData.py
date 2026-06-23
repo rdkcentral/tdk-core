@@ -22,9 +22,6 @@ import tdklib;
 import time
 import StabilityTestUtility
 from StabilityTestUtility import *
-import PerformanceTestVariables
-import rdkv_performancelib
-import BrowserPerformanceVariables
 
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 #IP and Port of box, No need to change,
@@ -55,10 +52,6 @@ if expectedResult in result.upper():
         app_name = app_bundle_name.split("+")[0]
         app_download_url = PerformanceTestVariables.app_download_url
 
-        app_bundle_name=BrowserPerformanceVariables.css3_app_bundle_name
-        app_download_url=BrowserPerformanceVariables.app_download_url
-        app_name="com.rdkcentrl.css3"
-
         status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
         if status == "SUCCESS":
             print("\n Validating resource usage before clearing app data:")
@@ -69,47 +62,48 @@ if expectedResult in result.upper():
             if expectedResult in result and resource_usage != "ERROR":
                 print("\n Resource usage is within the expected limit")
                 tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                print("\n Error while validating resource usage")
-                tdkTestObj.setResultStatus("FAILURE")
-            time.sleep(5)
 
-            print("\n Terminating the app")
-            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-            tdkTestObj.addParameter("app_id",app_name)
-            tdkTestObj.executeTestCase(expectedResult)
-            result = tdkTestObj.getResult()
+                time.sleep(5)
 
-            if result == "SUCCESS":
-                tdkTestObj.setResultStatus("SUCCESS")
-
-                tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                tdkTestObj.addParameter("method", "org.rdk.AppManager.clearAppData")
-                tdkTestObj.addParameter("value", '{"appId": "' + app_name + '"}')
+                print("\n Terminating the app")
+                tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                tdkTestObj.addParameter("app_id",app_name)
                 tdkTestObj.executeTestCase(expectedResult)
-                status = tdkTestObj.getResult()
-                if status == "SUCCESS":
+                result = tdkTestObj.getResult()
+
+                if result == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"\nCleared app data for {app_name} successfully")
-                    print("\n Validating resource usage after clearing app data:")
-                    tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+
+                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                    tdkTestObj.addParameter("method", "org.rdk.AppManager.clearAppData")
+                    tdkTestObj.addParameter("value", '{"appId": "' + app_name + '"}')
                     tdkTestObj.executeTestCase(expectedResult)
-                    resource_usage = tdkTestObj.getResultDetails()
-                    result = tdkTestObj.getResult()
-                    if expectedResult in result and resource_usage != "ERROR":
-                        print("\n Resource usage is within the expected limit")
+                    status = tdkTestObj.getResult()
+                    if status == "SUCCESS":
                         tdkTestObj.setResultStatus("SUCCESS")
+                        print(f"\nCleared app data for {app_name} successfully")
+                        print("\n Validating resource usage after clearing app data:")
+                        tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                        tdkTestObj.executeTestCase(expectedResult)
+                        resource_usage = tdkTestObj.getResultDetails()
+                        result = tdkTestObj.getResult()
+                        if expectedResult in result and resource_usage != "ERROR":
+                            print("\n Resource usage is within the expected limit")
+                            tdkTestObj.setResultStatus("SUCCESS")
+                        else:
+                            print("\n Error while validating resource usage")
+                            tdkTestObj.setResultStatus("FAILURE")
+
                     else:
-                        print("\n Error while validating resource usage")
                         tdkTestObj.setResultStatus("FAILURE")
+                        print(f"\nFailed to clear app data for {app_name}")
 
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print(f"\nFailed to clear app data for {app_name}")
-
+                    print("Unable to terminate the app")
             else:
+                print("\n Error while validating resource usage")
                 tdkTestObj.setResultStatus("FAILURE")
-                print("Unable to terminate the app")
 
         else:
             print("Failed to Launch the app")

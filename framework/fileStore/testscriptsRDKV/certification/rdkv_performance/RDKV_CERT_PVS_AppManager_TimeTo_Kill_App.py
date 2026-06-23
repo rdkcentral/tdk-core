@@ -25,7 +25,6 @@ from StabilityTestUtility import *
 import PerformanceTestVariables
 from web_socket_util import *
 import rdkv_performancelib
-import BrowserPerformanceVariables
 from datetime import datetime, UTC
 
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
@@ -76,6 +75,8 @@ if expectedResult in result.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
                 continue_count = 0
                 end_time = ""
+                event = None
+                unloaded_flag = False
                 while True:
                     if continue_count > 120:
                         break
@@ -85,47 +86,80 @@ if expectedResult in result.upper():
                         continue
                     event = event_listener.getEventsBuffer().pop(0)
                     print("\nEvent:", event)
-                    if app_name in event and "onAppLifecycleStateChanged" in str(event):
-                        if "APP_STATE_UNLOADED" in event:
+                    if app_name in str(event) and "onAppLifecycleStateChanged" in str(event):
+                        if "APP_STATE_UNLOADED" in str(event):
                             print("Received unload event")
                             tdkTestObj.setResultStatus("SUCCESS")
+                            unloaded_flag = True
                             break   
-                if  "APP_STATE_UNLOADED" in event:
-                    print("Received unload event successfully")
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    event_data = str(event).split("$$$")[1]
-                    kill_time = str(event).split("$$$")[0]
-                    kill_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
-                    kill_end_time = datetime.strptime(str(kill_time), "%H:%M:%S.%f")
-                    conf_file,file_status = getConfigFileName(obj.realpath)
-                    config_status,kill_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_KILL_THRESHOLD_VALUE")
-                    config_status,kill_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
-                    Summ_list.append('APP_KILL_THRESHOLD_VALUE :{}ms'.format(kill_threshold))
-                    Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(kill_offset))
-                    Summ_list.append('App Kill initiated at :{}'.format(start_time))
-                    Summ_list.append('App killed at :{}'.format(kill_time))
-                    time_taken_for_kill = kill_end_time - kill_start_time
-                    time_taken_for_kill = time_taken_for_kill.total_seconds() * 1000
-                    print("\nKill initiated at ", start_time)
-                    print("\n Kill completed at ", kill_time)
-                    print("\n Time taken to kill the app : {}(ms)".format(time_taken_for_kill))
-                    Summ_list.append('Time taken to kill app :{}ms'.format(time_taken_for_kill))
-                    print("\n Threshold value for time taken to kill the app: {} ms".format(kill_threshold))
-                    print("\n Validate the time:")
-                    if 0 < int(time_taken_for_kill) < (int(kill_threshold) + int(kill_offset)) :
-                        print("\n Time taken for killing the app is within the expected range")
+                if unloaded_flag:
+                    try:
+                        print("Received unload event successfully")
                         tdkTestObj.setResultStatus("SUCCESS")
-                    else:
-                        print("\n Time taken for killing the app is not within the expected range")
-                        tdkTestObj.setResultStatus("FAILURE")  
-                    getSummary(Summ_list,obj)    
-                    event_listener.disconnect()                          
+                        event_data = str(event).split("$$$")[1]
+                        kill_time = str(event).split("$$$")[0]
+                        kill_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
+                        kill_end_time = datetime.strptime(str(kill_time), "%H:%M:%S.%f")
+                        conf_file,file_status = getConfigFileName(obj.realpath)
+                        config_status,kill_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_KILL_THRESHOLD_VALUE")
+                        config_status,kill_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                        # Provide safe defaults if config lookup fails or returns non-numeric/empty values
+                        try:
+                            if kill_threshold is None or str(kill_threshold).strip() == "" or not str(kill_threshold).strip().isdigit():
+                                print("Using default kill threshold value 2000ms")
+                                kill_threshold = "2000"
+                        except Exception:
+                            kill_threshold = "2000"
+                        try:
+                            if kill_offset is None or str(kill_offset).strip() == "" or not str(kill_offset).strip().isdigit():
+                                print("Using default threshold offset value 10ms")
+                                kill_offset = "10"
+                        except Exception:
+                            kill_offset = "10"
+                        Summ_list.append('APP_KILL_THRESHOLD_VALUE :{}ms'.format(kill_threshold))
+                        Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(kill_offset))
+                        Summ_list.append('App Kill initiated at :{}'.format(start_time))
+                        Summ_list.append('App killed at :{}'.format(kill_time))
+                        time_taken_for_kill = kill_end_time - kill_start_time
+                        time_taken_for_kill = time_taken_for_kill.total_seconds() * 1000
+                        print("\nKill initiated at ", start_time)
+                        print("\n Kill completed at ", kill_time)
+                        print("\n Time taken to kill the app : {}(ms)".format(time_taken_for_kill))
+                        Summ_list.append('Time taken to kill app :{}ms'.format(time_taken_for_kill))
+                        print("\n Threshold value for time taken to kill the app: {} ms".format(kill_threshold))
+                        print("\n Validate the time:")
+                        try:
+                            if 0 < int(time_taken_for_kill) < (int(kill_threshold) + int(kill_offset)) :
+                                print("\n Time taken for killing the app is within the expected range")
+                                tdkTestObj.setResultStatus("SUCCESS")
+                            else:
+                                print("\n Time taken for killing the app is not within the expected range")
+                                tdkTestObj.setResultStatus("FAILURE")
+                        except Exception:
+                            print("\n Error validating time due to invalid threshold/offset values")
+                            tdkTestObj.setResultStatus("FAILURE")
+                        getSummary(Summ_list,obj)
+                    finally:
+                        # Ensure websocket listener is always disconnected to avoid leaking threads
+                        try:
+                            event_listener.disconnect()
+                        except Exception as e:
+                            print(f"Error disconnecting event listener: {e}")
                 else:
                     print("Failed to receive unload event")
                     tdkTestObj.setResultStatus("FAILURE")
+                    try:
+                        event_listener.disconnect()
+                    except Exception as e:
+                        print(f"Error disconnecting event listener: {e}")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print(f"\nFailed to kill {app_name}")
+                # Ensure websocket listener is disconnected on failure path
+                try:
+                    event_listener.disconnect()
+                except Exception as e:
+                    print(f"Error disconnecting event listener: {e}")
 
                 print("\n Terminating the app")
                 tdkTestObj = obj.createTestStep('rdkv_terminate_app')
