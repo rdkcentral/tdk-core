@@ -96,7 +96,6 @@ if expectedResult in result.upper():
                     try:
                         print("Received unload event successfully")
                         tdkTestObj.setResultStatus("SUCCESS")
-                        event_data = str(event).split("$$$")[1]
                         kill_time = str(event).split("$$$")[0]
                         kill_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
                         kill_end_time = datetime.strptime(str(kill_time), "%H:%M:%S.%f")
