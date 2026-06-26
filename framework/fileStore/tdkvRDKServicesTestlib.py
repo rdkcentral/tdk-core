@@ -1956,6 +1956,21 @@ def getTestStepInfo(testStep):
                 status,result = readDeviceConfigKeys(param.attrib.get("key"))
                 testStepInfo["parseStatus"] = status if status == "FAILURE" else ""
                 testParams[param.attrib.get("tag")] = result
+            elif param.attrib.get("configBasedResultId") == "true":
+                status,result = readDeviceConfigKeys(param.attrib.get("key"))
+                #Set parse status
+                testStepInfo["parseStatus"] = status if status == "FAILURE" else ""
+                print("\n[INFO]: Device config value is %s" % result)
+                #form execution Ids
+                executionIds = '{}_{}_{}'.format(str(libObj.execID),str(libObj.execDevId),str(libObj.resultId))
+                print("\n[INFO]: Execution Ids formed using executionId, deviceId and resultId are %s" % executionIds)
+                #Update URL only if valid
+                if result and "fileName=" in result:
+                    final_url = result.replace("fileName=", f"fileName={executionIds}_")
+                    print("\n[INFO]: Final URL formed using device config value and execution Ids is %s" % final_url)
+                else:
+                    final_url = result
+                testParams[param.attrib.get("tag")] = final_url
             else:
                 testParams[param.attrib.get("tag")] = param.attrib.get("value")
 
