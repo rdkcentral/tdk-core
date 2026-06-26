@@ -1249,7 +1249,7 @@ def setMediaTestPostRequisites(app_id):
                 break
         event_listener.disconnect()
     else:
-        print("\nEvent listener is not initialized. Failed to terminate the bolt app\n")
+        print(f"\nEvent listener is not initialized; cannot validate app unload event for {app_id}\n")
         return "FAILURE"
 
     if event_received:
