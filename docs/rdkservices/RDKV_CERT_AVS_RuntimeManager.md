@@ -1,53 +1,56 @@
+## TestScript Name
+RDKV_CERT_AVS_RuntimeManager
+
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Pre-conditions](#pre-conditions)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [RuntimeManager_GetInfo (RTM_01)](#runtimemanager_getinfo-rtm_01)
-   - [RuntimeManager_GetInfo_EmptyAppId (RTM_02)](#runtimemanager_getinfo_emptyappid-rtm_02)
-   - [RuntimeManager_GetInfo_InvalidAppId (RTM_03)](#runtimemanager_getinfo_invalidappid-rtm_03)
-   - [RuntimeManager_GetInfo_SpecialCharsAppId (RTM_04)](#runtimemanager_getinfo_specialcharsappid-rtm_04)
-   - [RuntimeManager_GetInfo_Without_Parameter (RTM_05)](#runtimemanager_getinfo_without_parameter-rtm_05)
-   - [RuntimeManager_GetInfo_NumericAppId (RTM_06)](#runtimemanager_getinfo_numericappid-rtm_06)
-   - [RuntimeManager_Annotate_ValidParameters (RTM_07)](#runtimemanager_annotate_validparameters-rtm_07)
-   - [RuntimeManager_Annotate_EmptyAppId (RTM_08)](#runtimemanager_annotate_emptyappid-rtm_08)
-   - [RuntimeManager_Annotate_InvalidAppId (RTM_09)](#runtimemanager_annotate_invalidappid-rtm_09)
-   - [RuntimeManager_Annotate_EmptyKey (RTM_10)](#runtimemanager_annotate_emptykey-rtm_10)
-   - [RuntimeManager_Annotate_InvalidKey (RTM_11)](#runtimemanager_annotate_invalidkey-rtm_11)
-   - [RuntimeManager_Annotate_SpecialCharsKey (RTM_12)](#runtimemanager_annotate_specialcharskey-rtm_12)
-   - [RuntimeManager_Annotate_EmptyValue (RTM_13)](#runtimemanager_annotate_emptyvalue-rtm_13)
-   - [RuntimeManager_Annotate_SpecialCharsValue (RTM_14)](#runtimemanager_annotate_specialcharsvalue-rtm_14)
-   - [RuntimeManager_Annotate_InvalidParameter (RTM_15)](#runtimemanager_annotate_invalidparameter-rtm_15)
-   - [RuntimeManager_Annotate_Without_Parameters (RTM_16)](#runtimemanager_annotate_without_parameters-rtm_16)
-   - [RuntimeManager_Hibernate_Application (RTM_17)](#runtimemanager_hibernate_application-rtm_17)
-   - [RuntimeManager_Hibernate_EmptyAppId (RTM_18)](#runtimemanager_hibernate_emptyappid-rtm_18)
-   - [RuntimeManager_Hibernate_InvalidAppId (RTM_19)](#runtimemanager_hibernate_invalidappid-rtm_19)
-   - [RuntimeManager_Hibernate_SpecialCharsAppId (RTM_20)](#runtimemanager_hibernate_specialcharsappid-rtm_20)
-   - [RuntimeManager_Hibernate_NumericAppId (RTM_21)](#runtimemanager_hibernate_numericappid-rtm_21)
-   - [RuntimeManager_Hibernate_Without_Parameter (RTM_22)](#runtimemanager_hibernate_without_parameter-rtm_22)
-   - [RuntimeManager_Suspend_Application (RTM_23)](#runtimemanager_suspend_application-rtm_23)
-   - [RuntimeManager_Suspend_EmptyAppId (RTM_24)](#runtimemanager_suspend_emptyappid-rtm_24)
-   - [RuntimeManager_Suspend_InvalidAppId (RTM_25)](#runtimemanager_suspend_invalidappid-rtm_25)
-   - [RuntimeManager_Suspend_SpecialCharsAppId (RTM_26)](#runtimemanager_suspend_specialcharsappid-rtm_26)
-   - [RuntimeManager_Suspend_NumericAppId (RTM_27)](#runtimemanager_suspend_numericappid-rtm_27)
-   - [RuntimeManager_Suspend_Without_Parameter (RTM_28)](#runtimemanager_suspend_without_parameter-rtm_28)
-   - [RuntimeManager_Resume_Application (RTM_29)](#runtimemanager_resume_application-rtm_29)
-   - [RuntimeManager_Resume_EmptyAppId (RTM_30)](#runtimemanager_resume_emptyappid-rtm_30)
-   - [RuntimeManager_Resume_InvalidAppId (RTM_31)](#runtimemanager_resume_invalidappid-rtm_31)
-   - [RuntimeManager_Resume_SpecialCharsAppId (RTM_32)](#runtimemanager_resume_specialcharsappid-rtm_32)
-   - [RuntimeManager_Resume_NumericAppId (RTM_33)](#runtimemanager_resume_numericappid-rtm_33)
-   - [RuntimeManager_Resume_Without_Parameter (RTM_34)](#runtimemanager_resume_without_parameter-rtm_34)
-   - [RuntimeManager_Wake_Application (RTM_35)](#runtimemanager_wake_application-rtm_35)
-   - [RuntimeManager_Wake_Application_Suspended_State (RTM_36)](#runtimemanager_wake_application_suspended_state-rtm_36)
-   - [RuntimeManager_Wake_EmptyAppId (RTM_37)](#runtimemanager_wake_emptyappid-rtm_37)
-   - [RuntimeManager_Wake_InvalidAppId (RTM_38)](#runtimemanager_wake_invalidappid-rtm_38)
-   - [RuntimeManager_Wake_SpecialCharsAppId (RTM_39)](#runtimemanager_wake_specialcharsappid-rtm_39)
-   - [RuntimeManager_Wake_NumericAppId (RTM_40)](#runtimemanager_wake_numericappid-rtm_40)
-   - [RuntimeManager_Wake_InvalidState (RTM_41)](#runtimemanager_wake_invalidstate-rtm_41)
-   - [RuntimeManager_Wake_EmptyState (RTM_42)](#runtimemanager_wake_emptystate-rtm_42)
-   - [RuntimeManager_Wake_Without_Parameters (RTM_43)](#runtimemanager_wake_without_parameters-rtm_43)
-   - [RuntimeManager_Wake_Without_State (RTM_44)](#runtimemanager_wake_without_state-rtm_44)
-4. [Post-conditions](#post-conditions)
+   - [RuntimeManager_GetInfo](#runtimemanager_getinfo)
+   - [RuntimeManager_GetInfo_EmptyAppId](#runtimemanager_getinfo_emptyappid)
+   - [RuntimeManager_GetInfo_InvalidAppId](#runtimemanager_getinfo_invalidappid)
+   - [RuntimeManager_GetInfo_SpecialCharsAppId](#runtimemanager_getinfo_specialcharsappid)
+   - [RuntimeManager_GetInfo_Without_Parameter](#runtimemanager_getinfo_without_parameter)
+   - [RuntimeManager_GetInfo_NumericAppId](#runtimemanager_getinfo_numericappid)
+   - [RuntimeManager_Annotate_ValidParameters](#runtimemanager_annotate_validparameters)
+   - [RuntimeManager_Annotate_EmptyAppId](#runtimemanager_annotate_emptyappid)
+   - [RuntimeManager_Annotate_InvalidAppId](#runtimemanager_annotate_invalidappid)
+   - [RuntimeManager_Annotate_EmptyKey](#runtimemanager_annotate_emptykey)
+   - [RuntimeManager_Annotate_InvalidKey](#runtimemanager_annotate_invalidkey)
+   - [RuntimeManager_Annotate_SpecialCharsKey](#runtimemanager_annotate_specialcharskey)
+   - [RuntimeManager_Annotate_EmptyValue](#runtimemanager_annotate_emptyvalue)
+   - [RuntimeManager_Annotate_SpecialCharsValue](#runtimemanager_annotate_specialcharsvalue)
+   - [RuntimeManager_Annotate_InvalidParameter](#runtimemanager_annotate_invalidparameter)
+   - [RuntimeManager_Annotate_Without_Parameters](#runtimemanager_annotate_without_parameters)
+   - [RuntimeManager_Hibernate_Application](#runtimemanager_hibernate_application)
+   - [RuntimeManager_Hibernate_EmptyAppId](#runtimemanager_hibernate_emptyappid)
+   - [RuntimeManager_Hibernate_InvalidAppId](#runtimemanager_hibernate_invalidappid)
+   - [RuntimeManager_Hibernate_SpecialCharsAppId](#runtimemanager_hibernate_specialcharsappid)
+   - [RuntimeManager_Hibernate_NumericAppId](#runtimemanager_hibernate_numericappid)
+   - [RuntimeManager_Hibernate_Without_Parameter](#runtimemanager_hibernate_without_parameter)
+   - [RuntimeManager_Suspend_Application](#runtimemanager_suspend_application)
+   - [RuntimeManager_Suspend_EmptyAppId](#runtimemanager_suspend_emptyappid)
+   - [RuntimeManager_Suspend_InvalidAppId](#runtimemanager_suspend_invalidappid)
+   - [RuntimeManager_Suspend_SpecialCharsAppId](#runtimemanager_suspend_specialcharsappid)
+   - [RuntimeManager_Suspend_NumericAppId](#runtimemanager_suspend_numericappid)
+   - [RuntimeManager_Suspend_Without_Parameter](#runtimemanager_suspend_without_parameter)
+   - [RuntimeManager_Resume_Application](#runtimemanager_resume_application)
+   - [RuntimeManager_Resume_EmptyAppId](#runtimemanager_resume_emptyappid)
+   - [RuntimeManager_Resume_InvalidAppId](#runtimemanager_resume_invalidappid)
+   - [RuntimeManager_Resume_SpecialCharsAppId](#runtimemanager_resume_specialcharsappid)
+   - [RuntimeManager_Resume_NumericAppId](#runtimemanager_resume_numericappid)
+   - [RuntimeManager_Resume_Without_Parameter](#runtimemanager_resume_without_parameter)
+   - [RuntimeManager_Wake_Application](#runtimemanager_wake_application)
+   - [RuntimeManager_Wake_Application_Suspended_State](#runtimemanager_wake_application_suspended_state)
+   - [RuntimeManager_Wake_EmptyAppId](#runtimemanager_wake_emptyappid)
+   - [RuntimeManager_Wake_InvalidAppId](#runtimemanager_wake_invalidappid)
+   - [RuntimeManager_Wake_SpecialCharsAppId](#runtimemanager_wake_specialcharsappid)
+   - [RuntimeManager_Wake_NumericAppId](#runtimemanager_wake_numericappid)
+   - [RuntimeManager_Wake_InvalidState](#runtimemanager_wake_invalidstate)
+   - [RuntimeManager_Wake_EmptyState](#runtimemanager_wake_emptystate)
+   - [RuntimeManager_Wake_Without_Parameters](#runtimemanager_wake_without_parameters)
+   - [RuntimeManager_Wake_Without_State](#runtimemanager_wake_without_state)
+4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
 ---
@@ -63,7 +66,7 @@ accessible via JSON-RPC under the callsign `org.rdk.RuntimeManager` (version 1)
 - **Lifecycle / Control APIs**: `hibernate`, `resume`, `suspend`
 - **Other APIs**: `annotate`, `wake`
 
-### APIs Under Test
+## APIs Under Test
 
 | API | Description |
 |-----|-------------|
@@ -76,669 +79,889 @@ accessible via JSON-RPC under the callsign `org.rdk.RuntimeManager` (version 1)
 
 ---
 
-## Pre-conditions
+## Plugin Pre-conditions
 
-### Pre-condition 1: Activate_AppStorageManager_Plugin
-
-| Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.AppStorageManager"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppStorageManager"}}' http://127.0.0.1:9998/jsonrpc` | N/A |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-
-### Pre-condition 2: Activate_DownloadManager_Plugin
+### Plugin Pre-condition 1: Activate_AppStorageManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.DownloadManager"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | N/A |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 1 | Check PluginActive Status | Check Active Status of AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppStorageManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
-### Pre-condition 3: Activate_PackageManagerRDKEMS_Plugin
-
-| Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.PackageManagerRDKEMS"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PackageManagerRDKEMS"}}' http://127.0.0.1:9998/jsonrpc` | N/A |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-
-### Pre-condition 4: Activate_AppManager_Plugin
+### Plugin Pre-condition 2: Activate_DownloadManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.AppManager"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppManager"}}' http://127.0.0.1:9998/jsonrpc` | N/A |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 1 | Check PluginActive Status | Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
-### Pre-condition 5: Activate_RuntimeManager_Plugin
-
-| Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RuntimeManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.RuntimeManager"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.RuntimeManager"}}' http://127.0.0.1:9998/jsonrpc` | N/A |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RuntimeManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-
-### Pre-condition 6: Check_Existing_Package_Before_Install
+### Plugin Pre-condition 3: Activate_PackageManagerRDKEMS_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Check Existing Package | Invoke `listPackages` on `org.rdk.PackageManagerRDKEMS`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Package list returned successfully |
-| 2 | Uninstall Existing Package | Invoke `uninstall` on `org.rdk.PackageManagerRDKEMS` with `packageId`: `"<PACKAGEMANAGER_APPLICATION_NAME>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
-| 3 | Download ValidParameters | Invoke `download` on `org.rdk.DownloadManager` with `url`: `"<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Valid downloadId is returned successfully |
-| 4 | Install | Invoke `install` on `org.rdk.PackageManagerRDKEMS` with `packageId`: `"<PACKAGEMANAGER_APPLICATION_NAME>"`, `version`: `"<PACKAGEMANAGER_APPLICATION_VERSION>"`, `fileLocator`: `"<result_step_4>"`, `name`: `"<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>"`, `value`: `"<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
-| 5 | Verify Installed Package | Invoke `listPackages` on `org.rdk.PackageManagerRDKEMS`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Installed package validation succeeds |
+| 1 | Check PluginActive Status | Check Active Status of PackageManagerRDKEMS Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PackageManagerRDKEMS Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PackageManagerRDKEMS"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of PackageManagerRDKEMS Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
-### Pre-condition 7: Launch_Application
+### Plugin Pre-condition 4: Activate_AppManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Launch App Valid Params | Invoke `launchApp` on `org.rdk.AppManager` with `appId`: `"<PACKAGEMANAGER_APPLICATION_NAME>"`, `intent`: `""`, `launchArgs`: `""`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": "", "launchArgs": ""}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
-| 2 | Check App Launched | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Loaded apps information validated successfully |
+| 1 | Check PluginActive Status | Check Active Status of AppManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of AppManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+
+### Plugin Pre-condition 5: Activate_RuntimeManager_Plugin
+
+| Step ID | Step Name | Description | Expected Result |
+|---------|-----------|-------------|-----------------|
+| 1 | Check PluginActive Status | Check Active Status of RuntimeManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RuntimeManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate RuntimeManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.RuntimeManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of RuntimeManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RuntimeManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+
+### Plugin Pre-condition 6: Check_Existing_Package_Before_Install
+
+| Step ID | Step Name | Description | Expected Result |
+|---------|-----------|-------------|-----------------|
+| 1 | Check Existing Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
+| 2 | Uninstall Existing Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Download ValidParameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
+| 4 | Install | Install on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | Verify Installed Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
+
+### Plugin Pre-condition 7: Launch_Application
+
+| Step ID | Step Name | Description | Expected Result |
+|---------|-----------|-------------|-----------------|
+| 1 | Launch App Valid Params | Launch App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": "", "launchArgs": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 2 | Check App Launched | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 
 ---
 
 ## Test Cases
 
-<a id="runtimemanager_getinfo-rtm_01"></a>
-### RuntimeManager_GetInfo (RTM_01)
+<a id="runtimemanager_getinfo"></a>
+### TestCase Name
+RuntimeManager_GetInfo
 
-**Objective:** Check whether getInfo method returns non-empty result
+### TestCase ID
+RTM_01
 
-**Test Steps:**
+### TestCase Objective
+Check whether getInfo method returns non-empty result
 
-| Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Get Application Info | Invoke `getInfo` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API call should succeed and return a non-empty result |
-
----
-
-<a id="runtimemanager_getinfo_emptyappid-rtm_02"></a>
-### RuntimeManager_GetInfo_EmptyAppId (RTM_02)
-
-**Objective:** Test getInfo method with empty appInstanceId parameter
-
-**Test Steps:**
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get Application Info Empty AppId | Invoke `getInfo` on `org.rdk.RuntimeManager` with `appInstanceId`: `""`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Get Application Info | Invoke getInfo on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API call should succeed and return a non-empty result |
 
 ---
 
-<a id="runtimemanager_getinfo_invalidappid-rtm_03"></a>
-### RuntimeManager_GetInfo_InvalidAppId (RTM_03)
+<a id="runtimemanager_getinfo_emptyappid"></a>
+### TestCase Name
+RuntimeManager_GetInfo_EmptyAppId
 
-**Objective:** Test getInfo method with invalid appInstanceId parameter
+### TestCase ID
+RTM_02
 
-**Test Steps:**
+### TestCase Objective
+Test getInfo method with empty appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get Application Info Invalid AppId | Invoke `getInfo` on `org.rdk.RuntimeManager` with `appInstanceId`: `"invalid_app_id"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": "invalid_app_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get Application Info Empty AppId | Invoke getInfo on org.rdk.RuntimeManager with appInstanceId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_getinfo_specialcharsappid-rtm_04"></a>
-### RuntimeManager_GetInfo_SpecialCharsAppId (RTM_04)
+<a id="runtimemanager_getinfo_invalidappid"></a>
+### TestCase Name
+RuntimeManager_GetInfo_InvalidAppId
 
-**Objective:** Test getInfo method with special characters in appInstanceId
+### TestCase ID
+RTM_03
 
-**Test Steps:**
+### TestCase Objective
+Test getInfo method with invalid appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get Application Info SpecialChars AppId | Invoke `getInfo` on `org.rdk.RuntimeManager` with `appInstanceId`: `"()^*!"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get Application Info Invalid AppId | Invoke getInfo on org.rdk.RuntimeManager with appInstanceId: "invalid_app_id"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": "invalid_app_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_getinfo_without_parameter-rtm_05"></a>
-### RuntimeManager_GetInfo_Without_Parameter (RTM_05)
+<a id="runtimemanager_getinfo_specialcharsappid"></a>
+### TestCase Name
+RuntimeManager_GetInfo_SpecialCharsAppId
 
-**Objective:** Test getInfo method without parameter
+### TestCase ID
+RTM_04
 
-**Test Steps:**
+### TestCase Objective
+Test getInfo method with special characters in appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get Application Info Without Parameter | Invoke `getInfo` on `org.rdk.RuntimeManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get Application Info SpecialChars AppId | Invoke getInfo on org.rdk.RuntimeManager with appInstanceId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_getinfo_numericappid-rtm_06"></a>
-### RuntimeManager_GetInfo_NumericAppId (RTM_06)
+<a id="runtimemanager_getinfo_without_parameter"></a>
+### TestCase Name
+RuntimeManager_GetInfo_Without_Parameter
 
-**Objective:** Test getInfo method with numeric only appInstanceId
+### TestCase ID
+RTM_05
 
-**Test Steps:**
+### TestCase Objective
+Test getInfo method without parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get Application Info Numeric AppId | Invoke `getInfo` on `org.rdk.RuntimeManager` with `appInstanceId`: `123456789`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": 123456789}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get Application Info Without Parameter | Invoke getInfo on org.rdk.RuntimeManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_annotate_validparameters-rtm_07"></a>
-### RuntimeManager_Annotate_ValidParameters (RTM_07)
+<a id="runtimemanager_getinfo_numericappid"></a>
+### TestCase Name
+RuntimeManager_GetInfo_NumericAppId
 
-**Objective:** Test annotate method with valid parameters
+### TestCase ID
+RTM_06
 
-**Test Steps:**
+### TestCase Objective
+Test getInfo method with numeric only appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Annotate Application Valid Params | Invoke `annotate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `key`: `"testKey"`, `value`: `"testValue"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
+| 1 | Get Application Info Numeric AppId | Invoke getInfo on org.rdk.RuntimeManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": 123456789}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_annotate_emptyappid-rtm_08"></a>
-### RuntimeManager_Annotate_EmptyAppId (RTM_08)
+<a id="runtimemanager_annotate_validparameters"></a>
+### TestCase Name
+RuntimeManager_Annotate_ValidParameters
 
-**Objective:** Test annotate method with empty appInstanceId parameter
+### TestCase ID
+RTM_07
 
-**Test Steps:**
+### TestCase Objective
+Test annotate method with valid parameters
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Annotate Application Empty AppId | Invoke `annotate` on `org.rdk.RuntimeManager` with `appInstanceId`: `""`, `key`: `"testKey"`, `value`: `"testValue"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "", "key": "testKey", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Annotate Application Valid Params | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "testKey", value: "testValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
 
-<a id="runtimemanager_annotate_invalidappid-rtm_09"></a>
-### RuntimeManager_Annotate_InvalidAppId (RTM_09)
+<a id="runtimemanager_annotate_emptyappid"></a>
+### TestCase Name
+RuntimeManager_Annotate_EmptyAppId
 
-**Objective:** Test annotate method with invalid appInstanceId parameter
+### TestCase ID
+RTM_08
 
-**Test Steps:**
+### TestCase Objective
+Test annotate method with empty appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Annotate Application Invalid AppId | Invoke `annotate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"invalid_app_id"`, `key`: `"testKey"`, `value`: `"testValue"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "invalid_app_id", "key": "testKey", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Annotate Application Empty AppId | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "", key: "testKey", value: "testValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "", "key": "testKey", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_annotate_emptykey-rtm_10"></a>
-### RuntimeManager_Annotate_EmptyKey (RTM_10)
+<a id="runtimemanager_annotate_invalidappid"></a>
+### TestCase Name
+RuntimeManager_Annotate_InvalidAppId
 
-**Objective:** Test annotate method with empty key parameter
+### TestCase ID
+RTM_09
 
-**Test Steps:**
+### TestCase Objective
+Test annotate method with invalid appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Annotate Application Empty Key | Invoke `annotate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `key`: `""`, `value`: `"testValue"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Annotate Application Invalid AppId | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "invalid_app_id", key: "testKey", value: "testValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "invalid_app_id", "key": "testKey", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_annotate_invalidkey-rtm_11"></a>
-### RuntimeManager_Annotate_InvalidKey (RTM_11)
+<a id="runtimemanager_annotate_emptykey"></a>
+### TestCase Name
+RuntimeManager_Annotate_EmptyKey
 
-**Objective:** Test annotate method with invalid key parameter
+### TestCase ID
+RTM_10
 
-**Test Steps:**
+### TestCase Objective
+Test annotate method with empty key parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Annotate Application Invalid Key | Invoke `annotate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `key`: `"invalid_key"`, `value`: `"testValue"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "invalid_key", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Annotate Application Empty Key | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "", value: "testValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_annotate_specialcharskey-rtm_12"></a>
-### RuntimeManager_Annotate_SpecialCharsKey (RTM_12)
+<a id="runtimemanager_annotate_invalidkey"></a>
+### TestCase Name
+RuntimeManager_Annotate_InvalidKey
 
-**Objective:** Test annotate method with special characters in key
+### TestCase ID
+RTM_11
 
-**Test Steps:**
+### TestCase Objective
+Test annotate method with invalid key parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Annotate Application SpecialChars Key | Invoke `annotate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `key`: `"()^*!"`, `value`: `"testValue"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "()^*!", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Annotate Application Invalid Key | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "invalid_key", value: "testValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "invalid_key", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_annotate_emptyvalue-rtm_13"></a>
-### RuntimeManager_Annotate_EmptyValue (RTM_13)
+<a id="runtimemanager_annotate_specialcharskey"></a>
+### TestCase Name
+RuntimeManager_Annotate_SpecialCharsKey
 
-**Objective:** Test annotate method with empty value parameter
+### TestCase ID
+RTM_12
 
-**Test Steps:**
+### TestCase Objective
+Test annotate method with special characters in key
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Annotate Application Empty Value | Invoke `annotate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `key`: `"testKey"`, `value`: `""`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "value": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Annotate Application SpecialChars Key | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "()^*!", value: "testValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "()^*!", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_annotate_specialcharsvalue-rtm_14"></a>
-### RuntimeManager_Annotate_SpecialCharsValue (RTM_14)
+<a id="runtimemanager_annotate_emptyvalue"></a>
+### TestCase Name
+RuntimeManager_Annotate_EmptyValue
 
-**Objective:** Test annotate method with special characters in value
+### TestCase ID
+RTM_13
 
-**Test Steps:**
+### TestCase Objective
+Test annotate method with empty value parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Annotate Application SpecialChars Value | Invoke `annotate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `key`: `"testKey"`, `value`: `"()^*!"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "value": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Annotate Application Empty Value | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "testKey", value: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "value": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_annotate_invalidparameter-rtm_15"></a>
-### RuntimeManager_Annotate_InvalidParameter (RTM_15)
+<a id="runtimemanager_annotate_specialcharsvalue"></a>
+### TestCase Name
+RuntimeManager_Annotate_SpecialCharsValue
 
-**Objective:** Test annotate method with invalid parameter
+### TestCase ID
+RTM_14
 
-**Test Steps:**
+### TestCase Objective
+Test annotate method with special characters in value
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Annotate Application Invalid Parameter | Invoke `annotate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `key`: `"testKey"`, `invalidParam`: `"invalidValue"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "invalidParam": "invalidValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Annotate Application SpecialChars Value | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "testKey", value: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "value": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_annotate_without_parameters-rtm_16"></a>
-### RuntimeManager_Annotate_Without_Parameters (RTM_16)
+<a id="runtimemanager_annotate_invalidparameter"></a>
+### TestCase Name
+RuntimeManager_Annotate_InvalidParameter
 
-**Objective:** Test annotate method without parameters
+### TestCase ID
+RTM_15
 
-**Test Steps:**
+### TestCase Objective
+Test annotate method with invalid parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Annotate Application Without Parameters | Invoke `annotate` on `org.rdk.RuntimeManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Annotate Application Invalid Parameter | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "testKey", invalidParam: "invalidValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "invalidParam": "invalidValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_hibernate_application-rtm_17"></a>
-### RuntimeManager_Hibernate_Application (RTM_17)
+<a id="runtimemanager_annotate_without_parameters"></a>
+### TestCase Name
+RuntimeManager_Annotate_Without_Parameters
 
-**Objective:** Test hibernate method with valid appInstanceId
+### TestCase ID
+RTM_16
 
-**Test Steps:**
+### TestCase Objective
+Test annotate method without parameters
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Hibernate Application | Invoke `hibernate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
+| 1 | Annotate Application Without Parameters | Invoke annotate on org.rdk.RuntimeManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_hibernate_emptyappid-rtm_18"></a>
-### RuntimeManager_Hibernate_EmptyAppId (RTM_18)
+<a id="runtimemanager_hibernate_application"></a>
+### TestCase Name
+RuntimeManager_Hibernate_Application
 
-**Objective:** Test hibernate method with empty appInstanceId parameter
+### TestCase ID
+RTM_17
 
-**Test Steps:**
+### TestCase Objective
+Test hibernate method with valid appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Hibernate Application Empty AppId | Invoke `hibernate` on `org.rdk.RuntimeManager` with `appInstanceId`: `""`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Hibernate Application | Invoke hibernate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
 
-<a id="runtimemanager_hibernate_invalidappid-rtm_19"></a>
-### RuntimeManager_Hibernate_InvalidAppId (RTM_19)
+<a id="runtimemanager_hibernate_emptyappid"></a>
+### TestCase Name
+RuntimeManager_Hibernate_EmptyAppId
 
-**Objective:** Test hibernate method with invalid appInstanceId parameter
+### TestCase ID
+RTM_18
 
-**Test Steps:**
+### TestCase Objective
+Test hibernate method with empty appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Hibernate Application Invalid AppId | Invoke `hibernate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"invalid_app_id"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": "invalid_app_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Hibernate Application Empty AppId | Invoke hibernate on org.rdk.RuntimeManager with appInstanceId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_hibernate_specialcharsappid-rtm_20"></a>
-### RuntimeManager_Hibernate_SpecialCharsAppId (RTM_20)
+<a id="runtimemanager_hibernate_invalidappid"></a>
+### TestCase Name
+RuntimeManager_Hibernate_InvalidAppId
 
-**Objective:** Test hibernate method with special characters in appInstanceId
+### TestCase ID
+RTM_19
 
-**Test Steps:**
+### TestCase Objective
+Test hibernate method with invalid appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Hibernate Application SpecialChars AppId | Invoke `hibernate` on `org.rdk.RuntimeManager` with `appInstanceId`: `"()^*!"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Hibernate Application Invalid AppId | Invoke hibernate on org.rdk.RuntimeManager with appInstanceId: "invalid_app_id"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": "invalid_app_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_hibernate_numericappid-rtm_21"></a>
-### RuntimeManager_Hibernate_NumericAppId (RTM_21)
+<a id="runtimemanager_hibernate_specialcharsappid"></a>
+### TestCase Name
+RuntimeManager_Hibernate_SpecialCharsAppId
 
-**Objective:** Test hibernate method with numeric only appInstanceId
+### TestCase ID
+RTM_20
 
-**Test Steps:**
+### TestCase Objective
+Test hibernate method with special characters in appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Hibernate Application Numeric AppId | Invoke `hibernate` on `org.rdk.RuntimeManager` with `appInstanceId`: `123456789`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": 123456789}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Hibernate Application SpecialChars AppId | Invoke hibernate on org.rdk.RuntimeManager with appInstanceId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_hibernate_without_parameter-rtm_22"></a>
-### RuntimeManager_Hibernate_Without_Parameter (RTM_22)
+<a id="runtimemanager_hibernate_numericappid"></a>
+### TestCase Name
+RuntimeManager_Hibernate_NumericAppId
 
-**Objective:** Test hibernate method without parameter
+### TestCase ID
+RTM_21
 
-**Test Steps:**
+### TestCase Objective
+Test hibernate method with numeric only appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Hibernate Application Without Parameter | Invoke `hibernate` on `org.rdk.RuntimeManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Hibernate Application Numeric AppId | Invoke hibernate on org.rdk.RuntimeManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": 123456789}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_suspend_application-rtm_23"></a>
-### RuntimeManager_Suspend_Application (RTM_23)
+<a id="runtimemanager_hibernate_without_parameter"></a>
+### TestCase Name
+RuntimeManager_Hibernate_Without_Parameter
 
-**Objective:** Test suspend method with valid appInstanceId
+### TestCase ID
+RTM_22
 
-**Test Steps:**
+### TestCase Objective
+Test hibernate method without parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Suspend Application | Invoke `suspend` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
+| 1 | Hibernate Application Without Parameter | Invoke hibernate on org.rdk.RuntimeManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_suspend_emptyappid-rtm_24"></a>
-### RuntimeManager_Suspend_EmptyAppId (RTM_24)
+<a id="runtimemanager_suspend_application"></a>
+### TestCase Name
+RuntimeManager_Suspend_Application
 
-**Objective:** Test suspend method with empty appInstanceId parameter
+### TestCase ID
+RTM_23
 
-**Test Steps:**
+### TestCase Objective
+Test suspend method with valid appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Suspend Application Empty AppId | Invoke `suspend` on `org.rdk.RuntimeManager` with `appInstanceId`: `""`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Suspend Application | Invoke suspend on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
 
-<a id="runtimemanager_suspend_invalidappid-rtm_25"></a>
-### RuntimeManager_Suspend_InvalidAppId (RTM_25)
+<a id="runtimemanager_suspend_emptyappid"></a>
+### TestCase Name
+RuntimeManager_Suspend_EmptyAppId
 
-**Objective:** Test suspend method with invalid appInstanceId parameter
+### TestCase ID
+RTM_24
 
-**Test Steps:**
+### TestCase Objective
+Test suspend method with empty appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Suspend Application Invalid AppId | Invoke `suspend` on `org.rdk.RuntimeManager` with `appInstanceId`: `"invalid_app_id"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": "invalid_app_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Suspend Application Empty AppId | Invoke suspend on org.rdk.RuntimeManager with appInstanceId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_suspend_specialcharsappid-rtm_26"></a>
-### RuntimeManager_Suspend_SpecialCharsAppId (RTM_26)
+<a id="runtimemanager_suspend_invalidappid"></a>
+### TestCase Name
+RuntimeManager_Suspend_InvalidAppId
 
-**Objective:** Test suspend method with special characters in appInstanceId
+### TestCase ID
+RTM_25
 
-**Test Steps:**
+### TestCase Objective
+Test suspend method with invalid appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Suspend Application SpecialChars AppId | Invoke `suspend` on `org.rdk.RuntimeManager` with `appInstanceId`: `"()^*!"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Suspend Application Invalid AppId | Invoke suspend on org.rdk.RuntimeManager with appInstanceId: "invalid_app_id"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": "invalid_app_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_suspend_numericappid-rtm_27"></a>
-### RuntimeManager_Suspend_NumericAppId (RTM_27)
+<a id="runtimemanager_suspend_specialcharsappid"></a>
+### TestCase Name
+RuntimeManager_Suspend_SpecialCharsAppId
 
-**Objective:** Test suspend method with numeric only appInstanceId
+### TestCase ID
+RTM_26
 
-**Test Steps:**
+### TestCase Objective
+Test suspend method with special characters in appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Suspend Application Numeric AppId | Invoke `suspend` on `org.rdk.RuntimeManager` with `appInstanceId`: `123456789`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": 123456789}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Suspend Application SpecialChars AppId | Invoke suspend on org.rdk.RuntimeManager with appInstanceId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_suspend_without_parameter-rtm_28"></a>
-### RuntimeManager_Suspend_Without_Parameter (RTM_28)
+<a id="runtimemanager_suspend_numericappid"></a>
+### TestCase Name
+RuntimeManager_Suspend_NumericAppId
 
-**Objective:** Test suspend method without parameter
+### TestCase ID
+RTM_27
 
-**Test Steps:**
+### TestCase Objective
+Test suspend method with numeric only appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Suspend Application Without Parameter | Invoke `suspend` on `org.rdk.RuntimeManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Suspend Application Numeric AppId | Invoke suspend on org.rdk.RuntimeManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": 123456789}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_resume_application-rtm_29"></a>
-### RuntimeManager_Resume_Application (RTM_29)
+<a id="runtimemanager_suspend_without_parameter"></a>
+### TestCase Name
+RuntimeManager_Suspend_Without_Parameter
 
-**Objective:** Test resume method with valid appInstanceId
+### TestCase ID
+RTM_28
 
-**Test Steps:**
+### TestCase Objective
+Test suspend method without parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Resume Application | Invoke `resume` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
+| 1 | Suspend Application Without Parameter | Invoke suspend on org.rdk.RuntimeManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_resume_emptyappid-rtm_30"></a>
-### RuntimeManager_Resume_EmptyAppId (RTM_30)
+<a id="runtimemanager_resume_application"></a>
+### TestCase Name
+RuntimeManager_Resume_Application
 
-**Objective:** Test resume method with empty appInstanceId parameter
+### TestCase ID
+RTM_29
 
-**Test Steps:**
+### TestCase Objective
+Test resume method with valid appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Resume Application Empty AppId | Invoke `resume` on `org.rdk.RuntimeManager` with `appInstanceId`: `""`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Resume Application | Invoke resume on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
 
-<a id="runtimemanager_resume_invalidappid-rtm_31"></a>
-### RuntimeManager_Resume_InvalidAppId (RTM_31)
+<a id="runtimemanager_resume_emptyappid"></a>
+### TestCase Name
+RuntimeManager_Resume_EmptyAppId
 
-**Objective:** Test resume method with invalid appInstanceId parameter
+### TestCase ID
+RTM_30
 
-**Test Steps:**
+### TestCase Objective
+Test resume method with empty appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Resume Application Invalid AppId | Invoke `resume` on `org.rdk.RuntimeManager` with `appInstanceId`: `"invalid_app_id"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": "invalid_app_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Resume Application Empty AppId | Invoke resume on org.rdk.RuntimeManager with appInstanceId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_resume_specialcharsappid-rtm_32"></a>
-### RuntimeManager_Resume_SpecialCharsAppId (RTM_32)
+<a id="runtimemanager_resume_invalidappid"></a>
+### TestCase Name
+RuntimeManager_Resume_InvalidAppId
 
-**Objective:** Test resume method with special characters in appInstanceId
+### TestCase ID
+RTM_31
 
-**Test Steps:**
+### TestCase Objective
+Test resume method with invalid appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Resume Application SpecialChars AppId | Invoke `resume` on `org.rdk.RuntimeManager` with `appInstanceId`: `"()^*!"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Resume Application Invalid AppId | Invoke resume on org.rdk.RuntimeManager with appInstanceId: "invalid_app_id"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": "invalid_app_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_resume_numericappid-rtm_33"></a>
-### RuntimeManager_Resume_NumericAppId (RTM_33)
+<a id="runtimemanager_resume_specialcharsappid"></a>
+### TestCase Name
+RuntimeManager_Resume_SpecialCharsAppId
 
-**Objective:** Test resume method with numeric only appInstanceId
+### TestCase ID
+RTM_32
 
-**Test Steps:**
+### TestCase Objective
+Test resume method with special characters in appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Resume Application Numeric AppId | Invoke `resume` on `org.rdk.RuntimeManager` with `appInstanceId`: `123456789`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": 123456789}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Resume Application SpecialChars AppId | Invoke resume on org.rdk.RuntimeManager with appInstanceId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_resume_without_parameter-rtm_34"></a>
-### RuntimeManager_Resume_Without_Parameter (RTM_34)
+<a id="runtimemanager_resume_numericappid"></a>
+### TestCase Name
+RuntimeManager_Resume_NumericAppId
 
-**Objective:** Test resume method without parameter
+### TestCase ID
+RTM_33
 
-**Test Steps:**
+### TestCase Objective
+Test resume method with numeric only appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Resume Application Without Parameter | Invoke `resume` on `org.rdk.RuntimeManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Resume Application Numeric AppId | Invoke resume on org.rdk.RuntimeManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": 123456789}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_wake_application-rtm_35"></a>
-### RuntimeManager_Wake_Application (RTM_35)
+<a id="runtimemanager_resume_without_parameter"></a>
+### TestCase Name
+RuntimeManager_Resume_Without_Parameter
 
-**Objective:** Test wake method with valid appInstanceId and running state
+### TestCase ID
+RTM_34
 
-**Test Steps:**
+### TestCase Objective
+Test resume method without parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Wake Application Running State | Invoke `wake` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `state`: `"running"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
+| 1 | Resume Application Without Parameter | Invoke resume on org.rdk.RuntimeManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_wake_application_suspended_state-rtm_36"></a>
-### RuntimeManager_Wake_Application_Suspended_State (RTM_36)
+<a id="runtimemanager_wake_application"></a>
+### TestCase Name
+RuntimeManager_Wake_Application
 
-**Objective:** Test wake method with valid appInstanceId and suspended state
+### TestCase ID
+RTM_35
 
-**Test Steps:**
+### TestCase Objective
+Test wake method with valid appInstanceId and running state
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Wake Application Suspended State | Invoke `wake` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `state`: `"suspended"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": "suspended"}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Wake Application Running State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", state: "running"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
 
-<a id="runtimemanager_wake_emptyappid-rtm_37"></a>
-### RuntimeManager_Wake_EmptyAppId (RTM_37)
+<a id="runtimemanager_wake_application_suspended_state"></a>
+### TestCase Name
+RuntimeManager_Wake_Application_Suspended_State
 
-**Objective:** Test wake method with empty appInstanceId parameter
+### TestCase ID
+RTM_36
 
-**Test Steps:**
+### TestCase Objective
+Test wake method with valid appInstanceId and suspended state
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Wake Application Empty AppId | Invoke `wake` on `org.rdk.RuntimeManager` with `appInstanceId`: `""`, `state`: `"running"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "", "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Wake Application Suspended State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", state: "suspended"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": "suspended"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
 
-<a id="runtimemanager_wake_invalidappid-rtm_38"></a>
-### RuntimeManager_Wake_InvalidAppId (RTM_38)
+<a id="runtimemanager_wake_emptyappid"></a>
+### TestCase Name
+RuntimeManager_Wake_EmptyAppId
 
-**Objective:** Test wake method with invalid appInstanceId parameter
+### TestCase ID
+RTM_37
 
-**Test Steps:**
+### TestCase Objective
+Test wake method with empty appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Wake Application Invalid AppId | Invoke `wake` on `org.rdk.RuntimeManager` with `appInstanceId`: `"invalid_app_id"`, `state`: `"running"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "invalid_app_id", "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Wake Application Empty AppId | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "", state: "running"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "", "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_wake_specialcharsappid-rtm_39"></a>
-### RuntimeManager_Wake_SpecialCharsAppId (RTM_39)
+<a id="runtimemanager_wake_invalidappid"></a>
+### TestCase Name
+RuntimeManager_Wake_InvalidAppId
 
-**Objective:** Test wake method with special characters in appInstanceId
+### TestCase ID
+RTM_38
 
-**Test Steps:**
+### TestCase Objective
+Test wake method with invalid appInstanceId parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Wake Application SpecialChars AppId | Invoke `wake` on `org.rdk.RuntimeManager` with `appInstanceId`: `"()^*!"`, `state`: `"running"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "()^*!", "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Wake Application Invalid AppId | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "invalid_app_id", state: "running"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "invalid_app_id", "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_wake_numericappid-rtm_40"></a>
-### RuntimeManager_Wake_NumericAppId (RTM_40)
+<a id="runtimemanager_wake_specialcharsappid"></a>
+### TestCase Name
+RuntimeManager_Wake_SpecialCharsAppId
 
-**Objective:** Test wake method with numeric only appInstanceId
+### TestCase ID
+RTM_39
 
-**Test Steps:**
+### TestCase Objective
+Test wake method with special characters in appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Wake Application Numeric AppId | Invoke `wake` on `org.rdk.RuntimeManager` with `appInstanceId`: `123456789`, `state`: `"running"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": 123456789, "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Wake Application SpecialChars AppId | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "()^*!", state: "running"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "()^*!", "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_wake_invalidstate-rtm_41"></a>
-### RuntimeManager_Wake_InvalidState (RTM_41)
+<a id="runtimemanager_wake_numericappid"></a>
+### TestCase Name
+RuntimeManager_Wake_NumericAppId
 
-**Objective:** Test wake method with invalid state parameter
+### TestCase ID
+RTM_40
 
-**Test Steps:**
+### TestCase Objective
+Test wake method with numeric only appInstanceId
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Wake Application Invalid State | Invoke `wake` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `state`: `"invalid_state"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": "invalid_state"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Wake Application Numeric AppId | Invoke wake on org.rdk.RuntimeManager with state: "running"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": 123456789, "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_wake_emptystate-rtm_42"></a>
-### RuntimeManager_Wake_EmptyState (RTM_42)
+<a id="runtimemanager_wake_invalidstate"></a>
+### TestCase Name
+RuntimeManager_Wake_InvalidState
 
-**Objective:** Test wake method with empty state parameter
+### TestCase ID
+RTM_41
 
-**Test Steps:**
+### TestCase Objective
+Test wake method with invalid state parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Wake Application Empty State | Invoke `wake` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`, `state`: `""`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Wake Application Invalid State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", state: "invalid_state"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": "invalid_state"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_wake_without_parameters-rtm_43"></a>
-### RuntimeManager_Wake_Without_Parameters (RTM_43)
+<a id="runtimemanager_wake_emptystate"></a>
+### TestCase Name
+RuntimeManager_Wake_EmptyState
 
-**Objective:** Test wake method without parameters
+### TestCase ID
+RTM_42
 
-**Test Steps:**
+### TestCase Objective
+Test wake method with empty state parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Wake Application Without Parameters | Invoke `wake` on `org.rdk.RuntimeManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Wake Application Empty State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", state: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
-<a id="runtimemanager_wake_without_state-rtm_44"></a>
-### RuntimeManager_Wake_Without_State (RTM_44)
+<a id="runtimemanager_wake_without_parameters"></a>
+### TestCase Name
+RuntimeManager_Wake_Without_Parameters
 
-**Objective:** Test wake method without state parameter
+### TestCase ID
+RTM_43
 
-**Test Steps:**
+### TestCase Objective
+Test wake method without parameters
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get AppInstance Id | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected: `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Wake Application Without State | Invoke `wake` on `org.rdk.RuntimeManager` with `appInstanceId`: `"<result_step_1>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Wake Application Without Parameters | Invoke wake on org.rdk.RuntimeManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
----
+<a id="runtimemanager_wake_without_state"></a>
+### TestCase Name
+RuntimeManager_Wake_Without_State
 
-## Post-conditions
+### TestCase ID
+RTM_44
 
-### Post-condition 1: Uninstall_Package
+### TestCase Objective
+Test wake method without state parameter
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Check Loaded Apps | Invoke `getLoadedApps` on `org.rdk.AppManager`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Loaded apps information validated successfully |
-| 2 | Terminate App Valid Param | Invoke `terminateApp` on `org.rdk.AppManager` with `appId`: `"<PACKAGEMANAGER_APPLICATION_NAME>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
-| 3 | Check Package Info | Invoke `listPackages` on `org.rdk.PackageManagerRDKEMS`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Package list returned successfully |
-| 4 | Uninstall Package | Invoke `uninstall` on `org.rdk.PackageManagerRDKEMS` with `packageId`: `"<PACKAGEMANAGER_APPLICATION_NAME>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | API call succeeds with null/empty result |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 2 | Wake Application Without State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+---
+
+## Plugin Post-conditions
+
+### Plugin Post-condition 1: Uninstall_Package
+
+| Step ID | Step Name | Description | Expected Result |
+|---------|-----------|-------------|-----------------|
+| 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
+| 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Check Package Info | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
+| 4 | Uninstall Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
 

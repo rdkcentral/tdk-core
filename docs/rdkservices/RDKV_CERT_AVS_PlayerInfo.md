@@ -1,18 +1,21 @@
+## TestScript Name
+RDKV_CERT_AVS_PlayerInfo
+
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Pre-conditions](#pre-conditions)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [PlayerInfo_Check_Audio_Codecs (PI_01)](#playerinfo_check_audio_codecs-pi_01)
-   - [PlayerInfo_Check_Video_Codecs (PI_02)](#playerinfo_check_video_codecs-pi_02)
-   - [PlayerInfo_Check_AudioEquivalence_Enabled (PI_03)](#playerinfo_check_audioequivalence_enabled-pi_03)
-   - [PlayerInfo_Check_Dolby_Atmos_MetaData (PI_04)](#playerinfo_check_dolby_atmos_metadata-pi_04)
-   - [PlayerInfo_Check_Dolby_Sound_mode (PI_05)](#playerinfo_check_dolby_sound_mode-pi_05)
-   - [Enable_Disable_Audio_Atmos_Output (PI_06)](#enable_disable_audio_atmos_output-pi_06)
-   - [SetAndGet_All_Supported_Resolutions (PI_07)](#setandget_all_supported_resolutions-pi_07)
-   - [Check_Dolby_AudioMode_Changed_Event (PI_08)](#check_dolby_audiomode_changed_event-pi_08)
-   - [PlayerInfo_ActivateDeactivate_Event_Test (PI_09)](#playerinfo_activatedeactivate_event_test-pi_09)
-4. [Post-conditions](#post-conditions)
+   - [PlayerInfo_Check_Audio_Codecs](#playerinfo_check_audio_codecs)
+   - [PlayerInfo_Check_Video_Codecs](#playerinfo_check_video_codecs)
+   - [PlayerInfo_Check_AudioEquivalence_Enabled](#playerinfo_check_audioequivalence_enabled)
+   - [PlayerInfo_Check_Dolby_Atmos_MetaData](#playerinfo_check_dolby_atmos_metadata)
+   - [PlayerInfo_Check_Dolby_Sound_mode](#playerinfo_check_dolby_sound_mode)
+   - [Enable_Disable_Audio_Atmos_Output](#enable_disable_audio_atmos_output)
+   - [SetAndGet_All_Supported_Resolutions](#setandget_all_supported_resolutions)
+   - [Check_Dolby_AudioMode_Changed_Event](#check_dolby_audiomode_changed_event)
+   - [PlayerInfo_ActivateDeactivate_Event_Test](#playerinfo_activatedeactivate_event_test)
+4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
 ---
@@ -28,7 +31,7 @@ accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
 - **Events**: `dolby_audiomodechanged`
 - **Other APIs**: `audiocodecs`, `dolby_atmosmetadata`, `dolby_enableatmosoutput`, `dolby_soundmode`, `resolution`, `videocodecs`
 
-### APIs Under Test
+## APIs Under Test
 
 | API | Description |
 |-----|-------------|
@@ -40,7 +43,7 @@ accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
 | `resolution` | Returns current Video playback resolution |
 | `videocodecs` | Returns supported Video codecs |
 
-### Events Under Test
+## Events Under Test
 
 | Event | Description |
 |-------|-------------|
@@ -48,25 +51,25 @@ accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
 
 ---
 
-## Pre-conditions
+## Plugin Pre-conditions
 
-### Pre-condition 1: Activate_Plugins
-
-| Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | *(Conditional: executed only if plugin is currently deactivated)*<br>Invoke `activate` on `Controller` with `callsign`: `"PlayerInfo"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 3 | Check PluginActive Status | *(Conditional: executed only if plugin is currently deactivated)*<br>Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-
-### Pre-condition 2: Activate_DisplaySettings_Plugin
+### Plugin Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | *(Conditional: executed only if plugin is currently deactivated)*<br>Invoke `activate` on `Controller` with `callsign`: `"org.rdk.DisplaySettings"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DisplaySettings"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 3 | Check PluginActive Status | *(Conditional: executed only if plugin is currently deactivated)*<br>Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 1 | Check PluginActive Status | Check Active Status of PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
-### Pre-condition 3: Register_And_Listen_Events
+### Plugin Pre-condition 2: Activate_DisplaySettings_Plugin
+
+| Step ID | Step Name | Description | Expected Result |
+|---------|-----------|-------------|-----------------|
+| 1 | Check PluginActive Status | Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DisplaySettings"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+
+### Plugin Pre-condition 3: Register_And_Listen_Events
 
 - Register and listen to event `Event_AudioMode_Changed` on `PlayerInfo` plugin
 
@@ -76,152 +79,197 @@ accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
 
 ## Test Cases
 
-<a id="playerinfo_check_audio_codecs-pi_01"></a>
-### PlayerInfo_Check_Audio_Codecs (PI_01)
+<a id="playerinfo_check_audio_codecs"></a>
+### TestCase Name
+PlayerInfo_Check_Audio_Codecs
 
-**Objective:** checks the audio codecs list
+### TestCase ID
+PI_01
 
-**Test Steps:**
+### TestCase Objective
+checks the audio codecs list
 
-| Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Get Audio Codecs | Invoke `audiocodecs` on `PlayerInfo`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.audiocodecs"}' http://127.0.0.1:9998/jsonrpc` | Expected `<SUPPORTED_AUDIO_CODECS>` |
-
----
-
-<a id="playerinfo_check_video_codecs-pi_02"></a>
-### PlayerInfo_Check_Video_Codecs (PI_02)
-
-**Objective:** checks the video codecs list
-
-**Test Steps:**
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get Video Codecs | Invoke `videocodecs` on `PlayerInfo`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.videocodecs"}' http://127.0.0.1:9998/jsonrpc` | Expected `<SUPPORTED_Video_CODECS>` |
+| 1 | Get Audio Codecs | Invoke audiocodecs on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.audiocodecs"}' http://127.0.0.1:9998/jsonrpc` | Expected `<SUPPORTED_AUDIO_CODECS>` |
 
 ---
 
-<a id="playerinfo_check_audioequivalence_enabled-pi_03"></a>
-### PlayerInfo_Check_AudioEquivalence_Enabled (PI_03)
+<a id="playerinfo_check_video_codecs"></a>
+### TestCase Name
+PlayerInfo_Check_Video_Codecs
 
-**Objective:** Checks Loudness Equivalence in platform
+### TestCase ID
+PI_02
 
-**Test Steps:**
+### TestCase Objective
+checks the video codecs list
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Is AudioEquivalence Enabled | Invoke `isaudioequivalenceenabled` on `PlayerInfo`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.isaudioequivalenceenabled"}' http://127.0.0.1:9998/jsonrpc` | `success`: `true` Playerinfo validate boolean result |
+| 1 | Get Video Codecs | Invoke videocodecs on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.videocodecs"}' http://127.0.0.1:9998/jsonrpc` | Expected `<SUPPORTED_Video_CODECS>` |
 
 ---
 
-<a id="playerinfo_check_dolby_atmos_metadata-pi_04"></a>
-### PlayerInfo_Check_Dolby_Atmos_MetaData (PI_04)
+<a id="playerinfo_check_audioequivalence_enabled"></a>
+### TestCase Name
+PlayerInfo_Check_AudioEquivalence_Enabled
 
-**Objective:** Gets the Atmos capabilities of Sink
+### TestCase ID
+PI_03
 
-**Test Steps:**
+### TestCase Objective
+Checks Loudness Equivalence in platform
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get Dolby Atmos MetaData | Invoke `dolby_atmosmetadata` on `PlayerInfo`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_atmosmetadata"}' http://127.0.0.1:9998/jsonrpc` | `success`: `true` Playerinfo validate boolean result |
+| 1 | Is AudioEquivalence Enabled | Invoke isaudioequivalenceenabled on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.isaudioequivalenceenabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` Playerinfo validate boolean result |
 
 ---
 
-<a id="playerinfo_check_dolby_sound_mode-pi_05"></a>
-### PlayerInfo_Check_Dolby_Sound_mode (PI_05)
+<a id="playerinfo_check_dolby_atmos_metadata"></a>
+### TestCase Name
+PlayerInfo_Check_Dolby_Atmos_MetaData
 
-**Objective:** Checks the dolby sound mode
+### TestCase ID
+PI_04
 
-**Test Steps:**
+### TestCase Objective
+Gets the Atmos capabilities of Sink
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Get Dolby SoundMode | Invoke `dolby_soundmode` on `PlayerInfo`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_soundmode"}' http://127.0.0.1:9998/jsonrpc` | Expected `Unknown,Mono,Stereo,Surround,Passthru,SoundmodeAuto` |
+| 1 | Get Dolby Atmos MetaData | Invoke dolby_atmosmetadata on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_atmosmetadata"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` Playerinfo validate boolean result |
 
 ---
 
-<a id="enable_disable_audio_atmos_output-pi_06"></a>
-### Enable_Disable_Audio_Atmos_Output (PI_06)
+<a id="playerinfo_check_dolby_sound_mode"></a>
+### TestCase Name
+PlayerInfo_Check_Dolby_Sound_mode
 
-**Objective:** Check whether audio atmos output is possile to enable and disable
+### TestCase ID
+PI_05
 
-**Test Steps:**
+### TestCase Objective
+Checks the dolby sound mode
+
+### Test Steps
+
+| Step ID | Step Name | Description | Expected Result |
+|---------|-----------|-------------|-----------------|
+| 1 | Get Dolby SoundMode | Invoke dolby_soundmode on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_soundmode"}' http://127.0.0.1:9998/jsonrpc` | Expected `Unknown,Mono,Stereo,Surround,Passthru,SoundmodeAuto` |
+
+---
+
+<a id="enable_disable_audio_atmos_output"></a>
+### TestCase Name
+Enable_Disable_Audio_Atmos_Output
+
+### TestCase ID
+PI_06
+
+### TestCase Objective
+Check whether audio atmos output is possile to enable and disable
+
+### Test Steps
 
 > **Value Loop (Step 1):** Step 1 repeats **2 times**, once for each value of `enable`: `True`, `False`
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Enable Disable Audio Atmos Output | Invoke `dolby_enableatmosoutput` on `PlayerInfo` with `enable`: each of `True`, `False`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_enableatmosoutput", "params": {"enable": "<ENABLE_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | N/A |
+| 1 | Enable Disable Audio Atmos Output | Invoke dolby_enableatmosoutput on PlayerInfo with enable: "<ENABLE_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_enableatmosoutput", "params": {"enable": "<ENABLE_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null or empty response |
 
 ---
 
-<a id="setandget_all_supported_resolutions-pi_07"></a>
-### SetAndGet_All_Supported_Resolutions (PI_07)
+<a id="setandget_all_supported_resolutions"></a>
+### TestCase Name
+SetAndGet_All_Supported_Resolutions
 
-**Objective:** Set and get all the supported resolution by both TV and STB
+### TestCase ID
+PI_07
 
-**Test Steps:**
+### TestCase Objective
+Set and get all the supported resolution by both TV and STB
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Check Display Connected Status | Invoke `getConnectedVideoDisplays` on `org.rdk.DisplaySettings`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Connected Video Displays returned successfully |
-| 2 | Get Supported Resolutions | Invoke `getSupportedResolutions` on `org.rdk.DisplaySettings` with `videoDisplay`: `"<result_step_1>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Supported Resolutions returned successfully |
-| 3 | Get Current Resolution | Invoke `getCurrentResolution` on `org.rdk.DisplaySettings` with `videoDisplay`: `"<result_step_1>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `success`: `true` supported resolutions matches value from step 2 |
-| 4 | Set Resolution | Invoke `setCurrentResolution` on `org.rdk.DisplaySettings` with `videoDisplay`: `"<result_step_1>"`, `resolution`: `"<result_step_2>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "<result_step_1>", "resolution": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | Current Resolution set successfully |
-| 5 | Get Resolution | Invoke `resolution` on `PlayerInfo` (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.resolution"}' http://127.0.0.1:9998/jsonrpc` | `success`: `true` returned value matches the iterated value set in the previous step |
+| 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
+| 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
+| 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` supported resolutions matches value from step 2 |
+| 4 | Set Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>", resolution: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "<result_step_1>", "resolution": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the current resolution is set successfully |
+| 5 | Get Resolution | Invoke resolution on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.resolution"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` returned value matches the iterated value set in the previous step |
 
 ---
 
-<a id="check_dolby_audiomode_changed_event-pi_08"></a>
-### Check_Dolby_AudioMode_Changed_Event (PI_08)
+<a id="check_dolby_audiomode_changed_event"></a>
+### TestCase Name
+Check_Dolby_AudioMode_Changed_Event
 
-**Objective:** Checks for the audio mode changed event
+### TestCase ID
+PI_08
 
-**Test Steps:**
+### TestCase Objective
+Checks for the audio mode changed event
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Check Connected AudioPorts | Invoke `getConnectedAudioPorts` on `org.rdk.DisplaySettings`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | Connected Audio Ports returned successfully |
-| 2 | Get Supported Audio Modes | Invoke `getSupportedAudioModes` on `org.rdk.DisplaySettings` with `audioPort`: `"<result_step_1>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioModes", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Supported Audio Modes returned successfully |
-| 3 | Get Sound Mode | Invoke `getSoundMode` on `org.rdk.DisplaySettings` with `audioPort`: `"<result_step_1>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSoundMode", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `success`: `true` supported sound modes matches value from step 2 |
-| 4 | Set Sound Mode | Invoke `setSoundMode` on `org.rdk.DisplaySettings` with `audioPort`: `"<result_step_1>"`, `soundMode`: `"<result_step_2>"`, `persist`: `false`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setSoundMode", "params": {"audioPort": "<result_step_1>", "soundMode": "<result_step_2>", "persist": false}}' http://127.0.0.1:9998/jsonrpc` | Sound Mode set successfully |
-| 5 | Get Sound Mode | Invoke `getSoundMode` on `org.rdk.DisplaySettings` with `audioPort`: `"<result_step_1>"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSoundMode", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `success`: `true` returned value matches the iterated value set in the previous step |
-| 6 | Check Dolby AudioMode Changed Event | Listen for `Event_AudioMode_Changed` event (wait2s) | `success`: `true` returned value matches the iterated value set in the previous step |
+| 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected audio ports are returned successfully |
+| 2 | Get Supported Audio Modes | Invoke getSupportedAudioModes on org.rdk.DisplaySettings with audioPort: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioModes", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported audio modes are returned successfully |
+| 3 | Get Sound Mode | Invoke getSoundMode on org.rdk.DisplaySettings with audioPort: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSoundMode", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` supported sound modes matches value from step 2 |
+| 4 | Set Sound Mode | Invoke setSoundMode on org.rdk.DisplaySettings with audioPort: "<result_step_1>", soundMode: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setSoundMode", "params": {"audioPort": "<result_step_1>", "soundMode": "<result_step_2>", "persist": false}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the sound mode is set successfully |
+| 5 | Get Sound Mode | Invoke getSoundMode on org.rdk.DisplaySettings with audioPort: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSoundMode", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` returned value matches the iterated value set in the previous step |
+| 6 | Check Dolby AudioMode Changed Event | Listen for Event_AudioMode_Changed event (wait2s) | `success` : `true` returned value matches the iterated value set in the previous step |
 
 ---
 
-<a id="playerinfo_activatedeactivate_event_test-pi_09"></a>
-### PlayerInfo_ActivateDeactivate_Event_Test (PI_09)
+<a id="playerinfo_activatedeactivate_event_test"></a>
+### TestCase Name
+PlayerInfo_ActivateDeactivate_Event_Test
 
-**Objective:** Validates statechange event on Activating/deactivating the plugin
+### TestCase ID
+PI_09
 
-**Pre-condition:**
+### TestCase Objective
+Validates statechange event on Activating/deactivating the plugin
 
-#### Pre-condition 1: Activate_Plugins
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | *(Conditional: executed only if plugin is currently deactivated)*<br>Invoke `activate` on `Controller` with `callsign`: `"PlayerInfo"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 3 | Check PluginActive Status | *(Conditional: executed only if plugin is currently deactivated)*<br>Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 1 | Check PluginActive Status | Check Active Status of PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
-**Test Steps:**
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Deactivate PlayerInfo Plugin | Invoke `deactivate` on `Controller` with `callsign`: `"PlayerInfo"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Disabled successfully |
-| 2 | Check State Change Event | Listen for `Event_Controller_State_Changed` event (wait2s) | `statechange` event received; callsign = `playerinfo`, state = `"deactivated"` |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
-| 4 | Activate PlayerInfo Plugin | Invoke `activate` on `Controller` with `callsign`: `"PlayerInfo"` (wait 1 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 5 | Check State Change Event | Listen for `Event_Controller_State_Changed` event (wait2s) | `statechange` event received; callsign = `playerinfo`, state = `"activated"` |
-| 6 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 1 | Deactivate PlayerInfo Plugin | Invoke deactivate on Controller with callsign: "PlayerInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
+| 2 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait2s) | `statechange` event received; callsign = `playerinfo`, state = `"deactivated"` |
+| 3 | Check PluginActive Status | Invoke status on Controller for PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 4 | Activate PlayerInfo Plugin | Invoke activate on Controller with callsign: "PlayerInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
+| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait2s) | `statechange` event received; callsign = `playerinfo`, state = `"activated"` |
+| 6 | Check PluginActive Status | Invoke status on Controller for PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
 ---
 
 ---
 
-## Post-conditions
+## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
 

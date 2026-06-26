@@ -1,14 +1,17 @@
+## TestScript Name
+RDKV_CERT_AVS_User_Preferences
+
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Pre-conditions](#pre-conditions)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [UserPreferences_SetAndGet_UI_Language (UP_01)](#userpreferences_setandget_ui_language-up_01)
-   - [UserPreferences_ActivateDeactivate_Event_Test (UP_02)](#userpreferences_activatedeactivate_event_test-up_02)
-   - [UserPreferences_ActivateDeactivate_All_Event_Test (UP_03)](#userpreferences_activatedeactivate_all_event_test-up_03)
-   - [UserPreferences_Verify_Get_UI_Language_Error (UP_04)](#userpreferences_verify_get_ui_language_error-up_04)
-   - [UserPreferences_Verify_SetUILanguage_without_Params (UP_05)](#userpreferences_verify_setuilanguage_without_params-up_05)
-4. [Post-conditions](#post-conditions)
+   - [UserPreferences_SetAndGet_UI_Language](#userpreferences_setandget_ui_language)
+   - [UserPreferences_ActivateDeactivate_Event_Test](#userpreferences_activatedeactivate_event_test)
+   - [UserPreferences_ActivateDeactivate_All_Event_Test](#userpreferences_activatedeactivate_all_event_test)
+   - [UserPreferences_Verify_Get_UI_Language_Error](#userpreferences_verify_get_ui_language_error)
+   - [UserPreferences_Verify_SetUILanguage_without_Params](#userpreferences_verify_setuilanguage_without_params)
+4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
 ---
@@ -23,7 +26,7 @@ accessible via JSON-RPC under the callsign `org.rdk.UserPreferences` (version 1)
 - **State / Query APIs**: `getUILanguage`
 - **Configuration APIs**: `setUILanguage`
 
-### APIs Under Test
+## APIs Under Test
 
 | API | Description |
 |-----|-------------|
@@ -32,17 +35,17 @@ accessible via JSON-RPC under the callsign `org.rdk.UserPreferences` (version 1)
 
 ---
 
-## Pre-conditions
+## Plugin Pre-conditions
 
-### Pre-condition 1: Activate_Plugins
+### Plugin Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.UserPreferences"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 1 | Check PluginActive Status | Check Active Status of UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
-### Pre-condition 2: Register_And_Listen_Events
+### Plugin Pre-condition 2: Register_And_Listen_Events
 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
 
@@ -52,121 +55,146 @@ accessible via JSON-RPC under the callsign `org.rdk.UserPreferences` (version 1)
 
 ## Test Cases
 
-<a id="userpreferences_setandget_ui_language-up_01"></a>
-### UserPreferences_SetAndGet_UI_Language (UP_01)
+<a id="userpreferences_setandget_ui_language"></a>
+### TestCase Name
+UserPreferences_SetAndGet_UI_Language
 
-**Objective:** Set and get user preferred UI language
+### TestCase ID
+UP_01
 
-**Test Steps:**
+### TestCase Objective
+Set and get user preferred UI language
+
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Set UI Language | Invoke `setUILanguage` on `org.rdk.UserPreferences` with `ui_language`: `"US_en"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage", "params": {"ui_language": "US_en"}}' http://127.0.0.1:9998/jsonrpc` | UI Language set successfully |
-| 2 | Get UI Language | Invoke `getUILanguage` on `org.rdk.UserPreferences`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.getUILanguage"}' http://127.0.0.1:9998/jsonrpc` | Expected: `US_en` |
+| 1 | Set UI Language | Invoke setUILanguage on org.rdk.UserPreferences with ui_language: "US_en"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage", "params": {"ui_language": "US_en"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the UI language is set successfully |
+| 2 | Get UI Language | Invoke getUILanguage on org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.getUILanguage"}' http://127.0.0.1:9998/jsonrpc` | Expected `US_en` |
 
 ---
 
-<a id="userpreferences_activatedeactivate_event_test-up_02"></a>
-### UserPreferences_ActivateDeactivate_Event_Test (UP_02)
+<a id="userpreferences_activatedeactivate_event_test"></a>
+### TestCase Name
+UserPreferences_ActivateDeactivate_Event_Test
 
-**Objective:** Validates statechange event on Activating/deactivating the plugin
+### TestCase ID
+UP_02
 
-**Pre-condition:**
+### TestCase Objective
+Validates statechange event on Activating/deactivating the plugin
 
-#### Pre-condition 1: Activate_Plugins
+### TestCase Pre-condition
 
-| Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.UserPreferences"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-
-**Test Steps:**
+#### TestCase Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Deactivate UserPreferences Plugin | Invoke `deactivate` on `Controller` with `callsign`: `"org.rdk.UserPreferences"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Disabled successfully |
-| 2 | Check State Change Event | Listen for event `Event_Controller_State_Changed` | Event data validated successfully |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
-| 4 | Activate org.rdk.UserPreferences Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.UserPreferences"` (wait 1 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 5 | Check State Change Event | Listen for event `Event_Controller_State_Changed` | Event data validated successfully |
-| 6 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 1 | Check PluginActive Status | Check Active Status of UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+
+### Test Steps
+
+| Step ID | Step Name | Description | Expected Result |
+|---------|-----------|-------------|-----------------|
+| 1 | Deactivate UserPreferences Plugin | Invoke deactivate on Controller with callsign: "org.rdk.UserPreferences"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
+| 2 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that event data is validated successfully |
+| 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 4 | Activate org.rdk.UserPreferences Plugin | Invoke activate on Controller with callsign: "org.rdk.UserPreferences"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
+| 5 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that event data is validated successfully |
+| 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
 ---
 
-<a id="userpreferences_activatedeactivate_all_event_test-up_03"></a>
-### UserPreferences_ActivateDeactivate_All_Event_Test (UP_03)
+<a id="userpreferences_activatedeactivate_all_event_test"></a>
+### TestCase Name
+UserPreferences_ActivateDeactivate_All_Event_Test
 
-**Objective:** Validates all event on Activating/deactivating the plugin
+### TestCase ID
+UP_03
 
-**Pre-condition:**
+### TestCase Objective
+Validates all event on Activating/deactivating the plugin
 
-#### Pre-condition 1: Activate_Plugins
+### TestCase Pre-condition
 
-| Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.UserPreferences"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-
-**Test Steps:**
+#### TestCase Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Deactivate UserPreferences Plugin | Invoke `deactivate` on `Controller` with `callsign`: `"org.rdk.UserPreferences"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Disabled successfully |
-| 2 | Check All Event | Listen for event `Event_Controller_All` | Event data validated successfully |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
-| 4 | Activate UserPreferences Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.UserPreferences"` (wait 1 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 5 | Check All Event | Listen for event `Event_Controller_All` | Event data validated successfully |
-| 6 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 1 | Check PluginActive Status | Check Active Status of UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+
+### Test Steps
+
+| Step ID | Step Name | Description | Expected Result |
+|---------|-----------|-------------|-----------------|
+| 1 | Deactivate UserPreferences Plugin | Invoke deactivate on Controller with callsign: "org.rdk.UserPreferences"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
+| 2 | Check All Event | Listen for event Event_Controller_All | Verify that event data is validated successfully |
+| 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 4 | Activate UserPreferences Plugin | Invoke activate on Controller with callsign: "org.rdk.UserPreferences"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
+| 5 | Check All Event | Listen for event Event_Controller_All | Verify that event data is validated successfully |
+| 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
 ---
 
-<a id="userpreferences_verify_get_ui_language_error-up_04"></a>
-### UserPreferences_Verify_Get_UI_Language_Error (UP_04)
+<a id="userpreferences_verify_get_ui_language_error"></a>
+### TestCase Name
+UserPreferences_Verify_Get_UI_Language_Error
 
-**Objective:** Verify that the getUiLanguage method returns an error when the plugin is in a deactivated state
+### TestCase ID
+UP_04
 
-**Pre-condition:**
+### TestCase Objective
+Verify that the getUiLanguage method returns an error when the plugin is in a deactivated state
 
-#### Pre-condition 1: Activate_Plugins
+### TestCase Pre-condition
 
-| Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state returned successfully |
-| 2 | Activate Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.UserPreferences"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-
-**Test Steps:**
+#### TestCase Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Deactivate UserPreferences Plugin | Invoke `deactivate` on `Controller` with `callsign`: `"org.rdk.UserPreferences"`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Disabled successfully |
-| 2 | Check State Change Event | Listen for event `Event_Controller_State_Changed` | Event data validated successfully |
-| 3 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
-| 4 | Check UserPreferences Get UI Language API Response | Invoke `getUILanguage` on `org.rdk.UserPreferences`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.getUILanguage"}' http://127.0.0.1:9998/jsonrpc` | Expected error`Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
-| 5 | Activate UserPreferences Plugin | Invoke `activate` on `Controller` with `callsign`: `"org.rdk.UserPreferences"` (wait 1 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Enabled successfully |
-| 6 | Check State Change Event | Listen for event `Event_Controller_State_Changed` | Event data validated successfully |
-| 7 | Check PluginActive Status | Invoke `status` on `Controller`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 1 | Check PluginActive Status | Check Active Status of UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of UserPreferences Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
----
-
-<a id="userpreferences_verify_setuilanguage_without_params-up_05"></a>
-### UserPreferences_Verify_SetUILanguage_without_Params (UP_05)
-
-**Objective:** Verify that the setUILanguage API returns an error when UI language parameter is not provided
-
-**Test Steps:**
+### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
-| 1 | Set UI Language | Invoke `setUILanguage` on `org.rdk.UserPreferences`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage"}' http://127.0.0.1:9998/jsonrpc` | API returns error response with `"success": false` (missing `ui_language` parameter) |
+| 1 | Deactivate UserPreferences Plugin | Invoke deactivate on Controller with callsign: "org.rdk.UserPreferences"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
+| 2 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that event data is validated successfully |
+| 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 4 | Check UserPreferences Get UI Language API Response | Invoke getUILanguage on org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.getUILanguage"}' http://127.0.0.1:9998/jsonrpc` | Expected error`Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 5 | Activate UserPreferences Plugin | Invoke activate on Controller with callsign: "org.rdk.UserPreferences"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
+| 6 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that event data is validated successfully |
+| 7 | Check PluginActive Status | Invoke status on Controller for org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+
+---
+
+<a id="userpreferences_verify_setuilanguage_without_params"></a>
+### TestCase Name
+UserPreferences_Verify_SetUILanguage_without_Params
+
+### TestCase ID
+UP_05
+
+### TestCase Objective
+Verify that the setUILanguage API returns an error when UI language parameter is not provided
+
+### Test Steps
+
+| Step ID | Step Name | Description | Expected Result |
+|---------|-----------|-------------|-----------------|
+| 1 | Set UI Language | Invoke setUILanguage on org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage"}' http://127.0.0.1:9998/jsonrpc` | API returns error response with `"success": false` (missing `ui_language` parameter) |
 
 ---
 
 ---
 
-## Post-conditions
+## Plugin Post-conditions
 
 _No plugin-level post-conditions defined._
 
