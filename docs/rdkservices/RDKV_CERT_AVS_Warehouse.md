@@ -4,8 +4,10 @@ RDKV_CERT_AVS_Warehouse
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [WareHouse_Get_STB_Device_Info](#warehouse_get_stb_device_info)
    - [WareHouse_Set_Front_Panel_State_None](#warehouse_set_front_panel_state_none)
    - [WareHouse_Set_Front_Panel_State_Download_In_Progress](#warehouse_set_front_panel_state_download_in_progress)
@@ -19,22 +21,13 @@ RDKV_CERT_AVS_Warehouse
    - [Warehouse_ActivateDeactivate_Event_Test](#warehouse_activatedeactivate_event_test)
    - [WareHouse_Set_Front_Panel_State_EmptyValue](#warehouse_set_front_panel_state_emptyvalue)
    - [Warehouse_ActivateDeactivate_All_Event_Test](#warehouse_activatedeactivate_all_event_test)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **Warehouse** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.Warehouse` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getDeviceInfo`, `isClean`
-- **Configuration APIs**: `resetDevice`, `setFrontPanelState`
-- **Events**: `resetDone`
-- **Other APIs**: `internalReset`, `lightReset`
 
 ## APIs Under Test
 
@@ -53,8 +46,6 @@ accessible via JSON-RPC under the callsign `org.rdk.Warehouse` (version 1)
 |-------|-------------|
 | `resetDone` | Notifies about the status of the warehouse reset operation |
 
----
-
 ## Plugin Pre-conditions
 
 ### Plugin Pre-condition 1: Activate_Plugins
@@ -72,8 +63,6 @@ accessible via JSON-RPC under the callsign `org.rdk.Warehouse` (version 1)
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
 
 - Register and listen to event `Event_Controller_All` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -346,15 +335,9 @@ Validates all event on Activating/deactivating the plugin
 | 5 | Check All Event | Listen for Event_Controller_All event (wait 2s) | Controller `all` event received; callsign = `org.rdk.warehouse`, state = `"activated"` |
 | 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

@@ -4,27 +4,21 @@ RDKV_CERT_AVS_User_Preferences
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [UserPreferences_SetAndGet_UI_Language](#userpreferences_setandget_ui_language)
    - [UserPreferences_ActivateDeactivate_Event_Test](#userpreferences_activatedeactivate_event_test)
    - [UserPreferences_ActivateDeactivate_All_Event_Test](#userpreferences_activatedeactivate_all_event_test)
    - [UserPreferences_Verify_Get_UI_Language_Error](#userpreferences_verify_get_ui_language_error)
    - [UserPreferences_Verify_SetUILanguage_without_Params](#userpreferences_verify_setuilanguage_without_params)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **UserPreferences** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.UserPreferences` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getUILanguage`
-- **Configuration APIs**: `setUILanguage`
 
 ## APIs Under Test
 
@@ -32,8 +26,6 @@ accessible via JSON-RPC under the callsign `org.rdk.UserPreferences` (version 1)
 |-----|-------------|
 | `getUILanguage` | Gets the user preferred UI language |
 | `setUILanguage` | Sets the user preferred UI language |
-
----
 
 ## Plugin Pre-conditions
 
@@ -50,8 +42,6 @@ accessible via JSON-RPC under the callsign `org.rdk.UserPreferences` (version 1)
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
 
 - Register and listen to event `Event_Controller_All` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -190,15 +180,9 @@ Verify that the setUILanguage API returns an error when UI language parameter is
 |---------|-----------|-------------|-----------------|
 | 1 | Set UI Language | Invoke setUILanguage on org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage"}' http://127.0.0.1:9998/jsonrpc` | API returns error response with `"success": false` (missing `ui_language` parameter) |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined._
-
----
 
 ## Test Attributes
 

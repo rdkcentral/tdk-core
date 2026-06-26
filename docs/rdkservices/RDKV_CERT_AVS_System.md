@@ -4,8 +4,10 @@ RDKV_CERT_AVS_System
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [System_Get_ESTB_MAC](#system_get_estb_mac)
    - [System_Get_Serial_Number](#system_get_serial_number)
    - [System_Get_Version](#system_get_version)
@@ -61,22 +63,13 @@ RDKV_CERT_AVS_System
    - [System_Invalid_Set_Power_State](#system_invalid_set_power_state)
    - [System_Invalid_TimeZone_ErrorValidation](#system_invalid_timezone_errorvalidation)
    - [System_Invalid_Key_ErrorMessage](#system_invalid_key_errormessage)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **System** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.System` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getAvailableStandbyModes`, `getCachedValue`, `getCoreTemperature`, `getDeviceInfo`, `getDownloadedFirmwareInfo`, `getFriendlyName`, `getLastDeepSleepReason`, `getMacAddresses`, `getMfgSerialNumber`, `getMilestones`, `getMode`, `getNetworkStandbyMode`, `getOvertempGraceInterval`, `getPlatformConfiguration`, `getPowerState`, `getPowerStateBeforeReboot`, `getPowerStateIsManagedByDevice`, `getPreferredStandbyMode`, `getPreviousRebootInfo`, `getPreviousRebootInfo2`, `getPreviousRebootReason`, `getRFCConfig`, `getSerialNumber`, `getStateInfo`, `getSystemVersions`, `getTemperatureThresholds`, `getTerritory`, `getTimeZoneDST`, `getTimeZones`, `getXconfParams`, `hasRebootBeenRequested`, `isGzEnabled`, `isOptOutTelemetry`
-- **Configuration APIs**: `clearLastDeepSleepReason`, `deletePersistentPath`, `enableMoca`, `removeCacheKey`, `setCachedValue`, `setFriendlyName`, `setGzEnabled`, `setMode`, `setNetworkStandbyMode`, `setOptOutTelemetry`, `setOvertempGraceInterval`, `setPowerState`, `setPreferredStandbyMode`, `setTemperatureThresholds`, `setTerritory`, `setTimeZoneDST`, `updateFirmware`
-- **Events**: `onFriendlyNameChanged`, `onMacAddressesRetreived`, `onNetworkStandbyModeChanged`, `onRebootRequest`, `onSystemModeChanged`, `onSystemPowerStateChanged`, `onTemperatureThresholdChanged`, `onTerritoryChanged`, `onTimeZoneDSTChanged`
-- **Other APIs**: `cacheContains`, `queryMocaStatus`, `reboot`, `requestSystemUptime`
 
 ## APIs Under Test
 
@@ -151,8 +144,6 @@ accessible via JSON-RPC under the callsign `org.rdk.System` (version 1)
 | `onTerritoryChanged` | Triggered when the device territory changed |
 | `onTimeZoneDSTChanged` | Triggered when device timezone changed |
 
----
-
 ## Plugin Pre-conditions
 
 ### Plugin Pre-condition 1: Activate_System_Plugin
@@ -182,8 +173,6 @@ accessible via JSON-RPC under the callsign `org.rdk.System` (version 1)
 - Register and listen to event `Event_On_Territory_Changed` on `System` plugin
 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -1318,15 +1307,9 @@ Validate error message with invalid key in deviceInfo api
 |---------|-----------|-------------|-----------------|
 | 1 | Get Device Info | Invoke getDeviceInfo on org.rdk.System with params: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "INVALID"}}' http://127.0.0.1:9998/jsonrpc` | `getDeviceInfo` returns an error response with `success: false` for the invalid key `"INVALID"` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined._
-
----
 
 ## Test Attributes
 

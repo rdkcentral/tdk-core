@@ -4,8 +4,10 @@ RDKV_CERT_AVS_Controller
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [Start_Discovery](#start_discovery)
    - [Get_Subsystems_Status](#get_subsystems_status)
    - [Get_Process_Info](#get_process_info)
@@ -32,22 +34,13 @@ RDKV_CERT_AVS_Controller
    - [Activate_Empty_callsign](#activate_empty_callsign)
    - [Deactivate_Invalid_callsign](#deactivate_invalid_callsign)
    - [Deactivate_empty_callsign](#deactivate_empty_callsign)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **Controller** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `Controller` (version 1)
-
-**API Coverage**
-
-- **Lifecycle / Control APIs**: `activate`, `deactivate`, `startdiscovery`
-- **Configuration APIs**: `delete`
-- **Events**: `all`, `statechange`
-- **Other APIs**: `configuration`, `discoveryresults`, `environment`, `links`, `processinfo`, `status`, `storeconfig`, `subsystems`, `unavailable`
 
 ## APIs Under Test
 
@@ -74,8 +67,6 @@ accessible via JSON-RPC under the callsign `Controller` (version 1)
 | `all` | Signals each and every event in the system |
 | `statechange` | Signals a plugin state change |
 
----
-
 ## Plugin Pre-conditions
 
 ### Plugin Pre-condition 1: Activate_Plugins
@@ -91,8 +82,6 @@ accessible via JSON-RPC under the callsign `Controller` (version 1)
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
 
 - Register and listen to event `Event_Controller_All` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -715,15 +704,9 @@ Validate error message by deactivating with empty callsign
 |---------|-----------|-------------|-----------------|
 | 1 | Deactivate Plugin | Invoke deactivate on Controller with callsign: " "<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": " "}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` — empty callsign is not a registered plugin |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

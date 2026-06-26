@@ -4,8 +4,10 @@ RDKV_CERT_AVS_Display_Settings
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [Check_Settop_Supported_Resolutions](#check_settop_supported_resolutions)
    - [Check_Supported_Tv_Resolutions](#check_supported_tv_resolutions)
    - [Check_Supported_Video_Displays](#check_supported_video_displays)
@@ -106,21 +108,13 @@ RDKV_CERT_AVS_Display_Settings
    - [Set_Invalid_Persist](#set_invalid_persist)
    - [Set_Resolution_WithoutParameter](#set_resolution_withoutparameter)
    - [DisplaySettings_Check_Display_Connected_Status_After_Light_Sleep_HDMI0](#displaysettings_check_display_connected_status_after_light_sleep_hdmi0)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **DisplaySettings** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.DisplaySettings` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getActiveInput`, `getAssociatedAudioMixing`, `getAudioDelay`, `getAudioDelayOffset`, `getAudioFormat`, `getBassEnhancer`, `getColorDepthCapabilities`, `getConnectedAudioPorts`, `getConnectedVideoDisplays`, `getCurrentOutputSettings`, `getCurrentResolution`, `getDRCMode`, `getDefaultResolution`, `getDialogEnhancement`, `getDolbyVolumeMode`, `getEnableAudioPort`, `getFaderControl`, `getGain`, `getGraphicEqualizerMode`, `getIntelligentEqualizerMode`, `getMISteering`, `getMS12AudioCompression`, `getMS12AudioProfile`, `getMuted`, `getPreferredColorDepth`, `getSettopAudioCapabilities`, `getSettopHDRSupport`, `getSettopMS12Capabilities`, `getSinkAtmosCapability`, `getSoundMode`, `getSupportedAudioModes`, `getSupportedAudioPorts`, `getSupportedMS12AudioProfiles`, `getSupportedResolutions`, `getSupportedSettopResolutions`, `getSupportedTvResolutions`, `getSupportedVideoDisplays`, `getSurroundVirtualizer`, `getTVHDRCapabilities`, `getTvHDRSupport`, `getVideoFormat`, `getVideoPortStatusInStandby`, `getVolumeLevel`, `getVolumeLeveller`, `getZoomSetting`, `isConnectedDeviceRepeater`, `isSurroundDecoderEnabled`, `readEDID`, `readHostEDID`
-- **Configuration APIs**: `enableSurroundDecoder`, `resetBassEnhancer`, `resetDialogEnhancement`, `resetSurroundVirtualizer`, `resetVolumeLeveller`, `setAssociatedAudioMixing`, `setAudioAtmosOutputMode`, `setAudioDelay`, `setAudioDelayOffset`, `setBassEnhancer`, `setCurrentResolution`, `setDRCMode`, `setDialogEnhancement`, `setDolbyVolumeMode`, `setEnableAudioPort`, `setFaderControl`, `setGain`, `setGraphicEqualizerMode`, `setIntelligentEqualizerMode`, `setMISteering`, `setMS12AudioCompression`, `setMS12AudioProfile`, `setMS12ProfileSettingsOverride`, `setMuted`, `setPreferredColorDepth`, `setScartParameter`, `setSoundMode`, `setSurroundVirtualizer`, `setVideoPortStatusInStandby`, `setVolumeLevel`, `setVolumeLeveller`, `setZoomSetting`
-- **Events**: `muteStatusChanged`, `resolutionChanged`, `resolutionPreChange`, `volumeLevelChanged`, `zoomSettingUpdated`
 
 ## APIs Under Test
 
@@ -218,8 +212,6 @@ accessible via JSON-RPC under the callsign `org.rdk.DisplaySettings` (version 1)
 | `volumeLevelChanged` | Triggered on resolution pre-change |
 | `zoomSettingUpdated` | Zoom settings updated event  |
 
----
-
 ## Plugin Pre-conditions
 
 ### Plugin Pre-condition 1: Activate_Plugins
@@ -251,8 +243,6 @@ accessible via JSON-RPC under the callsign `org.rdk.DisplaySettings` (version 1)
 - Register and listen to event `Event_VolumeLevel_Changed` on `DisplaySettings` plugin
 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -2461,15 +2451,9 @@ Verify that the getConnectedVideoDisplays method returns the TV connected status
 | 2 | Set Power State (conditional) | *(Conditional statement executed only if previous step condition is met)*<br>Set Power State on System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
 | 3 | Check power state (conditional) | *(Conditional statement executed only if previous step condition is met)*<br>Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | `powerState` should be `ON` and `success` should be `true` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined._
-
----
 
 ## Test Attributes
 

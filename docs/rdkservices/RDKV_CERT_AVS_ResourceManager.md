@@ -4,8 +4,9 @@ RDKV_CERT_AVS_ResourceManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [ResourceManager_Set_AV_Blocked_Valid_AppId_True](#resourcemanager_set_av_blocked_valid_appid_true)
    - [ResourceManager_Set_AV_Blocked_Valid_AppId_False](#resourcemanager_set_av_blocked_valid_appid_false)
    - [ResourceManager_Set_AV_Blocked_Empty_AppId_True](#resourcemanager_set_av_blocked_empty_appid_true)
@@ -28,21 +29,13 @@ RDKV_CERT_AVS_ResourceManager
    - [ResourceManager_Reserve_TTS_Resource_AppId_Invalid](#resourcemanager_reserve_tts_resource_appid_invalid)
    - [ResourceManager_Reserve_TTS_Resource_AppId_Alphanumeric](#resourcemanager_reserve_tts_resource_appid_alphanumeric)
    - [ResourceManager_Reserve_TTS_Resource_AppId_SpecialChars](#resourcemanager_reserve_tts_resource_appid_specialchars)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **ResourceManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.ResourceManager` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getBlockedAVApplications`
-- **Configuration APIs**: `setAVBlocked`
-- **Other APIs**: `reserveTTSResource`, `reserveTTSResourceForApps`
 
 ## APIs Under Test
 
@@ -52,8 +45,6 @@ accessible via JSON-RPC under the callsign `org.rdk.ResourceManager` (version 1)
 | `reserveTTSResource` | Reserves the Text To speech Resource for specified client |
 | `reserveTTSResourceForApps` | Reserves TTS resource for applications |
 | `setAVBlocked` | Adds/removes the list of applications with the given callsigns to/from the blacklist |
-
----
 
 ## Plugin Pre-conditions
 
@@ -113,8 +104,6 @@ accessible via JSON-RPC under the callsign `org.rdk.ResourceManager` (version 1)
 |---------|-----------|-------------|-----------------|
 | 1 | Launch App Valid Params | Launch App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": "", "launchArgs": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check App Launched | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-
----
 
 ## Test Cases
 
@@ -512,10 +501,6 @@ Verify reserveTTSResource fails when appId contains special characters
 |---------|-----------|-------------|-----------------|
 | 1 | Reserve TTS Resource AppId SpecialChars | Invoke reserveTTSResource on org.rdk.ResourceManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.reserveTTSResource", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call returns a false success status |
 
----
-
----
-
 ## Plugin Post-conditions
 
 ### Plugin Post-condition 1: Uninstall_Package
@@ -526,8 +511,6 @@ Verify reserveTTSResource fails when appId contains special characters
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check Package Info | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
 | 4 | Uninstall Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
 
 ## Test Attributes
 

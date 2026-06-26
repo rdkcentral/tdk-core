@@ -4,8 +4,9 @@ RDKV_CERT_AVS_DownloadManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [DownloadManager_Download_ValidParameters](#downloadmanager_download_validparameters)
    - [DownloadManager_GetStorageDetails_Functionality](#downloadmanager_getstoragedetails_functionality)
    - [DownloadManager_Cancel_EmptyParameters](#downloadmanager_cancel_emptyparameters)
@@ -29,22 +30,13 @@ RDKV_CERT_AVS_DownloadManager
    - [DownloadManager_Progress_Invalid_Parameter](#downloadmanager_progress_invalid_parameter)
    - [DownloadManager_Download_Optional_Parameters](#downloadmanager_download_optional_parameters)
    - [DownloadManager_Download_Ratelimit_Pause_Resume_Delete_Package](#downloadmanager_download_ratelimit_pause_resume_delete_package)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **DownloadManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.DownloadManager` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getStorageDetails`
-- **Lifecycle / Control APIs**: `pause`, `resume`
-- **Configuration APIs**: `delete`
-- **Other APIs**: `cancel`, `download`, `progress`
 
 ## APIs Under Test
 
@@ -57,8 +49,6 @@ accessible via JSON-RPC under the callsign `org.rdk.DownloadManager` (version 1)
 | `pause` | Pauses an ongoing download |
 | `progress` | Retrieves the progress of a download |
 | `resume` | Resumes a paused download |
-
----
 
 ## Plugin Pre-conditions
 
@@ -77,8 +67,6 @@ accessible via JSON-RPC under the callsign `org.rdk.DownloadManager` (version 1)
 | 1 | Check PluginActive Status | Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
 | 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-
----
 
 ## Test Cases
 
@@ -537,15 +525,9 @@ Verify download, ratelimit, pause, resume and delete package functionality
 | 10 | Check Package Download Completion | Check downloaded package status on the device | Downloaded package checksum matches expected value: `<PACKAGEMANAGER_LARGE_APPLICATION_MD5SUM_VALUE>` |
 | 11 | Delete Package | Invoke delete on org.rdk.DownloadManager with fileLocator: "<DOWNLOADED_FILE_LOCATOR_URL>" (wait 10 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.delete", "params": {"fileLocator": "<DOWNLOADED_FILE_LOCATOR_URL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

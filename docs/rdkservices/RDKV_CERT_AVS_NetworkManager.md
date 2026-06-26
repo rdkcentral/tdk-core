@@ -4,8 +4,10 @@ RDKV_CERT_AVS_NetworkManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [NetworkManager_Get_Device_Interfaces](#networkmanager_get_device_interfaces)
    - [NetworkManager_Get_Primary/Default_Interface](#networkmanager_get_primary-default_interface)
    - [NetworkManager_Validate_Public_IPv4_IP](#networkmanager_validate_public_ipv4_ip)
@@ -95,23 +97,13 @@ RDKV_CERT_AVS_NetworkManager
    - [NetworkManager_Check_Internet_IPv6_Connectivity](#networkmanager_check_internet_ipv6_connectivity)
    - [NetworkManager_Get_IPSettings_IPv6](#networkmanager_get_ipsettings_ipv6)
    - [NetworkManager_Check_Primary_Interface_After_LightSleep](#networkmanager_check_primary_interface_after_lightsleep)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **NetworkManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.NetworkManager` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `GetAvailableInterfaces`, `GetConnectedSSID`, `GetConnectivityTestEndpoints`, `GetIPSettings`, `GetInterfaceState`, `GetKnownSSIDs`, `GetLogLevel`, `GetPrimaryInterface`, `GetPublicIP`, `GetStunEndpoint`, `GetSupportedSecurityModes`, `GetWifiState`, `IsConnectedToInternet`
-- **Lifecycle / Control APIs**: `StartConnectivityMonitoring`, `StartWiFiScan`, `StopConnectivityMonitoring`, `StopWiFiScan`
-- **Configuration APIs**: `AddToKnownSSIDs`, `RemoveKnownSSID`, `SetConnectivityTestEndpoints`, `SetIPSettings`, `SetInterfaceState`, `SetLogLevel`, `SetPrimaryInterface`, `SetStunEndpoint`
-- **Events**: `onAvailableSSIDs`, `onInterfaceStateChange`, `onWiFiStateChange`
-- **Other APIs**: `Ping`, `Trace`, `WiFiConnect`, `WiFiDisconnect`
 
 ## APIs Under Test
 
@@ -155,8 +147,6 @@ accessible via JSON-RPC under the callsign `org.rdk.NetworkManager` (version 1)
 | `onInterfaceStateChange` | Triggered when an interface state is changed |
 | `onWiFiStateChange` | Triggered when WIFI connection state get changed |
 
----
-
 ## Plugin Pre-conditions
 
 ### Plugin Pre-condition 1: Activate_Plugin
@@ -176,8 +166,6 @@ accessible via JSON-RPC under the callsign `org.rdk.NetworkManager` (version 1)
 - Register and listen to event `Event_On_WiFiStateChange` on `NetworkManager` plugin
 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -2247,15 +2235,9 @@ Checks the primary interface after the device has been put in sleep mode and the
 | 1 | Check power state | Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state is returned successfully |
 | 2 | Set Power State | *(Conditional statement executed only if previous step condition is met)*<br>Set Power State on System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

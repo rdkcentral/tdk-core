@@ -4,8 +4,10 @@ RDKV_CERT_AVS_Display_Info
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [DisplayInfo_GET_audiopassthrough](#displayinfo_get_audiopassthrough)
    - [DisplayInfo_GET_HDMI_Connected](#displayinfo_get_hdmi_connected)
    - [DisplayInfo_GET_resolution_width](#displayinfo_get_resolution_width)
@@ -31,22 +33,13 @@ RDKV_CERT_AVS_Display_Info
    - [DisplayInfo_Get_EOTF](#displayinfo_get_eotf)
    - [DisplayInfo_ActivateDeactivate_Event_Test](#displayinfo_activatedeactivate_event_test)
    - [DisplayInfo_Check_Resolution_PreChange_Event](#displayinfo_check_resolution_prechange_event)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **DisplayInfo** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `DisplayInfo` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `isaudiopassthrough`
-- **Lifecycle / Control APIs**: `connected`
-- **Events**: `updated`
-- **Other APIs**: `colorimetry`, `colorspace`, `colourdepth`, `edid`, `eotf`, `freegpuram`, `hdcpprotection`, `hdrsetting`, `height`, `heightincentimeters`, `portname`, `quantizationrange`, `stbcapabilities`, `totalgpuram`, `tvcapabilities`, `verticalfreq`, `width`, `widthincentimeters`
 
 ## APIs Under Test
 
@@ -79,8 +72,6 @@ accessible via JSON-RPC under the callsign `DisplayInfo` (version 1)
 |-------|-------------|
 | `updated` | Fires on changing the resolution |
 
----
-
 ## Plugin Pre-conditions
 
 ### Plugin Pre-condition 1: Activate_Plugins
@@ -104,8 +95,6 @@ accessible via JSON-RPC under the callsign `DisplayInfo` (version 1)
 - Register and listen to event `Event_Pre_Post_Resolution_Change` on `DisplayInfo` plugin
 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -758,15 +747,9 @@ Checks for the Resolution Pre Change event
 | 7 | Check Updated PreResolution Change Event | *(Conditional statement executed only if resolution changed between Step 4 and Step 6)*<br>Listen for Event_Pre_Post_Resolution_Change event (timeout: 2s) | Expected `preresolutionchange` event received confirming the display is about to apply the new resolution |
 | 8 | Check Updated PreResolution Change Event | *(Conditional statement executed only if resolution was unchanged between Step 4 and Step 6)*<br>Listen for Event_Pre_Post_Resolution_Change event (timeout: 2s) | No `preresolutionchange` event received — resolution was already at the target value; event is absent or empty |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

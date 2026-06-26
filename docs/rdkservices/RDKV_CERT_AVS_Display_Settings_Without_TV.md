@@ -4,8 +4,9 @@ RDKV_CERT_AVS_Display_Settings_Without_TV
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [Read_EDID_Without_TV](#read_edid_without_tv)
    - [Check_Connected_Video_Displays_Without_TV_Connected](#check_connected_video_displays_without_tv_connected)
    - [Check_Active_Input_Status_Without_TV_Connected](#check_active_input_status_without_tv_connected)
@@ -15,17 +16,27 @@ RDKV_CERT_AVS_Display_Settings_Without_TV
    - [Check_SetCurrentResolution_Status_Without_TV_Connected](#check_setcurrentresolution_status_without_tv_connected)
    - [Check_GetDefaultResolution_Status_Without_TV_Connected](#check_getdefaultresolution_status_without_tv_connected)
    - [Check_PortName_Status_Without_TV_Connected](#check_portname_status_without_tv_connected)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **DisplaySettingsWithoutTV** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.DisplaySettingsWithoutTV` (version 1)
 
----
+## APIs Under Test
+
+| API | Description |
+|-----|-------------|
+| `getActiveInput` | Get the active input status |
+| `getConnectedAudioPorts` | Get the connected audio port details |
+| `getConnectedVideoDisplays` | Get the connected video display details |
+| `getCurrentResolution` | Get the current resolution details |
+| `getDefaultResolution` | Get the default resolution value |
+| `getHDCPStatus` | Provides interface for HDCP related data and events |
+| `portname` | Get Video output port on the STB used for connection to TV |
+| `readEDID` | Read the EDID of connected output device |
+| `setCurrentResolution` | Set the current resolution values |
 
 ## Plugin Pre-conditions
 
@@ -44,8 +55,6 @@ accessible via JSON-RPC under the callsign `org.rdk.DisplaySettingsWithoutTV` (v
 | 1 | Check PluginActive Status | Check Active Status of HdcpProfile Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdcpProfile"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate HdcpProfile Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.HdcpProfile"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
 | 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of HdcpProfile Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdcpProfile"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-
----
 
 ## Test Cases
 
@@ -242,15 +251,9 @@ Checks portname API response when TV is not connected
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, HDMI input not present in connected video displays |
 | 2 | Check PortName Status | Invoke portname on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.portname"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

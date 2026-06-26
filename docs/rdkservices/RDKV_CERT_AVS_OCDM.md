@@ -4,23 +4,18 @@ RDKV_CERT_AVS_OCDM
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [OCDM_Get_All_DRM_Info](#ocdm_get_all_drm_info)
    - [OCDM_ActivateDeactivate_Event_Test](#ocdm_activatedeactivate_event_test)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **OCDM** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `OCDM` (version 1)
-
-**API Coverage**
-
-- **Other APIs**: `drms`, `keysystems`
 
 ## APIs Under Test
 
@@ -28,8 +23,6 @@ accessible via JSON-RPC under the callsign `OCDM` (version 1)
 |-----|-------------|
 | `drms` | Retrieves supported DRM systems |
 | `keysystems` | Provides access to the DRM key systems |
-
----
 
 ## Plugin Pre-conditions
 
@@ -44,8 +37,6 @@ accessible via JSON-RPC under the callsign `OCDM` (version 1)
 ### Plugin Pre-condition 2: Register_And_Listen_Events
 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -99,15 +90,9 @@ Validates statechange event on Activating/deactivating the plugin
 | 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | `statechange` event received; callsign = `ocdm`, state = `"activated"` |
 | 6 | Check PluginActive Status | Invoke status on Controller for OCDM<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@OCDM"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

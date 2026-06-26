@@ -4,8 +4,10 @@ RDKV_CERT_AVS_PlayerInfo
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [PlayerInfo_Check_Audio_Codecs](#playerinfo_check_audio_codecs)
    - [PlayerInfo_Check_Video_Codecs](#playerinfo_check_video_codecs)
    - [PlayerInfo_Check_AudioEquivalence_Enabled](#playerinfo_check_audioequivalence_enabled)
@@ -15,21 +17,13 @@ RDKV_CERT_AVS_PlayerInfo
    - [SetAndGet_All_Supported_Resolutions](#setandget_all_supported_resolutions)
    - [Check_Dolby_AudioMode_Changed_Event](#check_dolby_audiomode_changed_event)
    - [PlayerInfo_ActivateDeactivate_Event_Test](#playerinfo_activatedeactivate_event_test)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **PlayerInfo** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `isaudioequivalenceenabled`
-- **Events**: `dolby_audiomodechanged`
-- **Other APIs**: `audiocodecs`, `dolby_atmosmetadata`, `dolby_enableatmosoutput`, `dolby_soundmode`, `resolution`, `videocodecs`
 
 ## APIs Under Test
 
@@ -48,8 +42,6 @@ accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
 | Event | Description |
 |-------|-------------|
 | `dolby_audiomodechanged` | Notifies audio mode changed event |
-
----
 
 ## Plugin Pre-conditions
 
@@ -74,8 +66,6 @@ accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
 - Register and listen to event `Event_AudioMode_Changed` on `PlayerInfo` plugin
 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -265,15 +255,9 @@ Validates statechange event on Activating/deactivating the plugin
 | 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait2s) | `statechange` event received; callsign = `playerinfo`, state = `"activated"` |
 | 6 | Check PluginActive Status | Invoke status on Controller for PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

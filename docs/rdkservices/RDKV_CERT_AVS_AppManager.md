@@ -4,8 +4,10 @@ RDKV_CERT_AVS_AppManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [AppManager_Check_Response_Get_Installed_Apps](#appmanager_check_response_get_installed_apps)
    - [AppManager_Verify_IsInstalled_Valid_AppId](#appmanager_verify_isinstalled_valid_appid)
    - [AppManager_Verify_IsInstalled_With_Invalid_AppId](#appmanager_verify_isinstalled_with_invalid_appid)
@@ -127,22 +129,13 @@ RDKV_CERT_AVS_AppManager
    - [AppManager_Check_Get_Loaded_Apps_After_Close](#appmanager_check_get_loaded_apps_after_close)
    - [AppManager_Check_Get_Loaded_Apps_After_Kill](#appmanager_check_get_loaded_apps_after_kill)
    - [AppManager_Check_Get_Loaded_Apps_After_Terminate](#appmanager_check_get_loaded_apps_after_terminate)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **AppManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getAppProperty`, `getInstalledApps`, `getLoadedApps`, `getMaxRunningApps`, `isInstalled`
-- **Lifecycle / Control APIs**: `activateSystemApp`, `closeApp`, `deactivateSystemApp`, `hibernateSystemApp`, `killApp`, `launchApp`, `preloadApp`, `sendIntent`, `startSystemApp`, `stopSystemApp`, `terminateApp`
-- **Configuration APIs**: `clearAllAppData`, `clearAppData`, `setAppProperty`
-- **Events**: `onAppLifecycleStateChanged`
 
 ## APIs Under Test
 
@@ -173,8 +166,6 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 | Event | Description |
 |-------|-------------|
 | `onAppLifecycleStateChanged` | Triggered whenever there is a change in the lifecycle state of a running application |
-
----
 
 ## Plugin Pre-conditions
 
@@ -223,8 +214,6 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 ### Plugin Pre-condition 6: Register_And_Listen_Events
 
 - Register and listen to event `Event_On_App_Lifecycle_State_Changed` on `AppManager` plugin
-
----
 
 ## Test Cases
 
@@ -2727,8 +2716,6 @@ Verify that the terminated app is no longer reflected in the list of loaded apps
 | 3 | Terminate App Valid Param | Invoke terminateApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 4 | Get Loaded Apps After Terminate | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 
----
-
 ## Plugin Post-conditions
 
 ### Plugin Post-condition 1: Uninstall_Package
@@ -2739,8 +2726,6 @@ Verify that the terminated app is no longer reflected in the list of loaded apps
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check Package Info | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
 | 4 | Uninstall Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
 
 ## Test Attributes
 

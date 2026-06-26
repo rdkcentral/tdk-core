@@ -4,8 +4,10 @@ RDKV_CERT_AVS_RDKWindowManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [RWM_Check_Add_Key_Intercepts](#rwm_check_add_key_intercepts)
    - [RWM_AddKeyIntercepts_Empty_Modifiers](#rwm_addkeyintercepts_empty_modifiers)
    - [RWM_Check_AddKeyIntercepts_Invalid_Keys](#rwm_check_addkeyintercepts_invalid_keys)
@@ -47,22 +49,13 @@ RDKV_CERT_AVS_RDKWindowManager
    - [RWM_Check_User_Active](#rwm_check_user_active)
    - [RWM_Reset_Inactivity_Interval](#rwm_reset_inactivity_interval)
    - [RWM_Check_On_User_Inactivity_Event_Disabled_Reporting](#rwm_check_on_user_inactivity_event_disabled_reporting)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **RDKWindowManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.RDKWindowManager` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getApps`, `getZOrder`
-- **Configuration APIs**: `addKeyIntercepts`, `enableDisplayRender`, `enableInactivityReporting`, `removeKeyIntercept`, `resetInactivityTime`, `setFocus`, `setInactivityInterval`, `setVisible`, `setZOrder`
-- **Events**: `onUserInactivity`
-- **Other APIs**: `createDisplay`, `generateKey`, `renderReady`
 
 ## APIs Under Test
 
@@ -88,8 +81,6 @@ accessible via JSON-RPC under the callsign `org.rdk.RDKWindowManager` (version 1
 | Event | Description |
 |-------|-------------|
 | `onUserInactivity` | Triggered when the user inactivity timer reaches the set interval |
-
----
 
 ## Plugin Pre-conditions
 
@@ -153,8 +144,6 @@ accessible via JSON-RPC under the callsign `org.rdk.RDKWindowManager` (version 1
 ### Plugin Pre-condition 8: Register_And_Listen_Events
 
 - Register and listen to event `Event_On_User_Inactivity` on `RDKWindowManager` plugin
-
----
 
 ## Test Cases
 
@@ -976,10 +965,6 @@ Checks whether the user inactivity reporting event is triggered when inactivity 
 | 1 | Set Inactivity Interval | Invoke setInactivityInterval on org.rdk.RDKWindowManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.setInactivityInterval", "params": {"interval": 1}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check On UserInactivity Event NoEvent | Listen for event Event_On_User_Inactivity | Event should not be triggered |
 
----
-
----
-
 ## Plugin Post-conditions
 
 ### Plugin Post-condition 1: Uninstall_Package
@@ -990,8 +975,6 @@ Checks whether the user inactivity reporting event is triggered when inactivity 
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check Package Info | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
 | 4 | Uninstall Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
 
 ## Test Attributes
 

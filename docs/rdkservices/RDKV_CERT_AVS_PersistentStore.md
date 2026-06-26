@@ -4,8 +4,10 @@ RDKV_CERT_AVS_PersistentStore
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [PersistentStore_Set_and_Get_Value](#persistentstore_set_and_get_value)
    - [PersistentStore_Delete_Key](#persistentstore_delete_key)
    - [PersistentStore_Delete_Namespace](#persistentstore_delete_namespace)
@@ -18,22 +20,13 @@ RDKV_CERT_AVS_PersistentStore
    - [PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Namespce_Operations](#persistentstore_verify_setvalue_and_getvalue_api_with_empty_namespce_operations)
    - [PersistentStore_GetStorage_NamespaceLimit_For_DeletedNamespace](#persistentstore_getstorage_namespacelimit_for_deletednamespace)
    - [PersistentStore_ActivateDeactivate_Event_Test](#persistentstore_activatedeactivate_event_test)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **PersistentStore** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.PersistentStore` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getKeys`, `getNamespaceStorageLimit`, `getNamespaces`, `getStorageSize`, `getValue`
-- **Configuration APIs**: `deleteKey`, `deleteNamespace`, `setNamespaceStorageLimit`, `setValue`
-- **Events**: `onValueChanged`
-- **Other APIs**: `flushCache`
 
 ## APIs Under Test
 
@@ -56,8 +49,6 @@ accessible via JSON-RPC under the callsign `org.rdk.PersistentStore` (version 1)
 |-------|-------------|
 | `onValueChanged` | Triggered whenever any of the values stored are changed using setValue |
 
----
-
 ## Plugin Pre-conditions
 
 ### Plugin Pre-condition 1: Activate_Plugins
@@ -73,8 +64,6 @@ accessible via JSON-RPC under the callsign `org.rdk.PersistentStore` (version 1)
 - Register and listen to event `Event_On_Value_Changed` on `PersistentStore` plugin
 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -330,15 +319,9 @@ Validates statechange event on Activating/deactivating the plugin
 | 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | `statechange` event received; callsign = `org.rdk.persistentstore`, state = `"activated"` |
 | 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PersistentStore"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

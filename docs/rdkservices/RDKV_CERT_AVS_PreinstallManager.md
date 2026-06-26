@@ -4,8 +4,9 @@ RDKV_CERT_AVS_PreinstallManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [PreinstallManager_StartPreInstall_ForceInstall_True](#preinstallmanager_startpreinstall_forceinstall_true)
    - [PreinstallManager_StartPreInstall_ForceInstall_False](#preinstallmanager_startpreinstall_forceinstall_false)
    - [PreinstallManager_StartPreInstall_Empty](#preinstallmanager_startpreinstall_empty)
@@ -19,27 +20,19 @@ RDKV_CERT_AVS_PreinstallManager
    - [PreinstallManager_GetPreInstallState](#preinstallmanager_getpreinstallstate)
    - [Preinstall_Check_On_AppInstallationStatus_Event_StartPreInstall_True](#preinstall_check_on_appinstallationstatus_event_startpreinstall_true)
    - [Preinstall_Check_On_AppInstallationStatus_Event_StartPreInstall_False](#preinstall_check_on_appinstallationstatus_event_startpreinstall_false)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **PreinstallManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.PreinstallManager` (version 1)
 
-**API Coverage**
-
-- **Lifecycle / Control APIs**: `startPreinstall`
-
 ## APIs Under Test
 
 | API | Description |
 |-----|-------------|
 | `startPreinstall` | Checks the preinstall directory for packages to be preinstalled and installs them as needed |
-
----
 
 ## Plugin Pre-conditions
 
@@ -82,8 +75,6 @@ accessible via JSON-RPC under the callsign `org.rdk.PreinstallManager` (version 
 | 1 | Check PluginActive Status | Check Active Status of PreinstallManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PreinstallManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PreinstallManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PreinstallManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
 | 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of PreinstallManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PreinstallManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-
----
 
 ## Test Cases
 
@@ -330,15 +321,9 @@ Check onAppInstallationStatus event behavior when startPreinstall is called with
 | 1 | StartPreInstall ForceInstall False | Invoke startPreinstall on org.rdk.PreinstallManager with forceInstall: "false"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.startPreinstall", "params": {"forceInstall": false}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check On AppInstallationStatus Event | Listen for `Event_On_AppInstallationStatus` event (timeout: 60s) | Verify that the event is received and validated successfully |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

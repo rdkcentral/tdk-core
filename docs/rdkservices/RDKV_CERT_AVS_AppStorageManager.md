@@ -4,8 +4,9 @@ RDKV_CERT_AVS_AppStorageManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [AppStorageManager_Clear_App_Data](#appstoragemanager_clear_app_data)
    - [AppStorageManager_Clear_App_Data_Invalid_AppId](#appstoragemanager_clear_app_data_invalid_appid)
    - [AppStorageManager_Clear_App_Data_Numeric_AppId](#appstoragemanager_clear_app_data_numeric_appid)
@@ -48,21 +49,13 @@ RDKV_CERT_AVS_AppStorageManager
    - [AppStorageManager_DeleteStorage_Max_Length_AppId](#appstoragemanager_deletestorage_max_length_appid)
    - [AppStorageManager_DeleteStorage_Invalid_Characters_AppId](#appstoragemanager_deletestorage_invalid_characters_appid)
    - [AppStorageManager_DeleteStorage_Missing_AppId](#appstoragemanager_deletestorage_missing_appid)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **AppStorageManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.AppStorageManager` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getStorage`
-- **Configuration APIs**: `clear`, `clearAll`, `deleteStorage`
-- **Other APIs**: `createStorage`
 
 ## APIs Under Test
 
@@ -73,8 +66,6 @@ accessible via JSON-RPC under the callsign `org.rdk.AppStorageManager` (version 
 | `createStorage` | Creates storage for a given app id |
 | `deleteStorage` | Deletes storage for a given app id |
 | `getStorage` | Returns the storage location for a given app id |
-
----
 
 ## Plugin Pre-conditions
 
@@ -103,8 +94,6 @@ accessible via JSON-RPC under the callsign `org.rdk.AppStorageManager` (version 
 | 3 | Download ValidParameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 4 | Install | Install on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 5 | Verify Installed Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
-
----
 
 ## Test Cases
 
@@ -862,10 +851,6 @@ Verify deleteStorage returns error when appId parameter is missing
 |---------|-----------|-------------|-----------------|
 | 1 | DeleteStorage Missing AppId | Invoke deleteStorage on org.rdk.AppStorageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppStorageManager.1.deleteStorage"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 ### Plugin Post-condition 1: Uninstall_Package
@@ -874,8 +859,6 @@ Verify deleteStorage returns error when appId parameter is missing
 |---------|-----------|-------------|-----------------|
 | 1 | Check Existing Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
 | 2 | Uninstall Existing Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
 
 ## Test Attributes
 

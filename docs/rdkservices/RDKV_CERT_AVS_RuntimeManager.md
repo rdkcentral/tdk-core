@@ -4,8 +4,9 @@ RDKV_CERT_AVS_RuntimeManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [RuntimeManager_GetInfo](#runtimemanager_getinfo)
    - [RuntimeManager_GetInfo_EmptyAppId](#runtimemanager_getinfo_emptyappid)
    - [RuntimeManager_GetInfo_InvalidAppId](#runtimemanager_getinfo_invalidappid)
@@ -50,21 +51,13 @@ RDKV_CERT_AVS_RuntimeManager
    - [RuntimeManager_Wake_EmptyState](#runtimemanager_wake_emptystate)
    - [RuntimeManager_Wake_Without_Parameters](#runtimemanager_wake_without_parameters)
    - [RuntimeManager_Wake_Without_State](#runtimemanager_wake_without_state)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **RuntimeManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.RuntimeManager` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getInfo`
-- **Lifecycle / Control APIs**: `hibernate`, `resume`, `suspend`
-- **Other APIs**: `annotate`, `wake`
 
 ## APIs Under Test
 
@@ -76,8 +69,6 @@ accessible via JSON-RPC under the callsign `org.rdk.RuntimeManager` (version 1)
 | `resume` | Resume the application |
 | `suspend` | Suspend the application |
 | `wake` | Wake the application |
-
----
 
 ## Plugin Pre-conditions
 
@@ -137,8 +128,6 @@ accessible via JSON-RPC under the callsign `org.rdk.RuntimeManager` (version 1)
 |---------|-----------|-------------|-----------------|
 | 1 | Launch App Valid Params | Launch App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": "", "launchArgs": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check App Launched | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-
----
 
 ## Test Cases
 
@@ -948,10 +937,6 @@ Test wake method without state parameter
 | 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
 | 2 | Wake Application Without State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 ### Plugin Post-condition 1: Uninstall_Package
@@ -962,8 +947,6 @@ Test wake method without state parameter
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check Package Info | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
 | 4 | Uninstall Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
 
 ## Test Attributes
 

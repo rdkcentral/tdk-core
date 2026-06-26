@@ -4,8 +4,10 @@ RDKV_CERT_AVS_Bluetooth
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [Set_And_Get_Name](#set_and_get_name)
    - [Bluetooth_Toggle_Discoverable_Status](#bluetooth_toggle_discoverable_status)
    - [Bluetooth_On_Request_Failed](#bluetooth_on_request_failed)
@@ -16,10 +18,8 @@ RDKV_CERT_AVS_Bluetooth
    - [Bluetooth_Connect_Disconnect_LoudSpeaker_Device](#bluetooth_connect_disconnect_loudspeaker_device)
    - [Bluetooth_ActivateDeactivate_All_Event_Test](#bluetooth_activatedeactivate_all_event_test)
    - [Bluetooth_Verify_Connect_Error](#bluetooth_verify_connect_error)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
@@ -63,8 +63,6 @@ accessible via JSON-RPC under the callsign `org.rdk.Bluetooth` (version 1)
 | `onRequestFailed` | Indicates on request failed |
 | `onStatusChanged` | Gives status change information |
 
----
-
 ## Plugin Pre-conditions
 
 ### Plugin Pre-condition 1: Activate_Plugins
@@ -100,8 +98,6 @@ accessible via JSON-RPC under the callsign `org.rdk.Bluetooth` (version 1)
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
 
 - Register and listen to event `Event_Controller_All` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -388,10 +384,6 @@ Verify that the connect method returns an error when the plugin is in a deactiva
 | 6 | Check State Change Event | Listen for event Event_Controller_State_Changed | Event received callsign `org.rdk.bluetooth`, state `activated`, reason `requested` |
 | 7 | Check PluginActive Status | Invoke status on Controller for org.rdk.Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Bluetooth"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 ### Plugin Post-condition 1: Bluetooth_Stack_Disable
@@ -399,8 +391,6 @@ Verify that the connect method returns an error when the plugin is in a deactiva
 | Step ID | Step Name | Description | Expected Result |
 |---------|-----------|-------------|-----------------|
 | 1 | Disable Bluetooth Stack | Disable on Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.disable"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-
----
 
 ## Test Attributes
 

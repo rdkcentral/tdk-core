@@ -4,18 +4,18 @@ RDKV_CERT_AVS_Device_Diagnostics
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [DeviceDiagnostics_Get_Configurations](#devicediagnostics_get_configurations)
    - [DeviceDiagnostics_Deactivate_Activate_Stress](#devicediagnostics_deactivate_activate_stress)
    - [DeviceDiagnostics_Check_AVDecoder_Idle_Active_State](#devicediagnostics_check_avdecoder_idle_active_state)
    - [DeviceDiagnostics_Check_AVDecoder_StateChange_Event_Idle_Active](#devicediagnostics_check_avdecoder_statechange_event_idle_active)
    - [DeviceDiagnostics_ActivateDeactivate_Event_Test](#devicediagnostics_activatedeactivate_event_test)
    - [DeviceDiagnostics_ActivateDeactivate_All_Event_Test](#devicediagnostics_activatedeactivate_all_event_test)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
@@ -40,8 +40,6 @@ accessible via JSON-RPC under the callsign `org.rdk.DeviceDiagnostics` (version 
 |-------|-------------|
 | `onAVDecoderStatusChanged` | Triggered when the most active status of audio/video decoder/pipeline changes |
 
----
-
 ## Plugin Pre-conditions
 
 ### Plugin Pre-condition 1: Activate_DeviceDiagnostics_Plugin
@@ -59,8 +57,6 @@ accessible via JSON-RPC under the callsign `org.rdk.DeviceDiagnostics` (version 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
 
 - Register and listen to event `Event_Controller_All` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -290,15 +286,9 @@ Validates all event on Activating/deactivating the plugin
 | 5 | Check All Event | Listen for Event_Controller_All event (timeout: 2s) | Controller `all` event received; callsign = `org.rdk.devicediagnostics`, state = `"activated"` |
 | 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DeviceDiagnostics"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

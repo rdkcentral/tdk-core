@@ -4,28 +4,22 @@ RDKV_CERT_AVS_Monitor
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [Monitor_Reset_Statistics_NetworkManager](#monitor_reset_statistics_networkmanager)
    - [Monitor_Get_Status_NetworkManager](#monitor_get_status_networkmanager)
    - [Monitor_Restart_Limits_NetworkManager](#monitor_restart_limits_networkmanager)
    - [Monitor_ActivateDeactivate_Event_Test](#monitor_activatedeactivate_event_test)
    - [Monitor_ActivateDeactivate_All_Event_Test](#monitor_activatedeactivate_all_event_test)
    - [Monitor_Verify_restartlimits_Info_Error](#monitor_verify_restartlimits_info_error)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **Monitor** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `Monitor` (version 1)
-
-**API Coverage**
-
-- **Configuration APIs**: `resetstats`
-- **Other APIs**: `restartlimits`, `status`
 
 ## APIs Under Test
 
@@ -34,8 +28,6 @@ accessible via JSON-RPC under the callsign `Monitor` (version 1)
 | `resetstats` | Resets memory and process statistics for a single service watched by the Monitor |
 | `restartlimits` | Sets new restart limits for a service |
 | `status` | Provides access to the service statistics |
-
----
 
 ## Plugin Pre-conditions
 
@@ -60,8 +52,6 @@ accessible via JSON-RPC under the callsign `Monitor` (version 1)
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
 
 - Register and listen to event `Event_Controller_All` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -217,15 +207,9 @@ Verify that the restartlimits method returns an error when the plugin is in a de
 | 6 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | `statechange` event received; callsign = `monitor`, state = `"activated"` |
 | 7 | Check PluginActive Status | Invoke status on Controller for Monitor<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

@@ -4,25 +4,20 @@ RDKV_CERT_AVS_HDCP_Profile
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [Get_HDCP_Details](#get_hdcp_details)
    - [Get_STB_Supported_HDCP_Version](#get_stb_supported_hdcp_version)
    - [HdcpProfile_ActivateDeactivate_Event_Test](#hdcpprofile_activatedeactivate_event_test)
    - [HdcpProfile_ActivateDeactivate_All_Event_Test](#hdcpprofile_activatedeactivate_all_event_test)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **HDCPProfile** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.HdcpProfile` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getHDCPStatus`, `getSettopHDCPSupport`
 
 ## APIs Under Test
 
@@ -30,8 +25,6 @@ accessible via JSON-RPC under the callsign `org.rdk.HdcpProfile` (version 1)
 |-----|-------------|
 | `getHDCPStatus` | Provides interface for HDCP related data and events |
 | `getSettopHDCPSupport` | Returns which version of HDCP is supported by the STB |
-
----
 
 ## Plugin Pre-conditions
 
@@ -48,8 +41,6 @@ accessible via JSON-RPC under the callsign `org.rdk.HdcpProfile` (version 1)
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
 
 - Register and listen to event `Event_Controller_All` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -164,15 +155,9 @@ Validates all event on Activating/deactivating the plugin
 | 5 | Check All Event | Listen for event Event_Controller_All | Verify that event data is validated successfully |
 | 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.HdcpProfile<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdcpProfile"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined._
-
----
 
 ## Test Attributes
 

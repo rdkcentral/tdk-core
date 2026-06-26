@@ -4,8 +4,9 @@ RDKV_CERT_AVS_Message_Control
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [MessageControl_Application_Toggle_All_Tracelevels](#messagecontrol_application_toggle_all_tracelevels)
    - [MessageControl_SysLog_Toggle_All_Tracelevels](#messagecontrol_syslog_toggle_all_tracelevels)
    - [MessageControl_LocationSync_Plugin_Toggle_All_Tracelevels](#messagecontrol_locationsync_plugin_toggle_all_tracelevels)
@@ -23,20 +24,13 @@ RDKV_CERT_AVS_Message_Control
    - [MessageControl_WebKitBrowser_Plugin_Toggle_All_Tracelevels](#messagecontrol_webkitbrowser_plugin_toggle_all_tracelevels)
    - [MessageControl_MessageControl_Plugin_Toggle_All_Tracelevels](#messagecontrol_messagecontrol_plugin_toggle_all_tracelevels)
    - [MessageControl_ActivateDeactivate_Event_Test](#messagecontrol_activatedeactivate_event_test)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **MessageControl** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `MessageControl` (version 1)
-
-**API Coverage**
-
-- **Configuration APIs**: `enable`
-- **Other APIs**: `controls`
 
 ## APIs Under Test
 
@@ -44,8 +38,6 @@ accessible via JSON-RPC under the callsign `MessageControl` (version 1)
 |-----|-------------|
 | `controls` | Provides access to retrieve a list of current message controls |
 | `enable` | Enables/disables a message control |
-
----
 
 ## Plugin Pre-conditions
 
@@ -60,8 +52,6 @@ accessible via JSON-RPC under the callsign `MessageControl` (version 1)
 ### Plugin Pre-condition 2: Register_And_Listen_Events
 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -655,15 +645,9 @@ Validates statechange event on Activating/deactivating the plugin
 | 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | `statechange` event received; callsign = `messagecontrol`, state = `"activated"` |
 | 6 | Check PluginActive Status | Invoke status on Controller for MessageControl<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

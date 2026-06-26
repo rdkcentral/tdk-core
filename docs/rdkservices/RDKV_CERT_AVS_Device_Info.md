@@ -4,8 +4,9 @@ RDKV_CERT_AVS_Device_Info
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [DeviceInfo_Get_All_System_Info](#deviceinfo_get_all_system_info)
    - [DeviceInfo_Get_All_Network_Interfaces](#deviceinfo_get_all_network_interfaces)
    - [DeviceInfo_Get_SocketInfo_Negative_Case](#deviceinfo_get_socketinfo_negative_case)
@@ -31,20 +32,13 @@ RDKV_CERT_AVS_Device_Info
    - [DeviceInfo_Check_SystemInfo_API_Date_Matches_DUT_Date](#deviceinfo_check_systeminfo_api_date_matches_dut_date)
    - [DeviceInfo_Get_Device_SocName](#deviceinfo_get_device_socname)
    - [DeviceInfo_Get_Device_Manufacturer](#deviceinfo_get_device_manufacturer)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **DeviceInfo** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
-
-**API Coverage**
-
-- **Configuration APIs**: `addresses`
-- **Other APIs**: `defaultresolution`, `devicetype`, `firmwareversion`, `hostedid`, `make`, `modelid`, `modelname`, `serialnumber`, `socketinfo`, `socname`, `supportedaudioports`, `supportedhdcp`, `supportedresolutions`, `supportedvideodisplays`, `systeminfo`
 
 ## APIs Under Test
 
@@ -66,8 +60,6 @@ accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
 | `supportedresolutions` | Supported resolutions on the selected video display port |
 | `supportedvideodisplays` | Provides access to the video ports supported on the device |
 | `systeminfo` | System general information |
-
----
 
 ## Plugin Pre-conditions
 
@@ -106,8 +98,6 @@ accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
 ### Plugin Pre-condition 5: Register_And_Listen_Events
 
 - Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
----
 
 ## Test Cases
 
@@ -597,15 +587,9 @@ Checks the device manufacturer
 |---------|-----------|-------------|-----------------|
 | 1 | Get Device Manufacturer | Invoke make on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.make"}' http://127.0.0.1:9998/jsonrpc` | The information retrieved from the make API must not be empty |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined._
-
----
 
 ## Test Attributes
 

@@ -4,8 +4,9 @@ RDKV_CERT_AVS_LifecycleManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Plugin Pre-conditions](#plugin-pre-conditions)
+4. [Test Cases](#test-cases)
    - [Verify_AppReady_Valid_AppId](#verify_appready_valid_appid)
    - [Verify_AppReady_Empty_AppId](#verify_appready_empty_appid)
    - [Verify_AppReady_Numeric_AppId](#verify_appready_numeric_appid)
@@ -46,20 +47,13 @@ RDKV_CERT_AVS_LifecycleManager
    - [CloseApp_Valid_AppId_Special_Char_CloseReason](#closeapp_valid_appid_special_char_closereason)
    - [CloseApp_Valid_AppId_Boolean_CloseReason](#closeapp_valid_appid_boolean_closereason)
    - [CloseApp_Valid_AppId_Long_String_CloseReason](#closeapp_valid_appid_long_string_closereason)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+5. [Plugin Post-conditions](#plugin-post-conditions)
+6. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **LifecycleManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.LifecycleManager` (version 1)
-
-**API Coverage**
-
-- **Lifecycle / Control APIs**: `closeApp`
-- **Other APIs**: `appReady`
 
 ## APIs Under Test
 
@@ -67,8 +61,6 @@ accessible via JSON-RPC under the callsign `org.rdk.LifecycleManager` (version 1
 |-----|-------------|
 | `appReady` | Response API call to appInitializing API |
 | `closeApp` | Close the app |
-
----
 
 ## Plugin Pre-conditions
 
@@ -121,8 +113,6 @@ accessible via JSON-RPC under the callsign `org.rdk.LifecycleManager` (version 1
 | 3 | Download ValidParameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 4 | Install | Install on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 5 | Verify Installed Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
-
----
 
 ## Test Cases
 
@@ -882,10 +872,6 @@ Verify closeApp with valid appId and very long string as closeReason
 |---------|-----------|-------------|-----------------|
 | 1 | Close App Long String CloseReason | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", closeReason: "VeryLongStringForCloseReasonTestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "closeReason": "VeryLongStringForCloseReasonTestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 ### Plugin Post-condition 1: Uninstall_Package
@@ -896,8 +882,6 @@ Verify closeApp with valid appId and very long string as closeReason
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check Package Info | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
 | 4 | Uninstall Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
 
 ## Test Attributes
 

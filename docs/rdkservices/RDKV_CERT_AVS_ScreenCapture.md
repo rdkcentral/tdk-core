@@ -4,27 +4,22 @@ RDKV_CERT_AVS_ScreenCapture
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [ScreenCapture_Check_Upload_Screen_Invalid_Url](#screencapture_check_upload_screen_invalid_url)
    - [ScreenCapture_Upload_Screen](#screencapture_upload_screen)
    - [ScreenCapture_Check_Upload_Complete_Event](#screencapture_check_upload_complete_event)
    - [ScreenCapture_Check_Upload_Complete_Event_Invalid_Url](#screencapture_check_upload_complete_event_invalid_url)
    - [ScreenCapture_Check_CallGUID](#screencapture_check_callguid)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **ScreenCapture** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.ScreenCapture` (version 1)
-
-**API Coverage**
-
-- **Events**: `uploadComplete`
-- **Other APIs**: `uploadScreenCapture`
 
 ## APIs Under Test
 
@@ -37,8 +32,6 @@ accessible via JSON-RPC under the callsign `org.rdk.ScreenCapture` (version 1)
 | Event | Description |
 |-------|-------------|
 | `uploadComplete` | Fired after an upload of screen capture |
-
----
 
 ## Plugin Pre-conditions
 
@@ -53,8 +46,6 @@ accessible via JSON-RPC under the callsign `org.rdk.ScreenCapture` (version 1)
 ### Plugin Pre-condition 2: Register_And_Listen_Events
 
 - Register and listen to event `Event_Upload_Complete` on `ScreenCapture` plugin
-
----
 
 ## Test Cases
 
@@ -149,15 +140,9 @@ Upload screen and check GUID in  uploadComplete Event
 | 1 | Upload Screen Capture | Invoke uploadScreenCapture on org.rdk.ScreenCapture with url: "<SC_UPLOAD_URL>", callGUID: "screenshot"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ScreenCapture.1.uploadScreenCapture", "params": {"url": "<SC_UPLOAD_URL>", "callGUID": "screenshot"}}' http://127.0.0.1:9998/jsonrpc` | Expected `True` |
 | 2 | Check Upload Complete Event | Listen for Event_Upload_Complete event (wait 10s) | Expected `True`, callGUID `screenshot` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 _No plugin-level post-conditions defined_
-
----
 
 ## Test Attributes
 

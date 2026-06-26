@@ -4,8 +4,10 @@ RDKV_CERT_AVS_PackageManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [Plugin Pre-conditions](#plugin-pre-conditions)
-3. [Test Cases](#test-cases)
+2. [APIs Under Test](#apis-under-test)
+3. [Events Under Test](#events-under-test)
+4. [Plugin Pre-conditions](#plugin-pre-conditions)
+5. [Test Cases](#test-cases)
    - [PackageManager_ListPackages_Functionality](#packagemanager_listpackages_functionality)
    - [PackageManager_Install_ValidParameters](#packagemanager_install_validparameters)
    - [PackageManager_Uninstall_ValidParameters](#packagemanager_uninstall_validparameters)
@@ -47,21 +49,13 @@ RDKV_CERT_AVS_PackageManager
    - [PackageManager_GetPackageState_ValidPackageId_InvalidVersion](#packagemanager_getpackagestate_validpackageid_invalidversion)
    - [PackageManager_GetPackageState_InvalidPackageId_ValidVersion](#packagemanager_getpackagestate_invalidpackageid_validversion)
    - [PackageManager_GetPackageState_NoParameters](#packagemanager_getpackagestate_noparameters)
-4. [Plugin Post-conditions](#plugin-post-conditions)
-5. [Test Attributes](#test-attributes)
-
----
+6. [Plugin Post-conditions](#plugin-post-conditions)
+7. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **PackageManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.PackageManagerRDKEMS` (version 1)
-
-**API Coverage**
-
-- **State / Query APIs**: `getLockedInfo`, `listPackages`
-- **Events**: `onAppInstallationStatus`
-- **Other APIs**: `config`, `install`, `lock`, `packageState`, `uninstall`, `unlock`
 
 ## APIs Under Test
 
@@ -81,8 +75,6 @@ accessible via JSON-RPC under the callsign `org.rdk.PackageManagerRDKEMS` (versi
 | Event | Description |
 |-------|-------------|
 | `onAppInstallationStatus` | Emitted when the Installation status of a queued requested has changed, including if it's terminated either gracefully or via a crash |
-
----
 
 ## Plugin Pre-conditions
 
@@ -105,8 +97,6 @@ accessible via JSON-RPC under the callsign `org.rdk.PackageManagerRDKEMS` (versi
 ### Plugin Pre-condition 3: Register_And_Listen_Events
 
 - Register and listen to event `Event_On_AppInstallationStatus` on `PackageManager` plugin
-
----
 
 ## Test Cases
 
@@ -1034,10 +1024,6 @@ Verify that the getPackageState method handles missing parameters correctly
 |---------|-----------|-------------|-----------------|
 | 1 | GetPackageState NoParameters | Invoke packageState on org.rdk.PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.packageState"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
----
-
----
-
 ## Plugin Post-conditions
 
 ### Plugin Post-condition 1: Uninstall_Package
@@ -1046,8 +1032,6 @@ Verify that the getPackageState method handles missing parameters correctly
 |---------|-----------|-------------|-----------------|
 | 1 | Check Existing Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
 | 2 | Uninstall Existing Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
 
 ## Test Attributes
 
