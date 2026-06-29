@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_12
+RDKV_PERFORMANCE_81
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_TimeToTerminateFromBackground
 

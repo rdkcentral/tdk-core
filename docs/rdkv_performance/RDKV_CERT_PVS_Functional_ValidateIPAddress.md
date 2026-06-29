@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_216
+RDKV_PERFORMANCE_20
 ## TestCase Name
 RDKV_CERT_PVS_Functional_ValidateIPAddress
 

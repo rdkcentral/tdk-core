@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_199
+RDKV_PERFORMANCE_12
 ## TestCase Name
 RDKV_CERT_PVS_Functional_TimeTo_ChannelChange
 

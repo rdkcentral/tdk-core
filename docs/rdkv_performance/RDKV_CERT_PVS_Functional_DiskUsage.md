@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_204
+RDKV_PERFORMANCE_3
 ## TestCase Name
 RDKV_CERT_PVS_Functional_DiskUsage
 

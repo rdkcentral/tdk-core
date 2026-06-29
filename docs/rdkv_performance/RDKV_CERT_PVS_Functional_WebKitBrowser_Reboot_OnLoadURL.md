@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_201
+RDKV_PERFORMANCE_21
 ## TestCase Name
 RDKV_CERT_PVS_Functional_WebKitBrowser_Reboot_OnLoadURL
 

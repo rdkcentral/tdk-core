@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_205
+RDKV_PERFORMANCE_4
 ## TestCase Name
 RDKV_CERT_PVS_Functional_IOWait_Time
 

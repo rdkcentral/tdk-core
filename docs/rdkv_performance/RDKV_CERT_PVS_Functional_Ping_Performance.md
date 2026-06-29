@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_206
+RDKV_PERFORMANCE_5
 ## TestCase Name
 RDKV_CERT_PVS_Functional_Ping_Performance
 

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_202
+RDKV_PERFORMANCE_1
 ## TestCase Name
 RDKV_CERT_PVS_Functional_Check_FailedServices
 

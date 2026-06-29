@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_195
+RDKV_PERFORMANCE_29
 ## TestCase Name
 RDKV_CERT_PVS_Apps_ResourceUsage_Video_MP4
 <a name="head.TOC"></a>

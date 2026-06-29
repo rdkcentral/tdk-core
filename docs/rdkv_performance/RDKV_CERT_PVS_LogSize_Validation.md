@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_218
+RDKV_PERFORMANCE_25
 ## TestCase Name
 RDKV_CERT_PVS_LogSize_Validation
 

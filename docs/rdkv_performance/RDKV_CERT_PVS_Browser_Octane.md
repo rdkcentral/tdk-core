@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_01
+RDKV_PERFORMANCE_55
 ## TestCase Name
 RDKV_CERT_PVS_Browser_Octane
 <a name="head.TOC"></a>

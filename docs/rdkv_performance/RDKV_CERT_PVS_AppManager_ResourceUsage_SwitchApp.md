@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_20
+RDKV_PERFORMANCE_73
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_ResourceUsage_SwitchApp
 

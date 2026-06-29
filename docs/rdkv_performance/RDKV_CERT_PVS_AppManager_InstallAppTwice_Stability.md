@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_31
+RDKV_PERFORMANCE_62
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_InstallAppTwice_Stability
 

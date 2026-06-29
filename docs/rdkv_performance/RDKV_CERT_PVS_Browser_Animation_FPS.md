@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_92
+RDKV_PERFORMANCE_51
 ## TestCase Name
 RDKV_CERT_PVS_Browser_Animation_FPS
 <a name="head.TOC"></a>

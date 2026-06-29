@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_212
+RDKV_PERFORMANCE_16
 ## TestCase Name
 RDKV_CERT_PVS_Functional_TimeTo_Scan_Bluetooth
 

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_224
+RDKV_PERFORMANCE_60
 ## TestCase Name
 RDKV_CERT_PVS_WebKitBrowser_Video_Playback_Without_Crash_WithWebinspect
 

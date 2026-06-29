@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_207
+RDKV_PERFORMANCE_6
 ## TestCase Name
 RDKV_CERT_PVS_Functional_ResourceUsage_BluetoothConnection
 

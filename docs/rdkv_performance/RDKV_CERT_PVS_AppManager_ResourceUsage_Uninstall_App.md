@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_18
+RDKV_PERFORMANCE_75
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_ResourceUsage_Uninstall_App
 

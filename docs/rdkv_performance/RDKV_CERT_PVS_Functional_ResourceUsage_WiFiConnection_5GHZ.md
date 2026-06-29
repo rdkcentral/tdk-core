@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_221
+RDKV_PERFORMANCE_10
 ## TestCase Name
 RDKV_CERT_PVS_Functional_ResourceUsage_WiFiConnection_5GHZ
 

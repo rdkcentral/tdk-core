@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_154
+RDKV_PERFORMANCE_35
 ## TestCase Name
 RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_4K_VP9
 <a name="head.TOC"></a>

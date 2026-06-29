@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_15
+RDKV_PERFORMANCE_78
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_TimeToRepeatedLaunch
 

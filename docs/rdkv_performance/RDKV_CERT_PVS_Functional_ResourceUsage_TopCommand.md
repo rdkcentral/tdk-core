@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_208
+RDKV_PERFORMANCE_7
 ## TestCase Name
 RDKV_CERT_PVS_Functional_ResourceUsage_TopCommand
 

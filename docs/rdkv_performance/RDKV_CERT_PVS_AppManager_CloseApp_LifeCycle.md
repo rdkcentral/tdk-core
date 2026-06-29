@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_32
+RDKV_PERFORMANCE_61
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_CloseApp_LifeCycle
 

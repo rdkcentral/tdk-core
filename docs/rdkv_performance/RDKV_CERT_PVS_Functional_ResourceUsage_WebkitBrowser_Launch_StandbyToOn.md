@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_198
+RDKV_PERFORMANCE_8
 ## TestCase Name
 RDKV_CERT_PVS_Functional_ResourceUsage_WebkitBrowser_Launch_StandbyToOn
 

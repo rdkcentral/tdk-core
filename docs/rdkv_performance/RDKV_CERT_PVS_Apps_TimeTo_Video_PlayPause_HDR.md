@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_147
+RDKV_PERFORMANCE_43
 ## TestCase Name
 RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_HDR
 <a name="head.TOC"></a>

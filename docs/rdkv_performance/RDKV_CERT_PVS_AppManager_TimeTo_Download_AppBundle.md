@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_10
+RDKV_PERFORMANCE_83
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_TimeTo_Download_AppBundle
 

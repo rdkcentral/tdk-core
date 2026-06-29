@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_102
+RDKV_PERFORMANCE_54
 ## TestCase Name
 RDKV_CERT_PVS_Browser_MotionMark
 <a name="head.TOC"></a>

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_197
+RDKV_PERFORMANCE_47
 ## TestCase Name
 RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_Vorbis
 <a name="head.TOC"></a>

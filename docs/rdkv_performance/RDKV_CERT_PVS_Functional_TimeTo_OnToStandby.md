@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_211
+RDKV_PERFORMANCE_15
 ## TestCase Name
 RDKV_CERT_PVS_Functional_TimeTo_OnToStandby
 

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_125
+RDKV_PERFORMANCE_27
 ## TestCase Name
 RDKV_CERT_PVS_Apps_ResourceUsage_Video_4K_DASH
 <a name="head.TOC"></a>

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_112
+RDKV_PERFORMANCE_36
 ## TestCase Name
 RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_AAC
 <a name="head.TOC"></a>

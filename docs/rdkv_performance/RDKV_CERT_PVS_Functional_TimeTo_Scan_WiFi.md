@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_213
+RDKV_PERFORMANCE_17
 ## TestCase Name
 RDKV_CERT_PVS_Functional_TimeTo_Scan_WiFi
 

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_99
+RDKV_PERFORMANCE_56
 ## TestCase Name
 RDKV_CERT_PVS_Browser_Speedometer
 <a name="head.TOC"></a>

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_8
+RDKV_PERFORMANCE_85
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_TimeTo_LaunchAfterReboot
 

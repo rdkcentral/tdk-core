@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_203
+RDKV_PERFORMANCE_2
 ## TestCase Name
 RDKV_CERT_PVS_Functional_Device_MaxResponseTime
 

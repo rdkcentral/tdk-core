@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_2
+RDKV_PERFORMANCE_91
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_UninstallApp_StabilityCheck
 

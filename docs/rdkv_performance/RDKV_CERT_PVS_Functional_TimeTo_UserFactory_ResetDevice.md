@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_215
+RDKV_PERFORMANCE_19
 ## TestCase Name
 RDKV_CERT_PVS_Functional_TimeTo_UserFactory_ResetDevice
 

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_210
+RDKV_PERFORMANCE_13
 ## TestCase Name
 RDKV_CERT_PVS_Functional_TimeTo_ColdBoot
 

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_27
+RDKV_PERFORMANCE_49
 ## TestCase Name
 RDKV_CERT_PVS_Apps_WiFi_ResourceUsage_Launch
 <a name="head.TOC"></a>

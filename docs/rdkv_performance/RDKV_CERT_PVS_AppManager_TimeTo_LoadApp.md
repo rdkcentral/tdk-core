@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_6
+RDKV_PERFORMANCE_87
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_TimeTo_LoadApp
 

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_11
+RDKV_PERFORMANCE_82
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_TimeTo_CloseApp
 

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_17
+RDKV_PERFORMANCE_26
 ## TestCase Name
 RDKV_CERT_PVS_Apps_ResourceUsage_Launch
 <a name="head.TOC"></a>

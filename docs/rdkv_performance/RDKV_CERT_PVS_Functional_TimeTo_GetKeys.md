@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_200
+RDKV_PERFORMANCE_14
 ## TestCase Name
 RDKV_CERT_PVS_Functional_TimeTo_GetKeys
 

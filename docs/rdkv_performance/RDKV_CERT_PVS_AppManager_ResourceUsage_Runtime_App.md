@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_22
+RDKV_PERFORMANCE_71
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_ResourceUsage_Runtime_App
 

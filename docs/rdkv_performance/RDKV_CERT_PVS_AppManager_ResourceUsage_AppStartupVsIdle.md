@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_28
+RDKV_PERFORMANCE_65
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_ResourceUsage_AppStartupVsIdle
 

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_217
+RDKV_PERFORMANCE_24
 ## TestCase Name
 RDKV_CERT_PVS_Functional_Zombie_Processes
 

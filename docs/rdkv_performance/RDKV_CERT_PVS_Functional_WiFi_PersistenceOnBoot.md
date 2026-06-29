@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_222
+RDKV_PERFORMANCE_22
 ## TestCase Name
 RDKV_CERT_PVS_Functional_WiFi_PersistenceOnBoot
 

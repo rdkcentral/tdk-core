@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_117
+RDKV_PERFORMANCE_42
 ## TestCase Name
 RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_EC3
 <a name="head.TOC"></a>

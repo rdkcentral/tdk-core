@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_PERFORMANCE_100
+RDKV_PERFORMANCE_57
 ## TestCase Name
 RDKV_CERT_PVS_Browser_Strike_1080_resolution
 <a name="head.TOC"></a>
