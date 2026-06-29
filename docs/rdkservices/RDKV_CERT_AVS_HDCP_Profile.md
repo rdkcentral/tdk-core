@@ -157,7 +157,7 @@ Validates all event on Activating/deactivating the plugin
 
 ## Plugin Post-conditions
 
-_No plugin-level post-conditions defined._
+_No plugin-level post-conditions defined_
 
 ## Test Attributes
 

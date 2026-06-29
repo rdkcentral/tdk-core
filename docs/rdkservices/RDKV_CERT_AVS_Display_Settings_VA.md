@@ -1831,7 +1831,7 @@ Verify that the getConnectedVideoDisplays method returns the TV connected status
 
 ## Plugin Post-conditions
 
-_No plugin-level post-conditions defined._
+_No plugin-level post-conditions defined_
 
 ## Test Attributes
 

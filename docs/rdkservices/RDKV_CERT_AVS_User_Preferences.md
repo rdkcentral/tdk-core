@@ -182,7 +182,7 @@ Verify that the setUILanguage API returns an error when UI language parameter is
 
 ## Plugin Post-conditions
 
-_No plugin-level post-conditions defined._
+_No plugin-level post-conditions defined_
 
 ## Test Attributes
 

@@ -1343,6 +1343,6 @@ _No plugin-level post-conditions defined_
 | Attribute | Value |
 |-----------|-------|
 | Supported Models | Video Accelerator, RPI Client |
-| Estimated Duration | ~5 minutes |
+| Estimated Duration | 20 minutes |
 | Priority | Medium |
-| TDK Release Version | 1.0 |
+| TDK Release Version | M150 |

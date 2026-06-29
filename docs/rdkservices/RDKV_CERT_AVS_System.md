@@ -1309,7 +1309,7 @@ Validate error message with invalid key in deviceInfo api
 
 ## Plugin Post-conditions
 
-_No plugin-level post-conditions defined._
+_No plugin-level post-conditions defined_
 
 ## Test Attributes
 
