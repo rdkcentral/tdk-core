@@ -131,8 +131,6 @@ if expectedResult in result.upper():
     elif current_interface == "eth0":
         print("Current interface is ethernet. Please connect to WiFi and run the test")
         status = "FAILURE"
-        print("Current interface is ethernet. Please connect to WiFi and run the test")
-        status = "FAILURE"
     else:
         print("\n Current interface is WIFI \n")
     if status == "SUCCESS":
@@ -143,27 +141,6 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
         if expectedResult in result and ssh_param_dict != {}:
-    if status == "SUCCESS":
-        tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
-        tdkTestObj.addParameter("realpath",obj.realpath)
-        tdkTestObj.addParameter("deviceIP",obj.IP)
-        tdkTestObj.executeTestCase(expectedResult)
-        result = tdkTestObj.getResult()
-        ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
-        if expectedResult in result and ssh_param_dict != {}:
-        #Take the channel change URL and replace TM-IP with actual TestManager IP
-        # channel_change_url = PerformanceTestVariables.channel_change_url
-        # tm_url = obj.url.split("/")[2]
-        # channel_change_url=channel_change_url.replace("TM-IP",tm_url)
-        # channel_change_url = PerformanceTestVariables.channel_change_url
-        # tm_url = obj.url.split("/")[2]
-        # channel_change_url=channel_change_url.replace("TM-IP",tm_url)
-        # channel_change_url = PerformanceTestVariables.channel_change_url
-        # tm_url = obj.url.split("/")[2]
-        # channel_change_url=channel_change_url.replace("TM-IP",tm_url)
-        # channel_change_url = PerformanceTestVariables.channel_change_url
-        # tm_url = obj.url.split("/")[2]
-        # channel_change_url=channel_change_url.replace("TM-IP",tm_url)
         #Write the TestManager IP and stream path to the channels.js file
         #where the user can configure their own channels for the test.
             filename = obj.realpath+"fileStore/lightning-apps/channels.js"
@@ -288,8 +265,8 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 if result == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
-                        print("\n Playing logs not present in logs")
-                        tdkTestObj.setResultStatus("FAILURE")
+                    print("\n Playing logs not present in logs")
+                    tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print("Tuning logs are not present in logs")
                     tdkTestObj.setResultStatus("FAILURE")
