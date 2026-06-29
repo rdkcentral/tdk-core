@@ -125,7 +125,7 @@ for video_test_url in video_test_urls:
     # ### ADD: FAIL IF monitorVideoTest REPORTS FAILURE
     # ==========================================================
     if test_result == "SUCCESS":
-        print("FAILURE: Encrypted video is playing fine")
+        print("SUCCESS: Encrypted video is playing fine")
         print("[TEST EXECUTION RESULT]: SUCCESS")
         tdkTestObj = obj.createTestStep('rdkv_media_test')
         tdkTestObj.executeTestCase(expectedResult)
