@@ -241,15 +241,17 @@ def printTestSummary(testData, plugin_name):
 #              - hostname: IP of the device.
 #              - username: SSH username.
 #              - password: SSH password.
+#              - port: SSH port.
 # Return:
 #              - Tuple: (SSH client object, session object)
 #-------------------------------------------------------------------
-def startSession(hostname, username, password):
+def startSession(hostname, username, password, port):
     output = ""
     try:
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(hostname, username=username, password=password)
+        print("Calling client.connect with ssh port", port)
+        client.connect(hostname, username=username, password=password, port=port)
         session = client.invoke_shell()
         print("\nCreated ssh session")
         return client,session
@@ -577,7 +579,8 @@ def SetupPreRequisites(host, username, password, basePath, binaryName, binaryCon
     print("\n\n#---------------------------- Plugin Pre-requisite ----------------------------#")
     print("\nPre Requisite : Setting_up_VTS_binary\nPre Requisite No : 1")
     try:
-        client,session = startSession(host,username,password)
+        sshPort = getDeviceConfigValues("SSH_PORT")
+        client,session = startSession(host,username,password,sshPort)
         if setupEnvironment:
             setupEnvironmentInSession(session,basePath)
         output = startBinary(session, binaryPath, module)
