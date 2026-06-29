@@ -3303,3 +3303,48 @@ def getChannelNumberBssid():
     return status;
 
 ########## End of Function ##########
+
+def verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,duration,phase="START",output_file="/tmp/tdkb_longrun_ping.log"):
+
+# verifyLongRunNetworkConnectivity
+
+# Syntax      : verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,duration,phase="START",output_file="/tmp/tdkb_longrun_ping.log")
+# Description : Function to check if the internet is accessible for specified long duration
+# Parameters  : dest_ip - IP to which ping should reach
+#             : connectivityType - PING type like ping to ipv4, ipv6 etc
+#             : source_ip - Ip from which ping to be placed
+#             : gateway_ip - Gateway IP address
+#             : duration - Time for which ping should be executed
+#             : phase -  decide whether to start the ping or check the response
+#             : output_file - file to which ping output will be written
+# Return Value: Returns the status of ping operation
+
+    try:
+        status = clientConnect("LAN")
+        if status == "SUCCESS":
+            if wlan_os_type == "UBUNTU":
+                script_name = lan_script
+                if connectivityType == "PING_TO_IPV4":
+                    if phase == "START":
+                        if output_file == "":
+                            output_file = "/tmp/tdkb_longrun_ping_ipv4.log"
+                        command = "sudo sh %s ping_to_ipv4_start %s %s %s %s %s" % (script_name,source_ip,dest_ip,gateway_ip,duration,output_file)
+                    elif phase == "CHECK":
+                        command = "sudo sh %s ping_to_ipv4_check %s %s %s %s" % (script_name,source_ip,dest_ip,gateway_ip,output_file)
+                    else:
+                        return "FAILURE:Invalid phase"
+                else:
+                    return "FAILURE:Unsupported connectivityType"
+                status = executeCommand(command)
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to lan client"
+    except Exception as e:
+        print(e)
+        status = e
+
+    print("Status of verifyLongRunNetworkConnectivity :%s" %status)
+    return status
+
+########## End of Function ##########
