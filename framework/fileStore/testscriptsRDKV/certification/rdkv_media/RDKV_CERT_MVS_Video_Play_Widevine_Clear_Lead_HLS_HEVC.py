@@ -144,7 +144,7 @@ for video_test_url in video_test_urls:
     print("NOTE:")
     print(" - 'Video Player Encrypted !!!' indicates DRM detection")
     print(" - It DOES NOT mean encrypted segments started playing")
-    print(" - Widevine initializes during MPD parse in DASH streams")
+    print(" - Widevine may initialize during manifest parse (DASH MPD / HLS m3u8)")
     print(" - Initial clear segments are EXPECTED behavior")
     print("==================================================\n")
     # ==========================================================
