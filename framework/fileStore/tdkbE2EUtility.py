@@ -3309,13 +3309,13 @@ def verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_
 # verifyLongRunNetworkConnectivity
 
 # Syntax      : verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,duration,phase="START",output_file="/tmp/tdkb_longrun_ping.log")
-# Description : Function to check if the internet is accessible for specified long duration
+# Description : Function to check long-run network connectivity from the LAN client
 # Parameters  : dest_ip - IP to which ping should reach
 #             : connectivityType - PING type like ping to ipv4, ipv6 etc
 #             : source_ip - Ip from which ping to be placed
 #             : gateway_ip - Gateway IP address
 #             : duration - Time for which ping should be executed
-#             : phase -  decide whether to start the ping or check the response
+#             : phase - "START" to start a long-running ping, "CHECK" to validate results.
 #             : output_file - file to which ping output will be written
 # Return Value: Returns the status of ping operation
 

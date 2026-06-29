@@ -121,9 +121,9 @@ def collect_failure_artifacts(obj, stability_type, iteration, failure_reason, up
             % artifact_dir,
 
         # --- core dump listing ---
-        "ls -al /minidumps"
-        " > \"%s/core_dumps.txt\" 2>&1"
-            % artifact_dir,
+         "if [ -d /minidumps ]; then ls -al /minidumps; else echo '/minidumps not present'; fi"
+         " > \"%s/core_dumps.txt\" 2>&1"
+             % artifact_dir,
 
         # --- network state ---
         "(ifconfig -a || ip addr show) > \"%s/network_state.txt\" 2>&1"
@@ -141,8 +141,15 @@ def collect_failure_artifacts(obj, stability_type, iteration, failure_reason, up
        # --- core dump files ---
         "mkdir -p \"%s/core_dumps_dir\""
             % artifact_dir,
-        "if [ -d /minidumps ]; then cp -r /minidumps/. /tmp/*_core.prog* \"%s/core_dumps_dir/\"; fi"
-            % artifact_dir,
+
+   (
+        'if [ -d /minidumps ]; then\n'
+        '  cp -r /minidumps/. "%s/core_dumps_dir/" 2>/dev/null || true;\n'
+        'fi;\n'
+        'if ls /tmp/*_core.prog* >/dev/null 2>&1; then\n'
+        '  cp -f /tmp/*_core.prog* "%s/core_dumps_dir/" 2>/dev/null || true;\n'
+        'fi'
+    ) % (artifact_dir, artifact_dir),
 
         # --- full /rdklogs/logs/ copy ---
         "if [ -d /rdklogs/logs ]; then cp -r /rdklogs/logs \"%s/rdklogs_logs\";"
@@ -180,8 +187,8 @@ def collect_failure_artifacts(obj, stability_type, iteration, failure_reason, up
         result["details"] = details
         return False, result
 
-    # Remove staging folder and tar file from device to free up /tmp space
-    cleanup_cmd = "rm -rf \"%s\" \"%s\" \"%s\"" % (artifact_dir, tar_file,artifact_root.rstrip("/"))
+    # Remove staging folder and tar file from device to free up space
+    cleanup_cmd = "rm -rf \"%s\" \"%s\"" % (artifact_dir, tar_file)
     stability_execute_cmd(obj, cleanup_cmd)
     print("[ARTIFACT] Cleaned up staging folder and tar from device: %s" % artifact_dir)
 
@@ -202,6 +209,7 @@ def get_waitTime_configFile(obj1,step):
     step+=1
     expectedresult = "SUCCESS"
     testFailed = False
+    waitTime = ""
     print(f"\nTEST STEP {step}: Get the max wait time of processes from configuration file")
     print(f"EXPECTED RESULT {step}: Should get the max wait time of processes from configuration file")
     cmd = "sh %s/tdk_utility.sh parseConfigFile MAX_PROCESSUP_WAITTIME" %TDK_PATH
@@ -231,6 +239,7 @@ def get_interfaceList_configFile(obj1,step):
     step+=1
     expectedresult = "SUCCESS"
     testFailed = False
+    interfaceList = []
     print(f"\nTEST STEP {step}: Get the list of interfaces from configuration file ")
     print(f"EXPECTED RESULT {step}: Should get the list of interfaces from configuration file")
     cmd= "sh %s/tdk_utility.sh parseConfigFile INTERFACE_LIST" %TDK_PATH
@@ -462,7 +471,8 @@ def get_process_status(obj1,step,process):
     print(f"EXPECTED RESULT {step}: {process} process should be running")
     tdkTestObj,actualresult,details = stability_execute_cmd(obj1,f"pidof {process}")
     if expectedresult in actualresult and details != "":
-        pid = int(details.replace("\\n", ""))
+        pid_str = details.replace("\\n", "").strip().split()[0]
+        pid = int(pid_str)
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"ACTUAL RESULT {step}: {process} process PID is {pid}")
         print("[TEST EXECUTION RESULT] : SUCCESS")

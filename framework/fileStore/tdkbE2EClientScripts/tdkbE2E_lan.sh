@@ -124,8 +124,10 @@ ping_to_ipv4_check()
         ping_file="$var5"
         wait_count=0
         max_wait_count=20
-        route_del_cmd="$("sudo ip route delete $var3 via $var4" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+        route_del_cmd="$(sudo ip route delete "$var3" via "$var4" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
         if [ ! -f "$ping_file" ]; then
+                echo "PING_FILE_MISSING:$ping_file"
+                echo "OUTPUT:FAILURE"
                 return
         fi
         summary_line=""
@@ -138,6 +140,8 @@ ping_to_ipv4_check()
                 wait_count=$((wait_count + 1))
         done
         if [ -z "$summary_line" ]; then
+                echo "PING_SUMMARY_MISSING"
+                echo "OUTPUT:FAILURE"
                 return
         fi
         packet_loss="$(echo "$summary_line" | sed -n 's/.* \([0-9][0-9]*\)% packet loss.*/\1/p')"
