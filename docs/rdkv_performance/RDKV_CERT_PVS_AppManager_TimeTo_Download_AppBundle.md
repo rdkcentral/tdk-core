@@ -1,7 +1,8 @@
 ## TestCase ID
-RDKV_PERFORMANCE_194
+RDKV_PERFORMANCE_10
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_TimeTo_Download_AppBundle
+
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
@@ -11,47 +12,36 @@ RDKV_CERT_PVS_AppManager_TimeTo_Download_AppBundle
 
 <a name="head.Objective"></a>
 ## Objective
-To measure the time taken to download an app bundle
+To validate that the time taken to download an application bundle via the DownloadManager is within the configured performance threshold, measured from the download request to the receipt of the onAppDownloadStatus event.
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|Conditions|
-|-|----------|
-|1|Wpeframework process should be up and running in the device.|
-|2|Time in Test Manager and DUT should be in sync with UTC|
-|3|google_bundle should be updated in PerformanceTestVariables|
-|4|app_download_url should be updated in PerformanceTestVariables|
-|5|APPMANAGER_DOWNLOAD_THRESHOLD_VALUE in device specific config file must be updated with correct threshold value|
+|#|StepName | Step Description| Expected Result|
+|-|---------|-----------------|----------------|
+| 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
+| 2 | Confirm org.rdk.DownloadManager plugin is available | The org.rdk.DownloadManager plugin must be present and activatable in the device build. | The DownloadManager plugin should be available in the build. |
+| 3 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
+| 4 | Configure google_bundle in PerformanceTestVariables | `google_bundle` must be set to the application bundle filename in PerformanceTestVariables. | The google_bundle variable should be configured with a valid application bundle name. |
+| 5 | Configure app_download_url in PerformanceTestVariables | `app_download_url` must be set to the base URL where the application bundle is hosted. | The app_download_url should point to a reachable hosting location from the device network. |
+| 6 | Configure download threshold in device config | `APPMANAGER_DOWNLOAD_THRESHOLD_VALUE` and `THRESHOLD_OFFSET` must be set in the device-specific configuration file with appropriate millisecond values. | Threshold and offset values should be correctly configured for performance comparison. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
 |#|StepName | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Step 1 | Check the status of org.rdk.DownloadManager
- {"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.DownloadManager"} | Should be able to get the current status of org.rdk.DownloadManager  |
-| 2 | Step 2  | If org.rdk.DownloadManager is not in activated state, try to activate
-{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate" , "params":{"callsign":"org.rdk.DownloadManager"} | Should be able to activate org.rdk.DownloadManager |
-| 3 | Step 3  | Register for the thunder event onAppDownloadStatus
-{"jsonrpc": "2.0","id": 2,"method": "org.rdk.DownloadManager.1.register","params": {"event": "onAppDownloadStatus", "id": "client.events.1" }} | Should be able to register for the onAppDownloadStatus event successfully |
-| 4 | Step 4 | Save the current time just before starting the download to calculate the time taken for downloading the bundle
-start_time = datetime.now(UTC).time() | Should save the current time  |
-| 5 | Step 5 | Download the configured app bundle from the configured download url 
-{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download","params": {"url":"<download url>"}}
- | The app bundle should get downloaded successfully and the API should return success |
-| 6 | Step 6 | Check if onAppDownloadStatus event is received on success download of the bundle | Should receive the event successfully
-{"jsonrpc":"2.0","method":"client.events.1.onAppDownloadStatus","params":{"downloadStatus":"[{\\"downloadId\\":\\"2001\\",\\"fileLocator\\":<PACKAGEMANAGER_FILE_LOCATOR>}]"}} |
-| 7 | Step 7 | Get the time when the event is received 
-time_taken_for_download = downloaded_time - download_start_time | Event: 03:13:54.408570$$${"jsonrpc":"2.0","method":"client.events.1.onAppDownloadStatus","params":{"downloadStatus":"[{\\"downloadId\\":\\"2001\\",\\"fileLocator\\":<PACKAGEMANAGER_FILE_LOCATOR>"}]"}} |
-| 8 | Step 8 | Calculate the time taken to download the app bundle using the start time and event time
- | The time taken for download should be less than the configured threshold value |
+| 1 | Verify and activate the DownloadManager plugin | Query the DownloadManager plugin status and activate it if not already active. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.DownloadManager"}` <br>Activate if needed: `{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}` | The org.rdk.DownloadManager plugin should be in the activated state. |
+| 2 | Subscribe to the download status event | Register a WebSocket event listener for onAppDownloadStatus to capture the timestamp when the download completes. <br>`{"jsonrpc": "2.0", "id": 2, "method": "org.rdk.DownloadManager.1.register", "params": {"event": "onAppDownloadStatus", "id": "client.events.1"}}` | Event subscription should be established successfully. |
+| 3 | Trigger app bundle download and record start time | Construct the full bundle URL by appending the bundle filename to the base download URL, record the current UTC timestamp as the download start time, then initiate the download. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<app_download_url>/<google_bundle>"}}` | The download request should be accepted and the download should begin. |
+| 4 | Wait for the onAppDownloadStatus event and extract completion timestamp | Monitor the event buffer until the onAppDownloadStatus event is received or a 120-second timeout is reached. Extract the download completion timestamp embedded in the event payload. | The onAppDownloadStatus event should be received within the timeout, confirming the download completed. |
+| 5 | Calculate download time and validate against threshold | Compute the elapsed time in milliseconds as the difference between the onAppDownloadStatus event timestamp and the recorded start time. Compare against `APPMANAGER_DOWNLOAD_THRESHOLD_VALUE` + `THRESHOLD_OFFSET` from device config. | The time taken to download the app bundle should be within the range: 0 < time_taken < (APPMANAGER_DOWNLOAD_THRESHOLD_VALUE + THRESHOLD_OFFSET) milliseconds. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video_Accelerator, RPI-Client
+**Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 5
+**Estimated duration** : 10 mins
 
 **Priority** : High
 
