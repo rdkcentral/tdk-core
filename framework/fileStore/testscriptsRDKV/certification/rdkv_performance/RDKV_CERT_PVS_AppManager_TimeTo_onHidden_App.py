@@ -71,11 +71,9 @@ if expectedResult in result.upper():
                 print("App instance id not received")
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.setResultStatus("FAILURE")
-                obj.setLoadModuleStatus("FAILURE")
             else:
                 time.sleep(5)
                 continue_count = 0
-                end_time = ""
                 payloads = []
                 events = ['{"org.rdk.RDKWindowManager": "onHidden"}']
                 thunder_port=rdkv_performancelib.devicePort
@@ -106,49 +104,42 @@ if expectedResult in result.upper():
                         break
 
                 if hidden_received:
+                    
+                    print("Received onHidden event successfully")
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    hidden_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
+                    hidden_end_time = datetime.strptime(str(hidden_time), "%H:%M:%S.%f")
+                    conf_file,file_status = getConfigFileName(obj.realpath)
+                    config_status,hidden_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_SET_VISIBLE_THRESHOLD_VALUE")
+                    config_status,hidden_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                    time_to_hidden = (hidden_end_time - hidden_start_time).total_seconds() * 1000
+                    Summ_list.append('HIDDEN_THRESHOLD_VALUE :{}ms'.format(hidden_threshold))
+                    Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(hidden_offset))
+                    Summ_list.append('SetVisible initiated at :{}'.format(start_time))
+                    Summ_list.append('App hidden at :{}'.format(hidden_time))
+                    Summ_list.append('Time taken to hide app :{}ms'.format(time_to_hidden))
+                    print("\nSetVisible initiated at", start_time)
+                    print("\nApp hidden at", hidden_time)
+                    print("\nTime taken to receive onHidden event: {} ms".format(time_to_hidden))
+                    print("\nThreshold value for onHidden: {} ms".format(hidden_threshold))
+                    print("\nValidate the time:")
                     try:
-                        print("Received onHidden event successfully")
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        hidden_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
-                        hidden_end_time = datetime.strptime(str(hidden_time), "%H:%M:%S.%f")
-                        conf_file,file_status = getConfigFileName(obj.realpath)
-                        config_status,hidden_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_SET_VISIBLE_THRESHOLD_VALUE")
-                        config_status,hidden_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
-                        time_to_hidden = (hidden_end_time - hidden_start_time).total_seconds() * 1000
-                        Summ_list.append('HIDDEN_THRESHOLD_VALUE :{}ms'.format(hidden_threshold))
-                        Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(hidden_offset))
-                        Summ_list.append('SetVisible initiated at :{}'.format(start_time))
-                        Summ_list.append('App hidden at :{}'.format(hidden_time))
-                        Summ_list.append('Time taken to hide app :{}ms'.format(time_to_hidden))
-                        print("\nSetVisible initiated at", start_time)
-                        print("\nApp hidden at", hidden_time)
-                        print("\nTime taken to receive onHidden event: {} ms".format(time_to_hidden))
-                        print("\nThreshold value for onHidden: {} ms".format(hidden_threshold))
-                        print("\nValidate the time:")
-                        try:
-                            if 0 < int(time_to_hidden) < (int(hidden_threshold) + int(hidden_offset)) :
-                                print("\nTime taken for onHidden event is within the expected range")
-                                tdkTestObj.setResultStatus("SUCCESS")
-                            else:
-                                print("\nTime taken for onHidden event is not within the expected range")
-                                tdkTestObj.setResultStatus("FAILURE")
-                        except Exception:
-                            print("\nError validating time due to invalid threshold/offset values")
+                        if 0 < int(time_to_hidden) < (int(hidden_threshold) + int(hidden_offset)) :
+                            print("\nTime taken for onHidden event is within the expected range")
+                            tdkTestObj.setResultStatus("SUCCESS")
+                        else:
+                            print("\nTime taken for onHidden event is not within the expected range")
                             tdkTestObj.setResultStatus("FAILURE")
-                        getSummary(Summ_list,obj)
-                    finally:
-                        try:
-                            event_listener.disconnect()
-                        except Exception as e:
-                            print(f"Error disconnecting event listener: {e}")
+                    except Exception:
+                        print("\nError validating time due to invalid threshold/offset values")
+                        tdkTestObj.setResultStatus("FAILURE")
+                    getSummary(Summ_list,obj)
+                    
                 else:
                     print("Failed to receive onHidden event")
                     tdkTestObj.setResultStatus("FAILURE")
-                    try:
-                        event_listener.disconnect()
-                    except Exception as e:
-                        print(f"Error disconnecting event listener: {e}")
-
+                    
+                event_listener.disconnect()
             print("\n Terminating the app")
             tdkTestObj = obj.createTestStep('rdkv_terminate_app')
             tdkTestObj.addParameter("app_id",app_name)
@@ -161,7 +152,7 @@ if expectedResult in result.upper():
                 print("Unable to terminate the app")
                     
         else:
-            obj.setLoadModuleStatus("FAILURE")
+            tdkTestObj.setResultStatus("FAILURE")
             print(f"\nFailed to launch {app_name}")
     else:
         print("The download manager is not active")

@@ -33,7 +33,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_TimeTo_onVisible_App');
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_TimeTo_SetVisible_App');
 #The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
@@ -71,7 +71,6 @@ if expectedResult in result.upper():
                 print("App instance id not received")
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.setResultStatus("FAILURE")
-                obj.setLoadModuleStatus("FAILURE")
             else:
                 time.sleep(5)
                 method = "org.rdk.RDKWindowManager.1.setVisible"
@@ -86,7 +85,6 @@ if expectedResult in result.upper():
                     print("App visibility set to false successfully")
                     time.sleep(5)
                     continue_count = 0
-                    end_time = ""
                     thunder_port=rdkv_performancelib.devicePort
                     event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 9,"method": "org.rdk.RDKWindowManager.1.register","params": {"event": "onVisible", "id": "client.events.1" }}'],"/jsonrpc",False)
                     time.sleep(3)
@@ -114,52 +112,44 @@ if expectedResult in result.upper():
                             break
 
                     if visible_received:
+                        
+                        print("Received onVisible event successfully")
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        visible_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
+                        visible_end_time = datetime.strptime(str(visible_time), "%H:%M:%S.%f")
+                        conf_file,file_status = getConfigFileName(obj.realpath)
+                        config_status,visible_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_SET_VISIBLE_THRESHOLD_VALUE")
+                        config_status,visible_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                        time_to_visible = (visible_end_time - visible_start_time).total_seconds() * 1000
+                        Summ_list.append('VISIBLE_THRESHOLD_VALUE :{}ms'.format(visible_threshold))
+                        Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(visible_offset))
+                        Summ_list.append('SetVisible initiated at :{}'.format(start_time))
+                        Summ_list.append('App visible at :{}'.format(visible_time))
+                        Summ_list.append('Time taken to visible app :{}ms'.format(time_to_visible))
+                        print("\nSetVisible initiated at", start_time)
+                        print("\nApp visible at", visible_time)
+                        print("\nTime taken to receive onVisible event: {} ms".format(time_to_visible))
+                        print("\nThreshold value for onVisible: {} ms".format(visible_threshold))
+                        print("\nValidate the time:")
                         try:
-                            print("Received onVisible event successfully")
-                            tdkTestObj.setResultStatus("SUCCESS")
-                            visible_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
-                            visible_end_time = datetime.strptime(str(visible_time), "%H:%M:%S.%f")
-                            conf_file,file_status = getConfigFileName(obj.realpath)
-                            config_status,visible_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_SET_VISIBLE_THRESHOLD_VALUE")
-                            config_status,visible_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
-                            time_to_visible = (visible_end_time - visible_start_time).total_seconds() * 1000
-                            Summ_list.append('VISIBLE_THRESHOLD_VALUE :{}ms'.format(visible_threshold))
-                            Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(visible_offset))
-                            Summ_list.append('SetVisible initiated at :{}'.format(start_time))
-                            Summ_list.append('App visible at :{}'.format(visible_time))
-                            Summ_list.append('Time taken to visible app :{}ms'.format(time_to_visible))
-                            print("\nSetVisible initiated at", start_time)
-                            print("\nApp visible at", visible_time)
-                            print("\nTime taken to receive onVisible event: {} ms".format(time_to_visible))
-                            print("\nThreshold value for onVisible: {} ms".format(visible_threshold))
-                            print("\nValidate the time:")
-                            try:
-                                if 0 < int(time_to_visible) < (int(visible_threshold) + int(visible_offset)) :
-                                    print("\nTime taken for onVisible event is within the expected range")
-                                    tdkTestObj.setResultStatus("SUCCESS")
-                                else:
-                                    print("\nTime taken for onVisible event is not within the expected range")
-                                    tdkTestObj.setResultStatus("FAILURE")
-                            except Exception:
-                                print("\nError validating time due to invalid threshold/offset values")
+                            if 0 < int(time_to_visible) < (int(visible_threshold) + int(visible_offset)) :
+                                print("\nTime taken for onVisible event is within the expected range")
+                                tdkTestObj.setResultStatus("SUCCESS")
+                            else:
+                                print("\nTime taken for onVisible event is not within the expected range")
                                 tdkTestObj.setResultStatus("FAILURE")
-                            getSummary(Summ_list,obj)
-                        finally:
-                            try:
-                                event_listener.disconnect()
-                            except Exception as e:
-                                print(f"Error disconnecting event listener: {e}")
+                        except Exception:
+                            print("\nError validating time due to invalid threshold/offset values")
+                            tdkTestObj.setResultStatus("FAILURE")
+                        getSummary(Summ_list,obj)
+    
                     else:
                         print("Failed to receive onVisible event")
                         tdkTestObj.setResultStatus("FAILURE")
-                        try:
-                            event_listener.disconnect()
-                        except Exception as e:
-                            print(f"Error disconnecting event listener: {e}")
+                    event_listener.disconnect()    
                 else:
                     print("Failed to set app invisible before onVisible test")
                     tdkTestObj.setResultStatus("FAILURE")
-                    obj.setLoadModuleStatus("FAILURE")
 
                 print("\n Terminating the app")
                 tdkTestObj = obj.createTestStep('rdkv_terminate_app')
@@ -172,7 +162,7 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("FAILURE")
                     print("Unable to terminate the app")
         else:
-            obj.setLoadModuleStatus("FAILURE")
+            tdkTestObj.setResultStatus("FAILURE")
             print(f"\nFailed to launch {app_name}")
     else:
         print("The download manager is not active")

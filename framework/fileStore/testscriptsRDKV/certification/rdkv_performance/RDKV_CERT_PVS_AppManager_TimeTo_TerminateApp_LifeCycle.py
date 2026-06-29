@@ -94,89 +94,75 @@ if expectedResult in result.upper():
                             event_dict["APP_STATE_UNLOADED"] = True
                             break    
                 if all(event_dict.values()):
+                    print("Received all terminate events successfully")
+                    tdkTestObj.setResultStatus("SUCCESS") 
+                    terminate_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
+                    time_paused_ms = (paused_time - terminate_start_time).total_seconds() * 1000
+                    time_terminated_ms = (terminate_time - paused_time).total_seconds() * 1000
+                    time_unload_ms = (unload_time - terminate_time).total_seconds() * 1000
+                    time_total_ms = (unload_time - terminate_start_time).total_seconds() * 1000
+
+                    print(f"Paused time (ms): {time_paused_ms:.2f}")
+                    print(f"Terminated time (ms): {time_terminated_ms:.2f}")
+                    print(f"Unload time (ms): {time_unload_ms:.2f}")
+                    print(f"Total close time (ms): {time_total_ms:.2f}")
+
+                    # Get threshold values from config file
+                    conf_file,file_status = getConfigFileName(obj.realpath)
+                    config_status,terminate_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_TERMINATE_LIFECYCLE_THRESHOLD_VALUE")
+                    config_status,terminate_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                    
+                    Summ_list.append('TERMINATE_LIFECYCLE_THRESHOLD_VALUE :{}ms'.format(terminate_threshold))
+                    Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(terminate_offset))
+                    Summ_list.append('App termination initiated at :{}'.format(start_time))
+                    Summ_list.append('Time taken to pause app :{}ms'.format(time_paused_ms))
+                    Summ_list.append('Time taken to terminate app :{}ms'.format(time_terminated_ms))
+                    Summ_list.append('Time taken to unload app :{}ms'.format(time_unload_ms))
+
+                    print("\n Validate the pause time:")
                     try:
-                        print("Received all terminate events successfully")
-                        tdkTestObj.setResultStatus("SUCCESS") 
-                        terminate_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
-                        time_paused_ms = (paused_time - terminate_start_time).total_seconds() * 1000
-                        time_terminated_ms = (terminate_time - paused_time).total_seconds() * 1000
-                        time_unload_ms = (unload_time - terminate_time).total_seconds() * 1000
-                        time_total_ms = (unload_time - terminate_start_time).total_seconds() * 1000
-
-                        print(f"Paused time (ms): {time_paused_ms:.2f}")
-                        print(f"Terminated time (ms): {time_terminated_ms:.2f}")
-                        print(f"Unload time (ms): {time_unload_ms:.2f}")
-                        print(f"Total close time (ms): {time_total_ms:.2f}")
-
-                        # Get threshold values from config file
-                        conf_file,file_status = getConfigFileName(obj.realpath)
-                        config_status,terminate_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_TERMINATE_EVENT_THRESHOLD_VALUE")
-                        config_status,terminate_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
-                        
-                        Summ_list.append('TERMINATE_LIFECYCLE_THRESHOLD_VALUE :{}ms'.format(terminate_threshold))
-                        Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(terminate_offset))
-                        Summ_list.append('App termination initiated at :{}'.format(start_time))
-                        Summ_list.append('Time taken to pause app :{}ms'.format(time_paused_ms))
-                        Summ_list.append('Time taken to terminate app :{}ms'.format(time_terminated_ms))
-                        Summ_list.append('Time taken to unload app :{}ms'.format(time_unload_ms))
-
-                        print("\n Validate the pause time:")
-                        try:
-                            if 0 < int(time_paused_ms) < (int(terminate_threshold) + int(terminate_offset)):
-                                print(f"\n Pause time {time_paused_ms:.2f}ms is within the expected range")
-                            else:
-                                print(f"\n Pause time {time_paused_ms:.2f}ms is not within the expected range")
-                                tdkTestObj.setResultStatus("FAILURE")
-                        except Exception:
-                            print("\n Error validating pause time due to invalid threshold/offset values")
+                        if 0 < int(time_paused_ms) < (int(terminate_threshold) + int(terminate_offset)):
+                            print(f"\n Pause time {time_paused_ms:.2f}ms is within the expected range")
+                        else:
+                            print(f"\n Pause time {time_paused_ms:.2f}ms is not within the expected range")
                             tdkTestObj.setResultStatus("FAILURE")
+                    except Exception:
+                        print("\n Error validating pause time due to invalid threshold/offset values")
+                        tdkTestObj.setResultStatus("FAILURE")
 
-                        print("\n Validate the terminate time:")
-                        try:
-                            if 0 < int(time_terminated_ms) < (int(terminate_threshold) + int(terminate_offset)):
-                                print(f"\n Terminate time {time_terminated_ms:.2f}ms is within the expected range")
-                            else:
-                                print(f"\n Terminate time {time_terminated_ms:.2f}ms is not within the expected range")
-                                tdkTestObj.setResultStatus("FAILURE")
-                        except Exception:
-                            print("\n Error validating terminate time due to invalid threshold/offset values")
+                    print("\n Validate the terminate time:")
+                    try:
+                        if 0 < int(time_terminated_ms) < (int(terminate_threshold) + int(terminate_offset)):
+                            print(f"\n Terminate time {time_terminated_ms:.2f}ms is within the expected range")
+                        else:
+                            print(f"\n Terminate time {time_terminated_ms:.2f}ms is not within the expected range")
                             tdkTestObj.setResultStatus("FAILURE")
+                    except Exception:
+                        print("\n Error validating terminate time due to invalid threshold/offset values")
+                        tdkTestObj.setResultStatus("FAILURE")
 
-                        print("\n Validate the unload time:")
-                        try:
-                            if 0 < int(time_unload_ms) < (int(terminate_threshold) + int(terminate_offset)):
-                                print(f"\n Unload time {time_unload_ms:.2f}ms is within the expected range")
-                            else:
-                                print(f"\n Unload time {time_unload_ms:.2f}ms is not within the expected range")
-                                tdkTestObj.setResultStatus("FAILURE")
-                        except Exception:
-                            print("\n Error validating total close time due to invalid threshold/offset values")
+                    print("\n Validate the unload time:")
+                    try:
+                        if 0 < int(time_unload_ms) < (int(terminate_threshold) + int(terminate_offset)):
+                            print(f"\n Unload time {time_unload_ms:.2f}ms is within the expected range")
+                        else:
+                            print(f"\n Unload time {time_unload_ms:.2f}ms is not within the expected range")
                             tdkTestObj.setResultStatus("FAILURE")
-                        
-                        getSummary(Summ_list,obj)
-                    finally:
-                        try:
-                            event_listener.disconnect()
-                        except Exception as e:
-                            print(f"Error disconnecting event listener: {e}")
+                    except Exception:
+                        print("\n Error validating total close time due to invalid threshold/offset values")
+                        tdkTestObj.setResultStatus("FAILURE")
+                    getSummary(Summ_list,obj)     
                 else:
                     print("Failed to receive terminate event")
                     print([name for name, value in event_dict.items() if not value])
                     tdkTestObj.setResultStatus("FAILURE")
-                    try:
-                        event_listener.disconnect()
-                    except Exception as e:
-                        print(f"Error disconnecting event listener: {e}")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print("Unable to terminate the app")
-                try:
-                    event_listener.disconnect()
-                except Exception as e:
-                    print(f"Error disconnecting event listener: {e}")           
+            event_listener.disconnect()          
         else:
+            print("Failed to Launch the app")
             obj.setLoadModuleStatus("FAILURE")
-            print(f"\nFailed to launch {app_name}")
     else:
         print("The download manager is not active")
         obj.setLoadModuleStatus("FAILURE")

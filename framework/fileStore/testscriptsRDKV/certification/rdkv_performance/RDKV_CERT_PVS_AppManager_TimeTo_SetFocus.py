@@ -69,11 +69,9 @@ if expectedResult in result.upper():
                 print("App instance id not received")
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.setResultStatus("FAILURE")
-                obj.setLoadModuleStatus("FAILURE")
             else:
                 time.sleep(5)
                 continue_count = 0
-                end_time = ""
                 thunder_port=rdkv_performancelib.devicePort
                 event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 9,"method": "org.rdk.RDKWindowManager.1.register","params": {"event": "onFocus", "id": "client.events.1" }}'],"/jsonrpc",False)
                 time.sleep(10)
@@ -100,51 +98,43 @@ if expectedResult in result.upper():
                         break
 
                 if focus_received:
+                    print("Received onFocus event successfully")
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    focus_time = str(event).split("$$$")[0]
+                    focus_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
+                    focus_end_time = datetime.strptime(str(focus_time), "%H:%M:%S.%f")
+                    conf_file,file_status = getConfigFileName(obj.realpath)
+                    config_status,focus_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_SETFOCUS_THRESHOLD_VALUE")
+                    config_status,focus_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                    Summ_list.append('FOCUS_THRESHOLD_VALUE :{}ms'.format(focus_threshold))
+                    Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(focus_offset))
+                    Summ_list.append('SetFocus initiated at :{}'.format(start_time))
+                    Summ_list.append('App focused at :{}'.format(focus_time))
+                    time_taken_for_focus = focus_end_time - focus_start_time
+                    time_taken_for_focus = time_taken_for_focus.total_seconds() * 1000
+                    print("\nSetFocus initiated at ", start_time)
+                    print("\n Focus completed at ", focus_time)
+                    print("\n Time taken to set focus on the app : {}(ms)".format(time_taken_for_focus))
+                    Summ_list.append('Time taken to set focus app :{}ms'.format(time_taken_for_focus))
+                    print("\n Threshold value for time taken to set focus on the app: {} ms".format(focus_threshold))
+                    print("\n Validate the time:")
                     try:
-                        print("Received onFocus event successfully")
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        focus_time = str(event).split("$$$")[0]
-                        focus_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
-                        focus_end_time = datetime.strptime(str(focus_time), "%H:%M:%S.%f")
-                        conf_file,file_status = getConfigFileName(obj.realpath)
-                        config_status,focus_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_SETFOCUS_THRESHOLD_VALUE")
-                        config_status,focus_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
-                        Summ_list.append('FOCUS_THRESHOLD_VALUE :{}ms'.format(focus_threshold))
-                        Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(focus_offset))
-                        Summ_list.append('SetFocus initiated at :{}'.format(start_time))
-                        Summ_list.append('App focused at :{}'.format(focus_time))
-                        time_taken_for_focus = focus_end_time - focus_start_time
-                        time_taken_for_focus = time_taken_for_focus.total_seconds() * 1000
-                        print("\nSetFocus initiated at ", start_time)
-                        print("\n Focus completed at ", focus_time)
-                        print("\n Time taken to set focus on the app : {}(ms)".format(time_taken_for_focus))
-                        Summ_list.append('Time taken to set focus app :{}ms'.format(time_taken_for_focus))
-                        print("\n Threshold value for time taken to set focus on the app: {} ms".format(focus_threshold))
-                        print("\n Validate the time:")
-                        try:
-                            if 0 < int(time_taken_for_focus) < (int(focus_threshold) + int(focus_offset)) :
-                                print("\n Time taken for setting focus on the app is within the expected range")
-                                tdkTestObj.setResultStatus("SUCCESS")
-                            else:
-                                print("\n Time taken for setting focus on the app is not within the expected range")
-                                tdkTestObj.setResultStatus("FAILURE")
-                        except Exception:
-                            print("\n Error validating time due to invalid threshold/offset values")
+                        if 0 < int(time_taken_for_focus) < (int(focus_threshold) + int(focus_offset)) :
+                            print("\n Time taken for setting focus on the app is within the expected range")
+                            tdkTestObj.setResultStatus("SUCCESS")
+                        else:
+                            print("\n Time taken for setting focus on the app is not within the expected range")
                             tdkTestObj.setResultStatus("FAILURE")
-                        getSummary(Summ_list,obj)
-                    finally:
-                        try:
-                            event_listener.disconnect()
-                        except Exception as e:
-                            print(f"Error disconnecting event listener: {e}")
+                    except Exception:
+                        print("\n Error validating time due to invalid threshold/offset values")
+                        tdkTestObj.setResultStatus("FAILURE")
+                    getSummary(Summ_list,obj)
+                        
                 else:
                     print("Failed to receive onFocus event")
                     tdkTestObj.setResultStatus("FAILURE")
-                    try:
-                        event_listener.disconnect()
-                    except Exception as e:
-                        print(f"Error disconnecting event listener: {e}")
 
+                event_listener.disconnect()
             print("\n Terminating the app")
             tdkTestObj = obj.createTestStep('rdkv_terminate_app')
             tdkTestObj.addParameter("app_id",app_name)
@@ -158,8 +148,8 @@ if expectedResult in result.upper():
                 print("Unable to terminate the app")
                     
         else:
+            print("Failed to install the app")
             obj.setLoadModuleStatus("FAILURE")
-            print(f"\nFailed to launch {app_name}")
     else:
         print("The download manager is not active")
         obj.setLoadModuleStatus("FAILURE")

@@ -108,96 +108,88 @@ if expectedResult in result.upper():
                             event_dict["APP_STATE_ACTIVE"] = True
                             break   
                 if all(event_dict.values()):
+                    print("Received all launch events successfully")
+                    tdkTestObj.setResultStatus("SUCCESS")  
+                    launch_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f") 
+                    time_load_ms = (Load_time - launch_start_time).total_seconds() * 1000
+                    time_init_ms = (Ini_time - Load_time).total_seconds() * 1000
+                    time_paused_ms = (Paused_time - Ini_time).total_seconds() * 1000
+                    time_active_ms = (Active_time - Paused_time).total_seconds() * 1000
+                    time_total_ms = (Active_time - launch_start_time).total_seconds() * 1000
+
+                    print(f"Load time (ms): {time_load_ms:.2f}")
+                    print(f"Initialize time (ms): {time_init_ms:.2f}")
+                    print(f"Paused transition time (ms): {time_paused_ms:.2f}")
+                    print(f"Active transition time (ms): {time_active_ms:.2f}")
+                    print(f"Total time to active (ms): {time_total_ms:.2f}")
+
+                    # Get threshold values from config file
+                    conf_file,file_status = getConfigFileName(obj.realpath)
+                    config_status,launch_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_LAUNCH_LIFECYCLE_THRESHOLD_VALUE")
+                    config_status,launch_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                    
+                    Summ_list.append('LAUNCH_THRESHOLD_VALUE :{}ms'.format(launch_threshold))
+                    Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(launch_offset))
+                    Summ_list.append('App launch initiated at :{}'.format(start_time))
+                    Summ_list.append('Time taken to load app :{}ms'.format(time_load_ms))
+                    Summ_list.append('Time taken to initialize app :{}ms'.format(time_init_ms))
+                    Summ_list.append('Time taken to pause app :{}ms'.format(time_paused_ms))
+                    Summ_list.append('Time taken for app to be active :{}ms'.format(time_active_ms))
+                    Summ_list.append('Total time for app launch :{}ms'.format(time_total_ms))
+
+                    print("\n Validate the load time:")
                     try:
-                        print("Received all launch events successfully")
-                        tdkTestObj.setResultStatus("SUCCESS")  
-                        launch_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f") 
-                        time_load_ms = (Load_time - launch_start_time).total_seconds() * 1000
-                        time_init_ms = (Ini_time - Load_time).total_seconds() * 1000
-                        time_paused_ms = (Paused_time - Ini_time).total_seconds() * 1000
-                        time_active_ms = (Active_time - Paused_time).total_seconds() * 1000
-                        time_total_ms = (Active_time - launch_start_time).total_seconds() * 1000
-
-                        print(f"Load time (ms): {time_load_ms:.2f}")
-                        print(f"Initialize time (ms): {time_init_ms:.2f}")
-                        print(f"Paused transition time (ms): {time_paused_ms:.2f}")
-                        print(f"Active transition time (ms): {time_active_ms:.2f}")
-                        print(f"Total time to active (ms): {time_total_ms:.2f}")
-
-                        # Get threshold values from config file
-                        conf_file,file_status = getConfigFileName(obj.realpath)
-                        config_status,launch_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_LAUNCH_EVENT_THRESHOLD_VALUE")
-                        config_status,launch_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
-                        
-                        Summ_list.append('LAUNCH_THRESHOLD_VALUE :{}ms'.format(launch_threshold))
-                        Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(launch_offset))
-                        Summ_list.append('App launch initiated at :{}'.format(start_time))
-                        Summ_list.append('Time taken to load app :{}ms'.format(time_load_ms))
-                        Summ_list.append('Time taken to initialize app :{}ms'.format(time_init_ms))
-                        Summ_list.append('Time taken to pause app :{}ms'.format(time_paused_ms))
-                        Summ_list.append('Time taken for app to be active :{}ms'.format(time_active_ms))
-                        Summ_list.append('Total time for app launch :{}ms'.format(time_total_ms))
-
-                        print("\n Validate the load time:")
-                        try:
-                            if 0 < int(time_load_ms) < (int(launch_threshold) + int(launch_offset)):
-                                print(f"\n Load time {time_load_ms:.2f}ms is within the expected range")
-                            else:
-                                print(f"\n Load time {time_load_ms:.2f}ms is not within the expected range")
-                                tdkTestObj.setResultStatus("FAILURE")
-                        except Exception:
-                            print("\n Error validating load time due to invalid threshold/offset values")
+                        if 0 < int(time_load_ms) < (int(launch_threshold) + int(launch_offset)):
+                            print(f"\n Load time {time_load_ms:.2f}ms is within the expected range")
+                        else:
+                            print(f"\n Load time {time_load_ms:.2f}ms is not within the expected range")
                             tdkTestObj.setResultStatus("FAILURE")
+                    except Exception:
+                        print("\n Error validating load time due to invalid threshold/offset values")
+                        tdkTestObj.setResultStatus("FAILURE")
 
-                        print("\n Validate the initialization time:")
-                        try:
-                            if 0 < int(time_init_ms) < (int(launch_threshold) + int(launch_offset)):
-                                print(f"\n Initialization time {time_init_ms:.2f}ms is within the expected range")
-                            else:
-                                print(f"\n Initialization time {time_init_ms:.2f}ms is not within the expected range")
-                                tdkTestObj.setResultStatus("FAILURE")
-                        except Exception:
-                            print("\n Error validating initialization time due to invalid threshold/offset values")
+                    print("\n Validate the initialization time:")
+                    try:
+                        if 0 < int(time_init_ms) < (int(launch_threshold) + int(launch_offset)):
+                            print(f"\n Initialization time {time_init_ms:.2f}ms is within the expected range")
+                        else:
+                            print(f"\n Initialization time {time_init_ms:.2f}ms is not within the expected range")
                             tdkTestObj.setResultStatus("FAILURE")
+                    except Exception:
+                        print("\n Error validating initialization time due to invalid threshold/offset values")
+                        tdkTestObj.setResultStatus("FAILURE")
 
-                        print("\n Validate the pause time:")
-                        try:
-                            if 0 < int(time_paused_ms) < (int(launch_threshold) + int(launch_offset)):
-                                print(f"\n Pause time {time_paused_ms:.2f}ms is within the expected range")
-                            else:
-                                print(f"\n Pause time {time_paused_ms:.2f}ms is not within the expected range")
-                                tdkTestObj.setResultStatus("FAILURE")
-                        except Exception:
-                            print("\n Error validating Pause time due to invalid threshold/offset values")
+                    print("\n Validate the pause time:")
+                    try:
+                        if 0 < int(time_paused_ms) < (int(launch_threshold) + int(launch_offset)):
+                            print(f"\n Pause time {time_paused_ms:.2f}ms is within the expected range")
+                        else:
+                            print(f"\n Pause time {time_paused_ms:.2f}ms is not within the expected range")
                             tdkTestObj.setResultStatus("FAILURE")
+                    except Exception:
+                        print("\n Error validating Pause time due to invalid threshold/offset values")
+                        tdkTestObj.setResultStatus("FAILURE")
 
-                        print("\n Validate the Active time:")
-                        try:
-                            if 0 < int(time_active_ms) < (int(launch_threshold) + int(launch_offset)):
-                                print(f"\n Active time {time_active_ms:.2f}ms is within the expected range")
-                            else:
-                                print(f"\n Active time {time_active_ms:.2f}ms is not within the expected range")
-                                tdkTestObj.setResultStatus("FAILURE")
-                        except Exception:
-                            print("\n Error validating Active time due to invalid threshold/offset values")
-                            tdkTestObj.setResultStatus("FAILURE")    
-                        
-                        getSummary(Summ_list,obj)
-                    finally:
-                        try:
-                            event_listener.disconnect()
-                        except Exception as e:
-                            print(f"Error disconnecting event listener: {e}")
+                    print("\n Validate the Active time:")
+                    try:
+                        if 0 < int(time_active_ms) < (int(launch_threshold) + int(launch_offset)):
+                            print(f"\n Active time {time_active_ms:.2f}ms is within the expected range")
+                        else:
+                            print(f"\n Active time {time_active_ms:.2f}ms is not within the expected range")
+                            tdkTestObj.setResultStatus("FAILURE")
+                    except Exception:
+                        print("\n Error validating Active time due to invalid threshold/offset values")
+                        tdkTestObj.setResultStatus("FAILURE")    
+                    
+                    getSummary(Summ_list,obj)
+               
+                    event_listener.disconnect()
+                    
                 else:
                     print("Failed to receive launch event")
                     print([name for name, value in event_dict.items() if not value])
                     tdkTestObj.setResultStatus("FAILURE")
-                    try:
-                        event_listener.disconnect()
-                    except Exception as e:
-                        print(f"Error disconnecting event listener: {e}")
 
-  
                 print("\n Terminating the app")
                 tdkTestObj = obj.createTestStep('rdkv_terminate_app')
                 tdkTestObj.addParameter("app_id",app_name)
@@ -209,12 +201,13 @@ if expectedResult in result.upper():
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     print("Unable to terminate the app")
+
+                event_listener.disconnect()    
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print("Unable to launch the app")
         else:
             print("Failed to install the app")
-            obj.setLoadModuleStatus("FAILURE")
     else:
         print("The download manager is not active")
         obj.setLoadModuleStatus("FAILURE")
