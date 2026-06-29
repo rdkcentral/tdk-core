@@ -18,10 +18,10 @@
 #########################################################################
 
 """
-Vulkan Library Module for TDK Testing Framework
+Graphics Library Module for TDK Testing Framework
 
 This module provides functionality for:
-- Vulkan/VkMark benchmark execution on DUT devices
+- Graphics benchmark execution on DUT devices
 - SSH connection management and command execution
 - Display creation using RDKWindowManager or Westeros
 - Device configuration management
@@ -78,7 +78,7 @@ RPI_CPU_USAGE_THRESHOLD=85
 #---------------------------------------------------------------------------------------
 def init_module(libobj, port, deviceInfo):
     """
-    Initialize the Vulkan library module with device configuration.
+    Initialize the Graphics library module with device configuration.
     
     Args:
         libobj: Library object containing device connection information
@@ -744,11 +744,11 @@ def execute_postrequisites():
         return "SUCCESS"
 
 #-------------------------------------------------------------------
-# PREREQUISITE SETUP FOR VULKAN APPS TESTING
+# PREREQUISITE SETUP FOR GRAPHICS APPS TESTING
 #-------------------------------------------------------------------
 def set_prerequisites(model, resolution):
     """
-    Set up the required environment for VkMark testing.
+    Set up the required environment for Graphics testing.
     
     This function attempts to create a display using RDKWindowManager first.
     If RDKWindowManager is not available, it falls back to starting Westeros
@@ -760,7 +760,7 @@ def set_prerequisites(model, resolution):
     Returns:
         str: "SUCCESS" on successful setup, "FAILURE" on error
     """
-    print("[INFO] Setting up prerequisites for Vulkan testing...")
+    print("[INFO] Setting up prerequisites for Graphics testing...")
 
     resolutions = {
             "720p": (1280, 720),
@@ -865,18 +865,18 @@ def parse_vkcube_output(output):
     }
 
 #-------------------------------------------------------------------
-# VKMARK BINARY EXECUTION
+# GRAPHICS BINARY EXECUTION
 #-------------------------------------------------------------------
 def execute_binary(binary, present_mode):
     """
-    Execute Vulkan benchmark binary with specified present mode.
+    Execute Graphics benchmark binary with specified present mode.
     
-    This function constructs and executes the appropriate Vulkan binary command
+    This function constructs and executes the appropriate Graphics binary command
     based on the display setup (RDKWindowManager vs Westeros) and parses
     the benchmark results.
     
     Args:
-        present_mode (str): Vulkan present mode (e.g., 'fifo', 'immediate')
+        present_mode (str): Graphics present mode (e.g., 'fifo', 'immediate')
     
     Returns:
         str: "SUCCESS" if benchmark completes and score is extracted,
@@ -935,16 +935,16 @@ def execute_binary(binary, present_mode):
             return "FAILURE"
         print("[INFO] Using Westeros display - waiting for socket creation")
     
-    print(f"[DEBUG] vulkan binary command: {command}")
+    print(f"[DEBUG] graphics binary command: {command}")
     
-    # Execute vulkan binary benchmark
+    # Execute graphics binary benchmark
     output = execute_Cmnd_InDUT(command)
     
     if not output:
-        print("[ERROR] No output received from vulkan binary execution")
+        print("[ERROR] No output received from graphics binary execution")
         return "FAILURE"
     
-    print("[INFO] Vulkan binary execution completed")
+    print("[INFO] Graphics binary execution completed")
     print(f"\n{output}\n")
 
     if "vkmark" in binary:
