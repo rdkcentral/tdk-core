@@ -28,7 +28,7 @@ obj = tdklib.TDKScriptingLibrary("Graphics","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'Vulkan_Motion_Benchmark');
+obj.configureTestCase(ip,port,'Graphics_Vulkan_Motion_Benchmark');
 
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult();
