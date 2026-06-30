@@ -132,8 +132,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         setLoggingMethod(obj)
         setURLArgument("logging",logging_method)
         setURLArgument("tmUrl",str(obj.url)+"/")
-        test_duration_in_seconds = 5
-        #test_duration_in_seconds = 36000
+        test_duration_in_seconds = 36000
         setOperation("close",test_duration_in_seconds)
         operations = getOperations()
         # Setting VideoPlayer test app URL arguments
