@@ -18,10 +18,10 @@
 #########################################################################
 
 """
-Vulkan Library Module for TDK Testing Framework
+Graphics Library Module for TDK Testing Framework
 
 This module provides functionality for:
-- Vulkan/VkMark benchmark execution on DUT devices
+- Graphics benchmark execution on DUT devices
 - SSH connection management and command execution
 - Display creation using RDKWindowManager or Westeros
 - Device configuration management
@@ -78,7 +78,7 @@ RPI_CPU_USAGE_THRESHOLD=85
 #---------------------------------------------------------------------------------------
 def init_module(libobj, port, deviceInfo):
     """
-    Initialize the Vulkan library module with device configuration.
+    Initialize the Graphics library module with device configuration.
     
     Args:
         libobj: Library object containing device connection information
@@ -641,11 +641,11 @@ def createDisplay():
         
         # JSON-RPC call to create display
         command = ('curl --header "Content-Type: application/json" '
-                   '--request POST --data \'{"jsonrpc":"2.0", "id":3, '
-                   '"method":"org.rdk.RDKWindowManager.1.createDisplay", '
-                   f'"params" : {{"displayParams" : {{ "client": "test", '
-                   f'"displayName": "test", "displayWidth": {width}, "displayHeight" : {height}}} }}\' '
-                   'http://127.0.0.1:9998/jsonrpc')
+           '--request POST --data \'{"jsonrpc":"2.0", "id":3, '
+           '"method":"org.rdk.RDKWindowManager.1.createDisplay", '
+           f'"params" : {{"clientId": "test", '
+           f'"displayName": "test", "displayWidth": {width}, "displayHeight": {height}}}\' '
+           'http://127.0.0.1:9998/jsonrpc')
         
         output = execute_Cmnd_InDUT(command)
         if output:
@@ -744,11 +744,11 @@ def execute_postrequisites():
         return "SUCCESS"
 
 #-------------------------------------------------------------------
-# PREREQUISITE SETUP FOR VULKAN APPS TESTING
+# PREREQUISITE SETUP FOR GRAPHICS APPS TESTING
 #-------------------------------------------------------------------
 def set_prerequisites(model, resolution):
     """
-    Set up the required environment for VkMark testing.
+    Set up the required environment for Graphics testing.
     
     This function attempts to create a display using RDKWindowManager first.
     If RDKWindowManager is not available, it falls back to starting Westeros
@@ -760,7 +760,7 @@ def set_prerequisites(model, resolution):
     Returns:
         str: "SUCCESS" on successful setup, "FAILURE" on error
     """
-    print("[INFO] Setting up prerequisites for Vulkan testing...")
+    print("[INFO] Setting up prerequisites for Graphics testing...")
 
     resolutions = {
             "720p": (1280, 720),
@@ -865,18 +865,18 @@ def parse_vkcube_output(output):
     }
 
 #-------------------------------------------------------------------
-# VKMARK BINARY EXECUTION
+# GRAPHICS BINARY EXECUTION
 #-------------------------------------------------------------------
 def execute_binary(binary, present_mode):
     """
-    Execute Vulkan benchmark binary with specified present mode.
+    Execute Graphics benchmark binary with specified present mode.
     
-    This function constructs and executes the appropriate Vulkan binary command
+    This function constructs and executes the appropriate Graphics binary command
     based on the display setup (RDKWindowManager vs Westeros) and parses
     the benchmark results.
     
     Args:
-        present_mode (str): Vulkan present mode (e.g., 'fifo', 'immediate')
+        present_mode (str): Graphics present mode (e.g., 'fifo', 'immediate')
     
     Returns:
         str: "SUCCESS" if benchmark completes and score is extracted,
@@ -935,16 +935,16 @@ def execute_binary(binary, present_mode):
             return "FAILURE"
         print("[INFO] Using Westeros display - waiting for socket creation")
     
-    print(f"[DEBUG] vulkan binary command: {command}")
+    print(f"[DEBUG] graphics binary command: {command}")
     
-    # Execute vulkan binary benchmark
+    # Execute graphics binary benchmark
     output = execute_Cmnd_InDUT(command)
     
     if not output:
-        print("[ERROR] No output received from vulkan binary execution")
+        print("[ERROR] No output received from graphics binary execution")
         return "FAILURE"
     
-    print("[INFO] Vulkan binary execution completed")
+    print("[INFO] Graphics binary execution completed")
     print(f"\n{output}\n")
 
     if "vkmark" in binary:
@@ -1005,3 +1005,62 @@ def execute_binary(binary, present_mode):
     
     print("SUCCESS : FPS score is within expected range")
     return "SUCCESS"
+
+#-------------------------------------------------------------------
+# Parse Graphics Test Execution Output
+#-------------------------------------------------------------------
+def parse_graphics_output(graphics_output,test_app):
+    #Remove wpeframework.service related prints from log
+    formatted_output = [line for line in graphics_output.splitlines() if "wpeframework.service" not in line]
+    output = '\n'.join(formatted_output)
+    print(output)
+    print ("*" * 80)
+    #If test application is Waymetric, obtain speed indices
+    if test_app == "Waymetric":
+        if "Waymetric Package is not installed" in output:
+            print ("FAILURE: Waymetric not installed in DUT")
+            print ("*" * 80)
+            return "FAILURE"
+        waymetric_report = " cat /tmp/waymetric-report.txt "
+        output = execute_Cmnd_InDUT(waymetric_report)
+        speed_indices = [line for line in output.splitlines() if "speed index" in line]
+        if not speed_indices:
+            print ("FAILURE: Unable to obtain speed index\nExecution Failed")
+            print ("*" * 80)
+            return "FAILURE"
+        else:
+            print (speed_indices)
+            print ("SUCCESS: Waymetric execution was successfull")
+            print ("*" * 80)
+            return "SUCCESS"
+    #Check if app exited gracefully without any crash
+    if ("Exiting from the test app" not in output) and ("westeros_test: exit" not in output):
+        print ("FAILURE: Test Application was not exited gracefully")
+        print ("*" * 80)
+        return "FAILURE"
+    #If test application is Westeros_TDKTestApp , validate error statements
+    if test_app == "Westeros_TDKTestApp":
+        #ignore "error opening device: /dev/input/event0" as output
+        if "error" in output and "error opening device" not in output:
+            print ("FAILURE: ERROR observed in execution")
+            print ("*" * 80)
+            return "FAILURE"
+        else:
+            print ("SUCCESS: WesterosTDKTestApp execution was successfull")
+            print ("*" * 80)
+            return "SUCCESS"
+    #Check if all APIs are validated successfully
+    #13 APIs must be validated for EssosTDKTestApp
+    validation_success = output.count("VALIDATION SUCCESS");
+    if validation_success == 13:
+        print ("SUCCESS : All Essos APIs validated successfully")
+        print ("*" * 80)
+        return "SUCCESS"
+    else:
+        print ("FAILURE: VALIDATION ERROR observed")
+        print ("*" * 80)
+        validation_error_strings = [line for line in output.splitlines() if "VALIDATION ERROR" in line]
+        print("ERROR Observed:")
+        for matched_line in validation_error_strings:
+             print(matched_line)
+        return "FAILURE"

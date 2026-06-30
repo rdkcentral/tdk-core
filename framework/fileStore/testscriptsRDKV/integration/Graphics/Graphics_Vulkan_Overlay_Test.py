@@ -19,25 +19,25 @@
 
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib;
-from Vulkanlib import resolution, api
+from Graphicslib import resolution, api
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
+obj = tdklib.TDKScriptingLibrary("Graphics","1",standAlone=True);
 
 #IP and Port of device type, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'Vulkan_MultiThreading_Test');
+obj.configureTestCase(ip,port,'Graphics_Vulkan_Overlay_Test');
 
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 expectedResult="SUCCESS"
 if api == "vulkan":
-    appname = "vkmultithread"
+    appname = "vkoverlay"
 else:
-    appname = "oglmultithread"
+    appname = "ogloverlay"
 command=f"cd /opt/TDK; {appname}  --time 60 --csv {appname}_{api}_{resolution}.csv"
 
 if "SUCCESS" in result.upper():
@@ -68,4 +68,4 @@ if "SUCCESS" in result.upper():
     else:
         print("Unable to set PRE-REQUISITES")
 
-obj.unloadModule("Vulkan");
+obj.unloadModule("Graphics");

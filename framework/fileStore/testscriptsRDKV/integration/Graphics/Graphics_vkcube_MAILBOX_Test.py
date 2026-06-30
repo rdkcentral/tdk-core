@@ -21,13 +21,13 @@
 import tdklib; 
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
+obj = tdklib.TDKScriptingLibrary("Graphics","1",standAlone=True);
 
 #IP and Port of device type, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'Vkmark_Benchmark_MAILBOX_Score');
+obj.configureTestCase(ip,port,'Graphics_vkcube_MAILBOX_Test');
 
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult();
@@ -45,6 +45,7 @@ if "SUCCESS" in result.upper():
     if "SUCCESS" in details:
         print("PRE-REQUISITES SUCCESSFULLY SET")
         tdkTestObj = obj.createTestStep('execute_binary')
+        tdkTestObj.addParameter("binary","vkcube")
         tdkTestObj.addParameter("present_mode",mode)
         tdkTestObj.executeTestCase(expectedResult)
         details = tdkTestObj.getResultDetails()
@@ -62,4 +63,4 @@ if "SUCCESS" in result.upper():
     else:
         print("Unable to set PRE-REQUISITES")
 
-obj.unloadModule("Vulkan");
+obj.unloadModule("Graphics");

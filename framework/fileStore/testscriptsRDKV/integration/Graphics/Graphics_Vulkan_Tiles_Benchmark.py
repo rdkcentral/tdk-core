@@ -18,35 +18,37 @@
 ##########################################################################
 
 # use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+import tdklib;
+from Graphicslib import resolution, api
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
+obj = tdklib.TDKScriptingLibrary("Graphics","1",standAlone=True);
 
 #IP and Port of device type, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'VkCube_MAILBOX_Test');
+obj.configureTestCase(ip,port,'Graphics_Vulkan_Tiles_Benchmark');
 
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 expectedResult="SUCCESS"
-mode="mailbox"
+command=f"cd /opt/TDK; tiles_benchmark  --api={api} --runtime 60 --csv tiles_{api}_{resolution}.csv"
 
 if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('set_prerequisites');
     boxtype = obj.getDeviceBoxType();
     if "RPI-Client" in boxtype:
         tdkTestObj.addParameter("model", "RPI")
+    print("\nTesting Resolution ", resolution)
+    tdkTestObj.addParameter("resolution", resolution)
     tdkTestObj.executeTestCase(expectedResult);
     details = tdkTestObj.getResultDetails()
     if "SUCCESS" in details:
         print("PRE-REQUISITES SUCCESSFULLY SET")
-        tdkTestObj = obj.createTestStep('execute_binary')
-        tdkTestObj.addParameter("binary","vkcube")
-        tdkTestObj.addParameter("present_mode",mode)
+        tdkTestObj = obj.createTestStep('run_test')
+        tdkTestObj.addParameter("command",command)
         tdkTestObj.executeTestCase(expectedResult)
         details = tdkTestObj.getResultDetails()
         if "SUCCESS" in details:
@@ -63,4 +65,4 @@ if "SUCCESS" in result.upper():
     else:
         print("Unable to set PRE-REQUISITES")
 
-obj.unloadModule("Vulkan");
+obj.unloadModule("Graphics");

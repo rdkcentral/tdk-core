@@ -18,33 +18,30 @@
 ##########################################################################
 
 # use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib;
-from Vulkanlib import resolution, api
+import tdklib; 
+from Graphicslib import resolution, api
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
+obj = tdklib.TDKScriptingLibrary("Graphics","1",standAlone=True);
 
 #IP and Port of device type, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'Vulkan_Overlay_Test');
+obj.configureTestCase(ip,port,'Graphics_Vulkan_Motion_Benchmark');
 
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 expectedResult="SUCCESS"
-if api == "vulkan":
-    appname = "vkoverlay"
-else:
-    appname = "ogloverlay"
-command=f"cd /opt/TDK; {appname}  --time 60 --csv {appname}_{api}_{resolution}.csv"
+command=f"cd /opt/TDK; motion_benchmark  --api={api} --runtime 60 --csv motion_{api}_{resolution}.csv"
 
 if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('set_prerequisites');
     boxtype = obj.getDeviceBoxType();
     if "RPI-Client" in boxtype:
         tdkTestObj.addParameter("model", "RPI")
+    print("\nTesting Resolution ", resolution)
     tdkTestObj.addParameter("resolution", resolution)
     tdkTestObj.executeTestCase(expectedResult);
     details = tdkTestObj.getResultDetails()
@@ -68,4 +65,4 @@ if "SUCCESS" in result.upper():
     else:
         print("Unable to set PRE-REQUISITES")
 
-obj.unloadModule("Vulkan");
+obj.unloadModule("Graphics");

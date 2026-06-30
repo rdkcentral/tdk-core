@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2026 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,15 +19,17 @@
 
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib; 
+import re
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("Vulkan","1",standAlone=True);
+obj = tdklib.TDKScriptingLibrary("Graphics","1",standAlone=True);
 
 #IP and Port of device type, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'VkCube_FIFO_Test');
+obj.configureTestCase(ip,port,'Graphics_vkmark_Benchmark_FIFO_Score');
+
 
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult();
@@ -45,7 +47,6 @@ if "SUCCESS" in result.upper():
     if "SUCCESS" in details:
         print("PRE-REQUISITES SUCCESSFULLY SET")
         tdkTestObj = obj.createTestStep('execute_binary')
-        tdkTestObj.addParameter("binary","vkcube")
         tdkTestObj.addParameter("present_mode",mode)
         tdkTestObj.executeTestCase(expectedResult)
         details = tdkTestObj.getResultDetails()
@@ -63,4 +64,5 @@ if "SUCCESS" in result.upper():
     else:
         print("Unable to set PRE-REQUISITES")
 
-obj.unloadModule("Vulkan");
+obj.unloadModule("Graphics");
+
