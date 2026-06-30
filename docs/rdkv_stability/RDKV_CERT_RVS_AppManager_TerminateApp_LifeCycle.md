@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_CERT_RVS_15
+RDKV_STABILITY_15
 ## TestCase Name
 RDKV_CERT_RVS_AppManager_TerminateApp_LifeCycle
 
@@ -20,12 +20,10 @@ To validate AppManager terminate application lifecycle state transitions by regi
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure PRE_REQ_REBOOT_PVS in device config | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
-| 3 | Confirm required plugins are available | The org.rdk.DownloadManager, org.rdk.PackageManagerRDKEMS, and org.rdk.AppManager plugins must be present and activatable in the build. | All three required plugins should be available on the DUT. |
-| 4 | Configure google_bundle in PerformanceTestVariables | `google_bundle` must be set to the application bundle filename in PerformanceTestVariables. | The google_bundle variable should be configured with a valid application bundle name. |
-| 5 | Configure app_download_url in PerformanceTestVariables | `app_download_url` must be set to the base URL where the application bundle is hosted in PerformanceTestVariables. | The app_download_url should point to a reachable hosting location. |
-| 6 | Configure lifecycle_count in StabilityTestVariables | `lifecycle_count` must be set to the desired number of lifecycle validation iterations in StabilityTestVariables (default: 100). | The lifecycle_count variable should be configured with a valid integer value. |
-| 7 | Configure PACKAGEMANAGER_FILE_LOCATOR in device config | `PACKAGEMANAGER_FILE_LOCATOR` must be set to the correct path on the DUT where downloaded packages are stored. | The file locator path should be correctly configured in the device-specific config file. |
-| 8 | Confirm WebSocket connectivity to Thunder is available | WebSocket connectivity to the Thunder JSON-RPC endpoint on the device must be available for event listener registration. | WebSocket connection to Thunder should be established successfully. |
+| 3 | Configure google_bundle in PerformanceTestVariables | `google_bundle` must be set to the application bundle filename in PerformanceTestVariables. | The google_bundle variable should be configured with a valid application bundle name. |
+| 4 | Configure app_download_url in PerformanceTestVariables | `app_download_url` must be set to the base URL where the application bundle is hosted in PerformanceTestVariables. | The app_download_url should point to a reachable hosting location. |
+| 5 | Configure lifecycle_count in StabilityTestVariables | `lifecycle_count` must be set to the desired number of lifecycle validation iterations in StabilityTestVariables (default: 100). | The lifecycle_count variable should be configured with a valid integer value. |
+| 6 | Configure PACKAGEMANAGER_FILE_LOCATOR in device config | `PACKAGEMANAGER_FILE_LOCATOR` must be set to the correct path on the DUT where downloaded packages are stored. | The file locator path should be correctly configured in the device-specific config file. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
@@ -40,8 +38,9 @@ To validate AppManager terminate application lifecycle state transitions by regi
 | 6 | Launch application (Per Iteration) | For each of the `lifecycle_count` (100) iterations, launch the com.rdkcentral.google application using the AppManager launchApp API. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.launchApp", "params": {"appId": "com.rdkcentral.google", "intent": "", "launchArgs": ""}}` | The launch API should return SUCCESS for each iteration. |
 | 7 | Wait before terminating application (Per Iteration) | After a successful launch, wait 30 seconds to allow the application to fully initialize and reach the active state before initiating the terminate request. | The 30-second wait should allow the application to reach the active running state. |
 | 8 | Terminate application (Per Iteration) | Terminate the running application using the AppManager terminateApp API. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "com.rdkcentral.google"}}` | The terminate API should return SUCCESS for each iteration. |
-| 9 | Validate all expected terminate lifecycle events (Per Iteration) | Monitor the onAppLifecycleStateChanged event buffer for up to 120 seconds after the terminate request. Verify that all three expected terminate lifecycle states are received for com.rdkcentral.google: APP_STATE_ACTIVE, APP_STATE_PAUSED, and APP_STATE_TERMINATING. The monitoring loop exits when APP_STATE_TERMINATING is observed. <br>Example event: `{"jsonrpc": "2.0", "method": "client.events.1.onAppLifecycleStateChanged", "params": {"appId": "com.rdkcentral.google", "newState": "APP_STATE_TERMINATING", "oldState": "APP_STATE_PAUSED", "errorReason": "APP_ERROR_NONE"}}` | All three expected terminate lifecycle states (APP_STATE_ACTIVE, APP_STATE_PAUSED, APP_STATE_TERMINATING) should be received for each iteration. |
-| 10 | Repeat terminate lifecycle validation for all iterations | Repeat Steps 6 through 9 for all `lifecycle_count` (100) configured iterations. | Every iteration should receive all three expected terminate lifecycle events successfully. |
+| 9 | Monitor lifecycle event buffer after terminate (Per Iteration) | Monitor the onAppLifecycleStateChanged event buffer for up to 120 seconds after the terminate request. The monitoring loop exits when APP_STATE_TERMINATING is observed for com.rdkcentral.google. | The event buffer should be accessible and return lifecycle events within the 120-second timeout period. |
+| 10 | Verify expected terminate lifecycle states received (Per Iteration) | Verify that all three expected terminate lifecycle state transitions are received for com.rdkcentral.google: APP_STATE_ACTIVE, APP_STATE_PAUSED, and APP_STATE_TERMINATING. <br>`{"jsonrpc": "2.0", "method": "client.events.1.onAppLifecycleStateChanged", "params": {"appId": "com.rdkcentral.google", "newState": "APP_STATE_TERMINATING", "oldState": "APP_STATE_PAUSED", "errorReason": "APP_ERROR_NONE"}}` | All three expected terminate lifecycle states (APP_STATE_ACTIVE, APP_STATE_PAUSED, APP_STATE_TERMINATING) should be received for each iteration. |
+| 11 | Repeat terminate lifecycle validation for all iterations | Repeat Steps 6 through 10 for all `lifecycle_count` (100) configured iterations. | Every iteration should receive all three expected terminate lifecycle events successfully. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes

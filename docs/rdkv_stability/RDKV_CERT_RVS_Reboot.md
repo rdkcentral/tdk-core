@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_CERT_RVS_2
+RDKV_STABILITY_2
 ## TestCase Name
 RDKV_CERT_RVS_Reboot
 

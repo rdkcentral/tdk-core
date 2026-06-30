@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_CERT_RVS_5
+RDKV_STABILITY_5
 ## TestCase Name
 RDKV_CERT_RVS_LongDuration_HLS_VideoPlayback
 

@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_CERT_RVS_3
+RDKV_STABILITY_3
 ## TestCase Name
 RDKV_CERT_RVS_LongDuration_VideoPlayback_4K_DASH
 

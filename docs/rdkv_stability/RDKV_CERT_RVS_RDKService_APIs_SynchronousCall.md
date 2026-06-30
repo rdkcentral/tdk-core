@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_CERT_RVS_1
+RDKV_STABILITY_1
 ## TestCase Name
 RDKV_CERT_RVS_RDKService_APIs_SynchronousCall
 

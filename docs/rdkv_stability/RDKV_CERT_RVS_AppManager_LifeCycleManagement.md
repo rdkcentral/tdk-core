@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_CERT_RVS_12
+RDKV_STABILITY_12
 ## TestCase Name
 RDKV_CERT_RVS_AppManager_LifeCycleManagement
 
@@ -20,11 +20,10 @@ To validate the full AppManager application lifecycle management by repeatedly p
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure PRE_REQ_REBOOT_PVS in device config | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
-| 3 | Confirm required plugins are available | The org.rdk.DownloadManager, org.rdk.PackageManagerRDKEMS, and org.rdk.AppManager plugins must be present and activatable in the build. | All three required plugins should be available on the DUT. |
-| 4 | Configure google_bundle in PerformanceTestVariables | `google_bundle` must be set to the application bundle filename in PerformanceTestVariables. | The google_bundle variable should be configured with a valid application bundle name. |
-| 5 | Configure app_download_url in PerformanceTestVariables | `app_download_url` must be set to the base URL where the application bundle is hosted in PerformanceTestVariables. | The app_download_url should point to a reachable hosting location. |
-| 6 | Configure lifecyclecount in StabilityTestVariables | `lifecyclecount` must be set to the desired number of full lifecycle iterations in StabilityTestVariables (default: 100). | The lifecyclecount variable should be configured with a valid integer value. |
-| 7 | Configure PACKAGEMANAGER_FILE_LOCATOR in device config | `PACKAGEMANAGER_FILE_LOCATOR` must be set to the correct path on the DUT where downloaded packages are stored. | The file locator path should be correctly configured in the device-specific config file. |
+| 3 | Configure google_bundle in PerformanceTestVariables | `google_bundle` must be set to the application bundle filename in PerformanceTestVariables. | The google_bundle variable should be configured with a valid application bundle name. |
+| 4 | Configure app_download_url in PerformanceTestVariables | `app_download_url` must be set to the base URL where the application bundle is hosted in PerformanceTestVariables. | The app_download_url should point to a reachable hosting location. |
+| 5 | Configure lifecyclecount in StabilityTestVariables | `lifecyclecount` must be set to the desired number of full lifecycle iterations in StabilityTestVariables (default: 100). | The lifecyclecount variable should be configured with a valid integer value. |
+| 6 | Configure PACKAGEMANAGER_FILE_LOCATOR in device config | `PACKAGEMANAGER_FILE_LOCATOR` must be set to the correct path on the DUT where downloaded packages are stored. | The file locator path should be correctly configured in the device-specific config file. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
