@@ -226,3 +226,4 @@ if expectedResult in (result.upper() and pre_condition_status):
 else:
     print("Failed to load module")
     obj.setLoadModuleStatus("FAILURE");
+
