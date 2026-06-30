@@ -277,6 +277,7 @@ def setPluginState(obj,plugin,state):
         return "FAILURE"
 
 def launchApp(obj,app_id):
+    global event_listener
     max_retries = 2
     print(f"\nLaunching the app: {app_id}")
     tdkTestObj = obj.createTestStep('rdkservice_launch_app')
@@ -289,6 +290,9 @@ def launchApp(obj,app_id):
         for attempt in range(max_retries):
             if app_id in rdkservice_get_loaded_apps():
                 print(f"\nSuccessfully launched the app: {app_id}")
+                print("\nRegister for app terminate events")
+                thunder_port = rdkv_performancelib.devicePort
+                event_listener = createEventListener(obj.IP, thunder_port, ['{"jsonrpc": "2.0","id": 9,"method": "org.rdk.AppManager.1.register","params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1" }}'], "/jsonrpc", False)
                 tdkTestObj.setResultStatus("SUCCESS")
                 return "SUCCESS"
             if attempt < max_retries - 1:
@@ -1221,12 +1225,39 @@ def getTestURLs(players_list,appArguments):
 
 # Function to set the primary post-requisites
 def setMediaTestPostRequisites(app_id):
-    post_requisite_status = "SUCCESS"
-    # Terminate the app using App Manager
-    terminate_status = rdkv_terminate_app(app_id)
-    if "FAILURE" in terminate_status:
-        post_requisite_status = "FAILURE"
-    return post_requisite_status
+    status = rdkv_terminate_app(app_id)
+    if "FAILURE" in status:
+        print("Failed to terminate the bolt app\n")
+        return "FAILURE"
+
+    if 'event_listener' in globals() and event_listener is not None:
+        print("\nWaiting for app unload event...")
+        max_wait = 20
+        waited = 0
+        event_received = False
+        while waited < max_wait:
+            events = event_listener.getEventsBuffer()
+            if not events:
+                time.sleep(0.1)
+                waited += 1
+                continue
+            event = events.pop(0)
+            if (app_id in str(event) and "onAppLifecycleStateChanged" in str(event) and "APP_STATE_UNLOADED" in str(event)):
+                print("\nSuccess: app unload event received")
+                print(f"\nReceived event details: {event}")
+                event_received = True
+                break
+        event_listener.disconnect()
+    else:
+        print(f"\nEvent listener is not initialized; cannot validate app unload event for {app_id}\n")
+        return "FAILURE"
+
+    if event_received:
+        print("\nSuccessfully terminated the bolt app & received app unload event\n")
+        return "SUCCESS"
+    else:
+        print("\nFailed to terminate the bolt app. App unload event not received within the given timeout\n")
+        return "FAILURE"
 
 # Function to validate the Latency time
 def validateLatency(obj):
