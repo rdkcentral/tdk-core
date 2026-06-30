@@ -2673,18 +2673,9 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         # FrameRate Plugin Response result parser steps
         elif tag == "framerate_check_set_operation":
-            try:
-                if otherInfo and "error" in otherInfo:
-                    info["error_info"] = otherInfo["error"]
-                    info["Test_Step_Status"] = "FAILURE"
-                else:
-                    info["result"] = result
-                    if str(result).strip().lower() == "true":
-                        info["Test_Step_Status"] = "SUCCESS"
-                    else:
-                        info["Test_Step_Status"] = "FAILURE"
-            except Exception as e:
-                info["error"] = str(e)
+            if str(result.get("success")).lower() == "true":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "framerate_check_auto_framerate_mode":
@@ -2697,12 +2688,15 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "framerate_check_negative_scenario":
             try:
-                info["otherInfo"] = otherInfo
-                message = otherInfo.get("error").get("message")
-                if str(message).lower() in [str(val).lower() for val in expectedValues]:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
                     info["Test_Step_Status"] = "FAILURE"
+                else:
+                    if str(result.get("success")).lower() == "false":
+                        info = result
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
             except Exception as e:
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"

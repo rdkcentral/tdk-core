@@ -1178,21 +1178,21 @@
         </method>
 	<method name="Start_FPS_Collection" api="startFpsCollection" type="method" desc="Starts the fps collection"/>
         <method name="Stop_FPS_Collection"  api="stopFpsCollection"  type="method" desc="Stops the fps collection"/>
-        <method name="Get_Frm_Mode"  api="getFrmMode"  type="method" desc="Returns the current auto framerate mode" >
+        <method name="Get_Frm_Mode"  api="getFrmMode"  type="method" version="2" desc="Returns the current auto framerate mode" >
             <expectedValues>0,1</expectedValues>
         </method>
-        <method name="Set_Frm_Mode"  api="setFrmMode"  type="method" desc="Sets the auto framerate mode" >
+        <method name="Set_Frm_Mode"  api="setFrmMode"  type="method" version="2" desc="Sets the auto framerate mode" >
             <params>
                 <param tag="frmmode" type="int"/>
             </params>
         </method>
-        <method name="Set_Frm_Mode_Negative"  api="setFrmMode"  type="method" desc="Sets the auto framerate mode with empty value" >
+        <method name="Set_Frm_Mode_Negative"  api="setFrmMode"  type="method" version="2" desc="Sets the auto framerate mode with empty value" >
             <params>
                 <param tag="frmmode" defaultValue="null"/>
             </params>
         </method>
-        <method name="Get_Display_FrameRate"  api="getDisplayFrameRate"  type="method" desc="Returns the current display frame rate values" />
-        <method name="Set_Display_FrameRate"  api="setDisplayFrameRate"  type="method" desc="Sets the display framerate values" >
+        <method name="Get_Display_FrameRate"  api="getDisplayFrameRate"  type="method" version="2" desc="Returns the current display frame rate values" />
+        <method name="Set_Display_FrameRate"  api="setDisplayFrameRate"  type="method" version="2" desc="Sets the display framerate values" >
             <params>
                 <param tag="framerate" defaultValue="null"/>
             </params>
