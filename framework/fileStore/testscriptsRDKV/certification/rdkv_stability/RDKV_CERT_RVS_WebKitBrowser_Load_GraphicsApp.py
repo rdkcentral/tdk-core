@@ -147,11 +147,11 @@ if expectedResult in (result.upper() and pre_condition_status):
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS");
             print("\n Video test URL is set successfully");
-            app_bundle_name=MediaValidationVariables.animation_graphics_app_download_url.split("/")[-1]
+            app_bundle_name=MediaValidationVariables.animation_app_download_url.split("/")[-1]
             print(f"\nApp bundle name: {app_bundle_name}")
             app_name = app_bundle_name.split("+")[0]
             print(f"\nApp name: {app_name}")
-            app_download_url = MediaValidationVariables.animation_graphics_app_download_url.split(app_bundle_name)[0]
+            app_download_url = MediaValidationVariables.animation_app_download_url.split(app_bundle_name)[0]
             print("app_download_url", app_download_url)
             status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
             if result == "SUCCESS":
