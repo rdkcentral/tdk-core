@@ -91,9 +91,9 @@ def collect_failure_artifacts(obj, stability_type, iteration, failure_reason, up
             % artifact_dir,
 
         # --- metadata ---
-        "printf 'testcase=TS_STABILITY_MultipleReboots\\niteration=%s\\nfailure_reason=%s\\ntimestamp=%s\\n'"
+        "printf 'testcase=%s\\niteration=%s\\nfailure_reason=%s\\ntimestamp=%s\\n'"
         " > \"%s/metadata.txt\""
-            % (iteration, reason_tag, timestamp, artifact_dir),
+            % (stability_type, iteration, reason_tag, timestamp, artifact_dir),
 
         # --- process snapshot ---
         "ps > \"%s/ps_snapshot.txt\" 2>&1"
@@ -214,8 +214,8 @@ def get_waitTime_configFile(obj1,step):
     print(f"EXPECTED RESULT {step}: Should get the max wait time of processes from configuration file")
     cmd = "sh %s/tdk_utility.sh parseConfigFile MAX_PROCESSUP_WAITTIME" %TDK_PATH
     tdkTestObj,actualresult,details = stability_execute_cmd(obj1,cmd)
-    if expectedresult in actualresult and details!="":
-        waitTime = details.replace("\\n", "")
+    waitTime = details.replace("\\n", "")
+    if expectedresult in actualresult and waitTime.isdigit():
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"ACTUAL RESULT {step}: wait time is {waitTime}")
         print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -244,7 +244,7 @@ def get_interfaceList_configFile(obj1,step):
     print(f"EXPECTED RESULT {step}: Should get the list of interfaces from configuration file")
     cmd= "sh %s/tdk_utility.sh parseConfigFile INTERFACE_LIST" %TDK_PATH
     tdkTestObj,actualresult,details = stability_execute_cmd(obj1,cmd)
-    if "Invalid Argument passed" not in details and details != "":
+    if expectedresult in actualresult and "Invalid Argument passed" not in details and details != "":
         interfaceList = details.replace("\\n", "")
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"ACTUAL RESULT {step}: {interfaceList}")
@@ -330,7 +330,7 @@ def get_device_uptime(obj1,step):
     print(f"EXPECTED RESULT {step}: Should get the Uptime of the DUT")
     tdkTestObj = obj1.createTestStep('TDKB_TR181Stub_Get')
     actualresult,upTime = getTR181Value(tdkTestObj,"Device.DeviceInfo.UpTime")
-    if expectedresult in actualresult and upTime!="":
+    if expectedresult in actualresult and upTime.isdigit():
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"ACTUAL RESULT {step}: Uptime of the DUT is : {upTime}")
         print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -357,10 +357,7 @@ def get_status_interfaces(obj1,step,interfaceList):
     expectedresult = "SUCCESS"
     iterationFailed = False
     for interfaceName in interfaceList:
-        if "wlan" in interfaceName:
-            command = "ifconfig | grep -A 1 %s | grep inet6 | awk '{ print $3 }'| tr \"\n\" \" \"" %interfaceName
-        else:
-            command = "ifconfig | grep -A 1 %s | grep inet | cut -f2 -d ':' | cut -f1 -d ' ' | tr \"\n\" \" \"" %interfaceName
+        command = "ifconfig | grep -A 1 %s | grep inet | cut -f2 -d ':' | cut -f1 -d ' '" %interfaceName
         step+=1
         print(f"\nTEST STEP {step}: Check if {interfaceName} is up")
         print(f"EXPECTED RESULT {step}: {interfaceName} should be up")
@@ -415,16 +412,16 @@ def get_status_processes(obj1,obj2,step,processList):
         if expectedresult in actualresult and details != "":
             pid = details.replace("\\n", "")
             tdkTestObj.setResultStatus("SUCCESS")
-            print("Process Name : %s" %process_name)
-            print("PID : %s" %pid)
-            print("%s with process ID %s is running" %(process_name,pid))
+            print(f"Process Name : {process_name}")
+            print(f"PID : {pid}")
+            print(f"{process_name} with process ID {pid} is running")
             print("[TEST EXECUTION RESULT] : SUCCESS")
         else:
             iterationFailed = True
             tdkTestObj.setResultStatus("FAILURE")
-            failureReason = "process_down_%s" % process_name
-            print("Process Name : %s" %process_name)
-            print("%s is not running" %process_name)
+            failureReason = f"process_down_{process_name}"
+            print(f"Process Name : {process_name}")
+            print(f"{process_name} is not running")
             print("[TEST EXECUTION RESULT] : FAILURE")
             break
     return step,iterationFailed,failureReason

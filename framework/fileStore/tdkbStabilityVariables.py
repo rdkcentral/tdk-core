@@ -21,9 +21,23 @@
 # Export all TDKB Stability variables
 #------------------------------------------------------------------------------
 
+#log upload server url eg: "http://<server-ip>:<portno>/upload"
 UPLOAD_SERVER_URL = ""
-FAILURE_ARTIFACT_ROOT = ""
-TOTAL_ITERATIONS =
-CONNECTIVITY_ITERATIONS =
-CONNECTIVITY_DURATION =
-PUBLIC_IPV4 = ""
+#full folder path where the device logs will be saved in the DUT for the first test failure eg : /tmp/tdk_stability_failures
+FAILURE_ARTIFACT_ROOT = "/tmp/tdk_stability_failures"
+#Number of iterations for reboot or factory reset stability test
+TOTAL_ITERATIONS = 50
+#No of iterations for testing the connectivity
+CONNECTIVITY_ITERATIONS = 1000
+#Duration of connectivity test in seconds
+CONNECTIVITY_DURATION = 3600
+#Public IPV4 IP eg: 8.8.8.8
+PUBLIC_IPV4 = "8.8.8.8"
+#full file path for writing the ping output eg : /tmp/tdkb_longrun_ping_ipv4.log
+PING_OUTPUT_FILE = "/tmp/tdkb_longrun_ping_ipv4.log"
+#process name of dns process eg: dnsmasq
+DNS_PROCESS = "dnsmasq"
+#process name of webpa process eg:webpa
+WEBPA_PROCESS = "webpa"
+#process name of parodus process eg:parodus
+PARODUS_PROCESS = "parodus"

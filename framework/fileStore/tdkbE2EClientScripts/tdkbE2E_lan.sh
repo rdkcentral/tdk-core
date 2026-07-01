@@ -104,27 +104,26 @@ ping_to_host()
 #Verify ping to a network successfully
 ping_to_ipv4_start()
 {
-
         route_add_cmd="$(sudo ip route add "$var3" via "$var4" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
         remove_logfile="$(rm -f "$var6" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
         echo "PING_START:$(date '+%Y-%m-%d %H:%M:%S')" > "$var6"
-        nohup sh -c "ping -q -i 5 -w '$var5' '$var3' >> '$var6' 2>&1; echo PING_EXIT_CODE:\$? >> '$var6'" > /dev/null 2>&1 &
+        ping -q -i 5 -w "$var5" "$var3" >> "$var6" 2>&1 &
         ping_pid=$!
         ping_started="$(kill -0 $ping_pid > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
-        if [ "$route_add_cmd" = "SUCCESS" ] && [ "$ping_started" = "SUCCESS" ]; then
+        route_del_cmd="$(sudo ip route delete "$var3" via "$var4" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+        if [ "$route_add_cmd" = "SUCCESS" ] && [ "$remove_logfile" = "SUCCESS" ] && [ "$ping_started" = "SUCCESS" ] &&  [ "$route_del_cmd" = "SUCCESS" ] ; then
                 echo "OUTPUT:SUCCESS"
         else
                 echo "OUTPUT:FAILURE"
         fi
 }
 
-# Validate long-running IPv4 ping output for packet loss
+#Validate long-running IPv4 ping output for packet loss
 ping_to_ipv4_check()
 {
-        ping_file="$var5"
+        ping_file="$var2"
         wait_count=0
         max_wait_count=20
-        route_del_cmd="$(sudo ip route delete "$var3" via "$var4" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
         if [ ! -f "$ping_file" ]; then
                 echo "PING_FILE_MISSING:$ping_file"
                 echo "OUTPUT:FAILURE"
@@ -145,7 +144,7 @@ ping_to_ipv4_check()
                 return
         fi
         packet_loss="$(echo "$summary_line" | sed -n 's/.* \([0-9][0-9]*\)% packet loss.*/\1/p')"
-        if [ "$route_del_cmd" = "SUCCESS" ] &&  [ "$packet_loss" = "0" ]; then
+        if [ "$packet_loss" = "0" ]; then
                 echo "OUTPUT:SUCCESS"
         else
                 echo "SUMMARY: $summary_line"

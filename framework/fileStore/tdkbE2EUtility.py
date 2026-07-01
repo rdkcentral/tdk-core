@@ -3304,19 +3304,17 @@ def getChannelNumberBssid():
 
 ########## End of Function ##########
 
-def verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,duration,phase="START",output_file="/tmp/tdkb_longrun_ping.log"):
+def verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,phase="START"):
 
 # verifyLongRunNetworkConnectivity
 
-# Syntax      : verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,duration,phase="START",output_file="/tmp/tdkb_longrun_ping.log")
+# Syntax      : verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,phase="START")
 # Description : Function to check long-run network connectivity from the LAN client
 # Parameters  : dest_ip - IP to which ping should reach
 #             : connectivityType - PING type like ping to ipv4, ipv6 etc
 #             : source_ip - Ip from which ping to be placed
 #             : gateway_ip - Gateway IP address
-#             : duration - Time for which ping should be executed
 #             : phase - "START" to start a long-running ping, "CHECK" to validate results.
-#             : output_file - file to which ping output will be written
 # Return Value: Returns the status of ping operation
 
     try:
@@ -3326,11 +3324,9 @@ def verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_
                 script_name = lan_script
                 if connectivityType == "PING_TO_IPV4":
                     if phase == "START":
-                        if output_file == "":
-                            output_file = "/tmp/tdkb_longrun_ping_ipv4.log"
-                        command = "sudo sh %s ping_to_ipv4_start %s %s %s %s %s" % (script_name,source_ip,dest_ip,gateway_ip,duration,output_file)
+                        command = "sudo sh %s ping_to_ipv4_start %s %s %s %s %s" % (script_name,source_ip,dest_ip,gateway_ip,CONNECTIVITY_DURATION,PING_OUTPUT_FILE)
                     elif phase == "CHECK":
-                        command = "sudo sh %s ping_to_ipv4_check %s %s %s %s" % (script_name,source_ip,dest_ip,gateway_ip,output_file)
+                        command = "sudo sh %s ping_to_ipv4_check %s" % (script_name,PING_OUTPUT_FILE)
                     else:
                         return "FAILURE:Invalid phase"
                 else:
