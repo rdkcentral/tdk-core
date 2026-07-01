@@ -82,7 +82,6 @@ if expectedResult in result.upper():
                 tdkTestObj.addParameter("value",value)
                 start_time = datetime.now(UTC).time()
                 tdkTestObj.executeTestCase(expectedResult)
-                result = tdkTestObj.getResultDetails()
                 focus_received = False
                 while True:
                     if continue_count > 120:
@@ -103,7 +102,7 @@ if expectedResult in result.upper():
                     focus_time = str(event).split("$$$")[0]
                     focus_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
                     focus_end_time = datetime.strptime(str(focus_time), "%H:%M:%S.%f")
-                    conf_file,file_status = getConfigFileName(obj.realpath)
+                    conf_file,_ = getConfigFileName(obj.realpath)
                     config_status,focus_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_SETFOCUS_THRESHOLD_VALUE")
                     config_status,focus_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                     Summ_list.append('FOCUS_THRESHOLD_VALUE :{}ms'.format(focus_threshold))

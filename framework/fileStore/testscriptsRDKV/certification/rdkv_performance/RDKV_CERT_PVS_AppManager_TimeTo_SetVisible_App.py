@@ -96,7 +96,6 @@ if expectedResult in result.upper():
                     tdkTestObj.addParameter("value",value)
                     start_time = datetime.now(UTC).time()
                     tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResultDetails()
                     while True:
                         if continue_count > 120:
                             break
@@ -117,7 +116,7 @@ if expectedResult in result.upper():
                         tdkTestObj.setResultStatus("SUCCESS")
                         visible_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
                         visible_end_time = datetime.strptime(str(visible_time), "%H:%M:%S.%f")
-                        conf_file,file_status = getConfigFileName(obj.realpath)
+                        conf_file,_ = getConfigFileName(obj.realpath)
                         config_status,visible_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_SET_VISIBLE_THRESHOLD_VALUE")
                         config_status,visible_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                         time_to_visible = (visible_end_time - visible_start_time).total_seconds() * 1000

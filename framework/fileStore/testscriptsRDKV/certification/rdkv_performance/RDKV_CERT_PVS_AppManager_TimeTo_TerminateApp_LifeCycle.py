@@ -108,7 +108,7 @@ if expectedResult in result.upper():
                     print(f"Total close time (ms): {time_total_ms:.2f}")
 
                     # Get threshold values from config file
-                    conf_file,file_status = getConfigFileName(obj.realpath)
+                    conf_file,_ = getConfigFileName(obj.realpath)
                     config_status,terminate_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_TERMINATE_LIFECYCLE_THRESHOLD_VALUE")
                     config_status,terminate_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                     

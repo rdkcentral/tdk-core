@@ -74,8 +74,6 @@ if expectedResult in result.upper():
             else:
                 time.sleep(5)
                 continue_count = 0
-                payloads = []
-                events = ['{"org.rdk.RDKWindowManager": "onHidden"}']
                 thunder_port=rdkv_performancelib.devicePort
                 event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 9,"method": "org.rdk.RDKWindowManager.1.register","params": {"event": "onHidden", "id": "client.events.1" }}'],"/jsonrpc",False)
                 time.sleep(3)
@@ -87,7 +85,6 @@ if expectedResult in result.upper():
                 tdkTestObj.addParameter("value",value)
                 start_time = datetime.now(UTC).time()
                 tdkTestObj.executeTestCase(expectedResult)
-                result = tdkTestObj.getResultDetails()
 
                 while True:
                     if continue_count > 120:
@@ -109,7 +106,7 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     hidden_start_time = datetime.strptime(str(start_time), "%H:%M:%S.%f")
                     hidden_end_time = datetime.strptime(str(hidden_time), "%H:%M:%S.%f")
-                    conf_file,file_status = getConfigFileName(obj.realpath)
+                    conf_file,_ = getConfigFileName(obj.realpath)
                     config_status,hidden_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_SET_VISIBLE_THRESHOLD_VALUE")
                     config_status,hidden_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                     time_to_hidden = (hidden_end_time - hidden_start_time).total_seconds() * 1000

@@ -71,7 +71,6 @@ if expectedResult in result.upper():
             print(f"Start time - {start_time}")
             tdkTestObj.executeTestCase(expectedResult)
             status = tdkTestObj.getResult()
-            details = tdkTestObj.getResultDetails()
             if status == "SUCCESS":
                 print("Check for all events")
                 tdkTestObj.setResultStatus("SUCCESS")
@@ -124,7 +123,7 @@ if expectedResult in result.upper():
                     print(f"Total time to active (ms): {time_total_ms:.2f}")
 
                     # Get threshold values from config file
-                    conf_file,file_status = getConfigFileName(obj.realpath)
+                    conf_file,_ = getConfigFileName(obj.realpath)
                     config_status,launch_threshold = getDeviceConfigKeyValue(conf_file,"APPMANAGER_LAUNCH_LIFECYCLE_THRESHOLD_VALUE")
                     config_status,launch_offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                     
