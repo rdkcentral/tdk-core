@@ -32,7 +32,7 @@ accessible via JSON-RPC under the callsign `org.rdk.Warehouse` (version 1)
 ## APIs Under Test
 
 | API | Description |
-|-----|-------------|
+| --- | --- |
 | `getDeviceInfo` | Provides STB device information |
 | `internalReset` | Invokes the internal reset script, which reboots the WarehouseService |
 | `isClean` | Checks locations where customer data may be stored |
@@ -43,7 +43,7 @@ accessible via JSON-RPC under the callsign `org.rdk.Warehouse` (version 1)
 ## Events Under Test
 
 | Event | Description |
-|-------|-------------|
+| --- | --- |
 | `resetDone` | Notifies about the status of the warehouse reset operation |
 
 ## Plugin Pre-conditions
@@ -51,18 +51,18 @@ accessible via JSON-RPC under the callsign `org.rdk.Warehouse` (version 1)
 ### Plugin Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.Warehouse"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 2: Register_And_Listen_Events
 
-- Register and listen to event `Event_Reset_Done` on `Warehouse` plugin
-
-- Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
-- Register and listen to event `Event_Controller_All` on `Controller` plugin
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Subscribe to the resetDone event | Register a WebSocket event listener for `resetDone` to receive `resetDone` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.register", "params": {"event": "resetDone", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 3 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ## Test Cases
 
@@ -79,7 +79,7 @@ Gets all STB device info
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get STB DeviceInfo | Invoke getDeviceInfo on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.getDeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that STB device info is returned successfully with all device details (`success` : `true`) |
 
 ---
@@ -97,7 +97,7 @@ Sets the front panel state to None
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": -1}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Front Panel State set to None successfully |
 
 ---
@@ -115,7 +115,7 @@ Sets the front panel state to DOWNLOAD IN PROGRESS
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 1}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Front Panel State set to Download In Progress successfully |
 
 ---
@@ -133,7 +133,7 @@ Sets the front panel state to DOWNLOAD FAILED
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 3}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Front Panel State set to Download Failed successfully |
 
 ---
@@ -151,8 +151,8 @@ Sets the front panel state to invalid value
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 2}}' http://127.0.0.1:9998/jsonrpc` | API returns error `success: false`  |
+| --- | --- | --- | --- |
+| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 2}}' http://127.0.0.1:9998/jsonrpc` | API returns error `success: false` |
 
 ---
 
@@ -169,7 +169,7 @@ Performs a light reset of application data
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Light Reset | Invoke lightReset on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.lightReset"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Light Reset completed successfully |
 
 ---
@@ -187,8 +187,8 @@ Checks locations where customer data may be stored
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Is Clean | Invoke isClean on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.isClean"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Clean status returned with `clean` boolean field and any `dirty` locations listed |
+| --- | --- | --- | --- |
+| 1 | Is Clean | Invoke isClean on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.isClean"}' http://127.0.0.1:9998/jsonrpc` | API should return `success` : `true`, and the `clean` flag must correctly reflect status true with no files listed, or false with one or more dirty files in the files array |
 
 ---
 
@@ -205,8 +205,9 @@ Resets the STB to the warehouse state
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Reset Device | Invoke resetDevice on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.resetDevice"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Device reset to warehouse state successfully |
+| 2 | Check Device Active Status | *(External function call no JSON-RPC command required)*<br>Checks whether the device has come back online after the reset. Once online, plugin pre-requisites are re-initialized internally | Device should come back online within 120 seconds and plugin pre-requisites restored successfully |
 
 ---
 
@@ -218,13 +219,14 @@ WareHouse_Internal_Reset
 WH_09
 
 ### TestCase Objective
-Resets the STB to the warehouse state
+Invokes the internal reset script, which reboots the Warehouse service
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Internal Reset | Invoke internalReset on org.rdk.Warehouse with passPhrase: "FOR TEST PURPOSES ONLY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.internalReset", "params": {"passPhrase": "FOR TEST PURPOSES ONLY"}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Internal Reset completed successfully; WarehouseService rebooted |
+| 2 | Check Device Active Status | *(External function call no JSON-RPC command required)*<br>Checks whether the device has come back online after the reset. Once online, plugin pre-requisites are re-initialized internally | Device should come back online within 120 seconds and plugin pre-requisites restored successfully |
 
 ---
 
@@ -241,7 +243,7 @@ Checks if event is received on device reset
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Reset Device | Invoke resetDevice on org.rdk.Warehouse with resetType: "USERFACTORY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.resetDevice", "params": {"resetType": "USERFACTORY"}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Device reset with `USERFACTORY` reset type successfully |
 | 2 | Check Event Reset Done | *(Event registration done in Pre-condition 2)*<br>Listen for resetDone event (Event_Reset_Done) on org.rdk.Warehouse (wait 5s) | Expected `True` and `resetDone` event received confirming warehouse reset operation completed |
 
@@ -268,21 +270,21 @@ Validates statechange event on Activating/deactivating the plugin
 #### TestCase Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.Warehouse"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate Warehouse Plugin | Invoke deactivate on Controller with callsign: "org.rdk.Warehouse"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.Warehouse"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | `statechange` event received; callsign = `org.rdk.warehouse`, state = `"deactivated"` |
-| 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 2 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.warehouse` with state `"deactivated"` |
+| 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate Warehouse Plugin | Invoke activate on Controller with callsign: "org.rdk.Warehouse"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.Warehouse"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | `statechange` event received; callsign = `org.rdk.warehouse`, state = `"activated"` |
-| 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.warehouse` with state `"activated"` |
+| 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
 
@@ -299,7 +301,7 @@ Sets the front panel state to EmptyValue
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set FrontPanel State EmptyValue | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `incorrect state` |
 
 ---
@@ -319,30 +321,38 @@ Validates all event on Activating/deactivating the plugin
 #### TestCase Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.Warehouse"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of Warehouse Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate Warehouse Plugin | Invoke deactivate on Controller with callsign: "org.rdk.Warehouse"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.Warehouse"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check All Event | Listen for Event_Controller_All event (wait 2s) | Controller `all` event received; callsign = `org.rdk.warehouse`, state = `"deactivated"` |
-| 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 2 | Check All Event | Listen for Event_Controller_All event (wait 2s) | Verify that the `all` event is received for callsign `org.rdk.warehouse` with state `"deactivated"` |
+| 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate Warehouse Plugin | Invoke activate on Controller with callsign: "org.rdk.Warehouse"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.Warehouse"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check All Event | Listen for Event_Controller_All event (wait 2s) | Controller `all` event received; callsign = `org.rdk.warehouse`, state = `"activated"` |
-| 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 5 | Check All Event | Listen for Event_Controller_All event (wait 2s) | Verify that the `all` event is received for callsign `org.rdk.warehouse` with state `"activated"` |
+| 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Warehouse"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ## Plugin Post-conditions
 
-_No plugin-level post-conditions defined_
+
+### Plugin Post-condition 1: Unregister_Events
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Unsubscribe from the resetDone event | Unregister the WebSocket event listener for `resetDone` to stop receiving `resetDone` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.unregister", "params": {"event": "resetDone", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 2 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 3 | Unsubscribe from the all event | Unregister the WebSocket event listener for `all` to stop receiving `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "all", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+
 
 ## Test Attributes
 
 | Attribute | Value |
-|-----------|-------|
+| --- | --- |
 | Supported Models | Video Accelerator, RPI Client |
 | Estimated Duration | 15 minutes |
 | Priority | Medium |

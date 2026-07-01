@@ -140,7 +140,7 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 ## APIs Under Test
 
 | API | Description |
-|-----|-------------|
+| --- | --- |
 | `activateSystemApp` | Activates the device application |
 | `clearAllAppData` | Clears all application data |
 | `clearAppData` | Clears the data of a specific application |
@@ -164,7 +164,7 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 ## Events Under Test
 
 | Event | Description |
-|-------|-------------|
+| --- | --- |
 | `onAppLifecycleStateChanged` | Triggered whenever there is a change in the lifecycle state of a running application |
 
 ## Plugin Pre-conditions
@@ -172,39 +172,39 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 ### Plugin Pre-condition 1: Activate_AppStorageManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppStorageManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 2: Activate_DownloadManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 3: Activate_PackageManagerRDKEMS_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of PackageManagerRDKEMS Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PackageManagerRDKEMS Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PackageManagerRDKEMS"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of PackageManagerRDKEMS Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of PackageManagerRDKEMS Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 4: Activate_AppManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of AppManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of AppManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of AppManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 5: Check_Existing_Package_Before_Install
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Existing Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
 | 2 | Uninstall Existing Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Download ValidParameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
@@ -213,7 +213,9 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 
 ### Plugin Pre-condition 6: Register_And_Listen_Events
 
-- Register and listen to event `Event_On_App_Lifecycle_State_Changed` on `AppManager` plugin
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Subscribe to the onAppLifecycleStateChanged event | Register a WebSocket event listener for `onAppLifecycleStateChanged` to receive `onAppLifecycleStateChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.register", "params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ## Test Cases
 
@@ -230,7 +232,7 @@ Check the response when applications are installed
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Installed Apps | Invoke getInstalledApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getInstalledApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that installed applications appear in the list |
 
 ---
@@ -248,7 +250,7 @@ Verify isInstalled with a valid appId of an installed application
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify IsInstalled | Invoke isInstalled on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.isInstalled", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Installed status matches expected value `true` |
 
 ---
@@ -266,7 +268,7 @@ Verify isInstalled with an invalid appId of an application that is not installed
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify IsInstalled With Invalid AppId | Invoke isInstalled on org.rdk.AppManager with appId: "InvalidAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.isInstalled", "params": {"appId": "InvalidAppId"}}' http://127.0.0.1:9998/jsonrpc` | Installed status matches expected value `false` |
 
 ---
@@ -284,7 +286,7 @@ Verify isInstalled with an empty string as appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify IsInstalled Empty AppId | Invoke isInstalled on org.rdk.AppManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.isInstalled", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -302,7 +304,7 @@ Verify isInstalled with a non-existent appId (e.g., random string)
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify IsInstalled NonExistent AppId | Invoke isInstalled on org.rdk.AppManager with appId: "zxcvbasdfg"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.isInstalled", "params": {"appId": "zxcvbasdfg"}}' http://127.0.0.1:9998/jsonrpc` | Installed status matches expected value `false` |
 
 ---
@@ -320,7 +322,7 @@ Verify isInstalled with a numeric value as appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify IsInstalled Numeric AppId | Invoke isInstalled on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.isInstalled", "params": {"appId": 12345}}' http://127.0.0.1:9998/jsonrpc` | Installed status matches expected value `false` |
 
 ---
@@ -338,7 +340,7 @@ Verify isInstalled with a special character string as appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify IsInstalled SpecialChar AppId | Invoke isInstalled on org.rdk.AppManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.isInstalled", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | Installed status matches expected value `false` |
 
 ---
@@ -356,7 +358,7 @@ Verify isInstalled with a very long string as appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify IsInstalled Long AppId | Invoke isInstalled on org.rdk.AppManager with appId: "VeryLongStringForAppIdTestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.isInstalled", "params": {"appId": "VeryLongStringForAppIdTestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Installed status matches expected value `false` |
 
 ---
@@ -374,7 +376,7 @@ Verify isInstalled with a appId containing spaces or whitespace characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify IsInstalled Whitespace AppId | Invoke isInstalled on org.rdk.AppManager with appId: "App Id"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.isInstalled", "params": {"appId": "App Id"}}' http://127.0.0.1:9998/jsonrpc` | Installed status matches expected value `false` |
 
 ---
@@ -392,7 +394,7 @@ Verify isInstalled with a appId containing mixed alphanumeric and special charac
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify IsInstalled | Invoke isInstalled on org.rdk.AppManager with appId: "MixedAlphaNum@123!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.isInstalled", "params": {"appId": "MixedAlphaNum@123!"}}' http://127.0.0.1:9998/jsonrpc` | Installed status matches expected value `false` |
 
 ---
@@ -410,7 +412,7 @@ Retrieves a list of applications currently loaded
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Loaded Apps | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Ensure the getLoadedApps API responds without errors when no applications are running, and provides a non-empty response when applications are active |
 
 ---
@@ -430,14 +432,14 @@ Verify that the launchApp method successfully launches an application when provi
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Valid Param | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check App Launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 
@@ -446,7 +448,7 @@ Verify that the launchApp method successfully launches an application when provi
 #### TestCase Post-condition 1: Terminate_Application
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Valid Param | Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -464,7 +466,7 @@ Verify that the launchApp method fails gracefully when an invalid appId is provi
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Invalid AppId | Invoke launchApp on org.rdk.AppManager with appId: "InvalidAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "InvalidAppId"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -482,7 +484,7 @@ Verify that the launchApp method fails gracefully when an invalid intent is prov
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Invalid Intent | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", intent: "InvalidIntent"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": "InvalidIntent"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -500,7 +502,7 @@ Verify that the launchApp method fails gracefully when an invalid launchArgs is 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Invalid LaunchArgs | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", launchArgs: "InvalidSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "launchArgs": "InvalidSource"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -518,7 +520,7 @@ Verify that the launchApp method fails gracefully when all parameters appId, int
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Invalid Params | Invoke launchApp on org.rdk.AppManager with appId: "InvalidAppId", intent: "InvalidIntent", launchArgs: "InvalidSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "InvalidAppId", "intent": "InvalidIntent", "launchArgs": "InvalidSource"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -536,7 +538,7 @@ Verify that the launchApp method fails gracefully when the appId parameter is em
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Empty AppId | Invoke launchApp on org.rdk.AppManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -554,7 +556,7 @@ Verify that the launchApp method fails gracefully when the intent parameter is e
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Empty Intent | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", intent: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -572,7 +574,7 @@ Verify that the launchApp method fails gracefully when the launchArgs parameter 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Empty LaunchArgs | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", launchArgs: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "launchArgs": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -590,7 +592,7 @@ Verify that the launchApp method fails gracefully when all parameters appId, int
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Without Params | Invoke launchApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -608,7 +610,7 @@ Verify that the launchApp method handles edge cases, such as extremely long stri
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Long Strings | Invoke launchApp on org.rdk.AppManager with appId: "A_very_long_string_exceeding_normal_limits_for_testing_purposes_appId", intent: "A_very_long_string_exceeding_normal_limits_for_testing_purposes_intent", launchArgs: "A_very_long_string_exceeding_normal_limits_for_testing_purposes_source"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "A_very_long_string_exceeding_normal_limits_for_testing_purposes_appId", "intent": "A_very_long_string_exceeding_normal_limits_for_testing_purposes_intent", "launchArgs": "A_very_long_string_exceeding_normal_limits_for_testing_purposes_source"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -628,14 +630,14 @@ Verify preloadApp with a valid param when provided with a valid appId
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | PreloadApp Valid Param | Invoke preloadApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check App Launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 
@@ -644,7 +646,7 @@ Verify preloadApp with a valid param when provided with a valid appId
 #### TestCase Post-condition 1: Terminate_Application
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Valid Param | Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -662,7 +664,7 @@ Verify preloadApp with an empty string as appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | PreloadApp Empty AppId | Invoke preloadApp on org.rdk.AppManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -680,7 +682,7 @@ Verify preloadApp with an empty string as launchArgs
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | PreloadApp Empty LaunchArgs | Invoke preloadApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", launchArgs: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "launchArgs": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -698,7 +700,7 @@ Verify preloadApp with a appId containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Preload App Special Char AppId | Invoke preloadApp on org.rdk.AppManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -716,7 +718,7 @@ Verify preloadApp with launchArgs containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | PreloadApp Special Char LaunchArgs | Invoke preloadApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", launchArgs: "()*^!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "launchArgs": "()*^!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -734,7 +736,7 @@ Verify preloadApp with a appId containing only numeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | PreloadApp with Numeric AppId | Invoke preloadApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": 123456}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -752,7 +754,7 @@ Verify preloadApp with launchArgs containing only numeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Preload App Numeric LaunchArgs | Invoke preloadApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "launchArgs": 123456}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -770,7 +772,7 @@ Verify preloadApp with an appId containing a mix of alphanumeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | PreloadApp with Alphanumeric AppId | Invoke preloadApp on org.rdk.AppManager with appId: "abc123XYZ"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": "abc123XYZ"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message`ERROR_GENERAL` |
 
 ---
@@ -788,7 +790,7 @@ Verify preloadApp with launchArgs containing a mix of alphanumeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | PreloadApp with Alphanumeric LaunchArgs | Invoke preloadApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", launchArgs: "arg1Value2Test3"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "launchArgs": "arg1Value2Test3"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -808,14 +810,14 @@ Verify preloadApp with a appId that is a valid application but is already preloa
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | PreloadApp Valid AppId | Invoke preloadApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check App Launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 3 | PreloadApp Valid AppId Already Preloaded | Invoke preloadApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.preloadApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
@@ -825,7 +827,7 @@ Verify preloadApp with a appId that is a valid application but is already preloa
 #### TestCase Post-condition 1: Terminate_Application
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Valid Param | Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -845,7 +847,7 @@ Verify closeApp with valid appId
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Launch App Valid Params | Launch App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -854,7 +856,7 @@ Verify closeApp with valid appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Close App Valid Params | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### TestCase Post-condition
@@ -862,7 +864,7 @@ Verify closeApp with valid appId
 #### TestCase Post-condition 1: Terminate_Application
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Valid Param | Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -880,7 +882,7 @@ Verify closeApp with an invalid appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Close App Invalid AppId | Invoke closeApp on org.rdk.LifecycleManager with appId: "InvalidAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "InvalidAppId"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -898,7 +900,7 @@ Verify closeApp with an empty appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Close App Empty AppId | Invoke closeApp on org.rdk.LifecycleManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -916,7 +918,7 @@ Verify closeApp with an appId containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Close App Special Char AppId | Invoke closeApp on org.rdk.LifecycleManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -934,7 +936,7 @@ Verify closeApp with an appId that is valid but the app is not loaded in the dev
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Close App Valid NotLoaded | Invoke closeApp on org.rdk.LifecycleManager with appId: "Cobalt"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "Cobalt"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -954,7 +956,7 @@ Verify terminateApp with valid appId
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Launch App Valid Params | Launch App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -963,7 +965,7 @@ Verify terminateApp with valid appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Valid Param | Invoke terminateApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -981,7 +983,7 @@ Verify terminateApp with an invalid appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Invalid AppId | Invoke terminateApp on org.rdk.AppManager with appId: "InvalidAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "InvalidAppId"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -999,7 +1001,7 @@ Verify terminateApp with an empty appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Empty AppId | Invoke terminateApp on org.rdk.AppManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1017,7 +1019,7 @@ Verify terminateApp with an appId containing only numeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Numeric AppId | Invoke terminateApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1035,7 +1037,7 @@ Verify terminateApp with an appId containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Special Char AppId | Invoke terminateApp on org.rdk.AppManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1053,7 +1055,7 @@ Verify startSystemApp with a valid appId of an installed device application
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Start System App | Invoke startSystemApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.startSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -1071,7 +1073,7 @@ Verify startSystemApp with an invalid appId that does not exist in the device
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Start System App Invalid AppId | Invoke startSystemApp on org.rdk.AppManager with appId: "InvalidAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.startSystemApp", "params": {"appId": "InvalidAppId"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1089,7 +1091,7 @@ Verify startSystemApp with an empty string as appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Start System App Empty AppId | Invoke startSystemApp on org.rdk.AppManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.startSystemApp", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1107,7 +1109,7 @@ Verify startSystemApp with a appId containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Start System App Special Char | Invoke startSystemApp on org.rdk.AppManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.startSystemApp", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1125,7 +1127,7 @@ Verify startSystemApp with an appId containing only numeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Start System App Numeric AppId | Invoke startSystemApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.startSystemApp", "params": {"appId": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1143,7 +1145,7 @@ Verify stopSystemApp with a valid appId of an actively running device applicatio
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Stop System App | Invoke stopSystemApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -1161,7 +1163,7 @@ Verify stopSystemApp with a valid appId of a device application that is already 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Start System App | Invoke startSystemApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.startSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Stop System App | Invoke stopSystemApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Stop System App | Invoke stopSystemApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
@@ -1181,7 +1183,7 @@ Verify stopSystemApp with an invalid appId that does not exist in the device
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Stop System App Invalid AppId | Invoke stopSystemApp on org.rdk.AppManager with appId: "InvalidAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": "InvalidAppId"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1199,7 +1201,7 @@ Verify stopSystemApp with an empty string as the appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Stop System App Empty AppId | Invoke stopSystemApp on org.rdk.AppManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1217,7 +1219,7 @@ Verify stopSystemApp with a appId containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Stop System App Special Char | Invoke stopSystemApp on org.rdk.AppManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1235,7 +1237,7 @@ Verify stopSystemApp with a appId containing only numeric values
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Stop System App Numeric AppId | Invoke stopSystemApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1253,7 +1255,7 @@ Verify stopSystemApp with a appId containing a mix of alphanumeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Stop System App Alphanumeric AppId | Invoke stopSystemApp on org.rdk.AppManager with appId: "App123Alpha"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": "App123Alpha"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1273,7 +1275,7 @@ Verify killApp with valid appId
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Launch App Valid Params | Launch App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -1282,7 +1284,7 @@ Verify killApp with valid appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Kill App Valid Param | Invoke killApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.killApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -1300,7 +1302,7 @@ Verify killApp with an invalid appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Kill App Invalid AppId | Invoke killApp on org.rdk.AppManager with appId: "InvalidApp"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.killApp", "params": {"appId": "InvalidApp"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1318,7 +1320,7 @@ Verify killApp with an empty appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Kill App Empty AppId | Invoke killApp on org.rdk.AppManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.killApp", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1336,7 +1338,7 @@ Verify killApp with a numeric appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Kill App Numeric AppId | Invoke killApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.killApp", "params": {"appId": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1354,7 +1356,7 @@ Verify killApp with an appId containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Kill App Special Char AppId | Invoke killApp on org.rdk.AppManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.killApp", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1372,7 +1374,7 @@ Verify sendIntent with valid appId and valid intent
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Send Intent Valid Params | Invoke sendIntent on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", intent: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.sendIntent", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -1390,7 +1392,7 @@ Verify sendIntent with valid appId and an empty string for intent
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Send Intent ValidAppId EmptyIntent | Invoke sendIntent on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", intent: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.sendIntent", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1408,7 +1410,7 @@ Verify sendIntent with an empty string for appId and valid intent
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Send Intent EmptyAppId ValidIntent | Invoke sendIntent on org.rdk.AppManager with appId: "", intent: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.sendIntent", "params": {"appId": "", "intent": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1426,7 +1428,7 @@ Verify sendIntent with empty strings for all parameters appId and intent
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Send Intent Empty Params | Invoke sendIntent on org.rdk.AppManager with appId: "", intent: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.sendIntent", "params": {"appId": "", "intent": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1444,7 +1446,7 @@ Verify sendIntent with invalid appId and valid intent
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Send Intent Invalid AppId | Invoke sendIntent on org.rdk.AppManager with appId: "InvalidAppId", intent: "start"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.sendIntent", "params": {"appId": "InvalidAppId", "intent": "start"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1462,7 +1464,7 @@ Verify clearAppData with a valid appId of an installed application
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Clear App Data Valid AppId | Invoke clear on org.rdk.AppStorageManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppStorageManager.1.clear", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -1480,7 +1482,7 @@ Verify clearAppData with an invalid appId that does not exist in the device
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Clear App Data Invalid AppId | Invoke clear on org.rdk.AppStorageManager with appId: "InvalidAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppStorageManager.1.clear", "params": {"appId": "InvalidAppId"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1498,7 +1500,7 @@ Verify clearAppData with an empty string as appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Clear App Data Empty AppId | Invoke clear on org.rdk.AppStorageManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppStorageManager.1.clear", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1516,7 +1518,7 @@ Verify clearAppData with appId containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Clear App Data Special Characters | Invoke clear on org.rdk.AppStorageManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppStorageManager.1.clear", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1534,7 +1536,7 @@ Verify clearAppData with appId containing a very long string
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Clear App Data Long AppId | Invoke clear on org.rdk.AppStorageManager with appId: "A_very_long_string_characters_here"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppStorageManager.1.clear", "params": {"appId": "A_very_long_string_characters_here"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1552,7 +1554,7 @@ Verify clearAppData with appId containing only numeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Clear App Data Numeric AppId | Invoke clear on org.rdk.AppStorageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppStorageManager.1.clear", "params": {"appId": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1570,7 +1572,7 @@ Verify clearAppData with appId containing a mix of alphanumeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Clear App Data Alphanumeric AppId | Invoke clear on org.rdk.AppStorageManager with appId: "TestApp123"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppStorageManager.1.clear", "params": {"appId": "TestApp123"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1588,7 +1590,7 @@ Verify that clearAllAppData successfully clears all persistent data for all inst
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Clear All App Data | Invoke clearAllAppData on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.clearAllAppData"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -1606,7 +1608,7 @@ Verify setAppProperty sets key 'delay' to value '10' for the valid appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set App Property Delay 10 | Invoke setAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: "delay"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.setAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": "delay", "value": 10}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Verify Get App Property | Invoke getAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: "delay"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": "delay"}}' http://127.0.0.1:9998/jsonrpc` | Status matches expected value `10` |
 
@@ -1625,7 +1627,7 @@ Verify setAppProperty with all parameters empty.
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set App Property Empty Params | Invoke setAppProperty on org.rdk.AppManager with appId: "", key: "", value: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.setAppProperty", "params": {"appId": "", "key": "", "value": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1643,7 +1645,7 @@ Verify setAppProperty with numeric strings for all parameters.
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set App Property Numeric Params | Invoke setAppProperty on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.setAppProperty", "params": {"appId": 12345, "key": 67890, "value": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1661,7 +1663,7 @@ Verify setAppProperty with only special characters for all parameters.
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set App Property SpecialChars All | Invoke setAppProperty on org.rdk.AppManager with appId: "()^*!", key: "!*()", value: "@@@"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.setAppProperty", "params": {"appId": "()^*!", "key": "!*()", "value": "@@@"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1679,7 +1681,7 @@ Verify setAppProperty with invalid appId and valid key/value.
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set App Property InvalidAppId | Invoke setAppProperty on org.rdk.AppManager with appId: "Invalid@AppId!", key: "delay"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.setAppProperty", "params": {"appId": "Invalid@AppId!", "key": "delay", "value": 10}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1697,7 +1699,7 @@ Verify setAppProperty with valid appId, invalid key, valid value.
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set App Property InvalidKey | Invoke setAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: "Invalid#Key"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.setAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": "Invalid#Key", "value": 10}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1715,7 +1717,7 @@ Verify setAppProperty with valid appId/value and empty key.
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set App Property EmptyKey | Invoke setAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.setAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": "", "value": 10}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1733,7 +1735,7 @@ Verify getAppProperty with valid appId and invalid key
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify GetAppProperty | Invoke getAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: "InvalidKey"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": "InvalidKey"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1751,7 +1753,7 @@ Verify getAppProperty with valid appId and empty key
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify GetAppProperty | Invoke getAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1769,7 +1771,7 @@ Verify getAppProperty with invalid appId and valid key
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify GetAppProperty Invalid AppId Valid Key | Invoke getAppProperty on org.rdk.AppManager with appId: "InvalidAppId", key: "delay"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "InvalidAppId", "key": "delay"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1787,7 +1789,7 @@ Verify getAppProperty with invalid appId and invalid key
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Verify GetAppProperty Invalid Params | Invoke getAppProperty on org.rdk.AppManager with appId: "InvalidAppId", key: "InvalidKey"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "InvalidAppId", "key": "InvalidKey"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1805,7 +1807,7 @@ Verify getAppProperty with invalid appId and empty key.
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get App Property InvalidAppId EmptyKey | Invoke getAppProperty on org.rdk.AppManager with appId: "InvalidAppId", key: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "InvalidAppId", "key": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1823,7 +1825,7 @@ Verify getAppProperty with empty appId and valid key
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get App Property EmptyAppId ValidKey | Invoke getAppProperty on org.rdk.AppManager with appId: "", key: "delay"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "", "key": "delay"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1841,7 +1843,7 @@ Verify getAppProperty with empty appId and invalid key
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | GetAppProperty EmptyAppId InvalidKey | Invoke getAppProperty on org.rdk.AppManager with appId: "", key: "InvalidKey"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "", "key": "InvalidKey"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1859,7 +1861,7 @@ Verify getAppProperty with empty appId and empty key
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get App Property Empty Params | Invoke getAppProperty on org.rdk.AppManager with appId: "", key: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "", "key": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1877,7 +1879,7 @@ Verify the successful retrieval of the maximum number of running apps
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Max Running Apps | Invoke getMaxRunningApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getMaxRunningApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the max running apps count is returned successfully |
 
 ---
@@ -1895,7 +1897,7 @@ Verify getAppProperty with valid appId and valid key as pinlock
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get App Property Valid Params | Invoke getAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: "pinlock"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": "pinlock"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with empty/null response |
 
 ---
@@ -1913,7 +1915,7 @@ Verify getAppProperty with valid appId and valid key as inactivePriority
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get App Property Valid Params | Invoke getAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: "inactivePriority"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": "inactivePriority"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with empty/null response |
 
 ---
@@ -1931,7 +1933,7 @@ Verify getAppProperty with numeric appId and numeric key
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get App Property Numeric Params | Invoke getAppProperty on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": 123, "key": 456}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -1951,13 +1953,13 @@ Verify activateSystemApp with a valid appId of an installed device application
 #### TestCase Pre-condition 1: Start_System_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Start System App | Start System App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.startSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Activate System App | Invoke activateSystemApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.activateSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### TestCase Post-condition
@@ -1965,7 +1967,7 @@ Verify activateSystemApp with a valid appId of an installed device application
 #### TestCase Post-condition 1: Stop_System_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Stop System App | Stop System App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -1983,7 +1985,7 @@ Verify activateSystemApp with an invalid appId that does not exist in the device
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Activate System App Invalid AppId | Invoke activateSystemApp on org.rdk.AppManager with appId: "InvalidAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.activateSystemApp", "params": {"appId": "InvalidAppId"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2001,7 +2003,7 @@ Verify activateSystemApp with an empty string as appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Activate System App Empty AppId | Invoke activateSystemApp on org.rdk.AppManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.activateSystemApp", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2019,7 +2021,7 @@ Verify activateSystemApp with a appId containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Activate System App Special Char | Invoke activateSystemApp on org.rdk.AppManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.activateSystemApp", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2037,7 +2039,7 @@ Verify activateSystemApp with an appId containing only numeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Activate System App Numeric AppId | Invoke activateSystemApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.activateSystemApp", "params": {"appId": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2055,7 +2057,7 @@ Verify activateSystemApp fails gracefully when called without parameter
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Activate System App Without Param | Invoke activateSystemApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.activateSystemApp"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2075,14 +2077,14 @@ Verify deactivateSystemApp with a valid appId of an installed device application
 #### TestCase Pre-condition 1: Start_System_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Start System App | Start System App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.startSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Activate System App | Activate System App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.activateSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate System App | Invoke deactivateSystemApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.deactivateSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### TestCase Post-condition
@@ -2090,7 +2092,7 @@ Verify deactivateSystemApp with a valid appId of an installed device application
 #### TestCase Post-condition 1: Stop_System_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Stop System App | Stop System App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -2108,7 +2110,7 @@ Verify deactivateSystemApp with an invalid appId that does not exist in the devi
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate System App Invalid AppId | Invoke deactivateSystemApp on org.rdk.AppManager with appId: "InvalidAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.deactivateSystemApp", "params": {"appId": "InvalidAppId"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2126,7 +2128,7 @@ Verify deactivateSystemApp with an empty string as appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate System App Empty AppId | Invoke deactivateSystemApp on org.rdk.AppManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.deactivateSystemApp", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2144,7 +2146,7 @@ Verify deactivateSystemApp with a appId containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate System App Special Char | Invoke deactivateSystemApp on org.rdk.AppManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.deactivateSystemApp", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2162,7 +2164,7 @@ Verify deactivateSystemApp with an appId containing only numeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate System App Numeric AppId | Invoke deactivateSystemApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.deactivateSystemApp", "params": {"appId": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2180,7 +2182,7 @@ Verify deactivateSystemApp fails gracefully when called without parameter
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate System App Without Param | Invoke deactivateSystemApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.deactivateSystemApp"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2200,14 +2202,14 @@ Verify hibernateSystemApp with a valid appId of an installed device application
 #### TestCase Pre-condition 1: Start_System_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Start System App | Start System App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.startSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Activate System App | Activate System App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.activateSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Hibernate System App | Invoke hibernateSystemApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.hibernateSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### TestCase Post-condition
@@ -2215,7 +2217,7 @@ Verify hibernateSystemApp with a valid appId of an installed device application
 #### TestCase Post-condition 1: Stop_System_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Stop System App | Stop System App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.stopSystemApp", "params": {"appId": "<PACKAGEMANAGER_SYSTEM_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -2233,7 +2235,7 @@ Verify hibernateSystemApp with an invalid appId that does not exist in the devic
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Hibernate System App Invalid AppId | Invoke hibernateSystemApp on org.rdk.AppManager with appId: "InvalidAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.hibernateSystemApp", "params": {"appId": "InvalidAppId"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2251,7 +2253,7 @@ Verify hibernateSystemApp with an empty string as appId
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Hibernate System App Empty AppId | Invoke hibernateSystemApp on org.rdk.AppManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.hibernateSystemApp", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2269,7 +2271,7 @@ Verify hibernateSystemApp with a appId containing special characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Hibernate System App Special Char | Invoke hibernateSystemApp on org.rdk.AppManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.hibernateSystemApp", "params": {"appId": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2287,7 +2289,7 @@ Verify hibernateSystemApp with an appId containing only numeric characters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Hibernate System App Numeric AppId | Invoke hibernateSystemApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.hibernateSystemApp", "params": {"appId": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2305,7 +2307,7 @@ Verify hibernateSystemApp fails gracefully when called without parameter
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Hibernate System App Without Param | Invoke hibernateSystemApp on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.hibernateSystemApp"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -2323,7 +2325,7 @@ Verify the successful retrieval of the maximum inactive ram usage
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Max Inactive Ramusage | Invoke getMaxInactiveRamUsage on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getMaxInactiveRamUsage"}' http://127.0.0.1:9998/jsonrpc` | Verify that the max inactive ram usage is returned successfully |
 
 ---
@@ -2343,14 +2345,14 @@ Verify that an app can be launched successfully after performing lock operation 
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Lock Package ValidParameters | Invoke lock on org.rdk.PackageManagerRDKEMS with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Launch App After Lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check App Launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
@@ -2374,14 +2376,14 @@ Verify that an app can be launch, terminate, lock and unlock successfully
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Before Lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check App Launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 3 | Terminate App Valid Param | Invoke terminateApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2405,14 +2407,14 @@ Verify that an app can be launch, kill, lock and unlock successfully
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Before Lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check App Launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 3 | Kill App Valid Param | Invoke killApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.killApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2436,14 +2438,14 @@ Verify that an app can be launch, close, lock and unlock successfully
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Before Lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check App Launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 3 | Close App Valid Params | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2455,7 +2457,7 @@ Verify that an app can be launch, close, lock and unlock successfully
 #### TestCase Post-condition 1: Terminate_the_Launched_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Valid Param | Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -2475,14 +2477,14 @@ Verify that appLifecycleStateChanged event is received with correct parameters w
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check AppLifecycleStateChanged Event After Launch | Listen for event Event_On_App_Lifecycle_State_Changed | Verify that event data is validated successfully |
 | 3 | Close App Valid Params | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2506,14 +2508,14 @@ Verify that appLifecycleStateChanged event is received with correct parameters w
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check AppLifecycleStateChanged Event After Launch | Listen for event Event_On_App_Lifecycle_State_Changed | Verify that event data is validated successfully |
 | 3 | Kill App Valid Param | Invoke killApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.killApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2536,14 +2538,14 @@ Verify that appLifecycleStateChanged event is received with correct parameters w
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check AppLifecycleStateChanged Event After Launch | Listen for event Event_On_App_Lifecycle_State_Changed | Verify that event data is validated successfully |
 | 3 | Terminate App Valid Param | Invoke terminateApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2566,14 +2568,14 @@ Check that an app can be launched successfully after terminating the app which i
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App First Time | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check AppLifecycleStateChanged Event After Launch | Listen for event Event_On_App_Lifecycle_State_Changed | Verify that event data is validated successfully |
 | 3 | Terminate App Valid Param | Invoke terminateApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2598,14 +2600,14 @@ Verify that the launched app is reflected in the list of loaded apps
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check AppLifecycleStateChanged Event After Launch | Listen for event Event_On_App_Lifecycle_State_Changed | Verify that event data is validated successfully |
 | 3 | Get Loaded Apps After Launch | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
@@ -2615,7 +2617,7 @@ Verify that the launched app is reflected in the list of loaded apps
 #### TestCase Post-condition 1: Terminate_the_Launched_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Valid Param | Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -2635,14 +2637,14 @@ Verify_that the closed app is no longer reflected in the list of loaded apps
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check AppLifecycleStateChanged Event After Launch | Listen for event Event_On_App_Lifecycle_State_Changed | Verify that event data is validated successfully |
 | 3 | Close App Valid Param | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2653,7 +2655,7 @@ Verify_that the closed app is no longer reflected in the list of loaded apps
 #### TestCase Post-condition 1: Terminate_the_Launched_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Terminate App Valid Param | Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -2673,14 +2675,14 @@ Verify that the killed app is no longer reflected in the list of loaded apps
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check AppLifecycleStateChanged Event After Launch | Listen for event Event_On_App_Lifecycle_State_Changed | Verify that event data is validated successfully |
 | 3 | Kill App Valid Param | Invoke killApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.killApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2703,14 +2705,14 @@ Verify that the terminated app is no longer reflected in the list of loaded apps
 #### TestCase Pre-condition 1: Terminate_Existing_App
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check AppLifecycleStateChanged Event After Launch | Listen for event Event_On_App_Lifecycle_State_Changed | Verify that event data is validated successfully |
 | 3 | Terminate App Valid Param | Invoke terminateApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2718,10 +2720,17 @@ Verify that the terminated app is no longer reflected in the list of loaded apps
 
 ## Plugin Post-conditions
 
-### Plugin Post-condition 1: Uninstall_Package
+
+### Plugin Post-condition 1: Unregister_Events
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
+| 1 | Unsubscribe from the onAppLifecycleStateChanged event | Unregister the WebSocket event listener for `onAppLifecycleStateChanged` to stop receiving `onAppLifecycleStateChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.unregister", "params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+
+### Plugin Post-condition 2: Uninstall_Package
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check Package Info | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
@@ -2730,7 +2739,7 @@ Verify that the terminated app is no longer reflected in the list of loaded apps
 ## Test Attributes
 
 | Attribute | Value |
-|-----------|-------|
+| --- | --- |
 | Supported Models | Video Accelerator, RPI Client |
 | Estimated Duration | 15 minutes |
 | Priority | Medium |

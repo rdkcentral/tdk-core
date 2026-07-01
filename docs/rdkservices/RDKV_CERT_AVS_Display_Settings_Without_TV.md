@@ -27,7 +27,7 @@ accessible via JSON-RPC under the callsign `org.rdk.DisplaySettingsWithoutTV` (v
 ## APIs Under Test
 
 | API | Description |
-|-----|-------------|
+| --- | --- |
 | `getActiveInput` | Get the active input status |
 | `getConnectedAudioPorts` | Get the connected audio port details |
 | `getConnectedVideoDisplays` | Get the connected video display details |
@@ -43,18 +43,18 @@ accessible via JSON-RPC under the callsign `org.rdk.DisplaySettingsWithoutTV` (v
 ### Plugin Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DisplaySettings"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 2: Activate_HdcpProfile_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of HdcpProfile Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdcpProfile"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate HdcpProfile Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.HdcpProfile"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of HdcpProfile Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdcpProfile"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of HdcpProfile Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdcpProfile"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ## Test Cases
 
@@ -73,13 +73,13 @@ Check the EDID status when TV is disconnected
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` `true`, connected video displays list is empty (TV not connected) |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|------------------|
+| --- | --- | --- | --- |
 | 1 | Check EDID Status Of Disconnected Device | Invoke readEDID on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.readEDID"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` `false` (readEDID returns failure when TV is not connected) |
 
 ---
@@ -97,7 +97,7 @@ Checks whether getConnectedVideoDisplays API is returning empty list when TV is 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, HDMI input not present in connected video displays |
 
 ---
@@ -117,13 +117,13 @@ Checks active input status with and without passing video port name when TV is n
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` `true`, connected video displays list is empty (TV not connected) |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Active Input Status With Video Port | Invoke getActiveInput on org.rdk.DisplaySettings with videoDisplay: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getActiveInput", "params": {"videoDisplay": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` `true`, `activeInput`: `false` |
 | 2 | Check Active Input Status Without Video Port | Invoke getActiveInput on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getActiveInput"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` `true`, `activeInput`: `false` |
 
@@ -142,7 +142,7 @@ Checks whether getConnectedAudioPorts API does not return HDMI0 when TV is not c
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, HDMI input not present in connected video displays |
 | 2 | Check AudioPorts Connected Status | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, HDMI0 not present in connected audio ports |
 
@@ -161,7 +161,7 @@ Checks getHDCPStatus API response when TV is not connected
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, HDMI input not present in connected video displays |
 | 2 | Get HDCP Status | Invoke getHDCPStatus on org.rdk.HdcpProfile<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdcpProfile.1.getHDCPStatus"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` `true`, `HDCPStatus.isConnected`: `false`, `HDCPStatus.isHDCPCompliant`: `false`, `HDCPStatus.isHDCPEnabled`: `false` (all fields reflect disconnected state from Step 1) |
 
@@ -180,7 +180,7 @@ Checks getCurrentResolution API response when TV is not connected
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, HDMI input not present in connected video displays |
 | 2 | Get CurrentResolution Status | Invoke getCurrentResolution on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution"}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
 
@@ -199,7 +199,7 @@ Checks setCurrentResolution API response when TV is not connected
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, HDMI input not present in connected video displays |
 | 2 | Check SetCurrentResolution Status | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "HDMI0", resolution: "720p"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "HDMI0", "resolution": "720p", "persist": true}}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
 
@@ -218,7 +218,7 @@ Checks getDefaultResolution API response when TV is not connected
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, HDMI input not present in connected video displays |
 | 2 | Check GetDefaultResolution Status | Invoke getDefaultResolution on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDefaultResolution"}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
 
@@ -239,15 +239,15 @@ Checks portname API response when TV is not connected
 #### TestCase Pre-condition 1: Activate_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DisplayInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, HDMI input not present in connected video displays |
 | 2 | Check PortName Status | Invoke portname on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.portname"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
@@ -258,7 +258,7 @@ _No plugin-level post-conditions defined_
 ## Test Attributes
 
 | Attribute | Value |
-|-----------|-------|
+| --- | --- |
 | Supported Models | Video Accelerator, RPI Client |
 | Estimated Duration | 2 minutes |
 | Priority | Medium |

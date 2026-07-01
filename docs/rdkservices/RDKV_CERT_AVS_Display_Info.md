@@ -44,7 +44,7 @@ accessible via JSON-RPC under the callsign `DisplayInfo` (version 1)
 ## APIs Under Test
 
 | API | Description |
-|-----|-------------|
+| --- | --- |
 | `colorimetry` | Provides access to the display colorimetry |
 | `colorspace` | Provides access to the display color space |
 | `colourdepth` | Provides access to the display colour depth |
@@ -54,22 +54,22 @@ accessible via JSON-RPC under the callsign `DisplayInfo` (version 1)
 | `freegpuram` | Gets the free GPU DRAM memory in bytes |
 | `hdcpprotection` | Get HDCP Version |
 | `hdrsetting` | Gets HDR format in use |
-| `height` | Provide vertical resolution of TV. |
+| `height` | Provide vertical resolution of TV |
 | `heightincentimeters` | Gets the vertical size in centimeters |
-| `isaudiopassthrough` | Read isaudioPassthrough property on HDMI. |
+| `isaudiopassthrough` | Read isaudioPassthrough property on HDMI |
 | `portname` | Get Video output port on the STB used for connection to TV |
 | `quantizationrange` | Provides access to the display quantization range |
 | `stbcapabilities` | Gets HDR formats supported by STB |
 | `totalgpuram` | Gets the total GPU DRAM memory in bytes |
 | `tvcapabilities` | Gets HDR formats supported by TV |
 | `verticalfreq` | Get Vertical Frequency |
-| `width` | Provides horizontal resolution of TV. |
+| `width` | Provides horizontal resolution of TV |
 | `widthincentimeters` | Gets the horizontal size in centimeters |
 
 ## Events Under Test
 
 | Event | Description |
-|-------|-------------|
+| --- | --- |
 | `updated` | Fires on changing the resolution |
 
 ## Plugin Pre-conditions
@@ -77,24 +77,25 @@ accessible via JSON-RPC under the callsign `DisplayInfo` (version 1)
 ### Plugin Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DisplayInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 2: Activate_DisplaySettings_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DisplaySettings"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 3: Register_And_Listen_Events
 
-- Register and listen to event `Event_Pre_Post_Resolution_Change` on `DisplayInfo` plugin
-
-- Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Subscribe to the updated event | Register a WebSocket event listener for `updated` to receive `updated` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.register", "params": {"event": "updated", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ## Test Cases
 
@@ -113,13 +114,13 @@ Read isaudioPassthrough property on HDMI.
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | IsAudiopassthrough | Invoke isaudiopassthrough on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.isaudiopassthrough"}' http://127.0.0.1:9998/jsonrpc` | Response contains `isaudiopassthrough` boolean field — `true` if HDMI audio is passed through directly to the TV, `false` otherwise |
 
 ---
@@ -137,7 +138,7 @@ Is HDMI connected.
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | IsHDMIConnected | Invoke connected on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.connected"}' http://127.0.0.1:9998/jsonrpc` | Response contains `connected` boolean field — `true` if an HDMI display is currently connected, `false` otherwise |
 
 ---
@@ -155,7 +156,7 @@ Get width of the current resolution.
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 | 2 | DisplaySettings getsupportedresolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
 | 3 | Getresolutionwidth | Invoke width on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.width"}' http://127.0.0.1:9998/jsonrpc` | Response returns horizontal resolution width in pixels — value matches the width mapped from the current resolution retrieved in Step 2 |
@@ -175,7 +176,7 @@ Get height of the current resolution.
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 | 2 | DisplaySettings getsupportedresolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
 | 3 | Getresolutionheight | Invoke height on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.height"}' http://127.0.0.1:9998/jsonrpc` | Response returns vertical resolution height in pixels — value matches the height mapped from the current resolution retrieved in Step 2 |
@@ -197,13 +198,13 @@ Get Vertical frequency.
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Getverticalfrequency | Invoke verticalfreq on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.verticalfreq"}' http://127.0.0.1:9998/jsonrpc` | Response returns vertical refresh frequency in mHz as a non-zero positive integer |
 
 ---
@@ -223,13 +224,13 @@ Get HDCP version.
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Gethdcpversion | Invoke hdcpprotection on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.hdcpprotection"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current HDCP protocol version — one of `HdcpUnencrypted`, `Hdcp1X`, `Hdcp2X`, or `HdcpAuto` |
 
 ---
@@ -249,13 +250,13 @@ Get portname used for TV connection.
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Getportname | Invoke portname on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.portname"}' http://127.0.0.1:9998/jsonrpc` | Response returns a non-empty video output port name used for the TV connection |
 
 ---
@@ -275,13 +276,13 @@ Get EDID of connected display
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Connected Device  EDID Details | Invoke readEDID on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.readEDID"}' http://127.0.0.1:9998/jsonrpc` | EDID data string returned from the connected display via `org.rdk.DisplaySettings` (base64-encoded, non-empty) |
 | 2 | GetEDID | Invoke edid on DisplayInfo with length: "<DISPLAYINFO_EDID_DATA_LENGTH>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.edid", "params": {"length": "<DISPLAYINFO_EDID_DATA_LENGTH>"}}' http://127.0.0.1:9998/jsonrpc` | EDID data returned by `DisplayInfo` matches the EDID data retrieved from `org.rdk.DisplaySettings` in Step 1 |
 
@@ -302,17 +303,17 @@ Activates and deactivates the plugin
 #### TestCase Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
-> **Stress Loop:** The step sequence below forms one iteration block. It is repeated **`<STRESS_TEST_REPEAT_COUNT>`** times as set in the device configuration file (key: `STRESS_TEST_REPEAT_COUNT`).
+> **Stress Loop:** The step sequence below forms one iteration block. It is repeated **`<STRESS_TEST_REPEAT_COUNT>`** times as set in the device configuration file
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check DisplayInfo Active Status | Invoke status on Controller for DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Deactivate DisplayInfo Plugin | Invoke deactivate on Controller with callsign: "DisplayInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DisplayInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 3 | Activate DisplayInfo Plugin | Invoke activate on Controller with callsign: "DisplayInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DisplayInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
@@ -323,8 +324,8 @@ Activates and deactivates the plugin
 #### TestCase Post-condition 1: Check_PluginActive_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
-| 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| --- | --- | --- | --- |
+| 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
 
@@ -343,13 +344,13 @@ Gets the HDR formats supported by TV
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | GetHDRFormatsTV | Invoke tvcapabilities on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.tvcapabilities"}' http://127.0.0.1:9998/jsonrpc` | Response returns a non-empty array of HDR formats supported by the connected TV — each entry is one of `HdrOff`, `Hdr10`, `Hdr10Plus`, `HdrHlg`, `HdrDolbyvision`, `HdrTechnicolor` |
 
 ---
@@ -369,13 +370,13 @@ Gets the HDR formats supported by STB
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | GetHDRFormatsSTB | Invoke stbcapabilities on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.stbcapabilities"}' http://127.0.0.1:9998/jsonrpc` | Response returns a non-empty array of HDR formats supported by the STB — each entry is one of `HdrOff`, `Hdr10`, `Hdr10Plus`, `HdrHlg`, `HdrDolbyvision`, `HdrTechnicolor` |
 
 ---
@@ -395,13 +396,13 @@ Gets the HDR formats in use
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | GetHDRFormatInUse | Invoke hdrsetting on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.hdrsetting"}' http://127.0.0.1:9998/jsonrpc` | Response returns the HDR format currently active on the display — one of `HdrOff`, `Hdr10`, `Hdr10Plus`, `HdrHlg`, `HdrDolbyvision`, `HdrTechnicolor` |
 
 ---
@@ -421,13 +422,13 @@ Gets the total GPU DRAM memory in bytes
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Total GPU RAM | Invoke totalgpuram on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.totalgpuram"}' http://127.0.0.1:9998/jsonrpc` | Response returns total GPU DRAM memory in bytes as a non-zero positive integer |
 
 ---
@@ -447,13 +448,13 @@ Gets the free GPU DRAM memory in bytes
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Free GPU RAM | Invoke freegpuram on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.freegpuram"}' http://127.0.0.1:9998/jsonrpc` | Response returns free GPU DRAM memory in bytes as a non-negative integer (value ≤ `totalgpuram`) |
 
 ---
@@ -473,13 +474,13 @@ Gets the horizontal size in centimeters
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Width In Centimeters | Invoke widthincentimeters on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.widthincentimeters"}' http://127.0.0.1:9998/jsonrpc` | Response returns horizontal screen size in centimeters as a non-zero positive integer |
 
 ---
@@ -499,13 +500,13 @@ Gets the vertical size in centimeters
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Height In Centimeters | Invoke heightincentimeters on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.heightincentimeters"}' http://127.0.0.1:9998/jsonrpc` | Response returns vertical screen size in centimeters as a non-zero positive integer |
 
 ---
@@ -523,7 +524,7 @@ Checks for the Resolution Post Change event
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 | 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
 | 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the current resolution is returned successfully |
@@ -550,13 +551,13 @@ Checks the HDMI connection status when TV is not connected
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | IsHDMIConnected | Invoke connected on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.connected"}' http://127.0.0.1:9998/jsonrpc` | `connected`: `false` — HDMI display is not connected (test requires TV disconnected as pre-condition) |
 
 ---
@@ -576,13 +577,13 @@ Gets the display color space
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Color Space | Invoke colorspace on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.colorspace"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current display color space — one of `FORMATUNKNOWN`, `FORMATOTHER`, `FORMATRGB444`, `FORMATYCBCR444`, `FORMATYCBCR422`, `FORMATYCBCR420` |
 
 ---
@@ -602,13 +603,13 @@ Gets the display colour depth
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Colour Depth | Invoke colourdepth on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.colourdepth"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current display colour depth — one of `COLORDEPTHUNKNOWN`, `COLORDEPTH8BIT`, `COLORDEPTH10BIT`, `COLORDEPTH12BIT` |
 
 ---
@@ -628,13 +629,13 @@ Gets the display quantization range
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Quantization Range | Invoke quantizationrange on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.quantizationrange"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current display quantization range — one of `QUANTIZATIONRANGEUNKNOWN`, `QUANTIZATIONRANGELIMITED`, `QUANTIZATIONRANGEFULL` |
 
 ---
@@ -654,13 +655,13 @@ Gets the display colorimetry
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Colorimetry | Invoke colorimetry on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.colorimetry"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current display colorimetry — one of the values configured in `DISPLAYINFO_SUPPORTED_COLORIMETRY_LIST` (e.g., `BT2020cL`, `BT2020ncl`, `DCI_P3`, `Sycc601`) |
 
 ---
@@ -680,13 +681,13 @@ Gets the display Electro Optical Transfer Function
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get EOTF | Invoke eotf on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.eotf"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current Electro Optical Transfer Function in use — one of `EOTFUNKNOWN`, `EOTFOTHER`, `EOTFBT1886`, `EOTFBT2100`, `EOTFSMPTEST2084` |
 
 ---
@@ -706,21 +707,21 @@ Validates statechange event on Activating/deactivating the plugin
 #### TestCase Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DisplayInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate DisplayInfo Plugin | Invoke deactivate on Controller with callsign: "DisplayInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DisplayInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | `statechange` event received; callsign = `displayinfo`, state = `"deactivated"` |
-| 3 | Check PluginActive Status | Invoke status on Controller for DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 2 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `displayinfo` with state `"deactivated"` |
+| 3 | Check PluginActive Status | Invoke status on Controller for DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate DisplayInfo Plugin | Invoke activate on Controller with callsign: "DisplayInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DisplayInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | `statechange` event received; callsign = `displayinfo`, state = `"activated"` |
-| 6 | Check PluginActive Status | Invoke status on Controller for DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `displayinfo` with state `"activated"` |
+| 6 | Check PluginActive Status | Invoke status on Controller for DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
 
@@ -737,7 +738,7 @@ Checks for the Resolution Pre Change event
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 | 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
 | 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the current resolution is returned successfully |
@@ -749,12 +750,19 @@ Checks for the Resolution Pre Change event
 
 ## Plugin Post-conditions
 
-_No plugin-level post-conditions defined_
+
+### Plugin Post-condition 1: Unregister_Events
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Unsubscribe from the updated event | Unregister the WebSocket event listener for `updated` to stop receiving `updated` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.unregister", "params": {"event": "updated", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 2 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+
 
 ## Test Attributes
 
 | Attribute | Value |
-|-----------|-------|
+| --- | --- |
 | Supported Models | Video Accelerator, RPI Client |
 | Estimated Duration | 20 minutes |
 | Priority | Medium |

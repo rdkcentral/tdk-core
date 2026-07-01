@@ -41,7 +41,7 @@ accessible via JSON-RPC under the callsign `org.rdk.DownloadManager` (version 1)
 ## APIs Under Test
 
 | API | Description |
-|-----|-------------|
+| --- | --- |
 | `cancel` | Cancels an ongoing download |
 | `delete` | Deletes a package |
 | `download` | Downloads a file from the specified URL |
@@ -55,18 +55,18 @@ accessible via JSON-RPC under the callsign `org.rdk.DownloadManager` (version 1)
 ### Plugin Pre-condition 1: Activate_AppStorageManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppStorageManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of AppStorageManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 2: Activate_DownloadManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ## Test Cases
 
@@ -83,7 +83,7 @@ Verify that the download method works correctly with valid parameters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download ValidParameters | Invoke download on org.rdk.DownloadManager with url: "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 2 | Delete Package | Invoke delete on org.rdk.DownloadManager with fileLocator: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.delete", "params": {"fileLocator": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
@@ -102,7 +102,7 @@ Verify that the getStorageDetails method functions correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | GetStorageDetails | Invoke getStorageDetails on org.rdk.DownloadManager with type: "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>", id: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.getStorageDetails", "params": {"type": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>", "id": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that storage details are returned with valid non-empty values |
 | 2 | Uninstall | Invoke uninstall on org.rdk.PackageManagerRDKEMS with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Verify Uninstalled Package | Invoke listPackages on org.rdk.PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the package is successfully uninstalled |
@@ -122,7 +122,7 @@ Verify that the cancel method handles empty parameters correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Cancel EmptyParameters | Invoke cancel on org.rdk.DownloadManager with downloadId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.cancel", "params": {"downloadId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -140,7 +140,7 @@ Verify that the delete method handles empty fileLocator correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Delete EmptyFileLocator | Invoke delete on org.rdk.DownloadManager with fileLocator: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.delete", "params": {"fileLocator": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -158,7 +158,7 @@ Verify that the delete method handles invalid fileLocator correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Delete InvalidFileLocator | Invoke delete on org.rdk.DownloadManager with fileLocator: "invalid_file_locator"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.delete", "params": {"fileLocator": "invalid_file_locator"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -176,7 +176,7 @@ Verify delete method with valid parameters and perform two consecutive delete op
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download ValidParameters | Invoke download on org.rdk.DownloadManager with url: "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 2 | First Delete Package | *(Conditional statement executed only if package/app is currently present)*<br>Invoke delete on org.rdk.DownloadManager with fileLocator: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.delete", "params": {"fileLocator": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Second Delete Package | *(Conditional statement executed only if package/app is currently present)*<br>Invoke delete on org.rdk.DownloadManager with fileLocator: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.delete", "params": {"fileLocator": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
@@ -196,7 +196,7 @@ Verify download, pause, resume and delete package functionality
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download ValidParameters | Invoke download on org.rdk.DownloadManager with url: "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 2 | Progress Check During Download | Invoke progress on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that download progress is reported successfully (0-100%) |
 | 3 | Pause Download | Invoke pause on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.pause", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -221,7 +221,7 @@ Verify download, pause and cancel package functionality
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download ValidParameters | Invoke download on org.rdk.DownloadManager with url: "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 2 | Progress Check During Download | Invoke progress on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that download progress is reported successfully (0-100%) |
 | 3 | Pause Download | Invoke pause on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.pause", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -244,7 +244,7 @@ Verify download with multiple pause and resume operations followed by delete
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download ValidParameters | Invoke download on org.rdk.DownloadManager with url: "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 2 | Progress Check During Download | Invoke progress on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that download progress is reported successfully (0-100%) |
 | 3 | Download Multiple Pause Resume Operations | Invoke resume on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.resume", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Pause and Resume calls succeed for each iteration with null/empty response |
@@ -265,7 +265,7 @@ Verify download and cancel package functionality
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download ValidParameters | Invoke download on org.rdk.DownloadManager with url: "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 2 | Progress Check During Download | Invoke progress on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that download progress is reported successfully (0-100%) |
 | 3 | Cancel Download | Invoke cancel on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.cancel", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -285,7 +285,7 @@ Verify download, pause, delete, resume and delete package functionality
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download ValidParameters | Invoke download on org.rdk.DownloadManager with url: "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 2 | Progress Check During Download | Invoke progress on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that download progress is reported successfully (0-100%) |
 | 3 | Pause Download | Invoke pause on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.pause", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -311,7 +311,7 @@ Check cancel package functionality with empty parameter
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Cancel Download Empty Parameter | Invoke cancel on org.rdk.DownloadManager with downloadId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.cancel", "params": {"downloadId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -329,7 +329,7 @@ Check cancel package functionality with invalid parameter
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Cancel Download Invalid Parameter | Invoke cancel on org.rdk.DownloadManager with downloadId: "invalid_handle"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.cancel", "params": {"downloadId": "invalid_handle"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -347,7 +347,7 @@ Verify that the download method handles empty URL correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download Empty URL | Invoke download on org.rdk.DownloadManager with url: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -365,7 +365,7 @@ Verify that the download method handles invalid URL correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download Invalid URL | Invoke download on org.rdk.DownloadManager with url: "http://invalid.com/"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "http://invalid.com/"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -383,7 +383,7 @@ Verify that the pause method handles empty parameters correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Pause Download Empty Parameter | Invoke pause on org.rdk.DownloadManager with downloadId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.pause", "params": {"downloadId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -401,7 +401,7 @@ Verify that the pause method handles invalid parameters correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Pause Download Invalid Parameter | Invoke pause on org.rdk.DownloadManager with downloadId: "invalid_download_id"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.pause", "params": {"downloadId": "invalid_download_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -419,7 +419,7 @@ Verify that the resume method handles empty parameters correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Resume Download Empty Parameter | Invoke resume on org.rdk.DownloadManager with downloadId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.resume", "params": {"downloadId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -437,7 +437,7 @@ Verify that the resume method handles invalid parameters correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Resume Download Invalid Parameter | Invoke resume on org.rdk.DownloadManager with downloadId: "invalid_download_id"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.resume", "params": {"downloadId": "invalid_download_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -455,7 +455,7 @@ Verify that the progress method handles empty parameters correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Progress Download Empty Parameter | Invoke progress on org.rdk.DownloadManager with downloadId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -473,7 +473,7 @@ Verify that the progress method handles invalid parameters correctly
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Progress Download Invalid Parameter | Invoke progress on org.rdk.DownloadManager with downloadId: "invalid_download_id"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "invalid_download_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -491,7 +491,7 @@ Verify that the download method works correctly with optional parameters
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download ValidParameters | Invoke download on org.rdk.DownloadManager with url: "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>", priority: "true", retries: "0", rateLimit: "0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>", "priority": true, "retries": 0, "rateLimit": 0}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 2 | Form Package FileLocator URL | Downloadmanager form filelocator url on the device | Verify that the file locator URL is formed successfully |
 | 3 | Check Package Status Before Install | Check downloaded package status on the device | Downloaded package checksum matches expected value: `<PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE>` |
@@ -512,7 +512,7 @@ Verify download, ratelimit, pause, resume and delete package functionality
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Download ValidParameters | Invoke download on org.rdk.DownloadManager with url: "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 2 | Form Package FileLocator URL | Downloadmanager form filelocator url on the device | Verify that the file locator URL is formed successfully |
 | 3 | Progress Check During Download | Invoke progress on org.rdk.DownloadManager with downloadId: "<DOWNLOAD_ID>" (wait 10 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<DOWNLOAD_ID>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that download progress is reported successfully (0-100%) |
@@ -532,7 +532,7 @@ _No plugin-level post-conditions defined_
 ## Test Attributes
 
 | Attribute | Value |
-|-----------|-------|
+| --- | --- |
 | Supported Models | Video Accelerator, RPI Client |
 | Estimated Duration | 30 minutes |
 | Priority | Medium |

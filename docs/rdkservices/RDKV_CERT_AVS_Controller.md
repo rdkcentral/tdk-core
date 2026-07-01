@@ -45,7 +45,7 @@ accessible via JSON-RPC under the callsign `Controller` (version 1)
 ## APIs Under Test
 
 | API | Description |
-|-----|-------------|
+| --- | --- |
 | `activate` | Activates a plugin |
 | `configuration` | Provides access to the configuration object of a service |
 | `deactivate` | deactivates a plugin |
@@ -63,7 +63,7 @@ accessible via JSON-RPC under the callsign `Controller` (version 1)
 ## Events Under Test
 
 | Event | Description |
-|-------|-------------|
+| --- | --- |
 | `all` | Signals each and every event in the system |
 | `statechange` | Signals a plugin state change |
 
@@ -72,16 +72,17 @@ accessible via JSON-RPC under the callsign `Controller` (version 1)
 ### Plugin Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.System"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 2: Register_And_Listen_Events
 
-- Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
-
-- Register and listen to event `Event_Controller_All` on `Controller` plugin
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 2 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ## Test Cases
 
@@ -98,7 +99,7 @@ Starts the network discovery
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Start Discovery | Invoke startdiscovery on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.startdiscovery", "params": {"ttl": 2}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Get Discovery Results | Invoke discoveryresults on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.discoveryresults"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Response contains array of discovered devices — each entry includes `locator`, `latency`, `model` and `secure` fields |
 
@@ -117,7 +118,7 @@ Status of the subsystems
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Subsystems Status | Invoke subsystems on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.subsystems"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Response contains a non-empty array of subsystem objects — each entry includes `name` (string) and `initialized` (boolean) fields |
 
 ---
@@ -135,7 +136,7 @@ Gives information about the framework process
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Process Info | Invoke processinfo on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.processinfo"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Response contains framework process details — `id` (PID), `path` (executable path), `memory` (allocated memory in bytes) and `threads` (active thread count) fields are present with non-empty values |
 
 ---
@@ -153,7 +154,7 @@ Gets the value of the environment variables
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Environment Variable | Invoke environment on Controller for <CONTROLLER_ENVIRONMENT_VARIABLES><br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.environment@<CONTROLLER_ENVIRONMENT_VARIABLES>"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Response contains the value of the requested environment variable as a non-empty string |
 
 ---
@@ -171,7 +172,7 @@ Gives information about the framework process
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Active Connections Info | Invoke links on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.links"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Response contains a non-empty array of active JSON-RPC connections — each entry includes `id`, `activity`, `remote` and `state` fields |
 
 ---
@@ -189,7 +190,7 @@ Gets the plugin current status
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Plugins Status | Invoke status on Controller for <Supported_Plugins><br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@<Supported_Plugins>"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Plugin state returned for each supported plugin — `callsign`, `state`, `module` and `version` fields are present |
 
 ---
@@ -207,7 +208,7 @@ Gets the configuration of DeviceInfo plugin
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Configuration | Invoke configuration on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.configuration@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Response contains the non-empty JSON configuration object of the `DeviceInfo` plugin (includes `callsign`, `classname`, `locator` and `autostart` fields) |
 
 ---
@@ -225,7 +226,7 @@ Stores the configuration
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Store Configuration | Invoke storeconfig on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.storeconfig"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Current runtime configuration saved to persistent storage successfully |
 
 ---
@@ -243,7 +244,7 @@ Removes contents of a directory from the persistent storage
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Execute Command | Create test file TDK_TEST_FILE.txt at <CONTROLLER_FILE_DELETE_PATH> on the device | Confirm that the file is created successfully at the specified path |
 | 2 | Delete Directory Contents | Invoke delete on Controller with path: "TDK_TEST_FILE.txt"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.delete", "params": {"path": "TDK_TEST_FILE.txt"}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` File `TDK_TEST_FILE.txt` removed from persistent storage successfully |
 | 3 | Execute Command | Verify file no longer exists at <CONTROLLER_FILE_DELETE_PATH> on the device | Expected `File does not exist` File is confirmed absent from the filesystem |
@@ -253,7 +254,7 @@ Removes contents of a directory from the persistent storage
 #### TestCase Post-condition 1: Delete_Test_files
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Execute Command | Delete test file on the device | Verify that the external function executed successfully and reference data is collected |
 
 ---
@@ -271,7 +272,7 @@ Checks the plugin status
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` System reboot initiated successfully |
 | 2 | Check Plugins Status | Invoke status on Controller for <Supported_Plugins><br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@<Supported_Plugins>"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Each plugin is in its expected default state after reboot (state matches the configured default — `activated`, `deactivated`, or `suspended`) |
 
@@ -290,7 +291,7 @@ Checks whether WPE Process is running or not
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check WPE Process | Verify WPE processes listed in WPE_PROCESSES_LIST are running on the device | Expected all WPE processes from `<WPE_PROCESSES_LIST>` are active and running |
 
 ---
@@ -310,23 +311,23 @@ Checks the StateChange and All Events by activating and deactivating the DeviceI
 #### TestCase Pre-condition 1: Activate_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
-| 3 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | `statechange` event received; callsign = `deviceinfo`, state = `"deactivated"` |
-| 4 | Check All Event | Listen for Event_Controller_All event | Controller `all` event received; callsign = `deviceinfo`, state = `"deactivated"` |
+| 2 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+| 3 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `deviceinfo` with state `"deactivated"` |
+| 4 | Check All Event | Listen for Event_Controller_All event | Verify that the `all` event is received for callsign `deviceinfo` with state `"deactivated"` |
 | 5 | Activate DeviceInfo Plugin | Invoke activate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 6 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
-| 7 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | `statechange` event received; callsign = `deviceinfo`, state = `"activated"` |
-| 8 | Check All Event | Listen for Event_Controller_All event (wait 2s) | Controller `all` event received; callsign = `deviceinfo`, state = `"activated"` |
+| 6 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 7 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `deviceinfo` with state `"activated"` |
+| 8 | Check All Event | Listen for Event_Controller_All event (wait 2s) | Verify that the `all` event is received for callsign `deviceinfo` with state `"activated"` |
 
 ---
 
@@ -345,35 +346,35 @@ Checks whether able to make DeviceInfo plugin unavailable
 #### TestCase Pre-condition 1: Activate_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 2 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 3 | Set DeviceInfo Plugin Unavailable | Invoke unavailable on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unavailable", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` `DeviceInfo` plugin marked as unavailable |
-| 4 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `unavailable` |
-| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | `statechange` event received; callsign = `deviceinfo`, state = `"unavailable"` |
+| 4 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is unavailable |
+| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `deviceinfo` with state `"unavailable"` |
 | 6 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Plugin deactivated from unavailable state successfully |
-| 7 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 7 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 8 | Activate DeviceInfo Plugin | Invoke activate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 9 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 9 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### TestCase Post-condition
 
 #### TestCase Post-condition 1: Check_Device_Info_Plugin_State
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Deactivate Plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
 | 3 | Activate Plugin | *(Conditional statement executed only if previous step condition is met)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 4 | Check PluginActive Status | *(Conditional statement executed only if previous step condition is met)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 4 | Check PluginActive Status | *(Conditional statement executed only if previous step condition is met)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
 
@@ -392,15 +393,15 @@ Checks whether able to make the plugin unavailable in activated state
 #### TestCase Pre-condition 1: Activate_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set DeviceInfo Plugin Unavailable | Invoke unavailable on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unavailable", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `The service is in an illegal state!!!.` / `5` |
 
 ### TestCase Post-condition
@@ -408,11 +409,11 @@ Checks whether able to make the plugin unavailable in activated state
 #### TestCase Post-condition 1: Check_Device_Info_Plugin_State
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Deactivate Plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
 | 3 | Activate Plugin | *(Conditional statement executed only if previous step condition is met)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 4 | Check PluginActive Status | *(Conditional statement executed only if previous step condition is met)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 4 | Check PluginActive Status | *(Conditional statement executed only if previous step condition is met)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
 
@@ -431,35 +432,35 @@ Queries the DeviceInfo plugin APIs after setting it as unavailable
 #### TestCase Pre-condition 1: Activate_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 2 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 3 | Set DeviceInfo Plugin Unavailable | Invoke unavailable on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unavailable", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` `DeviceInfo` plugin marked as unavailable |
-| 4 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `unavailable` |
+| 4 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is unavailable |
 | 5 | Check Json Response of DeviceInfo Plugin | Invoke systeminfo on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.systeminfo"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
 | 6 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 7 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 7 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 8 | Activate DeviceInfo Plugin | Invoke activate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 9 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 9 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### TestCase Post-condition
 
 #### TestCase Post-condition 1: Check_Device_Info_Plugin_State
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Deactivate Plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
 | 3 | Activate Plugin | *(Conditional statement executed only if previous step condition is met)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 4 | Check PluginActive Status | *(Conditional statement executed only if previous step condition is met)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 4 | Check PluginActive Status | *(Conditional statement executed only if previous step condition is met)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
 
@@ -476,7 +477,7 @@ Sets the controller plugin as unavailable and validate the error message
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Controller Plugin Unavailable | Invoke unavailable on Controller with callsign: "Controller"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unavailable", "params": {"callsign": "Controller"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `method invocation not allowed.` / `-32604` |
 
 ---
@@ -494,7 +495,7 @@ Activates/Deactivates the controller plugin and validates the error code
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Activate Plugin | Invoke activate on Controller with callsign: "Controller"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "Controller"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `method invocation not allowed.` / `-32604` |
 | 2 | Deactivate Plugin | Invoke deactivate on Controller with callsign: "Controller"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "Controller"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `method invocation not allowed.` / `-32604` |
 
@@ -513,7 +514,7 @@ Passes the invalid environment variable and validates the error code
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Environment Variable | Invoke environment on Controller for invalid<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.environment@invalid"}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` — the environment variable `"invalid"` does not exist on the system |
 
 ---
@@ -533,20 +534,20 @@ Queries the DeviceInfo plugin APIs after deactivated it
 #### TestCase Pre-condition 1: Activate_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 2 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 3 | Check DeviceInfo API Response | Invoke systeminfo on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.systeminfo"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
 | 4 | Activate DeviceInfo Plugin | Invoke activate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 5 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
 
@@ -563,7 +564,7 @@ Give the empty path and validate the error message and code
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Delete Directory Contents | Invoke delete on Controller with path: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.delete", "params": {"path": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` — empty path is not a valid persistent storage path |
 
 ---
@@ -581,7 +582,7 @@ Check if able to get the error message when querying configuration for empty val
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Configuration | Invoke configuration on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.configuration"}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` — no plugin callsign specified in the request |
 
 ---
@@ -601,36 +602,36 @@ To make deviceinfo plugin unavailable and validates the error message on activat
 #### TestCase Pre-condition 1: Activate_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 2 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 3 | Set DeviceInfo Plugin Unavailable | Invoke unavailable on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unavailable", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` `DeviceInfo` plugin marked as unavailable |
-| 4 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `unavailable` |
-| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | `statechange` event received; callsign = `deviceinfo`, state = `"unavailable"` |
+| 4 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is unavailable |
+| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `deviceinfo` with state `"unavailable"` |
 | 6 | Activate DeviceInfo Plugin | Invoke activate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | API returns error `The service is in an illegal state!!!.` / `5` — plugin cannot be activated from unavailable state |
 | 7 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 8 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 8 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 9 | Activate DeviceInfo Plugin | Invoke activate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 10 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 10 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### TestCase Post-condition
 
 #### TestCase Post-condition 1: Check_Device_Info_Plugin_State
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Deactivate Plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
 | 3 | Activate Plugin | *(Conditional statement executed only if previous step condition is met)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 4 | Check PluginActive Status | *(Conditional statement executed only if previous step condition is met)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 4 | Check PluginActive Status | *(Conditional statement executed only if previous step condition is met)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
 
@@ -647,7 +648,7 @@ Validate error message by activating with invalid callsign
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Activate Plugin | Invoke activate on Controller with callsign: "invalid"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "invalid"}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` — callsign `"invalid"` is not a registered plugin |
 
 ---
@@ -665,7 +666,7 @@ Validate error message by activating with empty callsign
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Activate Plugin | Invoke activate on Controller with callsign: " "<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": " "}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` — empty callsign is not a registered plugin |
 
 ---
@@ -683,7 +684,7 @@ Validate error message by deactivating with invalid callsign
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate Plugin | Invoke deactivate on Controller with callsign: "invalid"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "invalid"}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` — callsign `"invalid"` is not a registered plugin |
 
 ---
@@ -701,17 +702,24 @@ Validate error message by deactivating with empty callsign
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate Plugin | Invoke deactivate on Controller with callsign: " "<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": " "}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` — empty callsign is not a registered plugin |
 
 ## Plugin Post-conditions
 
-_No plugin-level post-conditions defined_
+
+### Plugin Post-condition 1: Unregister_Events
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 2 | Unsubscribe from the all event | Unregister the WebSocket event listener for `all` to stop receiving `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "all", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+
 
 ## Test Attributes
 
 | Attribute | Value |
-|-----------|-------|
+| --- | --- |
 | Supported Models | Video Accelerator, RPI Client |
 | Estimated Duration | 7 minutes |
 | Priority | Medium |

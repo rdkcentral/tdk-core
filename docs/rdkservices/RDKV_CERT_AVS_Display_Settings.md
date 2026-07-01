@@ -119,7 +119,7 @@ accessible via JSON-RPC under the callsign `org.rdk.DisplaySettings` (version 1)
 ## APIs Under Test
 
 | API | Description |
-|-----|-------------|
+| --- | --- |
 | `enableSurroundDecoder` | Enable or disable the surround decoder |
 | `getActiveInput` | Get the active input status |
 | `getAssociatedAudioMixing` | Returns the Associated Audio Mixing status |
@@ -180,69 +180,66 @@ accessible via JSON-RPC under the callsign `org.rdk.DisplaySettings` (version 1)
 | `setAudioDelayOffset` | Set the audio delay offset value |
 | `setBassEnhancer` | Enable or disable the bass enhancer |
 | `setCurrentResolution` | Set the current resolution values |
-| `setDRCMode` | Set the DRC mode values  |
+| `setDRCMode` | Set the DRC mode values |
 | `setDialogEnhancement` | Set the dialog enhancement values |
 | `setDolbyVolumeMode` | Set the dolby volume mode as true or false |
 | `setEnableAudioPort` | Enable or disable specified audioPort based on the input audio port |
 | `setFaderControl` | Sets the set the mixerbalance betweeen main and associated audio |
-| `setGain` | Set the audio port gain value  |
+| `setGain` | Set the audio port gain value |
 | `setGraphicEqualizerMode` | Sets the Graphic  equalizer mode for specified audio port |
 | `setIntelligentEqualizerMode` | Set the intelligent equalizer mode values |
 | `setMISteering` | Enable or disable the MI Steering |
 | `setMS12AudioCompression` | Set the MS12Audio compression values |
 | `setMS12AudioProfile` | Configures selected MS12 Audio Profile |
 | `setMS12ProfileSettingsOverride` | Overrides individual MS12 audio settings in order to optimize the customer experience |
-| `setMuted` | Set the audio mute  |
+| `setMuted` | Set the audio mute |
 | `setPreferredColorDepth` | Sets the current color depth for the videoDisplay |
 | `setScartParameter` | Set Scart parameter values |
 | `setSoundMode` | Set the sound mode values |
 | `setSurroundVirtualizer` | Set the surround virtualizer values |
 | `setVideoPortStatusInStandby` | Set the video port status to be used in standby mode |
-| `setVolumeLevel` | Set the volume level value  |
+| `setVolumeLevel` | Set the volume level value |
 | `setVolumeLeveller` | Set the volume leveller values |
 | `setZoomSetting` | Set the zoom setting values |
 
 ## Events Under Test
 
 | Event | Description |
-|-------|-------------|
+| --- | --- |
 | `muteStatusChanged` | Triggered on resolution pre-change |
 | `resolutionChanged` | Fires on changing resolution |
 | `resolutionPreChange` | Triggered on resolution pre-change |
 | `volumeLevelChanged` | Triggered on resolution pre-change |
-| `zoomSettingUpdated` | Zoom settings updated event  |
+| `zoomSettingUpdated` | Zoom settings updated event |
 
 ## Plugin Pre-conditions
 
 ### Plugin Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state should be `activated` and `success` should be `true` |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DisplaySettings"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 2: Activate_System_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Plugin state should be `activated` and `success` should be `true` |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.System"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 3: Register_And_Listen_Events
 
-- Register and listen to event `Event_Zoom_Settings_Updated` on `DisplaySettings` plugin
-
-- Register and listen to event `Event_Resolution_Changed` on `DisplaySettings` plugin
-
-- Register and listen to event `Event_Resolution_PreChange` on `DisplaySettings` plugin
-
-- Register and listen to event `Event_MuteStatus_Changed` on `DisplaySettings` plugin
-
-- Register and listen to event `Event_VolumeLevel_Changed` on `DisplaySettings` plugin
-
-- Register and listen to event `Event_Controller_State_Changed` on `Controller` plugin
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Subscribe to the zoomSettingUpdated event | Register a WebSocket event listener for `zoomSettingUpdated` to receive `zoomSettingUpdated` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.register", "params": {"event": "zoomSettingUpdated", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 2 | Subscribe to the resolutionChanged event | Register a WebSocket event listener for `resolutionChanged` to receive `resolutionChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.register", "params": {"event": "resolutionChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 3 | Subscribe to the resolutionPreChange event | Register a WebSocket event listener for `resolutionPreChange` to receive `resolutionPreChange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.register", "params": {"event": "resolutionPreChange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 4 | Subscribe to the muteStatusChanged event | Register a WebSocket event listener for `muteStatusChanged` to receive `muteStatusChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.register", "params": {"event": "muteStatusChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 5 | Subscribe to the volumeLevelChanged event | Register a WebSocket event listener for `volumeLevelChanged` to receive `volumeLevelChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.register", "params": {"event": "volumeLevelChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 6 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ## Test Cases
 
@@ -259,7 +256,7 @@ Check whether settop displays all supported resoltions
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Settop Supported Resolutions | Invoke getSupportedSettopResolutions on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedSettopResolutions"}' http://127.0.0.1:9998/jsonrpc` | `supportedResolutions` list for settop should match the configured `SETTOP_SUPPORTED_RESOLUTIONS` values and `success` should be `true` |
 
 ---
@@ -277,7 +274,7 @@ Check whether settop displays supported TV resoltions
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get Supported Tv Resolutions | Invoke getSupportedTvResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedTvResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `supportedResolutions` list for TV should be non-empty and `success` should be `true` |
 
@@ -296,7 +293,7 @@ Check whether settop displays supported video displays
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Supported Video Displays | Invoke getSupportedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Expected `<SUPPORTED_VIDEO_DISPLAYS>` |
 
 ---
@@ -314,7 +311,7 @@ Check whether settop lists supported audio ports
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Supported Audio Ports | Invoke getSupportedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | Expected `<SUPPORTED_AUDIO_PORTS>` |
 
 ---
@@ -332,7 +329,7 @@ Check whether settop has HDR support or not
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Settop HDR Support Details | Invoke getSettopHDRSupport on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSettopHDRSupport"}' http://127.0.0.1:9998/jsonrpc` | `standards` list should include the configured `HDR_SUPPORT` values and `success` should be `true` |
 
 ---
@@ -352,13 +349,13 @@ Check whether TV has HDR support or not
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get TV HDR Support Details | Invoke getTvHDRSupport on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getTvHDRSupport"}' http://127.0.0.1:9998/jsonrpc` | `TVSUPPORTSHDR` should be `True` or `False` |
 
 ---
@@ -376,7 +373,7 @@ Check the EDID status of host
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Host EDID Details | Invoke readHostEDID on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.readHostEDID"}' http://127.0.0.1:9998/jsonrpc` | `EDID` field should be a non-empty base64-encoded string and `success` should be `true` |
 
 ---
@@ -396,13 +393,13 @@ Check the EDID status of connected device
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Connected Device  EDID Details | Invoke readEDID on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.readEDID"}' http://127.0.0.1:9998/jsonrpc` | `EDID` field should be a non-empty base64-encoded string and `success` should be `true` |
 
 ---
@@ -420,7 +417,7 @@ Check whether supported audio modes are able to set HDMI0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 3 | Get Supported Audio Modes | Invoke getSupportedAudioModes on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioModes", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `supportedAudioModes` list should be non-empty and `success` should be `true` |
@@ -433,7 +430,7 @@ Check whether supported audio modes are able to set HDMI0 port
 #### TestCase Post-condition 1: Revert_Sound_Mode
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Sound Mode | Get Sound Mode from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSoundMode", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `soundMode` should match the original value recorded in step 4; if it already matches, no revert is required |
 
 ---
@@ -451,7 +448,7 @@ Check whether supported zoom modes are able to set and get
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Zoom Setting | Invoke getZoomSetting on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getZoomSetting"}' http://127.0.0.1:9998/jsonrpc` | `zoomSetting` should match one of the configured `ZOOM_SETTINGS` values and `success` should be `true` |
 | 2 | Set Zoom Setting | Invoke setZoomSetting on org.rdk.DisplaySettings with zoomSetting: "<ZOOM_SETTINGS>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setZoomSetting", "params": {"zoomSetting": "<ZOOM_SETTINGS>"}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
 | 3 | Get Zoom Setting | Invoke getZoomSetting on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getZoomSetting"}' http://127.0.0.1:9998/jsonrpc` | `zoomSetting` should match the value set in step 2 |
@@ -472,7 +469,7 @@ Checks the negative scenario for video port status in standby
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get VideoPort Status InStandby | Invoke getVideoPortStatusInStandby on org.rdk.DisplaySettings with portName: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVideoPortStatusInStandby", "params": {"portName": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Unknown method.` |
 | 3 | Set VideoPort Status InStandby | Invoke setVideoPortStatusInStandby on org.rdk.DisplaySettings with portName: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVideoPortStatusInStandby", "params": {"portName": "<result_step_1>", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Unknown method.` |
@@ -492,7 +489,7 @@ Check whether MS12 audio compression values are able to set and get
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get MS12 Audio Compression | Invoke getMS12AudioCompression on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMS12AudioCompression"}' http://127.0.0.1:9998/jsonrpc` | `compressionlevel` should be a valid integer in the range `0–10` and `success` should be `true` |
 | 2 | Set MS12 Audio Compression (iterate each value) | Invoke setMS12AudioCompression on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMS12AudioCompression", "params": {"compresionLevel": <compression_level>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each compression level set |
 | 3 | Get MS12 Audio Compression (verify after each set) | Invoke getMS12AudioCompression on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMS12AudioCompression"}' http://127.0.0.1:9998/jsonrpc` | `compressionlevel` should match the value set in the corresponding iteration of step 2 and `success` should be `true` |
@@ -502,7 +499,7 @@ Check whether MS12 audio compression values are able to set and get
 #### TestCase Post-condition 1: Revert_MS12_Audio_Compression
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set MS12 Audio Compression | Set MS12Audio Compression on DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMS12AudioCompression", "params": {"compresionLevel": <original_level>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
 | 2 | Get MS12 Audio Compression | Get MS12Audio Compression from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMS12AudioCompression"}' http://127.0.0.1:9998/jsonrpc` | `compressionlevel` should match the original value recorded in step 1 and `success` should be `true` |
 
@@ -521,7 +518,7 @@ Check the current output settings of device
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Current Output Settings | Invoke getCurrentOutputSettings on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentOutputSettings"}' http://127.0.0.1:9998/jsonrpc` | `colorSpace` should be in `[0,1,2,3,4,5]`, `matrixCoefficients` should be in `[0,1,2,3,4,5,6,7]`, and `success` should be `true` |
 
 ---
@@ -539,7 +536,7 @@ Check the active input value
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Check Get Active Input | Invoke getActiveInput on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getActiveInput"}' http://127.0.0.1:9998/jsonrpc` | `activeInput` should be `True` or `False` and `success` should be `true` |
 
@@ -558,7 +555,7 @@ Set and get all the supported resolution by both TV and STB, also checks for the
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `supportedResolutions` list should be non-empty and `success` should be `true` |
 | 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `resolution` should be a valid resolution string and `success` should be `true` (record this value for post-condition revert) |
@@ -572,7 +569,7 @@ Set and get all the supported resolution by both TV and STB, also checks for the
 #### TestCase Post-condition 1: Revert_Resolution
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Resolution | Set Current Resolution on DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "<result_step_1>", "resolution": "<original_resolution>", "persist": true}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
 | 2 | Get Current Resolution | Get Current Resolution from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `resolution` should match the original value recorded in step 3 and `success` should be `true` |
 
@@ -591,7 +588,7 @@ Check whether dolby volume mode can enable and disable
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Dolby Volume Mode | Invoke getDolbyVolumeMode on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDolbyVolumeMode"}' http://127.0.0.1:9998/jsonrpc` | `dolbyVolumeMode` should be `true` or `false` and `success` should be `true` |
 | 2 | Set Dolby Volume Mode (iterate each value) | Invoke setDolbyVolumeMode on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setDolbyVolumeMode", "params": {"dolbyVolumeMode": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each value set |
 | 3 | Get Dolby Volume Mode (verify after each set) | Invoke getDolbyVolumeMode on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDolbyVolumeMode"}' http://127.0.0.1:9998/jsonrpc` | `dolbyVolumeMode` should match the value set in the corresponding iteration of step 2 and `success` should be `true` |
@@ -601,7 +598,7 @@ Check whether dolby volume mode can enable and disable
 #### TestCase Post-condition 1: Revert_Dolby_Volume_Mode
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Dolby Volume Mode | Set Dolby Volume Mode on DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setDolbyVolumeMode", "params": {"dolbyVolumeMode": <original_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
 
 ---
@@ -619,7 +616,7 @@ Check whether dialog enhancement values are able to set and get
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Dialog Enhancement | Invoke getDialogEnhancement on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDialogEnhancement"}' http://127.0.0.1:9998/jsonrpc` | `enhancerlevel` should be a valid integer and `success` should be `true` |
 | 2 | Set Dialog Enhancement (iterate each level) | Invoke setDialogEnhancement on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setDialogEnhancement", "params": {"enhancerlevel": <each_level>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each level set |
 | 3 | Get Dialog Enhancement (verify after each set) | Invoke getDialogEnhancement on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDialogEnhancement"}' http://127.0.0.1:9998/jsonrpc` | `enhancerlevel` should match the value set in the corresponding iteration of step 2 and `success` should be `true` |
@@ -639,7 +636,7 @@ Check whether intelligent equalizer mode values are able to set and get
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Intelligent Equalizer Mode | Invoke getIntelligentEqualizerMode on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getIntelligentEqualizerMode"}' http://127.0.0.1:9998/jsonrpc` | `intelligentEqualizerMode` should be a valid integer and `success` should be `true` |
 | 2 | Set Intelligent Equalizer Mode (iterate each mode) | Invoke setIntelligentEqualizerMode on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setIntelligentEqualizerMode", "params": {"intelligentEqualizerMode": <each_mode>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each mode set |
 | 3 | Get Intelligent Equalizer Mode (verify after each set) | Invoke getIntelligentEqualizerMode on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getIntelligentEqualizerMode"}' http://127.0.0.1:9998/jsonrpc` | `intelligentEqualizerMode` should match the value set in the corresponding iteration of step 2 and `success` should be `true` |
@@ -659,7 +656,7 @@ Check whether volume values are able to set and get for HDMI0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Volume Leveller | Invoke getVolumeLeveller on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLeveller", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `level` should be in range `[0, 10]`, `mode` should be in `[0, 1, 2]`, and `success` should be `true` |
 | 3 | Set Volume Leveller (iterate each level) | Invoke setVolumeLeveller on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLeveller", "params": {"audioPort": "HDMI0", "level": <each_level_value>, "mode": 1}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each level set |
@@ -680,7 +677,7 @@ Check whether DRC mode values are able to set and get for HDMI0
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get DRC Mode | Invoke getDRCMode on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDRCMode", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `DRCMode` should be `0` (line) or `1` (rf) and `success` should be `true` (record this value for post-condition revert) |
 | 3 | Set DRC Mode (iterate each mode) | Invoke setDRCMode on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setDRCMode", "params": {"audioPort": "HDMI0", "DRCMode": <each_drc_mode>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each mode set |
@@ -701,7 +698,7 @@ Check whether volume level values are able to set and get for HDMI0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Volume Level | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `volumeLevel` should be a valid integer in range `[0, 100]` and `success` should be `true` (record this value for post-condition revert) |
 | 3 | Set Volume Level (iterate each value) | Invoke setVolumeLevel on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLevel", "params": {"audioPort": "HDMI0", "volumeLevel": <each_level>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each volume level set |
@@ -722,7 +719,7 @@ Check whether audio port gain values are able to set and get for HDMI0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Gain | Invoke getGain on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getGain", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `gain` should be a valid float and `success` should be `true` (record this value for post-condition revert) |
 | 3 | Set Gain (iterate each value) | Invoke setGain on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setGain", "params": {"audioPort": "HDMI0", "gain": <each_gain_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each gain value set |
@@ -743,7 +740,7 @@ Check whether audio is able to mute and unmute  for HDMI0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Muted | Invoke getMuted on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Muted (iterate each value) | Invoke setMuted on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "HDMI0", "muted": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each value set |
@@ -764,7 +761,7 @@ Check whether audio delay values are able to set and get for HDMI0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Audio Delay | Invoke getAudioDelay on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAudioDelay", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `audioDelay` should be a valid integer and `success` should be `true` |
 | 3 | Set Audio Delay (iterate each value) | Invoke setAudioDelay on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAudioDelay", "params": {"audioPort": "HDMI0", "audioDelay": <each_delay_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each delay value set |
@@ -785,7 +782,7 @@ Check whether audio delay offset values are able to set and get for HDMI0
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Audio Delay Offset | Invoke getAudioDelayOffset on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAudioDelayOffset", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `audioDelayOffset` should be a valid integer and `success` should be `true` |
 | 3 | Set Audio Delay Offset (iterate each value) | Invoke setAudioDelayOffset on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAudioDelayOffset", "params": {"audioPort": "HDMI0", "audioDelayOffset": <each_offset_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each offset value set |
@@ -806,7 +803,7 @@ Check the the Atmos capability of the sink
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Sink Atmos Capability | Invoke getSinkAtmosCapability on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSinkAtmosCapability"}' http://127.0.0.1:9998/jsonrpc` | `atmos_capability` should be a valid integer (`0`, `1`, or `2`) and `success` should be `true` |
 
 ---
@@ -824,7 +821,7 @@ Check whether audio atmos output mode is possile to enable and disable
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Enable/Disable Audio Atmos Output Mode (iterate each value) | Invoke setAudioAtmosOutputMode on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAudioAtmosOutputMode", "params": {"enable": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each enable/disable value set |
 
 ---
@@ -842,7 +839,7 @@ Check the HDR capabilities of TV
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get TV HDR Capabilities | Invoke getTVHDRCapabilities on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getTVHDRCapabilities"}' http://127.0.0.1:9998/jsonrpc` | `capabilities` should be a valid integer bitmask and `success` should be `true` |
 
@@ -861,7 +858,7 @@ Check whether connected device is a repeater
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Is Connected Device Repeater | Invoke isConnectedDeviceRepeater on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.isConnectedDeviceRepeater"}' http://127.0.0.1:9998/jsonrpc` | `isDeviceRepeater` should be `true` or `false` and `success` should be `true` |
 
@@ -880,7 +877,7 @@ Check whether the default resolution is available in supported resolutions
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `supportedResolutions` list should be non-empty and `success` should be `true` |
 | 3 | Get Default Resolution | Invoke getDefaultResolution on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDefaultResolution"}' http://127.0.0.1:9998/jsonrpc` | `defaultResolution` should be present in the `supportedResolutions` list from step 2 and `success` should be `true` |
@@ -900,7 +897,7 @@ Check whether supported audio modes are able to set for SPDIF0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPDIF0` and `success` should be `true` |
 | 3 | Get Supported Audio Modes | Invoke getSupportedAudioModes on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioModes", "params": {"audioPort": "SPDIF0"}}' http://127.0.0.1:9998/jsonrpc` | `supportedAudioModes` list should be non-empty and `success` should be `true` |
@@ -923,7 +920,7 @@ Check whether supported audio modes are able to set for IDLR0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `IDLR0` and `success` should be `true` |
 | 3 | Get Supported Audio Modes | Invoke getSupportedAudioModes on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioModes", "params": {"audioPort": "IDLR0"}}' http://127.0.0.1:9998/jsonrpc` | `supportedAudioModes` list should be non-empty and `success` should be `true` |
@@ -946,7 +943,7 @@ Check whether supported audio modes are able to set for SPEAKER0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPEAKER0` and `success` should be `true` |
 | 3 | Get Supported Audio Modes | Invoke getSupportedAudioModes on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioModes", "params": {"audioPort": "SPEAKER0"}}' http://127.0.0.1:9998/jsonrpc` | `supportedAudioModes` list should be non-empty and `success` should be `true` |
@@ -969,7 +966,7 @@ Check whether volume values are able to set and get for SPDIF0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPDIF0` and `success` should be `true` |
 | 2 | Get Volume Leveller | Invoke getVolumeLeveller on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLeveller", "params": {"audioPort": "SPDIF0"}}' http://127.0.0.1:9998/jsonrpc` | `level` should be in range `[0, 10]`, `mode` should be in `[0, 1, 2]`, and `success` should be `true` |
 | 3 | Set Volume Leveller (iterate each level) | Invoke setVolumeLeveller on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLeveller", "params": {"audioPort": "SPDIF0", "level": <each_level_value>, "mode": 1}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each level set |
@@ -990,7 +987,7 @@ Check whether volume values are able to set and get for IDLR0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `IDLR0` and `success` should be `true` |
 | 2 | Get Volume Leveller | Invoke getVolumeLeveller on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLeveller", "params": {"audioPort": "IDLR0"}}' http://127.0.0.1:9998/jsonrpc` | `level` should be in range `[0, 10]`, `mode` should be in `[0, 1, 2]`, and `success` should be `true` |
 | 3 | Set Volume Leveller (iterate each level) | Invoke setVolumeLeveller on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLeveller", "params": {"audioPort": "IDLR0", "level": <each_level_value>, "mode": 1}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each level set |
@@ -1011,7 +1008,7 @@ Check whether volume values are able to set and get for SPEAKER0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPEAKER0` and `success` should be `true` |
 | 2 | Get Volume Leveller | Invoke getVolumeLeveller on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLeveller", "params": {"audioPort": "SPEAKER0"}}' http://127.0.0.1:9998/jsonrpc` | `level` should be in range `[0, 10]`, `mode` should be in `[0, 1, 2]`, and `success` should be `true` |
 | 3 | Set Volume Leveller (iterate each level) | Invoke setVolumeLeveller on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLeveller", "params": {"audioPort": "SPEAKER0", "level": <each_level_value>, "mode": 1}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each level set |
@@ -1032,7 +1029,7 @@ Check whether DRC mode values are able to set and get for SPDIF0
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPDIF0` and `success` should be `true` |
 | 2 | Get DRC Mode | Invoke getDRCMode on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDRCMode", "params": {"audioPort": "SPDIF0"}}' http://127.0.0.1:9998/jsonrpc` | `DRCMode` should be `0` (line) or `1` (rf) and `success` should be `true` |
 | 3 | Set DRC Mode (iterate each mode) | Invoke setDRCMode on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setDRCMode", "params": {"audioPort": "SPDIF0", "DRCMode": <each_drc_mode>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each mode set |
@@ -1053,7 +1050,7 @@ Check whether DRC mode values are able to set and get for IDLR0
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `IDLR0` and `success` should be `true` |
 | 2 | Get DRC Mode | Invoke getDRCMode on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDRCMode", "params": {"audioPort": "IDLR0"}}' http://127.0.0.1:9998/jsonrpc` | `DRCMode` should be `0` (line) or `1` (rf) and `success` should be `true` |
 | 3 | Set DRC Mode (iterate each mode) | Invoke setDRCMode on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setDRCMode", "params": {"audioPort": "IDLR0", "DRCMode": <each_drc_mode>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each mode set |
@@ -1074,7 +1071,7 @@ Check whether DRC mode values are able to set and get for SPEAKER0
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPEAKER0` and `success` should be `true` |
 | 2 | Get DRC Mode | Invoke getDRCMode on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDRCMode", "params": {"audioPort": "SPEAKER0"}}' http://127.0.0.1:9998/jsonrpc` | `DRCMode` should be `0` (line) or `1` (rf) and `success` should be `true` |
 | 3 | Set DRC Mode (iterate each mode) | Invoke setDRCMode on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setDRCMode", "params": {"audioPort": "SPEAKER0", "DRCMode": <each_drc_mode>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each mode set |
@@ -1095,7 +1092,7 @@ Check whether volume level values are able to set and get for SPDIF0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPDIF0` and `success` should be `true` |
 | 2 | Get Volume Level | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": "SPDIF0"}}' http://127.0.0.1:9998/jsonrpc` | `volumeLevel` should be a valid integer in range `[0, 100]` and `success` should be `true` (record this value for post-condition revert) |
 | 3 | Set Volume Level (iterate each value) | Invoke setVolumeLevel on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLevel", "params": {"audioPort": "SPDIF0", "volumeLevel": <each_level>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each volume level set |
@@ -1116,7 +1113,7 @@ Check whether volume level values are able to set and get for IDLR0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `IDLR0` and `success` should be `true` |
 | 2 | Get Volume Level | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": "IDLR0"}}' http://127.0.0.1:9998/jsonrpc` | `volumeLevel` should be a valid integer in range `[0, 100]` and `success` should be `true` (record this value for post-condition revert) |
 | 3 | Set Volume Level (iterate each value) | Invoke setVolumeLevel on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLevel", "params": {"audioPort": "IDLR0", "volumeLevel": <each_level>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each volume level set |
@@ -1137,7 +1134,7 @@ Check whether volume level values are able to set and get for SPEAKER0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPEAKER0` and `success` should be `true` |
 | 2 | Get Volume Level | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": "SPEAKER0"}}' http://127.0.0.1:9998/jsonrpc` | `volumeLevel` should be a valid integer in range `[0, 100]` and `success` should be `true` (record this value for post-condition revert) |
 | 3 | Set Volume Level (iterate each value) | Invoke setVolumeLevel on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLevel", "params": {"audioPort": "SPEAKER0", "volumeLevel": <each_level>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each volume level set |
@@ -1158,7 +1155,7 @@ Check whether audio port gain values are able to set and get for SPDIF0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPDIF0` and `success` should be `true` |
 | 2 | Get Gain | Invoke getGain on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getGain", "params": {"audioPort": "SPDIF0"}}' http://127.0.0.1:9998/jsonrpc` | `gain` should be a valid float and `success` should be `true` |
 | 3 | Set Gain (iterate each value) | Invoke setGain on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setGain", "params": {"audioPort": "SPDIF0", "gain": <each_gain_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each gain value set |
@@ -1179,7 +1176,7 @@ Check whether audio port gain values are able to set and get for IDLR0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `IDLR0` and `success` should be `true` |
 | 2 | Get Gain | Invoke getGain on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getGain", "params": {"audioPort": "IDLR0"}}' http://127.0.0.1:9998/jsonrpc` | `gain` should be a valid float and `success` should be `true` |
 | 3 | Set Gain (iterate each value) | Invoke setGain on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setGain", "params": {"audioPort": "IDLR0", "gain": <each_gain_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each gain value set |
@@ -1200,7 +1197,7 @@ Check whether audio port gain values are able to set and get for SPEAKER0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPEAKER0` and `success` should be `true` |
 | 2 | Get Gain | Invoke getGain on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getGain", "params": {"audioPort": "SPEAKER0"}}' http://127.0.0.1:9998/jsonrpc` | `gain` should be a valid float and `success` should be `true` |
 | 3 | Set Gain (iterate each value) | Invoke setGain on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setGain", "params": {"audioPort": "SPEAKER0", "gain": <each_gain_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each gain value set |
@@ -1221,7 +1218,7 @@ Check whether audio is able to mute and unmute for SPDIF0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPDIF0` and `success` should be `true` |
 | 2 | Get Muted | Invoke getMuted on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "SPDIF0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Muted (iterate each value) | Invoke setMuted on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "SPDIF0", "muted": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each value set |
@@ -1242,7 +1239,7 @@ Check whether audio is able to mute and unmute for IDLR0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `IDLR0` and `success` should be `true` |
 | 2 | Get Muted | Invoke getMuted on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "IDLR0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Muted (iterate each value) | Invoke setMuted on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "IDLR0", "muted": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each value set |
@@ -1263,7 +1260,7 @@ Check whether audio is able to mute and unmute for SPEAKER0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPEAKER0` and `success` should be `true` |
 | 2 | Get Muted | Invoke getMuted on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "SPEAKER0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Muted (iterate each value) | Invoke setMuted on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "SPEAKER0", "muted": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each value set |
@@ -1284,7 +1281,7 @@ Check whether audio delay values are able to set and get for SPDIF0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPDIF0` and `success` should be `true` |
 | 2 | Get Audio Delay | Invoke getAudioDelay on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAudioDelay", "params": {"audioPort": "SPDIF0"}}' http://127.0.0.1:9998/jsonrpc` | `audioDelay` should be a valid integer and `success` should be `true` |
 | 3 | Set Audio Delay (iterate each value) | Invoke setAudioDelay on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAudioDelay", "params": {"audioPort": "SPDIF0", "audioDelay": <each_delay_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each delay value set |
@@ -1305,7 +1302,7 @@ Check whether audio delay values are able to set and get for IDLR0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `IDLR0` and `success` should be `true` |
 | 2 | Get Audio Delay | Invoke getAudioDelay on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAudioDelay", "params": {"audioPort": "IDLR0"}}' http://127.0.0.1:9998/jsonrpc` | `audioDelay` should be a valid integer and `success` should be `true` |
 | 3 | Set Audio Delay (iterate each value) | Invoke setAudioDelay on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAudioDelay", "params": {"audioPort": "IDLR0", "audioDelay": <each_delay_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each delay value set |
@@ -1326,7 +1323,7 @@ Check whether audio delay values are able to set and get for SPEAKER0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPEAKER0` and `success` should be `true` |
 | 2 | Get Audio Delay | Invoke getAudioDelay on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAudioDelay", "params": {"audioPort": "SPEAKER0"}}' http://127.0.0.1:9998/jsonrpc` | `audioDelay` should be a valid integer and `success` should be `true` |
 | 3 | Set Audio Delay (iterate each value) | Invoke setAudioDelay on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAudioDelay", "params": {"audioPort": "SPEAKER0", "audioDelay": <each_delay_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each delay value set |
@@ -1347,7 +1344,7 @@ Check whether audio delay offset values are able to set and get for SPDIF0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPDIF0` and `success` should be `true` |
 | 2 | Get Audio Delay Offset | Invoke getAudioDelayOffset on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAudioDelayOffset", "params": {"audioPort": "SPDIF0"}}' http://127.0.0.1:9998/jsonrpc` | `audioDelayOffset` should be a valid integer and `success` should be `true` |
 | 3 | Set Audio Delay Offset (iterate each value) | Invoke setAudioDelayOffset on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAudioDelayOffset", "params": {"audioPort": "SPDIF0", "audioDelayOffset": <each_offset_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each offset value set |
@@ -1368,7 +1365,7 @@ Check whether audio delay offset values are able to set and get for IDLR0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `IDLR0` and `success` should be `true` |
 | 2 | Get Audio Delay Offset | Invoke getAudioDelayOffset on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAudioDelayOffset", "params": {"audioPort": "IDLR0"}}' http://127.0.0.1:9998/jsonrpc` | `audioDelayOffset` should be a valid integer and `success` should be `true` |
 | 3 | Set Audio Delay Offset (iterate each value) | Invoke setAudioDelayOffset on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAudioDelayOffset", "params": {"audioPort": "IDLR0", "audioDelayOffset": <each_offset_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each offset value set |
@@ -1389,7 +1386,7 @@ Check whether audio delay offset values are able to set and get for SPEAKER0 por
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPEAKER0` and `success` should be `true` |
 | 2 | Get Audio Delay Offset | Invoke getAudioDelayOffset on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAudioDelayOffset", "params": {"audioPort": "SPEAKER0"}}' http://127.0.0.1:9998/jsonrpc` | `audioDelayOffset` should be a valid integer and `success` should be `true` |
 | 3 | Set Audio Delay Offset (iterate each value) | Invoke setAudioDelayOffset on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAudioDelayOffset", "params": {"audioPort": "SPEAKER0", "audioDelayOffset": <each_offset_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each offset value set |
@@ -1410,7 +1407,7 @@ Check whether able to enable and disable HDMI0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Enable Audio Port | Invoke getEnableAudioPort on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getEnableAudioPort", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `enable` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Enable Audio Port (iterate each value) | Invoke setEnableAudioPort on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setEnableAudioPort", "params": {"audioPort": "HDMI0", "enable": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each enable/disable value set |
@@ -1431,7 +1428,7 @@ Check whether able to enable and disable SPDIF0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPDIF0` and `success` should be `true` |
 | 2 | Get Enable Audio Port | Invoke getEnableAudioPort on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getEnableAudioPort", "params": {"audioPort": "SPDIF0"}}' http://127.0.0.1:9998/jsonrpc` | `enable` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Enable Audio Port (iterate each value) | Invoke setEnableAudioPort on org.rdk.DisplaySettings with audioPort: "SPDIF0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setEnableAudioPort", "params": {"audioPort": "SPDIF0", "enable": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each enable/disable value set |
@@ -1452,7 +1449,7 @@ Check whether able to enable and disable IDLR0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `IDLR0` and `success` should be `true` |
 | 2 | Get Enable Audio Port | Invoke getEnableAudioPort on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getEnableAudioPort", "params": {"audioPort": "IDLR0"}}' http://127.0.0.1:9998/jsonrpc` | `enable` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Enable Audio Port (iterate each value) | Invoke setEnableAudioPort on org.rdk.DisplaySettings with audioPort: "IDLR0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setEnableAudioPort", "params": {"audioPort": "IDLR0", "enable": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each enable/disable value set |
@@ -1473,7 +1470,7 @@ Check whether able to enable and disable SPEAKER0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `SPEAKER0` and `success` should be `true` |
 | 2 | Get Enable Audio Port | Invoke getEnableAudioPort on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getEnableAudioPort", "params": {"audioPort": "SPEAKER0"}}' http://127.0.0.1:9998/jsonrpc` | `enable` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Enable Audio Port (iterate each value) | Invoke setEnableAudioPort on org.rdk.DisplaySettings with audioPort: "SPEAKER0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setEnableAudioPort", "params": {"audioPort": "SPEAKER0", "enable": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each enable/disable value set |
@@ -1494,7 +1491,7 @@ Check whether settop displays all supported audio capabilities
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Settop Audio Capabilities | Invoke getSettopAudioCapabilities on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSettopAudioCapabilities", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `audioCapabilities` list should match the configured `SETTOP_SUPPORTED_AUDIO_CAPABILITIES` values and `success` should be `true` |
 
 ---
@@ -1512,7 +1509,7 @@ Check whether settop displays all supported MS12 capabilities
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Settop MS12 Capabilities | Invoke getSettopMS12Capabilities on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSettopMS12Capabilities", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `ms12Capabilities` list should match the configured `SETTOP_SUPPORTED_MS12_CAPABILITIES` values and `success` should be `true` |
 
 ---
@@ -1530,7 +1527,7 @@ Check whether able to enables or disables volume leveling for HDMI0 port
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Volume Leveller | Invoke getVolumeLeveller on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLeveller", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `level` should be in range `[0, 10]`, `mode` should be in `[0, 1, 2]`, and `success` should be `true` |
 | 3 | Set Volume Leveller (iterate each mode) | Invoke setVolumeLeveller on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLeveller", "params": {"audioPort": "HDMI0", "mode": <each_mode>, "level": 10}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each mode set |
@@ -1551,7 +1548,7 @@ Checks whether the supported resolutions list contains the common resolutions pr
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get Supported Tv Resolutions | Invoke getSupportedTvResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedTvResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `supportedResolutions` list for TV should be non-empty and `success` should be `true` |
 | 3 | Get Settop Supported Resolutions | Invoke getSupportedSettopResolutions on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedSettopResolutions"}' http://127.0.0.1:9998/jsonrpc` | `supportedResolutions` list for settop should match the configured `SETTOP_SUPPORTED_RESOLUTIONS` values and `success` should be `true` |
@@ -1572,7 +1569,7 @@ Checks the active input value for invalid video display
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Get Active Input | Invoke getActiveInput on org.rdk.DisplaySettings with videoDisplay: "Invalid0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getActiveInput", "params": {"videoDisplay": "Invalid0"}}' http://127.0.0.1:9998/jsonrpc` | Expected `False` |
 
 ---
@@ -1590,7 +1587,7 @@ Checks the video port standby status for invalid display
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get VideoPort Status InStandby | Invoke getVideoPortStatusInStandby on org.rdk.DisplaySettings with portName: "Invalid0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVideoPortStatusInStandby", "params": {"portName": "Invalid0"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Unknown method.` |
 | 2 | Set VideoPort Status InStandby | Invoke setVideoPortStatusInStandby on org.rdk.DisplaySettings with portName: "Invalid0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVideoPortStatusInStandby", "params": {"portName": "Invalid0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Unknown method.` |
 
@@ -1609,7 +1606,7 @@ Check whether audio delay api accepts negative values
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Audio Delay | Invoke getAudioDelay on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAudioDelay", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `audioDelay` should be a valid integer and `success` should be `true` |
 | 3 | Set Audio Delay | Invoke setAudioDelay on org.rdk.DisplaySettings with audioPort: "HDMI0", audioDelay: "-10,-50,-100"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAudioDelay", "params": {"audioPort": "HDMI0", "audioDelay": "-10,-50,-100"}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
@@ -1630,7 +1627,7 @@ Validates the results of supported audio modes without passing audio port parame
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 3 | Get Supported Audio Modes | Invoke getSupportedAudioModes on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioModes"}' http://127.0.0.1:9998/jsonrpc` | `supportedAudioModes` list should be non-empty and `success` should be `true` |
@@ -1652,13 +1649,13 @@ Checks the current and supported video formats
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Video Formats | Invoke getVideoFormat on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVideoFormat"}' http://127.0.0.1:9998/jsonrpc` | `currentVideoFormat` and `supportedVideoFormat` list should be non-empty and `success` should be `true` |
 
 ---
@@ -1678,13 +1675,13 @@ Checks the current and supported audio formats
 #### TestCase Pre-condition 1: Get_Display_Connected_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Audio Formats | Invoke getAudioFormat on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAudioFormat"}' http://127.0.0.1:9998/jsonrpc` | `currentAudioFormat` and `supportedAudioFormat` list should be non-empty and `success` should be `true` |
 
 ---
@@ -1702,7 +1699,7 @@ Checks whether resolution persisted after reboot if persist set as true
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `supportedResolutions` list should be non-empty and `success` should be `true` |
 | 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `resolution` should be a valid resolution string and `success` should be `true` |
@@ -1725,7 +1722,7 @@ Checks whether resolution not persisted after reboot if persist set as false
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `supportedResolutions` list should be non-empty and `success` should be `true` |
 | 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `resolution` should be a valid resolution string and `success` should be `true` |
@@ -1749,7 +1746,7 @@ Set and get all the supported color depth capabilities
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get Color Depth Capabilities | Invoke getColorDepthCapabilities on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getColorDepthCapabilities"}' http://127.0.0.1:9998/jsonrpc` | `supportedColorDepth` list should be non-empty and `success` should be `true` |
 | 3 | Get Preferred Color Depth | Invoke getPreferredColorDepth on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getPreferredColorDepth", "params": {"videoDisplay": "<result_step_1>", "persist": true}}' http://127.0.0.1:9998/jsonrpc` | `colorDepth` should be a valid string from the supported list and `success` should be `true` |
@@ -1771,7 +1768,7 @@ Set and get all the supported resolution by both TV and STB, also checks for the
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `supportedResolutions` list should be non-empty and `success` should be `true` |
 | 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `resolution` should be a valid resolution string and `success` should be `true` |
@@ -1796,7 +1793,7 @@ Checks whether resolution persisted for 30 seconds after reboot if persist set a
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `supportedResolutions` list should be non-empty and `success` should be `true` |
 | 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `resolution` should be a valid resolution string and `success` should be `true` |
@@ -1819,7 +1816,7 @@ Check whether audio is able to mute and unmute  for HDMI0 port and check Mute st
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Muted | Invoke getMuted on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Muted (iterate each value) | Invoke setMuted on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "HDMI0", "muted": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each value set |
@@ -1841,7 +1838,7 @@ Check whether volume level values are able to set and get for HDMI0 port and che
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Set Volume Level (iterate each value) | Invoke setVolumeLevel on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLevel", "params": {"audioPort": "HDMI0", "volumeLevel": <each_level>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each volume level set |
 | 3 | Get Volume Level (verify after each set) | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `volumeLevel` should match the value set in the corresponding iteration of step 2 and `success` should be `true` |
@@ -1862,7 +1859,7 @@ Check whether negative volume level values are able to set and get for HDMI0 por
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Set Volume Level | Invoke setVolumeLevel on org.rdk.DisplaySettings with audioPort: "HDMI0", volumeLevel: "-10,-25,-50,-100"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLevel", "params": {"audioPort": "HDMI0", "volumeLevel": "-10,-25,-50,-100"}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
 | 3 | Get Volume Level | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `volumeLevel` should be a valid integer in range `[0, 100]` and `success` should be `true` |
@@ -1882,7 +1879,7 @@ Checks if able to set and get the mixerbalance betweeen main and associated audi
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Fader Control | Invoke getFaderControl on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getFaderControl", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `mixerBalance` should be a valid integer in range `[-32, 32]` and `success` should be `true` |
 | 3 | Set Fader Control (iterate each value) | Invoke setFaderControl on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setFaderControl", "params": {"audioPort": "HDMI0", "mixerBalance": <each_balance_value>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each balance value set |
@@ -1903,7 +1900,7 @@ Checks if able to set the mixerbalance as empty
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Set Fader Control | Invoke setFaderControl on org.rdk.DisplaySettings with audioPort: "HDMI0", mixerBalance: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setFaderControl", "params": {"audioPort": "HDMI0", "mixerBalance": ""}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
 
@@ -1922,7 +1919,7 @@ Checks if able to set the mixerbalance as out of range
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Set Fader Control | Invoke setFaderControl on org.rdk.DisplaySettings with audioPort: "HDMI0", mixerBalance: "-60,-40,-38,38,40,60"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setFaderControl", "params": {"audioPort": "HDMI0", "mixerBalance": "-60,-40,-38,38,40,60"}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
 
@@ -1941,7 +1938,7 @@ Checks if able to enable/disable associated audio mixing
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Associated Audio Mixing | Invoke getAssociatedAudioMixing on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getAssociatedAudioMixing", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `mixing` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Associated Audio Mixing (iterate each value) | Invoke setAssociatedAudioMixing on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setAssociatedAudioMixing", "params": {"audioPort": "HDMI0", "mixing": <true_or_false>}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` for each value set |
@@ -1964,21 +1961,21 @@ Validates statechange event on Activating/deactivating the plugin
 #### TestCase Pre-condition 1: Activate_Plugins
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state should be `activated` and `success` should be `true` |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DisplaySettings"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Deactivate DisplaySettings Plugin | Invoke deactivate on Controller with callsign: "org.rdk.DisplaySettings"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.DisplaySettings"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 2 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that event data is validated successfully |
-| 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `deactivated` |
+| 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate DisplaySettings Plugin | Invoke activate on Controller with callsign: "org.rdk.DisplaySettings"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DisplaySettings"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
 | 5 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that event data is validated successfully |
-| 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
 
@@ -1997,15 +1994,15 @@ Verify the mute status after adjusting the volume (increase) using keycode on HD
 #### TestCase Pre-condition 1: Activate_RDKWindowManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RDKWindowManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state should be `activated` and `success` should be `true` |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.RDKWindowManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RDKWindowManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RDKWindowManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Volume Level | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `volumeLevel` should be a valid integer in range `[0, 100]` and `success` should be `true` |
 | 3 | Set Volume Level (decrease key — conditional) | *(Conditional statement executed only if previous step condition is met)*<br>Invoke generateKey on org.rdk.RDKWindowManager with modifiers: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.generateKey", "params": {"keyCode": 174, "modifiers": "", "delay": 1.0}}' http://127.0.0.1:9998/jsonrpc` | Verify that the key event is dispatched successfully with null/empty result |
@@ -2023,7 +2020,7 @@ Verify the mute status after adjusting the volume (increase) using keycode on HD
 #### TestCase Post-condition 1: Reverting_Muted_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Get Connected Audio Ports from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Muted | Get Muted from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Muted | *(Conditional statement executed only if previous step condition is met)*<br>Set Muted on DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "HDMI0", "muted": false}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
@@ -2046,15 +2043,15 @@ Verify the mute status after adjusting the volume (decrease) using keycode on HD
 #### TestCase Pre-condition 1: Activate_RDKWindowManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RDKWindowManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state should be `activated` and `success` should be `true` |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.RDKWindowManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RDKWindowManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RDKWindowManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Volume Level | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `volumeLevel` should be a valid integer in range `[0, 100]` and `success` should be `true` |
 | 3 | Set Volume Level (increase key — conditional) | *(Conditional statement executed only if previous step condition is met)*<br>Invoke generateKey on org.rdk.RDKWindowManager with modifiers: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.generateKey", "params": {"keyCode": 175, "modifiers": "", "delay": 1.0}}' http://127.0.0.1:9998/jsonrpc` | Verify that the key event is dispatched successfully with null/empty result |
@@ -2072,7 +2069,7 @@ Verify the mute status after adjusting the volume (decrease) using keycode on HD
 #### TestCase Post-condition 1: Reverting_Muted_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Get Connected Audio Ports from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Muted | Get Muted from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Muted | *(Conditional statement executed only if previous step condition is met)*<br>Set Muted on DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "HDMI0", "muted": false}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
@@ -2095,15 +2092,15 @@ Verify the mute status using keycode on HDMI0
 #### TestCase Pre-condition 1: Activate_RDKWindowManager_Plugin
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RDKWindowManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state should be `activated` and `success` should be `true` |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.RDKWindowManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is currently deactivated)*<br>Check Active Status of RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RDKWindowManager"}' http://127.0.0.1:9998/jsonrpc` | Plugin state matches `activated` |
+| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of RDKWindowManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.RDKWindowManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Muted | Invoke getMuted on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Mute Status Using KeyCode | Invoke generateKey on org.rdk.RDKWindowManager with modifiers: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.generateKey", "params": {"keyCode": 173, "modifiers": "", "delay": 1.0}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -2114,7 +2111,7 @@ Verify the mute status using keycode on HDMI0
 #### TestCase Post-condition 1: Reverting_Muted_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Get Connected Audio Ports from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Muted | Get Muted from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Muted (conditional) | *(Conditional statement executed only if previous step condition is met)*<br>Set Muted on DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "HDMI0", "muted": false}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
@@ -2135,7 +2132,7 @@ Validate by setting up mute for invalid audioport
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Muted | Invoke setMuted on org.rdk.DisplaySettings with audioPort: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "INVALID", "muted": true}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for invalid audio port (`"INVALID"`) — `success` should be `false` |
 
 ---
@@ -2153,7 +2150,7 @@ Validate by setting up mute for empty audioport
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Muted | Invoke setMuted on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": null, "muted": true}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for null/empty audio port — `success` should be `false` |
 
 ---
@@ -2171,7 +2168,7 @@ Validate by getting dialogEnhancement for invalid audioport
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Dialog Enhancement | Invoke getDialogEnhancement on org.rdk.DisplaySettings with audioPort: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDialogEnhancement", "params": {"audioPort": "INVALID"}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for invalid audio port (`"INVALID"`) — `success` should be `false` |
 
 ---
@@ -2189,7 +2186,7 @@ Validate by getting dialogEnhancement for empty audioport
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Dialog Enhancement | Invoke getDialogEnhancement on org.rdk.DisplaySettings with audioPort: " "<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDialogEnhancement", "params": {"audioPort": " "}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for empty/blank audio port — `success` should be `false` |
 
 ---
@@ -2207,7 +2204,7 @@ Validate by getting VolumeLevel for invalid audioport
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Volume Level | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": "INVALID"}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for invalid audio port (`"INVALID"`) — `success` should be `false` |
 
 ---
@@ -2225,7 +2222,7 @@ Validate by getting VolumeLevel for empty audioport
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Get Volume Level | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: " "<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": " "}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for empty/blank audio port — `success` should be `false` |
 
 ---
@@ -2243,7 +2240,7 @@ To confirm that the volume level change event is not triggered when the volume r
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Volume Level | Invoke getVolumeLevel on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getVolumeLevel", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `volumeLevel` should be a valid integer in range `[0, 100]` and `success` should be `true` |
 | 3 | Set Volume Level | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setVolumeLevel on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setVolumeLevel", "params": {"audioPort": "HDMI0", "volumeLevel": 50}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
@@ -2270,7 +2267,7 @@ To confirm that the mute status change event is not triggered when the mute stat
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Muted | Invoke getMuted on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Muted | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setMuted on org.rdk.DisplaySettings with audioPort: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "HDMI0", "muted": true}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
@@ -2287,7 +2284,7 @@ To confirm that the mute status change event is not triggered when the mute stat
 #### TestCase Post-condition 1: Reverting_Muted_Status
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Get Connected Audio Ports from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | `connectedAudioPorts` list should include `HDMI0` and `success` should be `true` |
 | 2 | Get Muted | Get Muted from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getMuted", "params": {"audioPort": "HDMI0"}}' http://127.0.0.1:9998/jsonrpc` | `muted` should be `true` or `false` and `success` should be `true` |
 | 3 | Set Muted | *(Conditional statement executed only if previous step condition is met)*<br>Set Muted on DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setMuted", "params": {"audioPort": "HDMI0", "muted": false}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
@@ -2308,7 +2305,7 @@ Validate by setting up invalid resolution
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Current Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "HDMI0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "HDMI0", "resolution": 7, "persist": true}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for invalid resolution value (numeric type `7` instead of string) — `success` should be `false` |
 
 ---
@@ -2326,7 +2323,7 @@ Validate by setting up empty resolution
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Current Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "HDMI0", resolution: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "HDMI0", "resolution": "", "persist": true}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for empty resolution string — `success` should be `false` |
 
 ---
@@ -2344,7 +2341,7 @@ Validate by setting up invalid data type in resolution
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Current Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "HDMI0", resolution: "invalid"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "HDMI0", "resolution": "invalid", "persist": true}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for invalid string value in resolution field — `success` should be `false` |
 
 ---
@@ -2362,7 +2359,7 @@ Validate by setting up empty videoDisplay
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Current Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "", resolution: "720p"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "", "resolution": "720p", "persist": true}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for empty `videoDisplay` parameter — `success` should be `false` |
 
 ---
@@ -2380,7 +2377,7 @@ Validate by setting up invalid videoDisplay
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Current Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "invalid", resolution: "720p"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "invalid", "resolution": "720p", "persist": true}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for invalid `videoDisplay` string — `success` should be `false` |
 
 ---
@@ -2398,7 +2395,7 @@ Validate by setting up invalid persist
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Current Resolution Negative | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "HDMI0", resolution: "720p", persist: "invalid"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "HDMI0", "resolution": "720p", "persist": "invalid"}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for invalid `persist` value type (string instead of boolean) — `success` should be `false` |
 
 ---
@@ -2416,7 +2413,7 @@ Validate set currentResolution API without passing the parameter
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Set Current Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "HDMI0", persist: "invalid"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "HDMI0", "persist": "invalid"}}' http://127.0.0.1:9998/jsonrpc` | API returns error response for missing `resolution` parameter — `success` should be `false` |
 
 ---
@@ -2434,7 +2431,7 @@ Verify that the getConnectedVideoDisplays method returns the TV connected status
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | `videoDisplay` list should be non-empty and `success` should be `true` |
 | 2 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | `powerState` should be a valid string (`ON`, `STANDBY`, `LIGHT_SLEEP`, `DEEP_SLEEP`) and `success` should be `true` |
 | 3 | Set Power State (conditional) | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setPowerState on org.rdk.System with standbyReason: "", powerState: "LIGHT_SLEEP"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "", "powerState": "LIGHT_SLEEP"}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
@@ -2446,19 +2443,30 @@ Verify that the getConnectedVideoDisplays method returns the TV connected status
 #### TestCase Post-condition 1: Reverting_PowerState_ON
 
 | Step ID | Step Name | Description | Expected Result |
-|---------|-----------|-------------|-----------------|
+| --- | --- | --- | --- |
 | 1 | Check power state | Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | `powerState` should be a valid string (`ON`, `STANDBY`, `LIGHT_SLEEP`, `DEEP_SLEEP`) and `success` should be `true` |
 | 2 | Set Power State (conditional) | *(Conditional statement executed only if previous step condition is met)*<br>Set Power State on System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | `success` should be `true` |
 | 3 | Check power state (conditional) | *(Conditional statement executed only if previous step condition is met)*<br>Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | `powerState` should be `ON` and `success` should be `true` |
 
 ## Plugin Post-conditions
 
-_No plugin-level post-conditions defined_
+
+### Plugin Post-condition 1: Unregister_Events
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Unsubscribe from the zoomSettingUpdated event | Unregister the WebSocket event listener for `zoomSettingUpdated` to stop receiving `zoomSettingUpdated` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.unregister", "params": {"event": "zoomSettingUpdated", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 2 | Unsubscribe from the resolutionChanged event | Unregister the WebSocket event listener for `resolutionChanged` to stop receiving `resolutionChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.unregister", "params": {"event": "resolutionChanged", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 3 | Unsubscribe from the resolutionPreChange event | Unregister the WebSocket event listener for `resolutionPreChange` to stop receiving `resolutionPreChange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.unregister", "params": {"event": "resolutionPreChange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 4 | Unsubscribe from the muteStatusChanged event | Unregister the WebSocket event listener for `muteStatusChanged` to stop receiving `muteStatusChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.unregister", "params": {"event": "muteStatusChanged", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 5 | Unsubscribe from the volumeLevelChanged event | Unregister the WebSocket event listener for `volumeLevelChanged` to stop receiving `volumeLevelChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.unregister", "params": {"event": "volumeLevelChanged", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 6 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+
 
 ## Test Attributes
 
 | Attribute | Value |
-|-----------|-------|
+| --- | --- |
 | Supported Models | Video Accelerator, RPI Client |
 | Estimated Duration | 42 minutes |
 | Priority | Medium |
