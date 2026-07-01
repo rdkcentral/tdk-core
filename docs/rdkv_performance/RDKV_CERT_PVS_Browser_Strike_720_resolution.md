@@ -48,7 +48,7 @@ To validate the browser performance score obtained from the Strike benchmark too
 
 **Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 10
+**Estimated duration** : 10 mins
 
 **Priority** : High
 

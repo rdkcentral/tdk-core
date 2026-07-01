@@ -39,14 +39,14 @@ To validate the average FPS value obtained from the browser graphics performance
 | 10 | Wait for MotionMark benchmark to complete | Wait 420 seconds (7 minutes) for the MotionMark benchmark to complete all its rendering test iterations. | The MotionMark benchmark should complete execution within the wait period. |
 | 11 | Retrieve MotionMark benchmark score | Connect to the WebKit webinspect page and extract the main MotionMark FPS score from the benchmark test results. | The MotionMark score should be successfully retrieved and must not contain the value "Unable to get the browser score". |
 | 12 | Validate MotionMark score against threshold | Compare the retrieved MotionMark score against `MOTIONMARK_THRESHOLD_VALUE` from the device configuration file. | The MotionMark benchmark score should be greater than the configured `MOTIONMARK_THRESHOLD_VALUE`. |
-| 13 | Terminate MotionMark application | Terminate the MotionMark application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminate", "params": {"appId": "com.rdkcentral.motion"}}` | The MotionMark application should be terminated successfully. |
+| 13 | Terminate MotionMark application | Terminate the MotionMark application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "com.rdkcentral.motion"}}` | The MotionMark application should be terminated successfully. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
 **Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 10
+**Estimated duration** : 10 mins
 
 **Priority** : High
 
