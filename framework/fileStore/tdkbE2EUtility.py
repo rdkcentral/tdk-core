@@ -35,6 +35,7 @@ import webpaUtility;
 from webpaUtility import *
 import subprocess
 from time import gmtime, strftime
+from tdkbStabilityVariables import *
 
 #Global variable to check whether login session is active
 isSessionActive = False
@@ -3316,7 +3317,6 @@ def verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_
 #             : gateway_ip - Gateway IP address
 #             : phase - "START" to start a long-running ping, "CHECK" to validate results.
 # Return Value: Returns the status of ping operation
-
     try:
         status = clientConnect("LAN")
         if status == "SUCCESS":
