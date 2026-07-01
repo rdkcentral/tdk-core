@@ -1,7 +1,5 @@
-<!-- AUTO-INFERRED: This document was generated from Python code because no embedded XML metadata was found. Fields marked <TO_BE_UPDATED> must be reviewed and filled in. -->
-
-## TestCase ID
-<TO_BE_UPDATED>
+﻿## TestCase ID
+RDKV_Media_Validation_1084
 ## TestCase Name
 RDKV_CERT_MVS_Video_HTML_SHAKA_Mute_Unmute_HLS_H264
 <a name="head.TOC"></a>
@@ -19,21 +17,21 @@ Test script to launch a HTML5 Player application via AppManager and perform mute
 ## Preconditions
 |#|StepName | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-|1| WPE Framework Running | Wpeframework process should be up and running in the device.| Wpeframework process is active and running on the device.|
-|2| Html Player BOLT App Available | MediaValidationVariables.bolt_packages_base_path must be configured with the BOLT packages hosting server URL (e.g. http://<TM_IP>:<port>/images/signed-packages/). MediaValidationVariables.html_player_app_download_url is derived from this base path and must resolve to the HTML5 Player BOLT app package (e.g. http://<TM_IP>:<port>/images/signed-packages/com.rdkcentral.html-player+0.1.0.bolt).| BOLT app package is available and accessible for download via AppManager.|
-|3| AppManager App Installation Check | AppManager should check if the BOLT app is already installed using `org.rdk.PackageManagerRDKEMS.1.listPackages`. If already present, proceed without download/install. If not present, download the BOLT app package via `org.rdk.DownloadManager.1.download` (params: `{"url":"<app_download_url>"}`) and install it via `org.rdk.PackageManagerRDKEMS.install` (params: `{"packageId":"<app_id>","version":"0.1.0","additionalMetadata":[{"name":"type","value":"native/dac-app"}],"fileLocator":"<file_locator>"}`).| BOLT app is installed successfully on the device.|
+| 1 | WPE Framework Running | Wpeframework process should be up and running in the device. | Ensure that Wpeframework process is active and running on the device. |
+| 2 | Html Player BOLT App Available | MediaValidationVariables.bolt_packages_base_path must be configured with the BOLT packages<br>hosting server URL (e.g. http://<TM_IP>:<port>/images/signed-packages/).<br>MediaValidationVariables.html_player_app_download_url is derived from this base path and must<br>resolve to the HTML5 Player BOLT app package (e.g.<br>http://<TM_IP>:<port>/images/signed-packages/com.rdkcentral.html-player+0.1.0.bolt). | Ensure that BOLT app package is available and accessible for download via AppManager. |
+| 3 | AppManager App Installation Check | AppManager should check if the BOLT app is already installed using :<br>List packages: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}`<br>If it is not already installed then download and install the BOLT package.<br>Download: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<app_download_url>/html-player-app"}}`<br>Install: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.install", "params": {"packageId": "com.rdkcentral.html-player", "version": "0.1.0", "additionalMetadata": [{"name": "type", "value": "native/dac-app"}], "fileLocator": "<PACKAGEMANAGER_FILE_LOCATOR>/package<download_id>"}}` | BOLT app is installed successfully on the device. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
 |#|StepName | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Configure Playback Operations and Test URL | Set playback operations: Mute audio (30s), unmute audio (30s). Build the test URL with the video_src_url_hls. Store the constructed URL in PersistentStore for AppManager launch. | Verify that playback operations are configured correctly: Mute audio (30s), unmute audio (30s). Confirm the test URL is built with video_src_url_hls. Confirm the URL is stored in PersistentStore (MVS/lightningURL) successfully. |
-| 2 | Launch Player App via AppManager | Launch the test app via AppManager using the URL stored in PersistentStore.<br>`curl -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"org.rdk.AppManager.1.launchApp","params":{"appId":"com.rdkcentral.html-player"}}'` | Ensure the app (com.rdkcentral.html-player) is launched successfully and should be listed in the loaded apps. |
-| 3 | Perform Play Content and Validate Media Events | App performs the configured operations and validates using media events. The 'Observed Event: play' event is monitored to validate successful playback. | Verify that the app performs all configured operations and validates them using media events. Operations should complete successfully without errors. |
-| 4 | Validate Event Result and Update Test Status | If expected event (Observed Event: play) is observed, app gives the validation result as SUCCESS or else FAILURE. | Confirm the 'play' event is observed as expected. Check that the test result is updated as SUCCESS/FAILURE accordingly. |
-| 5 | Update Test Result Based on Event Validation | Update the test script result as SUCCESS/FAILURE based on event validation result and proc check status (if applicable). | Check that the test result is updated as SUCCESS/FAILURE based on event validation result. |
-| 6 | Terminate App and Revert Test Settings | Terminate the test app via AppManager (org.rdk.AppManager.1.terminateApp (appId: com.rdkcentral.html-player)) and restore the test environment.<br>`curl -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"org.rdk.AppManager.1.terminateApp","params":{"appId":"com.rdkcentral.html-player"}}'` | Ensure the test environment is restored successfully. Verify that the app (com.rdkcentral.html-player) is terminated via org.rdk.AppManager.1.terminateApp. |
+| 1 | Configure Playback Operations and Test URL | Set playback operations: Mute audio (30s), unmute audio (30s).<br>Build the test URL with the video_src_url_hls.<br>Store the constructed URL in PersistentStore for AppManager launch. | Ensure that playback operations are configured correctly: Mute audio (30s), unmute audio (30s).<br>Ensure the test URL is built with video_src_url_hls. Ensure the URL is stored in<br>PersistentStore (MVS/lightningURL) successfully. |
+| 2 | Launch Player App via AppManager | Launch the test app via AppManager using the URL stored in PersistentStore.<br>`curl -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"org.rdk.AppManager.1.launchApp","params":{"appId":"com.rdkcentral.html-player"}}'` | Ensure the app (com.rdkcentral.html-player) is launched successfully and should be listed in<br>the loaded apps. |
+| 3 | Perform Play Content and Validate Media Events | App performs the configured operations and validates using media events. The 'Observed Event:<br>play' event is monitored to validate successful playback. | Ensure that the app performs all configured operations and validates them using media events.<br>Operations should complete successfully without errors. |
+| 4 | Validate Event Result and Update Test Status | If expected event (Observed Event: play) is observed, app gives the validation result as<br>SUCCESS or else FAILURE. | Ensure that the 'play' event is observed as expected. Ensure that the test result is<br>updated as SUCCESS/FAILURE accordingly. |
+| 5 | Update Test Result Based on Event Validation | Update the test script result as SUCCESS/FAILURE based on event validation result and proc<br>check status (if applicable). | Ensure that the test result is updated as SUCCESS/FAILURE based on event validation result. |
+| 6 | Terminate App and Revert Test Settings | Terminate the test app via AppManager (org.rdk.AppManager.1.terminateApp (appId:com.rdkcentral.html-player)) and restore the test environment.<br>`curl -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"org.rdk.AppManager.1.terminateApp","params":{"appId":"com.rdkcentral.html-player"}}'` | Ensure the test environment is restored successfully. Ensure that the app<br>(com.rdkcentral.html-player) is terminated via org.rdk.AppManager.1.terminateApp. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
@@ -44,4 +42,4 @@ Test script to launch a HTML5 Player application via AppManager and perform mute
 
 **Priority** : High
 
-**Release Version** : <TO_BE_UPDATED><div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Release Version** : M144<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
