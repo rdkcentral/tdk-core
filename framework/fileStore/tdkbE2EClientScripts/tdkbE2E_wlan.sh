@@ -66,6 +66,14 @@ get_wlan_ip_address()
         echo "OUTPUT:$value"
 }
 
+# Get the IPV6 address of the WLAN after connecting to it
+get_wlan_ipv6_address()
+{
+        value="$(ifconfig -a $var2 | grep "$var3" | tr -s " " |  grep -v Link | cut -d " " -f3 | cut -d "/" -f1 | head -1)"
+        echo "OUTPUT:$value"
+}
+
+
 # Get the subnet mask of the WLAN after connecting to WIFI
 get_wlan_subnet_mask()
 {
@@ -173,6 +181,17 @@ ping_to_host()
         ping_cmd="$(ping -I $var4 -c 3 $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
         route_del_cmd="$(sudo route del -net $var2 netmask 255.255.255.255 gw $var3 dev $var4  > /dev/null && echo "SUCCESS" || echo "FAILURE")"
         if [ $route_add_cmd = "SUCCESS" ] && [ $ping_cmd = "SUCCESS" ]  && [ $route_del_cmd = "SUCCESS" ]; then
+                echo "OUTPUT:SUCCESS"
+        else
+                echo "OUTPUT:FAILURE"
+        fi
+}
+
+# IPv6 ping to a host url
+ipv6_ping_to_host()
+{
+        ping_cmd="$(ping -6 -I $var3 -c 3 $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+        if [ $ping_cmd = "SUCCESS" ]; then
                 echo "OUTPUT:SUCCESS"
         else
                 echo "OUTPUT:FAILURE"
@@ -619,6 +638,8 @@ case $event in
         wifi_ssid_disconnect;;
    "get_wlan_ip_address")
         get_wlan_ip_address;;
+   "get_wlan_ipv6_address")
+        get_wlan_ipv6_address;;
    "get_wlan_subnet_mask")
         get_wlan_subnet_mask;;
    "get_connected_ssid_name")
@@ -643,6 +664,8 @@ case $event in
         ping_to_network;;
    "ping_to_host")
         ping_to_host;;
+   "ipv6_ping_to_host")
+        ipv6_ping_to_host;;
    "wget_http_network")
         wget_http_network;;
    "wget_https_network")

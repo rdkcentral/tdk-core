@@ -92,6 +92,9 @@ def parseDeviceConfig(obj):
         global wan_ftp_ip
         wan_ftp_ip = config.get(deviceConfig, "WAN_FTP_IP")
 
+        global ipv6_host_name
+        ipv6_host_name = config.get(deviceConfig, "IPV6_HOST_NAME")
+
         global wlan_username
         wlan_username = config.get(deviceConfig, "WLAN_USERNAME")
 
@@ -124,6 +127,10 @@ def parseDeviceConfig(obj):
 
         global wlan_inet_address
         wlan_inet_address = config.get(deviceConfig, "WLAN_INET_ADDRESS")
+
+        global wlan_inet6_address
+        wlan_inet6_address = config.get(deviceConfig, "WLAN_INET6_ADDRESS")
+
 
         global wlan_subnet_mask
         wlan_subnet_mask = config.get(deviceConfig, "WLAN_SUBNET_MASK")
@@ -931,6 +938,40 @@ def getWlanIPAddress(wlanInterface):
 
 ########## End of Function ##########
 
+def getWLANIPV6Address(wlanInterface):
+
+# getWLANIPV6Address
+
+# Syntax      : getWLANIPV6Address()
+# Description : Function to get the current IPv6 address of the wlan client after connecting to wifi
+# Parameters  : wlanInterface - wlan interface name
+# Return Value: status - IPv6 Address of the WLAN client
+
+    try:
+        status = clientConnect("WLAN")
+        if status == "SUCCESS":
+
+            if wlan_os_type == "UBUNTU":
+                command="sudo sh %s refresh_wifi_network %s" %(wlan_script,wlanInterface)
+                executeCommand(command)
+                sleep(20)
+
+                command="sudo sh %s get_wlan_ipv6_address %s %s" %(wlan_script,wlanInterface,wlan_inet6_address)
+                status = executeCommand(command)
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to lan client"
+
+    except Exception as e:
+        print(e)
+        status = e
+
+    print("WLAN IPV6 Address after connecting to WLAN client:%s" %status)
+    return status
+########## End of Function ##########
+
+
 def getWlanSubnetMask(wlanInterface):
 
 # getWlanSubnetMask
@@ -1576,6 +1617,50 @@ def verifyNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,sour
     return status;
 
 ########## End of Function ##########
+
+def verifyIPv6NetworkConnectivity(connectivityType,host_name,interface,source="WLAN"):
+
+#verifyIPv6NetworkConnectivity
+
+# Syntax      : verifyIPv6NetworkConnectivity()
+# Description : Function to check if the ipv6 network connectivity is accessible or not
+# Parameters  : connectivityType - IPV6_PING_TO_HOST
+#               host_name - Host name to which ping should reach
+#               interface - Interface name
+#               source - LAN/WLAN
+# Return Value: Returns the status of ping operation
+    try:
+        if source == "WLAN_6G":
+            status = clientConnect("WLAN")
+        else:
+            status = clientConnect(source)
+
+        if status == "SUCCESS":
+            if wlan_os_type == "UBUNTU":
+                if source == "WLAN":
+                    script_name = wlan_script
+                    interface = wlan_2ghz_interface
+                elif source == "WLAN_6G":
+                    script_name = wlan_script
+                    interface = wlan_6ghz_interface
+                elif source == "LAN":
+                    script_name = lan_script
+                    interface = lan_interface
+
+                if connectivityType == "IPV6_PING_TO_HOST":
+                    command="sudo sh %s ipv6_ping_to_host %s %s" %(script_name,host_name,interface)
+                status = executeCommand(command)
+            else:
+                print("Only UBUNTU platform supported!!!")
+        else:
+            return "Failed to connect to wlan client"
+    except Exception as e:
+        print(e)
+        status = e
+
+    print("Status of verifyIPV6NetworkConnectivity:%s" %status)
+    return status
+########### End of Function ##########
 
 def ftpToClient(dest, network_ip, source="LAN"):
 
