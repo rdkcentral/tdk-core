@@ -22,10 +22,9 @@ To validate device stability and resource usage during long-duration HLS video p
 | 2 | Configure PRE_REQ_REBOOT in device config | The user should configure `PRE_REQ_REBOOT` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
 | 3 | Configure video_src_url_hls in StabilityTestVariables | `video_src_url_hls` must be set to a valid HLS video stream URL of at least 10 hours duration in StabilityTestVariables. | The video URL variable should point to a reachable HLS stream. |
 | 4 | Configure unified_player_app_download_url in MediaValidationVariables | `unified_player_app_download_url` must be set to the full download URL of the unified video player application bundle. | The app download URL should be configured and the bundle should be reachable. |
-| 5 | Configure codec_hls_h264 player list in MediaValidationVariables | `codec_hls_h264` must contain the player instance name(s) to be used for playback (comma-separated). | The player list should contain at least one valid player name. |
-| 6 | Configure LOGGING_METHOD in device config | `LOGGING_METHOD` must be configured in the device-specific config file as either `REST_API` or `WEB_INSPECT`. | The LOGGING_METHOD key should be set to a valid value in the device config file. |
-| 7 | Confirm DeviceInfo and PersistentStore plugins are available | The DeviceInfo and org.rdk.PersistentStore plugins must be present and activatable in the build. | Both plugins should be available and activatable on the DUT. |
-| 8 | Configure PACKAGEMANAGER_FILE_LOCATOR in device config | `PACKAGEMANAGER_FILE_LOCATOR` must be set to the correct path on the DUT where downloaded packages are stored. | The file locator path should be correctly configured in the device-specific config file. |
+| 5 | Configure LOGGING_METHOD in device config | `LOGGING_METHOD` must be configured in the device-specific config file as either `REST_API` or `WEB_INSPECT`. | The LOGGING_METHOD key should be set to a valid value in the device config file. |
+| 6 | Confirm DeviceInfo and PersistentStore plugins are available | The DeviceInfo and org.rdk.PersistentStore plugins must be present and activatable in the build. | Both plugins should be available and activatable on the DUT. |
+| 7 | Configure PACKAGEMANAGER_FILE_LOCATOR in device config | `PACKAGEMANAGER_FILE_LOCATOR` must be set to the correct path on the DUT where downloaded packages are stored. | The file locator path should be correctly configured in the device-specific config file. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
