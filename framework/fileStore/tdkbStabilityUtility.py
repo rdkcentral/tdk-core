@@ -40,8 +40,8 @@ def stability_execute_cmd(obj, command):
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
-# sanitize_tag
-# Syntax      : sanitize_tag(value)
+# stability_sanitize_tag
+# Syntax      : stability_sanitize_tag(value)
 # Description : Replace characters not safe for filenames/directory names
 #               with underscores so artifact paths are always valid
 # Parameters  : value - raw string (e.g. failure reason)
