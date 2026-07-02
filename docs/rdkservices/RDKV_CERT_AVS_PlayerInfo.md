@@ -84,7 +84,7 @@ checks the audio codecs list
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Audio Codecs | Invoke audiocodecs on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.audiocodecs"}' http://127.0.0.1:9998/jsonrpc` | Expected `<SUPPORTED_AUDIO_CODECS>` |
+| 1 | Get Audio Codecs | Invoke audiocodecs on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.audiocodecs"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported audio codecs match the expected value `<SUPPORTED_AUDIO_CODECS>` from the device config file  |
 
 ---
 
@@ -102,7 +102,7 @@ checks the video codecs list
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Video Codecs | Invoke videocodecs on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.videocodecs"}' http://127.0.0.1:9998/jsonrpc` | Expected `<SUPPORTED_Video_CODECS>` |
+| 1 | Get Video Codecs | Invoke videocodecs on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.videocodecs"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported video codecs match the expected value `<SUPPORTED_Video_CODECS>` from the device config file  |
 
 ---
 
@@ -120,7 +120,7 @@ Checks Loudness Equivalence in platform
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Is AudioEquivalence Enabled | Invoke isaudioequivalenceenabled on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.isaudioequivalenceenabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` Playerinfo validate boolean result |
+| 1 | Is AudioEquivalence Enabled | Invoke isaudioequivalenceenabled on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.isaudioequivalenceenabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Playerinfo validate boolean result  |
 
 ---
 
@@ -138,7 +138,7 @@ Gets the Atmos capabilities of Sink
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Dolby Atmos MetaData | Invoke dolby_atmosmetadata on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_atmosmetadata"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` Playerinfo validate boolean result |
+| 1 | Get Dolby Atmos MetaData | Invoke dolby_atmosmetadata on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_atmosmetadata"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Playerinfo validate boolean result  |
 
 ---
 
@@ -156,7 +156,7 @@ Checks the dolby sound mode
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Dolby SoundMode | Invoke dolby_soundmode on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_soundmode"}' http://127.0.0.1:9998/jsonrpc` | Expected `Unknown,Mono,Stereo,Surround,Passthru,SoundmodeAuto` |
+| 1 | Get Dolby SoundMode | Invoke dolby_soundmode on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_soundmode"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported sound modes include `Unknown`, `Mono`, `Stereo`, `Surround`, `Passthru`, and `SoundmodeAuto`  |
 
 ---
 
@@ -168,7 +168,7 @@ Enable_Disable_Audio_Atmos_Output
 PI_06
 
 ### TestCase Objective
-Check whether audio atmos output is possile to enable and disable
+Check whether audio atmos output is possible to enable and disable
 
 ### Test Steps
 
@@ -196,9 +196,9 @@ Set and get all the supported resolution by both TV and STB
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 | 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
-| 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` supported resolutions matches value from step 2 |
+| 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` supported resolutions matches value from step 2  |
 | 4 | Set Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>", resolution: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "<result_step_1>", "resolution": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the current resolution is set successfully |
-| 5 | Get Resolution | Invoke resolution on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.resolution"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` returned value matches the iterated value set in the previous step |
+| 5 | Get Resolution | Invoke resolution on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.resolution"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` returned value matches the iterated value set in the previous step  |
 
 ---
 
@@ -218,10 +218,10 @@ Checks for the audio mode changed event
 | --- | --- | --- | --- |
 | 1 | Check Connected AudioPorts | Invoke getConnectedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected audio ports are returned successfully |
 | 2 | Get Supported Audio Modes | Invoke getSupportedAudioModes on org.rdk.DisplaySettings with audioPort: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioModes", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported audio modes are returned successfully |
-| 3 | Get Sound Mode | Invoke getSoundMode on org.rdk.DisplaySettings with audioPort: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSoundMode", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` supported sound modes matches value from step 2 |
+| 3 | Get Sound Mode | Invoke getSoundMode on org.rdk.DisplaySettings with audioPort: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSoundMode", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` supported sound modes matches value from step 2  |
 | 4 | Set Sound Mode | Invoke setSoundMode on org.rdk.DisplaySettings with audioPort: "<result_step_1>", soundMode: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setSoundMode", "params": {"audioPort": "<result_step_1>", "soundMode": "<result_step_2>", "persist": false}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the sound mode is set successfully |
-| 5 | Get Sound Mode | Invoke getSoundMode on org.rdk.DisplaySettings with audioPort: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSoundMode", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` returned value matches the iterated value set in the previous step |
-| 6 | Check Dolby AudioMode Changed Event | Listen for Event_AudioMode_Changed event (wait2s) | `success` : `true` returned value matches the iterated value set in the previous step |
+| 5 | Get Sound Mode | Invoke getSoundMode on org.rdk.DisplaySettings with audioPort: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSoundMode", "params": {"audioPort": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` returned value matches the iterated value set in the previous step  |
+| 6 | Check Dolby AudioMode Changed Event | Listen for Event_AudioMode_Changed event (wait2s) | Verify that `success` : `true` returned value matches the iterated value set in the previous step  |
 
 ---
 
@@ -275,3 +275,5 @@ Validates statechange event on Activating/deactivating the plugin
 | Estimated Duration | 5 minutes |
 | Priority | Medium |
 | TDK Release Version | M88 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

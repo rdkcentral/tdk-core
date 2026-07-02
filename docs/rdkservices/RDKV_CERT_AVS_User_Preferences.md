@@ -61,7 +61,7 @@ Set and get user preferred UI language
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set UI Language | Invoke setUILanguage on org.rdk.UserPreferences with ui_language: "US_en"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage", "params": {"ui_language": "US_en"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the UI language is set successfully |
-| 2 | Get UI Language | Invoke getUILanguage on org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.getUILanguage"}' http://127.0.0.1:9998/jsonrpc` | Expected `US_en` |
+| 2 | Get UI Language | Invoke getUILanguage on org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.getUILanguage"}' http://127.0.0.1:9998/jsonrpc` | Verify that the UI language is set to `US_en` as expected  |
 
 ---
 
@@ -158,7 +158,7 @@ Verify that the getUiLanguage method returns an error when the plugin is in a de
 | 1 | Deactivate UserPreferences Plugin | Invoke deactivate on Controller with callsign: "org.rdk.UserPreferences"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 2 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that event data is validated successfully |
 | 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
-| 4 | Check UserPreferences Get UI Language API Response | Invoke getUILanguage on org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.getUILanguage"}' http://127.0.0.1:9998/jsonrpc` | Expected error`Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 4 | Check UserPreferences Get UI Language API Response | Invoke getUILanguage on org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.getUILanguage"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API returns the expected error: `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.`  |
 | 5 | Activate UserPreferences Plugin | Invoke activate on Controller with callsign: "org.rdk.UserPreferences"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.UserPreferences"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
 | 6 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that event data is validated successfully |
 | 7 | Check PluginActive Status | Invoke status on Controller for org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.UserPreferences"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
@@ -200,3 +200,5 @@ Verify that the setUILanguage API returns an error when UI language parameter is
 | Estimated Duration | 5 minutes |
 | Priority | Medium |
 | TDK Release Version | M81 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

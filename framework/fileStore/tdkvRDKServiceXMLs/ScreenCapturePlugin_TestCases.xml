@@ -54,7 +54,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="SC_02" testCaseName="ScreenCapture_Upload_Screen" desc="Uploads the screenshott">
+        <testCase testCaseId="SC_02" testCaseName="ScreenCapture_Upload_Screen" desc="Uploads the screenshot">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
                   <param tag="url" useConfigFile="true" key="SC_UPLOAD_URL"/>

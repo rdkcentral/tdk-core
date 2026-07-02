@@ -164,7 +164,7 @@ Pass a valid list of key intercepts and ensure the method successfully adds the 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Add Key Intercepts | Invoke addKeyIntercepts on org.rdk.RDKWindowManager with clientId: "<result_step_1>", modifiers: "shift"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.addKeyIntercepts", "params": {"clientId": "<result_step_1>", "keyCode": 13, "modifiers": "shift", "focusOnly": true, "propagate": false}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -183,7 +183,7 @@ Pass an empty modifiers parameter to the addKeyIntercepts method and check that 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Add Key Intercepts Empty Modifiers | Invoke addKeyIntercepts on org.rdk.RDKWindowManager with clientId: "<result_step_1>", modifiers: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.addKeyIntercepts", "params": {"clientId": "<result_step_1>", "keyCode": 13, "modifiers": "", "focusOnly": true, "propagate": false}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -202,7 +202,7 @@ Pass a list containing invalid key intercepts and ensure the method returns an a
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Add Key Intercepts Invalid | Invoke addKeyIntercepts on org.rdk.RDKWindowManager with clientId: "<result_step_1>", modifiers: "INVALID_MODIFIERS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.addKeyIntercepts", "params": {"clientId": "<result_step_1>", "keyCode": 0, "modifiers": "INVALID_MODIFIERS", "focusOnly": true, "propagate": false}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -329,7 +329,7 @@ Verify the behavior of generateKey when called with valid key press and release.
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Generate Key Valid Events | Invoke generateKey on org.rdk.RDKWindowManager with clientId: "<result_step_1>", modifiers: "shift"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.generateKey", "params": {"clientId": "<result_step_1>", "keyCode": 13, "modifiers": "shift", "delay": 10.0}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -348,7 +348,7 @@ Test generateKey with invalid or unsupported key codes. Verify that the method h
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Generate Key Invalid | Invoke generateKey on org.rdk.RDKWindowManager with clientId: "<result_step_1>", keyCode: "INVALID_KEY", modifiers: "shift"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.generateKey", "params": {"clientId": "<result_step_1>", "keyCode": "INVALID_KEY", "modifiers": "shift", "delay": 10}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -403,7 +403,7 @@ Pass a valid intercept parameter and ensure the key intercept is successfully re
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Remove Key Intercept | Invoke removeKeyIntercept on org.rdk.RDKWindowManager with clientId: "<result_step_1>", modifiers: "shift"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.removeKeyIntercept", "params": {"clientId": "<result_step_1>", "keyCode": 13, "modifiers": "shift"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -512,7 +512,7 @@ Pass a valid client to the setFocus method and ensure the focus is successfully 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Set Focus Valid Client | Invoke setFocus on org.rdk.RDKWindowManager with client: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.setFocus", "params": {"client": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -567,7 +567,7 @@ Test the setVisible method by passing a valid client and setting visible to true
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Set Visible Valid Client True | Invoke setVisible on org.rdk.RDKWindowManager with client: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.setVisible", "params": {"client": "<result_step_1>", "visible": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -586,7 +586,7 @@ Test the setVisible method by passing a valid client and setting visible to fals
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Set Visible Valid Client False | Invoke setVisible on org.rdk.RDKWindowManager with client: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.setVisible", "params": {"client": "<result_step_1>", "visible": false}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -623,7 +623,7 @@ Call the renderReady method with a valid clientId of an application that has ren
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Render Ready Valid ClientId | Invoke renderReady on org.rdk.RDKWindowManager with clientId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.renderReady", "params": {"clientId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -678,7 +678,7 @@ Call the enableDisplayRender method with a valid clientId and set enable to true
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Enable Display Render | Invoke enableDisplayRender on org.rdk.RDKWindowManager with clientId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.enableDisplayRender", "params": {"clientId": "<result_step_1>", "enable": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -697,7 +697,7 @@ Call the enableDisplayRender method with a valid clientId and set enable to fals
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Disable Display Render | Invoke enableDisplayRender on org.rdk.RDKWindowManager with clientId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.enableDisplayRender", "params": {"clientId": "<result_step_1>", "enable": false}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -734,7 +734,7 @@ Test the setZOrder method by providing a valid clientId and a valid zOrder value
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Set Z Order Valid Params | Invoke setZOrder on org.rdk.RDKWindowManager with clientId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.setZOrder", "params": {"clientId": "<result_step_1>", "zOrder": 1}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -771,7 +771,7 @@ Test the setZOrder method by providing a valid clientId and an invalid zOrder va
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Set Z Order Invalid ZOrder | Invoke setZOrder on org.rdk.RDKWindowManager with clientId: "<result_step_1>", zOrder: "InvalidZOrderValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.setZOrder", "params": {"clientId": "<result_step_1>", "zOrder": "InvalidZOrderValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -790,7 +790,7 @@ Pass a valid clientId to the getZOrder method and ensure it returns the correct 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | GetZOrder Valid ClientId | Invoke getZOrder on org.rdk.RDKWindowManager with clientId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.getZOrder", "params": {"clientId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call returns a valid z-order reference |
 
 ---
@@ -892,7 +892,7 @@ Check device returns to active mode after user input via generateKey when it was
 | --- | --- | --- | --- |
 | 1 | Set Inactivity Interval | Invoke setInactivityInterval on org.rdk.RDKWindowManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.setInactivityInterval", "params": {"interval": 1}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check On UserInactivity Event | Listen for event Event_On_User_Inactivity | Verify that event data is validated successfully |
-| 3 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 3 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 4 | Generate Key Valid Events | Invoke generateKey on org.rdk.RDKWindowManager with clientId: "<result_step_3>", modifiers: "shift"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.generateKey", "params": {"clientId": "<result_step_3>", "keyCode": 13, "modifiers": "shift", "delay": 3.0}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### TestCase Post-condition
@@ -966,7 +966,7 @@ Checks whether the user inactivity reporting event is triggered when inactivity 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Inactivity Interval | Invoke setInactivityInterval on org.rdk.RDKWindowManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.setInactivityInterval", "params": {"interval": 1}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Check On UserInactivity Event NoEvent | Listen for event Event_On_User_Inactivity | Event should not be triggered |
+| 2 | Check On UserInactivity Event NoEvent | Listen for event Event_On_User_Inactivity | Verify that no event is triggered during this operation  |
 
 ## Plugin Post-conditions
 
@@ -995,3 +995,5 @@ Checks whether the user inactivity reporting event is triggered when inactivity 
 | Estimated Duration | 20 minutes |
 | Priority | Medium |
 | TDK Release Version | M147 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

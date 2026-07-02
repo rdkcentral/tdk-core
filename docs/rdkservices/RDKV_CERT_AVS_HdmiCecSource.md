@@ -132,9 +132,9 @@ Verify that the getDeviceList method returns a list of devices that support CEC
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Enabled | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get Enabled | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setEnabled", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the enabled state is set successfully |
-| 3 | Get Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 3 | Get Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 4 | Check CEC Enabled Devices List | Invoke getDeviceList on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getDeviceList"}' http://127.0.0.1:9998/jsonrpc` | Verify that the device list is returned successfully |
 
 ---
@@ -161,10 +161,10 @@ Verify that the getDeviceList method returns empty when the HDMI-CEC driver is d
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Enabled | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get Enabled | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setEnabled", "params": {"enabled": false}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the enabled state is set successfully |
-| 3 | Get Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
-| 4 | Check CEC Enabled Devices List | Invoke getDeviceList on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getDeviceList"}' http://127.0.0.1:9998/jsonrpc` | Device List should not return |
+| 3 | Get Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 4 | Check CEC Enabled Devices List | Invoke getDeviceList on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getDeviceList"}' http://127.0.0.1:9998/jsonrpc` | Verify that the device list does not return any devices  |
 
 ### TestCase Post-condition
 
@@ -172,9 +172,9 @@ Verify that the getDeviceList method returns empty when the HDMI-CEC driver is d
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Enabled | Get Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get Enabled | Get Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Set Enabled on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setEnabled", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the enabled state is set successfully |
-| 3 | Get Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 3 | Get Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 
 ---
 
@@ -200,9 +200,9 @@ Enables and disables hdmicec driver
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Enabled | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get Enabled | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set Enabled | *(Toggles the enabled value from Step 1, if Step 1 returned true sets false, if false, sets true)*<br>Invoke setEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setEnabled", "params": {"enabled": <toggled_value_from_step_1>}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the enabled state is set successfully |
-| 3 | Get Enabled | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Expected `<toggled_value_from_step_1>` |
+| 3 | Get Enabled | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value matches the toggled value set in step 1  |
 
 ### TestCase Post-condition
 
@@ -211,7 +211,7 @@ Enables and disables hdmicec driver
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Enabled | Set Enabled on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setEnabled", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the enabled state is set successfully |
-| 2 | Get Enabled | Get Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Expected `true` |
+| 2 | Get Enabled | Get Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API returns `true` as the expected result  |
 
 ---
 
@@ -239,7 +239,7 @@ Verify that the OSD (On-Screen Display) name can be set to a specified value and
 | --- | --- | --- | --- |
 | 1 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name is returned successfully |
 | 2 | Set OSD Name | Invoke setOSDName on org.rdk.HdmiCecSource with name: "Television"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": "Television"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the OSD name is set successfully |
-| 3 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Expected `Television` |
+| 3 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television` as expected  |
 
 ### TestCase Post-condition
 
@@ -248,7 +248,7 @@ Verify that the OSD (On-Screen Display) name can be set to a specified value and
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set OSD Name | Set OSD Name on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": "<original_value_from_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the OSD name is restored successfully |
-| 2 | Get OSD Name | Get OSD Name from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Expected `<original_value_from_step_1>` |
+| 2 | Get OSD Name | Get OSD Name from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value matches the original value captured in step 1  |
 
 ---
 
@@ -274,9 +274,9 @@ Enables and Disables the HdmiCec OTP option
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get OTP Enabled | Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get OTP Enabled | Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set OTP Enabled | *(Toggles the enabled value from Step 1: if Step 1 returned true, sets false; if false, sets true)*<br>Invoke setOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled", "params": {"enabled": <toggled_value_from_step_1>}}' http://127.0.0.1:9998/jsonrpc` | Confirm that OTP enabled state is set successfully |
-| 3 | Get OTP Enabled | Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Expected `<toggled_value_from_step_1>` |
+| 3 | Get OTP Enabled | Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value matches the toggled value set in step 1  |
 
 ### TestCase Post-condition
 
@@ -285,7 +285,7 @@ Enables and Disables the HdmiCec OTP option
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set OTP Enabled | Set OTP Enabled on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled", "params": {"enabled": <original_value_from_step_1>}}' http://127.0.0.1:9998/jsonrpc` | Confirm that OTP enabled state is restored successfully |
-| 2 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Expected `<original_value_from_step_1>` |
+| 2 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value matches the original value captured in step 1  |
 
 ---
 
@@ -345,10 +345,10 @@ Verify if the sendStandbyMessage method sends a CEC standby message to the logic
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Set OTP Enabled on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Confirm that OTP enabled state is set successfully |
-| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
-| 4 | Check Perform OTP Action | Perform OTP Action on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` |
+| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 4 | Check Perform OTP Action | Perform OTP Action on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
 
 ---
 
@@ -374,10 +374,10 @@ Verify if the sendstandbymessage method returns an error when the hdmicec driver
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Enabled | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get Enabled | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setEnabled", "params": {"enabled": false}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the enabled state is set successfully |
-| 3 | Get Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
-| 4 | Check Send Standby Message | Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 3 | Get Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 4 | Check Send Standby Message | Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ### TestCase Post-condition
 
@@ -385,9 +385,9 @@ Verify if the sendstandbymessage method returns an error when the hdmicec driver
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Enabled | Get Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get Enabled | Get Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Set Enabled on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setEnabled", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the enabled state is set successfully |
-| 3 | Get Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 3 | Get Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 
 ---
 
@@ -405,7 +405,7 @@ Verify that the setEnabled method returns an error when the 'enabled' parameter 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check Set Enabled No Params | Invoke setEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 1 | Check Set Enabled No Params | Invoke setEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -423,7 +423,7 @@ Verify if the setOTPEnabled method returns an error when 'enabled' parameter is 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check Set OTP Enabled No Params | Invoke setOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 1 | Check Set OTP Enabled No Params | Invoke setOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -451,7 +451,7 @@ Verify if the setVendorId method successfully sets the vendor ID when a valid ve
 | --- | --- | --- | --- |
 | 1 | Get Vendor ID | Invoke getVendorId on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getVendorId"}' http://127.0.0.1:9998/jsonrpc` | Verify that the vendor ID is returned successfully |
 | 2 | Set Vendor ID | Invoke setVendorId on org.rdk.HdmiCecSource with vendorid: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setVendorId", "params": {"vendorid": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the vendor ID is set successfully |
-| 3 | Get Vendor ID | Invoke getVendorId on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getVendorId"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` hdmicecsource get previous vendor id matches value from step 1 |
+| 3 | Get Vendor ID | Invoke getVendorId on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getVendorId"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` hdmicecsource get previous vendor id matches value from step 1  |
 
 ---
 
@@ -477,10 +477,10 @@ Verify if the performOTPAction method returns an error when the OTP action is no
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get OTP Enabled | Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get OTP Enabled | Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled", "params": {"enabled": false}}' http://127.0.0.1:9998/jsonrpc` | Confirm that OTP enabled state is set successfully |
-| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `disabled` state returned |
-| 4 | Check Perform OTP Action | Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `disabled` state returned  |
+| 4 | Check Perform OTP Action | Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ### TestCase Post-condition
 
@@ -488,9 +488,9 @@ Verify if the performOTPAction method returns an error when the OTP action is no
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Set OTP Enabled on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Confirm that OTP enabled state is set successfully |
-| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 
 ---
 
@@ -508,7 +508,7 @@ Verify that the sendKeyPressEvent method returns an error when both the logical 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check Without LogicalAddress and Keycode | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent"}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 1 | Check Without LogicalAddress and Keycode | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -528,13 +528,13 @@ Verify that the getDeviceList method returns an empty list when no CEC-enabled d
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
+| 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response does not contain any connected video display information |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check CEC Enabled Devices List | Invoke getDeviceList on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getDeviceList"}' http://127.0.0.1:9998/jsonrpc` | Verify that the device list is returned successfully |
+| 1 | Check CEC Enabled Devices List | Invoke getDeviceList on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getDeviceList"}' http://127.0.0.1:9998/jsonrpc` | Verify that the device list returns empty (`None`), confirming no CEC-enabled devices are connected (TV not connected) |
 
 ---
 
@@ -561,9 +561,9 @@ Verify that the getActiveSourceStatus method returns the correct active source s
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Active Source Status | Invoke getActiveSourceStatus on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getActiveSourceStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the active source status is returned successfully |
-| 2 | Check Perform OTP Action | *(Conditional statement executed only if previous step condition is met)*<br>Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` |
+| 2 | Check Perform OTP Action | *(Conditional statement executed only if previous step condition is met)*<br>Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
 | 3 | Check Send Standby Message | Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the standby message is sent successfully |
-| 4 | Get Active Source Status | Invoke getActiveSourceStatus on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getActiveSourceStatus"}' http://127.0.0.1:9998/jsonrpc` | Expected `False` |
+| 4 | Get Active Source Status | Invoke getActiveSourceStatus on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getActiveSourceStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API returns `False` as the expected result  |
 
 ### TestCase Post-condition
 
@@ -571,10 +571,10 @@ Verify that the getActiveSourceStatus method returns the correct active source s
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Set OTP Enabled on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Confirm that OTP enabled state is set successfully |
-| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
-| 4 | Check Perform OTP Action | Perform OTP Action on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` |
+| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 4 | Check Perform OTP Action | Perform OTP Action on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
 
 ---
 
@@ -602,8 +602,8 @@ Verify that the getActiveSourceStatus method returns the correct active source s
 | --- | --- | --- | --- |
 | 1 | Get Active Source Status | Invoke getActiveSourceStatus on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getActiveSourceStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the active source status is returned successfully |
 | 2 | Check Send Standby Message | *(Conditional statement executed only if previous step condition is met)*<br>Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the standby message is sent successfully |
-| 3 | Check Perform OTP Action | Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` |
-| 4 | Get Active Source Status | Invoke getActiveSourceStatus on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getActiveSourceStatus"}' http://127.0.0.1:9998/jsonrpc` | Expected `True` |
+| 3 | Check Perform OTP Action | Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
+| 4 | Get Active Source Status | Invoke getActiveSourceStatus on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getActiveSourceStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API returns `True` as the expected result  |
 
 ---
 
@@ -631,7 +631,7 @@ Check if the ondeviceinfoupdated event was triggered when updating the OSD name
 | --- | --- | --- | --- |
 | 1 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name is returned successfully |
 | 2 | Set OSD Name | Invoke setOSDName on org.rdk.HdmiCecSource with name: "Television"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": "Television"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the OSD name is set successfully |
-| 3 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Expected `Television` |
+| 3 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television` as expected  |
 | 4 | Check Device Info Updated Event | Listen for Event_On_Device_Info_Updated event (timeout: 5s) | Verify that the event is received and validated |
 
 ---
@@ -667,10 +667,10 @@ Check whether the standbymessagereceived event has been triggered
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Set OTP Enabled on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Confirm that OTP enabled state is set successfully |
-| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
-| 4 | Check Perform OTP Action | Perform OTP Action on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` |
+| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 4 | Check Perform OTP Action | Perform OTP Action on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
 
 ---
 
@@ -697,7 +697,7 @@ Check whether the onActiveSourceStatusUpdated event has been triggered when the 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Active Source Status | Invoke getActiveSourceStatus on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getActiveSourceStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the active source status is returned successfully |
-| 2 | Check Perform OTP Action | *(Conditional statement executed only if previous step condition is met)*<br>Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` |
+| 2 | Check Perform OTP Action | *(Conditional statement executed only if previous step condition is met)*<br>Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
 | 3 | Check Send Standby Message | Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the standby message is sent successfully |
 | 4 | Check On ActiveSource StatusUpdated Event | Listen for Event_On_Active_Source_Status_Updated event (timeout: 10s) | Verify that the event is received and validated |
 
@@ -707,10 +707,10 @@ Check whether the onActiveSourceStatusUpdated event has been triggered when the 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
+| 1 | Get OTP Enabled | Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Set OTP Enabled on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Confirm that OTP enabled state is set successfully |
-| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` `enabled` state returned |
-| 4 | Check Perform OTP Action | Perform OTP Action on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` |
+| 3 | Get OTP Enabled | *(Conditional statement executed only if previous step condition is met)*<br>Get OTP Enabled from HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 4 | Check Perform OTP Action | Perform OTP Action on HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
 
 ---
 
@@ -738,7 +738,7 @@ Check whether the onActiveSourceStatusUpdated event has been triggered when the 
 | --- | --- | --- | --- |
 | 1 | Get Active Source Status | Invoke getActiveSourceStatus on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getActiveSourceStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the active source status is returned successfully |
 | 2 | Check Send Standby Message | *(Conditional statement executed only if previous step condition is met)*<br>Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the standby message is sent successfully |
-| 3 | Check Perform OTP Action | Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` |
+| 3 | Check Perform OTP Action | Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
 | 4 | Check On ActiveSource StatusUpdated Event | Listen for Event_On_Active_Source_Status_Updated event (timeout: 10s) | Verify that the event is received and validated |
 
 ---
@@ -833,10 +833,10 @@ Verify if the onDeviceInfoUpdated event is not triggered when the OSD name is se
 | --- | --- | --- | --- |
 | 1 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name is returned successfully |
 | 2 | Set OSD Name | Invoke setOSDName on org.rdk.HdmiCecSource with name: "Television"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": "Television"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the OSD name is set successfully |
-| 3 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Expected `Television` |
+| 3 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television` as expected  |
 | 4 | Set OSD Name | Invoke setOSDName on org.rdk.HdmiCecSource with name: "Television"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": "Television"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the OSD name is set successfully |
-| 5 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Expected `Television` |
-| 6 | Check Device Info Updated Event | Listen for Event_On_Device_Info_Updated event (timeout: 5s) | Event should not occur |
+| 5 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television` as expected  |
+| 6 | Check Device Info Updated Event | Listen for Event_On_Device_Info_Updated event (timeout: 5s) | Verify that no event is received during this operation  |
 
 ---
 
@@ -864,7 +864,7 @@ Verify if the onDeviceInfoUpdated event is not triggered when no changes are mad
 | --- | --- | --- | --- |
 | 1 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name is returned successfully |
 | 2 | Get Vendor ID | Invoke getVendorId on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getVendorId"}' http://127.0.0.1:9998/jsonrpc` | Verify that the vendor ID is returned successfully |
-| 3 | Check Device Info Updated Event | Listen for Event_On_Device_Info_Updated event (timeout: 5s) | Event should not occur |
+| 3 | Check Device Info Updated Event | Listen for Event_On_Device_Info_Updated event (timeout: 5s) | Verify that no event is received during this operation  |
 
 ---
 
@@ -892,9 +892,9 @@ Verify if the onDeviceInfoUpdated event is triggered when the OSD name is update
 | --- | --- | --- | --- |
 | 1 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name is returned successfully |
 | 2 | Set OSD Name | Invoke setOSDName on org.rdk.HdmiCecSource with name: "Television"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": "Television"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the OSD name is set successfully |
-| 3 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Expected `Television` |
+| 3 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television` as expected  |
 | 4 | Set OSD Name | Invoke setOSDName on org.rdk.HdmiCecSource with name: "Television1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": "Television1"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the OSD name is set successfully |
-| 5 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Expected `Television1` |
+| 5 | Get OSD Name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television1` as expected  |
 | 6 | Check Device Info Updated Event | Listen for Event_On_Device_Info_Updated event (timeout: 5s) | Verify that the event is received and validated |
 
 ---
@@ -1083,7 +1083,7 @@ Verify if the sendKeyPressEvent method returns an error when an invalid logical 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Send Key Press Event Invalid Address | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with logicalAddress: "InvalidAddress"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": "InvalidAddress", "keyCode": 65}}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 1 | Send Key Press Event Invalid Address | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with logicalAddress: "InvalidAddress"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": "InvalidAddress", "keyCode": 65}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -1101,7 +1101,7 @@ Verify if the sendKeyPressEvent method returns an error when an invalid keycode 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Send Key Press Event Invalid Keycode | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with keyCode: "InvalidKeycode"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": 0, "keyCode": "InvalidKeycode"}}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 1 | Send Key Press Event Invalid Keycode | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with keyCode: "InvalidKeycode"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": 0, "keyCode": "InvalidKeycode"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -1119,7 +1119,7 @@ Verify if the sendKeyPressEvent method returns an error when both the logical ad
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Send Key Press Event Invalid Params | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with logicalAddress: "InvalidAddress", keyCode: "InvalidKeycode"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": "InvalidAddress", "keyCode": "InvalidKeycode"}}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 1 | Send Key Press Event Invalid Params | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with logicalAddress: "InvalidAddress", keyCode: "InvalidKeycode"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": "InvalidAddress", "keyCode": "InvalidKeycode"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -1137,7 +1137,7 @@ Verify if the sendKeyPressEvent method returns an error when the logical address
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Send Key Press Event No KeyCode | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with keyCode: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": 0, "keyCode": ""}}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 1 | Send Key Press Event No KeyCode | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with keyCode: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": 0, "keyCode": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -1155,7 +1155,7 @@ Verify if the sendKeyPressEvent method returns an error when the keycode is vali
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Send Key Press Event No Logical Address | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with logicalAddress: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": "", "keyCode": 65}}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 1 | Send Key Press Event No Logical Address | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with logicalAddress: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": "", "keyCode": 65}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -1173,7 +1173,7 @@ Verify if the sendKeyPressEvent method returns an error when neither the logical
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Send Key Press Event No Params | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with logicalAddress: "", keyCode: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": "", "keyCode": ""}}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 1 | Send Key Press Event No Params | Invoke sendKeyPressEvent on org.rdk.HdmiCecSource with logicalAddress: "", keyCode: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendKeyPressEvent", "params": {"logicalAddress": "", "keyCode": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -1191,7 +1191,7 @@ Validate by setting up invalid OSD Name
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set OSD Name | Invoke setOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": 123}}' http://127.0.0.1:9998/jsonrpc` | `success`: `false` (expected error response) |
+| 1 | Set OSD Name | Invoke setOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": 123}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -1233,3 +1233,5 @@ Validate by setting up empty Vendor ID
 | Estimated Duration | 15 minutes |
 | Priority | Medium |
 | TDK Release Version | M129 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

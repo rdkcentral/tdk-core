@@ -145,8 +145,8 @@ Check whether getInfo method returns non-empty result
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
-| 2 | Get Application Info | Invoke getInfo on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API call should succeed and return a non-empty result |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
+| 2 | Get Application Info | Invoke getInfo on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.getInfo", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds and returns a non-empty result  |
 
 ---
 
@@ -254,7 +254,7 @@ Test annotate method with valid parameters
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Annotate Application Valid Params | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "testKey", value: "testValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -309,7 +309,7 @@ Test annotate method with empty key parameter
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Annotate Application Empty Key | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "", value: "testValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -328,7 +328,7 @@ Test annotate method with invalid key parameter
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Annotate Application Invalid Key | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "invalid_key", value: "testValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "invalid_key", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -347,7 +347,7 @@ Test annotate method with special characters in key
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Annotate Application SpecialChars Key | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "()^*!", value: "testValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "()^*!", "value": "testValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -366,7 +366,7 @@ Test annotate method with empty value parameter
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Annotate Application Empty Value | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "testKey", value: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "value": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -385,7 +385,7 @@ Test annotate method with special characters in value
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Annotate Application SpecialChars Value | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "testKey", value: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "value": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -404,7 +404,7 @@ Test annotate method with invalid parameter
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Annotate Application Invalid Parameter | Invoke annotate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", key: "testKey", invalidParam: "invalidValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.annotate", "params": {"appInstanceId": "<result_step_1>", "key": "testKey", "invalidParam": "invalidValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -441,7 +441,7 @@ Test hibernate method with valid appInstanceId
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Hibernate Application | Invoke hibernate on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.hibernate", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -550,7 +550,7 @@ Test suspend method with valid appInstanceId
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Suspend Application | Invoke suspend on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.suspend", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -659,7 +659,7 @@ Test resume method with valid appInstanceId
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Resume Application | Invoke resume on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.resume", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -768,7 +768,7 @@ Test wake method with valid appInstanceId and running state
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Wake Application Running State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", state: "running"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": "running"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -787,7 +787,7 @@ Test wake method with valid appInstanceId and suspended state
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Wake Application Suspended State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", state: "suspended"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": "suspended"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -878,7 +878,7 @@ Test wake method with invalid state parameter
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Wake Application Invalid State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", state: "invalid_state"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": "invalid_state"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -897,7 +897,7 @@ Test wake method with empty state parameter
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Wake Application Empty State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>", state: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>", "state": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
@@ -934,7 +934,7 @@ Test wake method without state parameter
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Expected `<PACKAGEMANAGER_APPLICATION_NAME> (APP_STATE_ACTIVE)` |
+| 1 | Get AppInstance Id | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that application `<PACKAGEMANAGER_APPLICATION_NAME>` is in `APP_STATE_ACTIVE` state as expected  |
 | 2 | Wake Application Without State | Invoke wake on org.rdk.RuntimeManager with appInstanceId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RuntimeManager.1.wake", "params": {"appInstanceId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ## Plugin Post-conditions
@@ -956,3 +956,5 @@ Test wake method without state parameter
 | Estimated Duration | 20 minutes |
 | Priority | Medium |
 | TDK Release Version | M147 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

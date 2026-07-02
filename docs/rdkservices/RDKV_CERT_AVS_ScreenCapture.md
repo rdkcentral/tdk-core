@@ -77,7 +77,7 @@ ScreenCapture_Upload_Screen
 SC_02
 
 ### TestCase Objective
-Uploads the screenshott
+Uploads the screenshot
 
 ### Test Steps
 
@@ -160,3 +160,5 @@ Upload screen and check GUID in  uploadComplete Event
 | Estimated Duration | 5 minutes |
 | Priority | Medium |
 | TDK Release Version | M82 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

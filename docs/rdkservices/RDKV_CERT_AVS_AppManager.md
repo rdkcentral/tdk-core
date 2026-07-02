@@ -1610,7 +1610,7 @@ Verify setAppProperty sets key 'delay' to value '10' for the valid appId
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set App Property Delay 10 | Invoke setAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: "delay"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.setAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": "delay", "value": 10}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Verify Get App Property | Invoke getAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: "delay"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": "delay"}}' http://127.0.0.1:9998/jsonrpc` | Status matches expected value `10` |
+| 2 | Verify Get App Property | Invoke getAppProperty on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", key: "delay"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getAppProperty", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "key": "delay"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned status matches the expected value `10`  |
 
 ---
 
@@ -2744,3 +2744,5 @@ Verify that the terminated app is no longer reflected in the list of loaded apps
 | Estimated Duration | 15 minutes |
 | Priority | Medium |
 | TDK Release Version | M147 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

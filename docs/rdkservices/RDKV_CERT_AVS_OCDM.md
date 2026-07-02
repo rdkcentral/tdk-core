@@ -56,8 +56,8 @@ Gets supported DRMs & DRM key systems
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Supported DRM Systems | Invoke drms on OCDM<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "OCDM.1.drms"}' http://127.0.0.1:9998/jsonrpc` | Expected `<OCDM_SUPPORTED_DRM_SYSTEMS>` |
-| 2 | Get DRM Key Systems | Invoke keysystems on OCDM for <result_step_1><br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "OCDM.1.keysystems@<result_step_1>"}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` drm key matches value from step 1 |
+| 1 | Get Supported DRM Systems | Invoke drms on OCDM<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "OCDM.1.drms"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported DRM systems match the expected value `<OCDM_SUPPORTED_DRM_SYSTEMS>` from the device config file  |
+| 2 | Get DRM Key Systems | Invoke keysystems on OCDM for <result_step_1><br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "OCDM.1.keysystems@<result_step_1>"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` drm key matches value from step 1  |
 
 ---
 
@@ -110,3 +110,5 @@ Validates statechange event on Activating/deactivating the plugin
 | Estimated Duration | 5 minutes |
 | Priority | Medium |
 | TDK Release Version | M81 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

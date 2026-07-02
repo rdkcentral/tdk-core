@@ -272,7 +272,7 @@ Check getPreinstallState method behavior
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check PreInstallState | Invoke getPreinstallState on org.rdk.PreinstallManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.getPreinstallState"}' http://127.0.0.1:9998/jsonrpc` | Expected: `NOT_STARTED,IN_PROGRESS,COMPLETED` |
+| 1 | Check PreInstallState | Invoke getPreinstallState on org.rdk.PreinstallManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.getPreinstallState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the maintenance status transitions through `NOT_STARTED`, `IN_PROGRESS`, and `COMPLETED` states  |
 
 ---
 
@@ -333,3 +333,5 @@ _No plugin-level post-conditions defined_
 | Estimated Duration | 20 minutes |
 | Priority | Medium |
 | TDK Release Version | M147 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

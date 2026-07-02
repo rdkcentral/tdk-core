@@ -70,7 +70,7 @@ Resets memory and process statistics for a single service
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Reset Statistics | Invoke resetstats on Monitor with callsign: "org.rdk.NetworkManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Monitor.1.resetstats", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Response contains `observable`: `"org.rdk.NetworkManager"`, `restartLimit` and `restartWindow` numeric values are present and `measurements` array is returned (each entry has `operational` boolean and `count` integer fields) |
+| 1 | Reset Statistics | Invoke resetstats on Monitor with callsign: "org.rdk.NetworkManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Monitor.1.resetstats", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains `observable`: `"org.rdk.NetworkManager"` with `restartLimit` and `restartWindow` numeric values present  |
 
 ---
 
@@ -88,7 +88,7 @@ Lists the service statistics
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Status | Invoke status on Monitor for org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Monitor.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Response contains `observable`: `"org.rdk.NetworkManager"`, `restartLimit` and `restartWindow` numeric values are present and `measurements` array is returned (each entry has `operational` boolean and `count` integer fields) |
+| 1 | Get Status | Invoke status on Monitor for org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Monitor.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains `observable`: `"org.rdk.NetworkManager"` with `restartLimit` and `restartWindow` numeric values present  |
 
 ---
 
@@ -227,3 +227,5 @@ Verify that the restartlimits method returns an error when the plugin is in a de
 | Estimated Duration | 5 minutes |
 | Priority | Medium |
 | TDK Release Version | M82 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

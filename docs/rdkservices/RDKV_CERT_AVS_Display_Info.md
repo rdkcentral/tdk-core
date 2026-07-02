@@ -121,7 +121,7 @@ Read isaudioPassthrough property on HDMI.
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | IsAudiopassthrough | Invoke isaudiopassthrough on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.isaudiopassthrough"}' http://127.0.0.1:9998/jsonrpc` | Response contains `isaudiopassthrough` boolean field — `true` if HDMI audio is passed through directly to the TV, `false` otherwise |
+| 1 | IsAudiopassthrough | Invoke isaudiopassthrough on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.isaudiopassthrough"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains `isaudiopassthrough` boolean field — `true` if HDMI audio is passed through directly to the TV, `false` otherwise  |
 
 ---
 
@@ -139,7 +139,7 @@ Is HDMI connected.
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | IsHDMIConnected | Invoke connected on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.connected"}' http://127.0.0.1:9998/jsonrpc` | Response contains `connected` boolean field — `true` if an HDMI display is currently connected, `false` otherwise |
+| 1 | IsHDMIConnected | Invoke connected on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.connected"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains `connected` boolean field — `true` if an HDMI display is currently connected, `false` otherwise  |
 
 ---
 
@@ -158,8 +158,8 @@ Get width of the current resolution.
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
-| 2 | DisplaySettings getsupportedresolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
-| 3 | Getresolutionwidth | Invoke width on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.width"}' http://127.0.0.1:9998/jsonrpc` | Response returns horizontal resolution width in pixels — value matches the width mapped from the current resolution retrieved in Step 2 |
+| 2 | DisplaySettings getsupportedresolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
+| 3 | Getresolutionwidth | Invoke width on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.width"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns the horizontal resolution width in pixels, matching the width mapped from the current resolution  |
 
 ---
 
@@ -178,8 +178,8 @@ Get height of the current resolution.
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
-| 2 | DisplaySettings getsupportedresolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
-| 3 | Getresolutionheight | Invoke height on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.height"}' http://127.0.0.1:9998/jsonrpc` | Response returns vertical resolution height in pixels — value matches the height mapped from the current resolution retrieved in Step 2 |
+| 2 | DisplaySettings getsupportedresolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
+| 3 | Getresolutionheight | Invoke height on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.height"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns the vertical resolution height in pixels, matching the height mapped from the current resolution  |
 
 ---
 
@@ -205,7 +205,7 @@ Get Vertical frequency.
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Getverticalfrequency | Invoke verticalfreq on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.verticalfreq"}' http://127.0.0.1:9998/jsonrpc` | Response returns vertical refresh frequency in mHz as a non-zero positive integer |
+| 1 | Getverticalfrequency | Invoke verticalfreq on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.verticalfreq"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns vertical refresh frequency in mHz as a non-zero positive integer  |
 
 ---
 
@@ -231,7 +231,7 @@ Get HDCP version.
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Gethdcpversion | Invoke hdcpprotection on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.hdcpprotection"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current HDCP protocol version — one of `HdcpUnencrypted`, `Hdcp1X`, `Hdcp2X`, or `HdcpAuto` |
+| 1 | Gethdcpversion | Invoke hdcpprotection on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.hdcpprotection"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns the current HDCP protocol version — one of `HdcpUnencrypted`, `Hdcp1X`, `Hdcp2X`, or `HdcpAuto`  |
 
 ---
 
@@ -257,7 +257,7 @@ Get portname used for TV connection.
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Getportname | Invoke portname on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.portname"}' http://127.0.0.1:9998/jsonrpc` | Response returns a non-empty video output port name used for the TV connection |
+| 1 | Getportname | Invoke portname on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.portname"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns a non-empty video output port name used for the TV connection  |
 
 ---
 
@@ -283,8 +283,8 @@ Get EDID of connected display
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Connected Device  EDID Details | Invoke readEDID on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.readEDID"}' http://127.0.0.1:9998/jsonrpc` | EDID data string returned from the connected display via `org.rdk.DisplaySettings` (base64-encoded, non-empty) |
-| 2 | GetEDID | Invoke edid on DisplayInfo with length: "<DISPLAYINFO_EDID_DATA_LENGTH>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.edid", "params": {"length": "<DISPLAYINFO_EDID_DATA_LENGTH>"}}' http://127.0.0.1:9998/jsonrpc` | EDID data returned by `DisplayInfo` matches the EDID data retrieved from `org.rdk.DisplaySettings` in Step 1 |
+| 1 | Get Connected Device  EDID Details | Invoke readEDID on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.readEDID"}' http://127.0.0.1:9998/jsonrpc` | Verify that the EDID data string returned from the connected display via `org.rdk.DisplaySettings` is a non-empty base64-encoded string  |
+| 2 | GetEDID | Invoke edid on DisplayInfo with length: "<DISPLAYINFO_EDID_DATA_LENGTH>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.edid", "params": {"length": "<DISPLAYINFO_EDID_DATA_LENGTH>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the EDID data returned by `DisplayInfo` matches the EDID data retrieved from `org.rdk.DisplaySettings` in step 1  |
 
 ---
 
@@ -351,7 +351,7 @@ Gets the HDR formats supported by TV
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | GetHDRFormatsTV | Invoke tvcapabilities on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.tvcapabilities"}' http://127.0.0.1:9998/jsonrpc` | Response returns a non-empty array of HDR formats supported by the connected TV — each entry is one of `HdrOff`, `Hdr10`, `Hdr10Plus`, `HdrHlg`, `HdrDolbyvision`, `HdrTechnicolor` |
+| 1 | GetHDRFormatsTV | Invoke tvcapabilities on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.tvcapabilities"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns a non-empty array of HDR formats supported by the connected TV (one of `HdrOff`, `Hdr10`, `Hdr10Plus`, `HdrHlg`, or `HdrDolbyVision`)  |
 
 ---
 
@@ -377,7 +377,7 @@ Gets the HDR formats supported by STB
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | GetHDRFormatsSTB | Invoke stbcapabilities on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.stbcapabilities"}' http://127.0.0.1:9998/jsonrpc` | Response returns a non-empty array of HDR formats supported by the STB — each entry is one of `HdrOff`, `Hdr10`, `Hdr10Plus`, `HdrHlg`, `HdrDolbyvision`, `HdrTechnicolor` |
+| 1 | GetHDRFormatsSTB | Invoke stbcapabilities on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.stbcapabilities"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns a non-empty array of HDR formats supported by the STB (one of `HdrOff`, `Hdr10`, `Hdr10Plus`, `HdrHlg`, or `HdrDolbyVision`)  |
 
 ---
 
@@ -403,7 +403,7 @@ Gets the HDR formats in use
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | GetHDRFormatInUse | Invoke hdrsetting on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.hdrsetting"}' http://127.0.0.1:9998/jsonrpc` | Response returns the HDR format currently active on the display — one of `HdrOff`, `Hdr10`, `Hdr10Plus`, `HdrHlg`, `HdrDolbyvision`, `HdrTechnicolor` |
+| 1 | GetHDRFormatInUse | Invoke hdrsetting on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.hdrsetting"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns the HDR format currently active on the display (one of `HdrOff`, `Hdr10`, `Hdr10Plus`, `HdrHlg`, or `HdrDolbyVision`)  |
 
 ---
 
@@ -429,7 +429,7 @@ Gets the total GPU DRAM memory in bytes
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Total GPU RAM | Invoke totalgpuram on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.totalgpuram"}' http://127.0.0.1:9998/jsonrpc` | Response returns total GPU DRAM memory in bytes as a non-zero positive integer |
+| 1 | Get Total GPU RAM | Invoke totalgpuram on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.totalgpuram"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns total GPU DRAM memory in bytes as a non-zero positive integer  |
 
 ---
 
@@ -455,7 +455,7 @@ Gets the free GPU DRAM memory in bytes
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Free GPU RAM | Invoke freegpuram on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.freegpuram"}' http://127.0.0.1:9998/jsonrpc` | Response returns free GPU DRAM memory in bytes as a non-negative integer (value ≤ `totalgpuram`) |
+| 1 | Get Free GPU RAM | Invoke freegpuram on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.freegpuram"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns free GPU DRAM memory in bytes as a non-negative integer (value ≤ `totalgpuram`)  |
 
 ---
 
@@ -481,7 +481,7 @@ Gets the horizontal size in centimeters
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Width In Centimeters | Invoke widthincentimeters on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.widthincentimeters"}' http://127.0.0.1:9998/jsonrpc` | Response returns horizontal screen size in centimeters as a non-zero positive integer |
+| 1 | Get Width In Centimeters | Invoke widthincentimeters on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.widthincentimeters"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns horizontal screen size in centimeters as a non-zero positive integer  |
 
 ---
 
@@ -507,7 +507,7 @@ Gets the vertical size in centimeters
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Height In Centimeters | Invoke heightincentimeters on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.heightincentimeters"}' http://127.0.0.1:9998/jsonrpc` | Response returns vertical screen size in centimeters as a non-zero positive integer |
+| 1 | Get Height In Centimeters | Invoke heightincentimeters on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.heightincentimeters"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns vertical screen size in centimeters as a non-zero positive integer  |
 
 ---
 
@@ -526,13 +526,13 @@ Checks for the Resolution Post Change event
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
-| 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
-| 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the current resolution is returned successfully |
-| 4 | Retrieve Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the current resolution is returned successfully |
-| 5 | Set Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>", resolution: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "<result_step_1>", "resolution": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the resolution change is applied to the display |
-| 6 | Get Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution"}' http://127.0.0.1:9998/jsonrpc` | Returned resolution matches the value set in Step 5 |
-| 7 | Check Updated PostRequisite Change Event | *(Conditional statement executed only if resolution changed between Step 4 and Step 6)*<br>Listen for Event_Pre_Post_Resolution_Change event (timeout: 2s) | Expected `postresolutionchange` event received confirming the resolution change completed |
-| 8 | Check Updated PostRequisite Change Event | *(Conditional statement executed only if resolution was unchanged between Step 4 and Step 6)*<br>Listen for Event_Pre_Post_Resolution_Change event (timeout: 2s) | No `postresolutionchange` event received — resolution was already at the target value; event is absent or empty |
+| 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
+| 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the current resolution is returned successfully |
+| 4 | Retrieve Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the current resolution is returned successfully |
+| 5 | Set Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay, resolution: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "<result_step_1>", "resolution": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the resolution change is applied to the display |
+| 6 | Get Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned resolution matches the value set in step 5  |
+| 7 | Check Updated PostRequisite Change Event | *(Conditional statement executed only if resolution changed between Step 4 and Step 6)*<br>Listen for Event_Pre_Post_Resolution_Change event (timeout: 2s) | Verify that the `postresolutionchange` event is received, confirming the resolution change completed successfully  |
+| 8 | Check Updated PostRequisite Change Event | *(Conditional statement executed only if resolution was unchanged between Step 4 and Step 6)*<br>Listen for Event_Pre_Post_Resolution_Change event (timeout: 2s) | Verify that no `postresolutionchange` event is received — resolution was already at the target value; event is absent or empty  |
 
 ---
 
@@ -552,13 +552,13 @@ Checks the HDMI connection status when TV is not connected
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
+| 1 | Check Display Connected Status | Get Connected Video Displays from DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response does not contain any connected video display information |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | IsHDMIConnected | Invoke connected on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.connected"}' http://127.0.0.1:9998/jsonrpc` | `connected`: `false` — HDMI display is not connected (test requires TV disconnected as pre-condition) |
+| 1 | IsHDMIConnected | Invoke connected on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.connected"}' http://127.0.0.1:9998/jsonrpc` | Verify that `connected` is `false` — HDMI display is not connected (test requires TV disconnected as pre-condition)  |
 
 ---
 
@@ -584,7 +584,7 @@ Gets the display color space
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Color Space | Invoke colorspace on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.colorspace"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current display color space — one of `FORMATUNKNOWN`, `FORMATOTHER`, `FORMATRGB444`, `FORMATYCBCR444`, `FORMATYCBCR422`, `FORMATYCBCR420` |
+| 1 | Get Color Space | Invoke colorspace on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.colorspace"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns the current display color space (one of `FORMATUNKNOWN`, `FORMATOTHER`, `FORMATRGB444`, `FORMATYCBCR444`, etc.)  |
 
 ---
 
@@ -610,7 +610,7 @@ Gets the display colour depth
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Colour Depth | Invoke colourdepth on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.colourdepth"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current display colour depth — one of `COLORDEPTHUNKNOWN`, `COLORDEPTH8BIT`, `COLORDEPTH10BIT`, `COLORDEPTH12BIT` |
+| 1 | Get Colour Depth | Invoke colourdepth on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.colourdepth"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns the current display colour depth (one of `COLORDEPTHUNKNOWN`, `COLORDEPTH8BIT`, `COLORDEPTH10BIT`, `COLORDEPTH12BIT`)  |
 
 ---
 
@@ -636,7 +636,7 @@ Gets the display quantization range
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Quantization Range | Invoke quantizationrange on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.quantizationrange"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current display quantization range — one of `QUANTIZATIONRANGEUNKNOWN`, `QUANTIZATIONRANGELIMITED`, `QUANTIZATIONRANGEFULL` |
+| 1 | Get Quantization Range | Invoke quantizationrange on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.quantizationrange"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns the current display quantization range (one of `QUANTIZATIONRANGEUNKNOWN`, `QUANTIZATIONRANGELIMITED`, or `QUANTIZATIONRANGEFULL`)  |
 
 ---
 
@@ -662,7 +662,7 @@ Gets the display colorimetry
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Colorimetry | Invoke colorimetry on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.colorimetry"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current display colorimetry — one of the values configured in `DISPLAYINFO_SUPPORTED_COLORIMETRY_LIST` (e.g., `BT2020cL`, `BT2020ncl`, `DCI_P3`, `Sycc601`) |
+| 1 | Get Colorimetry | Invoke colorimetry on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.colorimetry"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns the current display colorimetry as one of the values configured in `DISPLAYINFO_SUPPORTED_COLORIMETRY_LIST`  |
 
 ---
 
@@ -688,7 +688,7 @@ Gets the display Electro Optical Transfer Function
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get EOTF | Invoke eotf on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.eotf"}' http://127.0.0.1:9998/jsonrpc` | Response returns the current Electro Optical Transfer Function in use — one of `EOTFUNKNOWN`, `EOTFOTHER`, `EOTFBT1886`, `EOTFBT2100`, `EOTFSMPTEST2084` |
+| 1 | Get EOTF | Invoke eotf on DisplayInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DisplayInfo.1.eotf"}' http://127.0.0.1:9998/jsonrpc` | Verify that the response returns the current Electro Optical Transfer Function in use (one of `EOTFUNKNOWN`, `EOTFOTHER`, `EOTFBT1886`, `EOTFST2084`, or `EOTFHLG`)  |
 
 ---
 
@@ -740,13 +740,13 @@ Checks for the Resolution Pre Change event
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
-| 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
-| 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the current resolution is returned successfully |
-| 4 | Retrieve Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the current resolution is returned successfully |
-| 5 | Set Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay: "<result_step_1>", resolution: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "<result_step_1>", "resolution": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the resolution change is applied to the display |
-| 6 | Get Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution"}' http://127.0.0.1:9998/jsonrpc` | Returned resolution matches the value set in Step 5 |
-| 7 | Check Updated PreResolution Change Event | *(Conditional statement executed only if resolution changed between Step 4 and Step 6)*<br>Listen for Event_Pre_Post_Resolution_Change event (timeout: 2s) | Expected `preresolutionchange` event received confirming the display is about to apply the new resolution |
-| 8 | Check Updated PreResolution Change Event | *(Conditional statement executed only if resolution was unchanged between Step 4 and Step 6)*<br>Listen for Event_Pre_Post_Resolution_Change event (timeout: 2s) | No `preresolutionchange` event received — resolution was already at the target value; event is absent or empty |
+| 2 | Get Supported Resolutions | Invoke getSupportedResolutions on org.rdk.DisplaySettings with videoDisplay<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedResolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported resolutions are returned successfully |
+| 3 | Get Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the current resolution is returned successfully |
+| 4 | Retrieve Current Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings with videoDisplay<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the current resolution is returned successfully |
+| 5 | Set Resolution | Invoke setCurrentResolution on org.rdk.DisplaySettings with videoDisplay, resolution: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.setCurrentResolution", "params": {"videoDisplay": "<result_step_1>", "resolution": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the resolution change is applied to the display |
+| 6 | Get Resolution | Invoke getCurrentResolution on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getCurrentResolution"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned resolution matches the value set in step 5  |
+| 7 | Check Updated PreResolution Change Event | *(Conditional statement executed only if resolution changed between Step 4 and Step 6)*<br>Listen for Event_Pre_Post_Resolution_Change event (timeout: 2s) | Verify that the `preresolutionchange` event is received, confirming the display is about to apply the new resolution  |
+| 8 | Check Updated PreResolution Change Event | *(Conditional statement executed only if resolution was unchanged between Step 4 and Step 6)*<br>Listen for Event_Pre_Post_Resolution_Change event (timeout: 2s) | Verify that no `preresolutionchange` event is received — resolution was already at the target value; event is absent or empty  |
 
 ## Plugin Post-conditions
 
@@ -767,3 +767,5 @@ Checks for the Resolution Pre Change event
 | Estimated Duration | 20 minutes |
 | Priority | Medium |
 | TDK Release Version | M81 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

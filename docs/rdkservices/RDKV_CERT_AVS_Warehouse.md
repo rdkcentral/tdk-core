@@ -98,7 +98,7 @@ Sets the front panel state to None
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": -1}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Front Panel State set to None successfully |
+| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": -1}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the Front Panel State is set to None successfully  |
 
 ---
 
@@ -116,7 +116,7 @@ Sets the front panel state to DOWNLOAD IN PROGRESS
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 1}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Front Panel State set to Download In Progress successfully |
+| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 1}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the Front Panel State is set to Download In Progress successfully  |
 
 ---
 
@@ -134,7 +134,7 @@ Sets the front panel state to DOWNLOAD FAILED
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 3}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Front Panel State set to Download Failed successfully |
+| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 3}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the Front Panel State is set to Download Failed successfully  |
 
 ---
 
@@ -152,7 +152,7 @@ Sets the front panel state to invalid value
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 2}}' http://127.0.0.1:9998/jsonrpc` | API returns error `success: false` |
+| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 2}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API returns `success`: `false`, indicating an error or unsupported operation  |
 
 ---
 
@@ -170,7 +170,7 @@ Performs a light reset of application data
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Light Reset | Invoke lightReset on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.lightReset"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Light Reset completed successfully |
+| 1 | Light Reset | Invoke lightReset on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.lightReset"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the Light Reset completes successfully  |
 
 ---
 
@@ -188,7 +188,7 @@ Checks locations where customer data may be stored
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Is Clean | Invoke isClean on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.isClean"}' http://127.0.0.1:9998/jsonrpc` | API should return `success` : `true`, and the `clean` flag must correctly reflect status true with no files listed, or false with one or more dirty files in the files array |
+| 1 | Is Clean | Invoke isClean on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.isClean"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the `clean` flag correctly reflects the status — `true` with no files listed, or `false` with one or more files present  |
 
 ---
 
@@ -206,8 +206,8 @@ Resets the STB to the warehouse state
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Reset Device | Invoke resetDevice on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.resetDevice"}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Device reset to warehouse state successfully |
-| 2 | Check Device Active Status | *(External function call no JSON-RPC command required)*<br>Checks whether the device has come back online after the reset. Once online, plugin pre-requisites are re-initialized internally | Device should come back online within 120 seconds and plugin pre-requisites restored successfully |
+| 1 | Reset Device | Invoke resetDevice on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.resetDevice"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the device is reset to the warehouse state successfully  |
+| 2 | Check Device Active Status | *(External function call no JSON-RPC command required)*<br>Checks whether the device has come back online after the reset. Once online, plugin pre-requisites are re-initialized internally | Verify that the device comes back online within 120 seconds and plugin pre-requisites are restored successfully  |
 
 ---
 
@@ -225,8 +225,8 @@ Invokes the internal reset script, which reboots the Warehouse service
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Internal Reset | Invoke internalReset on org.rdk.Warehouse with passPhrase: "FOR TEST PURPOSES ONLY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.internalReset", "params": {"passPhrase": "FOR TEST PURPOSES ONLY"}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Internal Reset completed successfully; WarehouseService rebooted |
-| 2 | Check Device Active Status | *(External function call no JSON-RPC command required)*<br>Checks whether the device has come back online after the reset. Once online, plugin pre-requisites are re-initialized internally | Device should come back online within 120 seconds and plugin pre-requisites restored successfully |
+| 1 | Internal Reset | Invoke internalReset on org.rdk.Warehouse with passPhrase: "FOR TEST PURPOSES ONLY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.internalReset", "params": {"passPhrase": "FOR TEST PURPOSES ONLY"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the Internal Reset completes successfully, causing the WarehouseService to reboot  |
+| 2 | Check Device Active Status | *(External function call no JSON-RPC command required)*<br>Checks whether the device has come back online after the reset. Once online, plugin pre-requisites are re-initialized internally | Verify that the device comes back online within 120 seconds and plugin pre-requisites are restored successfully  |
 
 ---
 
@@ -244,8 +244,8 @@ Checks if event is received on device reset
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Reset Device | Invoke resetDevice on org.rdk.Warehouse with resetType: "USERFACTORY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.resetDevice", "params": {"resetType": "USERFACTORY"}}' http://127.0.0.1:9998/jsonrpc` | Expected `success` : `true` Device reset with `USERFACTORY` reset type successfully |
-| 2 | Check Event Reset Done | *(Event registration done in Pre-condition 2)*<br>Listen for resetDone event (Event_Reset_Done) on org.rdk.Warehouse (wait 5s) | Expected `True` and `resetDone` event received confirming warehouse reset operation completed |
+| 1 | Reset Device | Invoke resetDevice on org.rdk.Warehouse with resetType: "USERFACTORY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.resetDevice", "params": {"resetType": "USERFACTORY"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the device is reset with `USERFACTORY` reset type successfully  |
+| 2 | Check Event Reset Done | *(Event registration done in Pre-condition 2)*<br>Listen for resetDone event (Event_Reset_Done) on org.rdk.Warehouse (wait 5s) | Verify that the API returns `True` and the `resetDone` event is received, confirming the warehouse reset operation completed successfully  |
 
 ### TestCase Post-condition
 
@@ -357,3 +357,5 @@ Validates all event on Activating/deactivating the plugin
 | Estimated Duration | 15 minutes |
 | Priority | Medium |
 | TDK Release Version | M82 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

@@ -27,7 +27,7 @@ accessible via JSON-RPC under the callsign `org.rdk.DeviceDiagnostics` (version 
 | API | Description |
 | --- | --- |
 | `getAVDecoderStatus` | Gets the most active status of audio/video decoder/pipeline |
-| `getConfiguration` | RDK API interface for the WebPA service |
+| `getConfiguration` | Gets the values associated with the corresponding property names |
 
 ## Events Under Test
 
@@ -130,18 +130,18 @@ Checks the AV decoder status in idle and active state on launching and terminati
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Set Value on PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "MVS", "key": "lightningURL", "value": "<DEVICE_DIAGNOSTICS_PLAYBACK_URL>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
-| 2 | Get Value | Get Value from PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "MVS", "key": "lightningURL"}}' http://127.0.0.1:9998/jsonrpc` | Expected `<DEVICE_DIAGNOSTICS_PLAYBACK_URL>` |
+| 2 | Get Value | Get Value from PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "MVS", "key": "lightningURL"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the stored playback URL matches the expected value `<DEVICE_DIAGNOSTICS_PLAYBACK_URL>` from the device config file  |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AVDecoder Status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | AV decoder status is `"idle"` |
+| 1 | Get AVDecoder Status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the AV decoder status is `"idle"`, indicating no active decoding  |
 | 2 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check App Launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-| 4 | Get AVDecoder Status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | AV decoder status is `"active"` |
+| 4 | Get AVDecoder Status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the AV decoder status is `"active"`, indicating video/audio decoding is in progress  |
 | 5 | Terminate App Valid Param | Invoke terminateApp on org.rdk.AppManager with appId: "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 6 | Get AVDecoder Status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | AV decoder status is `"idle"` |
+| 6 | Get AVDecoder Status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the AV decoder status is `"idle"`, indicating no active decoding  |
 
 ### TestCase Post-condition
 
@@ -191,13 +191,13 @@ Checks the AV decoder status changed event in idle and active state
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Set Value on PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "MVS", "key": "lightningURL", "value": "<DEVICE_DIAGNOSTICS_PLAYBACK_URL>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
-| 2 | Get Value | Get Value from PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "MVS", "key": "lightningURL"}}' http://127.0.0.1:9998/jsonrpc` | Expected `<DEVICE_DIAGNOSTICS_PLAYBACK_URL>` |
+| 2 | Get Value | Get Value from PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "MVS", "key": "lightningURL"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the stored playback URL matches the expected value `<DEVICE_DIAGNOSTICS_PLAYBACK_URL>` from the device config file  |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get AVDecoder Status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | AV decoder status is `"idle"` |
+| 1 | Get AVDecoder Status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the AV decoder status is `"idle"`, indicating no active decoding  |
 | 2 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check App Launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 4 | Check OnAVDecoder Status Changed Event | Listen for Event_OnAVDecoder_Status_Changed event (timeout: 60s) | Ensure the `onAVDecoderStatusChanged` event is received with `AVDecoderStatus` as `active` |
@@ -299,3 +299,5 @@ Validates all event on Activating/deactivating the plugin
 | Estimated Duration | 20 minutes |
 | Priority | Medium |
 | TDK Release Version | M81 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

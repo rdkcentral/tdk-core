@@ -238,7 +238,7 @@ Gets system version details
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get System Uptime | Invoke requestSystemUptime on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.requestSystemUptime"}' http://127.0.0.1:9998/jsonrpc` | The uptime value should be returned and must not be empty |
+| 1 | Get System Uptime | Invoke requestSystemUptime on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.requestSystemUptime"}' http://127.0.0.1:9998/jsonrpc` | Verify that the uptime value is returned and must not be empty  |
 
 ---
 
@@ -275,9 +275,9 @@ Set and get device power state
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current power state is returned successfully and must be one of `STANDBY`, `DEEP_SLEEP`, `LIGHT_SLEEP`, `ON` |
-| 2 | Set Power State | Invoke setPowerState on org.rdk.System with standbyReason: "APIUnitTest", powerState: "STANDBY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "APIUnitTest", "powerState": "STANDBY"}}' http://127.0.0.1:9998/jsonrpc` | Power state set to `STANDBY` successfully |
-| 3 | Power State Changed Event | Listen for event onSystemPowerStateChanged (wait up to 30 seconds) | Event `onSystemPowerStateChanged` is received with new state matching `STANDBY` (the value set in step 2) |
-| 4 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Power state returned is `STANDBY`, confirming the set operation in step 2 was successful |
+| 2 | Set Power State | Invoke setPowerState on org.rdk.System with standbyReason: "APIUnitTest", powerState: "STANDBY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "APIUnitTest", "powerState": "STANDBY"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state is set to `STANDBY` successfully  |
+| 3 | Power State Changed Event | Listen for event onSystemPowerStateChanged (wait up to 30 seconds) | Verify that the `onSystemPowerStateChanged` event is received with the new state matching `STANDBY` (the value set in step 2)  |
+| 4 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state returned is `STANDBY`, confirming the set operation in step 2 was successful  |
 
 ### TestCase Post-condition
 
@@ -286,8 +286,8 @@ Set and get device power state
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Power State | Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current power state is returned successfully and must be one of `STANDBY`, `DEEP_SLEEP`, `LIGHT_SLEEP`, `ON` |
-| 2 | Set Power State | *(Conditional statement executed only if previous step condition is met)*<br>Set Power State on System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "APIUnitTest", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | Power state reverted to `ON` successfully |
-| 3 | Check Power State | *(Conditional statement executed only if previous step condition is met)*<br>Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Power state returned is `ON`, confirming device is restored to original state |
+| 2 | Set Power State | *(Conditional statement executed only if previous step condition is met)*<br>Set Power State on System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "APIUnitTest", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state is reverted to `ON` successfully, restoring the original state  |
+| 3 | Check Power State | *(Conditional statement executed only if previous step condition is met)*<br>Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state returned is `ON`, confirming the device is restored to its original state  |
 
 ---
 
@@ -306,7 +306,7 @@ Set and get DST time zone
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set TimeZone DST | Invoke setTimeZoneDST on org.rdk.System with timeZone: "America/New_York"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTimeZoneDST", "params": {"timeZone": "America/New_York"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the time zone DST is set successfully |
-| 2 | Get TimeZone DST | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Expected `America/New_York` |
+| 2 | Get TimeZone DST | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that the timezone is set to `America/New_York` as expected  |
 
 ---
 
@@ -342,8 +342,8 @@ Get Mac Address
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get MacAddress | Invoke getMacAddresses on org.rdk.System with GUID: "61734787891723481"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getMacAddresses", "params": {"GUID": "61734787891723481"}}' http://127.0.0.1:9998/jsonrpc` | `asyncResponse` is `true` and `success` is `true`, confirming the async MAC address retrieval was triggered successfully |
-| 2 | Check Mac Address | Listen for event onMacAddressesRetrieved (wait up to 2 seconds for async response) | Event is received and all MAC address fields (`ECM_MAC`, `ESTB_MAC`, `MOCA_MAC`, `ETH_MAC`, `WIFI_MAC`, `BLUETOOTH_MAC`, `RF4CE_MAC`) are validated against the pattern `[0-9a-f]{2}([-:])[0-9a-f]{2}(\1[0-9a-f]{2}){4}$` each non-zero MAC must match a valid format |
+| 1 | Get MacAddress | Invoke getMacAddresses on org.rdk.System with GUID: "61734787891723481"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getMacAddresses", "params": {"GUID": "61734787891723481"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `asyncResponse` is `true` and `success` is `true`, confirming the async MAC address retrieval was triggered successfully  |
+| 2 | Check Mac Address | Listen for event onMacAddressesRetrieved (wait up to 2 seconds for async response) | Verify that the event is received and all MAC address fields (`ECM_MAC`, `ESTB_MAC`, `MOCA_MAC`, `ETH_MAC`, `WIFI_MAC`, `BLUETOOTH_MAC`) are present and valid  |
 
 ---
 
@@ -361,7 +361,7 @@ Gets the image version
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device Image Version | Invoke getDeviceInfo on org.rdk.System with params: "imageVersion"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "imageVersion"}}' http://127.0.0.1:9998/jsonrpc` | `imageVersion` is returned successfully and must not be empty |
+| 1 | Get Device Image Version | Invoke getDeviceInfo on org.rdk.System with params: "imageVersion"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "imageVersion"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `imageVersion` is returned successfully and must not be empty  |
 
 ---
 
@@ -379,7 +379,7 @@ Gets the model number
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device model number | Invoke getDeviceInfo on org.rdk.System with params: "model_number"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "model_number"}}' http://127.0.0.1:9998/jsonrpc` | `model_number` is returned successfully and must not be empty |
+| 1 | Get Device model number | Invoke getDeviceInfo on org.rdk.System with params: "model_number"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "model_number"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `model_number` is returned successfully and must not be empty  |
 
 ---
 
@@ -397,7 +397,7 @@ Gets the box IP
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device boxIP | Invoke getDeviceInfo on org.rdk.System with params: "boxIP"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "boxIP"}}' http://127.0.0.1:9998/jsonrpc` | `boxIP` value is returned successfully and must not be empty |
+| 1 | Get Device boxIP | Invoke getDeviceInfo on org.rdk.System with params: "boxIP"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "boxIP"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `boxIP` value is returned successfully and must not be empty  |
 
 ---
 
@@ -415,7 +415,7 @@ Gets the build type
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device build type | Invoke getDeviceInfo on org.rdk.System with params: "build_type"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "build_type"}}' http://127.0.0.1:9998/jsonrpc` | `build_type` value is returned successfully and must not be empty |
+| 1 | Get Device build type | Invoke getDeviceInfo on org.rdk.System with params: "build_type"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "build_type"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `build_type` value is returned successfully and must not be empty  |
 
 ---
 
@@ -433,7 +433,7 @@ Gets eth mac of the device
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device eth mac | Invoke getDeviceInfo on org.rdk.System with params: "eth_mac"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "eth_mac"}}' http://127.0.0.1:9998/jsonrpc` | `eth_mac` value is returned and validated against MAC format `[0-9a-f]{2}([-:])[0-9a-f]{2}(\1[0-9a-f]{2}){4}$` must be a valid non-empty MAC address |
+| 1 | Get Device eth mac | Invoke getDeviceInfo on org.rdk.System with params: "eth_mac"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "eth_mac"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `eth_mac` value is returned and validated against MAC format `[0-9a-f]{2}([-:])[0-9a-f]{2}(\1[0-9a-f]{2}){4}$` must be a valid non-empty MAC address  |
 
 ---
 
@@ -451,7 +451,7 @@ Gets the rf4ce mac of the device
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device rf4ce mac | Invoke getDeviceInfo on org.rdk.System with params: "rf4ce_mac"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "rf4ce_mac"}}' http://127.0.0.1:9998/jsonrpc` | `rf4ce_mac` value is returned successfully and must not be empty (8-byte RF4CE MAC format) |
+| 1 | Get Device rf4ce mac | Invoke getDeviceInfo on org.rdk.System with params: "rf4ce_mac"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "rf4ce_mac"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `rf4ce_mac` value is returned successfully and must not be empty (8-byte RF4CE MAC format)  |
 
 ---
 
@@ -469,7 +469,7 @@ Gets device bluetooth mac
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device Bluetooth Mac | Invoke getDeviceInfo on org.rdk.System with params: "bluetooth_mac"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "bluetooth_mac"}}' http://127.0.0.1:9998/jsonrpc` | `bluetooth_mac` value is returned and validated against MAC format `[0-9a-f]{2}([-:])[0-9a-f]{2}(\1[0-9a-f]{2}){4}$` must be a valid non-empty MAC address |
+| 1 | Get Device Bluetooth Mac | Invoke getDeviceInfo on org.rdk.System with params: "bluetooth_mac"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "bluetooth_mac"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `bluetooth_mac` value is returned and validated against MAC format `[0-9a-f]{2}([-:])[0-9a-f]{2}(\1[0-9a-f]{2}){4}$` must be a valid non-empty MAC address  |
 
 ---
 
@@ -487,7 +487,7 @@ Gets device WiFi mac
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device WiFi Mac | Invoke getDeviceInfo on org.rdk.System with params: "wifi_mac"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "wifi_mac"}}' http://127.0.0.1:9998/jsonrpc` | `wifi_mac` value is returned and validated against MAC format `[0-9a-f]{2}([-:])[0-9a-f]{2}(\1[0-9a-f]{2}){4}$` must be a valid non-empty MAC address |
+| 1 | Get Device WiFi Mac | Invoke getDeviceInfo on org.rdk.System with params: "wifi_mac"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "wifi_mac"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `wifi_mac` value is returned and validated against MAC format `[0-9a-f]{2}([-:])[0-9a-f]{2}(\1[0-9a-f]{2}){4}$` must be a valid non-empty MAC address  |
 
 ---
 
@@ -506,8 +506,8 @@ Checks the powerstate before reboot
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current power state is returned successfully and must be one of `STANDBY`, `DEEP_SLEEP`, `LIGHT_SLEEP`, `ON`, saved for comparison in step 3 |
-| 2 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Reboot triggered successfully (`success` : `true`) |
-| 3 | Get Power State Before Reboot | Invoke getPowerStateBeforeReboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerStateBeforeReboot"}' http://127.0.0.1:9998/jsonrpc` | Power state before reboot matches the state recorded in step 1 |
+| 2 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the reboot is triggered successfully with `success`: `true`  |
+| 3 | Get Power State Before Reboot | Invoke getPowerStateBeforeReboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerStateBeforeReboot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state before reboot matches the state recorded in step 1  |
 
 ---
 
@@ -525,9 +525,9 @@ Checks for the system mode changed event
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set STB Mode WAREHOUSE | Invoke setMode on org.rdk.System with mode: "WAREHOUSE"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"duration": 5, "mode": "WAREHOUSE"}}' http://127.0.0.1:9998/jsonrpc` | Mode set to `WAREHOUSE` successfully (`success` : `true`) |
-| 2 | Check On SystemMode Changed Event | Listen for event onSystemModeChanged (triggered immediately when mode is set to WAREHOUSE) | Event received with `mode`: `"WAREHOUSE"` |
-| 3 | Check On SystemMode Changed Event | Listen for event onSystemModeChanged (wait up to 5 seconds for auto-revert) | Event received with `mode`: `"NORMAL"` confirming automatic revert after duration expires |
+| 1 | Set STB Mode WAREHOUSE | Invoke setMode on org.rdk.System with mode: "WAREHOUSE"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"duration": 5, "mode": "WAREHOUSE"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the mode is set to `WAREHOUSE` successfully with `success`: `true`  |
+| 2 | Check On SystemMode Changed Event | Listen for event onSystemModeChanged (triggered immediately when mode is set to WAREHOUSE) | Verify that the event is received with `mode` as `"WAREHOUSE"`, confirming the warehouse mode was set  |
+| 3 | Check On SystemMode Changed Event | Listen for event onSystemModeChanged (wait up to 5 seconds for auto-revert) | Verify that the event is received with `mode` as `"NORMAL"`, confirming automatic revert after the duration expires  |
 
 ---
 
@@ -545,8 +545,8 @@ Retrieve basic information about a reboot
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System reboot | Invoke reboot on org.rdk.System with rebootReason: "API Validation"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot", "params": {"rebootReason": "API Validation"}}' http://127.0.0.1:9998/jsonrpc` | Reboot triggered successfully (`success` : `true`) |
-| 2 | Check On Reboot Request Event | Listen for event onRebootRequest (wait up to 60 seconds) | Event received with `rebootReason`: `"API Validation"` and `requestedApp`: `"SystemServices"` |
+| 1 | System reboot | Invoke reboot on org.rdk.System with rebootReason: "API Validation"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot", "params": {"rebootReason": "API Validation"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the reboot is triggered successfully with `success`: `true`  |
+| 2 | Check On Reboot Request Event | Listen for event onRebootRequest (wait up to 60 seconds) | Verify that the event is received with `rebootReason` as `"API Validation"` and `requestedApp` as `"SystemServices"`  |
 
 ---
 
@@ -564,9 +564,9 @@ Checks whether able to enable and disable the telemetry opt-out status
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get OptOut Telemetry Status | Invoke isOptOutTelemetry on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.isOptOutTelemetry"}' http://127.0.0.1:9998/jsonrpc` | `optOut` status returned successfully as `true` or `false` saved for revert |
+| 1 | Get OptOut Telemetry Status | Invoke isOptOutTelemetry on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.isOptOutTelemetry"}' http://127.0.0.1:9998/jsonrpc` | Verify that the `optOut` status is returned successfully as `true` or `false` saved for revert  |
 | 2 | Set OptOut Telemetry Status | Invoke setOptOutTelemetry on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setOptOutTelemetry", "params": {"Opt-Out": true}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the telemetry opt-out status is set successfully (`success` : `true`) for each iteration |
-| 3 | Get OptOut Telemetry Status | Invoke isOptOutTelemetry on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.isOptOutTelemetry"}' http://127.0.0.1:9998/jsonrpc` | `optOut` value matches the value set in step 2 for the current iteration (`true` then `false`) |
+| 3 | Get OptOut Telemetry Status | Invoke isOptOutTelemetry on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.isOptOutTelemetry"}' http://127.0.0.1:9998/jsonrpc` | Verify that the `optOut` value matches the value set in step 2 for the current iteration (`true` then `false`)  |
 
 ---
 
@@ -628,7 +628,7 @@ Checks the model number of the DUT
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Device Details | SSH to device: grep model_number /tmp/.deviceDetails.cache \| cut -d'=' -f2- \| xargs reads the model_number field from the device details cache file (path from config key SYSTEM_DEVICE_DETAILS_FILE_PATH) | Verify that the model number is read from the device cache file successfully |
-| 2 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.model"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "DeviceInfo.model"}}' http://127.0.0.1:9998/jsonrpc` | `MODEL_NUMBER` returned by `getPlatformConfiguration` matches the `model_number` value read from device cache file in step 1 |
+| 2 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.model"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "DeviceInfo.model"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `MODEL_NUMBER` returned by `getPlatformConfiguration` matches the `model_number` value read from device cache file in step 1  |
 
 ---
 
@@ -647,7 +647,7 @@ Checks the device MAC address
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Device Details | SSH to device: grep estb_mac /tmp/.deviceDetails.cache \| cut -d'=' -f2- \| xargs reads the estb_mac field from the device details cache file (path from config key SYSTEM_DEVICE_DETAILS_FILE_PATH) | Verify that the ESTB MAC address is read from the device cache file successfully |
-| 2 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.deviceMACAddress"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "AccountInfo.deviceMACAddress"}}' http://127.0.0.1:9998/jsonrpc` | `deviceMACAddress` returned by `getPlatformConfiguration` matches the `estb_mac` value read from device cache file in step 1 |
+| 2 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.deviceMACAddress"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "AccountInfo.deviceMACAddress"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `deviceMACAddress` returned by `getPlatformConfiguration` matches the `estb_mac` value read from device cache file in step 1  |
 
 ---
 
@@ -665,8 +665,8 @@ Checks the firmware upgrade status
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get SWUpdate File Status | SSH to device: [ -f "/opt/swupdate.conf" ] && echo 1 \|\| echo 0 checks whether /opt/swupdate.conf exists; if file exists → FIRMWARE_UPGRADE_STATUS: true; if not → FIRMWARE_UPGRADE_STATUS: false result saved for comparison in step 2 | `/opt/swupdate.conf` presence checked successfully `FIRMWARE_UPGRADE_STATUS` saved (`true` or `false`) |
-| 2 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.firmwareUpdateDisabled"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "AccountInfo.firmwareUpdateDisabled"}}' http://127.0.0.1:9998/jsonrpc` | `firmwareUpdateDisabled` value returned by `getPlatformConfiguration` matches the `FIRMWARE_UPGRADE_STATUS` read from `/opt/swupdate.conf` in step 1 |
+| 1 | Get SWUpdate File Status | SSH to device: [ -f "/opt/swupdate.conf" ] && echo 1 \|\| echo 0 checks whether /opt/swupdate.conf exists; if file exists → FIRMWARE_UPGRADE_STATUS: true; if not → FIRMWARE_UPGRADE_STATUS: false result saved for comparison in step 2 | Verify that the `/opt/swupdate.conf` presence is checked successfully `FIRMWARE_UPGRADE_STATUS` saved (`true` or `false`)  |
+| 2 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.firmwareUpdateDisabled"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "AccountInfo.firmwareUpdateDisabled"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `firmwareUpdateDisabled` value returned by `getPlatformConfiguration` matches the `FIRMWARE_UPGRADE_STATUS` read from `/opt/swupdate.conf` in step 1  |
 
 ---
 
@@ -685,7 +685,7 @@ Checks the public IP address
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Public IP Address | SSH to device: curl -s ifconfig.me fetches the device's public IP address from the external service; result saved as PUBLIC_IP for comparison in step 2 | Verify that the public IP address is retrieved from the device successfully |
-| 2 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.publicIP"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "DeviceInfo.publicIP"}}' http://127.0.0.1:9998/jsonrpc` | `publicIP` returned by `getPlatformConfiguration` matches the `PUBLIC_IP` value retrieved via `ifconfig.me` in step 1 |
+| 2 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.publicIP"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "DeviceInfo.publicIP"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `publicIP` returned by `getPlatformConfiguration` matches the `PUBLIC_IP` value is retrieved via `ifconfig.me` in step 1  |
 
 ---
 
@@ -719,7 +719,7 @@ Checks the HDR Capabilities of the device
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration"}' http://127.0.0.1:9998/jsonrpc` | HDR capabilities returned match expected value `<SYSTEM_SUPPORTED_HDR_CAPABILITIES>` from device config file |
+| 1 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration"}' http://127.0.0.1:9998/jsonrpc` | Verify that the HDR capabilities returned match the expected value `<SYSTEM_SUPPORTED_HDR_CAPABILITIES>` from the device config file  |
 
 ---
 
@@ -739,7 +739,7 @@ Set and get all the time zones
 | --- | --- | --- | --- |
 | 1 | Get Time Zones | Invoke getTimeZones on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getTimeZones"}' http://127.0.0.1:9998/jsonrpc` | Verify that the full list of supported time zones is returned successfully |
 | 2 | Set TimeZone DST | Invoke setTimeZoneDST on org.rdk.System with timeZone: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTimeZoneDST", "params": {"timeZone": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that timezone is set successfully (`success` : `true`) for each iteration |
-| 3 | Get TimeZone DST | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Timezone returned matches the timezone set in the current iteration |
+| 3 | Get TimeZone DST | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that the timezone returned matches the timezone set in the current iteration  |
 
 ---
 
@@ -757,10 +757,10 @@ Toggle Network Standby Mode Status
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Network Standby Mode | Invoke getNetworkStandbyMode on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getNetworkStandbyMode"}' http://127.0.0.1:9998/jsonrpc` | Current network standby mode returned as `true` or `false` and saved as baseline for toggle |
+| 1 | Get Network Standby Mode | Invoke getNetworkStandbyMode on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getNetworkStandbyMode"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current network standby mode is returned as `true` or `false` and saved as the baseline for toggle  |
 | 2 | Set Network Standby Mode | Invoke setNetworkStandbyMode on org.rdk.System with nwStandby: "<toggled_from_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setNetworkStandbyMode", "params": {"nwStandby": "<toggled_from_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that network standby mode is set successfully (`success` : `true`) |
-| 3 | Get Network Standby Mode | Invoke getNetworkStandbyMode on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getNetworkStandbyMode"}' http://127.0.0.1:9998/jsonrpc` | Network standby mode returned matches the toggled value (opposite of step 1) |
-| 4 | Check Network Standby Mode Changed Event | Listen for event onNetworkStandbyModeChanged (wait up to 3 seconds) | Event received with `nwStandby` value matching the toggled value set in step 2 |
+| 3 | Get Network Standby Mode | Invoke getNetworkStandbyMode on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getNetworkStandbyMode"}' http://127.0.0.1:9998/jsonrpc` | Verify that the network standby mode returned matches the toggled value (opposite of step 1)  |
+| 4 | Check Network Standby Mode Changed Event | Listen for event onNetworkStandbyModeChanged (wait up to 3 seconds) | Verify that the event is received with `nwStandby` matching the toggled value set in step 2  |
 
 ---
 
@@ -780,9 +780,9 @@ Checks the powerstate before reboot
 | --- | --- | --- | --- |
 | 1 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state is returned successfully |
 | 2 | Set Power State | Invoke setPowerState on org.rdk.System with standbyReason: "<value>", powerState: "STANDBY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "STANDBY"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
-| 3 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Expected `LIGHT_SLEEP,STANDBY` |
-| 4 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Validation succeeded using method tag `system_check_set_operation` |
-| 5 | Get Power State Before Reboot | Invoke getPowerStateBeforeReboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerStateBeforeReboot"}' http://127.0.0.1:9998/jsonrpc` | Expected `compared against value from step 3` |
+| 3 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported power states include `LIGHT_SLEEP` and `STANDBY`  |
+| 4 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the set operation on System API is completed and validated successfully  |
+| 5 | Get Power State Before Reboot | Invoke getPowerStateBeforeReboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerStateBeforeReboot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value matches the value captured in step 3  |
 
 ### TestCase Post-condition
 
@@ -790,7 +790,7 @@ Checks the powerstate before reboot
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check power state | Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Expected `LIGHT_SLEEP,STANDBY` |
+| 1 | Check power state | Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported power states include `LIGHT_SLEEP` and `STANDBY`  |
 | 2 | Set Power State | *(Conditional statement executed only if previous step condition is met)*<br>Set Power State on System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
 
 ---
@@ -811,8 +811,8 @@ Checks whether time zone setting is persist after reboot
 | --- | --- | --- | --- |
 | 1 | Get Time Zones | Invoke getTimeZones on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getTimeZones"}' http://127.0.0.1:9998/jsonrpc` | Verify that the full list of supported time zones is returned successfully |
 | 2 | Set TimeZone DST | Invoke setTimeZoneDST on org.rdk.System with timeZone: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTimeZoneDST", "params": {"timeZone": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that timezone is set successfully (`success` : `true`) for each iteration |
-| 3 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Reboot triggered successfully (`success` : `true`) |
-| 4 | Get TimeZone DST | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Timezone returned after reboot matches the timezone set in step 2, confirming persistence |
+| 3 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the reboot is triggered successfully with `success`: `true`  |
+| 4 | Get TimeZone DST | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that the timezone returned after reboot matches the timezone set in step 2, confirming persistence across reboots  |
 
 ---
 
@@ -831,8 +831,8 @@ To reboot and check the system uptime
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get System Uptime | Invoke requestSystemUptime on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.requestSystemUptime"}' http://127.0.0.1:9998/jsonrpc` | Verify that the system uptime is returned and must not be empty |
-| 2 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Reboot triggered successfully (`success` : `true`) |
-| 3 | Get System Uptime | Invoke requestSystemUptime on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.requestSystemUptime"}' http://127.0.0.1:9998/jsonrpc` | System uptime after reboot is less than `<SYSTEM_UPTIME_IN_SECONDS>` seconds, confirming device rebooted successfully |
+| 2 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the reboot is triggered successfully with `success`: `true`  |
+| 3 | Get System Uptime | Invoke requestSystemUptime on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.requestSystemUptime"}' http://127.0.0.1:9998/jsonrpc` | Verify that the system uptime after reboot is less than `<SYSTEM_UPTIME_IN_SECONDS>` seconds, confirming the device rebooted successfully  |
 
 ---
 
@@ -852,11 +852,11 @@ Checks whether time zone setting is persist after reboot
 | --- | --- | --- | --- |
 | 1 | Get Time Zones | Invoke getTimeZones on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.2.getTimeZones"}' http://127.0.0.1:9998/jsonrpc` | Verify that the full list of supported time zones is returned successfully |
 | 2 | Set TimeZone DST | Invoke setTimeZoneDST on org.rdk.System with timeZone: "<baseline_timezone>"<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.setTimeZoneDST","params":{"timeZone":"<baseline_timezone>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that timezone is set successfully (`success` : `true`) |
-| 3 | Get TimeZone DST | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Timezone returned matches the baseline timezone set in step 2 |
+| 3 | Get TimeZone DST | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that the timezone returned matches the baseline timezone set in step 2  |
 | 4 | Get TimeZone DST *(loop repeated for each timezone in the iteration set)* | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current timezone is returned successfully |
 | 5 | Set TimeZone DST *(loop)* | Invoke setTimeZoneDST on org.rdk.System with timeZone: "<iteration_timezone>"<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.setTimeZoneDST","params":{"timeZone":"<iteration_timezone>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that timezone is set successfully (`success` : `true`) for each iteration |
-| 6 | Get TimeZone DST *(loop)* | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Timezone returned matches the timezone set in step 5 for the current iteration |
-| 7 | Check On TimeZoneDST Event *(loop)* | Listen for event onTimeZoneDSTChanged (wait up to 2 seconds) after each timezone change in the loop | Event received with `newTimeZone` matching the timezone set in step 5 and `oldTimeZone` matching the timezone captured in step 4 of the same iteration |
+| 6 | Get TimeZone DST *(loop)* | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that the timezone returned matches the timezone set in step 5 for the current iteration  |
+| 7 | Check On TimeZoneDST Event *(loop)* | Listen for event onTimeZoneDSTChanged (wait up to 2 seconds) after each timezone change in the loop | Verify that the event is received with `newTimeZone` matching the timezone set in step 5 and `oldTimeZone` matching the timezone captured in step 1  |
 
 ---
 
@@ -876,11 +876,11 @@ Checks whether the RFC value is correctly reflected using getRFCConfig
 | --- | --- | --- | --- |
 | 1 | Check RFC Status | Read current value of TR181 parameter <SYSTEM_RFC_PARAMETER_NAME> from device config and save for reference | Verify that the TR181 parameter value is read from the device successfully |
 | 2 | Disable RFC Parameter | Disable TR181 parameter <SYSTEM_RFC_PARAMETER_NAME> on the device via configuration | Confirm that TR181 parameter is disabled successfully |
-| 3 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Reboot triggered successfully (`success` : `true`) |
-| 4 | Get System RFC Config | Invoke getRFCConfig on org.rdk.System with rfcList: "<SYSTEM_RFC_PARAMETER_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getRFCConfig", "params": {"rfcList": "<SYSTEM_RFC_PARAMETER_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | RFC parameter value returned is `false`, confirming the disabled state persists after reboot |
+| 3 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the reboot is triggered successfully with `success`: `true`  |
+| 4 | Get System RFC Config | Invoke getRFCConfig on org.rdk.System with rfcList: "<SYSTEM_RFC_PARAMETER_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getRFCConfig", "params": {"rfcList": "<SYSTEM_RFC_PARAMETER_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the RFC parameter value returned is `false`, confirming the disabled state persists after reboot  |
 | 5 | Enable RFC Parameter | Enable TR181 parameter <SYSTEM_RFC_PARAMETER_NAME> on the device via configuration | Confirm that TR181 parameter is enabled successfully |
-| 6 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Reboot triggered successfully (`success` : `true`) |
-| 7 | Get System RFC Config | Invoke getRFCConfig on org.rdk.System with rfcList: "<SYSTEM_RFC_PARAMETER_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getRFCConfig", "params": {"rfcList": "<SYSTEM_RFC_PARAMETER_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | RFC parameter value returned is `true`, confirming the enabled state persists after reboot |
+| 6 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the reboot is triggered successfully with `success`: `true`  |
+| 7 | Get System RFC Config | Invoke getRFCConfig on org.rdk.System with rfcList: "<SYSTEM_RFC_PARAMETER_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getRFCConfig", "params": {"rfcList": "<SYSTEM_RFC_PARAMETER_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the RFC parameter value returned is `true`, confirming the enabled state persists after reboot  |
 
 ---
 
@@ -900,8 +900,8 @@ Check whether able to set and get friendly name
 | --- | --- | --- | --- |
 | 1 | Get Friendly Name | Invoke getFriendlyName on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFriendlyName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current friendly name is returned successfully |
 | 2 | Set Friendly Name | Invoke setFriendlyName on org.rdk.System with friendlyName: "Test_Value"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setFriendlyName", "params": {"friendlyName": "Test_Value"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the friendly name is set successfully (`success` : `true`) |
-| 3 | Get Friendly Name | Invoke getFriendlyName on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFriendlyName"}' http://127.0.0.1:9998/jsonrpc` | Friendly name returned is `"Test_Value"`, confirming the set in step 2 was applied |
-| 4 | Check On Friendly Name Changed Event | Listen for event onFriendlyNameChanged (wait up to 2 seconds) | Event received with `friendlyName`: `"Test_Value"` |
+| 3 | Get Friendly Name | Invoke getFriendlyName on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFriendlyName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the friendly name returned is `"Test_Value"`, confirming the value set in step 2 was applied successfully  |
+| 4 | Check On Friendly Name Changed Event | Listen for event onFriendlyNameChanged (wait up to 2 seconds) | Verify that the event is received with `friendlyName` as `"Test_Value"`, confirming the new name was applied  |
 
 ---
 
@@ -921,7 +921,7 @@ Check friendly name is persisting on reboot
 | --- | --- | --- | --- |
 | 1 | Get Friendly Name | Invoke getFriendlyName on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFriendlyName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current friendly name is returned successfully |
 | 2 | Set Friendly Name | Invoke setFriendlyName on org.rdk.System with friendlyName: "Test_Value"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setFriendlyName", "params": {"friendlyName": "Test_Value"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the friendly name is set successfully (`success` : `true`) |
-| 3 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Reboot triggered successfully (`success` : `true`) |
+| 3 | System reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the reboot is triggered successfully with `success`: `true`  |
 | 4 | Get Friendly Name | Invoke getFriendlyName on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFriendlyName"}' http://127.0.0.1:9998/jsonrpc` | Verify that friendly name `"Test_Value"` persists after reboot and is returned successfully |
 
 ---
@@ -940,7 +940,7 @@ Checks whether able to set invalid timezone
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set TimeZone DST | Invoke setTimeZoneDST on org.rdk.System with timeZone: "TestValue1/TestValue2"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTimeZoneDST", "params": {"timeZone": "TestValue1/TestValue2"}}' http://127.0.0.1:9998/jsonrpc` | `setTimeZoneDST` returns an error response with `success: false` for the invalid timezone `"TestValue1/TestValue2"` |
+| 1 | Set TimeZone DST | Invoke setTimeZoneDST on org.rdk.System with timeZone: "TestValue1/TestValue2"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTimeZoneDST", "params": {"timeZone": "TestValue1/TestValue2"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setTimeZoneDST` returns an error response with `success: false` for the invalid timezone `"TestValue1/TestValue2"`  |
 
 ---
 
@@ -958,7 +958,7 @@ Check RFC configurations list with empty value
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check RFC Config List Empty | Invoke getRFCConfig on org.rdk.System with rfcList: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getRFCConfig", "params": {"rfcList": ""}}' http://127.0.0.1:9998/jsonrpc` | `getRFCConfig` with empty `rfcList` returns a valid response (`success` : `true`) with an empty RFC configuration list no error, but no entries returned |
+| 1 | Check RFC Config List Empty | Invoke getRFCConfig on org.rdk.System with rfcList: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getRFCConfig", "params": {"rfcList": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getRFCConfig` with empty `rfcList` returns a valid response (`success` : `true`) with an empty RFC configuration list no error, but no entries returned  |
 
 ---
 
@@ -976,7 +976,7 @@ Check the device type of the DUT with getPlatformConfiguration API
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.deviceType"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "DeviceInfo.deviceType"}}' http://127.0.0.1:9998/jsonrpc` | Device type returned matches expected value `<DEVICEINFO_DEVICE_TYPE>` from device config file |
+| 1 | Get Platform Configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.deviceType"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "DeviceInfo.deviceType"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the device type returned matches the expected value `<DEVICEINFO_DEVICE_TYPE>` from the device config file  |
 
 ---
 
@@ -995,10 +995,10 @@ Check whether the box sshable or not in standbymode after reboot
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current power state is one of `STANDBY`, `DEEP_SLEEP`, `LIGHT_SLEEP`, or `ON` |
-| 2 | Set Power State | Invoke setPowerState on org.rdk.System with standbyReason: "APIUnitTest", powerState: "STANDBY"<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.setPowerState","params":{"standbyReason":"APIUnitTest","powerState":"STANDBY"}}' http://127.0.0.1:9998/jsonrpc` | Power state set to `STANDBY` successfully |
-| 3 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Expected `LIGHT_SLEEP` or `STANDBY` |
-| 4 | System Reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Reboot triggered successfully (`success` : `true`) |
-| 5 | Check Device SSH State | After device is back up, verify the device is SSH-accessible (external function: check_device_ssh_state creates SSH session, retrieves MAC address via ifconfig) | Device is SSH-accessible after reboot in standby state (`Box is SSH able`) |
+| 2 | Set Power State | Invoke setPowerState on org.rdk.System with standbyReason: "APIUnitTest", powerState: "STANDBY"<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.setPowerState","params":{"standbyReason":"APIUnitTest","powerState":"STANDBY"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state is set to `STANDBY` successfully  |
+| 3 | Get Power State | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned power state is either `LIGHT_SLEEP` or `STANDBY` as expected  |
+| 4 | System Reboot | Invoke reboot on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.reboot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the reboot is triggered successfully with `success`: `true`  |
+| 5 | Check Device SSH State | After device is back up, verify the device is SSH-accessible (external function: check_device_ssh_state creates SSH session, retrieves MAC address via ifconfig) | Verify that the device is SSH-accessible after reboot in standby state (confirms remote access is restored)  |
 
 ### TestCase Post-condition
 
@@ -1006,8 +1006,8 @@ Check whether the box sshable or not in standbymode after reboot
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check Power State | Get Power State from System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Expected `LIGHT_SLEEP` or `STANDBY` |
-| 2 | Set Power State | *(Conditional statement executed only if previous step condition is met)*<br>Set Power State on System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.setPowerState","params":{"standbyReason":"APIUnitTest","powerState":"ON"}}' http://127.0.0.1:9998/jsonrpc` | Power state reverted to `ON` successfully |
+| 1 | Check Power State | Get Power State from System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned power state is either `LIGHT_SLEEP` or `STANDBY` as expected  |
+| 2 | Set Power State | *(Conditional statement executed only if previous step condition is met)*<br>Set Power State on System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.setPowerState","params":{"standbyReason":"APIUnitTest","powerState":"ON"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state is reverted to `ON` successfully, restoring the original state  |
 
 ---
 
@@ -1099,8 +1099,8 @@ Check whether able to set and get territory and region
 | --- | --- | --- | --- |
 | 1 | Get territory And region Config File | Read territory and region pairs from device config file <SYSTEM_TERRITORYS> and save for loop iteration | Verify that territory/region pairs are read successfully |
 | 2 | System Set Territory | Invoke setTerritory on org.rdk.System with territory: "<territory>", region: "<region>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "<territory>", "region": "<region>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that territory and region are set successfully (`success` : `true`) for each iteration |
-| 3 | Check Territory Change Event | Listen for event onTerritoryChanged | Event received with `territory` and `region` matching the values set in step 2 |
-| 4 | System Get Territory | Invoke getTerritory on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getTerritory"}' http://127.0.0.1:9998/jsonrpc` | Territory and region returned match the values set in step 2 |
+| 3 | Check Territory Change Event | Listen for event onTerritoryChanged | Verify that the event is received with `territory` and `region` matching the values set in step 2  |
+| 4 | System Get Territory | Invoke getTerritory on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getTerritory"}' http://127.0.0.1:9998/jsonrpc` | Verify that the territory and region returned match the values set in step 2  |
 
 ---
 
@@ -1154,7 +1154,7 @@ Check whether able to set valid territory and empty region to set territory API
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System Set Valid Territory And Set Empty Region | Invoke setTerritory on org.rdk.System with territory: "CHN", region: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "CHN", "region": ""}}' http://127.0.0.1:9998/jsonrpc` | `setTerritory` returns an error response with `success: false` for valid territory `"CHN"` with empty region |
+| 1 | System Set Valid Territory And Set Empty Region | Invoke setTerritory on org.rdk.System with territory: "CHN", region: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "CHN", "region": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setTerritory` returns an error response with `success: false` for valid territory `"CHN"` with empty region  |
 
 ---
 
@@ -1201,10 +1201,10 @@ Validates statechange event on Activating/deactivating the plugin
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate System Plugin | Invoke deactivate on Controller with callsign: "org.rdk.System"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.System"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check State Change Event | Listen for event onStateChanged from Controller (wait up to 2 seconds) | Event received with callsign `org.rdk.System`, state `deactivated`, reason `requested` |
+| 2 | Check State Change Event | Listen for event onStateChanged from Controller (wait up to 2 seconds) | Verify that the event is received with callsign `org.rdk.System`, state `deactivated`, and reason `requested`  |
 | 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate System Plugin | Invoke activate on Controller with callsign: "org.rdk.System"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.System"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 5 | Check State Change Event | Listen for event onStateChanged from Controller (wait up to 2 seconds) | Event received with callsign `org.rdk.System`, state `activated`, reason `requested` |
+| 5 | Check State Change Event | Listen for event onStateChanged from Controller (wait up to 2 seconds) | Verify that the event is received with callsign `org.rdk.System`, state `activated`, and reason `requested`  |
 | 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
@@ -1223,7 +1223,7 @@ Validate by setting up invalid mode
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set Mode | Invoke setMode on org.rdk.System with param: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"param": "INVALID", "duration": 0}}' http://127.0.0.1:9998/jsonrpc` | `setMode` returns an error response with `success: false` for the invalid mode value `"INVALID"` |
+| 1 | Set Mode | Invoke setMode on org.rdk.System with param: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"param": "INVALID", "duration": 0}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` for the invalid mode value `"INVALID"`  |
 
 ---
 
@@ -1243,8 +1243,8 @@ Check whether able to set and get empty friendly name
 | --- | --- | --- | --- |
 | 1 | Get Friendly Name | Invoke getFriendlyName on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFriendlyName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the friendly name is returned successfully |
 | 2 | Set Friendly Name | Invoke setFriendlyName on org.rdk.System with friendlyName: " "<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setFriendlyName", "params": {"friendlyName": " "}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the friendly name is set successfully |
-| 3 | Get Friendly Name | Invoke getFriendlyName on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFriendlyName"}' http://127.0.0.1:9998/jsonrpc` | Friendly name returned is a space character `" "`, confirming empty/space name was accepted |
-| 4 | Check On Friendly Name Changed Event | Listen for event onFriendlyNameChanged (wait up to 2 seconds) | Event received with `friendlyName`: `" "` (space character) |
+| 3 | Get Friendly Name | Invoke getFriendlyName on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFriendlyName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the friendly name returned is a space character `" "`, confirming that an empty/space name is accepted  |
+| 4 | Check On Friendly Name Changed Event | Listen for event onFriendlyNameChanged (wait up to 2 seconds) | Verify that the event is received with `friendlyName` as `" "` (space character), confirming an empty/space name was accepted  |
 | 5 | Set Friendly Name | Invoke setFriendlyName on org.rdk.System with friendlyName: "My Device"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setFriendlyName", "params": {"friendlyName": "My Device"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the friendly name is set successfully |
 
 ---
@@ -1263,7 +1263,7 @@ Validate by setting up invalid power state
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set Power State | Invoke setPowerState on org.rdk.System with powerState: "INVALID", standbyReason: "APIUnitTest"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"powerState": "INVALID", "standbyReason": "APIUnitTest"}}' http://127.0.0.1:9998/jsonrpc` | `setPowerState` returns an error response with `success: false` for the invalid power state value `"INVALID"` |
+| 1 | Set Power State | Invoke setPowerState on org.rdk.System with powerState: "INVALID", standbyReason: "APIUnitTest"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"powerState": "INVALID", "standbyReason": "APIUnitTest"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setPowerState` returns an error response with `success: false` for the invalid power state value `"INVALID"`  |
 
 ---
 
@@ -1299,7 +1299,7 @@ Validate error message with invalid key in deviceInfo api
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device Info | Invoke getDeviceInfo on org.rdk.System with params: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "INVALID"}}' http://127.0.0.1:9998/jsonrpc` | `getDeviceInfo` returns an error response with `success: false` for the invalid key `"INVALID"` |
+| 1 | Get Device Info | Invoke getDeviceInfo on org.rdk.System with params: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "INVALID"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getDeviceInfo` returns an error response with `success: false` for the invalid key `"INVALID"`  |
 
 ## Plugin Post-conditions
 
@@ -1327,3 +1327,5 @@ Validate error message with invalid key in deviceInfo api
 | Estimated Duration | 70 minutes |
 | Priority | Medium |
 | TDK Release Version | M81 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

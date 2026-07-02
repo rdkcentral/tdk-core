@@ -49,6 +49,7 @@ accessible via JSON-RPC under the callsign `org.rdk.DownloadManager` (version 1)
 | `pause` | Pauses an ongoing download |
 | `progress` | Retrieves the progress of a download |
 | `resume` | Resumes a paused download |
+| `rateLimit` | RateLimit Set rate limiting for a specific download session |
 
 ## Plugin Pre-conditions
 
@@ -247,7 +248,7 @@ Verify download with multiple pause and resume operations followed by delete
 | --- | --- | --- | --- |
 | 1 | Download ValidParameters | Invoke download on org.rdk.DownloadManager with url: "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
 | 2 | Progress Check During Download | Invoke progress on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that download progress is reported successfully (0-100%) |
-| 3 | Download Multiple Pause Resume Operations | Invoke resume on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.resume", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Pause and Resume calls succeed for each iteration with null/empty response |
+| 3 | Download Multiple Pause Resume Operations | Invoke resume on org.rdk.DownloadManager with downloadId: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.resume", "params": {"downloadId": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the Pause and Resume calls succeed for each iteration, returning a null/empty response as expected  |
 | 4 | Delete Package | Invoke delete on org.rdk.DownloadManager with fileLocator: "<result_step_2>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.delete", "params": {"fileLocator": "<result_step_2>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
@@ -519,7 +520,7 @@ Verify download, ratelimit, pause, resume and delete package functionality
 | 4 | Apply Rate Limit | Invoke rateLimit on org.rdk.DownloadManager with downloadId: "<DOWNLOAD_ID>", rateLimit: "0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.rateLimit", "params": {"downloadId": "<DOWNLOAD_ID>", "rateLimit": 0}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 5 | Pause Download | Invoke pause on org.rdk.DownloadManager with downloadId: "<DOWNLOAD_ID>" (wait 5 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.pause", "params": {"downloadId": "<DOWNLOAD_ID>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 6 | Check Download Paused Status | Invoke progress on org.rdk.DownloadManager with downloadId: "<DOWNLOAD_ID>" (wait 10 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<DOWNLOAD_ID>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that download progress is reported successfully (0-100%) |
-| 7 | Confirm Download Remains Paused | Invoke progress on org.rdk.DownloadManager with downloadId: "<DOWNLOAD_ID>" (wait 10 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<DOWNLOAD_ID>"}}' http://127.0.0.1:9998/jsonrpc` | `success`: `true`; download progress matches value from step 6 |
+| 7 | Confirm Download Remains Paused | Invoke progress on org.rdk.DownloadManager with downloadId: "<DOWNLOAD_ID>" (wait 10 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<DOWNLOAD_ID>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`; download progress matches value from step 6  |
 | 8 | Resume Download | Invoke resume on org.rdk.DownloadManager with downloadId: "<DOWNLOAD_ID>" (wait 10 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.resume", "params": {"downloadId": "<DOWNLOAD_ID>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 9 | Progress Check After Resume | Invoke progress on org.rdk.DownloadManager with downloadId: "<DOWNLOAD_ID>" (wait 10 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.progress", "params": {"downloadId": "<DOWNLOAD_ID>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that download progress increases after resume |
 | 10 | Check Package Download Completion | Check downloaded package status on the device | Downloaded package checksum matches expected value: `<PACKAGEMANAGER_LARGE_APPLICATION_MD5SUM_VALUE>` |
@@ -537,3 +538,5 @@ _No plugin-level post-conditions defined_
 | Estimated Duration | 30 minutes |
 | Priority | Medium |
 | TDK Release Version | M147 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

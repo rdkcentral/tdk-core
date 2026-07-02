@@ -135,7 +135,7 @@ Gets all network interfaces
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Network Interfaces | Invoke addresses on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.addresses"}' http://127.0.0.1:9998/jsonrpc` | Validation succeeded using method tag `deviceinfo_get_network_info` |
+| 1 | Get Network Interfaces | Invoke addresses on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.addresses"}' http://127.0.0.1:9998/jsonrpc` | Verify that the DeviceInfo network information is returned and validated successfully  |
 
 ---
 
@@ -192,7 +192,7 @@ Checks the serial number
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Serial Number | Invoke serialnumber on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.serialnumber"}' http://127.0.0.1:9998/jsonrpc` | Validation succeeded using method tag `deviceinfo_get_api_info` |
+| 1 | Get Serial Number | Invoke serialnumber on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.serialnumber"}' http://127.0.0.1:9998/jsonrpc` | Verify that the DeviceInfo API response is returned and validated successfully  |
 
 ---
 
@@ -210,8 +210,8 @@ Checks the model name of the DUT
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device Details | Read expected model name by executing: grep FRIENDLY_ID <DEVICEINFO_DEVICE_DETAILS_FILE_PATH> \| cut -d'=' -f2- \| xargs | `FRIENDLY_ID` value retrieved successfully and saved for comparison |
-| 2 | Get Model Name | Invoke modelname on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.modelname"}' http://127.0.0.1:9998/jsonrpc` | Model name returned by API matches `FRIENDLY_ID` value retrieved in step 1 |
+| 1 | Get Device Details | Read expected model name by executing: grep FRIENDLY_ID <DEVICEINFO_DEVICE_DETAILS_FILE_PATH> \| cut -d'=' -f2- \| xargs | Verify that the `FRIENDLY_ID` value is retrieved successfully and saved for comparison  |
+| 2 | Get Model Name | Invoke modelname on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.modelname"}' http://127.0.0.1:9998/jsonrpc` | Verify that the model name returned by the API matches the `FRIENDLY_ID` value retrieved in step 1  |
 
 ---
 
@@ -230,7 +230,7 @@ Checks the firmware version of the DUT
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Current Image Version | Retrieve current firmware image version from device | Verify that the current firmware image version is retrieved from the device successfully |
-| 2 | Get Firmware Version | Invoke firmwareversion on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.firmwareversion"}' http://127.0.0.1:9998/jsonrpc` | Firmware version matches expected value retrieved from device |
+| 2 | Get Firmware Version | Invoke firmwareversion on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.firmwareversion"}' http://127.0.0.1:9998/jsonrpc` | Verify that the firmware version matches the expected value retrieved from the device  |
 
 ---
 
@@ -248,7 +248,7 @@ Check whether settop lists supported audio ports
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Supported Audio Ports | Invoke supportedaudioports on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedaudioports"}' http://127.0.0.1:9998/jsonrpc` | Expected `<SUPPORTED_AUDIO_PORTS>` |
+| 1 | Get Supported Audio Ports | Invoke supportedaudioports on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedaudioports"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported audio ports match the expected value `<SUPPORTED_AUDIO_PORTS>` from the device config file  |
 
 ---
 
@@ -266,7 +266,7 @@ Check whether settop displays supported video displays
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Supported Video Displays | Invoke supportedvideodisplays on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedvideodisplays"}' http://127.0.0.1:9998/jsonrpc` | Expected `<SUPPORTED_VIDEO_DISPLAYS>` |
+| 1 | Get Supported Video Displays | Invoke supportedvideodisplays on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedvideodisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported video displays match the expected value `<SUPPORTED_VIDEO_DISPLAYS>` from the device config file  |
 
 ---
 
@@ -284,7 +284,7 @@ Check the EDID status of host
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Host EDID Details | Invoke hostedid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.hostedid"}' http://127.0.0.1:9998/jsonrpc` | The information retrieved from the hostedid API must not be empty |
+| 1 | Get Host EDID Details | Invoke hostedid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.hostedid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the hostedid API is not empty  |
 
 ---
 
@@ -303,8 +303,8 @@ Check whether the default resolution is available in supported resolutions
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
-| 2 | Get Supported Resolutions | Invoke supportedresolutions on DeviceInfo with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedresolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | The information retrieved from the supportedresolutions API must not be empty |
-| 3 | Get Default Resolution | Invoke defaultresolution on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.defaultresolution"}' http://127.0.0.1:9998/jsonrpc` | Expected `compared against value from step 2` |
+| 2 | Get Supported Resolutions | Invoke supportedresolutions on DeviceInfo with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedresolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the supportedresolutions API is not empty  |
+| 3 | Get Default Resolution | Invoke defaultresolution on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.defaultresolution"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value matches the value captured in step 2  |
 
 ---
 
@@ -323,7 +323,7 @@ Checks the supported HDCP version
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
-| 2 | Get Supported HDCP | Invoke supportedhdcp on DeviceInfo with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedhdcp", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | HDCP version matches expected value from configuration |
+| 2 | Get Supported HDCP | Invoke supportedhdcp on DeviceInfo with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedhdcp", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the HDCP version matches the expected value from the device configuration  |
 
 ---
 
@@ -341,7 +341,7 @@ Checks the model id of the DUT
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device Details | Read expected ^MODEL_NUM value from device config file <DEVICEINFO_DEVICE_DETAILS_FILE_PATH> | Expected `^MODEL_NUM` value read from device config file successfully |
+| 1 | Get Device Details | Read expected model id by executing grep ^MODEL_NUM <DEVICEINFO_DEVICE_DETAILS_FILE_PATH> \| cut -d'=' -f2- \| xargs | Verify that the `MODEL_NUM` value is retrieved successfully and saved for comparison |
 | 2 | Get Model ID | Invoke modelid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.modelid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API response matches the expected value from step 1 |
 
 ---
@@ -360,7 +360,7 @@ Checks the device type of the DUT
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device Type | Invoke devicetype on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.devicetype"}' http://127.0.0.1:9998/jsonrpc` | Device type returned by API matches expected value `<DEVICEINFO_DEVICE_TYPE>` from device config file |
+| 1 | Get Device Type | Invoke devicetype on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.devicetype"}' http://127.0.0.1:9998/jsonrpc` | Verify that the device type returned by the API matches the expected value `<DEVICEINFO_DEVICE_TYPE>` from the device config file  |
 
 ---
 
@@ -413,7 +413,7 @@ Verify whether the firmware version returned by deviceinfo API matches the firmw
 | --- | --- | --- | --- |
 | 1 | DeviceInfo Get Firmware Version | Invoke firmwareversion on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.firmwareversion"}' http://127.0.0.1:9998/jsonrpc` | Verify that the firmware version is retrieved successfully from DeviceInfo API |
 | 2 | System Get Device Image Version | Invoke getDeviceInfo on org.rdk.System with params: "imageVersion"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "imageVersion"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the image version is retrieved successfully from System API |
-| 3 | Comparison of Two API Results | Compare firmware version from step 1 (DeviceInfo API) against image version from step 2 (System API) | Firmware version returned by `DeviceInfo.firmwareversion` matches the image version returned by `System.getDeviceInfo` |
+| 3 | Comparison of Two API Results | Compare firmware version from step 1 (DeviceInfo API) against image version from step 2 (System API) | Verify that the firmware version returned by `DeviceInfo.firmwareversion` matches the image version returned by `System.getDeviceInfo`  |
 
 ---
 
@@ -433,7 +433,7 @@ Verify whether the serial number returned by deviceinfo API matches the serial n
 | --- | --- | --- | --- |
 | 1 | DeviceInfo Get Serial Number | Invoke serialnumber on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.serialnumber"}' http://127.0.0.1:9998/jsonrpc` | Verify that the serial number is retrieved successfully from DeviceInfo API |
 | 2 | System Get Device Serial Number | Invoke getSerialNumber on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getSerialNumber"}' http://127.0.0.1:9998/jsonrpc` | Verify that the serial number is retrieved successfully from System API |
-| 3 | Comparison of Two API Results | Compare serial number from step 1 (DeviceInfo API) against serial number from step 2 (System API) | Serial number returned by `DeviceInfo.serialnumber` matches the serial number returned by `System.getSerialNumber` |
+| 3 | Comparison of Two API Results | Compare serial number from step 1 (DeviceInfo API) against serial number from step 2 (System API) | Verify that the serial number returned by `DeviceInfo.serialnumber` matches the serial number returned by `System.getSerialNumber`  |
 
 ---
 
@@ -452,7 +452,7 @@ Verify whether the audio ports returned by deviceinfo API matches the audio port
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | DeviceInfo Get Supported Audio Ports | Invoke supportedaudioports on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedaudioports"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported audio ports are retrieved successfully from DeviceInfo API |
-| 2 | DisplaySettings Get Supported Audio Ports | Invoke getSupportedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | Supported audio ports returned by `DisplaySettings.getSupportedAudioPorts` matches the ports returned by `DeviceInfo.supportedaudioports` in step 1 |
+| 2 | DisplaySettings Get Supported Audio Ports | Invoke getSupportedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported audio ports returned by `DisplaySettings.getSupportedAudioPorts` match the ports returned by `DeviceInfo.supportedaudioports`  |
 
 ---
 
@@ -471,7 +471,7 @@ Verify whether the video ports returned by deviceinfo API matches the video port
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | DeviceInfo Get Supported Video Displays | Invoke supportedvideodisplays on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedvideodisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported video displays are retrieved successfully from DeviceInfo API |
-| 2 | DisplaySettings Get Supported Video Displays | Invoke getSupportedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Supported video displays returned by `DisplaySettings.getSupportedVideoDisplays` matches the displays returned by `DeviceInfo.supportedvideodisplays` in step 1 |
+| 2 | DisplaySettings Get Supported Video Displays | Invoke getSupportedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported video displays returned by `DisplaySettings.getSupportedVideoDisplays` match the displays returned by `DeviceInfo.supportedvideodisplays`  |
 
 ---
 
@@ -491,7 +491,7 @@ Verify whether the host EDID details returned by deviceinfo API matches the EDID
 | --- | --- | --- | --- |
 | 1 | DeviceInfo Get Host EDID Details | Invoke hostedid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.hostedid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the host EDID details are retrieved successfully from DeviceInfo API |
 | 2 | DisplaySettings Get Host EDID Details | Invoke readHostEDID on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.readHostEDID"}' http://127.0.0.1:9998/jsonrpc` | Verify that the host EDID details are retrieved successfully from DisplaySettings API |
-| 3 | Comparison of Two API Results | Compare host EDID from step 1 (DeviceInfo API) against host EDID from step 2 (DisplaySettings API) | Host EDID returned by `DeviceInfo.hostedid` matches the EDID returned by `DisplaySettings.readHostEDID` |
+| 3 | Comparison of Two API Results | Compare host EDID from step 1 (DeviceInfo API) against host EDID from step 2 (DisplaySettings API) | Verify that the host EDID returned by `DeviceInfo.hostedid` matches the EDID returned by `DisplaySettings.readHostEDID`  |
 
 ---
 
@@ -510,8 +510,8 @@ Verify whether the HDCP version returned by deviceinfo API matches the HDCP vers
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video display name is retrieved successfully |
-| 2 | DeviceInfo Get Supported HDCP | Invoke supportedhdcp on DeviceInfo with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedhdcp", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported HDCP version is retrieved successfully from DeviceInfo API |
-| 3 | HdcpProfile Get Supported HDCP | Invoke getSettopHDCPSupport on org.rdk.HdcpProfile<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdcpProfile.1.getSettopHDCPSupport"}' http://127.0.0.1:9998/jsonrpc` | HDCP version returned by `HdcpProfile.getSettopHDCPSupport` matches the version returned by `DeviceInfo.supportedhdcp` in step 2 |
+| 2 | DeviceInfo Get Supported HDCP | Invoke supportedhdcp on DeviceInfo with videoDisplay<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedhdcp", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported HDCP version is retrieved successfully from DeviceInfo API |
+| 3 | HdcpProfile Get Supported HDCP | Invoke getSettopHDCPSupport on org.rdk.HdcpProfile<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdcpProfile.1.getSettopHDCPSupport"}' http://127.0.0.1:9998/jsonrpc` | Verify that the HDCP version returned by `HdcpProfile.getSettopHDCPSupport` matches the version returned by `DeviceInfo.supportedhdcp`  |
 
 ---
 
@@ -531,7 +531,7 @@ Check whether the default resolution returned by deviceinfo API matches the defa
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video display name is retrieved successfully |
 | 2 | DeviceInfo Get Default Resolution | Invoke defaultresolution on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.defaultresolution"}' http://127.0.0.1:9998/jsonrpc` | Verify that the default resolution is retrieved successfully from DeviceInfo API |
-| 3 | DisplaySettings Get Default Resolution | Invoke getDefaultResolution on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDefaultResolution"}' http://127.0.0.1:9998/jsonrpc` | Default resolution returned by `DisplaySettings.getDefaultResolution` matches the resolution returned by `DeviceInfo.defaultresolution` in step 2 |
+| 3 | DisplaySettings Get Default Resolution | Invoke getDefaultResolution on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getDefaultResolution"}' http://127.0.0.1:9998/jsonrpc` | Verify that the default resolution returned by `DisplaySettings.getDefaultResolution` matches the resolution returned by `DeviceInfo.defaultresolution`  |
 
 ---
 
@@ -550,8 +550,8 @@ Check if the date returned by the systeminfo API matches the DUT date
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get SystemInfo API Date | Invoke systeminfo on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.systeminfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the system date is retrieved successfully from DeviceInfo API |
-| 2 | Get DUT Date | Retrieve current date directly from the DUT system | DUT system date retrieved successfully and saved for comparison |
-| 3 | Compare SystemInfo API Date With DUT Date | Compare date from step 1 (DeviceInfo systeminfo API) against date from step 2 (DUT system date) | Date returned by `DeviceInfo.systeminfo` matches the current date on the DUT |
+| 2 | Get DUT Date | Retrieve current date directly from the DUT system | Verify that the DUT system date is retrieved successfully and saved for comparison  |
+| 3 | Compare SystemInfo API Date With DUT Date | Compare date from step 1 (DeviceInfo systeminfo API) against date from step 2 (DUT system date) | Verify that the date returned by `DeviceInfo.systeminfo` matches the current date on the DUT  |
 
 ---
 
@@ -569,7 +569,7 @@ Checks the device SOC Name
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device SocName | Invoke socname on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.socname"}' http://127.0.0.1:9998/jsonrpc` | The information retrieved from the socname API must not be empty |
+| 1 | Get Device SocName | Invoke socname on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.socname"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the socname API is not empty  |
 
 ---
 
@@ -587,7 +587,7 @@ Checks the device manufacturer
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Device Manufacturer | Invoke make on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.make"}' http://127.0.0.1:9998/jsonrpc` | The information retrieved from the make API must not be empty |
+| 1 | Get Device Manufacturer | Invoke make on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.make"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the make API is not empty  |
 
 ## Plugin Post-conditions
 
@@ -606,3 +606,5 @@ Checks the device manufacturer
 | Estimated Duration | 5 minutes |
 | Priority | Medium |
 | TDK Release Version | M81 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

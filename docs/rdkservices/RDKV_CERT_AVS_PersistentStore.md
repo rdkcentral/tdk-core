@@ -85,7 +85,7 @@ Sets and gets the particular key value
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Invoke setValue on org.rdk.PersistentStore with namespace: "Namespace_1", key: "Key_1", value: "<VALUE_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Namespace_1", "key": "Key_1", "value": "<VALUE_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
-| 2 | Get Value | Invoke getValue on org.rdk.PersistentStore with namespace: "Namespace_1", key: "Key_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "Namespace_1", "key": "Key_1"}}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` returned value matches the iterated value set in the previous step |
+| 2 | Get Value | Invoke getValue on org.rdk.PersistentStore with namespace: "Namespace_1", key: "Key_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "Namespace_1", "key": "Key_1"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` returned value matches the iterated value set in the previous step  |
 
 ---
 
@@ -104,9 +104,9 @@ Deletes the key
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Invoke setValue on org.rdk.PersistentStore with namespace: "Namespace_1", key: "Key_2", value: "Value_2"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Namespace_1", "key": "Key_2", "value": "Value_2"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
-| 2 | Get Keys | Invoke getKeys on org.rdk.PersistentStore with namespace: "Namespace_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getKeys", "params": {"namespace": "Namespace_1"}}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, `Key_2` present in the returned keys list |
+| 2 | Get Keys | Invoke getKeys on org.rdk.PersistentStore with namespace: "Namespace_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getKeys", "params": {"namespace": "Namespace_1"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`, `Key_2` present in the returned keys list  |
 | 3 | Delete Key | Invoke deleteKey on org.rdk.PersistentStore with namespace: "Namespace_1", key: "Key_2"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteKey", "params": {"namespace": "Namespace_1", "key": "Key_2"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the key is deleted successfully |
-| 4 | Get Keys | Invoke getKeys on org.rdk.PersistentStore with namespace: "Namespace_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getKeys", "params": {"namespace": "Namespace_1"}}' http://127.0.0.1:9998/jsonrpc` | `success` : `true`, `Key_2` absent from the returned keys list |
+| 4 | Get Keys | Invoke getKeys on org.rdk.PersistentStore with namespace: "Namespace_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getKeys", "params": {"namespace": "Namespace_1"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`, `Key_2` absent from the returned keys list  |
 
 ---
 
@@ -125,9 +125,9 @@ Deletes the Namespace
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Invoke setValue on org.rdk.PersistentStore with namespace: "Namespace_2", key: "Key_1", value: "Value_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Namespace_2", "key": "Key_1", "value": "Value_1"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
-| 2 | Get Namespaces | Invoke getNamespaces on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces"}' http://127.0.0.1:9998/jsonrpc` | Expected `Namespace_2` |
+| 2 | Get Namespaces | Invoke getNamespaces on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces"}' http://127.0.0.1:9998/jsonrpc` | Verify that `Namespace_2` is present in the namespaces list as expected  |
 | 3 | Delete Namespace | Invoke deleteNamespace on org.rdk.PersistentStore with namespace: "Namespace_2"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteNamespace", "params": {"namespace": "Namespace_2"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the namespace is deleted successfully |
-| 4 | Get Namespaces | Invoke getNamespaces on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces"}' http://127.0.0.1:9998/jsonrpc` | Expected `Namespace_2` absent from the namespaces list |
+| 4 | Get Namespaces | Invoke getNamespaces on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces"}' http://127.0.0.1:9998/jsonrpc` | Verify that `Namespace_2` is absent from the namespaces list, confirming successful deletion  |
 
 ---
 
@@ -185,8 +185,8 @@ Sets and gets the particular key value
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Invoke setValue on org.rdk.PersistentStore with namespace: "Namespace_3", key: "Key_1", value: "<VALUE_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Namespace_3", "key": "Key_1", "value": "<VALUE_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
-| 2 | Get Value | Invoke getValue on org.rdk.PersistentStore with namespace: "Namespace_3", key: "Key_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "Namespace_3", "key": "Key_1"}}' http://127.0.0.1:9998/jsonrpc` | `success` : `true` returned value matches the iterated value set in the previous step |
-| 3 | Check On Value Changed Event | Listen for Event_On_Value_Changed event (wait 2s) | `success` : `true` returned value matches the iterated value set in the previous step |
+| 2 | Get Value | Invoke getValue on org.rdk.PersistentStore with namespace: "Namespace_3", key: "Key_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "Namespace_3", "key": "Key_1"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` returned value matches the iterated value set in the previous step  |
+| 3 | Check On Value Changed Event | Listen for Event_On_Value_Changed event (wait 2s) | Verify that `success` : `true` returned value matches the iterated value set in the previous step  |
 
 ---
 
@@ -207,7 +207,7 @@ Set and get storage limits for available namespaces
 | 1 | Get Namespaces | Invoke getNamespaces on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces"}' http://127.0.0.1:9998/jsonrpc` | Verify that namespaces are returned successfully |
 | 2 | Delete Namespace | *(Conditional statement executed only if previous step condition is met)*<br>Invoke deleteNamespace on org.rdk.PersistentStore with namespace: "username"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteNamespace", "params": {"namespace": "username"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the namespace is deleted successfully |
 | 3 | Set Namespace Storagelimit | Invoke setNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "username"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setNamespaceStorageLimit", "params": {"namespace": "username", "storageLimit": 20}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the namespace storage limit is set successfully |
-| 4 | Get Namespace Storagelimit | Invoke getNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "username"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaceStorageLimit", "params": {"namespace": "username"}}' http://127.0.0.1:9998/jsonrpc` | Expected `20` |
+| 4 | Get Namespace Storagelimit | Invoke getNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "username"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaceStorageLimit", "params": {"namespace": "username"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value is `20` as expected  |
 | 5 | Delete Namespace | Invoke deleteNamespace on org.rdk.PersistentStore with namespace: "username"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteNamespace", "params": {"namespace": "username"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the namespace is deleted successfully |
 
 ---
@@ -239,7 +239,7 @@ PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Key_Operations
 PS_09
 
 ### TestCase Objective
-Verify persistent store handles empty key, set and get operatins across namespaces
+Verify persistent store handles empty key, set and get operations across namespaces
 
 ### Test Steps
 
@@ -258,7 +258,7 @@ PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Namespce_Operations
 PS_10
 
 ### TestCase Objective
-Verify persistent store handles empty namespace, set and get operatins
+Verify persistent store handles empty namespace, set and get operations
 
 ### Test Steps
 
@@ -339,3 +339,5 @@ Validates statechange event on Activating/deactivating the plugin
 | Estimated Duration | 5 minutes |
 | Priority | Medium |
 | TDK Release Version | M88 |
+
+<div align="right"><a href="#">&#8593; Go to Top</a></div>

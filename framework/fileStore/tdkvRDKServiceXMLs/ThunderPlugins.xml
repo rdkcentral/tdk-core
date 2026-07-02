@@ -628,7 +628,7 @@
 
     <!-- DeviceDiagnostics Plugin Information -->
     <plugin pluginName="DeviceDiagnostics" serviceName="org.rdk.DeviceDiagnostics" serviceVersion="1">
-        <method name="Get_Configuration" api="getConfiguration" type="method" desc="RDK API interface for the WebPA service" >
+        <method name="Get_Configuration" api="getConfiguration" type="method" desc="Gets the values associated with the corresponding property names" >
             <params>
                 <param tag="names" defaultValue="null" type="list" />
             </params>
