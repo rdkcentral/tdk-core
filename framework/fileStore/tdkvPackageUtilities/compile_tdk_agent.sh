@@ -2225,9 +2225,9 @@ pack_tdkv()
 	rm -rf ../TDK_Package/var/TDK/
 	cp MediaPipelineTests_stub/tdk_mediapipelinetests ../TDK_Package/usr/bin/
 	cp MediaPipelineTests_stub/tdk_mediapipelinetests_trickplay ../TDK_Package/usr/bin/
-	cp FireboltCompliance_Validation/graphics_validation/Essos_TDKTestApp ../TDK_Package/usr/bin
-        cp FireboltCompliance_Validation/graphics_validation/.libs/Westeros_TDKTestApp ../TDK_Package/usr/bin
-	cp FireboltCompliance_Validation/scripts/RunGraphicsTDKTest.sh ../TDK_Package/opt/TDK
+	cp Graphics_TestApplications/Essos_TDKTestApp ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/.libs/Westeros_TDKTestApp ../TDK_Package/usr/bin
+	cp scripts/RunGraphicsTDKTest.sh ../TDK_Package/opt/TDK
 	cp Graphics_TestApplications/tiles_benchmark ../TDK_Package/usr/bin
         cp Graphics_TestApplications/motion_benchmark ../TDK_Package/usr/bin
         cp Graphics_TestApplications/vkmultithread ../TDK_Package/usr/bin

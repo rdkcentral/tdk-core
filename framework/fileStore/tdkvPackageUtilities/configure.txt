@@ -88,7 +88,7 @@ DEEPSLEEPHAL_FLAGS=" -DENABLE_DEEPSLEEP_WAKEUP_EVT "
 FLAGS_HAL="-DENABLE_DEEPSLEEP_WAKEUP_EVT -DENABLE_THERMAL_PROTECTION -DENABLE_LLAMA_PLATCO -DNO_DEVICE_READY_EVENT"
 
 #Do you want to enable any modules which are not enabled?
-DISTRO_CONFIGURE=" --enable-fireboltcompliance --enable-bluetoothhal"
+DISTRO_CONFIGURE=" --enable-graphicstestapps --enable-bluetoothhal"
 
 
 #Do you want to exclude any files from copying to device?

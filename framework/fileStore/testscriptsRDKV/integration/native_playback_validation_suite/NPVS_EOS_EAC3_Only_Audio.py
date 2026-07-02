@@ -32,7 +32,7 @@ obj.configureTestCase(ip,port,'NPVS_EOS_EAC3_Only_Audio');
 #Set device configurations to default values
 checkAVStatus = "no"
 #The default timeout of test application is 6 minutes, so for EOS test cases, if the test stream is longer than 6 minutes the total timeout in seconds ( stream duration + ~5 seconds as buffer) should be explicitly specified in configuration parameter 'NATIVE_PLAYBACK_EOS_TIMEOUT' inside device config file
-#the default timeout value given below is only for following the similar way as other FNCS playback scripts, in EOS tests, the default timeout is 6 minutes
+#the default timeout value given below is only for following the similar way as other NPVS playback scripts, in EOS tests, the default timeout is 6 minutes
 timeoutInSeconds = "10"
 
 
