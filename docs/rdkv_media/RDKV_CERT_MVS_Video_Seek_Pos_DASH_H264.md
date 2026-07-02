@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_Media_Validation_191
 ## TestCase Name
 RDKV_CERT_MVS_Video_Seek_Pos_DASH_H264
@@ -33,9 +33,9 @@ Test Script to launch a lightning Video player application through AppManager an
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
 | 1 | Run playback operations and validate media events. | Start playback of the content and close the player after 30s (close_interval). | Ensure that expected media events are observed for the configured operations. |
-| 2 | Store the launch URL in PersistentStore. | Build the test URL with the video_src_url_dash_h264 (DASH stream). Store the constructed URL in PersistentStore for AppManager launch. Sample URL (dashjs player):<br><code>http://&lt;TM_IP&gt;:&lt;port&gt;/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html<br>?player=sdk<br>&url=http://&lt;TM_IP&gt;:&lt;port&gt;/TDK_Clear_Test_Streams_Sunrise/DASH_H264_AAC/atfms_291_dash_tdk_avc_aac_fmp4.mpd<br>&operations=close(30)<br>&autotest=true<br>&type=DASH</code>. | Ensure that the launch URL is stored in PersistentStore. |
+| 2 | Store the launch URL in PersistentStore. | Build the test URL with the video_src_url_dash_h264 (DASH stream). Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_url>.mpd&operations=seekpos(30:120),seekpos(30:80),close(30)&autotest=true&options=checkInterval(10)&type=dash`| Ensure that the launch URL is stored in PersistentStore. |
 | 3 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |
-| 4 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps by sending the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |
+| 4 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |
 | 5 | Execute operations and validate media events. | App performs seek to position operations and validates using seeking, seeked events and with position. | Ensure that expected media events are observed for the configured operations. |
 | 6 | Execute operations and validate media events. | If expected event ('Observed Event: ') is observed for each operation, the app reports SUCCESS; otherwise, it reports FAILURE. Update the test script result as SUCCESS/FAILURE based on event validation result from the app and proc check status (if applicable). | Ensure that expected media events are observed for the configured operations. |
 | 7 | Terminate app and restore test environment. | Terminate the test app through AppManager using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.terminateApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code> and restore the test environment. | Ensure that the app is terminated and the test environment is restored. |
@@ -49,3 +49,14 @@ Test Script to launch a lightning Video player application through AppManager an
 **Priority**: High
 
 **Release Version**: M97<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+
+
+
+
+
+
+
+
+
+
+

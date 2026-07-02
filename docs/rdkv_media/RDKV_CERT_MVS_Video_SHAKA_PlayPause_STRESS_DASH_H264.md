@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_Media_Validation_53
 ## TestCase Name
 RDKV_CERT_MVS_Video_SHAKA_PlayPause_STRESS_DASH_H264
@@ -34,9 +34,9 @@ Test Script to launch a lightning Shaka player application through AppManager an
 |-|---------|-----------------|----------------|
 | 1 | Set playback operations for the scenario. | Set playback operations: Pause, play, repeat. | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_dash_h264. | Build the test URL with the video_src_url_dash_h264. | Verify that the test URL is built using video_src_url_dash_h264. |
-| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. | Ensure that the launch URL is stored in PersistentStore. |
+| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_url>.mpd&operations=pause(5),play(5),repeat(15)&autotest=true`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |
-| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps by sending the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |
+| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |
 | 6 | Run play/pause operations and validate events. | App performs the pause and play operation repeatedly and validates using events. | Ensure that play/pause operations complete and expected events are observed. |
 | 7 | Validate observed events and set pass/fail status. | If expected events paused, play occurs for pause and play in all the repetition, then the app reports SUCCESS; otherwise, it reports FAILURE. | Ensure that pass/fail status matches observed event validation. |
 | 8 | Update test result based on validation. | Update the test script result as SUCCESS/FAILURE based on event validation result from the app and proc check status (if applicable). | Ensure that the final test result is updated based on validation and proc-check status. |
@@ -51,6 +51,17 @@ Test Script to launch a lightning Shaka player application through AppManager an
 **Priority**: High
 
 **Release Version**: M87<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

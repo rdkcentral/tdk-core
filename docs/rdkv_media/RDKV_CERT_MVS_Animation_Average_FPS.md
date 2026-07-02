@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_Media_Validation_04
 ## TestCase Name
 RDKV_CERT_MVS_Animation_Average_FPS
@@ -31,9 +31,9 @@ Test Script to launch a lightning Animation application through AppManager and c
 |-|---------|-----------------|----------------|
 | 1 | Set playback operations for the scenario. | Set playback operations: Stop (60s). | Ensure playback operations are set as specified. |
 | 2 | Build the animation app test URL. | Build the test URL for the Animation app. | Verify that the test URL is built successfully. |
-| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. | Ensure that the launch URL is stored in PersistentStore. |
+| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/animations/build/index.html?operations=stop(60)&autotest=true`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.animation-app"}}</code>. | Ensure that the app launches successfully via AppManager. |
-| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps by sending the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.animation-app is present in the loaded apps list. |
+| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.animation-app is present in the loaded apps list. |
 | 6 | Run animation operations and validate outcomes. | App performs animation for 60 sec and stops after that. | Ensure that animation completes successfully without errors. |
 | 7 | Run animation operations and validate outcomes. | Monitor animation progress. Validates the 'stop' event (animation completes successfully) and retrieves the valid ation result with average CPU load value. It also gives average FPS value. | Ensure that animation operations complete successfully without errors. |
 | 8 | Update final test result from event validation. | Get the event validation result and average FPS value from the app and check whether FPS obtained is greater than or eq ual to expected fps value. | Ensure that the final test result is updated based on event validation. |
@@ -48,6 +48,17 @@ Test Script to launch a lightning Animation application through AppManager and c
 **Priority**: High
 
 **Release Version**: M83<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

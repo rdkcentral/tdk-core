@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_Media_Validation_792
 ## TestCase Name
 RDKV_CERT_MVS_Video_SHAKA_Mute_UnMute_HEVC
@@ -31,9 +31,9 @@ Test script to launch a Lightning Unified Player application through AppManager 
 |-|---------|-----------------|----------------|
 | 1 | Set playback operations for the scenario. | Set playback operations: Mute audio (30s), unmute audio (30s). | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_hevc. | Build the test URL with the video_src_url_hevc. | Verify that the test URL is built using video_src_url_hevc. |
-| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. | Ensure that the launch URL is stored in PersistentStore. |
+| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_src_url_hevc>&operations=mute(30),unmute(30)&autotest=true`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |
-| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps by sending the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |
+| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |
 | 6 | Execute operations and validate media events. | App performs the configured operations and validates using media events. The 'Observed Event: volumechange' event is monitored to validate successful playback. | Ensure that expected media events are observed for the configured operations. |
 | 7 | Execute operations and validate media events. | If expected event (Observed Event: volumechange) is observed, the app reports SUCCESS; otherwise, it reports FAILURE. | Ensure that expected media events are observed for the configured operations. |
 | 8 | Validate observed events and set pass/fail status. | Update the test script result as SUCCESS/FAILURE based on event validation result and proc check status (if applicable). | Ensure that the final test result is updated based on validation and proc-check status. |
@@ -48,6 +48,17 @@ Test script to launch a Lightning Unified Player application through AppManager 
 **Priority**: High
 
 **Release Version**: M142<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

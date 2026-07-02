@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_Media_Validation_11
 ## TestCase Name
 RDKV_CERT_MVS_Animation_Check_Graphics_workload
@@ -30,9 +30,9 @@ Test Script to perform animation of multiple objects for multiple object counts 
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Store the launch URL in PersistentStore. | Build the test URL for the Multianimation app. Store the constructed URL in PersistentStore for AppManager launch. Sample URL:<br><code>http://&lt;TM_IP&gt;:&lt;port&gt;/tdkservice/fileStore/lightning-apps/multianimations/build/index.html?autotest=true</code>. | Ensure that the launch URL is stored in PersistentStore. |
+| 1 | Store the launch URL in PersistentStore. | Build the test URL for the Multianimation app. Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/multianimations/build/index.html?autotest=true`| Ensure that the launch URL is stored in PersistentStore. |
 | 2 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.multi-animation-app"}}</code>. | Ensure that the app launches successfully via AppManager. |
-| 3 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps by sending the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.multi-animation-app is present in the loaded apps list. |
+| 3 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.multi-animation-app is present in the loaded apps list. |
 | 4 | Run animation operations and validate outcomes. | App performs animation of multiple objects for multiple object counts one by one for the provided duration. | Ensure that animation of multiple objects for multiple object counts one by one for the provided duration completes successfully without errors. |
 | 5 | Verify that app starts with animation of single object for provided duration and collect the fps. | App starts with animation of single object for provided duration and collect the fps for every second, then find the average of collected fps. | Ensure that with animation of single object for provided duration and collect the fps for every second, then find the average of collected fps completes successfully without errors. |
 | 6 | Verify that if the average FPS obtained is greater than or equal to expected fps value, then app. | If the average FPS obtained is greater than or equal to expected fps value, then app increases number of objects to. | Ensure that if the average FPS obtained should be greater than or equal to expected fps value, then app increases number of objects to. |
@@ -50,6 +50,18 @@ Test Script to perform animation of multiple objects for multiple object counts 
 **Priority**: High
 
 **Release Version**: M84<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_Media_Validation_802
 ## TestCase Name
 RDKV_CERT_MVS_Video_HTML_Mute_Unmute_OPUS_VP8_WEBM
@@ -31,9 +31,9 @@ Test script to launch an HTML video player application through AppManager and pe
 |-|---------|-----------------|----------------|
 | 1 | Set playback operations for the scenario. | Set playback operations: Mute audio (30s), unmute audio (30s). | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_vp8. | Build the test URL with the video_src_url_vp8. | Verify that the test URL is built using video_src_url_vp8. |
-| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. | Ensure that the launch URL is stored in PersistentStore. |
+| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/htmlplayer.html?url=<video_opus_vp8_webm_url>&operations=mute(30),unmute(30)`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the player using AppManager. | Launch the HTML player test app using the video src URL, and perform mute and unmute operations. Use the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.html-player"}}</code>. | Ensure that the player app launches successfully. |
-| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps by sending the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.html-player is present in the loaded apps list. |
+| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.html-player is present in the loaded apps list. |
 | 6 | Execute operations and validate media events. | App performs the provided operations and validates each operation using media events ('Observed Event: play'). | Ensure that expected media events are observed for the configured operations. |
 | 7 | Execute operations and validate media events. | If expected event ('Observed Event: play') is observed for each operation, the app reports SUCCESS; otherwise, it reports FAILURE. Update the test script result as SUCCESS/FAILURE based on event validation result and proc check status (if applicable). | Ensure that expected media events are observed for the configured operations. |
 | 8 | Terminate app and restore test environment. | Terminate the test app through AppManager using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.terminateApp", "params":{"appId": "com.rdkcentral.html-player"}}</code> and restore the test environment. | Ensure that the app is terminated and the test environment is restored. |
@@ -47,6 +47,19 @@ Test script to launch an HTML video player application through AppManager and pe
 **Priority**: High
 
 **Release Version**: M143<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

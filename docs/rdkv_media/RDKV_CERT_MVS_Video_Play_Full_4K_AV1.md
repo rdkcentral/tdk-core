@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_Media_Validation_509
 ## TestCase Name
 RDKV_CERT_MVS_Video_Play_Full_4K_AV1
@@ -32,9 +32,9 @@ Test Script to launch a lightning Video player application through AppManager an
 |-|---------|-----------------|----------------|
 | 1 | Set playback operations for the scenario. | Set playback operations: Play till end of content (0s). | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_mp4_2160p_av1. | Build the test URL with the video_src_url_mp4_2160p_av1. | Verify that the test URL is built using video_src_url_mp4_2160p_av1. |
-| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. | Ensure that the launch URL is stored in PersistentStore. |
+| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_4k_av1_url>.mp4&operations=playtillend(0)&autotest=true&type=mp4`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |
-| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps by sending the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |
+| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |
 | 6 | Run playback operations and validate media events. | App plays the entire video and validates using video events play and ended. The 'playing' event is monitored to validate successful playback. | Ensure that expected media events are observed for the configured operations. |
 | 7 | Validate observed events and set pass/fail status. | After playing the video till the end, if the expected events play and ended are captured, then the app reports SUCCESS; otherwise, it reports FAILURE. | Ensure that pass/fail status matches observed event validation. |
 | 8 | Update test result based on validation. | Update the test script result as SUCCESS/FAILURE based on event validation result from the app and proc check status (if applicable). | Ensure that the final test result is updated based on validation and proc-check status. |
@@ -49,6 +49,17 @@ Test Script to launch a lightning Video player application through AppManager an
 **Priority**: High
 
 **Release Version**: M131<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

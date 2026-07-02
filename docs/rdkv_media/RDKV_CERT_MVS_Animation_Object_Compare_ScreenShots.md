@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_Media_Validation_42
 ## TestCase Name
 RDKV_CERT_MVS_Animation_Object_Compare_ScreenShots
@@ -30,9 +30,9 @@ Test Script to launch a lightning Objects Animation application through AppManag
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Store the launch URL in PersistentStore. | Build the test URL for the Objects Animation app. Store the constructed URL in PersistentStore for AppManager launch. Sample URL:<br><code>http://&lt;TM_IP&gt;:&lt;port&gt;/tdkservice/fileStore/lightning-apps/objectanimations/build/index.html?autotest=true</code>. | Ensure that the launch URL is stored in PersistentStore. |
+| 1 | Store the launch URL in PersistentStore. | Build the test URL for the Objects Animation app. Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/objectanimations/build/index.html?autotest=true`| Ensure that the launch URL is stored in PersistentStore. |
 | 2 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.object-animation-app"}}</code>. | Ensure that the app launches successfully via AppManager. |
-| 3 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps by sending the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.object-animation-app is present in the loaded apps list. |
+| 3 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.object-animation-app is present in the loaded apps list. |
 | 4 | Run animation operations and validate outcomes. | App performs animation to render single rectangle object for provided duration. | Ensure that animation to render single rectangle object for provided duration completes successfully without errors. |
 | 5 | Verify that using screenshot plugin, capture screenshots at regular interval and upload to the. | Using screenshot plugin, capture screenshots at regular interval and upload to the configured url. | Ensure that the URL should be stored in PersistentStore (MVS/lightningURL) successfully. |
 | 6 | Verify that compare the captured screenshots among them and check whether they are same or different. | compare the captured screenshots among them and check whether they are same or different. | Ensure that they should be same or different as expected. |
@@ -49,6 +49,18 @@ Test Script to launch a lightning Objects Animation application through AppManag
 **Priority**: High
 
 **Release Version**: M86<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

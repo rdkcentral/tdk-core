@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_Media_Validation_22
 ## TestCase Name
 RDKV_CERT_MVS_Animation_Objects_Average_FPS
@@ -31,9 +31,9 @@ Test Script to launch a lightning Objects Animation application through AppManag
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Store the launch URL in PersistentStore. | Build the test URL for the Objects Animation app. Store the constructed URL in PersistentStore for AppManager launch. Sample URL:<br><code>http://&lt;TM_IP&gt;:&lt;port&gt;/tdkservice/fileStore/lightning-apps/objectanimations/build/index.html?autotest=true</code>. | Ensure that the launch URL is stored in PersistentStore. |
+| 1 | Store the launch URL in PersistentStore. | Build the test URL for the Objects Animation app. Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/objectanimations/build/index.html?autotest=true`| Ensure that the launch URL is stored in PersistentStore. |
 | 2 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.object-animation-app"}}</code>. | Ensure that the app launches successfully via AppManager. |
-| 3 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps by sending the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.object-animation-app is present in the loaded apps list. |
+| 3 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.object-animation-app is present in the loaded apps list. |
 | 4 | Run animation operations and validate outcomes. | App performs objects animation by rendering given number of rectangles for 60 sec and stops after that. | Ensure that objects animation by rendering given number of rectangles completes successfully without errors. |
 | 5 | Verify that app gives average FPS value after duration of 60 sec. | App gives average FPS value after duration of 60 sec. | Ensure that app gives average FPS value after duration of 60 sec should be validated successfully. |
 | 6 | Verify that get the average FPS value from the app and check whether FPS obtained is greater than. | Get the average FPS value from the app and check whether FPS obtained is greater than or equal to expected fps va lue. | Ensure that fps obtained should be greater than or equal to expected fps value as expected. |
@@ -48,6 +48,18 @@ Test Script to launch a lightning Objects Animation application through AppManag
 **Priority**: High
 
 **Release Version**: M85<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

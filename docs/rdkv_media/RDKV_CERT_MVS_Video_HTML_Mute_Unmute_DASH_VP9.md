@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_Media_Validation_1036
 ## TestCase Name
 RDKV_CERT_MVS_Video_HTML_Mute_Unmute_DASH_VP9
@@ -31,9 +31,9 @@ Test script to launch a HTML5 Player application through AppManager and perform 
 |-|---------|-----------------|----------------|
 | 1 | Set playback operations for the scenario. | Set playback operations: Mute audio (30s), unmute audio (30s). | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_vp9. | Build the test URL with the video_src_url_vp9. | Verify that the test URL is built using video_src_url_vp9. |
-| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. | Ensure that the launch URL is stored in PersistentStore. |
+| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/htmlplayer.html?url=<video_dash_vp9_url>&operations=mute(30),unmute(30)`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.html-player"}}</code>. | Ensure that the app launches successfully via AppManager. |
-| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps by sending the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.html-player is present in the loaded apps list. |
+| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.html-player is present in the loaded apps list. |
 | 6 | Execute operations and validate media events. | App performs the configured operations and validates using media events. The 'Observed Event: play' event is monitored to validate successful playback. | Ensure that expected media events are observed for the configured operations. |
 | 7 | Execute operations and validate media events. | If expected event (Observed Event: play) is observed, the app reports SUCCESS; otherwise, it reports FAILURE. | Ensure that expected media events are observed for the configured operations. |
 | 8 | Validate observed events and set pass/fail status. | Update the test script result as SUCCESS/FAILURE based on event validation result and proc check status (if applicable). | Ensure that the final test result is updated based on validation and proc-check status. |
@@ -48,6 +48,16 @@ Test script to launch a HTML5 Player application through AppManager and perform 
 **Priority**: High
 
 **Release Version**: M143<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+
+
+
+
+
+
+
+
+
+
 
 
 
