@@ -961,7 +961,7 @@ def getWLANIPV6Address(wlanInterface):
             else:
                 status = "Only UBUNTU platform supported!!!"
         else:
-            return "Failed to connect to lan client"
+            return "Failed to connect to wlan client"
 
     except Exception as e:
         print(e)
