@@ -19,7 +19,9 @@
 
 from tdkutility import *
 from tdkbIPv6Variables import *
+
 import ipaddress
+
 
 # getWAN_Interface
 # Syntax      : getWAN_Interface(tr181obj, step)
@@ -82,7 +84,7 @@ def verifyIPv6Address(sysobj, interface, step, scope="global"):
 ########## End of function ##########
 
 # ExtractIPv6PrefixandAddress
-# Syntax      : extractIPv6PrefixandAddress(sysobj, interface, step)
+# Syntax      : extractIPv6PrefixandAddress(sysobj, interface, step, scope="global")
 # Description : Extracts IPv6 address and prefix from an interface.
 # Parameters  : sysobj - sysutil object
 #               interface - interface name
@@ -99,29 +101,33 @@ def extractIPv6PrefixandAddress(sysobj, interface, step, scope="global"):
     ipv6_addr = ""
     ipv6_prefix = None
     flag = False
-    print(f"TEST STEP {step} : Get the prefix of the ip address")
-    print(f"EXPECTED RESULT {step} : Should get the prefix of the ip address")
+    print(f"TEST STEP {step} : Get the IP address and prefix of the {interface} interface with {scope} scope")
+    print(f"EXPECTED RESULT {step} : Should get the IP address and prefix of the {interface} interface with {scope} scope")
     command = f"ip -6 addr show {interface} | grep 'inet6' | grep 'scope {scope}' | awk '{{print$2}}'"
     print(f"Command: {command}")
     tdkTestObj = sysobj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
     print(f"Command output: {details}")
+
+    print("Checking if the output is a valid IPv6 address")
     if expectedresult in actualresult and details != "":
         try:
             ipv6_interface = ipaddress.ip_interface(details.strip())
             ipv6_addr = str(ipv6_interface.ip)
             ipv6_prefix = ipv6_interface.network.prefixlen
+            print("The output is a valid IPv6 address.")
         except ValueError:
             ipv6_addr = ""
             ipv6_prefix = None
+            print("The output is NOT a valid IPv6 address.")
 
     if expectedresult in actualresult and ipv6_prefix is not None:
         flag = True
-        print(f"ACTUAL RESULT {step} : Successfully got the prefix of the ip address. Prefix is {ipv6_prefix}")
+        print(f"ACTUAL RESULT {step} : Successfully got the IP address and prefix of the {interface} interface with {scope} scope. IP address is {ipv6_addr}, Prefix is {ipv6_prefix}")
         tdkTestObj.setResultStatus("SUCCESS")
         print("[TEST EXECUTION RESULT] : SUCCESS\n")
     else:
-        print(f"ACTUAL RESULT {step} : Failed to get the prefix of the ip address. Prefix is {ipv6_prefix}")
+        print(f"ACTUAL RESULT {step} : Failed to get the IP address and prefix of the {interface} interface with {scope} scope. IP address is {ipv6_addr}, Prefix is {ipv6_prefix}")
         tdkTestObj.setResultStatus("FAILURE")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     return tdkTestObj, ipv6_addr, ipv6_prefix, flag
@@ -189,6 +195,7 @@ def getWANIPv6Address(tr181obj, step, validity_check=False):
 # Return Value: index - active host index or None
 #               step - updated test step number
 def getActiveClientIndex(tr181obj, expected_value, step):
+    expectedresult = "SUCCESS"
     if expected_value == "Ethernet":
         client_type = "LAN"
     else:
@@ -237,7 +244,7 @@ def getActiveClientIndex(tr181obj, expected_value, step):
         print(f"ACTUAL RESULT {step} : Failed to find an active {client_type} client with Layer1Interface value {expected_value}")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
-        print(f"ACTUAL RESULT {step} : Failed to get the number of hosts in Device.Hosts using Device.Hosts.HostNumberOfEntries")
+        print(f"ACTUAL RESULT {step} : Failed to get the number of hosts in Device.Hosts using Device.Hosts.HostNumberOfEntries or No hosts are connected. Number of hosts is {host_number}")
         tdkTestObj.setResultStatus("FAILURE")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     return index, step
@@ -311,37 +318,8 @@ def getClientLinkLocalIPv6Address(tr181obj, index, step):
 
 ########## End of function ##########
 
-# CheckIPv6DNSServerAddresses
-# Syntax      : checkIPv6DNSServerAddresses(tr181obj, step)
-# Description : Checks whether IPv6 DNS server addresses are present.
-# Parameters  : tr181obj - TR-181 object
-#               step - test step number
-# Return Value: flag - True if DNS server is present else False
-#               details - DNS server address string
-
-
-def checkIPv6DNSServerAddresses(tr181obj, step):
-    expectedresult = "SUCCESS"
-    flag = False
-    print(f"\nTEST STEP {step} : Check that IPv6 DNS server addresses are present on the DUT")
-    print(f"EXPECTED RESULT {step} : Should check that IPv6 DNS server addresses are present on the DUT")
-    tdkTestObj = tr181obj.createTestStep('TDKB_TR181Stub_Get')
-    actualresult, details = getTR181Value(tdkTestObj, "Device.DNS.Client.Server.1.DNSServer")
-    if expectedresult in actualresult and details != "":
-        flag = True
-        print(f"ACTUAL RESULT {step} : Successfully checked that IPv6 DNS server addresses are present on the DUT. Details : {details}")
-        tdkTestObj.setResultStatus("SUCCESS")
-        print("[TEST EXECUTION RESULT] : SUCCESS\n")
-    else:
-        print(f"ACTUAL RESULT {step} : Failed to check that IPv6 DNS server addresses are present on the DUT")
-        tdkTestObj.setResultStatus("FAILURE")
-        print("[TEST EXECUTION RESULT] : FAILURE\n")
-    return flag, details
-
-########## End of function ##########
-
 # GetIPv6DNSServerAddresses
-# Syntax      : getIPv6DNSServerAddresses(tr181obj, step)
+# Syntax      : getIPv6DNSServerAddresses(tr181obj, step, type="Primary")
 # Description : Gets the IPv6 DNS server addresses.
 # Parameters  : tr181obj - TR-181 object
 #               step - test step number
@@ -350,7 +328,6 @@ def checkIPv6DNSServerAddresses(tr181obj, step):
 #               tdkTestObj - executed test object
 #               flag - True if retrieval succeeds else False
 def getIPv6DNSServerAddresses(tr181obj, step, type = "Primary"):
-    # For primary DNS server, index is 1, for secondary DNS server, index is 2
     if type == "Secondary":
         index = 2
     else:
@@ -399,3 +376,5 @@ def resolveDomainUsingDNS(sysobj, domain, dns_server, step):
         print(f"ACTUAL RESULT {step} : Failed to resolve the domain {domain} using DNS server {dns_server}.")
     return tdkTestObj, flag, resolved_ip
 ########## End of function ##########
+
+
