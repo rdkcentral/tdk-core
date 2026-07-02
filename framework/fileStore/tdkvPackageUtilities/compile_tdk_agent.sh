@@ -127,14 +127,14 @@ config=configure.txt
 . $config
 
 for arg in "$@"; do
-    if [ "$arg" == "--fncs-package" ]; then
-        echo "Creating only FNCS_PACKAGE"
-	FNCS_PACKAGE="TRUE"
+    if [ "$arg" == "--npvs-package" ]; then
+        echo "Creating only NPVS_PACKAGE"
+	NPVS_PACKAGE="TRUE"
     fi
 done
 
-#Enabling FNCS Package Flag as rdkfwupgrader compilation is disabled
-FNCS_PACKAGE="TRUE"
+#Enabling NPVS Package Flag as rdkfwupgrader compilation is disabled
+NPVS_PACKAGE="TRUE"
 
 if [ -z $PLATFORM ];then
     echo -e "\nNO PLATFORM Selected , creating Generic_TDK_Package\n"
@@ -898,7 +898,7 @@ compile_skeleton_libraries()
     COMPILE_DUMMY_LIBS="WiFiHal PowerMgrHal DeepSleepHal DSHal IARMBus HdmiCec Bluetooth MfrHal WesterosHal Essos AudioCaptureMgr Graphics AAMP"
     COMPILE_DUMMY_LIBS="$COMPILE_DUMMY_LIBS common_utilities rdklogger DeviceSettings IARMBus libsyswrapper NetSrvMgr "
     COMPILE_DUMMY_LIBS="cJSON common_utilities libsyswrapper rdklogger Graphics WesterosHal Essos wdmp rfcapi DSHal"
-    if [[ $FNCS_PACKAGE == "TRUE" ]];then
+    if [[ $NPVS_PACKAGE == "TRUE" ]];then
 	COMPILE_DUMMY_LIBS="Graphics WesterosHal Essos DSHal"
     fi
     got_versions=false
@@ -2023,9 +2023,9 @@ compile_tdkv()
     fi
     CONF_DEVICE=CONFIGURE_OPTIONS_$DEVICE_TYPE
     CONF_OPTIONS="${!CONF_DEVICE} $DISTRO_CONFIGURE $CONFIGURE_OPTIONS_VA  $CONFIGURE_OPTIONS_COMPONENTS"
-    if [[ $FNCS_PACKAGE == "TRUE" ]];then
-        CONF_OPTIONS=" --enable-fncsPackage --enable-tdkgraphics --enable-graphicstestapps"
-	echo "FNCS Package compilation enabled"
+    if [[ $NPVS_PACKAGE == "TRUE" ]];then
+        CONF_OPTIONS=" --enable-npvsPackage --enable-tdkgraphics --enable-graphicstestapps"
+	echo "NPVS Package compilation enabled"
     fi
     if [[ $CONF_OPTIONS == *"enable-powermgrhal"* ]] || [[ $CONF_OPTIONS == *"enable-rdkfwupdater"* ]];then
 	get_component_versions
@@ -2177,7 +2177,7 @@ pack_tdkv()
 	cp $VULKAN_TOOLS_DIR/cube/vkcube $ROOT_DIR/TDK_Package/usr/bin
 	rm -rf $VULKAN_TOOLS_DIR
     fi
-    if [[ $FNCS_PACKAGE != "TRUE" ]];then
+    if [[ $NPVS_PACKAGE != "TRUE" ]];then
         mkdir -p TDK_Package/var/TDK/scripts
         mkdir -p TDK_Package/var/TDK/opensourcecomptest
         mkdir -p TDK_Package/lib/systemd/system
@@ -2217,7 +2217,7 @@ pack_tdkv()
 
     cp -av ../json_temp/* ../TDK_Package/usr/lib/ >> $LOG_FILE 2>&1
     
-    if [[ $FNCS_PACKAGE != "TRUE" ]];then
+    if [[ $NPVS_PACKAGE != "TRUE" ]];then
         #Copy all the shell scripts and config files along with tdk service
         cp agent/scripts/* ../TDK_Package/var/TDK
     else
@@ -2225,9 +2225,9 @@ pack_tdkv()
 	rm -rf ../TDK_Package/var/TDK/
 	cp MediaPipelineTests_stub/tdk_mediapipelinetests ../TDK_Package/usr/bin/
 	cp MediaPipelineTests_stub/tdk_mediapipelinetests_trickplay ../TDK_Package/usr/bin/
-	cp FireboltCompliance_Validation/graphics_validation/Essos_TDKTestApp ../TDK_Package/usr/bin
-        cp FireboltCompliance_Validation/graphics_validation/.libs/Westeros_TDKTestApp ../TDK_Package/usr/bin
-	cp FireboltCompliance_Validation/scripts/RunGraphicsTDKTest.sh ../TDK_Package/opt/TDK
+	cp Graphics_TestApplications/Essos_TDKTestApp ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/.libs/Westeros_TDKTestApp ../TDK_Package/usr/bin
+	cp scripts/RunGraphicsTDKTest.sh ../TDK_Package/opt/TDK
 	cp Graphics_TestApplications/tiles_benchmark ../TDK_Package/usr/bin
         cp Graphics_TestApplications/motion_benchmark ../TDK_Package/usr/bin
         cp Graphics_TestApplications/vkmultithread ../TDK_Package/usr/bin
@@ -2285,7 +2285,7 @@ pack_tdkv()
         fi
 
         scripts_path="$(dirname "$(find .  -type f -name StartTDK.sh)")"
-	if [[ $FNCS_PACKAGE == "TRUE" ]];then
+	if [[ $NPVS_PACKAGE == "TRUE" ]];then
 	    echo "Copying only TDK.env"
             cp $scripts_path/TDK.env ../TDK_Package/opt/TDK/
 	else
@@ -2297,7 +2297,7 @@ pack_tdkv()
 	echo "PLATFORM configuration skipped"
     fi
 
-    if [[ $FNCS_PACKAGE != "TRUE" ]];then
+    if [[ $NPVS_PACKAGE != "TRUE" ]];then
         #Create symlink for all the shared libraries
         cd ${ROOT_DIR}/TDK_Package/usr/lib
         for file in lib*stub*;do 
