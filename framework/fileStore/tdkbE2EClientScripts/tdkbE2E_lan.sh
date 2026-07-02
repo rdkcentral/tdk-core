@@ -31,10 +31,10 @@ get_lan_ip_address()
         echo "OUTPUT:$value"
 }
 
-# Get the IPV6 address of the LAN after connecting to it
+# Get the global IPV6 address of the LAN after connecting to it
 get_lan_ipv6_address()
 {
-        value="$(ifconfig -a $var2 | grep "$var3" | tr -s " " |  grep -v Link | cut -d " " -f3 | cut -d "/" -f1 | head -1)"
+        value="$(ifconfig -a $var2 | grep "$var3" | tr -s " " | grep -v -i Link | grep 'prefixlen 128' | awk '{print $2}' | head -1)"
         echo "OUTPUT:$value"
 }
 

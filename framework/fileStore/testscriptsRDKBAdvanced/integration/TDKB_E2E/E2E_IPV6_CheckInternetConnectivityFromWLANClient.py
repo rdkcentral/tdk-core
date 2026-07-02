@@ -1,3 +1,22 @@
+##########################################################################
+# If not stated otherwise in this file or this component's Licenses.txt
+# file the following copyright and licenses apply:
+#
+# Copyright 2026 RDK Management
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##########################################################################
+
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import time;
@@ -16,7 +35,7 @@ obj.configureTestCase(ip,port,'E2E_IPV6_CheckInternetConnectivityFromWLANClient'
 
 #Get the result of connection with test component
 loadmodulestatus =obj.getLoadModuleResult()
-print("[LIB LOAD STATUS]  :  %s" %loadmodulestatus)
+print(f"[LIB LOAD STATUS]  : {loadmodulestatus}")
 
 if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS")
@@ -31,7 +50,6 @@ if "SUCCESS" in loadmodulestatus.upper():
         #Assign the WIFI parameters names to a variable
         ssidName = f"Device.WiFi.SSID.{tdkbE2EUtility.ssid_5ghz_index}.SSID"
         keyPassPhrase = f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_5ghz_index}.Security.KeyPassphrase"
-        dnsServer = "Device.DNS.Client.Server.1.DNSServer"
         wan_ip_address = "Device.DeviceInfo.X_COMCAST-COM_WAN_IPv6"
 
         #Get the WAN IPv6 address of the DUT
@@ -41,24 +59,23 @@ if "SUCCESS" in loadmodulestatus.upper():
         tdkTestObj,status,wanIpv6Address = getParameterValue(obj,wan_ip_address)
         if expectedresult in status and wanIpv6Address != "":
             tdkTestObj.setResultStatus("SUCCESS")
-            print(f"ACTUAL RESULT {step}: {wanIpv6Address}")
+            print(f"ACTUAL RESULT {step}: Retrieved the current WAN IPv6 address: {wanIpv6Address}")
             print("[TEST EXECUTION RESULT] : SUCCESS")
 
             step += 1
 
             #Get the value of the wifi parameters that are currently set.
-            print(f"\nTEST STEP {step}: Get the current value of DNS Server")
-            print(f"EXPECTED RESULT {step}: Should retrieve the current value of DNS Server")
-            paramList=[ssidName,keyPassPhrase,dnsServer]
+            print(f"\nTEST STEP {step}: Get the current SSID and key passphrase values")
+            print(f"EXPECTED RESULT {step}: Should retrieve the current SSID and key passphrase values")
+            paramList=[ssidName,keyPassPhrase]
             tdkTestObj,status,orgValue = getMultipleParameterValues(obj,paramList)
-
             if expectedresult in status:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print(f"ACTUAL RESULT {step}: {orgValue[2]}")
+                print(f"ACTUAL RESULT {step}: Retrieved the current SSID and key passphrase values: {orgValue}")
                 print("[TEST EXECUTION RESULT] : SUCCESS")
 
                 setValuesList = [tdkbE2EUtility.ssid_5ghz_name,tdkbE2EUtility.ssid_5ghz_pwd]
-                print("WIFI parameter values that are set: %s" %setValuesList)
+                print(f"WIFI parameter values that are set: {setValuesList}")
 
                 list1 = [ssidName,tdkbE2EUtility.ssid_5ghz_name,'string']
                 list2 = [keyPassPhrase,tdkbE2EUtility.ssid_5ghz_pwd,'string']
@@ -73,7 +90,7 @@ if "SUCCESS" in loadmodulestatus.upper():
 
                 if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"ACTUAL RESULT {step}: {details}")
+                    print(f"ACTUAL RESULT {step}: Successfully set the SSID and key passphrase. Details: {details}")
                     print("[TEST EXECUTION RESULT] : SUCCESS")
 
                     #Retrieve the values after set and compare
@@ -84,7 +101,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                     tdkTestObj,status,newValues = getMultipleParameterValues(obj,newParamList)
                     if expectedresult in status and setValuesList == newValues:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print(f"ACTUAL RESULT {step}: {newValues}")
+                        print(f"ACTUAL RESULT {step}: Retrieved SSID and key passphrase values match the configured values: {newValues}")
                         print("[TEST EXECUTION RESULT] : SUCCESS")
 
                         #Wait for the changes to reflect in client device
@@ -161,12 +178,12 @@ if "SUCCESS" in loadmodulestatus.upper():
                             print("[TEST EXECUTION RESULT] : FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print(f"ACTUAL RESULT {step}: %s" %newValues)
+                        print(f"ACTUAL RESULT {step}: Failed to verify the configured SSID and key passphrase values. Retrieved values: {newValues}")
                         print(f"[TEST EXECUTION RESULT] : FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     details = tdkTestObj.getResultDetails()
-                    print(f"ACTUAL RESULT {step}: %s" %details)
+                    print(f"ACTUAL RESULT {step}: Failed to set the SSID and key passphrase. Details: {details}")
                     print(f"[TEST EXECUTION RESULT] : FAILURE")
 
                 #Prepare the list of parameter values to be reverted
@@ -184,16 +201,16 @@ if "SUCCESS" in loadmodulestatus.upper():
                 tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
                 if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"ACTUAL RESULT {step}: %s" %details)
+                    print(f"ACTUAL RESULT {step}: Restored the original SSID and key passphrase successfully. Details: {details}")
                     print("[TEST EXECUTION RESULT] : SUCCESS")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     details = tdkTestObj.getResultDetails()
-                    print(f"ACTUAL RESULT {step}: %s" %details)
+                    print(f"ACTUAL RESULT {step}: Failed to restore the original SSID and key passphrase. Details: {details}")
                     print("[TEST EXECUTION RESULT] : FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print(f"ACTUAL RESULT {step}: %s" %orgValue)
+                print(f"ACTUAL RESULT {step}: Failed to retrieve the current SSID and key passphrase values. Details: {orgValue}")
                 print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             print(f"ACTUAL RESULT {step}: Failed to get the current WAN IPv6 address. WAN IPv6 address is {wanIpv6Address}")

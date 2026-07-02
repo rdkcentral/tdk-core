@@ -1,3 +1,22 @@
+##########################################################################
+# If not stated otherwise in this file or this component's Licenses.txt
+# file the following copyright and licenses apply:
+#
+# Copyright 2026 RDK Management
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##########################################################################
+
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import time;
@@ -15,7 +34,7 @@ obj.configureTestCase(ip,port,'E2E_IPV6_DNSResolutionViaPrimaryDNSServerFromWLAN
 
 #Get the result of connection with test component
 loadmodulestatus =obj.getLoadModuleResult()
-print("[LIB LOAD STATUS]  :  %s" %loadmodulestatus)
+print(f"[LIB LOAD STATUS]  :  {loadmodulestatus}")
 
 if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS")
@@ -48,15 +67,16 @@ if "SUCCESS" in loadmodulestatus.upper():
             #Get the current WiFi parameters and DNS server value.
             paramList=[ssidName,keyPassPhrase,dnsServer]
             tdkTestObj,status,orgValue = getMultipleParameterValues(obj,paramList)
-            print(f"\nTEST STEP {step}: Get the current value of DNS Server")
-            print(f"EXPECTED RESULT {step}: Should retrieve the current value of DNS Server")
+            dnsServerValue = orgValue[2]
+            print(f"\nTEST STEP {step}: Get the current SSID, key passphrase, and DNS server values")
+            print(f"EXPECTED RESULT {step}: Should retrieve the current SSID, key passphrase, and DNS server values")
             if expectedresult in status:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print(f"ACTUAL RESULT {step}: The current value of DNS Server is {orgValue[2]}")
+                print(f"ACTUAL RESULT {step}: Retrieved SSID and key passphrase values {orgValue[0:2]} and DNS server value {dnsServerValue}")
                 print("[TEST EXECUTION RESULT] : SUCCESS")
 
                 setValuesList = [tdkbE2EUtility.ssid_5ghz_name,tdkbE2EUtility.ssid_5ghz_pwd]
-                print("WIFI parameter values that are set: %s" %setValuesList)
+                print(f"WIFI parameter values that are set: {setValuesList}")
 
                 list1 = [ssidName,tdkbE2EUtility.ssid_5ghz_name,'string']
                 list2 = [keyPassPhrase,tdkbE2EUtility.ssid_5ghz_pwd,'string']
@@ -89,40 +109,54 @@ if "SUCCESS" in loadmodulestatus.upper():
                         #Wait for the changes to reflect in client device
                         time.sleep(60)
 
-                        #Connect to the wifi ssid from wlan client and resolve domain name with nslookup in WLAN Client
+                        #Connect to the wifi ssid from wlan client
                         step += 1
-                        print(f"\nTEST STEP {step}: Connect to WLAN Client and resolve a known domain with nslookup")
-                        print(f"EXPECTED RESULT {step}: DNS Primary Server should resolve the DNS query from WLAN client")
-                        status=nslookupInClient(tdkbE2EUtility.nslookup_domain_name,orgValue[2],'WLAN')
+                        print(f"\nTEST STEP {step}: Connect to the wifi ssid from wlan client")
+                        print(f"EXPECTED RESULT {step}: WLAN client should connect to the wifi ssid")
+                        status = wlanConnectWifiSsid(tdkbE2EUtility.ssid_5ghz_name,tdkbE2EUtility.ssid_5ghz_pwd,tdkbE2EUtility.wlan_5ghz_interface)
                         if expectedresult in status:
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print(f"ACTUAL RESULT {step}: DNS Primary Server successfully resolves the DNS query")
+                            print(f"ACTUAL RESULT {step}: WiFi connected successfully")
                             print("[TEST EXECUTION RESULT] : SUCCESS")
-                        else:
-                            tdkTestObj.setResultStatus("FAILURE")
-                            print(f"ACTUAL RESULT {step}: DNS Primary Server doesn't resolve the DNS query")
-                            print("[TEST EXECUTION RESULT] : FAILURE")
 
-                        #Disconnect the WLAN client from the wifi ssid.
-                        step += 1
-                        print(f"\nTEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
-                        print(f"EXPECTED RESULT {step}: WLAN client should disconnect from the wifi ssid")
-                        status = wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_5ghz_interface)
-                        if expectedresult in status:
-                            tdkTestObj.setResultStatus("SUCCESS")
-                            print(f"ACTUAL RESULT {step}: WiFi disconnected successfully")
-                            print("[TEST EXECUTION RESULT] : SUCCESS")
+                            #Resolve domain name with nslookup in WLAN Client
+                            step += 1
+                            print(f"\nTEST STEP {step}: Resolve domain name with nslookup from WLAN Client")
+                            print(f"EXPECTED RESULT {step}: DNS Primary Server should resolve the DNS query from WLAN client")
+                            status=nslookupInClient(tdkbE2EUtility.nslookup_domain_name,orgValue[2],'WLAN')
+                            if expectedresult in status:
+                                tdkTestObj.setResultStatus("SUCCESS")
+                                print(f"ACTUAL RESULT {step}: DNS Primary Server successfully resolves the DNS query")
+                                print("[TEST EXECUTION RESULT] : SUCCESS")
+                            else:
+                                tdkTestObj.setResultStatus("FAILURE")
+                                print(f"ACTUAL RESULT {step}: DNS Primary Server doesn't resolve the DNS query")
+                                print("[TEST EXECUTION RESULT] : FAILURE")
+
+                            #Disconnect the WLAN client from the wifi ssid.
+                            step += 1
+                            print(f"\nTEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
+                            print(f"EXPECTED RESULT {step}: WLAN client should disconnect from the wifi ssid")
+                            status = wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_5ghz_interface)
+                            if expectedresult in status:
+                                tdkTestObj.setResultStatus("SUCCESS")
+                                print(f"ACTUAL RESULT {step}: WiFi disconnected successfully")
+                                print("[TEST EXECUTION RESULT] : SUCCESS")
+                            else:
+                                tdkTestObj.setResultStatus("FAILURE")
+                                print(f"ACTUAL RESULT {step}: Wifi disconnect failed")
+                                print("[TEST EXECUTION RESULT] : FAILURE")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print(f"ACTUAL RESULT {step}: Wifi disconnect failed")
+                            print(f"ACTUAL RESULT {step}: WiFi connection failed")
                             print("[TEST EXECUTION RESULT] : FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print(f"ACTUAL RESULT {step}: Get Operation Failed. Details : %s" %newValues)
+                        print(f"ACTUAL RESULT {step}: Get Operation Failed. Details : {newValues}")
                         print(f"[TEST EXECUTION RESULT] : FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print(f"ACTUAL RESULT {step}: Set Operation Failed. Details : %s" %details)
+                    print(f"ACTUAL RESULT {step}: Set Operation Failed. Details : {details}")
                     print(f"[TEST EXECUTION RESULT] : FAILURE")
 
                 #Prepare the list of parameter values to be reverted
@@ -140,16 +174,16 @@ if "SUCCESS" in loadmodulestatus.upper():
                 tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
                 if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"ACTUAL RESULT {step}: Set Operation succeeded. Details :%s" %details)
+                    print(f"ACTUAL RESULT {step}: Set Operation succeeded. Details : {details}")
                     print("[TEST EXECUTION RESULT] : SUCCESS")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     details = tdkTestObj.getResultDetails()
-                    print(f"ACTUAL RESULT {step}: Set Operation Failed. Details :%s" %details)
+                    print(f"ACTUAL RESULT {step}: Set Operation Failed. Details : {details}")
                     print("[TEST EXECUTION RESULT] : FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print(f"ACTUAL RESULT {step}: Failed to get the current value of DNS Server. Details : %s" %orgValue)
+                print(f"ACTUAL RESULT {step}: Get Operation Failed. Details : {orgValue}")
                 print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             print(f"ACTUAL RESULT {step}: Failed to get the current WAN IPv6 address. WAN IPv6 address is {wanIpv6Address}")

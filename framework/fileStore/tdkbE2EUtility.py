@@ -1630,10 +1630,7 @@ def verifyIPv6NetworkConnectivity(connectivityType,host_name,interface,source="W
 #               source - LAN/WLAN
 # Return Value: Returns the status of ping operation
     try:
-        if source == "WLAN_6G":
-            status = clientConnect("WLAN")
-        else:
-            status = clientConnect(source)
+        status = clientConnect(source)
 
         if status == "SUCCESS":
             if wlan_os_type == "UBUNTU":
