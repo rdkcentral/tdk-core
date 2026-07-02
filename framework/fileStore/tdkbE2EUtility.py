@@ -3320,7 +3320,7 @@ def verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_
     try:
         status = clientConnect("LAN")
         if status == "SUCCESS":
-            if wlan_os_type == "UBUNTU":
+            if lan_os_type == "UBUNTU":
                 script_name = lan_script
                 if connectivityType == "PING_TO_IPV4":
                     if phase == "START":

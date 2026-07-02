@@ -23,7 +23,7 @@
 
 #log upload server url eg: "http://<server-ip>:<portno>/upload"
 UPLOAD_SERVER_URL = ""
-#full folder path where the device logs will be saved in the DUT for the first test failure eg : /tmp/tdk_stability_failures
+#full folder path where the device logs will be saved in the DUT in case of failure eg : /tmp/tdk_stability_failures
 FAILURE_ARTIFACT_ROOT = "/tmp/tdk_stability_failures"
 #Number of iterations for reboot or factory reset stability test
 TOTAL_ITERATIONS = 50
