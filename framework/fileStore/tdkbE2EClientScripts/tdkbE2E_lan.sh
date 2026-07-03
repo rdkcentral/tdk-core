@@ -112,6 +112,58 @@ ipv6_ping_to_host()
         fi
 }
 
+#Verify ping to a network successfully
+ping_to_ipv4_start()
+{
+        route_add_cmd="$(sudo ip route add "$var3" via "$var4" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+        remove_logfile="$(rm -f "$var6" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+        echo "PING_START:$(date '+%Y-%m-%d %H:%M:%S')" > "$var6"
+        ping -q -i 5 -w "$var5" "$var3" >> "$var6" 2>&1 &
+        ping_pid=$!
+        ping_started="$(kill -0 $ping_pid > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+        route_del_cmd="$(sudo ip route delete "$var3" via "$var4" > /dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+        if [ "$route_add_cmd" = "SUCCESS" ] && [ "$remove_logfile" = "SUCCESS" ] && [ "$ping_started" = "SUCCESS" ] &&  [ "$route_del_cmd" = "SUCCESS" ] ; then
+                echo "OUTPUT:SUCCESS"
+        else
+                echo "OUTPUT:FAILURE"
+        fi
+}
+
+#Validate long-running IPv4 ping output for packet loss
+ping_to_ipv4_check()
+{
+        ping_file="$var2"
+        wait_count=0
+        max_wait_count=20
+        if [ ! -f "$ping_file" ]; then
+                echo "PING_FILE_MISSING:$ping_file"
+                echo "OUTPUT:FAILURE"
+                return
+        fi
+        summary_line=""
+        while [ $wait_count -lt $max_wait_count ]; do
+                summary_line="$(grep -E '[0-9]+ packets transmitted' "$ping_file" | tail -1)"
+                if [ -n "$summary_line" ]; then
+                        break
+                fi
+                sleep 2
+                wait_count=$((wait_count + 1))
+        done
+        if [ -z "$summary_line" ]; then
+                echo "PING_SUMMARY_MISSING"
+                echo "OUTPUT:FAILURE"
+                return
+        fi
+        packet_loss="$(echo "$summary_line" | sed -n 's/.* \([0-9][0-9]*\)% packet loss.*/\1/p')"
+        if [ "$packet_loss" = "0" ]; then
+                echo "OUTPUT:SUCCESS"
+        else
+                echo "SUMMARY: $summary_line"
+                echo "PACKET_LOSS: ${packet_loss:-unknown}%"
+                echo "OUTPUT:FAILURE"
+        fi
+}
+
 #To send http request to a network
 wget_http_network()
 {
@@ -485,6 +537,10 @@ case $event in
         ping_to_host;;
    "ipv6_ping_to_host")
         ipv6_ping_to_host;;
+   "ping_to_ipv4_start")
+        ping_to_ipv4_start;;
+   "ping_to_ipv4_check")
+        ping_to_ipv4_check;;
    "wget_http_network")
         wget_http_network;;
    "wget_https_network")
