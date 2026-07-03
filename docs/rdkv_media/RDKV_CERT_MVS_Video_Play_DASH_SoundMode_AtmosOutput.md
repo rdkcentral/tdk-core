@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_106
 ## TestCase Name
 RDKV_CERT_MVS_Video_Play_DASH_SoundMode_AtmosOutput
@@ -32,7 +32,7 @@ Test Script to launch a lightning Video player application through AppManager an
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Verify that enable audio atmos output sound mode. | Enable audio atmos output sound mode. | Ensure that enable audio atmos output sound mode should be validated successfully. |
+| 1 | Verify that enable audio atmos output sound mode. | Get the current audio sound mode and enable the Atmos output sound mode on the device to configure the audio output before starting playback. | Ensure that enable audio atmos output sound mode should be validated successfully. |
 | 2 | Run playback operations and validate media events. | Start playback of the content and close the player after the configured duration (close_interval). | Ensure that expected media events are observed for the configured operations. |
 | 3 | Store the launch URL in PersistentStore. | Build the test URL with the video_src_url_dolby. Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_dolby_url>.mpd&operations=close(60)&autotest=true&type=dash`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |

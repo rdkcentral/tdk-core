@@ -32,7 +32,7 @@ Test Script to launch a lightning Video player application through AppManager an
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations for the scenario. | Configure the `pause(30),play(10)` operations: the video will play for 10 seconds, then pause for 30 seconds, and then resume playback. | Ensure playback operations are set as specified. |
+| 1 | Set playback operations for the scenario. | Configure the `pause(30),play(10)` operations: the video will play for 30 seconds and then pause, keep it paused for 10 seconds, and then resume playback. | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_av1. | Build the test URL with the video_src_url_av1. | Verify that the test URL is built using video_src_url_av1. |
 | 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_av1_url>.webm&operations=pause(30),play(10)&autotest=true&type=webm`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |
