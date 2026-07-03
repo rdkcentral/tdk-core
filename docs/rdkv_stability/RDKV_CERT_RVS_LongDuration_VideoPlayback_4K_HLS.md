@@ -1,7 +1,8 @@
 ## TestCase ID
-RDKV_STABILITY_93
+RDKV_STABILITY_6
 ## TestCase Name
 RDKV_CERT_RVS_LongDuration_VideoPlayback_4K_HLS
+
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
@@ -11,38 +12,43 @@ RDKV_CERT_RVS_LongDuration_VideoPlayback_4K_HLS
 
 <a name="head.Objective"></a>
 ## Objective
-To validate device stability by playing a 4K HLS video stream via webkit_instance for a configured long duration, measuring CPU load and memory usage periodically to ensure resources remain within expected limits.
+To validate device stability and resource usage during long-duration 4K HLS video playback using the unified video player Lightning application for a minimum of 10 hours, confirming that CPU and memory usage remain within acceptable limits throughout the playback session.
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|Conditions|
-|-|----------|
-|1|WPEFramework process should be up and running in the device.|
-|2|webkit_instance plugin must be in resumed state; Cobalt plugin must be deactivated; DeviceInfo plugin must be activated.|
-|3|video_src_url_4k_hls (4K HLS stream URL) and test_duration must be configured in StabilityTestVariables.|
-|4|Device should be rebooted before test execution if `pre_req_reboot_pvs` is configured as `Yes`.|
+|#|StepName | Step Description| Expected Result|
+|-|---------|-----------------|----------------|
+| 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
+| 2 | Configure PRE_REQ_REBOOT in device config | The user should configure `PRE_REQ_REBOOT` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
+| 3 | Configure video_src_url_4k_hls in MediaValidationVariables | `video_src_url_4k_hls` must be set to a valid 4K HLS video stream URL (e.g., an HLS_HEVC_AAC master.m3u8 playlist) of at least 10 hours duration in MediaValidationVariables. | The video URL variable should point to a reachable 4K HLS stream. |
+| 4 | Configure unified_player_app_download_url in MediaValidationVariables | `unified_player_app_download_url` must be set to the full download URL of the unified video player application bundle in MediaValidationVariables (e.g., `com.rdkcentral.lightning-unified-player+0.1.0.bolt`). | The app download URL should be configured and the bundle should be reachable. |
+| 5 | Configure LOGGING_METHOD in device config | `LOGGING_METHOD` must be configured in the device-specific config file as either `REST_API` or `WEB_INSPECT` to determine how resource usage is monitored during the test. | The LOGGING_METHOD key should be set to a valid value in the device config file. |
+| 6 | Configure PACKAGEMANAGER_FILE_LOCATOR in device config | `PACKAGEMANAGER_FILE_LOCATOR` must be set to the correct path on the DUT where downloaded packages are stored. | The file locator path should be correctly configured in the device-specific config file. |
+| 7 | Confirm DeviceInfo and PersistentStore plugins are available | The DeviceInfo and org.rdk.PersistentStore plugins must be present and activatable in the build. | Both plugins should be available and activatable on the DUT. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
 |#|StepName | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Check device state | Verify the device is in a stable state before starting the test using applicable API calls. | Device should be in healthy state. |
-| 2 | Check and set plugin preconditions | Get the status of webkit_instance, Cobalt, and DeviceInfo plugins. Set required states: webkit_instance=resumed, Cobalt=deactivated, DeviceInfo=activated. | All required plugins should be in their expected states. |
-| 3 | Set 4K HLS stream URL | Load the 4K HLS video stream in webkit_instance.<br>{"jsonrpc":"2.0","id":1234567890,"method":"webkit_instance.1.url","params":{"value":"<video_src_url_4k_hls>"}} | 4K HLS video URL should be set and webkit_instance should start loading the stream. |
-| 4 | Validate video playback | Verify that video is playing by checking decoder process entries via applicable API calls. | Video decoder proc entry should be present, confirming 4K HLS video playback. |
-| 5 | Monitor resource usage (periodically for test_duration) | Every configured interval for the test duration: <br>Validate CPU load and memory usage via using DeviceInfo.1.systeminfo. <br>Verify video is still playing by re-checking the proc entry. | CPU load and memory usage should remain within expected limits throughout the test duration. 4K HLS video should continue playing without interruption. |
-| 6 | Save CPU/memory data | Save the collected CPU and memory usage data to a JSON file (`CPUMemoryInfo.json`) for post-analysis. | JSON file should be saved with all timed measurement data. |
-| 7 | Revert URL and plugins | Restore the original URL in webkit_instance and revert plugins to their original state. | URL and plugins should be restored to pre-test state. |
-| 8 | Check device state post-condition | Verify the device is still in a stable state after completing the test using applicable API calls. | Device should remain stable after the long-duration 4K HLS playback test. |
+| 1 | Conditionally reboot device before test | Conditionally reboot the device based on the `PRE_REQ_REBOOT` configuration key. If set to "Yes", the device is rebooted by invoking the Thunder Controller harakiri method and the script waits 150 seconds for the device to come back online. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.harakiri"}` | Device should come back online successfully if reboot was configured. |
+| 2 | Validate device resource usage before test | Check device state and resource usage before starting the long-duration test. The DeviceInfo plugin is queried, activated if needed, and resource usage is measured via DeviceInfo.1.systeminfo. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@DeviceInfo"}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "DeviceInfo.1.systeminfo"}` | CPU and memory usage should be within the expected range before the test starts. |
+| 3 | Verify and activate required plugins | Check the activation state of the DeviceInfo and org.rdk.PersistentStore plugins. Activate any that are not already in the activated state. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@DeviceInfo"}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.PersistentStore"}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PersistentStore"}}` | Both DeviceInfo and org.rdk.PersistentStore should be in activated state. |
+| 4 | Build 4K HLS test URL and store in PersistentStore | Build the full 4K HLS test URL by combining `video_src_url_4k_hls` with URL arguments including the player from `codec_hls_h264` (default: `hlsjs`), the configured logging method, and a close operation set to 36000 seconds (10 hours). Store the resulting URL in PersistentStore so the unified video player application can retrieve it on launch. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "TDKVideoPlayer", "key": "video_test_url", "value": "<video_test_url>"}}` | The 4K HLS video test URL should be successfully stored in PersistentStore. |
+| 5 | Install unified video player application | Check if the unified video player application (`com.rdkcentral.lightning-unified-player`) is already installed. If not installed, download the app bundle from `unified_player_app_download_url` via DownloadManager, install it via PackageManagerRDKEMS, and verify it appears in the installed packages list. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<unified_player_app_download_url>"}}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.install", "params": {"packageId": "com.rdkcentral.lightning-unified-player", "version": "0.1.0", "additionalMetadata": [{"name": "type", "value": "native/dac-app"}], "fileLocator": "<PACKAGEMANAGER_FILE_LOCATOR>/package<download_id>"}}` | The application should be installed successfully and appear in the installed packages list. |
+| 6 | Launch unified video player application | Launch the installed unified video player application using the AppManager launchApp API and verify the app is in the active state. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.launchApp", "params": {"appId": "com.rdkcentral.lightning-unified-player", "intent": "", "launchArgs": ""}}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}` | The application should launch successfully and appear in the list of loaded apps in APP_STATE_ACTIVE. |
+| 7 | Monitor 4K HLS video playback and validate resource usage | Monitor the long-duration 4K HLS video playback session for 36000 seconds (10 hours). Depending on the configured logging method: if REST_API, resource usage is fetched periodically via the REST API endpoint; if WEB_INSPECT, a WebSocket connection is established to the WebInspect port at /devtools/page/1 for resource monitoring. CPU load and memory usage are recorded per measurement interval. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "DeviceInfo.1.systeminfo"}` | 4K HLS video playback should continue without crash or termination throughout the entire 10-hour test duration. CPU and memory usage should remain within acceptable thresholds. |
+| 8 | Terminate video player application | After the long-duration playback session completes or on failure, terminate the unified video player application using the AppManager terminateApp API. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "com.rdkcentral.lightning-unified-player"}}` | The application should terminate successfully. |
+| 9 | Revert plugin statuses | If any plugins were activated during Step 3, revert them back to their original states using the Controller deactivate API. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.deactivate", "params": {"callsign": "<plugin_name>"}}` | Plugin states should be restored to their pre-test values. |
+| 10 | Validate device resource usage after test | Check device state and resource usage after the long-duration test completes to confirm the device remains healthy. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "DeviceInfo.1.systeminfo"}` | CPU and memory usage should be within the expected range after the long-duration test completes. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator
+**Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 740
+**Estimated duration** : 1000 mins
 
 **Priority** : High
 
-**Release Version** : M128<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Release Version** : M103<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

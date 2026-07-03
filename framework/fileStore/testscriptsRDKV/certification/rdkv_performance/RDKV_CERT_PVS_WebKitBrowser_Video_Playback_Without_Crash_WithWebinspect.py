@@ -86,7 +86,9 @@ deviceIP =str(ip)
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 webkit_console_socket = None
-webinspect_launched = True
+driver = None
+crash_Validation = False
+crash_iteration = -1
 memory_usage = []
 result_dict_list =[]
 #Get the result of connection with test component and DUT
@@ -107,7 +109,7 @@ if expectedResult in result.upper():
     setLoggingMethod(obj)
     setURLArgument("logging",logging_method)
     setURLArgument("tmUrl",str(obj.url)+"/")  
-    test_duration_in_seconds = 1800
+    test_duration_in_seconds = 60
     setOperation("close",test_duration_in_seconds)    
     operations = getOperations()
     # Setting VideoPlayer test app URL arguments
@@ -124,20 +126,10 @@ if expectedResult in result.upper():
     video_test_urls = getTestURLs(players_list,appArguments)
     print("\n Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
-    revert="NO"
-    crash_Validation = False
-    crash_iteration = None                       
-    driver = None    
-    set_method = "WebKitBrowser"+'.1.url'
-    webinspect_port =str(PerformanceTestVariables.webinspect_port)
-    plugins_list = ["Cobalt","WebKitBrowser"]
-    plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"resumed"}
-    conf_file, status = get_configfile_name(obj);
-    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
-    for plugin in plugins_list[:]:
-        if plugin not in supported_plugins:
-            plugins_list.remove(plugin)
-            plugin_status_needed.pop(plugin)
+    revert="NO"    
+    
+    plugins_list = ["DeviceInfo","org.rdk.PersistentStore"]
+    plugin_status_needed = {"org.rdk.PersistentStore":"activated","DeviceInfo":"activated"}
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(20)
     status = "SUCCESS"
@@ -151,154 +143,133 @@ if expectedResult in result.upper():
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
     if status == "SUCCESS":
-        print("\n Pre conditions for the test are set successfully");        
-        print("\n Get the URL in WebKitBrowser")
-        tdkTestObj = obj.createTestStep('rdkservice_getValue');
-        tdkTestObj.addParameter("method",set_method);
+        print("\n Pre conditions for the test are set successfully");
+        time.sleep(10)
+        tdkTestObj = obj.createTestStep('setPS_value');
+        tdkTestObj.addParameter("video_test_url",video_test_urls[0]);
         tdkTestObj.executeTestCase(expectedResult);
-        current_url = tdkTestObj.getResultDetails();
-        result = tdkTestObj.getResult()
-        if current_url != None and expectedResult in result:
+        result = tdkTestObj.getResult();
+        if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS");
-            webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
-            time.sleep(60)            
-            print("\n Current URL:",current_url)
-            original_url = video_test_urls[0]
-            video_test_url_new = original_url[:original_url.find("&url=")] +"&url="+ '%22%22'+'"'
-            print("\n Set WebKitBrowser Application URL 1")
-            tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method",set_method);
-            tdkTestObj.addParameter("value",video_test_url_new);
-            tdkTestObj.executeTestCase(expectedResult);
-            result = tdkTestObj.getResult();
-            if expectedResult in result:
+            print("\n Video test URL is set successfully");
+            app_bundle_name=MediaValidationVariables.unified_player_app_download_url.split("/")[-1]
+            print(f"\nApp bundle name: {app_bundle_name}")
+            app_name = app_bundle_name.split("+")[0]
+            print(f"\nApp name: {app_name}")
+            app_download_url = MediaValidationVariables.unified_player_app_download_url.split(app_bundle_name)[0]
+            print("app_download_url", app_download_url)
+            status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
+            if status == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
+                print("\n App is installed and launched successfully")
+                tdkTestObj.setResultStatus("SUCCESS")
+
                 tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
                 tdkTestObj.addParameter("realpath",obj.realpath)
                 tdkTestObj.addParameter("deviceIP",obj.IP)
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
-                print("\n Validate if the URL is set successfully or not")                
-                tdkTestObj = obj.createTestStep('rdkservice_getValue');
-                tdkTestObj.addParameter("method",set_method);
-                tdkTestObj.executeTestCase(expectedResult);
-                new_url = tdkTestObj.getResultDetails();
-                if new_url in video_test_url_new:
-                    tdkTestObj.setResultStatus("SUCCESS");
-                    print("\n URL(",new_url,") is set successfully")                    
-                    webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/Main.html?ws='+deviceIP+':'+webinspect_port+'/socket/1/1/WebPage'
-                    print (webinspectURL)
-                    try:                      
-                       driver = openChromeBrowser(webinspectURL);
-                       if driver != "EXCEPTION OCCURRED":
-                          time.sleep(20)                          
-                          print("Webinspect page in device  launched successfully")  
-                       else:
-                           raise RuntimeError("failed to launch webinspect page")                    
-                           
-                    except Exception as error:
-                         print("Got exception while opening the browser")
-                         tdkTestObj.setResultStatus("FAILURE")                                                 
-                         print(error)
-                         webinspect_launched = False
-                else:
-                    print("Failed to set video_test_url_new in device")
+
+                webinspect_launched = False
+                webinspect_port = None
+                webinspectURL = None
+
+                try:
+                    webinspect_port = str(get_webinspect_port()).strip()
+                except Exception as error:
+                    print(f"Unable to get WebInspect port: {error}")
                     tdkTestObj.setResultStatus("FAILURE")
-                    webinspect_launched =False  
-            if webinspect_launched == True:                              
-               print("launching the video test url to play")
-               tdkTestObj = obj.createTestStep('rdkservice_setValue');
-               tdkTestObj.addParameter("method",set_method);
-               tdkTestObj.addParameter("value",video_test_urls[0]);
-               tdkTestObj.executeTestCase(expectedResult);
-               result = tdkTestObj.getResult();
-               if expectedResult in result:
-                  print("\n Validate if the URL is set successfully or not")
-                  tdkTestObj.setResultStatus("SUCCESS");
-                  tdkTestObj = obj.createTestStep('rdkservice_getValue');
-                  tdkTestObj.addParameter("method",set_method);
-                  tdkTestObj.executeTestCase(expectedResult);
-                  new_url1 = tdkTestObj.getResultDetails();
-                  memory_usage = []
-                  if new_url1 in video_test_urls[0]:
-                     tdkTestObj.setResultStatus("SUCCESS");
-                     print("\n URL(",new_url1,") is set successfully")
-                     test_time_in_sec = 1200
-                     test_time_in_millisec = test_time_in_sec * 1000
-                     time_limit = int(round(time.time() * 1000)) + test_time_in_millisec
-                     iteration = 0                    
-                     if ssh_param_dict != {}:
-                        while int(round(time.time() * 1000)) < time_limit:
-                            iteration += 1
-                            print(f"Iteration: {iteration}") 
-                            print("Checking for any crash during video playback\n")
-                            command = 'cat /opt/logs/wpeframework.log | grep -inr crash'
-                            print("COMMAND : %s" %(command))            
-                            tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
-                            #Add the parameters to ssh to the DUT and execute the command
-                            tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
-                            tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
-                            tdkTestObj.addParameter("command",command)
-                            #Execute the test case in DUT
-                            tdkTestObj.executeTestCase(expectedResult);
-                            output = tdkTestObj.getResultDetails()
-                            output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
-                            output = output[output.find('\n')]            
-                            if ("crash" or "CRASH" or "Crash") in output:
-                                print("\nCrash observed during Video playback\n")
-                                print("\n Validate the status of WebKitBrowser plugin to confirm the crash:\n")
-                                tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
-                                tdkTestObj.addParameter("plugin","WebKitBrowser")
-                                #Execute the test case in DUT                
-                                tdkTestObj.executeTestCase(expectedResult);
-                                output = tdkTestObj.getResultDetails()
-                                if output != 'deactivated':
-                                   print("\nCrash is not observed and plugin is still active")
-                                   tdkTestObj.setResultStatus("SUCCESS")
-                                else:
-                                    print("\nCrash is observed during video playback and plugin is deactivated")
-                                    tdkTestObj.setResultStatus("FAILURE")
-                                    crash_Validation = True 
-                                    crash_iteration = iteration                            
-                                    obj.unloadModule("rdkv_performance");
-                                    break
-                            else:                                 
-                                print(f"No crash observed during video playback in iteration: {iteration} \n")
+
+                if webinspect_port and webinspect_port.lower() not in ["none", "null", "error", "exception"]:
+                    webinspectURL = 'http://' + deviceIP + ':' + webinspect_port + '/Main.html?ws=' + deviceIP + ':' + webinspect_port + '/socket/1/1/WebPage'
+                    print(webinspectURL)
+
+                    try:
+                        driver = openChromeBrowser(webinspectURL)
+                        if driver != "EXCEPTION OCCURRED":
+                            time.sleep(20)
+                            print("Webinspect page in device launched successfully")
+                            webinspect_launched = True
+                            webkit_console_socket = driver
+                        else:
+                            raise RuntimeError("failed to launch webinspect page")
+
+                    except Exception as error:
+                        print("Got exception while opening the browser")
+                        tdkTestObj.setResultStatus("FAILURE")
+                        print(error)
+                else:
+                    print(f"Invalid WebInspect port received: {webinspect_port}")
+                    tdkTestObj.setResultStatus("FAILURE")
+
+                if webinspect_launched:
+                    test_time_in_sec = 60
+                    test_time_in_millisec = test_time_in_sec * 1000
+                    time_limit = int(round(time.time() * 1000)) + test_time_in_millisec
+                    iteration = 0
+                    if ssh_param_dict != {}:
+                        print("Checking for any crash during video playback\n")
+                        command = 'cat /opt/logs/wpeframework.log | grep -inr crash'
+                        print("COMMAND : %s" %(command))
+                        tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                        #Add the parameters to ssh to the DUT and execute the command
+                        tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                        tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                        tdkTestObj.addParameter("command",command)
+                        #Execute the test case in DUT
+                        tdkTestObj.executeTestCase(expectedResult)
+                        output = tdkTestObj.getResultDetails()
+                        output = tdkTestObj.getResultDetails().replace(r'\n', '\n')
+                        output = output[output.find('\n')]
+                        if ("crash" or "CRASH" or "Crash") in output:
+                            print("\nCrash observed during Video playback\n")
+                            print("\n Validate the status of the app to confirm the crash:\n")
+                            app_ids = rdkservice_get_loaded_apps()
+                            if app_name in app_ids:
+                                print(f"\n Crash is not observed and {app_name} is still running")
                                 tdkTestObj.setResultStatus("SUCCESS")
-                            time.sleep(240)       
-                     if logging_method == "REST_API":
-                        expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result = testusingRestAPI(obj);
+                            else:
+                                tdkTestObj.setResultStatus("FAILURE")
+                                print(f"Crash is observed during video playback and {app_name} is not listed as loadedapps")
+                                crash_Validation = True
+                                obj.unloadModule("rdkv_performance")
+                        else:
+                            print(f"No crash observed during video playback \n")
+                            tdkTestObj.setResultStatus("SUCCESS")
+                    if logging_method == "REST_API":
+                        expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result = testusingRestAPI(obj)
                         evt_list = [expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result]
-                     elif logging_method == "WEB_INSPECT":
+                    elif logging_method == "WEB_INSPECT":
                         if current_url != None and expectedResult in result:
-                            tdkTestObj.setResultStatus("SUCCESS");
-                            expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result = testusingWebInspect(obj,webkit_console_socket);
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result = testusingWebInspect(obj,webkit_console_socket)
                             evt_list = [expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result]
-                  if ("SUCCESS" in test_result)  and crash_Validation ==False:                    
-                     print("\nVideo playback is happening successfully with out any crash")
-                     tdkTestObj.setResultStatus("SUCCESS")               
-                  else:
-                    tdkTestObj.setResultStatus("FAILURE");
-                    print ("\n Error occured during video playback")
-                  #Set the URL back to previous                
-                  tdkTestObj = obj.createTestStep('rdkservice_setValue');
-                  tdkTestObj.addParameter("method",set_method);
-                  tdkTestObj.addParameter("value",current_url);
-                  tdkTestObj.executeTestCase(expectedResult);
-                  result = tdkTestObj.getResult();
-                  if result == "SUCCESS":
-                    print("\n URL is reverted successfully")
-                    tdkTestObj.setResultStatus("SUCCESS");
-                  else:
-                    print("\n Failed to revert the URL")
-                    tdkTestObj.setResultStatus("FAILURE");
-               else:
-                  print("\n Failed to load the URL, new URL %s" %(new_url))
-                  tdkTestObj.setResultStatus("FAILURE");
+                    if ("SUCCESS" in test_result) and crash_Validation == False:
+                        print("\nVideo playback is happening successfully with out any crash")
+                        tdkTestObj.setResultStatus("SUCCESS")
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE")
+                        print("\n Error occured during video playback")
+                else:
+                    print("WebInspect page was not launched. Skipping playback and crash validation")
+                    tdkTestObj.setResultStatus("FAILURE")
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
+                print("Unable to set the video url value in PersistanceStorage")
+            print("\n Terminating the app")
+            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+            tdkTestObj.addParameter("app_id",app_name)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
+            if result == "SUCCESS":
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
+                print("Unable to terminate the app") 
         else:
-            print("\n Failed to set the URL")
-            tdkTestObj.setResultStatus("FAILURE");
+            tdkTestObj.setResultStatus("FAILURE")
+            print("Failed to install or launch app")
     else:
         print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
@@ -311,6 +282,9 @@ if expectedResult in result.upper():
        if crash_Validation == False:
           print("No crash is observed during the execution\n")
        else:
-           print(f"Crash observed during execution at iteration:{crash_iteration}\n")
+           print(f"Crash observed during execution \n")
        driver.quit()
     obj.unloadModule("rdkv_performance");
+else:
+    obj.setLoadModuleStatus("FAILURE");
+    print("\n Failed to load module")

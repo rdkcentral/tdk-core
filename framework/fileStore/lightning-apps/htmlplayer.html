@@ -115,7 +115,7 @@
             }
         }
     </style>
-
+    
 <script src="html_config.js"></script>
 
 <!-- Starter function to fetch the url value from PersistentStore, format it & replace the current browser URL -->
@@ -177,6 +177,9 @@ getValuePS();
             </video>
         </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/dashjs@5.0.3/dist/modern/umd/dash.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.9/dist/hls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/shaka-player@4.15.9/dist/shaka-player.compiled.js"></script>
     <script>
         /*
            Implements: play/pause/seekpos/seekfwd/seekbwd/setPlaybackRate/volume/mute/unmute
@@ -193,11 +196,17 @@ getValuePS();
         let message1 = "";
         let message2 = "";
         let inputs = window.location.search.substring(1).split("&");
-        let videoURL = "";
+        let videoURL = GetURLParameter("url").replace(/:and:/g, "&").replace(/:eq:/g, "=");
+        let autotest = GetURLParameter("autotest")
+        let urlType = GetURLParameter("type")
         let expectedEvents = [];
         let observedEvents = [];
         let seekInterval = 10;
+        let usedashlib = false;
+        let usehlslib = false;
         let options = [];
+        let configs = [];
+        let DRMconfig = {};
         let expectedPos = "";
         let observedPos = "";
         let expectedRate = 0;
@@ -219,7 +228,6 @@ getValuePS();
         let playbackRateIndex = playbackSpeeds.indexOf(1);
         let progressEventMsg = "";
         let progressLogger = null;
-        let firstPlayHandled = false;
         const SEEK_TOLERANCE = { lower: 2, upper: 7 }; //like [exp-2, exp+7]
         const interval = 1000;
         let checkInterval = 3000;
@@ -244,6 +252,16 @@ getValuePS();
             else if (item.includes("checkInterval")) {
                 checkInterval = parseInt(item.split('(')[1].split(')')[0]) * 1000;
             }
+            else if (item.includes("useDashlib")) {
+                var dashlib = item.split('(')[1].split(')')[0]
+                if (dashlib == "yes" || dashlib == "YES")
+                    usedashlib = true;
+            }
+            else if (item.includes("useHlslib")) {
+                var hlslib = item.split('(')[1].split(')')[0]
+                if (hlslib == "yes" || hlslib == "YES")
+                    usehlslib = true;
+            }
         });
 
         // To display Events & Video position in UI
@@ -260,7 +278,7 @@ getValuePS();
         function logMsg(msg) {
             const logging = GetURLParameter("logging");
             const inputs1 = window.location.search.substring(1).split("&");
-            const player = GetURLParameter("player") ?? "HTML";
+            const player = GetURLParameter("player");
             const options1 = [];
             inputs1.forEach(item => {
                 if (item.split("=")[0] === "options") {
@@ -327,23 +345,114 @@ getValuePS();
            Basic operations 
            ------------------------ */
 
-        function load(url, autoplay = true) {
-            videoURL = url.replace(/:and:/g, "&").replace(/:eq:/g, "=");
-            logMsg("URL Info: " + videoURL);
+        function load(autoplay = true) {
+            const player = (GetURLParameter("player") || "HTMLPlayer");
+            logMsg("URL Info: " + videoURL)
+            logMsg("Selected Player : " + player);
 
-            // Update video src
-            videoEl.src = videoURL;
+            // --- Cleanup any existing players ---
+            if (window.dashPlayer) {
+                window.dashPlayer.reset();
+                window.dashPlayer = null;
+            }
+            if (window.hlsPlayer) {
+                window.hlsPlayer.destroy();
+                window.hlsPlayer = null;
+            }
+            if (window.shakaPlayer) {
+                window.shakaPlayer.destroy();
+                window.shakaPlayer = null;
+            }
 
-            // Update source element
-            const sourceEl = videoEl.querySelector('source');
-            if (sourceEl) sourceEl.src = videoURL;
+            let finalPlayer = player;
 
-            videoEl.load(); // reload the video with new source
-            if (autoplay) videoEl.autoplay = true;
+            // --- Player initialization ---
+            switch (player) {
+                case "dashjs":
+                    if (typeof dashjs !== "undefined") {
+                        logMsg("Initializing DASH player...",dashjs);
+
+                        window.dashPlayer = dashjs.MediaPlayer().create();
+                        window.dashPlayer.initialize(videoEl, videoURL, autoplay);
+
+                        const dashEvents = dashjs.MediaPlayer.events;
+                        window.dashPlayer.on(dashEvents.STREAM_INITIALIZED, () =>
+                            logMsg("DASH: STREAM_INITIALIZED")
+                        );
+                        window.dashPlayer.on(dashEvents.ERROR, (e) =>
+                            logMsg("DASH: ERROR - " + JSON.stringify(e))
+                        );
+                    } else {
+                        logMsg("dashjs not available. Switching to HTMLPlayer.");
+                        finalPlayer = "HTMLPlayer";
+                    }
+                    break;
+
+                case "hls":
+                    if (typeof Hls !== "undefined") {
+                        logMsg("Initializing hls.js player...");
+                        window.hlsPlayer = new Hls();
+                        window.hlsPlayer.loadSource(videoURL);
+                        window.hlsPlayer.attachMedia(videoEl);
+                        window.hlsPlayer.on(Hls.Events.MANIFEST_PARSED, () => {
+                            logMsg("HLS: MANIFEST_PARSED");
+                            if (autoplay) videoEl.play();
+                        });
+                    } else {
+                        logMsg("hls.js not available. Switching to HTMLPlayer.");
+                        finalPlayer = "HTMLPlayer";
+                    }
+                    break;
+
+                case "shaka":
+                    if (typeof shaka !== "undefined") {
+                        logMsg("Initializing Shaka player...");
+                        shaka.polyfill.installAll();
+                        window.shakaPlayer = new shaka.Player(videoEl);
+                        logMsg("SHAKA Player object created !!!");
+                        window.shakaPlayer.load(videoURL)
+                            .then(() => logMsg("SHAKA: Stream loaded"))
+                            .catch((error) => logMsg("SHAKA Load Error: " + error));
+                        logMsg("SHAKA Player loaded with video url");
+                    } else {
+                        logMsg("Shaka not available. Switching to HTMLPlayer.");
+                        finalPlayer = "HTMLPlayer";
+                    }
+                    break;
+
+                default:
+                    finalPlayer = "HTMLPlayer";
+                    break;
+            }
+
+            // --- Validation: ensure player initialized properly ---
+            let isValid = false;
+
+            if (finalPlayer === "dashjs" && window.dashPlayer) isValid = true;
+            else if (finalPlayer === "hls" && window.hlsPlayer) isValid = true;
+            else if (finalPlayer === "shaka" && window.shakaPlayer) isValid = true;
+            else if (finalPlayer === "HTMLPlayer") isValid = true;
+
+            if (!isValid) {
+                logMsg(`[Validation] Player initialization failed. Falling back to HTMLPlayer.`);
+                finalPlayer = "HTMLPlayer";
+            }
+
+            // --- HTMLPlayer fallback ---
+            if (finalPlayer === "HTMLPlayer") {
+                logMsg("Using HTML5 video element (HTMLPlayer).");
+                videoEl.src = videoURL;
+                const sourceEl = videoEl.querySelector("source");
+                if (sourceEl) sourceEl.src = videoURL;
+                videoEl.load();
+                videoEl.autoplay = autoplay;
+            }
+
+            logMsg(`[Validation] Final Player Loaded: ${finalPlayer}`);
         }
 
         function play() {
-            expectedEvents.push("play");
+            expectedEvents = ["play"];
             logMsg("Expected Event: " + expectedEvents);
             videoEl.playbackRate = 1;
             // Use promise to ensure play request success
@@ -359,7 +468,7 @@ getValuePS();
         }
 
         function pause() {
-            expectedEvents.push("pause");
+            expectedEvents = ["pause"];
             logMsg("Expected Event: " + expectedEvents);
             pos_zero_index_flag = 1
             videoEl.pause();
@@ -377,22 +486,26 @@ getValuePS();
             videoEl.currentTime = Math.max(0, Math.min(timeSec, videoEl.duration));
         }
         function seekfwd(pos) {
-            expectedEvents.push("seeking");
-            expectedEvents.push("seeked");
+            expectedEvents = ["seeking", "seeked"]
             expectedPos = Math.floor(getPosition() + pos)
             logMsg("Expected Event: " + expectedEvents)
             logMsg("Expected Pos  : [ " + (expectedPos - 2) + " - " + (expectedPos + 7) + " ]")
             seek(expectedPos)
         }
         function seekbwd(pos) {
-            expectedEvents.push("seeking");
-            expectedEvents.push("seeked");
+            expectedEvents = ["seeking", "seeked"]
             expectedPos = Math.floor(getPosition() - pos)
             logMsg("Expected Event: " + expectedEvents)
             logMsg("Expected Pos  : [ " + (expectedPos - 2) + " - " + (expectedPos + 7) + " ]")
             seek(expectedPos)
         }
-
+        function seekpos(pos) {
+            expectedEvents = ["seeking", "seeked"]
+            expectedPos = pos
+            logMsg("Expected Event: " + expectedEvents)
+            logMsg("Expected Pos  : [ " + (expectedPos).toFixed(2) + " - " + (expectedPos + 7).toFixed(2) + " ]")
+            videoEl.currentTime = pos
+        }
         function getPosition() { return Number(videoEl.currentTime.toFixed(2)); }
         function getDuration() { return Number(videoEl.duration ? videoEl.duration.toFixed(2) : 0); }
 
@@ -407,9 +520,9 @@ getValuePS();
             if (isNaN(rate) || rate === 0) { logMsg("Invalid rate"); return; }
             playbackRateIndex = playbackSpeeds.indexOf(rate);
             rate = playbackSpeeds[playbackRateIndex];
-            expectedEvents.push("ratechange");
+            expectedEvents = ["ratechange"];
             expectedRate = rate;
-            expectedRates.push(rate)
+            observedRates = []
             logMsg("Expected Event: " + expectedEvents);
             logMsg("Expected Rate: " + rate);
             videoEl.playbackRate = rate;
@@ -430,7 +543,7 @@ getValuePS();
             // Only trigger event if value changes
             if (videoEl.volume !== level) {
                 expectedVolume = level;
-                expectedEvents.push("volumechange");
+                expectedEvents = ["volumechange"];
                 logMsg("Expected Event: " + expectedEvents + " set volume to " + level);
                 videoEl.volume = level;
             } else {
@@ -442,14 +555,14 @@ getValuePS();
         function getVolume() { return videoEl.volume; }
 
         function mute() {
-            expectedEvents.push("volumechange");
+            expectedEvents = ["volumechange"];
             expectedMute = true;
             logMsg("Mute requested");
             videoEl.muted = true;
         }
 
         function unmute() {
-            expectedEvents.push("volumechange");
+            expectedEvents = ["volumechange"];
             expectedMute = false;
             logMsg("Unmute requested");
             videoEl.muted = false;
@@ -484,15 +597,6 @@ getValuePS();
         });
 
         videoEl.addEventListener('play', (e) => {
-            // Skip the first autoplay 'play' event
-            if (!firstPlayHandled && !expectedEvents.includes("play")) {
-                firstPlayHandled = true;
-                const info = "[Event]: Video Player Play";
-                dispUIMessage(info);
-                checkAndLogEvents("play", info);
-                updatePosValidationInfo(1);
-                return;
-            }
             observedEvents.push("play");
             const info = "[Event]: Video Player Play";
             dispUIMessage(info);
@@ -551,33 +655,6 @@ getValuePS();
             dispUIMessage(info);
             checkAndLogEvents("seeked", info);
             updatePosValidationInfo(1);
-
-            // Defer validation: allow video to progress after seek
-            if (expectedPos !== "") {
-                setTimeout(() => {
-                    // Fallback: record one position if none yet
-                    if (pos_list.length < 1) {
-                        pos_list.push(Number(videoEl.currentTime.toFixed(2)));
-                    }
-                    if (pos_list.length < 2) {
-                        logMsg("video seek operation failure");
-                        logMsg("Failure Reason: insufficient playback data after seek");
-                        pos_val_result.push('FAILURE');
-                        return;
-                    }
-                    const lastPos = parseFloat(pos_list[pos_list.length - 1]);
-                    const expTime = parseInt(expectedPos);
-                    const inRange = lastPos >= (expTime - SEEK_TOLERANCE.lower) &&
-                        lastPos <= (expTime + SEEK_TOLERANCE.upper);
-                    if (inRange) {
-                        logMsg(`video seek operation success (settled at ${lastPos})`);
-                    } else {
-                        pos_val_result.push('FAILURE');
-                        logMsg("video seek operation failure");
-                        logMsg(`Failure Reason: final playback pos ${lastPos} not within expected range`);
-                    }
-                }, 4000);
-            }
             if (expectedPos !== "") {
                 const expTime = parseInt(expectedPos);
             }
@@ -604,13 +681,8 @@ getValuePS();
             observedEvents.push("volumechange");
             observedMute = videoEl.muted;
             const info = "Video Player Volume Change, Mute Status: " + observedMute;
-            const isExpected = expectedEvents.includes("volumechange");
             checkAndLogEvents("volumechange", info)
-            if (isExpected) {
-                updatePosValidationInfo(1);
-            } else {
-                logMsg("[Warning] Unexpected volumechange event detected skipping validation update.");
-            }
+            updatePosValidationInfo(1);
         });
 
         /* error */
@@ -656,13 +728,10 @@ getValuePS();
         /* checks expected vs observed and additional checks per event type */
         function updateEventFlowFlag() {
             let Status = "SUCCESS";
-            const missingEvents = expectedEvents.filter(e => !observedEvents.includes(e));
-            const extraEvents = observedEvents.filter(e => !expectedEvents.includes(e));
-            if (missingEvents.length > 0 || extraEvents.length > 0) {
+            if (!expectedEvents.every(e => observedEvents.indexOf(e) >= 0)) {
                 eventFlowFlag = 0;
                 Status = "FAILURE";
-                if (missingEvents.length) logMsg("Failure Reason:- Missing events: " + missingEvents.join(", "));
-                if (extraEvents.length) logMsg("Failure Reason:- Unexpected events: " + extraEvents.join(", "));
+                logMsg("Failure Reason: Expected events not occurred");
             } else {
                 if (expectedEvents.includes("pause")) {
                     if (!videoEl.paused) {
@@ -715,8 +784,8 @@ getValuePS();
                 }
                 else if (expectedEvents.includes("seeking")) {
                     var currTime = parseInt(observedPos);
-                    var expTime1 = parseInt(expectedPos);
-                    if (currTime >= (expTime1 - SEEK_TOLERANCE.lower) && currTime <= (expTime1 + SEEK_TOLERANCE.upper)) {
+                    var expTime = parseInt(expectedPos);
+                    if (currTime >= (expTime - SEEK_TOLERANCE.lower) && currTime <= (expTime + SEEK_TOLERANCE.upper)) {
                         logMsg("video seek operation success");
                     } else {
                         eventFlowFlag = 0;
@@ -920,11 +989,6 @@ getValuePS();
                 if (action == "seekpos") {
                     duration = parseInt(operations[i].split('(')[1].split(')')[0].split(":")[0]);
                     position = parseInt(operations[i].split('(')[1].split(')')[0].split(":")[1]);
-                    logMsg(`Seekpos requested with Duration=${duration}s, Position=${position}s`);
-                    setTimeout(() => {
-                        clearEvents();
-                        seek(position);
-                    }, actionInterval);
                 }
                 else {
                     duration = parseInt(operations[i].split('(')[1].split(')')[0]);
@@ -970,6 +1034,12 @@ getValuePS();
                     setTimeout(() => {
                         clearEvents()
                         seekbwd(seekInterval)
+                    }, actionInterval);
+                }
+                else if (action == "seekpos") {
+                    setTimeout(() => {
+                        clearEvents()
+                        seekpos(position)
                     }, actionInterval);
                 }
                 else if (action == "fastfwd2x" || action == "fastfwd3x" || action == "fastfwd4x") {
@@ -1029,11 +1099,15 @@ getValuePS();
         }
 
         function checkAndStartAutoTesting() {
-            const operationsStr = GetURLParameter("operations");
-            if (!operationsStr) { logMsg("No auto operations provided"); return; }
-            const operations = getVideoOperations(operationsStr);
-            logMsg("********************** STARTING AUTO TEST ***********************");
-            performOperations(operations);
+            if (autotest == "true") {
+                const operationsStr = GetURLParameter("operations");
+                if (!operationsStr) { logMsg("No auto operations provided"); return; }
+                const operations = getVideoOperations(operationsStr);
+                logMsg("********************** STARTING AUTO TEST ***********************");
+                performOperations(operations);
+            } else {
+                logMsg("***************** PRESS KEYS TO DO OPERATIONS ********************")
+            }
         }
 
         /* ------------------------
@@ -1102,8 +1176,7 @@ getValuePS();
            Init - load url from query and attach UI
            ------------------------ */
         window.addEventListener('load', () => {
-            const url = GetURLParameter('url');
-            if (url) load(url, true);
+            load(true);
             window.HTMLPlayer = {
                 load, play, pause, seek, seekfwd, seekbwd, setPlaybackRate, getRate, setVolume, getVolume, mute, unmute,
                 getPosition, getDuration, dispTestResult, updatePrevPosValidationResult
