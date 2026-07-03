@@ -4908,6 +4908,78 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
+        # SystemAudioPlayer Plugin Response result parser steps
+        elif tag == "systemaudioplayer_success_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    if isinstance(result, dict):
+                        info.update(result)
+                        if str(result.get("success")).lower() == "true":
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["result"] = result
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "systemaudioplayer_open_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    player_id = result.get("id") if isinstance(result, dict) else None
+                    success = str(result.get("success")).lower() == "true" if isinstance(result, dict) else False
+                    info["id"] = player_id
+                    info["success"] = success
+                    if success and isinstance(player_id, int):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "systemaudioplayer_sessionid_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    session_id = result.get("sessionId") if isinstance(result, dict) else None
+                    success = str(result.get("success")).lower() == "true" if isinstance(result, dict) else False
+                    info["sessionId"] = session_id
+                    info["success"] = success
+                    if success and isinstance(session_id, int) and session_id == int(expectedValues[0]):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "systemaudioplayer_speaking_status_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    speaking = str(result.get("success")).lower()
+                    expected = str(expectedValues[0]).lower()
+                    if speaking == expected:
+                        info["success"] = speaking
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
@@ -6645,6 +6717,11 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             info["appInstanceId"] = testStepResults[0].get("appInstanceId")
 
+        # SystemAudioPlayer Plugin Response result parser steps
+        elif tag == "systemaudioplayer_get_player_id":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["id"] = testStepResults[0].get("id")
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
@@ -6912,8 +6989,11 @@ def generateComplexTestInputParam(methodTag,testParams):
             #print(testParams,"testParams")
             userGeneratedParam = { "packageId": testParams.get("packageId"), "version": testParams.get("version"), "additionalMetadata": [ {"name": testParams.get("name"), "value": testParams.get("value") } ], "fileLocator": testParams.get("fileLocator") }
         elif tag == "download_optional_parameters":
-            print(testParams,"testParams")
+            #print(testParams,"testParams")
             userGeneratedParam = { "url": testParams.get("url"), "options": { "priority": testParams.get("priority"), "retries": testParams.get("retries"), "rateLimit": testParams.get("rateLimit") } }
+        elif tag == "systemaudioplayer_config_params":
+            #print(testParams,"testParams")
+            userGeneratedParam = { "id": testParams.get("id"), "pcmconfig": { "format": testParams.get("format"), "channels": int(testParams.get("channels")), "rate": int(testParams.get("rate")), "layout": testParams.get("layout") } }
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
