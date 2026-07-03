@@ -37,14 +37,14 @@ To validate the average FPS value obtained from the browser animation performanc
 | 8 | Verify animation application is running | Confirm the launched app appears in the active loaded apps list: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}` | com.rdkcentral.animation should be listed as an active loaded application. |
 | 9 | Retrieve animation benchmark FPS score | Wait 20 seconds for the animation benchmark to execute, then connect to the WebKit webinspect page to extract the average FPS score from the animation benchmark test results. | The average FPS score should be successfully retrieved from the webinspect page and must not contain the value "Unable to get the browser score". |
 | 10 | Validate animation FPS score against threshold | Compare the retrieved animation benchmark FPS score against `ANIMATION_BENCHMARK_THRESHOLD_VALUE` from the device configuration file. | The animation FPS score should be greater than the configured `ANIMATION_BENCHMARK_THRESHOLD_VALUE`. |
-| 11 | Terminate animation application | Terminate the animation application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "com.rdkcentral.animation"}}` | The animation application should be terminated successfully. |
+| 11 | Terminate animation application | Terminate the animation application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminate", "params": {"appId": "com.rdkcentral.animation"}}` | The animation application should be terminated successfully. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
 **Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 4 mins
+**Estimated duration** : 4
 
 **Priority** : High
 

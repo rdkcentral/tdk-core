@@ -20,7 +20,7 @@ To validate that the maximum API response time for a configured WPEFramework met
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
-| 3 | Configure method in PerformanceTestVariables | `method` must be set to the JSON-RPC method name to be benchmarked in PerformanceTestVariables. | The method variable should be configured with a valid WPEFramework API method name. |
+| 3 | Configure method in PerformanceTestVariables | `method` must be set to the JSON-RPC method name to be benchmarked in PerformanceTestVariables. Eg: `org.rdk.AppManager.1.getInstalledApps` | The method variable should be configured with a valid WPEFramework API method name. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

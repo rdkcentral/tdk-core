@@ -38,14 +38,14 @@ To validate the browser performance score obtained from the Kraken JavaScript be
 | 9 | Wait for Kraken benchmark to complete | Wait 900 seconds (15 minutes) for the Kraken JavaScript benchmark to complete all its test iterations before retrieving results. | The Kraken benchmark should complete execution within the wait period. |
 | 10 | Retrieve Kraken benchmark score | Connect to the WebKit webinspect page and extract the main Kraken score from the benchmark test results. | The Kraken score should be successfully retrieved and must not contain the value "Unable to get the browser score". |
 | 11 | Validate Kraken score against threshold | Compare the retrieved Kraken score against `KRAKEN_THRESHOLD_VALUE` from the device configuration file. For the Kraken benchmark, a lower score indicates better JavaScript performance, so the score must be less than the threshold and greater than zero. | The Kraken benchmark score should be greater than 0 and less than the configured `KRAKEN_THRESHOLD_VALUE`. |
-| 12 | Terminate Kraken application | Terminate the Kraken application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "com.rdkcentral.kraken"}}` | The Kraken application should be terminated successfully. |
+| 12 | Terminate Kraken application | Terminate the Kraken application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminate", "params": {"appId": "com.rdkcentral.kraken"}}` | The Kraken application should be terminated successfully. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
 **Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 20 mins
+**Estimated duration** : 20
 
 **Priority** : High
 
