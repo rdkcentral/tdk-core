@@ -21,7 +21,7 @@ import CertificationSuiteCommonVariables
 import requests
 import subprocess
 
-def ssh_and_execute(ssh_method, hostname, username, password, command):
+def ssh_and_execute(ssh_method, hostname, username, password, command, port=22):
     output = ""
     try:
         if (ssh_method == "directSSH"):
@@ -29,7 +29,7 @@ def ssh_and_execute(ssh_method, hostname, username, password, command):
                                     "StrictHostKeyChecking": "no",
                                     "UserKnownHostsFile": "/dev/null"})
             print("\nCreating ssh session")
-            session.login(hostname,username,password,sync_multiplier=3)
+            session.login(hostname,username,password,sync_multiplier=3,port=port)
             print("\nExecuting command")
             session.sendline(command)
             session.prompt()
