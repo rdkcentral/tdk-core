@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_715
 ## TestCase Name
 RDKV_CERT_MVS_Video_Loop_Play_4K_AV1
@@ -30,7 +30,7 @@ Test Script to launch a lightning Video player application through AppManager an
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations for the scenario. | Set playback operations: Check loop state (96s). | Ensure playback operations are set as specified. |
+| 1 | Set playback operations for the scenario. | Configure the `checkloop(30)` operation: the video player will loop the content continuously, counting the number of times the video restarts within the 30-second observation window based on the content duration. | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_mp4_2160p_av1. | Build the test URL with the video_src_url_mp4_2160p_av1. | Verify that the test URL is built using video_src_url_mp4_2160p_av1. |
 | 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_src_url_mp4_2160p_av1>.mp4&operations=checkloop(30)&autotest=true&type=mp4`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |

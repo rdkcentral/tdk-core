@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_01
 ## TestCase Name
 RDKV_CERT_MVS_Animation_Operations
@@ -30,15 +30,14 @@ Test Script to launch a lightning Animation application through AppManager and p
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations for the scenario. | Set playback operations: Pause, play, stop, replay from beginning, stop immediately, start playback, stop. | Ensure playback operations are set as specified. |
-| 2 | Build the animation app test URL. | Build the test URL for the Animation app. | Verify that the test URL is built successfully. |
-| 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/animations/build/index.html?operations=pause,play,stop,replay,stopNow,start,stop&autotest=true`| Ensure that the launch URL is stored in PersistentStore. |
-| 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.animation-app"}}</code>. | Ensure that the app launches successfully via AppManager. |
-| 5 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.animation-app is present in the loaded apps list. |
-| 6 | Execute operations and validate media events. | App performs the provided operations and validates each operation using events. | Ensure that expected media events are observed for the configured operations. |
-| 7 | Monitor animation progress. | Monitor animation progress. | Ensure that the 'pause, play, stop, replay, stopNow, start, stop' event should be received and animation completes successfully. Ensure that the validation result and average CPU load value should be retrieved. |
-| 8 | Run animation operations and validate outcomes. | Validates the 'pause, play, stop, replay, stopNow, start, stop' event (animation completes successfully) and retrieves the validation result with average CPU load value. Get the event validation result from the app and update the test script status. | Ensure that animation operations complete successfully without errors. |
-| 9 | Terminate app and restore test environment. | Terminate the test app through AppManager using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.terminateApp", "params":{"appId": "com.rdkcentral.animation-app"}}</code> and restore the test environment. | Ensure that the app is terminated and the test environment is restored. |
+| 1 | Set playback operations and build the animation app test URL. | Configure the playback operations (pause, play, stop, replay from beginning, stop immediately, start playback, stop) and build the test URL for the Animation app with these operations embedded as query parameters. | Ensure that the playback operations are configured and the test URL is built successfully. |
+| 2 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/animations/build/index.html?operations=pause,play,stop,replay,stopNow,start,stop&autotest=true`| Ensure that the launch URL is stored in PersistentStore. |
+| 3 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.animation-app"}}</code>. | Ensure that the app launches successfully via AppManager. |
+| 4 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.animation-app is present in the loaded apps list. |
+| 5 | Execute operations and validate media events. | App performs the provided operations and validates each operation using events. | Ensure that expected media events are observed for the configured operations. |
+| 6 | Monitor animation progress. | Monitor animation progress. | Ensure that the 'pause, play, stop, replay, stopNow, start, stop' event should be received and animation completes successfully. Ensure that the validation result and average CPU load value should be retrieved. |
+| 7 | Run animation operations and validate outcomes. | Validates the 'pause, play, stop, replay, stopNow, start, stop' event (animation completes successfully) and retrieves the validation result with average CPU load value. Get the event validation result from the app and update the test script status. | Ensure that animation operations complete successfully without errors. |
+| 8 | Terminate app and restore test environment. | Terminate the test app through AppManager using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.terminateApp", "params":{"appId": "com.rdkcentral.animation-app"}}</code> and restore the test environment. | Ensure that the app is terminated and the test environment is restored. |
 <a name="head.Attributes"></a>
 ## Test Attributes
 
@@ -49,7 +48,6 @@ Test Script to launch a lightning Animation application through AppManager and p
 **Priority**: High
 
 **Release Version**: M83<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
-
 
 
 

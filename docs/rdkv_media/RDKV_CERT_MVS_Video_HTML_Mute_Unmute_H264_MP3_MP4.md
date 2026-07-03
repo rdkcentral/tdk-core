@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_801
 ## TestCase Name
 RDKV_CERT_MVS_Video_HTML_Mute_Unmute_H264_MP3_MP4
@@ -29,7 +29,7 @@ Test script to launch an HTML video player application through AppManager and pe
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations for the scenario. | Set playback operations: Mute audio (30s), unmute audio (30s). | Ensure playback operations are set as specified. |
+| 1 | Set playback operations for the scenario. | Configure the `mute(30),unmute(30)` operations: the player will play the content for 30 seconds and then mute the audio, keep it muted for 30 seconds, and then unmute the audio. | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_h264_mp3. | Build the test URL with the video_src_url_h264_mp3. | Verify that the test URL is built using video_src_url_h264_mp3. |
 | 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/htmlplayer.html?url=<video_h264_mp3_mp4_url>&operations=mute(30),unmute(30)`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the player using AppManager. | Launch the HTML player test app using the video src URL, and perform mute and unmute operations. Use the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.html-player"}}</code>. | Ensure that the player app launches successfully. |

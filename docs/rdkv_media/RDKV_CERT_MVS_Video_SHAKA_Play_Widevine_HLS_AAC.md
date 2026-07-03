@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_758
 ## TestCase Name
 RDKV_CERT_MVS_Video_SHAKA_Play_Widevine_HLS_AAC
@@ -30,7 +30,7 @@ Test Script to launch a lightning Shaka player application through AppManager an
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations. | Set the close interval: Start playback of the content and close the player after the configured duration. | Ensure that the playback operations are set correctly. |
+| 1 | Set playback operations. | Configure the `close(60)` operation: the video player will start playing the content and automatically close the player after 60 seconds. | Ensure that the playback operations are set correctly. |
 | 2 | Store the launch URL in PersistentStore. | Build the test URL with the video_src_url_widevine_hls_aac. Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<widevine_hls_aac_url>.m3u8&drmconfigs=com.widevine(license_url)&operations=close(60)&autotest=true`| Ensure that the launch URL is stored in PersistentStore. |
 | 3 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |
 | 4 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |

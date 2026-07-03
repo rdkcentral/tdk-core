@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_725
 ## TestCase Name
 RDKV_CERT_MVS_Video_SHAKA_Mute_UnMute_STRESS_DASH_H264
@@ -30,7 +30,7 @@ Test Script to launch a lightning Shaka player application through AppManager to
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations for the scenario. | Set playback operations: Mute audio (10s), unmute audio (10s), repeat. | Ensure playback operations are set as specified. |
+| 1 | Set playback operations for the scenario. | Configure the `mute(10),unmute(10),repeat(10)` operations: the player will play the content for 10 seconds and then mute the audio, keep it muted for 10 seconds, then unmute, and repeat this mute/unmute cycle 10 times. | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_dash_h264. | Build the test URL with the video_src_url_dash_h264. | Verify that the test URL is built using video_src_url_dash_h264. |
 | 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_dash_h264_url>.mpd&operations=mute(10),unmute(10),repeat(10)&autotest=true`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |

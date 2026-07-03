@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_925
 ## TestCase Name
 RDKV_CERT_MVS_Video_HTML_Setvolume_AV1_VORBIS_WEBM
@@ -30,7 +30,7 @@ Test script to launch an HTML video player application through AppManager and pe
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations for the scenario. | Set playback operations: Set volume (5s), close the player. | Ensure playback operations are set as specified. |
+| 1 | Set playback operations for the scenario. | Configure the `setvolume(0.5),close(30)` operations: the player will set the audio volume to 0.5 (50% level), then play the content for 30 seconds and automatically close the player. | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_av1_vorbis. | Build the test URL with the video_src_url_av1_vorbis. | Verify that the test URL is built using video_src_url_av1_vorbis. |
 | 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/htmlplayer.html?url=<video_av1_vorbis_webm_url>&operations=setvolume(0.5),close(30)`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the player using AppManager. | Launch the HTML player test app using the video source URL, and perform volume level operations. Use the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.html-player"}}</code>. | Ensure that the player app launches successfully. |

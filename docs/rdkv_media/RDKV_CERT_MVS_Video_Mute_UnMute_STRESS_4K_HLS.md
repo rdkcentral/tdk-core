@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_365
 ## TestCase Name
 RDKV_CERT_MVS_Video_Mute_UnMute_STRESS_4K_HLS
@@ -31,7 +31,7 @@ Test Script to launch a lightning Video player application through AppManager to
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations for the scenario. | Set playback operations: Mute audio, unmute audio, repeat. | Ensure playback operations are set as specified. |
+| 1 | Set playback operations for the scenario. | Configure the `mute(5),unmute(5),repeat(15)` operations: the player will play the content for 5 seconds and then mute the audio, keep it muted for 5 seconds, then unmute, and repeat this mute/unmute cycle 15 times. | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_4k_hls. | Build the test URL with the video_src_url_4k_hls (HLS stream). | Verify that the test URL is built using video_src_url_4k_hls. |
 | 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_4k_url>.m3u8&operations=mute(5),unmute(5),repeat(15)&autotest=true&type=hls`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |

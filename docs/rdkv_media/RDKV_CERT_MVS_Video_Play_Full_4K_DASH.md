@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_472
 ## TestCase Name
 RDKV_CERT_MVS_Video_Play_Full_4K_DASH
@@ -29,7 +29,7 @@ Test Script to launch a lightning Video player application through AppManager an
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations for the scenario. | Set playback operations: Play till end of content (0s). | Ensure playback operations are set as specified. |
+| 1 | Set playback operations for the scenario. | Configure the `playtillend(0)` operation: the video player will play the content through to the end of its full duration and then automatically exit the player. | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_short_duration_4k_dash. | Build the test URL with the video_src_url_short_duration_4k_dash (DASH stream). | Verify that the test URL is built using video_src_url_short_duration_4k_dash. |
 | 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_src_url_short_duration_4k_dash>&operations=playtillend(0)&autotest=true&type=dash`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |

@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_895
 ## TestCase Name
 RDKV_CERT_MVS_Video_HTML_PlayPause_H264_MP3_MP4_2160p
@@ -31,7 +31,7 @@ Test Script to launch a HTML Video player application through AppManager and per
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations for the scenario. | Set playback operations: Pause, play. | Ensure playback operations are set as specified. |
+| 1 | Set playback operations for the scenario. | Configure the `pause(30),play(10)` operations: the video will play for 10 seconds, then pause for 30 seconds, and then resume playback. | Ensure playback operations are set as specified. |
 | 2 | Build the test URL using video_src_url_h264_mp3_2160p. | Build the test URL with the video_src_url_h264_mp3_2160p. | Verify that the test URL is built using video_src_url_h264_mp3_2160p. |
 | 3 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/htmlplayer.html?url=<video_h264_mp3_mp4_url>&operations=pause(30),play(10)`| Ensure that the launch URL is stored in PersistentStore. |
 | 4 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.html-player"}}</code>. | Ensure that the app launches successfully via AppManager. |

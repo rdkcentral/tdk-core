@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_Media_Validation_73
 ## TestCase Name
 RDKV_CERT_MVS_Video_Play_PlayReady_DASH_H264
@@ -30,7 +30,7 @@ Test Script to launch a lightning Video player application through AppManager an
 
 |#| StepName | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Run playback operations and validate media events. | Start playback of the content and close the player after the configured duration (close_interval). | Ensure that expected media events are observed for the configured operations. |
+| 1 | Configure the playback operations. | Configure the `close(close_interval)` operation: the video player will start playing the content and automatically close after the configured duration (close_interval seconds). | Ensure that the playback operations are configured correctly. |
 | 2 | Store the launch URL in PersistentStore. | Build the test URL with the video_src_url_playready_dash_h264 (DASH stream). Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_h264_url>.mpd&drmconfigs=com.playready(license_url)&operations=close(60)&autotest=true&type=dash`| Ensure that the launch URL is stored in PersistentStore. |
 | 3 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |
 | 4 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |
