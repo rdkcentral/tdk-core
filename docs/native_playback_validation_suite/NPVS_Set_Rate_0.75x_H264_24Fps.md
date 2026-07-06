@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_250
 
-**TestCase Name**
+## TestCase Name
 NPVS_Set_Rate_0
 
 ## Table of Contents
@@ -12,7 +12,7 @@ NPVS_Set_Rate_0
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Test to verify playback rate control at 0.75x speed using GStreamer `gst_element_seek()` function with H.264 24fps stream baseline. Validate that position advances at exactly 0.75x speed (three-quarter normal speed) through periodic `gst_element_query_position()` polling with position increment expected at ±25% tolerance around 0.075 seconds per 100ms interval. Verify audio/video remain synchronized during rate change and frame rendering continues without discontinuities with 24fps framerate baseline.
+Test to verify playback rate control at 0.75x speed using GStreamer `gst_element_seek()` function with H.264 24fps stream baseline. Validate that position advances at exactly 0.75x speed (three-quarter normal speed) through periodic `gst_element_query_position()` polling with position increment expected at Â±25% tolerance around 0.075 seconds per 100ms interval. Verify audio/video remain synchronized during rate change and frame rendering continues without discontinuities with 24fps framerate baseline.
 
 ## Preconditions
 
@@ -30,10 +30,10 @@ Test to verify playback rate control at 0.75x speed using GStreamer `gst_element
 |----|----------|------------------|-----------------|  
 | 1 | Initialize Test Environment | Initialize test environment by sourcing variables from `/opt/TDK/TDK.env` and establish Wayland display session via RDKWindowManager | Verify environment variables load correctly and Wayland display is created |
 | 2 | Configure and Execute Test Application | Retrieve configuration and stream URL, then execute `tdk_mediapipelinetests` with test case name, stream URL, and timeout arguments | Verify configuration is retrieved and `tdk_mediapipelinetests` initializes playbin pipeline |
-| 3 | Construct Pipeline and Initiate Playback | Create `playbin` element with stream URI, set `westerossink` as video sink, trigger `NULL→READY→PAUSED→PLAYING` state transition, verify `first-video-frame-callback` signal | Verify `playbin` reaches `GST_STATE_PLAYING` with first frame rendered, no `GST_MESSAGE_ERROR` |
+| 3 | Construct Pipeline and Initiate Playback | Create `playbin` element with stream URI, set `westerossink` as video sink, trigger `NULLâ†’READYâ†’PAUSEDâ†’PLAYING` state transition, verify `first-video-frame-callback` signal | Verify `playbin` reaches `GST_STATE_PLAYING` with first frame rendered, no `GST_MESSAGE_ERROR` |
 | 4 | Execute Playback Rate Change | Invoke `gst_element_seek()` with playback rate set to 0.75 and GST_SEEK_FLAG_FLUSH flag. Verify position progression matches 0.75x speed (three-quarter normal speed) with maintained audio/video sync | Verify test operation completes successfully with expected results |
-| 5 | Monitor Playback Progress | Poll `gst_element_query_position()` at 100ms intervals to verify position advances at 0.75x rate (expected increment: 0.075 seconds per 100ms ±25% tolerance) | Verify position increments are consistent, no stalls or backward jumps detected |
-| 6 | Validate Frame Rendering | Poll `westerossink→stats` to verify `rendered_frames` increments and `dropped_frames` remains acceptable | Verify frame statistics indicate proper video rendering |
+| 5 | Monitor Playback Progress | Poll `gst_element_query_position()` at 100ms intervals to verify position advances at 0.75x rate (expected increment: 0.075 seconds per 100ms Â±25% tolerance) | Verify position increments are consistent, no stalls or backward jumps detected |
+| 6 | Validate Frame Rendering | Poll `westerossinkâ†’stats` to verify `rendered_frames` increments and `dropped_frames` remains acceptable | Verify frame statistics indicate proper video rendering |
 | 7 | Validate Test Success Indicators | Parse GCheck framework output and verify test-specific metrics match expected values | Verify GCheck shows `Failures: 0`, `Errors: 0`, and metrics are correct |
 | 8 | Release Pipeline Resources | Set pipeline state to `GST_STATE_NULL` and release all codec, decoder, and sink resources | Verify pipeline reaches `GST_STATE_NULL` and system restored to pre-test state |
 

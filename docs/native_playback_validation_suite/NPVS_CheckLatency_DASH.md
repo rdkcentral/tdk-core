@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_202
 
-**TestCase Name**
+## TestCase Name
 NPVS_CheckLatency_DASH
 
 ## Table of Contents

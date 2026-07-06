@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_226
 
-**TestCase Name**
+## TestCase Name
 NPVS_Play_WAV
 
 ## Table of Contents
@@ -12,7 +12,8 @@ NPVS_Play_WAV
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Validate PCM audio codec playback via `test_generic_playback` function with WAV audio stream. Initialize audio-only pipeline with wavparse element, configure `autoaudiosink` for audio output. Execute continuous playback for 10 seconds via `gst_element_query_position()` polling. Verify audio stream present via `n-audio` property, monitor audio rendering statistics, and validate clean pipeline state transitions without errors.
+Validate PCM audio codec playback via `test_generic_playback` function with WAV audio stream. Initialize audio-only pipeline with wavparse element, configure `autoaudiosink` for audio output. Execute continuous playback for 10 seconds via `gst_element_query_position()` polling. Verify audio stream present via 
+-audio` property, monitor audio rendering statistics, and validate clean pipeline state transitions without errors.
 
 ## Preconditions
 
@@ -32,7 +33,7 @@ Validate PCM audio codec playback via `test_generic_playback` function with WAV 
 | 2 | Configure and Execute Test Application | Retrieve `NATIVE_PLAYBACK_MEDIAPLAYBACK_TIMEOUT` configuration; Retrieve stream URL from `audio_src_url_wav_pcm` variable; Execute `mediapipelinetests test_generic_playback <URL> timeout=<seconds>` with audio stream | Verify mediapipelinetests initializes with WAV audio stream |
 | 3 | Construct Audio Pipeline | Create `playbin` element via `gst_element_factory_make()`; Set `uri` property to WAV audio file via `g_object_set()`; Configure `autoaudiosink` for audio output via `g_object_set()`; Set state to `GST_STATE_PLAYING` via `gst_element_set_state()` | Verify playbin reaches `GST_STATE_PLAYING`, audio sink active |
 | 4 | Query Audio Stream Properties | Query audio stream presence via `g_object_get(playbin, "n-audio", &n_audio, NULL)`; Verify n-audio >= 1 confirming PCM stream; Query audio pad capabilities for PCM format information | Verify n-audio >= 1; Verify PCM stream properties queried successfully |
-| 5 | Play Audio Stream | Execute continuous playback via internal play mechanism for configured timeout (10 seconds); Monitor playback position via `gst_element_query_position()` at 100ms intervals | Verify position advances at 1x rate (±1 second), no stalls |
+| 5 | Play Audio Stream | Execute continuous playback via internal play mechanism for configured timeout (10 seconds); Monitor playback position via `gst_element_query_position()` at 100ms intervals | Verify position advances at 1x rate (Â±1 second), no stalls |
 | 6 | Validate Audio Rendering | Monitor audio output on device; Verify continuous audio playback without glitches or interruptions during timeout window | Verify audio renders clearly throughout playback window |
 | 7 | Monitor GStreamer Bus | Monitor GStreamer message bus via `gst_bus_pop()` for `GST_MESSAGE_ERROR`, `GST_MESSAGE_WARNING`, or `GST_MESSAGE_EOS` messages; Verify no audio decoder errors | Verify no errors/warnings; Verify clean audio decoding |
 | 8 | Release Pipeline Resources | Call `terminatePipeline(playbin)` to set state to `GST_STATE_NULL` and release audio decoder and sink resources | Verify pipeline reaches `GST_STATE_NULL`; Verify test output shows "Failures: 0" |

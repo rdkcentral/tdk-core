@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_05
 
-**TestCase Name**
+## TestCase Name
 NPVS_Play_H264
 
 ## Table of Contents
@@ -12,7 +12,7 @@ NPVS_Play_H264
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Validate play-pause state management and position control during interactive playback. The test executes repeated `gst_element_set_state()` transitions between `GST_STATE_PLAYING` (active rendering) and `GST_STATE_PAUSED` (halted rendering). When paused, verify playback position halts completely without advancing; when resumed to playing state, verify position advancement resumes at normal rate without gaps. Confirm frame rendering statistics via `westerossink→stats` show rendered_frames increments only during play state, demonstrating correct state machine behavior and audio/video synchronization preservation.
+Validate play-pause state management and position control during interactive playback. The test executes repeated `gst_element_set_state()` transitions between `GST_STATE_PLAYING` (active rendering) and `GST_STATE_PAUSED` (halted rendering). When paused, verify playback position halts completely without advancing; when resumed to playing state, verify position advancement resumes at normal rate without gaps. Confirm frame rendering statistics via `westerossinkâ†’stats` show rendered_frames increments only during play state, demonstrating correct state machine behavior and audio/video synchronization preservation.
 
 ## Preconditions
 
@@ -29,11 +29,11 @@ Validate play-pause state management and position control during interactive pla
 | ID | StepName | Step Description | Expected Result |
 |----|----------|------------------|-----------------|  
 | 1 | Initialize Test Environment | Source environment variables from `/opt/TDK/TDK.env` to load GStreamer plugins, library paths, and Wayland display configuration. Establish Wayland display session via RDKWindowManager. Set up logging file at `/opt/TDK/mediapipeline_test_step.log` | Verify all environment variables load correctly, Wayland display is created successfully, logging initialized without errors |
-| 2 | Configure and Execute Test Application | Retrieve configuration values for `NATIVE_PLAYBACK_CHECK_AV_STATUS` and `NATIVE_PLAYBACK_MEDIAPLAYBACK_TIMEOUT` from device config; Retrieve stream URL from `video_src_url_dash_h264` variable; Execute `mediapipelinetests test_generic_playback <DASH_URL> checkavstatus=<yes/no> timeout=<seconds>` | Verify mediapipelinetests initializes with H.264 DASH stream and timeout parameters |
+| 2 | Configure and Execute Test Application | Retrieve configuration values for `NATIVE_PLAYBACK_MEDIAPLAYBACK_TIMEOUT` from device config; Retrieve stream URL from `video_src_url_dash_h264` variable; Execute `mediapipelinetests test_generic_playback <DASH_URL> timeout=<seconds>` | Verify mediapipelinetests initializes with H.264 DASH stream and timeout parameters |
 | 3 | Construct Pipeline and Initiate Playback | Create `playbin` element via `gst_element_factory_make()` with video_src_url_dash_h264 URI; Configure `uri` property to video_src_url_dash_h264 manifest/file via `g_object_set()`; Set `video-sink` property to `westerossink` via `g_object_set()`; Configure `autoaudiosink` for AAC audio; Trigger state transition from `GST_STATE_NULL` to `GST_STATE_PLAYING` via `gst_element_set_state()`; Monitor for `first-video-frame-callback` signal | Verify playbin reaches `GST_STATE_PLAYING` with first frame decoded, DASH manifest/file parsed successfully, no `GST_MESSAGE_ERROR` |
-| 4 | Query Video and Audio Stream Properties | Query video dimensions via `g_object_get(westerossink, "video-height", &height, NULL)` and `westerossink→video-width`; Query audio stream count via `g_object_get(playbin, "n-audio", &n_audio, NULL)` to verify AAC stream presence; Log extracted properties | Verify video dimensions valid; Verify n-audio >= 1 confirming AAC stream present |
-| 5 | Play Stream for Configured Timeout | Execute continuous playback via PlaySeconds(playbin, play_timeout) or equivalent for configured timeout (default 10 seconds); Monitor playback position via `gst_element_query_position()` at 100ms intervals to verify position advances at 1x rate | Verify playback position advances consistently at 1x rate (±1 second tolerance), no stalls or backward jumps detected |
-| 6 | Validate Frame Rendering and Statistics | Poll `westerossink→stats` to verify `rendered_frames` increments indicating continuous video rendering; Verify `dropped_frames` < 1% of rendered_frames throughout playback; Log frame statistics | Verify frame statistics indicate proper video rendering at H.264; Verify dropped frame rate acceptable |
+| 4 | Query Video and Audio Stream Properties | Query video dimensions via `g_object_get(westerossink, "video-height", &height, NULL)` and `westerossinkâ†’video-width`; Query audio stream count via `g_object_get(playbin, "n-audio", &n_audio, NULL)` to verify AAC stream presence; Log extracted properties | Verify video dimensions valid; Verify n-audio >= 1 confirming AAC stream present |
+| 5 | Play Stream for Configured Timeout | Execute continuous playback via PlaySeconds(playbin, play_timeout) or equivalent for configured timeout (default 10 seconds); Monitor playback position via `gst_element_query_position()` at 100ms intervals to verify position advances at 1x rate | Verify playback position advances consistently at 1x rate (Â±1 second tolerance), no stalls or backward jumps detected |
+| 6 | Validate Frame Rendering and Statistics | Poll `westerossinkâ†’stats` to verify `rendered_frames` increments indicating continuous video rendering; Verify `dropped_frames` < 1% of rendered_frames throughout playback; Log frame statistics | Verify frame statistics indicate proper video rendering at H.264; Verify dropped frame rate acceptable |
 | 7 | Monitor GStreamer Bus and Detect EOS | Monitor GStreamer message bus via `gst_bus_pop()` to detect `GST_MESSAGE_ERROR`, `GST_MESSAGE_WARNING`, or `GST_MESSAGE_EOS` messages; Verify no error messages indicating codec decoding failures or stream parsing issues | Verify no decoder errors or format errors on bus; Verify clean playback without glitches or interruptions |
 | 8 | Release Pipeline Resources | Call `terminatePipeline(playbin)` to set state to `GST_STATE_NULL` via `gst_element_set_state()` and release all GStreamer objects (playbin, DASH demuxer, westerossink, audio sink, bus); Verify cleanup completes successfully without resource leaks | Verify pipeline reaches `GST_STATE_NULL`; Verify all resources released; Verify test output contains "Failures: 0" and "Errors: 0" or "failed: 0" |
 

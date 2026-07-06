@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_262
 
-**TestCase Name**
+## TestCase Name
 NPVS_Seek_Towards_EOS_MP4
 
 ## Table of Contents
@@ -12,7 +12,7 @@ NPVS_Seek_Towards_EOS_MP4
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Test validates seeking capability towards end-of-stream (EOS) on MP4 H.264 video by invoking `gst_element_seek()` to reposition playback near the stream's final position. The test verifies that the seek target position is reached within ±1 second tolerance using position queries every 100ms, and that playback continues smoothly through the remaining stream until `GST_MESSAGE_EOS` is detected. Validates frame rendering continues with correct PTS monotonicity and no errors are triggered during near-EOS seeking operations.
+Test validates seeking capability towards end-of-stream (EOS) on MP4 H.264 video by invoking `gst_element_seek()` to reposition playback near the stream's final position. The test verifies that the seek target position is reached within Â±1 second tolerance using position queries every 100ms, and that playback continues smoothly through the remaining stream until `GST_MESSAGE_EOS` is detected. Validates frame rendering continues with correct PTS monotonicity and no errors are triggered during near-EOS seeking operations.
 
 ## Preconditions
 
@@ -33,7 +33,7 @@ Test validates seeking capability towards end-of-stream (EOS) on MP4 H.264 video
 | 3 | Register Callbacks and Setup State Machine | Register `first-video-frame-callback` signal via `g_signal_connect()` for frame detection. Set playbin flags (VIDEO, AUDIO, BUFFERING). Register bus message handler for ERROR, EOS, STATE_CHANGED via `gst_bus_pop_filtered()` | All signals registered, flags configured, bus monitoring active |
 | 4 | Transition Pipeline to Playing State | Set pipeline state `GST_STATE_PAUSED` via `gst_element_set_state()`. Query stream duration via `gst_element_query_duration()` to determine EOS position. Transition to `GST_STATE_PLAYING` via `gst_element_set_state()`. Monitor first-frame signal for rendering confirmation | Pipeline PLAYING, stream duration queried, first frame detected, baseline position recorded |
 | 5 | Execute Seek Towards EOS | Query current playback position via `gst_element_query_position()`. Calculate seek target as (stream_duration - 5 seconds) to seek near end. Invoke `gst_element_seek(playbin, 1.0, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH, GST_SEEK_TYPE_SET, seekPosition, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE)` to perform seek | Seek operation completes without errors, pipeline continues playing from near-EOS position |
-| 6 | Validate EOS Seek Target Accuracy | Monitor bus for `GST_MESSAGE_ASYNC_DONE` confirming seek completion. Poll `gst_element_query_position()` every 100ms verifying position matches seek target within ±GST_SECOND (±1000ms). Confirm position stabilizes near EOS | Position queries show currentPosition ≈ seekPosition ±1000ms, EOS seek confirmed |
+| 6 | Validate EOS Seek Target Accuracy | Monitor bus for `GST_MESSAGE_ASYNC_DONE` confirming seek completion. Poll `gst_element_query_position()` every 100ms verifying position matches seek target within Â±GST_SECOND (Â±1000ms). Confirm position stabilizes near EOS | Position queries show currentPosition â‰ˆ seekPosition Â±1000ms, EOS seek confirmed |
 | 7 | Monitor Video Rendering Through EOS Boundary | Poll westerossink stats every 1 second. Extract rendered_frames and dropped_frames via `gst_structure_get_uint64()`. Verify rendered frames increment, dropped < 1%. Continue monitoring position to verify playback advances towards EOS | Rendered frame count increases per second, dropped < 1%, position advances towards stream end |
 | 8 | Monitor EOS Detection and Stream Completion | Continue monitoring until `GST_MESSAGE_EOS` detected on bus via `gst_bus_pop_filtered()`. Verify no `GST_MESSAGE_ERROR` messages detected. Confirm stream reaches end position without errors or stalls | EOS detected when stream reaches end, no errors, pipeline remained stable |
 | 9 | Release Pipeline Resources | Set pipeline state `GST_STATE_NULL` via `gst_element_set_state()`. Unreference playbin via `gst_object_unref()`. Close logging, free memory, verify system ready | Pipeline NULL, all resources released, logging closed |

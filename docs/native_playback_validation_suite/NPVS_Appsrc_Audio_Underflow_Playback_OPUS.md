@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_258
 
-**TestCase Name**
+## TestCase Name
 NPVS_Appsrc_Audio_Underflow_Playback_OPUS
 
 ## Table of Contents
@@ -34,7 +34,7 @@ Test to verify if buffer underflow signal is obtained upon audio/video underrun 
 | 4 | Start Appsrc Data Feeding and Transition to Playing State | Set pipeline to `GST_STATE_PAUSED` via `gst_element_set_state()`. Emit `push-buffer` action on Appsrc via `g_signal_emit_by_name()` until `BYTES_THRESHOLD = 419338 bytes` is reached. Transition to `GST_STATE_PLAYING` via `gst_element_set_state()`. Monitor first-frame signal to confirm rendering started | Verify pipeline state transitions to PAUSED then PLAYING, buffers pushed to Appsrc reach 419338 bytes threshold, first-frame signal is detected |
 | 5 | Intentionally Starve Buffer to Trigger Underflow | Stop emitting `push-buffer` action on Appsrc to create buffer starvation. Monitor `buffer-underflow-callback` signal to detect underflow condition | Verify `buffer-underflow-callback` signal is detected when sink buffer depletes |
 | 6 | Resume Data Feeding with Increased Buffer Threshold and Emit EOS | Resume emitting `push-buffer` action on Appsrc to accumulate `2 * BYTES_THRESHOLD = 838676 bytes`. After all media data is transferred to Appsrc, emit `end-of-stream` action via `g_signal_emit_by_name()` | Verify buffers accumulated to 838676 bytes threshold and `end-of-stream` action is emitted |
-| 7 | Validate Playback Recovery After Buffer Refill | Transition to `GST_STATE_PLAYING` via `gst_element_set_state()`. Query playback position via `gst_element_query_position()` at 100ms intervals to verify position advances at expected rate (1 second position per 1 second real-time ±250ms tolerance). Monitor `pts-error-callback` signal to detect presentation timestamp errors. Query sink element properties to verify frame rendering continues | Verify position advances at expected rate with no backward jumps, no `pts-error-callback` signals detected, sink continues rendering without stalls |
+| 7 | Validate Playback Recovery After Buffer Refill | Transition to `GST_STATE_PLAYING` via `gst_element_set_state()`. Query playback position via `gst_element_query_position()` at 100ms intervals to verify position advances at expected rate (1 second position per 1 second real-time Â±250ms tolerance). Monitor `pts-error-callback` signal to detect presentation timestamp errors. Query sink element properties to verify frame rendering continues | Verify position advances at expected rate with no backward jumps, no `pts-error-callback` signals detected, sink continues rendering without stalls |
 | 8 | Monitor Pipeline EOS and Validate Test Completion | Monitor GStreamer bus via `gst_bus_pop()` to detect `GST_MESSAGE_EOS` message from pipeline. Verify test framework output confirms execution success. Compare recorded playback metrics against expected baseline values | Verify `GST_MESSAGE_EOS` is detected on bus, test execution completed successfully with expected metrics matching baseline |
 | 9 | Release Pipeline and Cleanup Resources | Set pipeline to `GST_STATE_NULL` via `gst_element_set_state()`. Unreference playbin element via `gst_object_unref()`. Free allocated memory and close logging file | Verify pipeline reaches `GST_STATE_NULL`, all GStreamer resources released, logging closed, system ready for next test |
 

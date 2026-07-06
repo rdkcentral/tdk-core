@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_206
 
-**TestCase Name**
+## TestCase Name
 NPVS_CheckLatency_VP9
 
 ## Table of Contents
