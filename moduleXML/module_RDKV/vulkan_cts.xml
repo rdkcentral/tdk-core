@@ -17,18 +17,23 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
+            <function id="05cdc3b3-0037-4192-9a34-8f74b7f1c410" name="executeCmnd_InDUT">
+                <parameters>
+                    <parameter id="bffa3cfc-2a7b-47c9-a0f4-4b753b4e4815" parameterName="command" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
             <function id="85e568aa-31f3-43f1-96b0-f4f3a72662d9" name="copy_qpa_file_from_dut">
                 <parameters>
-                    <parameter id="2cad090b-65e8-42b2-bc5e-075b4266b4cd" parameterName="qpa_file_name" parameterType="STRING" range="a-z"/>
                     <parameter id="bd1213dc-033b-4cab-9df4-604b04c1617f" parameterName="qpa_folder_path" parameterType="STRING" range="a-z"/>
                     <parameter id="976e70fc-a194-43e5-90db-c34cad25583f" parameterName="result_dir" parameterType="STRING" range="a-z"/>
+                    <parameter id="2cad090b-65e8-42b2-bc5e-075b4266b4cd" parameterName="qpa_file_name" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
             <function id="51e17538-088a-4a56-9188-dbdc004c556c" name="copy_file">
                 <parameters>
                     <parameter id="c704a551-a108-41fc-945f-6f042df8a977" parameterName="qpa_file_name" parameterType="STRING" range="a-z"/>
-                    <parameter id="6d182e91-3a49-4053-b8dc-1ad1fe29b4cd" parameterName="qpa_folder_path" parameterType="STRING" range="a-z"/>
                     <parameter id="8a06505b-9144-4433-aa6f-c98978396539" parameterName="result_dir" parameterType="STRING" range="a-z"/>
+                    <parameter id="6d182e91-3a49-4053-b8dc-1ad1fe29b4cd" parameterName="qpa_folder_path" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
             <function id="ebf9d422-4c34-4308-aedf-62882e124fa7" name="run_vulkan_cts_command">
@@ -36,13 +41,9 @@
                     <parameter id="ec71d3b1-8fe8-49ca-8b9c-17147dc0e55a" parameterName="info_filename" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="05cdc3b3-0037-4192-9a34-8f74b7f1c410" name="executeCmnd_InDUT">
-                <parameters>
-                    <parameter id="bffa3cfc-2a7b-47c9-a0f4-4b753b4e4815" parameterName="command" parameterType="STRING" range="a-z"/>
-                </parameters>
-            </function>
             <function id="d2baa7b4-2cc1-461b-aa89-d931d92a8121" name="report_generation">
                 <parameters>
+                    <parameter id="c17c7de7-8a90-4450-bc8d-7ecc238fda7d" parameterName="obj" parameterType="STRING" range="a-z"/>
                     <parameter id="aa8ef4eb-3b94-48b2-9f52-050a2c843a26" parameterName="result_dir" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
@@ -110,6 +111,13 @@
                 <name>report_generation</name>
                 <funName>report_generation</funName>
                 <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>48577011-901c-42c8-8593-f83fef9ce576</id>
+                        <parameterName>obj</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
                     <primitiveTestParameter>
                         <id>f0a9f992-1d1d-41df-8255-f2fca63251ea</id>
                         <parameterName>result_dir</parameterName>

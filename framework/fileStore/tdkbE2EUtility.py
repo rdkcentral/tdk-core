@@ -35,6 +35,7 @@ import webpaUtility;
 from webpaUtility import *
 import subprocess
 from time import gmtime, strftime
+from tdkbStabilityVariables import *
 
 #Global variable to check whether login session is active
 isSessionActive = False
@@ -92,6 +93,9 @@ def parseDeviceConfig(obj):
         global wan_ftp_ip
         wan_ftp_ip = config.get(deviceConfig, "WAN_FTP_IP")
 
+        global ipv6_host_name
+        ipv6_host_name = config.get(deviceConfig, "IPV6_HOST_NAME")
+
         global wlan_username
         wlan_username = config.get(deviceConfig, "WLAN_USERNAME")
 
@@ -124,6 +128,10 @@ def parseDeviceConfig(obj):
 
         global wlan_inet_address
         wlan_inet_address = config.get(deviceConfig, "WLAN_INET_ADDRESS")
+
+        global wlan_inet6_address
+        wlan_inet6_address = config.get(deviceConfig, "WLAN_INET6_ADDRESS")
+
 
         global wlan_subnet_mask
         wlan_subnet_mask = config.get(deviceConfig, "WLAN_SUBNET_MASK")
@@ -931,6 +939,40 @@ def getWlanIPAddress(wlanInterface):
 
 ########## End of Function ##########
 
+def getWLANIPV6Address(wlanInterface):
+
+# getWLANIPV6Address
+
+# Syntax      : getWLANIPV6Address()
+# Description : Function to get the current IPv6 address of the wlan client after connecting to wifi
+# Parameters  : wlanInterface - wlan interface name
+# Return Value: status - IPv6 Address of the WLAN client
+
+    try:
+        status = clientConnect("WLAN")
+        if status == "SUCCESS":
+
+            if wlan_os_type == "UBUNTU":
+                command="sudo sh %s refresh_wifi_network %s" %(wlan_script,wlanInterface)
+                executeCommand(command)
+                sleep(20)
+
+                command="sudo sh %s get_wlan_ipv6_address %s %s" %(wlan_script,wlanInterface,wlan_inet6_address)
+                status = executeCommand(command)
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to wlan client"
+
+    except Exception as e:
+        print(e)
+        status = e
+
+    print("WLAN IPV6 Address after connecting to WLAN client:%s" %status)
+    return status
+########## End of Function ##########
+
+
 def getWlanSubnetMask(wlanInterface):
 
 # getWlanSubnetMask
@@ -1576,6 +1618,49 @@ def verifyNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,sour
     return status;
 
 ########## End of Function ##########
+
+def verifyIPv6NetworkConnectivity(connectivityType,host_name,interface,source="WLAN"):
+
+#verifyIPv6NetworkConnectivity
+
+# Syntax      : verifyIPv6NetworkConnectivity()
+# Description : Function to check if the ipv6 network connectivity is accessible or not
+# Parameters  : connectivityType - IPV6_PING_TO_HOST
+#               host_name - Host name to which ping should reach
+#               interface - Interface name
+#               source - LAN/WLAN
+# Return Value: Returns the status of ping operation
+    try:
+        status = clientConnect(source)
+        script_name = ""
+        command = ""
+
+        if status == "SUCCESS":
+            if wlan_os_type == "UBUNTU":
+                if source == "WLAN":
+                    script_name = wlan_script
+                    interface = wlan_2ghz_interface
+                elif source == "WLAN_6G":
+                    script_name = wlan_script
+                    interface = wlan_6ghz_interface
+                elif source == "LAN":
+                    script_name = lan_script
+                    interface = lan_interface
+
+                if connectivityType == "IPV6_PING_TO_HOST":
+                    command="sudo sh %s ipv6_ping_to_host %s %s" %(script_name,host_name,interface)
+                status = executeCommand(command)
+            else:
+                print("Only UBUNTU platform supported!!!")
+        else:
+            return "Failed to connect to wlan client"
+    except Exception as e:
+        print(e)
+        status = e
+
+    print("Status of verifyIPV6NetworkConnectivity:%s" %status)
+    return status
+########### End of Function ##########
 
 def ftpToClient(dest, network_ip, source="LAN"):
 
@@ -3182,3 +3267,164 @@ def postExecutionCleanup():
     clientDisconnect();
 
 ######### End of Function ##########
+
+def wifiConnectBssid(ssidName,ssidPwd,bssid,securityType):
+# wifiConnectBssid
+# Syntax      : wifiConnectBssid()
+# Description : Function to connect to the WIFI SSID from the WLAN client with bssid to force to respective radio.
+# Parameters  : ssidName - SSID Name
+#               ssidPwd - SSID password
+#               bssid  - BSSID of respective radio
+#               securityType - Protected/Open security mode
+# Return Value: SUCCESS/FAILURE
+
+    try:
+        if wlan_os_type == "UBUNTU":
+            if securityType == "Protected":
+                command="sudo sh %s wifi_ssid_bssid_connect %s %s %s" %(wlan_script,ssidName,bssid,ssidPwd)
+            else:
+                command="sudo sh %s wifi_ssid_connect_openSecurity %s" %(wlan_script,ssidName)
+            status = executeCommand(command)
+        else:
+            status = "Only UBUNTU platform supported!!!"
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("WIFI connect status:%s" %status);
+    return status;
+
+########## End of Function ##########
+
+
+def wlanConnectWifiSsidBssid(ssidName,ssidPwd,bssid,wlanInterface,securityType= "Protected"):
+
+# wlanConnectWifiSsidBssid
+
+# Syntax      : wlanConnectWifiSsidBssid()
+# Description : Function to connect wlan to the wifi ssid and bssid
+# Parameters  : ssidName - SSID Name
+#               ssidPwd - SSID password
+#               wlanInterface - wlan interface name
+#               bssid - bssid of respective radio
+#               securityType - Protected/Open security mode
+# Return Value: SUCCESS/FAILURE
+
+    try:
+        status = clientConnect("WLAN")
+        if status == "SUCCESS":
+            command="sudo sh %s refresh_wifi_network" %(wlan_script)
+            executeCommand(command)
+            sleep(20);
+            status = checkSsidAvailable(ssidName)
+            if ssidName in status:
+                status = wifiConnectBssid(ssidName,ssidPwd,bssid,securityType)
+                if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status:
+                    sleep(60);
+                    status = getConnectedSsidName(wlanInterface)
+                    if ssidName in status:
+                        return "SUCCESS"
+                    else:
+                        return "Failed to get the connected SSID Name"
+                else:
+                    return "Failed to connect to wifi ssid and bssid"
+            else:
+                return "Couldn't find the SSID in available SSIDs list"
+        else:
+            return "Failed to connect to wlan client"
+    except Exception as e:
+        print(e);
+        return e;
+
+
+def connectWlanGetMACAddress(wlanInterface):
+
+# connectWlanGetMACAddress
+
+# Syntax      : connectWlanGetMACAddress(wlanInterface)
+# Description : Function to get the MAC address of the wlan client on the given interface via SSH
+# Parameters  : wlanInterface - wlan interface name
+# Return Value: status - MAC Address of the WLAN client
+
+    try:
+        status = clientConnect("WLAN")
+        if status == "SUCCESS":
+            if wlan_os_type == "UBUNTU":
+                command="sudo sh %s get_wlan_mac %s" %(wlan_script,wlanInterface)
+                status = executeCommand(command)
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to wlan client"
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("WLAN MAC Address after accessing wlan client via SSH :%s" %status);
+    return status;
+
+########## End of Function ##########
+
+def getChannelNumberBssid():
+
+# getChannelNumberBssid
+
+# Syntax      : getChannelNumberBssid()
+# Description : Function to get the channel number of the WIFI connected
+# Parameters  : None
+# Return Value: Returns the channel number
+
+    try:
+        if wlan_os_type == "UBUNTU":
+            command="sudo sh %s get_channel_number_bssid" %(wlan_script)
+            status = executeCommand(command)
+        else:
+            status = "Only UBUNTU platform supported!!!"
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("Connected WIFI's channel number:%s" %status);
+    return status;
+
+########## End of Function ##########
+
+def verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,phase="START"):
+
+# verifyLongRunNetworkConnectivity
+
+# Syntax      : verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,phase="START")
+# Description : Function to check long-run network connectivity from the LAN client
+# Parameters  : dest_ip - IP to which ping should reach
+#             : connectivityType - PING type like ping to ipv4, ipv6 etc
+#             : source_ip - Ip from which ping to be placed
+#             : gateway_ip - Gateway IP address
+#             : phase - "START" to start a long-running ping, "CHECK" to validate results.
+# Return Value: Returns the status of ping operation
+    try:
+        status = clientConnect("LAN")
+        if status == "SUCCESS":
+            if lan_os_type == "UBUNTU":
+                script_name = lan_script
+                if connectivityType == "PING_TO_IPV4":
+                    if phase == "START":
+                        command = "sudo sh %s ping_to_ipv4_start %s %s %s %s %s" % (script_name,source_ip,dest_ip,gateway_ip,CONNECTIVITY_DURATION,PING_OUTPUT_FILE)
+                    elif phase == "CHECK":
+                        command = "sudo sh %s ping_to_ipv4_check %s" % (script_name,PING_OUTPUT_FILE)
+                    else:
+                        return "FAILURE:Invalid phase"
+                else:
+                    return "FAILURE:Unsupported connectivityType"
+                status = executeCommand(command)
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to lan client"
+    except Exception as e:
+        print(e)
+        status = e
+
+    print("Status of verifyLongRunNetworkConnectivity :%s" %status)
+    return status
+
+########## End of Function ##########

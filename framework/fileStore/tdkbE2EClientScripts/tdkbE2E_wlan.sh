@@ -34,6 +34,13 @@ wifi_ssid_connect()
 	printf "OUTPUT:$value"
 }
 
+# Connect to the WIFI SSID,wlan interface and BSSID
+wifi_ssid_bssid_connect()
+{
+        value="$(nmcli device wifi connect $var2 bssid $var3 password $var4 | tr -cd [:print:])"
+        printf "OUTPUT:$value"
+}
+
 # Connect to the WIFI SSID with security mode None
 wifi_ssid_connect_openSecurity()
 {
@@ -59,6 +66,14 @@ get_wlan_ip_address()
         echo "OUTPUT:$value"
 }
 
+# Get the globalIPV6 address of the WLAN after connecting to it
+get_wlan_ipv6_address()
+{
+        value="$(ifconfig -a $var2 | grep "$var3" | tr -s " " | grep -v -i Link | grep 'prefixlen 128' | awk '{print $2}' | head -1)"
+        echo "OUTPUT:$value"
+}
+
+
 # Get the subnet mask of the WLAN after connecting to WIFI
 get_wlan_subnet_mask()
 {
@@ -82,6 +97,13 @@ get_connected_ssid_name()
 get_channel_number()
 {
         value="$(nmcli device wifi list |grep $var2| awk '{ print $5 }')"
+        echo "OUTPUT:$value"
+}
+
+# Get the current channel number of the WIFI connected with same ssid and different bssid
+get_channel_number_bssid()
+{
+        value="$(nmcli device wifi | awk '/^\*/ {print $5}')"
         echo "OUTPUT:$value"
 }
 
@@ -159,6 +181,17 @@ ping_to_host()
         ping_cmd="$(ping -I $var4 -c 3 $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
         route_del_cmd="$(sudo route del -net $var2 netmask 255.255.255.255 gw $var3 dev $var4  > /dev/null && echo "SUCCESS" || echo "FAILURE")"
         if [ $route_add_cmd = "SUCCESS" ] && [ $ping_cmd = "SUCCESS" ]  && [ $route_del_cmd = "SUCCESS" ]; then
+                echo "OUTPUT:SUCCESS"
+        else
+                echo "OUTPUT:FAILURE"
+        fi
+}
+
+# IPv6 ping to a host url
+ipv6_ping_to_host()
+{
+        ping_cmd="$(ping -6 -I $var3 -c 3 $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+        if [ $ping_cmd = "SUCCESS" ]; then
                 echo "OUTPUT:SUCCESS"
         else
                 echo "OUTPUT:FAILURE"
@@ -597,12 +630,16 @@ var6=$6
 case $event in
    "wifi_ssid_connect")
         wifi_ssid_connect;;
+   "wifi_ssid_bssid_connect")
+        wifi_ssid_bssid_connect;;
    "wifi_ssid_connect_openSecurity")
         wifi_ssid_connect_openSecurity;;
    "wifi_ssid_disconnect")
         wifi_ssid_disconnect;;
    "get_wlan_ip_address")
         get_wlan_ip_address;;
+   "get_wlan_ipv6_address")
+        get_wlan_ipv6_address;;
    "get_wlan_subnet_mask")
         get_wlan_subnet_mask;;
    "get_connected_ssid_name")
@@ -611,6 +648,8 @@ case $event in
         is_ssid_available;;
    "get_channel_number")
         get_channel_number;;
+   "get_channel_number_bssid")
+        get_channel_number_bssid;;
    "get_bit_rate")
         get_bit_rate;;
    "get_security_mode")
@@ -625,6 +664,8 @@ case $event in
         ping_to_network;;
    "ping_to_host")
         ping_to_host;;
+   "ipv6_ping_to_host")
+        ipv6_ping_to_host;;
    "wget_http_network")
         wget_http_network;;
    "wget_https_network")

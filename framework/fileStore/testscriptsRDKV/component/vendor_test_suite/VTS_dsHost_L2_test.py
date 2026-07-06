@@ -124,9 +124,14 @@ if "SUCCESS" in result.upper():
     socIDerror = False
     hostConfigFile = basePath + "/" + binaryConfig
     sshMethod = "directSSH"
+    try:
+        sshPort = getDeviceConfigValues("SSH_PORT")
+        print("Got sshPort from config file : ", sshPort)
+    except:
+        sshPort = 22
     checkSoCID_command = fr"[ -f {hostConfigFile} ] && sed -n '/socID:[[:space:]]*$/c\empty' {hostConfigFile} || echo 'File not found'"
     print("checkSoCID_command : " , checkSoCID_command)
-    output = ssh_and_execute (sshMethod, ip, username, password, checkSoCID_command).splitlines()[-1]
+    output = ssh_and_execute (sshMethod, ip, username, password, checkSoCID_command, sshPort).splitlines()[-1]
     print("checkSoCID_command output : ",output)
     if "empty" in output:
         print("SoC ID must be updated for this device")

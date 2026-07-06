@@ -2105,6 +2105,22 @@ def rdkservice_install_app(fileLocator, app_id):
     print(params)
     result = rdkservice_setValue("org.rdk.PackageManagerRDKEMS.install",params)
     return result
+#---------------------------------------------------------------
+#UNINSTALL APP
+#---------------------------------------------------------------
+def rdkservice_uninstall_app(app_id):
+    params = '{ "packageId": "' +app_id+ '" }'
+    print(params)
+    result = rdkservice_setValue("org.rdk.PackageManagerRDKEMS.uninstall",params)
+    return result
+#---------------------------------------------------------------
+#CLOSE APP
+#---------------------------------------------------------------
+def rdkservice_close_app(app_id):
+    params = '{ "appId": "' +app_id+ '" }'
+    print(params)
+    result = rdkservice_setValue("org.rdk.AppManager.closeApp",params)
+    return result
 
 #---------------------------------------------------------------
 #LAUNCH INSTALLED APP
@@ -2220,6 +2236,7 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
 
         if status == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
+            time.sleep(10)
             print(f"\nCheck if {app_name} is launched")
             app_ids = rdkservice_get_loaded_apps()
             if app_name in app_ids:

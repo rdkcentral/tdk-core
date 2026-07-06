@@ -33,6 +33,8 @@ graphical_plugins_list = []
 
 ping_test_destination = "google.com"
 
+method = "org.rdk.AppManager.1.getInstalledApps"
+
 #AppManager environment variables
 app_download_url = ""
 google_bundle=""

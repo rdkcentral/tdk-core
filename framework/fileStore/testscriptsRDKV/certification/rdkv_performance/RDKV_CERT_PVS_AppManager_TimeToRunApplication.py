@@ -113,7 +113,7 @@ if expectedResult in result.upper():
 
                 if launched:
 
-                    # í´¹ Add stabilization delay
+                    # Add stabilization delay
                     time.sleep(3)
 
                     end_time = datetime.now(UTC)

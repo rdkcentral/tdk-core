@@ -1292,6 +1292,19 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
+        # SystemAudioPlayer Events response result parser steps
+        elif tag == "systemaudioplayer_check_sap_event":
+            try:
+                result = result[0]
+                info = result
+                if result.get("id") == int(expectedValues[1]) and str(result.get("event")).lower() == str(expectedValues[0]).lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
