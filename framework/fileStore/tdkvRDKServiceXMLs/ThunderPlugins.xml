@@ -628,7 +628,7 @@
 
     <!-- DeviceDiagnostics Plugin Information -->
     <plugin pluginName="DeviceDiagnostics" serviceName="org.rdk.DeviceDiagnostics" serviceVersion="1">
-        <method name="Get_Configuration" api="getConfiguration" type="method" desc="RDK API interface for the WebPA service" >
+        <method name="Get_Configuration" api="getConfiguration" type="method" desc="Gets the values associated with the corresponding property names" >
             <params>
                 <param tag="names" defaultValue="null" type="list" />
             </params>
@@ -3684,5 +3684,79 @@
                 <param tag="state" defaultValue="null" type="string"/>
             </params>
         </method>
+    </plugin>
+
+    <!-- SystemAudioPlayer Plugin Information -->
+    <plugin pluginName="SystemAudioPlayer" serviceName="org.rdk.SystemAudioPlayer" serviceVersion="1">
+        <method name="Open_Player" api="open" type="method" desc="Opens a player instance and assigns a unique ID">
+            <params>
+               <param tag="audiotype" type="string" defaultValue="null"/>
+               <param tag="sourcetype" type="string" defaultValue="null"/>
+               <param tag="playmode" type="string" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Close_Player" api="close" type="method" desc="Closes the player for given session id">
+            <params>
+               <param tag="id" type="int"/>
+            </params>
+        </method>
+        <method name="Config_Player" api="config" type="method" desc="Configures playback for PCM sources">
+            <params paramKey="pcmconfig" paramType="userGenerate" useMethodTag="systemaudioplayer_config_params">
+               <param tag="id" type="int"/>
+               <param tag="format" type="string" defaultValue="null"/>
+               <param tag="rate" type="int" defaultValue="null"/>
+               <param tag="channels" type="int" defaultValue="null"/>
+               <param tag="layout" type="string" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Get_Player_Session_Id" api="getPlayerSessionId" type="method" desc="Gets session id from URL">
+            <params>
+               <param tag="url" type="string" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Is_Speaking" api="isspeaking" type="method" desc="Checks whether playback is in progress">
+            <params>
+               <param tag="id" type="int"/>
+            </params>
+        </method>
+        <method name="Play_Audio" api="play" type="method" desc="Plays audio on the specified player">
+            <params>
+               <param tag="id" type="int"/>
+               <param tag="url" type="string" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Pause_Audio" api="pause" type="method" desc="Pauses playback on the specified player">
+            <params>
+               <param tag="id" type="int"/>
+            </params>
+        </method>
+        <method name="Resume_Audio" api="resume" type="method" desc="Resumes playback on the specified player">
+            <params>
+               <param tag="id" type="int"/>
+            </params>
+        </method>
+        <method name="Set_Mixer_Levels" api="setMixerLevels" type="method" desc="Sets primary and player volume levels">
+            <params>
+               <param tag="id" type="int"/>
+               <param tag="primaryVolume" type="int"/>
+               <param tag="playerVolume" type="int"/>
+            </params>
+        </method>
+        <method name="Set_Smart_Vol_Control" api="setSmartVolControl" type="method" desc="Sets smart volume control parameters">
+            <params>
+               <param tag="id" type="int"/>
+               <param tag="enable" type="bool"/>
+               <param tag="playerAudioLevelThreshold" type="float"/>
+               <param tag="playerDetectTimeMs" type="int"/>
+               <param tag="playerHoldTimeMs" type="int"/>
+               <param tag="primaryDuckingPercent" type="int"/>
+            </params>
+        </method>
+        <method name="Stop_Audio" api="stop" type="method" desc="Stops audio playback">
+            <params>
+               <param tag="id" type="int"/>
+            </params>
+        </method>
+        <event name="Event_On_SAP_Events" eventName="onsapevents" eventId="client.events.1" type="event" desc="Triggered during playback for each player" />
     </plugin>
 </thunderPlugins>

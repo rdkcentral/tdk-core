@@ -1,7 +1,8 @@
 ## TestCase ID
-RDKV_PERFORMANCE_173
+RDKV_PERFORMANCE_90
 ## TestCase Name
 RDKV_CERT_PVS_AppManager_TimeTo_Uninstall_App
+
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
@@ -11,42 +12,38 @@ RDKV_CERT_PVS_AppManager_TimeTo_Uninstall_App
 
 <a name="head.Objective"></a>
 ## Objective
-To measure the time taken to uninstall an app
+To validate that the time taken to uninstall an application via the AppManager is within the configured performance threshold, measured from the uninstall request to the receipt of the onAppUninstalled event.
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|Conditions|
-|-|----------|
-|1|Wpeframework process should be up and running in the device.|
-|2|Time in Test Manager and DUT should be in sync with UTC|
-|3|google_bundle should be updated in PerformanceTestVariables|
-|4|app_download_url should be updated in PerformanceTestVariables|
-|5|PACKAGEMANAGER_FILE_LOCATOR in device specific config file must be updated with correct file path where the app bundle is getting downloaded in the device|
-|6|APPMANAGER_UNINSTALL_THRESHOLD_VALUE in device specific config file must be updated with correct threshold value|
+|#|StepName | Step Description| Expected Result|
+|-|---------|-----------------|----------------|
+| 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
+| 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
+| 3 | Configure google_bundle in PerformanceTestVariables | `google_bundle` must be set to the application bundle filename (e.g., `com.rdkcentral.google+0.1.0+...`) in PerformanceTestVariables. | The google_bundle variable should be configured with a valid application bundle name. |
+| 4 | Configure app_download_url in PerformanceTestVariables | `app_download_url` must be set to the base URL where the application bundle is hosted. | The app_download_url should point to a reachable location hosting the application bundle. |
+| 5 | Configure uninstall threshold in device config | `APPMANAGER_UNINSTALL_THRESHOLD_VALUE` and `THRESHOLD_OFFSET` must be set in the device-specific configuration file with appropriate millisecond values. | Threshold and offset values should be correctly configured for performance comparison. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
 |#|StepName | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Step 1 | Check the status of org.rdk.DownloadManager, org.rdk.PackageManagerRDKEMS and org.rdk.AppManager <br> {"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.DownloadManager"}<br>{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}<br>{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.AppManager"} | Should be able to get the current status of org.rdk.DownloadManager, org.rdk.PackageManagerRDKEMS and org.rdk.AppManager |
-| 2 | Step 2 | If org.rdk.DownloadManager, org.rdk.PackageManagerRDKEMS or org.rdk.AppManager is not in activated state, try to activate <br>{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params":{"callsign":"org.rdk.DownloadManager"}}<br>{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params":{"callsign":"org.rdk.PackageManagerRDKEMS"}}<br>{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params":{"callsign":"org.rdk.AppManager"}} | Should be able to activate org.rdk.DownloadManager, org.rdk.PackageManagerRDKEMS and org.rdk.AppManager |
-| 3 | Step 3 | Check if the configured app is already installed in the device <br>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"} | Should be able to retrieve the list of apps installed in the device |
-| 4 | Step 4 | If the app is not already installed, start downloading the app bundle <br>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download","params": {"url":"<download url>"}} | The app bundle should get downloaded successfully and the API should return success |
-| 5 | Step 5 | If the app is not already installed, install the downloaded app bundle<br>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.install","params": {"packageId": "com.rdkcentral.google", "version": "0.1.0", "additionalMetadata": [{"name": "type", "value": "native/dac-app"}], "fileLocator":"<PACKAGEMANAGER_FILE_LOCATOR>"}} | The app should get installed in the device |
-| 6 | Step 6 | Register for the event onAppUninstalled to listen for the uninstall completion<br>{"jsonrpc": "2.0","id": 10,"method": "org.rdk.AppManager.1.register","params": {"event": "onAppUninstalled", "id": "client.events.4"}} | Should be able to register for the onAppUninstalled event successfully |
-| 7 | Step 7 | Save the current time just before initiating the uninstall to calculate the time taken for uninstallation<br>start_time = datetime.now(UTC).time() | Should be able to save the current time successfully |
-| 8 | Step 8 | Initiate uninstall app command to uninstall the installed app<br>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.uninstall","params": {"packageId": "com.rdkcentral.google"}} | The app should get uninstalled successfully and the API should return success |
-| 9 | Step 9 | Check if the event onAppUninstalled is received on uninstalling the app | Should receive the event successfully<br>{"jsonrpc":"2.0","method":"client.events.4.onAppUninstalled","params":{"appId":"com.rdkcentral.google"}} |
-| 10 | Step 10 | Get the time when the onAppUninstalled event is received <br>uninstall_time = str(event).split("$$$")[0]<br>time_taken_for_uninstall = uninstalled_time - uninstall_start_time | Event: 05:31:19.700007$$${"jsonrpc":"2.0","method":"client.events.4.onAppUninstalled","params":{"appId":"com.rdkcentral.google"}} |
-| 11 | Step 11 | Calculate the time taken to uninstall the app using the start time and event time | The time taken for uninstallation should be less than the configured threshold value |
+| 1 | Verify and activate required plugins | Query and activate the required plugins to ensure they are in the activated state before proceeding. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.DownloadManager"}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.AppManager"}` <br>Activate if needed: `{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params": {"callsign": "<plugin_name>"}}` | All required plugins should be in the activated state. |
+| 2 | Check if the application is already installed | Query the installed packages list to determine whether the application is already present on the device. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}` | The installed packages list should be returned successfully. |
+| 3 | Download the application bundle | If the application is not already installed, download the application bundle from the configured URL via the DownloadManager. This step is skipped if the application was found to be already installed in the previous step. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<app_download_url>/<google_bundle>"}}` | The download should complete successfully and a download ID should be returned. |
+| 4 | Install the application | Install the downloaded application bundle without launching it. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.install", "params": {"packageId": "com.rdkcentral.google", "version": "0.1.0", "additionalMetadata": [{"name": "type", "value": "native/dac-app"}], "fileLocator": "<PACKAGEMANAGER_FILE_LOCATOR>/package<download_id>"}}` | The application should be installed successfully and appear in the installed packages list. |
+| 5 | Subscribe to the uninstall event | Register a WebSocket event listener for the onAppUninstalled event to capture the precise timestamp when uninstall completes. <br>`{"jsonrpc": "2.0", "id": 10, "method": "org.rdk.AppManager.1.register", "params": {"event": "onAppUninstalled", "id": "client.events.4"}}` | Event subscription should be established successfully. |
+| 6 | Trigger app uninstall and record start time | Record the current UTC timestamp as the uninstall start time, then send the uninstall request. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.uninstall", "params": {"packageId": "com.rdkcentral.google"}}` | The uninstall request should be accepted and processing should begin. |
+| 7 | Wait for the onAppUninstalled event and extract completion timestamp | Monitor the event buffer until the onAppUninstalled event is received or a 120-second timeout is reached. Extract the completion timestamp embedded in the event payload. | The onAppUninstalled event should be received within the timeout period, and the completion timestamp should be extractable from the event data. |
+| 8 | Calculate uninstall time and validate against threshold | Compute the elapsed time in milliseconds as the difference between the event completion timestamp and the recorded start time. Compare against `APPMANAGER_UNINSTALL_THRESHOLD_VALUE` + `THRESHOLD_OFFSET` from device config. | The time taken to uninstall the app should be within the range: 0 < time_taken < (APPMANAGER_UNINSTALL_THRESHOLD_VALUE + THRESHOLD_OFFSET) milliseconds. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video_Accelerator, RPI-Client
+**Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 5
+**Estimated duration** : 10 mins
 
 **Priority** : High
 

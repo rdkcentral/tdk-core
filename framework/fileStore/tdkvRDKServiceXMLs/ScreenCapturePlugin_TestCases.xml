@@ -54,10 +54,10 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="SC_02" testCaseName="ScreenCapture_Upload_Screen" desc="Uploads the screenshott">
+        <testCase testCaseId="SC_02" testCaseName="ScreenCapture_Upload_Screen" desc="Uploads the screenshot">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
-                  <param tag="url" useConfigFile="true" key="SC_UPLOAD_URL"/>
+                  <param tag="url" configBasedResultId="true" key="SC_UPLOAD_URL"/>
                 </params>
                 <resultGeneration useMethodTag="screencapture_upload_screen" expectedValues="True"/>
             </testStep>
@@ -66,7 +66,7 @@
         <testCase testCaseId="SC_03" testCaseName="ScreenCapture_Check_Upload_Complete_Event" desc="Upload screen and receive uploadComplete Event">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
-                  <param tag="url" useConfigFile="true" key="SC_UPLOAD_URL"/>
+                  <param tag="url" configBasedResultId="true" key="SC_UPLOAD_URL"/>
                 </params>
                 <resultGeneration useMethodTag="screencapture_upload_screen" expectedValues="True"/>
             </testStep>
@@ -90,7 +90,7 @@
         <testCase testCaseId="SC_05" testCaseName="ScreenCapture_Check_CallGUID" desc="Upload screen and check GUID in  uploadComplete Event">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
-                  <param tag="url" useConfigFile="true" key="SC_UPLOAD_URL"/>
+                  <param tag="url" configBasedResultId="true" key="SC_UPLOAD_URL"/>
                   <param tag="callGUID" value="screenshot"/>
                 </params>
                 <resultGeneration useMethodTag="screencapture_upload_screen" expectedValues="True"/>

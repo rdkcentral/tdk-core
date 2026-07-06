@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>2ab1200a-bb3c-4896-93c9-fbfeef5b7a41</moduleId>
+        <!-- Module name -->
+        <moduleName>STABILITY</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>1600</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/rdklogs/logs]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[/rdklogs/logs]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="c583bced-7e94-45da-b4ea-f5359b2631ab" name="STABILITY_Donothing">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>83b0d13d-21fd-4527-ac60-cae8e1105177</id>
+                <name>STABILITY_Donothing</name>
+                <funName>STABILITY_Donothing</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

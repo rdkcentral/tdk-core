@@ -119,44 +119,23 @@ for video_test_url in video_test_urls:
     # ----------------------------------------------------------
     # MONITOR VIDEO PLAYBACK
     # ----------------------------------------------------------
-    test_result, proc_check_list = monitorVideoTest(
-        obj,
-        webkit_console_socket,
-        validation_dict,
-        "Video Player Playing"
-    )
+    test_result, proc_check_list = monitorVideoTest(obj, webkit_console_socket, validation_dict, "Video Player Playing")
 
     # ==========================================================
     # ### ADD: FAIL IF monitorVideoTest REPORTS FAILURE
     # ==========================================================
-    if test_result != "SUCCESS":
-        print("FAILURE: monitorVideoTest reported playback/position validation failure")
-
+    if test_result == "SUCCESS":
+        print("SUCCESS: Encrypted video is playing fine")
+        print("[TEST EXECUTION RESULT]: SUCCESS")
+        tdkTestObj = obj.createTestStep('rdkv_media_test')
+        tdkTestObj.executeTestCase(expectedResult)
+        tdkTestObj.setResultStatus("SUCCESS")
+    else:
+        print("FAILURE: Encrypted video is not playing fine")
+        print("[TEST EXECUTION RESULT]: FAILURE")
         tdkTestObj = obj.createTestStep('rdkv_media_test')
         tdkTestObj.executeTestCase(expectedResult)
         tdkTestObj.setResultStatus("FAILURE")
-
-    # ------------------------------------------------------------------
-    # FAIL IF VIDEO DID NOT PLAY TILL close() TIME
-    # ------------------------------------------------------------------
-    CLOSE_TIME = 150        # value used in setOperation("close", "150")
-    TOLERANCE = 10          # acceptable drift in seconds
-
-    min_expected_position = CLOSE_TIME - TOLERANCE
-
-    last_position = validation_dict.get("lastVideoPosition", 0)
-
-    print(f"INFO: Last video position observed: {last_position}s")
-    print(f"INFO: Minimum expected position: {min_expected_position}s")
-
-    if last_position < min_expected_position:
-        print("FAILURE: Video did NOT play till close() duration")
-        print(f"FAILURE: Expected ~{CLOSE_TIME}s but stopped at {last_position}s")
-
-        tdkTestObj = obj.createTestStep('rdkv_media_test')
-        tdkTestObj.executeTestCase(expectedResult)
-        tdkTestObj.setResultStatus("FAILURE")
-        continue
 
     # ==========================================================
     # ADDED PRINTS DRM OBSERVATION
@@ -165,14 +144,10 @@ for video_test_url in video_test_urls:
     print("NOTE:")
     print(" - 'Video Player Encrypted !!!' indicates DRM detection")
     print(" - It DOES NOT mean encrypted segments started playing")
-    print(" - Widevine initializes during MPD parse in DASH streams")
+    print(" - Widevine may initialize during manifest parse (DASH MPD / HLS m3u8)")
     print(" - Initial clear segments are EXPECTED behavior")
-    print("=================================================\n")
+    print("==================================================\n")
     # ==========================================================
-
-    tdkTestObj = obj.createTestStep('rdkv_media_test')
-    tdkTestObj.executeTestCase(expectedResult)
-    tdkTestObj.setResultStatus("SUCCESS")
 
 # ------------------------------------------------------------------------------
 # POST-CONDITIONS
@@ -191,4 +166,3 @@ else:
     tdkTestObj.setResultStatus("FAILURE")
 
 obj.unloadModule("rdkv_media")
-

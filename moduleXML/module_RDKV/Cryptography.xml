@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>198fe419-a538-4da3-a4be-8b1be11cb9b8</moduleId>
+        <!-- Module name -->
+        <moduleName>Cryptography</moduleName>
+        <!-- Category of the module -->
+        <category>RDKV_RDKSERVICE</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>5</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>E2E</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="f04286a3-1f8e-467d-a485-88bbe3bb8b70" name="execute_Cmnd_In_DUT">
+                <parameters>
+                    <parameter id="45efc4c5-bec3-4cd7-b8f9-74c32a08ecc1" parameterName="sshMethod" parameterType="STRING" range="a-z"/>
+                    <parameter id="002c0ee1-ccf4-414a-b5d0-3f2937592378" parameterName="command" parameterType="STRING" range="a-z"/>
+                    <parameter id="16493e10-5537-4591-bca7-f173b0eb616f" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>7e263bf0-9b4a-4ad4-b7e5-300d957f1b84</id>
+                <name>execute_Cmnd_In_DUT</name>
+                <funName>execute_Cmnd_In_DUT</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>905491e6-92cb-4e31-afeb-bbab109d57be</id>
+                        <parameterName>command</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>dacb384c-b160-4402-ae10-b7957a68669f</id>
+                        <parameterName>sshMethod</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f975cdeb-8982-45c8-9482-4c504cbf6e5d</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>
