@@ -116,7 +116,7 @@
 	    </testStep>
         </testCase>
 
-        <testCase testCaseId="WH_09" testCaseName="WareHouse_Internal_Reset" desc="Resets the STB to the warehouse state">
+        <testCase testCaseId="WH_09" testCaseName="WareHouse_Internal_Reset" desc="Invokes the internal reset script, which reboots the Warehouse service">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="WAREHOUSE_NA_TESTS" useMethodTag="warehouse_na_tests" arguments="reset"/>
 	    <testStep testStepId="1" name="Internal_Reset" method="Internal_Reset">
                 <params>

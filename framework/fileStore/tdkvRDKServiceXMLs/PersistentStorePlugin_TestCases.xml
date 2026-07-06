@@ -217,7 +217,7 @@
         </testCase>
 
 	<!-- Test case 09 -->
-        <testCase testCaseId="PS_09" testCaseName="PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Key_Operations"  desc="Verify persistent store handles empty key, set and get operatins across namespaces">
+        <testCase testCaseId="PS_09" testCaseName="PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Key_Operations"  desc="Verify persistent store handles empty key, set and get operations across namespaces">
             <testCaseInfo testCaseType="direct" />
 	    <testStep testStepId="1" name="Set_Value" method="Set_Value">
                   <params>
@@ -237,7 +237,7 @@
         </testCase>
 
 	<!-- Test case 10 -->
-        <testCase testCaseId="PS_10" testCaseName="PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Namespce_Operations"  desc="Verify persistent store handles empty namespace, set and get operatins">
+        <testCase testCaseId="PS_10" testCaseName="PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Namespce_Operations"  desc="Verify persistent store handles empty namespace, set and get operations">
             <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Set_Value" method="Set_Value">
                   <params>

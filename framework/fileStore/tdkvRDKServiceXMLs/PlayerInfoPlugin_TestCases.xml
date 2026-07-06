@@ -97,7 +97,7 @@
               <resultGeneration useMethodTag="playerinfo_check_results" expectedValues="Unknown,Mono,Stereo,Surround,Passthru,SoundmodeAuto"/>
             </testStep>
         </testCase>
-        <testCase testCaseId="PI_06" testCaseName= "Enable_Disable_Audio_Atmos_Output" desc="Check whether audio atmos output is possile to enable and disable">
+        <testCase testCaseId="PI_06" testCaseName= "Enable_Disable_Audio_Atmos_Output" desc="Check whether audio atmos output is possible to enable and disable">
             <testCaseInfo testCaseType="loop" />
             <testStep testStepId="1" name="Enable_Disable_Audio_Atmos_Output" testStepType="loop" >
               <subtestStep subtestStepId="1" name="Enable_Disable_Audio_Atmos_Output" method="Set_Atmos_Output" >
