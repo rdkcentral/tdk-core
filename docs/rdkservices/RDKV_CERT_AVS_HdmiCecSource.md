@@ -4,10 +4,8 @@ RDKV_CERT_AVS_HdmiCecSource
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [HdmiCecSource_Verify_Get_Device_List](#hdmicecsource_verify_get_device_list)
    - [HdmiCecSource_Check_Empty_Device_List](#hdmicecsource_check_empty_device_list)
    - [HdmiCecSource_Enable_Disable_HdmiCec_Driver](#hdmicecsource_enable_disable_hdmicec_driver)
@@ -46,39 +44,13 @@ RDKV_CERT_AVS_HdmiCecSource
    - [HdmiCecSource_Verify_Send_Key_Press_Event_No_Param](#hdmicecsource_verify_send_key_press_event_no_param)
    - [Set_Invalid_OSD_Name](#set_invalid_osd_name)
    - [Set_Empty_VendorID](#set_empty_vendorid)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **HdmiCecSource** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.HdmiCecSource` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `getActiveSourceStatus` | Gets the active source status of the device |
-| `getDeviceList` | Gets the list of CEC enabled devices connected and system information for each device. The information includes logicalAddress,OSD name and vendor ID |
-| `getEnabled` | Returns if CEC is enabled |
-| `getOSDName` | Gets the OSD name used by host device |
-| `getOTPEnabled` | Returns HDMI-CEC OTP option enabled status |
-| `getVendorId` | Gets the current vendor ID used by host device |
-| `performOTPAction` | Turns on the TV and takes back the input to the device |
-| `sendKeyPressEvent` | Sends the CEC User Control Pressed and User Control Release message when TV remote key is pressed |
-| `sendStandbyMessage` | Sends a CEC Standby message to the logical address of the device |
-| `setEnabled` | Enables or disables CEC |
-| `setOSDName` | Sets the OSD name of the application |
-| `setOTPEnabled` | Enables or disables HDMI-CEC OTP option |
-| `setVendorId` | Sets the vendor ID of the application |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onActiveSourceStatusUpdated` | Triggered when the device active source status changes |
-| `onDeviceInfoUpdated` | Triggered when device system information is updated (vendorID, osdName) |
-| `standbyMessageReceived` | Triggered when the source device changes status to STANDBY |
 
 ## Plugin Pre-conditions
 

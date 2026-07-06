@@ -4,9 +4,8 @@ RDKV_CERT_AVS_Message_Control
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [MessageControl_Application_Toggle_All_Tracelevels](#messagecontrol_application_toggle_all_tracelevels)
    - [MessageControl_SysLog_Toggle_All_Tracelevels](#messagecontrol_syslog_toggle_all_tracelevels)
    - [MessageControl_LocationSync_Plugin_Toggle_All_Tracelevels](#messagecontrol_locationsync_plugin_toggle_all_tracelevels)
@@ -24,20 +23,13 @@ RDKV_CERT_AVS_Message_Control
    - [MessageControl_WebKitBrowser_Plugin_Toggle_All_Tracelevels](#messagecontrol_webkitbrowser_plugin_toggle_all_tracelevels)
    - [MessageControl_MessageControl_Plugin_Toggle_All_Tracelevels](#messagecontrol_messagecontrol_plugin_toggle_all_tracelevels)
    - [MessageControl_ActivateDeactivate_Event_Test](#messagecontrol_activatedeactivate_event_test)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **MessageControl** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `MessageControl` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `controls` | Provides access to retrieve a list of current message controls |
-| `enable` | Enables/disables a message control |
 
 ## Plugin Pre-conditions
 
@@ -55,6 +47,11 @@ accessible via JSON-RPC under the callsign `MessageControl` (version 1)
 | --- | --- | --- | --- |
 | 1 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Not Applicable Plugins | `MESSAGECONTROL_NOT_APPLICABLE_PLUGINS` must be configured as required for the test setup | The `MESSAGECONTROL_NOT_APPLICABLE_PLUGINS` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="messagecontrol_application_toggle_all_tracelevels"></a>

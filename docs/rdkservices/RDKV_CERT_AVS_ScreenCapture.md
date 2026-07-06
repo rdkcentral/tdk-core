@@ -4,34 +4,20 @@ RDKV_CERT_AVS_ScreenCapture
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [ScreenCapture_Check_Upload_Screen_Invalid_Url](#screencapture_check_upload_screen_invalid_url)
    - [ScreenCapture_Upload_Screen](#screencapture_upload_screen)
    - [ScreenCapture_Check_Upload_Complete_Event](#screencapture_check_upload_complete_event)
    - [ScreenCapture_Check_Upload_Complete_Event_Invalid_Url](#screencapture_check_upload_complete_event_invalid_url)
    - [ScreenCapture_Check_CallGUID](#screencapture_check_callguid)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **ScreenCapture** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.ScreenCapture` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `uploadScreenCapture` | Takes screenshot and uploads it to the specified url |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `uploadComplete` | Fired after an upload of screen capture |
 
 ## Plugin Pre-conditions
 
@@ -49,6 +35,12 @@ accessible via JSON-RPC under the callsign `org.rdk.ScreenCapture` (version 1)
 | --- | --- | --- | --- |
 | 1 | Subscribe to the uploadComplete event | Register a WebSocket event listener for `uploadComplete` to receive `uploadComplete` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ScreenCapture.1.register", "params": {"event": "uploadComplete", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure SC Invalid Upload URL | `SC_INVALID_UPLOAD_URL` must be set to the invalid image upload URL used for negative test scenarios (unreachable server) | The `SC_INVALID_UPLOAD_URL` value should be correctly configured in the device-specific config file |
+| 2 | Configure SC Upload URL | `SC_UPLOAD_URL` must be set to the CGI server URL for uploading the captured image PNG data | The `SC_UPLOAD_URL` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="screencapture_check_upload_screen_invalid_url"></a>

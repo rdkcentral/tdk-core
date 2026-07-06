@@ -4,9 +4,8 @@ RDKV_CERT_AVS_Device_Info
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [DeviceInfo_Get_All_System_Info](#deviceinfo_get_all_system_info)
    - [DeviceInfo_Get_All_Network_Interfaces](#deviceinfo_get_all_network_interfaces)
    - [DeviceInfo_Get_SocketInfo_Negative_Case](#deviceinfo_get_socketinfo_negative_case)
@@ -32,34 +31,13 @@ RDKV_CERT_AVS_Device_Info
    - [DeviceInfo_Check_SystemInfo_API_Date_Matches_DUT_Date](#deviceinfo_check_systeminfo_api_date_matches_dut_date)
    - [DeviceInfo_Get_Device_SocName](#deviceinfo_get_device_socname)
    - [DeviceInfo_Get_Device_Manufacturer](#deviceinfo_get_device_manufacturer)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **DeviceInfo** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `addresses` | Network interface addresses |
-| `defaultresolution` | Default resolution on the selected video display port |
-| `devicetype` | Provides access to the device type |
-| `firmwareversion` | Provides access to the versions maintained in version.txt |
-| `hostedid` | Provides access to the EDID of the host |
-| `make` | Provides access to the device manufacturer |
-| `modelid` | Provides access to the device model number or SKU |
-| `modelname` | Provides access to the friendly device model name |
-| `serialnumber` | Provides access to the serial number set by manufacturer |
-| `socketinfo` | Socket information |
-| `socname` | Provides access to the SOC Name |
-| `supportedaudioports` | Provides access to the audio ports supported on the device |
-| `supportedhdcp` | Supported HDCP version on the selected video display port |
-| `supportedresolutions` | Supported resolutions on the selected video display port |
-| `supportedvideodisplays` | Provides access to the video ports supported on the device |
-| `systeminfo` | System general information |
 
 ## Plugin Pre-conditions
 
@@ -101,6 +79,15 @@ accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
 | --- | --- | --- | --- |
 | 1 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 6: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure ESN Support | `DEVICEINFO_ESN_SUPPORT` must be set to 'yes' if ESN support is available on the DUT, otherwise 'no' | The `DEVICEINFO_ESN_SUPPORT` value should be correctly configured in the device-specific config file |
+| 2 | Configure Supported HDCP Version | `DEVICEINFO_SUPPORTED_HDCP_VERSION` must be set to the HDCP version supported by the DUT | The `DEVICEINFO_SUPPORTED_HDCP_VERSION` value should be correctly configured in the device-specific config file |
+| 3 | Configure Device Details File Path | `DEVICEINFO_DEVICE_DETAILS_FILE_PATH` must be set to the path to the device properties file on the DUT | The `DEVICEINFO_DEVICE_DETAILS_FILE_PATH` value should be correctly configured in the device-specific config file |
+| 4 | Configure Device Type | `DEVICEINFO_DEVICE_TYPE` must be set to the type of the DUT | The `DEVICEINFO_DEVICE_TYPE` value should be correctly configured in the device-specific config file |
+| 5 | Configure NA Tests | `DEVICEINFO_NA_TESTS` must be set to the DeviceInfo test names to skip when not applicable on the DUT | The `DEVICEINFO_NA_TESTS` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="deviceinfo_get_all_system_info"></a>

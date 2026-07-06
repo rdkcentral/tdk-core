@@ -4,9 +4,8 @@ RDKV_CERT_AVS_LifecycleManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [Verify_AppReady_Valid_AppId](#verify_appready_valid_appid)
    - [Verify_AppReady_Empty_AppId](#verify_appready_empty_appid)
    - [Verify_AppReady_Numeric_AppId](#verify_appready_numeric_appid)
@@ -47,20 +46,13 @@ RDKV_CERT_AVS_LifecycleManager
    - [CloseApp_Valid_AppId_Special_Char_CloseReason](#closeapp_valid_appid_special_char_closereason)
    - [CloseApp_Valid_AppId_Boolean_CloseReason](#closeapp_valid_appid_boolean_closereason)
    - [CloseApp_Valid_AppId_Long_String_CloseReason](#closeapp_valid_appid_long_string_closereason)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **LifecycleManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.LifecycleManager` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `appReady` | Response API call to appInitializing API |
-| `closeApp` | Close the app |
 
 ## Plugin Pre-conditions
 
@@ -114,6 +106,16 @@ accessible via JSON-RPC under the callsign `org.rdk.LifecycleManager` (version 1
 | 4 | Install | Install on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 5 | Verify Installed Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
 
+### Plugin Pre-condition 7: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Packagemanager Application Name | `PACKAGEMANAGER_APPLICATION_NAME` must be set to the application/package name to be installed | The `PACKAGEMANAGER_APPLICATION_NAME` value should be correctly configured in the device-specific config file |
+| 2 | Configure Packagemanager Application Version | `PACKAGEMANAGER_APPLICATION_VERSION` must be set to the application version to be installed | The `PACKAGEMANAGER_APPLICATION_VERSION` value should be correctly configured in the device-specific config file |
+| 3 | Configure Packagemanager Application Hosted URL | `PACKAGEMANAGER_APPLICATION_HOSTEDURL` must be set to the hosted URL of the primary application/package | The `PACKAGEMANAGER_APPLICATION_HOSTEDURL` value should be correctly configured in the device-specific config file |
+| 4 | Configure Packagemanager Additionalmetadata Name | `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` must be set to the additional metadata key associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` value should be correctly configured in the device-specific config file |
+| 5 | Configure Packagemanager Additionalmetadata Value | `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` must be set to the additional metadata value associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` value should be correctly configured in the device-specific config file |
+| 6 | Configure Packagemanager Application MD5 Checksum Value | `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` must be set to the expected MD5 checksum of the application package for download integrity verification | The `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="verify_appready_valid_appid"></a>

@@ -4,10 +4,8 @@ RDKV_CERT_AVS_PersistentStore
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [PersistentStore_Set_and_Get_Value](#persistentstore_set_and_get_value)
    - [PersistentStore_Delete_Key](#persistentstore_delete_key)
    - [PersistentStore_Delete_Namespace](#persistentstore_delete_namespace)
@@ -20,34 +18,13 @@ RDKV_CERT_AVS_PersistentStore
    - [PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Namespce_Operations](#persistentstore_verify_setvalue_and_getvalue_api_with_empty_namespce_operations)
    - [PersistentStore_GetStorage_NamespaceLimit_For_DeletedNamespace](#persistentstore_getstorage_namespacelimit_for_deletednamespace)
    - [PersistentStore_ActivateDeactivate_Event_Test](#persistentstore_activatedeactivate_event_test)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **PersistentStore** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.PersistentStore` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `deleteKey` | Deletes the key for given namespace |
-| `deleteNamespace` | Deletes the given Namespace |
-| `flushCache` | flushes the database cache |
-| `getKeys` | Gets the keys list for given namespace |
-| `getNamespaceStorageLimit` | Returns the storage limit for a given namespace |
-| `getNamespaces` | Gets the available namespaces |
-| `getStorageSize` | Returns the size occupied by each namespace |
-| `getValue` | Gets the value of the key for given namespace |
-| `setNamespaceStorageLimit` | Sets the storage limit for a given namespace |
-| `setValue` | Sets the value of the key for given the namespace |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onValueChanged` | Triggered whenever any of the values stored are changed using setValue |
 
 ## Plugin Pre-conditions
 

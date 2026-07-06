@@ -4,10 +4,8 @@ RDKV_CERT_AVS_AppManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [AppManager_Check_Response_Get_Installed_Apps](#appmanager_check_response_get_installed_apps)
    - [AppManager_Verify_IsInstalled_Valid_AppId](#appmanager_verify_isinstalled_valid_appid)
    - [AppManager_Verify_IsInstalled_With_Invalid_AppId](#appmanager_verify_isinstalled_with_invalid_appid)
@@ -129,43 +127,13 @@ RDKV_CERT_AVS_AppManager
    - [AppManager_Check_Get_Loaded_Apps_After_Close](#appmanager_check_get_loaded_apps_after_close)
    - [AppManager_Check_Get_Loaded_Apps_After_Kill](#appmanager_check_get_loaded_apps_after_kill)
    - [AppManager_Check_Get_Loaded_Apps_After_Terminate](#appmanager_check_get_loaded_apps_after_terminate)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **AppManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `activateSystemApp` | Activates the device application |
-| `clearAllAppData` | Clears all application data |
-| `clearAppData` | Clears the data of a specific application |
-| `closeApp` | Close the app |
-| `deactivateSystemApp` | Deactivates the device application |
-| `getAppProperty` | Retrieve a specific property of an application |
-| `getInstalledApps` | Function fetches the details of all applications currently installed |
-| `getLoadedApps` | Retrieves a list of applications currently loaded on the device |
-| `getMaxRunningApps` | Retrieves the maximum number of running applications allowed |
-| `hibernateSystemApp` | Hibernates the device application |
-| `isInstalled` | Check if an application is installed |
-| `killApp` | Terminates the specified application |
-| `launchApp` | Launches an application |
-| `preloadApp` | Preloads an application instance. |
-| `sendIntent` | Sends an intent to a specific application |
-| `setAppProperty` | Sets a property for the application instance |
-| `startSystemApp` | Starts the device application |
-| `stopSystemApp` | Stops the device application |
-| `terminateApp` | Terminates an application |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onAppLifecycleStateChanged` | Triggered whenever there is a change in the lifecycle state of a running application |
 
 ## Plugin Pre-conditions
 
@@ -217,6 +185,17 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 | --- | --- | --- | --- |
 | 1 | Subscribe to the onAppLifecycleStateChanged event | Register a WebSocket event listener for `onAppLifecycleStateChanged` to receive `onAppLifecycleStateChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.register", "params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 7: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Packagemanager Application Name | `PACKAGEMANAGER_APPLICATION_NAME` must be set to the application/package name to be installed | The `PACKAGEMANAGER_APPLICATION_NAME` value should be correctly configured in the device-specific config file |
+| 2 | Configure Packagemanager Application Version | `PACKAGEMANAGER_APPLICATION_VERSION` must be set to the application version to be installed | The `PACKAGEMANAGER_APPLICATION_VERSION` value should be correctly configured in the device-specific config file |
+| 3 | Configure Packagemanager Application Hosted URL | `PACKAGEMANAGER_APPLICATION_HOSTEDURL` must be set to the hosted URL of the primary application/package | The `PACKAGEMANAGER_APPLICATION_HOSTEDURL` value should be correctly configured in the device-specific config file |
+| 4 | Configure Packagemanager Additionalmetadata Name | `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` must be set to the additional metadata key associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` value should be correctly configured in the device-specific config file |
+| 5 | Configure Packagemanager Additionalmetadata Value | `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` must be set to the additional metadata value associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` value should be correctly configured in the device-specific config file |
+| 6 | Configure Packagemanager Application MD5 Checksum Value | `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` must be set to the expected MD5 checksum of the application package for download integrity verification | The `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
+| 7 | Configure Packagemanager System Application Name | `PACKAGEMANAGER_SYSTEM_APPLICATION_NAME` must be set to the name of the pre-installed system application used for validation | The `PACKAGEMANAGER_SYSTEM_APPLICATION_NAME` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="appmanager_check_response_get_installed_apps"></a>

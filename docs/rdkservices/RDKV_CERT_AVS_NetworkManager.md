@@ -4,10 +4,8 @@ RDKV_CERT_AVS_NetworkManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [NetworkManager_Get_Device_Interfaces](#networkmanager_get_device_interfaces)
    - [NetworkManager_Get_Primary/Default_Interface](#networkmanager_get_primary-default_interface)
    - [NetworkManager_Validate_Public_IPv4_IP](#networkmanager_validate_public_ipv4_ip)
@@ -97,55 +95,13 @@ RDKV_CERT_AVS_NetworkManager
    - [NetworkManager_Check_Internet_IPv6_Connectivity](#networkmanager_check_internet_ipv6_connectivity)
    - [NetworkManager_Get_IPSettings_IPv6](#networkmanager_get_ipsettings_ipv6)
    - [NetworkManager_Check_Primary_Interface_After_LightSleep](#networkmanager_check_primary_interface_after_lightsleep)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **NetworkManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.NetworkManager` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `AddToKnownSSIDs` | Saves the SSID, passphrase, and security mode for upcoming and future sessions |
-| `GetAvailableInterfaces` | Get device supported list of available interface including their state |
-| `GetConnectedSSID` | Returns the connected SSID information |
-| `GetConnectivityTestEndpoints` | Gets currently used test endpoints |
-| `GetIPSettings` | Gets the IP setting for the given interface |
-| `GetInterfaceState` | Gets the current Status of the specified interface |
-| `GetKnownSSIDs` | Gets list of saved SSIDs. This method returns all the SSIDs that are saved as array |
-| `GetLogLevel` | Returns the currently set logging level |
-| `GetPrimaryInterface` | Gets the primary/default network interface for the device |
-| `GetPublicIP` | Gets the public IP Address of the device |
-| `GetStunEndpoint` | Get the STUN endpoint that is used to identify public IP of the device |
-| `GetSupportedSecurityModes` | Returns the wifi security modes that the device supports |
-| `GetWifiState` | Returns the current Wifi State |
-| `IsConnectedToInternet` | Seeks whether the device has internet connectivity. This API might take up to 3s to validate internet connectivity |
-| `Ping` | Pings the specified endpoint with the specified number of packets |
-| `RemoveKnownSSID` | Remove given SSID from saved SSIDs list |
-| `SetConnectivityTestEndpoints` | sets the list of endpoints |
-| `SetIPSettings` | Sets the IP settings for the given interface |
-| `SetInterfaceState` | Enable or disable the specified interface |
-| `SetLogLevel` | Sets the logging level |
-| `SetPrimaryInterface` | Sets the primary/default interface for the device |
-| `SetStunEndpoint` | Set the STUN endpoint to be used to identify public IP of the device |
-| `StartConnectivityMonitoring` | Enable a continuous monitoring of internet connectivity with heart beat interval thats given |
-| `StartWiFiScan` | Initiates WiFi scanning |
-| `StopConnectivityMonitoring` | Stops the connectivity monitoring |
-| `StopWiFiScan` | Stops WiFi scanning |
-| `Trace` | Traces the specified endpoint with the specified number of packets using traceroute |
-| `WiFiConnect` | Initiates request to connect to the specified SSID with the given passphrase |
-| `WiFiDisconnect` | Disconnects from the currently connected SSID |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onAvailableSSIDs` | Triggered when scan completes or when scan cancelled |
-| `onInterfaceStateChange` | Triggered when an interface state is changed |
-| `onWiFiStateChange` | Triggered when WIFI connection state get changed |
 
 ## Plugin Pre-conditions
 
@@ -166,6 +122,38 @@ accessible via JSON-RPC under the callsign `org.rdk.NetworkManager` (version 1)
 | 3 | Subscribe to the onWiFiStateChange event | Register a WebSocket event listener for `onWiFiStateChange` to receive `onWiFiStateChange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.register", "params": {"event": "onWiFiStateChange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 4 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Custom Timeout For Ping And Trace | `CUSTOM_TIMEOUT_FOR_PING_AND_TRACE` must be set to the custom timeout to ping or trace the particular endpoint | The `CUSTOM_TIMEOUT_FOR_PING_AND_TRACE` value should be correctly configured in the device-specific config file |
+| 2 | Configure Connectivity Test Endpoints | `CONNECTIVITY_TEST_ENDPOINTS` must be configured with a maximum of 5 endpoints | The `CONNECTIVITY_TEST_ENDPOINTS` value should be correctly configured in the device-specific config file |
+| 3 | Configure Wifi Security Mode | `WIFI_SECURITY_MODE` must be set to the security mode used for 2.4GHZ connecting | The `WIFI_SECURITY_MODE` value should be correctly configured in the device-specific config file |
+| 4 | Configure Wifi Security Mode 5ghz | `WIFI_SECURITY_MODE_5GHZ` must be set to the security mode used for 5GHZ connecting | The `WIFI_SECURITY_MODE_5GHZ` value should be correctly configured in the device-specific config file |
+| 5 | Configure Wifi Invalid Passphrase | `WIFI_INVALID_PASSPHRASE` must be set to the invalid passphrase for negative test case | The `WIFI_INVALID_PASSPHRASE` value should be correctly configured in the device-specific config file |
+| 6 | Configure Wifi Invalid SSID Name | `WIFI_INVALID_SSID_NAME` must be set to the invalid SSID name for negative test case | The `WIFI_INVALID_SSID_NAME` value should be correctly configured in the device-specific config file |
+| 7 | Configure Enable Disable Interfacename | `NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME` must be set to the name of the interface to enable or disable Example : eth0 or wlan0 | The `NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME` value should be correctly configured in the device-specific config file |
+| 8 | Configure Interface Details | `NETWORKMANAGER_INTERFACE_DETAILS` must be set to the name of the current interface Example : eth0 or wlan0 | The `NETWORKMANAGER_INTERFACE_DETAILS` value should be correctly configured in the device-specific config file |
+| 9 | Configure Ethernet Cableconnected Status | `NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS` must be set to 'yes' if the device is connected to an ethernet cable, otherwise 'no' | The `NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS` value should be correctly configured in the device-specific config file |
+| 10 | Configure Ipv6 Support | `NETWORKMANAGER_IPV6_SUPPORT` must be set to 'yes' if IPv6 support is available in the environment otherwise set to 'no' | The `NETWORKMANAGER_IPV6_SUPPORT` value should be correctly configured in the device-specific config file |
+| 11 | Configure Max Connectivity Test Endpoints | `NETWORKMANAGER_MAX_CONNECTIVITY_TEST_ENDPOINTS` must be set to the endpoints value required for the test | The `NETWORKMANAGER_MAX_CONNECTIVITY_TEST_ENDPOINTS` value should be correctly configured in the device-specific config file |
+| 12 | Configure Invalid Endpoint | `NETWORKMANAGER_INVALID_ENDPOINT` must be set to the endpoint value required for the test | The `NETWORKMANAGER_INVALID_ENDPOINT` value should be correctly configured in the device-specific config file |
+| 13 | Configure Invalid Port | `NETWORKMANAGER_INVALID_PORT` must be set to the port value required for the test | The `NETWORKMANAGER_INVALID_PORT` value should be correctly configured in the device-specific config file |
+| 14 | Configure Test Ipaddress | `NETWORKMANAGER_TEST_IPADDRESS` must be set to the endpoint value required for the test | The `NETWORKMANAGER_TEST_IPADDRESS` value should be correctly configured in the device-specific config file |
+| 15 | Configure Test Port | `NETWORKMANAGER_TEST_PORT` must be set to the port value required for the test | The `NETWORKMANAGER_TEST_PORT` value should be correctly configured in the device-specific config file |
+| 16 | Configure Test Interface | `NETWORKMANAGER_TEST_INTERFACE` must be set to the interface value required for the test | The `NETWORKMANAGER_TEST_INTERFACE` value should be correctly configured in the device-specific config file |
+| 17 | Configure Test Ipversion | `NETWORKMANAGER_TEST_IPVERSION` must be set to the IP version value required for the test | The `NETWORKMANAGER_TEST_IPVERSION` value should be correctly configured in the device-specific config file |
+| 18 | Configure Test Autoconfig | `NETWORKMANAGER_TEST_AUTOCONFIG` must be set to the auto-configuration value required for the test | The `NETWORKMANAGER_TEST_AUTOCONFIG` value should be correctly configured in the device-specific config file |
+| 19 | Configure Test Prefix | `NETWORKMANAGER_TEST_PREFIX` must be set to the prefix value required for the test | The `NETWORKMANAGER_TEST_PREFIX` value should be correctly configured in the device-specific config file |
+| 20 | Configure Test Gateway | `NETWORKMANAGER_TEST_GATEWAY` must be set to the gateway value required for the test | The `NETWORKMANAGER_TEST_GATEWAY` value should be correctly configured in the device-specific config file |
+| 21 | Configure Test Primary DNS | `NETWORKMANAGER_TEST_PRIMARY_DNS` must be set to the primary DNS value required for the test | The `NETWORKMANAGER_TEST_PRIMARY_DNS` value should be correctly configured in the device-specific config file |
+| 22 | Configure Test Secondary DNS | `NETWORKMANAGER_TEST_SECONDARY_DNS` must be set to the secondary DNS value required for the test | The `NETWORKMANAGER_TEST_SECONDARY_DNS` value should be correctly configured in the device-specific config file |
+| 23 | Configure Ping IP | `PING_IP` must be set to the IP address which is accessible from Device under test | The `PING_IP` value should be correctly configured in the device-specific config file |
+| 24 | Configure Trace IP | `TRACE_IP` must be set to the endpoint value required for the test | The `TRACE_IP` value should be correctly configured in the device-specific config file |
+| 25 | Configure Wifi SSID Name | `WIFI_SSID_NAME` must be set to the wifi 2.4GHZ SSID of the End Point | The `WIFI_SSID_NAME` value should be correctly configured in the device-specific config file |
+| 26 | Configure Wifi Passphrase | `WIFI_PASSPHRASE` must be set to the passphrase of the 2.4GHZ SSID | The `WIFI_PASSPHRASE` value should be correctly configured in the device-specific config file |
+| 27 | Configure Wifi SSID Name 5ghz | `WIFI_SSID_NAME_5GHZ` must be set to the wifi 5GHZ SSID of the End Point | The `WIFI_SSID_NAME_5GHZ` value should be correctly configured in the device-specific config file |
+| 28 | Configure Wifi Passphrase 5ghz | `WIFI_PASSPHRASE_5GHZ` must be set to the passphrase of the 5GHZ SSID | The `WIFI_PASSPHRASE_5GHZ` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="networkmanager_get_device_interfaces"></a>

@@ -4,10 +4,8 @@ RDKV_CERT_AVS_Warehouse
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [WareHouse_Get_STB_Device_Info](#warehouse_get_stb_device_info)
    - [WareHouse_Set_Front_Panel_State_None](#warehouse_set_front_panel_state_none)
    - [WareHouse_Set_Front_Panel_State_Download_In_Progress](#warehouse_set_front_panel_state_download_in_progress)
@@ -21,30 +19,13 @@ RDKV_CERT_AVS_Warehouse
    - [Warehouse_ActivateDeactivate_Event_Test](#warehouse_activatedeactivate_event_test)
    - [WareHouse_Set_Front_Panel_State_EmptyValue](#warehouse_set_front_panel_state_emptyvalue)
    - [Warehouse_ActivateDeactivate_All_Event_Test](#warehouse_activatedeactivate_all_event_test)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **Warehouse** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.Warehouse` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `getDeviceInfo` | Provides STB device information |
-| `internalReset` | Invokes the internal reset script, which reboots the WarehouseService |
-| `isClean` | Checks locations where customer data may be stored |
-| `lightReset` | Performs light reset |
-| `resetDevice` | Resets the STB to the warehouse state |
-| `setFrontPanelState` | Sets the discoverable status of the device |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `resetDone` | Notifies about the status of the warehouse reset operation |
 
 ## Plugin Pre-conditions
 
@@ -64,6 +45,11 @@ accessible via JSON-RPC under the callsign `org.rdk.Warehouse` (version 1)
 | 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 3 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure NA Tests | `WAREHOUSE_NA_TESTS` must be set to the warehouse test names to skip when not applicable on the DUT | The `WAREHOUSE_NA_TESTS` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="warehouse_get_stb_device_info"></a>

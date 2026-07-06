@@ -4,10 +4,8 @@ RDKV_CERT_AVS_Controller
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [Start_Discovery](#start_discovery)
    - [Get_Subsystems_Status](#get_subsystems_status)
    - [Get_Process_Info](#get_process_info)
@@ -34,38 +32,13 @@ RDKV_CERT_AVS_Controller
    - [Activate_Empty_callsign](#activate_empty_callsign)
    - [Deactivate_Invalid_callsign](#deactivate_invalid_callsign)
    - [Deactivate_empty_callsign](#deactivate_empty_callsign)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **Controller** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `Controller` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `activate` | Activates a plugin |
-| `configuration` | Provides access to the configuration object of a service |
-| `deactivate` | deactivates a plugin |
-| `delete` | Removes contents of a directory from the persistent storage |
-| `discoveryresults` | Gives discovery results |
-| `environment` | Gives value of an environment variable |
-| `links` | Gives information about active connections |
-| `processinfo` | Gives information about the framework process |
-| `startdiscovery` | Starts the network discovery |
-| `status` | Provides the information about plugins |
-| `storeconfig` | Saves the current configuration |
-| `subsystems` | Provides access to the status of the subsystems |
-| `unavailable` | Sets a plugin unavailable for interaction |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `all` | Signals each and every event in the system |
-| `statechange` | Signals a plugin state change |
 
 ## Plugin Pre-conditions
 
@@ -84,6 +57,14 @@ accessible via JSON-RPC under the callsign `Controller` (version 1)
 | 1 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 2 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Environment Variables | `CONTROLLER_ENVIRONMENT_VARIABLES` must be set to the environment variables defined in /lib/systemd/system/wpeframework.service file | The `CONTROLLER_ENVIRONMENT_VARIABLES` value should be correctly configured in the device-specific config file |
+| 2 | Configure Supported Features | `CONTROLLER_SUPPORTED_FEATURES` must be set to the supported features in device. If device supports NetworkDiscovery, add NetworkDiscovery | The `CONTROLLER_SUPPORTED_FEATURES` value should be correctly configured in the device-specific config file |
+| 3 | Configure File Delete Path | `CONTROLLER_FILE_DELETE_PATH` must be set to the persistent path for file deletion as configured in /etc/WPEFramework/config.json | The `CONTROLLER_FILE_DELETE_PATH` value should be correctly configured in the device-specific config file |
+| 4 | Configure WPE Processes List | `WPE_PROCESSES_LIST` must be set to the WPE processes to check the status | The `WPE_PROCESSES_LIST` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="start_discovery"></a>
@@ -515,7 +496,7 @@ Passes the invalid environment variable and validates the error code
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Environment Variable | Invoke environment on Controller for invalid<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.environment@invalid"}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` — the environment variable `"invalid"` does not exist on the system |
+| 1 | Get Environment Variable | Invoke environment on Controller for invalid<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.environment@invalid"}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` must be configured: the environment variable `"invalid"` does not exist on the system |
 
 ---
 
@@ -565,7 +546,7 @@ Give the empty path and validate the error message and code
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Delete Directory Contents | Invoke delete on Controller with path: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.delete", "params": {"path": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` — empty path is not a valid persistent storage path |
+| 1 | Delete Directory Contents | Invoke delete on Controller with path: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.delete", "params": {"path": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` must be configured: empty path is not a valid persistent storage path |
 
 ---
 
@@ -583,7 +564,7 @@ Check if able to get the error message when querying configuration for empty val
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Configuration | Invoke configuration on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.configuration"}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` — no plugin callsign specified in the request |
+| 1 | Get Configuration | Invoke configuration on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.configuration"}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` must be configured: no plugin callsign specified in the request |
 
 ---
 
@@ -616,7 +597,7 @@ To make deviceinfo plugin unavailable and validates the error message on activat
 | 3 | Set DeviceInfo Plugin Unavailable | Invoke unavailable on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unavailable", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the `DeviceInfo` plugin is marked as unavailable  |
 | 4 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is unavailable |
 | 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `deviceinfo` with state `"unavailable"` |
-| 6 | Activate DeviceInfo Plugin | Invoke activate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | API returns error `The service is in an illegal state!!!.` / `5` — plugin cannot be activated from unavailable state |
+| 6 | Activate DeviceInfo Plugin | Invoke activate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | API returns error `The service is in an illegal state!!!.` / `5` must be configured: plugin cannot be activated from unavailable state |
 | 7 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 8 | Check PluginActive Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 9 | Activate DeviceInfo Plugin | Invoke activate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
@@ -649,7 +630,7 @@ Validate error message by activating with invalid callsign
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Activate Plugin | Invoke activate on Controller with callsign: "invalid"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "invalid"}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` — callsign `"invalid"` is not a registered plugin |
+| 1 | Activate Plugin | Invoke activate on Controller with callsign: "invalid"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "invalid"}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` must be configured: callsign `"invalid"` is not a registered plugin |
 
 ---
 
@@ -667,7 +648,7 @@ Validate error message by activating with empty callsign
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Activate Plugin | Invoke activate on Controller with callsign: " "<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": " "}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` — empty callsign is not a registered plugin |
+| 1 | Activate Plugin | Invoke activate on Controller with callsign: " "<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": " "}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` must be configured: empty callsign is not a registered plugin |
 
 ---
 
@@ -685,7 +666,7 @@ Validate error message by deactivating with invalid callsign
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Deactivate Plugin | Invoke deactivate on Controller with callsign: "invalid"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "invalid"}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` — callsign `"invalid"` is not a registered plugin |
+| 1 | Deactivate Plugin | Invoke deactivate on Controller with callsign: "invalid"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "invalid"}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` must be configured: callsign `"invalid"` is not a registered plugin |
 
 ---
 
@@ -703,7 +684,7 @@ Validate error message by deactivating with empty callsign
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Deactivate Plugin | Invoke deactivate on Controller with callsign: " "<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": " "}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` — empty callsign is not a registered plugin |
+| 1 | Deactivate Plugin | Invoke deactivate on Controller with callsign: " "<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": " "}}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` must be configured: empty callsign is not a registered plugin |
 
 ## Plugin Post-conditions
 

@@ -4,10 +4,8 @@ RDKV_CERT_AVS_PackageManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [PackageManager_ListPackages_Functionality](#packagemanager_listpackages_functionality)
    - [PackageManager_Install_ValidParameters](#packagemanager_install_validparameters)
    - [PackageManager_Uninstall_ValidParameters](#packagemanager_uninstall_validparameters)
@@ -49,32 +47,13 @@ RDKV_CERT_AVS_PackageManager
    - [PackageManager_GetPackageState_ValidPackageId_InvalidVersion](#packagemanager_getpackagestate_validpackageid_invalidversion)
    - [PackageManager_GetPackageState_InvalidPackageId_ValidVersion](#packagemanager_getpackagestate_invalidpackageid_validversion)
    - [PackageManager_GetPackageState_NoParameters](#packagemanager_getpackagestate_noparameters)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **PackageManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.PackageManagerRDKEMS` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `config` | Retrieves configuration information for a installed application |
-| `getLockedInfo` | Retrieves lock information for packages |
-| `install` | Installs a package |
-| `listPackages` | Retrieves information about packages |
-| `lock` | Locks an application to prevent uninstallation |
-| `packageState` | Retrieves the current state of a package |
-| `uninstall` | Uninstalls a package |
-| `unlock` | Unlocks a package |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onAppInstallationStatus` | Emitted when the Installation status of a queued requested has changed, including if it's terminated either gracefully or via a crash |
 
 ## Plugin Pre-conditions
 
@@ -100,6 +79,16 @@ accessible via JSON-RPC under the callsign `org.rdk.PackageManagerRDKEMS` (versi
 | --- | --- | --- | --- |
 | 1 | Subscribe to the onAppInstallationStatus event | Register a WebSocket event listener for `onAppInstallationStatus` to receive `onAppInstallationStatus` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.register", "params": {"event": "onAppInstallationStatus", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 4: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Application Name | `PACKAGEMANAGER_APPLICATION_NAME` must be set to the application/package name to be installed | The `PACKAGEMANAGER_APPLICATION_NAME` value should be correctly configured in the device-specific config file |
+| 2 | Configure Application Version | `PACKAGEMANAGER_APPLICATION_VERSION` must be set to the application version to be installed | The `PACKAGEMANAGER_APPLICATION_VERSION` value should be correctly configured in the device-specific config file |
+| 3 | Configure Application Hosted URL | `PACKAGEMANAGER_APPLICATION_HOSTEDURL` must be set to the hosted URL of the primary application/package | The `PACKAGEMANAGER_APPLICATION_HOSTEDURL` value should be correctly configured in the device-specific config file |
+| 4 | Configure Additionalmetadata Name | `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` must be set to the additional metadata key associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` value should be correctly configured in the device-specific config file |
+| 5 | Configure Additionalmetadata Value | `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` must be set to the additional metadata value associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` value should be correctly configured in the device-specific config file |
+| 6 | Configure Application MD5 Checksum Value | `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` must be set to the expected MD5 checksum of the application package for download integrity verification | The `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="packagemanager_listpackages_functionality"></a>

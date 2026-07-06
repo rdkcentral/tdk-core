@@ -4,10 +4,8 @@ RDKV_CERT_AVS_SystemAudioPlayer
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [SAP_Open_Player_PCM_HTTPSRC_System](#sap_open_player_pcm_httpsrc_system)
    - [SAP_Open_Player_MP3_HTTPSRC_System](#sap_open_player_mp3_httpsrc_system)
    - [SAP_Open_Player_WAV_HTTPSRC_System](#sap_open_player_wav_httpsrc_system)
@@ -63,35 +61,13 @@ RDKV_CERT_AVS_SystemAudioPlayer
    - [SAP_Mixer_Levels_Max_Boundary_Values](#sap_mixer_levels_max_boundary_values)
    - [SAP_Dual_Player_System_And_App_Mode](#sap_dual_player_system_and_app_mode)
    - [SAP_Play_Stop_Replay_Scenario](#sap_play_stop_replay_scenario)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **SystemAudioPlayer** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.SystemAudioPlayer` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `close` | Closes the player for given session id |
-| `config` | Configures playback for PCM sources |
-| `getPlayerSessionId` | Gets session id from URL |
-| `isspeaking` | Checks whether playback is in progress |
-| `open` | Opens a player instance and assigns a unique ID |
-| `pause` | Pauses playback on the specified player |
-| `play` | Plays audio on the specified player |
-| `resume` | Resumes playback on the specified player |
-| `setMixerLevels` | Sets primary and player volume levels |
-| `setSmartVolControl` | Sets smart volume control parameters |
-| `stop` | Stops audio playback |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onsapevents` | Triggered during playback for each player |
 
 ## Plugin Pre-conditions
 
@@ -108,6 +84,13 @@ accessible via JSON-RPC under the callsign `org.rdk.SystemAudioPlayer` (version 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Subscribe to the onsapevents event | Register a WebSocket event listener for `onsapevents` to receive `onsapevents` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.register", "params": {"event": "onsapevents", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure WAV Audio File URL | `SAP_AUDIO_URL_HTTPSRC_WAV` must be set to the HTTPS hosted URL of the WAV audio file for System Audio Player playback testing | The `SAP_AUDIO_URL_HTTPSRC_WAV` value should be correctly configured in the device-specific config file |
+| 2 | Configure MP3 Audio File URL | `SAP_AUDIO_URL_HTTPSRC_MP3` must be set to the HTTPS hosted URL of the MP3 audio file for System Audio Player playback testing | The `SAP_AUDIO_URL_HTTPSRC_MP3` value should be correctly configured in the device-specific config file |
 
 ## Test Cases
 

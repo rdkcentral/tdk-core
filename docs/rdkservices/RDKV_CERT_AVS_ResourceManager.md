@@ -4,9 +4,8 @@ RDKV_CERT_AVS_ResourceManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [ResourceManager_Set_AV_Blocked_Valid_AppId_True](#resourcemanager_set_av_blocked_valid_appid_true)
    - [ResourceManager_Set_AV_Blocked_Valid_AppId_False](#resourcemanager_set_av_blocked_valid_appid_false)
    - [ResourceManager_Set_AV_Blocked_Empty_AppId_True](#resourcemanager_set_av_blocked_empty_appid_true)
@@ -29,22 +28,13 @@ RDKV_CERT_AVS_ResourceManager
    - [ResourceManager_Reserve_TTS_Resource_AppId_Invalid](#resourcemanager_reserve_tts_resource_appid_invalid)
    - [ResourceManager_Reserve_TTS_Resource_AppId_Alphanumeric](#resourcemanager_reserve_tts_resource_appid_alphanumeric)
    - [ResourceManager_Reserve_TTS_Resource_AppId_SpecialChars](#resourcemanager_reserve_tts_resource_appid_specialchars)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **ResourceManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.ResourceManager` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `getBlockedAVApplications` | Gets a list of blacklisted clients |
-| `reserveTTSResource` | Reserves the Text To speech Resource for specified client |
-| `reserveTTSResourceForApps` | Reserves TTS resource for applications |
-| `setAVBlocked` | Adds/removes the list of applications with the given callsigns to/from the blacklist |
 
 ## Plugin Pre-conditions
 
@@ -105,6 +95,16 @@ accessible via JSON-RPC under the callsign `org.rdk.ResourceManager` (version 1)
 | 1 | Launch App Valid Params | Launch App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": "", "launchArgs": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check App Launched | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 
+### Plugin Pre-condition 8: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Packagemanager Application Name | `PACKAGEMANAGER_APPLICATION_NAME` must be set to the application/package name to be installed | The `PACKAGEMANAGER_APPLICATION_NAME` value should be correctly configured in the device-specific config file |
+| 2 | Configure Packagemanager Application Version | `PACKAGEMANAGER_APPLICATION_VERSION` must be set to the application version to be installed | The `PACKAGEMANAGER_APPLICATION_VERSION` value should be correctly configured in the device-specific config file |
+| 3 | Configure Packagemanager Application Hosted URL | `PACKAGEMANAGER_APPLICATION_HOSTEDURL` must be set to the hosted URL of the primary application/package | The `PACKAGEMANAGER_APPLICATION_HOSTEDURL` value should be correctly configured in the device-specific config file |
+| 4 | Configure Packagemanager Additionalmetadata Name | `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` must be set to the additional metadata key associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` value should be correctly configured in the device-specific config file |
+| 5 | Configure Packagemanager Additionalmetadata Value | `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` must be set to the additional metadata value associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` value should be correctly configured in the device-specific config file |
+| 6 | Configure Packagemanager Application MD5 Checksum Value | `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` must be set to the expected MD5 checksum of the application package for download integrity verification | The `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="resourcemanager_set_av_blocked_valid_appid_true"></a>

@@ -4,10 +4,8 @@ RDKV_CERT_AVS_System
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [System_Get_ESTB_MAC](#system_get_estb_mac)
    - [System_Get_Serial_Number](#system_get_serial_number)
    - [System_Get_Version](#system_get_version)
@@ -63,86 +61,13 @@ RDKV_CERT_AVS_System
    - [System_Invalid_Set_Power_State](#system_invalid_set_power_state)
    - [System_Invalid_TimeZone_ErrorValidation](#system_invalid_timezone_errorvalidation)
    - [System_Invalid_Key_ErrorMessage](#system_invalid_key_errormessage)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **System** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.System` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `cacheContains` | Checks if key is present in cache |
-| `clearLastDeepSleepReason` | Clear the last deep sleep reason |
-| `deletePersistentPath` | Deletes the persistent path |
-| `enableMoca` | Enables or disables Moca support for the platform |
-| `getAvailableStandbyModes` | Get available standby modes |
-| `getCachedValue` | Get value of the key in cache |
-| `getCoreTemperature` | Gives core temperature of the device |
-| `getDeviceInfo` | Gives device details |
-| `getDownloadedFirmwareInfo` | Returns information about firmware downloads |
-| `getFriendlyName` | Returns the friendly name set by setFriendlyName API or default value |
-| `getLastDeepSleepReason` | Retrieve the last deep sleep reason |
-| `getMacAddresses` | Retrieve the mac addresses |
-| `getMfgSerialNumber` | Gets the manufacturing serial number |
-| `getMilestones` | Gives list of milestones |
-| `getMode` | Gets currently set mode |
-| `getNetworkStandbyMode` | Returns the network standby mode of the device |
-| `getOvertempGraceInterval` | Returns the over-temperature grace interval value |
-| `getPlatformConfiguration` | Returns the supported features and device/account info |
-| `getPowerState` | Get power state |
-| `getPowerStateBeforeReboot` | Gets the power state before reboot |
-| `getPowerStateIsManagedByDevice` | Checks whether the power state is managed by the device |
-| `getPreferredStandbyMode` | Get preferred standby mode |
-| `getPreviousRebootInfo` | Retrieve basic information about a reboot |
-| `getPreviousRebootInfo2` | Retrieve detailed information about a reboot |
-| `getPreviousRebootReason` | Retrieve the last reboot reason |
-| `getRFCConfig` | Gets RFC configurations |
-| `getSerialNumber` | Gives device serial number |
-| `getStateInfo` | Query device state information of various properties |
-| `getSystemVersions` | Gives system version details |
-| `getTemperatureThresholds` | Gets temperature thresholds |
-| `getTerritory` | Gets the configured system territory and region |
-| `getTimeZoneDST` | Get configured time zone |
-| `getTimeZones` | Gets the available timezones from the system's time zone database |
-| `getXconfParams` | Gives Xconf configuration of the device |
-| `hasRebootBeenRequested` | Check whether a reboot has been requested |
-| `isGzEnabled` | Gives GZ enabled status |
-| `isOptOutTelemetry` | Checks the telemetry opt-out status |
-| `queryMocaStatus` | Check whether Moca is enabled |
-| `reboot` | system perform a reboot of the set-top box |
-| `removeCacheKey` | Remove key from cache |
-| `requestSystemUptime` | Gives system uptime |
-| `setCachedValue` | Set value of the key in cache |
-| `setFriendlyName` | Sets the friendly name of the device |
-| `setGzEnabled` | Sets GZ enabled status |
-| `setMode` | Set mode for specific duration |
-| `setNetworkStandbyMode` | Enables or disables the network standby mode of the device |
-| `setOptOutTelemetry` | Sets the telemetry opt-out status |
-| `setOvertempGraceInterval` | Sets the over-temperature grace interval value |
-| `setPowerState` | Set power state |
-| `setPreferredStandbyMode` | Set preferred standby mode |
-| `setTemperatureThresholds` | Sets temperature thresholds |
-| `setTerritory` | Sets the system territory and region |
-| `setTimeZoneDST` | Set configured time zone |
-| `updateFirmware` | Initiates a firmware update |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onFriendlyNameChanged` | Triggered when the device friendly name change |
-| `onMacAddressesRetreived` | MacAddressesRetreived |
-| `onNetworkStandbyModeChanged` | Triggered when the network standby mode setting changes |
-| `onRebootRequest` | Fires on reboot request |
-| `onSystemModeChanged` | Fires on system mode changed event |
-| `onSystemPowerStateChanged` | power state changed event |
-| `onTemperatureThresholdChanged` | Fires on temperature threshold change |
-| `onTerritoryChanged` | Triggered when the device territory changed |
-| `onTimeZoneDSTChanged` | Triggered when device timezone changed |
 
 ## Plugin Pre-conditions
 
@@ -168,6 +93,26 @@ accessible via JSON-RPC under the callsign `org.rdk.System` (version 1)
 | 8 | Subscribe to the onTerritoryChanged event | Register a WebSocket event listener for `onTerritoryChanged` to receive `onTerritoryChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.register", "params": {"event": "onTerritoryChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 9 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure RFC Params | `SYSTEM_RFC_PARAMS` must be set to the RFC parameter names to query from the device | The `SYSTEM_RFC_PARAMS` value should be correctly configured in the device-specific config file |
+| 2 | Configure Device Params | `SYSTEM_DEVICE_PARAMS` must be set to the device property names to retrieve via the System API | The `SYSTEM_DEVICE_PARAMS` value should be correctly configured in the device-specific config file |
+| 3 | Configure Device Details File Path | `SYSTEM_DEVICE_DETAILS_FILE_PATH` must be set to the path to the device details cache file on the DUT | The `SYSTEM_DEVICE_DETAILS_FILE_PATH` value should be correctly configured in the device-specific config file |
+| 4 | Configure Power State Managed By Device | `SYSTEM_POWER_STATE_MANAGED_BY_DEVICE` must be set to 'true' if power state transitions are managed by the DUT, otherwise 'false' | The `SYSTEM_POWER_STATE_MANAGED_BY_DEVICE` value should be correctly configured in the device-specific config file |
+| 5 | Configure Supported HDR Capabilities | `SYSTEM_SUPPORTED_HDR_CAPABILITIES` must be set to the HDR capabilities supported by the DUT | The `SYSTEM_SUPPORTED_HDR_CAPABILITIES` value should be correctly configured in the device-specific config file |
+| 6 | Configure Uptime In Seconds | `SYSTEM_UPTIME_IN_SECONDS` must be set to the minimum device uptime in seconds required before running uptime-related tests | The `SYSTEM_UPTIME_IN_SECONDS` value should be correctly configured in the device-specific config file |
+| 7 | Configure Territorys | `SYSTEM_TERRITORYS` must be set to the territory and region codes to test in format TERRITORY:REGION | The `SYSTEM_TERRITORYS` value should be correctly configured in the device-specific config file |
+| 8 | Configure RFC Parameter Name | `SYSTEM_RFC_PARAMETER_NAME` must be set to the boolean RFC parameter name from /etc/datamodel.xml for enable/disable testing | The `SYSTEM_RFC_PARAMETER_NAME` value should be correctly configured in the device-specific config file |
+| 9 | Configure Device Features | `SYSTEM_DEVICE_FEATURES` must be set to the system feature names supported by the DUT | The `SYSTEM_DEVICE_FEATURES` value should be correctly configured in the device-specific config file |
+| 10 | Configure Rf4ce Mac | `RF4CE_MAC` must be set to 'enable' if RF4CE MAC is applicable for the DUT, otherwise 'disable' | The `RF4CE_MAC` value should be correctly configured in the device-specific config file |
+| 11 | Configure Xconf Server Support | `XCONF_SERVER_SUPPORT` must be set to 'yes' if an XCONF server is available in the test setup, otherwise 'no' | The `XCONF_SERVER_SUPPORT` value should be correctly configured in the device-specific config file |
+| 12 | Configure Firmware Download Reboot In Seconds | `FIRMWARE_DOWNLOAD_REBOOT_IN_SECONDS` must be set to the maximum device reboot wait time in seconds after firmware download | The `FIRMWARE_DOWNLOAD_REBOOT_IN_SECONDS` value should be correctly configured in the device-specific config file |
+| 13 | Configure Firmware Download Protocol | `FIRMWARE_DOWNLOAD_PROTOCOL` must be set to the firmware download protocol used by the XCONF server | The `FIRMWARE_DOWNLOAD_PROTOCOL` value should be correctly configured in the device-specific config file |
+| 14 | Configure Firmware Filename | `FIRMWARE_FILENAME` must be set to the target firmware image filename for the XCONF upgrade test | The `FIRMWARE_FILENAME` value should be correctly configured in the device-specific config file |
+| 15 | Configure Firmware Location | `FIRMWARE_LOCATION` must be set to the base URL of the server hosting the firmware image | The `FIRMWARE_LOCATION` value should be correctly configured in the device-specific config file |
+| 16 | Configure Firmware Version | `FIRMWARE_VERSION` must be set to the target firmware version expected after the XCONF upgrade | The `FIRMWARE_VERSION` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="system_get_estb_mac"></a>

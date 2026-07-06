@@ -4,9 +4,8 @@ RDKV_CERT_AVS_DownloadManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [DownloadManager_Download_ValidParameters](#downloadmanager_download_validparameters)
    - [DownloadManager_GetStorageDetails_Functionality](#downloadmanager_getstoragedetails_functionality)
    - [DownloadManager_Cancel_EmptyParameters](#downloadmanager_cancel_emptyparameters)
@@ -30,26 +29,13 @@ RDKV_CERT_AVS_DownloadManager
    - [DownloadManager_Progress_Invalid_Parameter](#downloadmanager_progress_invalid_parameter)
    - [DownloadManager_Download_Optional_Parameters](#downloadmanager_download_optional_parameters)
    - [DownloadManager_Download_Ratelimit_Pause_Resume_Delete_Package](#downloadmanager_download_ratelimit_pause_resume_delete_package)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **DownloadManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.DownloadManager` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `cancel` | Cancels an ongoing download |
-| `delete` | Deletes a package |
-| `download` | Downloads a file from the specified URL |
-| `getStorageDetails` | Retrieve storage details of packages |
-| `pause` | Pauses an ongoing download |
-| `progress` | Retrieves the progress of a download |
-| `resume` | Resumes a paused download |
-| `rateLimit` | RateLimit Set rate limiting for a specific download session |
 
 ## Plugin Pre-conditions
 
@@ -69,6 +55,19 @@ accessible via JSON-RPC under the callsign `org.rdk.DownloadManager` (version 1)
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
 | 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DownloadManager Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Packagemanager Application Name | `PACKAGEMANAGER_APPLICATION_NAME` must be set to the application/package name to be installed | The `PACKAGEMANAGER_APPLICATION_NAME` value should be correctly configured in the device-specific config file |
+| 2 | Configure Packagemanager Application Version | `PACKAGEMANAGER_APPLICATION_VERSION` must be set to the application version to be installed | The `PACKAGEMANAGER_APPLICATION_VERSION` value should be correctly configured in the device-specific config file |
+| 3 | Configure Packagemanager Application Hosted URL | `PACKAGEMANAGER_APPLICATION_HOSTEDURL` must be set to the hosted URL of the primary application/package | The `PACKAGEMANAGER_APPLICATION_HOSTEDURL` value should be correctly configured in the device-specific config file |
+| 4 | Configure Packagemanager Additionalmetadata Name | `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` must be set to the additional metadata key associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` value should be correctly configured in the device-specific config file |
+| 5 | Configure Packagemanager Additionalmetadata Value | `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` must be set to the additional metadata value associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` value should be correctly configured in the device-specific config file |
+| 6 | Configure Packagemanager Application MD5 Checksum Value | `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` must be set to the expected MD5 checksum of the application package for download integrity verification | The `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
+| 7 | Configure Packagemanager Large Application Hosted URL | `PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL` must be set to the hosted URL of the large application or asset/package | The `PACKAGEMANAGER_LARGE_APPLICATION_HOSTEDURL` value should be correctly configured in the device-specific config file |
+| 8 | Configure Packagemanager Large Application MD5 Checksum Value | `PACKAGEMANAGER_LARGE_APPLICATION_MD5SUM_VALUE` must be set to the expected MD5 checksum of the large application or asset package for integrity verification | The `PACKAGEMANAGER_LARGE_APPLICATION_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
+| 9 | Configure Packagemanager Pause Resume Times | `PACKAGEMANAGER_PAUSE_RESUME_TIMES` must be set to the number of pause and resume cycles to perform during package download validation | The `PACKAGEMANAGER_PAUSE_RESUME_TIMES` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="downloadmanager_download_validparameters"></a>

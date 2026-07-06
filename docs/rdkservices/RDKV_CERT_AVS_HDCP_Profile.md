@@ -4,27 +4,19 @@ RDKV_CERT_AVS_HDCP_Profile
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [Get_HDCP_Details](#get_hdcp_details)
    - [Get_STB_Supported_HDCP_Version](#get_stb_supported_hdcp_version)
    - [HdcpProfile_ActivateDeactivate_Event_Test](#hdcpprofile_activatedeactivate_event_test)
    - [HdcpProfile_ActivateDeactivate_All_Event_Test](#hdcpprofile_activatedeactivate_all_event_test)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **HDCPProfile** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.HdcpProfile` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `getHDCPStatus` | Provides interface for HDCP related data and events |
-| `getSettopHDCPSupport` | Returns which version of HDCP is supported by the STB |
 
 ## Plugin Pre-conditions
 

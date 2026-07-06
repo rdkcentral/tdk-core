@@ -4,9 +4,8 @@ RDKV_CERT_AVS_AppStorageManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [AppStorageManager_Clear_App_Data](#appstoragemanager_clear_app_data)
    - [AppStorageManager_Clear_App_Data_Invalid_AppId](#appstoragemanager_clear_app_data_invalid_appid)
    - [AppStorageManager_Clear_App_Data_Numeric_AppId](#appstoragemanager_clear_app_data_numeric_appid)
@@ -49,23 +48,13 @@ RDKV_CERT_AVS_AppStorageManager
    - [AppStorageManager_DeleteStorage_Max_Length_AppId](#appstoragemanager_deletestorage_max_length_appid)
    - [AppStorageManager_DeleteStorage_Invalid_Characters_AppId](#appstoragemanager_deletestorage_invalid_characters_appid)
    - [AppStorageManager_DeleteStorage_Missing_AppId](#appstoragemanager_deletestorage_missing_appid)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **AppStorageManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.AppStorageManager` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `clear` | Clears app data for a given app id |
-| `clearAll` | Clears all app data except for the exempt app ids |
-| `createStorage` | Creates storage for a given app id |
-| `deleteStorage` | Deletes storage for a given app id |
-| `getStorage` | Returns the storage location for a given app id |
 
 ## Plugin Pre-conditions
 
@@ -95,6 +84,16 @@ accessible via JSON-RPC under the callsign `org.rdk.AppStorageManager` (version 
 | 4 | Install | Install on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 5 | Verify Installed Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
 
+### Plugin Pre-condition 4: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Packagemanager Application Name | `PACKAGEMANAGER_APPLICATION_NAME` must be set to the application/package name to be installed | The `PACKAGEMANAGER_APPLICATION_NAME` value should be correctly configured in the device-specific config file |
+| 2 | Configure Packagemanager Application Version | `PACKAGEMANAGER_APPLICATION_VERSION` must be set to the application version to be installed | The `PACKAGEMANAGER_APPLICATION_VERSION` value should be correctly configured in the device-specific config file |
+| 3 | Configure Packagemanager Application Hostedurl | `PACKAGEMANAGER_APPLICATION_HOSTEDURL` must be set to the hosted URL of the primary application/package | The `PACKAGEMANAGER_APPLICATION_HOSTEDURL` value should be correctly configured in the device-specific config file |
+| 4 | Configure Packagemanager Additionalmetadata Name | `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` must be set to the additional metadata key associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` value should be correctly configured in the device-specific config file |
+| 5 | Configure Packagemanager Additionalmetadata Value | `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` must be set to the additional metadata value associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` value should be correctly configured in the device-specific config file |
+| 6 | Configure Packagemanager Application Md5sum Value | `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` must be set to the expected MD5 checksum of the application package for download integrity verification | The `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="appstoragemanager_clear_app_data"></a>

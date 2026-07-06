@@ -4,10 +4,8 @@ RDKV_CERT_AVS_MaintenanceManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [MaintenanceManager_Get_MaintenanceActivity_Status](#maintenancemanager_get_maintenanceactivity_status)
    - [MaintenanceManager_Get_Maintenance_Mode](#maintenancemanager_get_maintenance_mode)
    - [MaintenanceManager_Start_Stop_Maintenance](#maintenancemanager_start_stop_maintenance)
@@ -37,30 +35,13 @@ RDKV_CERT_AVS_MaintenanceManager
    - [MaintenanceManager_Set_Specialchars_MaintenanceMode_with_ENFORCE_OPTOUT_OptOut](#maintenancemanager_set_specialchars_maintenancemode_with_enforce_optout_optout)
    - [MaintenanceManager_Set_Specialchars_MaintenanceMode_with_None_OptOut](#maintenancemanager_set_specialchars_maintenancemode_with_none_optout)
    - [MaintenanceManager_Set_Foreground_MaintenanceMode_with_Specialchars_OptOut](#maintenancemanager_set_foreground_maintenancemode_with_specialchars_optout)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **MaintenanceManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.MaintenanceManager` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `getMaintenanceActivityStatus` | Gets the maintenance activity status details |
-| `getMaintenanceMode` | Gets the current maintenance mode and software upgrade opt-out mode which are stored in the persistent location |
-| `getMaintenanceStartTime` | Gets the scheduled maintenance start time |
-| `setMaintenanceMode` | Sets the maintenance mode and software upgrade opt-out mode |
-| `startMaintenance` | Starts maintenance activities |
-| `stopMaintenance` | Stops maintenance activities |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onMaintenanceStatusChange` | Triggered when the maintenance manager status changes |
 
 ## Plugin Pre-conditions
 
@@ -79,6 +60,11 @@ accessible via JSON-RPC under the callsign `org.rdk.MaintenanceManager` (version
 | 1 | Subscribe to the onMaintenanceStatusChange event | Register a WebSocket event listener for `onMaintenanceStatusChange` to receive `onMaintenanceStatusChange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.register", "params": {"event": "onMaintenanceStatusChange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Optout Modes | `MAINTENANCEMANAGER_OPTOUT_MODES` must be set to the opt-out mode value required for the test | The `MAINTENANCEMANAGER_OPTOUT_MODES` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="maintenancemanager_get_maintenanceactivity_status"></a>

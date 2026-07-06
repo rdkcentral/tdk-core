@@ -4,9 +4,8 @@ RDKV_CERT_AVS_PreinstallManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [PreinstallManager_StartPreInstall_ForceInstall_True](#preinstallmanager_startpreinstall_forceinstall_true)
    - [PreinstallManager_StartPreInstall_ForceInstall_False](#preinstallmanager_startpreinstall_forceinstall_false)
    - [PreinstallManager_StartPreInstall_Empty](#preinstallmanager_startpreinstall_empty)
@@ -20,19 +19,13 @@ RDKV_CERT_AVS_PreinstallManager
    - [PreinstallManager_GetPreInstallState](#preinstallmanager_getpreinstallstate)
    - [Preinstall_Check_On_AppInstallationStatus_Event_StartPreInstall_True](#preinstall_check_on_appinstallationstatus_event_startpreinstall_true)
    - [Preinstall_Check_On_AppInstallationStatus_Event_StartPreInstall_False](#preinstall_check_on_appinstallationstatus_event_startpreinstall_false)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **PreinstallManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.PreinstallManager` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `startPreinstall` | Checks the preinstall directory for packages to be preinstalled and installs them as needed |
 
 ## Plugin Pre-conditions
 

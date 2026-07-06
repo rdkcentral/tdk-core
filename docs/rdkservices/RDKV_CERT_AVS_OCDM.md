@@ -4,25 +4,17 @@ RDKV_CERT_AVS_OCDM
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [OCDM_Get_All_DRM_Info](#ocdm_get_all_drm_info)
    - [OCDM_ActivateDeactivate_Event_Test](#ocdm_activatedeactivate_event_test)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **OCDM** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `OCDM` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `drms` | Retrieves supported DRM systems |
-| `keysystems` | Provides access to the DRM key systems |
 
 ## Plugin Pre-conditions
 
@@ -40,6 +32,11 @@ accessible via JSON-RPC under the callsign `OCDM` (version 1)
 | --- | --- | --- | --- |
 | 1 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Supported DRM Systems | `OCDM_SUPPORTED_DRM_SYSTEMS` must be configured as required for the test setup | The `OCDM_SUPPORTED_DRM_SYSTEMS` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="ocdm_get_all_drm_info"></a>

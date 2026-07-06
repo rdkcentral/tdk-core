@@ -4,9 +4,8 @@ RDKV_CERT_AVS_MiracastService
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [MiracastService_Get_Enable](#miracastservice_get_enable)
    - [MiracastService_Set_Get_Enable](#miracastservice_set_get_enable)
    - [MiracastService_Set_Enable_Without_Parameter](#miracastservice_set_enable_without_parameter)
@@ -14,23 +13,13 @@ RDKV_CERT_AVS_MiracastService
    - [MiracastService_Reject_Client_Connection](#miracastservice_reject_client_connection)
    - [MiracastService_Set_VideoRectangle](#miracastservice_set_videorectangle)
    - [MiracastService_ActivateDeactivate_Event_Test](#miracastservice_activatedeactivate_event_test)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **MiracastService** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.MiracastService` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `acceptClientConnection` | To accept /reject new client connection requests for the Miracast feature |
-| `getEnable` | To get the enable status of the Miracast feature |
-| `setEnable` | To enable/disable the Miracast feature |
-| `setLogging` | Enable/Disable/Reduce the Logging level for Miracast |
-| `setVideoRectangle` *(MiracastPlayer)* | Set the Video Rectangle |
 
 ## Plugin Pre-conditions
 

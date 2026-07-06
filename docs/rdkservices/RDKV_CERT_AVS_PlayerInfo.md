@@ -4,10 +4,8 @@ RDKV_CERT_AVS_PlayerInfo
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [PlayerInfo_Check_Audio_Codecs](#playerinfo_check_audio_codecs)
    - [PlayerInfo_Check_Video_Codecs](#playerinfo_check_video_codecs)
    - [PlayerInfo_Check_AudioEquivalence_Enabled](#playerinfo_check_audioequivalence_enabled)
@@ -17,31 +15,13 @@ RDKV_CERT_AVS_PlayerInfo
    - [SetAndGet_All_Supported_Resolutions](#setandget_all_supported_resolutions)
    - [Check_Dolby_AudioMode_Changed_Event](#check_dolby_audiomode_changed_event)
    - [PlayerInfo_ActivateDeactivate_Event_Test](#playerinfo_activatedeactivate_event_test)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **PlayerInfo** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `audiocodecs` | Returns supported Audio codecs |
-| `dolby_atmosmetadata` | Atmos capabilities of Sink |
-| `dolby_enableatmosoutput` | Enables Atmos Audio Output |
-| `dolby_soundmode` | Gets the dolby sound mode |
-| `isaudioequivalenceenabled` | Checks Loudness Equivalence in platform |
-| `resolution` | Returns current Video playback resolution |
-| `videocodecs` | Returns supported Video codecs |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `dolby_audiomodechanged` | Notifies audio mode changed event |
 
 ## Plugin Pre-conditions
 
@@ -68,6 +48,13 @@ accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
 | 1 | Subscribe to the dolby_audiomodechanged event | Register a WebSocket event listener for `dolby_audiomodechanged` to receive `dolby_audiomodechanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.register", "params": {"event": "dolby_audiomodechanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 4: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Supported Audio Codecs | `SUPPORTED_AUDIO_CODECS` must be set to the audio codec formats supported by the DUT | The `SUPPORTED_AUDIO_CODECS` value should be correctly configured in the device-specific config file |
+| 2 | Configure Supported Video Codecs | `SUPPORTED_VIDEO_CODECS` must be set to the video codec formats supported by the DUT | The `SUPPORTED_VIDEO_CODECS` value should be correctly configured in the device-specific config file |
+| 3 | Configure NA Tests | `PLAYERINFO_NA_TESTS` must be set to the PlayerInfo test names to skip when not applicable on the DUT | The `PLAYERINFO_NA_TESTS` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="playerinfo_check_audio_codecs"></a>

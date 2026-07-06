@@ -4,9 +4,8 @@ RDKV_CERT_AVS_Display_Settings_Without_TV
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Plugin Pre-conditions](#plugin-pre-conditions)
-4. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [Read_EDID_Without_TV](#read_edid_without_tv)
    - [Check_Connected_Video_Displays_Without_TV_Connected](#check_connected_video_displays_without_tv_connected)
    - [Check_Active_Input_Status_Without_TV_Connected](#check_active_input_status_without_tv_connected)
@@ -16,27 +15,12 @@ RDKV_CERT_AVS_Display_Settings_Without_TV
    - [Check_SetCurrentResolution_Status_Without_TV_Connected](#check_setcurrentresolution_status_without_tv_connected)
    - [Check_GetDefaultResolution_Status_Without_TV_Connected](#check_getdefaultresolution_status_without_tv_connected)
    - [Check_PortName_Status_Without_TV_Connected](#check_portname_status_without_tv_connected)
-5. [Plugin Post-conditions](#plugin-post-conditions)
-6. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
-The **DisplaySettingsWithoutTV** plugin is a Thunder (WPEFramework) component
-accessible via JSON-RPC under the callsign `org.rdk.DisplaySettingsWithoutTV` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `getActiveInput` | Get the active input status |
-| `getConnectedAudioPorts` | Get the connected audio port details |
-| `getConnectedVideoDisplays` | Get the connected video display details |
-| `getCurrentResolution` | Get the current resolution details |
-| `getDefaultResolution` | Get the default resolution value |
-| `getHDCPStatus` | Provides interface for HDCP related data and events |
-| `portname` | Get Video output port on the STB used for connection to TV |
-| `readEDID` | Read the EDID of connected output device |
-| `setCurrentResolution` | Set the current resolution values |
+**DisplaySettingsWithoutTV** is a test scenario that validates DisplaySettings API behavior in a no-TV-connected environment. The API responses are obtained through the `org.rdk.DisplaySettings` interface (version 1)
 
 ## Plugin Pre-conditions
 

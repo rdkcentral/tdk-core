@@ -4,10 +4,8 @@ RDKV_CERT_AVS_Bluetooth
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [Set_And_Get_Name](#set_and_get_name)
    - [Bluetooth_Toggle_Discoverable_Status](#bluetooth_toggle_discoverable_status)
    - [Bluetooth_On_Request_Failed](#bluetooth_on_request_failed)
@@ -18,43 +16,13 @@ RDKV_CERT_AVS_Bluetooth
    - [Bluetooth_Connect_Disconnect_LoudSpeaker_Device](#bluetooth_connect_disconnect_loudspeaker_device)
    - [Bluetooth_ActivateDeactivate_All_Event_Test](#bluetooth_activatedeactivate_all_event_test)
    - [Bluetooth_Verify_Connect_Error](#bluetooth_verify_connect_error)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **Bluetooth** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.Bluetooth` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `connect` | Connects to the given Bluetooth device |
-| `disable` | Disables the Bluetooth stack |
-| `disconnect` | Disconnects the given device from this device |
-| `enable` | Enables the Bluetooth stack |
-| `getApiVersionNumber` | Provides the current API version number |
-| `getConnectedDevices` | Returns a list of connected devices to this device |
-| `getDeviceInfo` | Returns the device info of the given device ID |
-| `getDiscoveredDevices` | Gives discovered Bluetooth devices |
-| `getName` | Provides name of the device as seen by other Bluetooth devices |
-| `getPairedDevices` | Returns a list of devices that have paired with this device |
-| `isDiscoverable` | Provides discoverable status of the device |
-| `pair` | Pairs the given device with this device |
-| `setDiscoverable` | Sets the discoverable status of the device |
-| `setName` | Sets the name of this device as seen by other Bluetooth devices |
-| `startScan` | Searches for available Bluetooth devices |
-| `stopScan` | Stops scanning for Bluetooth devices |
-| `unpair` | Unpairs the given device with this device |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onDiscoveredDevice` | Gives discovered Bluetooth devices |
-| `onRequestFailed` | Indicates on request failed |
-| `onStatusChanged` | Gives status change information |
 
 ## Plugin Pre-conditions
 
@@ -89,6 +57,16 @@ accessible via JSON-RPC under the callsign `org.rdk.Bluetooth` (version 1)
 | 3 | Subscribe to the onRequestFailed event | Register a WebSocket event listener for `onRequestFailed` to receive `onRequestFailed` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.register", "params": {"event": "onRequestFailed", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 4 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 5 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+
+### Plugin Pre-condition 5: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Bluetooth Emulator Support | `BT_EMULATOR_SUPPORT` must be set to `yes` if a Bluetooth emulator is available in the test setup, otherwise set to `no` | The Bluetooth emulator support flag should be correctly configured in the device-specific config file |
+| 2 | Configure Bluetooth Emulator IP | `BT_EMU_IP` must be set to the IP address of the Bluetooth emulator device accessible from the DUT. Required only when `BT_EMULATOR_SUPPORT = yes` | The Bluetooth emulator IP address should be correctly configured in the device-specific config file |
+| 3 | Configure Bluetooth Emulator User Name | `BT_EMU_USER_NAME` must be set to the username used to connect to the Bluetooth emulator. Required only when `BT_EMULATOR_SUPPORT = yes` | The Bluetooth emulator username should be correctly configured in the device-specific config file |
+| 4 | Configure Bluetooth Emulator Password | `BT_EMU_PWD` must be set to the password used to authenticate with the Bluetooth emulator. Required only when `BT_EMULATOR_SUPPORT = yes` | The Bluetooth emulator password should be correctly configured in the device-specific config file |
+| 5 | Configure Bluetooth Emulator Device Name | `BT_EMU_DEVICE_NAME` must be set to the name of the Bluetooth emulator device as visible during scanning on the DUT. Required only when `BT_EMULATOR_SUPPORT = yes` | The Bluetooth emulator device name should be correctly configured in the device-specific config file |
 
 ## Test Cases
 

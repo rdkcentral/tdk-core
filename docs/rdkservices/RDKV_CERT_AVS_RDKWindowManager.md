@@ -4,10 +4,8 @@ RDKV_CERT_AVS_RDKWindowManager
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [RWM_Check_Add_Key_Intercepts](#rwm_check_add_key_intercepts)
    - [RWM_AddKeyIntercepts_Empty_Modifiers](#rwm_addkeyintercepts_empty_modifiers)
    - [RWM_Check_AddKeyIntercepts_Invalid_Keys](#rwm_check_addkeyintercepts_invalid_keys)
@@ -49,38 +47,13 @@ RDKV_CERT_AVS_RDKWindowManager
    - [RWM_Check_User_Active](#rwm_check_user_active)
    - [RWM_Reset_Inactivity_Interval](#rwm_reset_inactivity_interval)
    - [RWM_Check_On_User_Inactivity_Event_Disabled_Reporting](#rwm_check_on_user_inactivity_event_disabled_reporting)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **RDKWindowManager** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.RDKWindowManager` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `addKeyIntercepts` | Adds the list of key intercepts |
-| `createDisplay` | Creates a new display |
-| `enableDisplayRender` | Enables or disables display rendering for a specific app instance |
-| `enableInactivityReporting` | Enables or disables inactivity reporting |
-| `generateKey` | Generates a key for the window manager |
-| `getApps` | Retrieves the list of available applications |
-| `getZOrder` | Retrieves the Z-order of a specific application instance |
-| `removeKeyIntercept` | Removes a key intercept |
-| `renderReady` | Indicates that the rendering is ready for the specified app instance |
-| `resetInactivityTime` | Resets the inactivity time counter |
-| `setFocus` | Set focus to a specific application instance |
-| `setInactivityInterval` | Sets the inactivity interval |
-| `setVisible` | Sets the visibility of a specific application instance |
-| `setZOrder` | Sets the z-order of the specified app |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onUserInactivity` | Triggered when the user inactivity timer reaches the set interval |
 
 ## Plugin Pre-conditions
 
@@ -148,6 +121,16 @@ accessible via JSON-RPC under the callsign `org.rdk.RDKWindowManager` (version 1
 | 1 | Subscribe to the onUserInactivity event | Register a WebSocket event listener for `onUserInactivity` to receive `onUserInactivity` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.register", "params": {"event": "onUserInactivity", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 2 | Subscribe to the onScreenshotComplete event | Register a WebSocket event listener for `onScreenshotComplete` to receive `onScreenshotComplete` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.register", "params": {"event": "onScreenshotComplete", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 9: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure Packagemanager Application Name | `PACKAGEMANAGER_APPLICATION_NAME` must be set to the application/package name to be installed | The `PACKAGEMANAGER_APPLICATION_NAME` value should be correctly configured in the device-specific config file |
+| 2 | Configure Packagemanager Application Version | `PACKAGEMANAGER_APPLICATION_VERSION` must be set to the application version to be installed | The `PACKAGEMANAGER_APPLICATION_VERSION` value should be correctly configured in the device-specific config file |
+| 3 | Configure Packagemanager Application Hosted URL | `PACKAGEMANAGER_APPLICATION_HOSTEDURL` must be set to the hosted URL of the primary application/package | The `PACKAGEMANAGER_APPLICATION_HOSTEDURL` value should be correctly configured in the device-specific config file |
+| 4 | Configure Packagemanager Application MD5 Checksum Value | `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` must be set to the expected MD5 checksum of the application/package for download integrity verification | The `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
+| 5 | Configure Packagemanager Additionalmetadata Name | `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` must be set to the additional metadata key associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` value should be correctly configured in the device-specific config file |
+| 6 | Configure Packagemanager Additionalmetadata Value | `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` must be set to the additional metadata value associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="rwm_check_add_key_intercepts"></a>

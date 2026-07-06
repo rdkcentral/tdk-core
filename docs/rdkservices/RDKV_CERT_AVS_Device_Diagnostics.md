@@ -4,36 +4,21 @@ RDKV_CERT_AVS_Device_Diagnostics
 ## Table of Contents
 
 1. [Objective](#objective)
-2. [APIs Under Test](#apis-under-test)
-3. [Events Under Test](#events-under-test)
-4. [Plugin Pre-conditions](#plugin-pre-conditions)
-5. [Test Cases](#test-cases)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
    - [DeviceDiagnostics_Get_Configurations](#devicediagnostics_get_configurations)
    - [DeviceDiagnostics_Deactivate_Activate_Stress](#devicediagnostics_deactivate_activate_stress)
    - [DeviceDiagnostics_Check_AVDecoder_Idle_Active_State](#devicediagnostics_check_avdecoder_idle_active_state)
    - [DeviceDiagnostics_Check_AVDecoder_StateChange_Event_Idle_Active](#devicediagnostics_check_avdecoder_statechange_event_idle_active)
    - [DeviceDiagnostics_ActivateDeactivate_Event_Test](#devicediagnostics_activatedeactivate_event_test)
    - [DeviceDiagnostics_ActivateDeactivate_All_Event_Test](#devicediagnostics_activatedeactivate_all_event_test)
-6. [Plugin Post-conditions](#plugin-post-conditions)
-7. [Test Attributes](#test-attributes)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
 
 ## Objective
 
 The **DeviceDiagnostics** plugin is a Thunder (WPEFramework) component
 accessible via JSON-RPC under the callsign `org.rdk.DeviceDiagnostics` (version 1)
-
-## APIs Under Test
-
-| API | Description |
-| --- | --- |
-| `getAVDecoderStatus` | Gets the most active status of audio/video decoder/pipeline |
-| `getConfiguration` | Gets the values associated with the corresponding property names |
-
-## Events Under Test
-
-| Event | Description |
-| --- | --- |
-| `onAVDecoderStatusChanged` | Triggered when the most active status of audio/video decoder/pipeline changes |
 
 ## Plugin Pre-conditions
 
@@ -53,6 +38,16 @@ accessible via JSON-RPC under the callsign `org.rdk.DeviceDiagnostics` (version 
 | 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to capture plugin state change notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event subscription should be established successfully and the event listener should be active |
 | 3 | Subscribe to the all event | Register a WebSocket event listener for `all` to capture all system event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event subscription should be established successfully and the event listener should be active |
 
+### Plugin Pre-condition 3: Configure_Device_Parameter
+
+| Step ID | Step Name | Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure RFC Params | `DEVICE_DIAGNOSTICS_RFC_PARAMS` must be set to the RFC parameter names to query | The `DEVICE_DIAGNOSTICS_RFC_PARAMS` value should be correctly configured in the device-specific config file |
+| 2 | Configure Prerequisite Plugins | `DEVICE_DIAGNOSTICS_PREREQ_PLUGINS` must be set to the plugin callsigns to activate as prerequisites for Device Diagnostics testing | The `DEVICE_DIAGNOSTICS_PREREQ_PLUGINS` value should be correctly configured in the device-specific config file |
+| 3 | Configure Unified Player App Name | `DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME` must be set to the package/app ID of the unified player application to be installed | The `DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME` value should be correctly configured in the device-specific config file |
+| 4 | Configure Unified Player App Hosted URL | `DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_HOSTEDURL` must be set to the hosted download URL of the unified player application/package | The `DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_HOSTEDURL` value should be correctly configured in the device-specific config file |
+| 5 | Configure Unified Player MD5 Checksum Value | `DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_MD5SUM_VALUE` must be set to the expected MD5 checksum of the unified player application/package for download integrity verification | The `DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
+| 6 | Configure Playback URL | `DEVICE_DIAGNOSTICS_PLAYBACK_URL` must be set to the media playback URL used by the unified player for Device Diagnostics testing | The `DEVICE_DIAGNOSTICS_PLAYBACK_URL` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="devicediagnostics_get_configurations"></a>
