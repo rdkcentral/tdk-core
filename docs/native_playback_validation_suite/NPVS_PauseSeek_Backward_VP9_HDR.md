@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_379
 
-**TestCase Name**
+## TestCase Name
 NPVS_PauseSeek_Backward_VP9_HDR
 
 ## Table of Contents
@@ -12,7 +12,7 @@ NPVS_PauseSeek_Backward_VP9_HDR
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Validate pause and backward seek operation on VP9 HDR encoded WebM video streams using playbin pipeline with westerossink. Execute controlled seek operations via `gst_element_seek()` with `GST_SEEK_FLAG_FLUSH` to seek to specified position during paused state, then resume playback to verify smooth transition and correct HDR rendering at seeked location. Confirm playback position advances correctly after seek via `gst_element_query_position()` and validate frame rendering statistics via `westerossink→stats` show no frame discontinuities across VP9 HDR seek boundary.
+Validate pause and backward seek operation on VP9 HDR encoded WebM video streams using playbin pipeline with westerossink. Execute controlled seek operations via `gst_element_seek()` with `GST_SEEK_FLAG_FLUSH` to seek to specified position during paused state, then resume playback to verify smooth transition and correct HDR rendering at seeked location. Confirm playback position advances correctly after seek via `gst_element_query_position()` and validate frame rendering statistics via `westerossinkâ†’stats` show no frame discontinuities across VP9 HDR seek boundary.
 
 ## Preconditions
 
@@ -33,8 +33,8 @@ Validate pause and backward seek operation on VP9 HDR encoded WebM video streams
 | 3 | Perform Initial Playback | Transition pipeline to `GST_STATE_PLAYING` state. Wait for playback startup with HDR metadata negotiation. Verify `first-video-frame-callback` signal to confirm VP9 HDR rendering started with correct color space | Verify pipeline reaches `GST_STATE_PLAYING`, first frame detected with HDR metadata without errors |
 | 4 | Pause Pipeline Before Seek | Transition to `GST_STATE_PAUSED` after initial playback duration (timeout + 20 seconds). Monitor state transition to verify pipeline halts with HDR state preserved | Verify pipeline successfully pauses, position query returns valid paused position |
 | 5 | Execute Backward Seek Operation | Query current playback position via `gst_element_query_position()`. Invoke `gst_element_seek()` with `GST_SEEK_FLAG_FLUSH` to seek to `NATIVE_PLAYBACK_SEEK_POSITION` (typically 0). Verify seek completion via `ASYNC_DONE` message | Verify seek position achieved within 1 second tolerance, HDR metadata remains valid, no seek errors detected |
-| 6 | Resume Playback After Seek | Transition to `GST_STATE_PLAYING` state. Poll playback position via `gst_element_query_position()` at 100ms intervals to verify position advances at normal playback rate (±250ms tolerance per second). Monitor westerossink to verify HDR rendering maintained post-seek | Verify playback resumes without stalls, HDR rendering maintained, position advances at expected rate |
-| 7 | Validate Frame Rendering Continuity and HDR Metadata | Query `westerossink→stats` to extract `rendered_frames` and `dropped_frames`. Verify frame increments consistent and HDR color metadata preserved across seek boundary | Verify no frame drops at seek boundary, HDR color space maintained, frame rendering smooth post-seek |
+| 6 | Resume Playback After Seek | Transition to `GST_STATE_PLAYING` state. Poll playback position via `gst_element_query_position()` at 100ms intervals to verify position advances at normal playback rate (Â±250ms tolerance per second). Monitor westerossink to verify HDR rendering maintained post-seek | Verify playback resumes without stalls, HDR rendering maintained, position advances at expected rate |
+| 7 | Validate Frame Rendering Continuity and HDR Metadata | Query `westerossinkâ†’stats` to extract `rendered_frames` and `dropped_frames`. Verify frame increments consistent and HDR color metadata preserved across seek boundary | Verify no frame drops at seek boundary, HDR color space maintained, frame rendering smooth post-seek |
 | 8 | Release Pipeline Resources | Set pipeline to `GST_STATE_NULL`. Unreference playbin element and restore HDR configuration | Verify pipeline reaches `GST_STATE_NULL`, all resources released, HDR configuration restored |
 
 ## Test Attributes

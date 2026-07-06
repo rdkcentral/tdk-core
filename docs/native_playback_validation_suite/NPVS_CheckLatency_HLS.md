@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_204
 
-**TestCase Name**
+## TestCase Name
 NPVS_CheckLatency_HLS
 
 ## Table of Contents

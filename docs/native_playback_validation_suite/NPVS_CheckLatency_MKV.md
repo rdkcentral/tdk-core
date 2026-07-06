@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_317
 
-**TestCase Name**
+## TestCase Name
 NPVS_CheckLatency_MKV
 
 ## Table of Contents

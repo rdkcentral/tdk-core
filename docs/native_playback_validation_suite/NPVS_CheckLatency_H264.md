@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_203
 
-**TestCase Name**
+## TestCase Name
 NPVS_CheckLatency_H264
 
 ## Table of Contents

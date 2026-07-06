@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_207
 
-**TestCase Name**
+## TestCase Name
 NPVS_CheckLatency_FastForward_2x_AAC
 
 ## Table of Contents
@@ -30,10 +30,10 @@ Measure playback latency when transitioning to 2.0x fast-forward playback rate o
 |----|----------|------------------|-----------------|  
 | 1 | Initialize Test Environment | Initialize test environment by sourcing variables from `/opt/TDK/TDK.env` and establish Wayland display session via RDKWindowManager | Verify environment variables load correctly and Wayland display is created |
 | 2 | Configure and Execute Test Application | Retrieve configuration and stream URL, then execute `tdk_mediapipelinetests` with test case name, stream URL, and timeout arguments | Verify configuration is retrieved and `tdk_mediapipelinetests` initializes playbin pipeline |
-| 3 | Construct Pipeline and Initiate Playback | Create `playbin` element with stream URI, set `westerossink` as video sink, trigger `NULL→READY→PAUSED→PLAYING` state transition, verify `first-video-frame-callback` signal | Verify `playbin` reaches `GST_STATE_PLAYING` with first frame rendered, no `GST_MESSAGE_ERROR` |
-| 4 | Execute Fast-Forward 2x Rate Operation with Latency Measurement | Invoke `gst_element_seek()` with playback rate parameter set to 2.0x for double-speed playback. Record timestamp at seek initiation for latency calculation. Verify position advances at exactly 2x rate and `westerossink→stats` shows accelerated frame rendering at 2x multiplier. Calculate latency from seek to first frame at new rate | Verify test operation completes successfully with expected results and latency below configured threshold (default 100ms) |
+| 3 | Construct Pipeline and Initiate Playback | Create `playbin` element with stream URI, set `westerossink` as video sink, trigger `NULLâ†’READYâ†’PAUSEDâ†’PLAYING` state transition, verify `first-video-frame-callback` signal | Verify `playbin` reaches `GST_STATE_PLAYING` with first frame rendered, no `GST_MESSAGE_ERROR` |
+| 4 | Execute Fast-Forward 2x Rate Operation with Latency Measurement | Invoke `gst_element_seek()` with playback rate parameter set to 2.0x for double-speed playback. Record timestamp at seek initiation for latency calculation. Verify position advances at exactly 2x rate and `westerossinkâ†’stats` shows accelerated frame rendering at 2x multiplier. Calculate latency from seek to first frame at new rate | Verify test operation completes successfully with expected results and latency below configured threshold (default 100ms) |
 | 5 | Monitor Playback Progress and Verify Latency Metrics | Poll `gst_element_query_position()` at 100ms intervals to verify position advances at expected rate. Calculate end-to-end latency from rate change command to stable fast-forward playback. Validate that latency metrics are captured and remain within acceptable bounds (default: 100 milliseconds) | Verify position increments are consistent with 2x rate, no stalls or backward jumps detected, latency metrics logged and within threshold |
-| 6 | Validate Frame Rendering | Poll `westerossink→stats` to verify `rendered_frames` increments and `dropped_frames` remains acceptable | Verify frame statistics indicate proper video rendering |
+| 6 | Validate Frame Rendering | Poll `westerossinkâ†’stats` to verify `rendered_frames` increments and `dropped_frames` remains acceptable | Verify frame statistics indicate proper video rendering |
 | 7 | Validate Test Success Indicators | Parse GCheck framework output and verify test-specific metrics match expected values | Verify GCheck shows `Failures: 0`, `Errors: 0`, and metrics are correct |
 | 8 | Release Pipeline Resources | Set pipeline state to `GST_STATE_NULL` and release all codec, decoder, and sink resources | Verify pipeline reaches `GST_STATE_NULL` and system restored to pre-test state |
 
