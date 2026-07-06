@@ -22,7 +22,6 @@ To validate the time taken to launch the Lightning/Unified Player application an
 | 3 | Confirm LOGGING_METHOD configuration | The `LOGGING_METHOD` key in the device configuration file must be set to either `REST_API` or `WEB_INSPECT` to determine how the Lightning application logs are monitored during the test. | The device configuration file should contain a valid `LOGGING_METHOD` value. |
 | 4 | Confirm APP_LAUNCH_THRESHOLD_VALUE configuration | The `APP_LAUNCH_THRESHOLD_VALUE` and `THRESHOLD_OFFSET` keys must be configured in the device configuration file to define the acceptable time range for application launch. | The `APP_LAUNCH_THRESHOLD_VALUE` and `THRESHOLD_OFFSET` keys should be present and populated with valid values in the device configuration file. |
 | 5 | Confirm PACKAGEMANAGER_FILE_LOCATOR configuration | The `PACKAGEMANAGER_FILE_LOCATOR` key must be set in the device configuration file to specify the file system path used by PackageManager when installing the application bundle. | The `PACKAGEMANAGER_FILE_LOCATOR` configuration key should be set with a valid path in the device configuration file. |
-| 6 | Confirm required plugins are activated | The DeviceInfo and org.rdk.PersistentStore plugins must be in the activated state on the device. | The DeviceInfo and org.rdk.PersistentStore plugins should be in the activated state. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

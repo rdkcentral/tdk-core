@@ -22,7 +22,6 @@ To validate the CPU and memory resource usage of the device during MP4 video pla
 | 3 | Confirm LOGGING_METHOD configuration | The `LOGGING_METHOD` key in the device configuration file must be set to either `REST_API` or `WEB_INSPECT`. | The device configuration file should contain a valid `LOGGING_METHOD` value. |
 | 4 | Confirm PACKAGEMANAGER_FILE_LOCATOR configuration | The `PACKAGEMANAGER_FILE_LOCATOR` key must be set in the device configuration file. | The `PACKAGEMANAGER_FILE_LOCATOR` configuration key should be set with a valid path. |
 | 5 | Confirm the MP4 video stream URL is configured | The `video_src_url_mp4` variable in MediaValidationVariables must be configured with a valid MP4 video stream URL. | The MP4 video URL should be configured and accessible. |
-| 6 | Confirm required plugins are activated | The DeviceInfo and org.rdk.PersistentStore plugins must be in the activated state. | Both plugins should be in the activated state. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
@@ -38,7 +37,7 @@ To validate the CPU and memory resource usage of the device during MP4 video pla
 | 7 | Monitor play and pause events during MP4 video playback | Monitor the application log (via REST_API log file or WEB_INSPECT WebSocket console) for play and pause event log messages. For REST_API: monitor the app log file for lines containing "Expected Event: paused", "Observed Event: paused", "Expected Event: play", "Observed Event: play", and "TEST RESULT:". For WEB_INSPECT: monitor the WebSocket console for the same event messages. | The pause and play events should be observed in the application log, and "TEST RESULT: SUCCESS" should be received, confirming the MP4 video was successfully paused and resumed. |
 | 8 | Validate resource usage during MP4 video play/pause operations | After confirming successful play and pause events ("TEST RESULT: SUCCESS"), validate the CPU and memory usage using the resource validation step, which internally invokes `DeviceInfo.1.systeminfo`: <br>`{"jsonrpc":"2.0","id":1,"method":"DeviceInfo.1.systeminfo"}` | The CPU and memory usage should be within the expected threshold limits during MP4 video play and pause operations. The resource usage validation should return SUCCESS with no ERROR status. |
 | 9 | Terminate the unified player application | Terminate the launched application: <br>`{"jsonrpc":"2.0","id":1,"method":"org.rdk.AppManager.1.terminateApp","params":{"appId":"<app_name>"}}` | The application should be terminated successfully. |
-| 10 | Revert plugin states to original configuration | If any plugins were modified during test setup, restore their original states. | All plugin states should be restored to their original configuration. |
+| 10 | Revert plugin states to original configuration | If any plugins were modified during test setup, restore their original states: <br>`{"jsonrpc":"2.0","id":1,"method":"Controller.1.deactivate","params":{"callsign":"<plugin_name>"}}` | All plugin states should be restored to their original configuration as captured before the test began. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
