@@ -24,7 +24,6 @@ To validate the time taken to launch the Lightning/Unified Player application ov
 | 5 | Confirm LOGGING_METHOD configuration | The `LOGGING_METHOD` key in the device configuration file must be set to either `REST_API` or `WEB_INSPECT`. | The device configuration file should contain a valid `LOGGING_METHOD` value. |
 | 6 | Confirm APP_LAUNCH_THRESHOLD_VALUE configuration | The `APP_LAUNCH_THRESHOLD_VALUE` and `THRESHOLD_OFFSET` keys must be configured in the device configuration file. | The `APP_LAUNCH_THRESHOLD_VALUE` and `THRESHOLD_OFFSET` keys should be present and populated with valid values. |
 | 7 | Confirm PACKAGEMANAGER_FILE_LOCATOR configuration | The `PACKAGEMANAGER_FILE_LOCATOR` key must be set in the device configuration file. | The `PACKAGEMANAGER_FILE_LOCATOR` configuration key should be set with a valid path. |
-| 8 | Confirm required plugins are activated | The DeviceInfo and org.rdk.PersistentStore plugins must be in the activated state. | Both plugins should be in the activated state. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
@@ -41,7 +40,7 @@ To validate the time taken to launch the Lightning/Unified Player application ov
 | 8 | Monitor application log for launch confirmation over WiFi | Monitor the application log (via REST_API log file monitoring or WEB_INSPECT WebSocket console) for the "URL Info:" message. This message indicates the Lightning application has successfully loaded the URL from PersistentStore over the WiFi connection. | The "URL Info:" confirmation message should appear in the application log, indicating the application has launched successfully over the WiFi network. |
 | 9 | Calculate and validate WiFi application launch time | Calculate the application launch time as the difference between the "URL Info:" log timestamp and the recorded launch initiation time. Retrieve `APP_LAUNCH_THRESHOLD_VALUE` and `THRESHOLD_OFFSET` from the device configuration. Validate: `0 < launch_time < (APP_LAUNCH_THRESHOLD_VALUE + THRESHOLD_OFFSET)`. | The time taken to launch the application over WiFi should be within the expected range defined by `APP_LAUNCH_THRESHOLD_VALUE` plus `THRESHOLD_OFFSET`. |
 | 10 | Terminate the unified player application | Terminate the launched application: <br>`{"jsonrpc":"2.0","id":1,"method":"org.rdk.AppManager.1.terminateApp","params":{"appId":"<app_name>"}}` | The application should be terminated successfully. |
-| 11 | Revert plugin states to original configuration | If any plugins were modified during test setup, restore their original states using the appropriate Controller deactivate or activate methods. | All plugin states should be restored to their original configuration. |
+| 11 | Revert plugin states to original configuration | If any plugins were modified during test setup, restore their original states: <br>`{"jsonrpc":"2.0","id":1,"method":"Controller.1.deactivate","params":{"callsign":"<plugin_name>"}}` | All plugin states should be restored to their original configuration as captured before the test began. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
