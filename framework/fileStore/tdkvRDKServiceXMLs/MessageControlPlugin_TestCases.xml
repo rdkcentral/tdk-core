@@ -149,7 +149,8 @@
               </subtestStep>
             </testStep>
         </testCase>
-        <testCase testCaseId="MC_03" testCaseName= "MessageControl_LocationSync_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the LocationSync module" >
+        <!-- LocationSync plugin is deprecated, the corresponding test cases have been commented -->
+        <!--testCase testCaseId="MC_03" testCaseName= "MessageControl_LocationSync_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the LocationSync module" >
 		<testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="LocationSync" />     
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_LocationSync_Plugin">
@@ -223,8 +224,8 @@
                   </resultGeneration>
               </subtestStep>
             </testStep>
-        </testCase>	
-	<testCase testCaseId="MC_04" testCaseName= "MessageControl_OCDM_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the OCDM module" >
+        </testCase-->
+	<testCase testCaseId="MC_03" testCaseName= "MessageControl_OCDM_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the OCDM module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="OCDM" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_OCDM_Plugin">
@@ -299,8 +300,8 @@
               </subtestStep>
             </testStep>
         </testCase>
-        
-	<testCase testCaseId="MC_05" testCaseName= "MessageControl_SecurityAgent_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the SecurityAgent module" >
+  <!-- SecurityAgent plugin is deprecated, the corresponding test cases have been commented -->
+	<!--testCase testCaseId="MC_04" testCaseName= "MessageControl_SecurityAgent_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the SecurityAgent module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="SecurityAgent" />
           <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -374,9 +375,9 @@
                   </resultGeneration>
               </subtestStep>
             </testStep>
-        </testCase>
-         
-	<testCase testCaseId="MC_06" testCaseName= "MessageControl_LISA_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the LISA module" >
+        </testCase-->
+  <!-- LISA plugin is deprecated, the corresponding test cases have been commented -->
+	<!--testCase testCaseId="MC_06" testCaseName= "MessageControl_LISA_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the LISA module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="LISA" />
             <testCasePreRequisite> 
 		  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -450,8 +451,8 @@
                   </resultGeneration>
               </subtestStep>
             </testStep>
-        </testCase>
-	<testCase testCaseId="MC_07" testCaseName= "MessageControl_System_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the System module" >
+        </testCase-->
+	<testCase testCaseId="MC_04" testCaseName= "MessageControl_System_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the System module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="System" />
             <testCasePreRequisite>
 		    <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -526,8 +527,8 @@
               </subtestStep>
             </testStep>
         </testCase>
-
-	<testCase testCaseId="MC_08" testCaseName= "MessageControl_Cobalt_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the Cobalt module" >
+  <!-- Cobalt plugin is deprecated, the corresponding test cases have been commented -->
+	<!--testCase testCaseId="MC_08" testCaseName= "MessageControl_Cobalt_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the Cobalt module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="Cobalt" />
             <testCasePreRequisite>
 		    <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -614,8 +615,9 @@
                   </resultGeneration>
               </subtestStep>
             </testStep>
-    </testCase>
-    <testCase testCaseId="MC_09" testCaseName= "MessageControl_Messenger_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the Messenger module" >
+    </testCase-->
+    <!-- Messenger plugin is deprecated, the corresponding test cases have been commented -->
+    <!--testCase testCaseId="MC_06" testCaseName= "MessageControl_Messenger_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the Messenger module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="Messenger" />
             <testCasePreRequisite>
                   <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -689,8 +691,8 @@
                   </resultGeneration>
               </subtestStep>
             </testStep>
-        </testCase>
-        <testCase testCaseId="MC_10" testCaseName= "MessageControl_Monitor_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the Monitor module" >
+        </testCase-->
+        <testCase testCaseId="MC_05" testCaseName= "MessageControl_Monitor_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the Monitor module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="Monitor" />
             <testCasePreRequisite>
                   <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -765,7 +767,7 @@
               </subtestStep>
             </testStep>
         </testCase>
-	<testCase testCaseId="MC_11" testCaseName= "MessageControl_DisplayInfo_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the DisplayInfo  module" >
+	<testCase testCaseId="MC_06" testCaseName= "MessageControl_DisplayInfo_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the DisplayInfo  module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="DisplayInfo" />
             <testCasePreRequisite>
                   <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -840,7 +842,8 @@
               </subtestStep>
             </testStep>
         </testCase>
-	<testCase testCaseId="MC_12" testCaseName= "MessageControl_DeviceIdentification_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the DeviceIdentification  module" >
+  <!-- DeviceIdentification plugin is deprecated, the corresponding test cases have been commented -->
+	<!--testCase testCaseId="MC_12" testCaseName= "MessageControl_DeviceIdentification_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the DeviceIdentification  module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="DeviceIdentification" />
             <testCasePreRequisite>
                   <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -914,10 +917,10 @@
                   </resultGeneration>
               </subtestStep>
             </testStep>
-        </testCase>
+        </testCase-->
 
-	<!-- Test case 13 -->
-	<testCase testCaseId="MC_13" testCaseName= "MessageControl_DeviceInfo_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the DeviceInfo module" >
+	<!-- Test case 07 -->
+	<testCase testCaseId="MC_07" testCaseName= "MessageControl_DeviceInfo_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the DeviceInfo module" >
 	<testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="DeviceInfo" />     
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_DeviceInfo_Plugin">
@@ -993,8 +996,8 @@
             </testStep>
         </testCase>
 	
-	<!-- Test case 14 -->
-	<testCase testCaseId="MC_14" testCaseName= "MessageControl_PlayerInfo_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the PlayerInfo module" >
+	<!-- Test case 08 -->
+	<testCase testCaseId="MC_08" testCaseName= "MessageControl_PlayerInfo_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the PlayerInfo module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="PlayerInfo" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_PlayerInfo_Plugin">
@@ -1071,7 +1074,8 @@
         </testCase>
 
 	<!-- Test case 15 -->
-	<testCase testCaseId="MC_15" testCaseName= "MessageControl_WebKitBrowser_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the WebKitBrowser module" >
+  <!-- WebKitBrowser plugin is deprecated, the corresponding test cases have been commented -->
+	<!--testCase testCaseId="MC_15" testCaseName= "MessageControl_WebKitBrowser_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the WebKitBrowser module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="WebKitBrowser" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_WebKitBrowser_Plugin">
@@ -1147,10 +1151,10 @@
                   </resultGeneration>
               </subtestStep>
             </testStep>
-        </testCase>
+        </testCase-->
 
-	<!--cTest case 16 -->
-	<testCase testCaseId="MC_16" testCaseName= "MessageControl_MessageControl_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the MessageControl module" >
+	<!--cTest case 09 -->
+	<testCase testCaseId="MC_09" testCaseName= "MessageControl_MessageControl_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the MessageControl module" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="MessageControl" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_MessageControl_Plugin">
@@ -1226,8 +1230,8 @@
             </testStep>
         </testCase>
 
-	<!-- Test case 17 -->
-	<testCase testCaseId="MC_17" testCaseName="MessageControl_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+	<!-- Test case 10 -->
+	<testCase testCaseId="MC_10" testCaseName="MessageControl_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
              <testCaseInfo testCaseType="direct" />
              <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">

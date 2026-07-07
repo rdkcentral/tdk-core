@@ -77,7 +77,7 @@ accessible via JSON-RPC under the callsign `org.rdk.PackageManagerRDKEMS` (versi
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Subscribe to the onAppInstallationStatus event | Register a WebSocket event listener for `onAppInstallationStatus` to receive `onAppInstallationStatus` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.register", "params": {"event": "onAppInstallationStatus", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 1 | Subscribe to the onAppInstallationStatus event | Register a WebSocket event listener for `onAppInstallationStatus` to receive `onAppInstallationStatus` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.register", "params": {"event": "onAppInstallationStatus", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ### Plugin Pre-condition 4: Configure_Device_Parameter
 
@@ -1022,7 +1022,7 @@ Verify that the getPackageState method handles missing parameters correctly
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Unsubscribe from the onAppInstallationStatus event | Unregister the WebSocket event listener for `onAppInstallationStatus` to stop receiving `onAppInstallationStatus` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.unregister", "params": {"event": "onAppInstallationStatus", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 1 | Unsubscribe from the onAppInstallationStatus event | Unregister the WebSocket event listener for `onAppInstallationStatus` to stop receiving `onAppInstallationStatus` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.unregister", "params": {"event": "onAppInstallationStatus", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 
 ### Plugin Post-condition 2: Uninstall_Package
 
@@ -1035,9 +1035,9 @@ Verify that the getPackageState method handles missing parameters correctly
 
 | Attribute | Value |
 | --- | --- |
-| Supported Models | Video Accelerator, RPI Client |
+| Supported Models | Video Accelerator, RPI-Client |
 | Estimated Duration | 20 minutes |
 | Priority | Medium |
 | TDK Release Version | M147 |
 
-<div align="right"><a href="#">&#8593; Go to Top</a></div>
+<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>
