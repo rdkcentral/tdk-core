@@ -52,11 +52,11 @@ accessible via JSON-RPC under the callsign `org.rdk.Bluetooth` (version 1)
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Subscribe to the onDiscoveredDevice event | Register a WebSocket event listener for `onDiscoveredDevice` to receive `onDiscoveredDevice` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.register", "params": {"event": "onDiscoveredDevice", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 2 | Subscribe to the onStatusChanged event | Register a WebSocket event listener for `onStatusChanged` to receive `onStatusChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.register", "params": {"event": "onStatusChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 3 | Subscribe to the onRequestFailed event | Register a WebSocket event listener for `onRequestFailed` to receive `onRequestFailed` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.register", "params": {"event": "onRequestFailed", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 4 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 5 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 1 | Subscribe to the onDiscoveredDevice event | Register a WebSocket event listener for `onDiscoveredDevice` to receive `onDiscoveredDevice` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.register", "params": {"event": "onDiscoveredDevice", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 2 | Subscribe to the onStatusChanged event | Register a WebSocket event listener for `onStatusChanged` to receive `onStatusChanged` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.register", "params": {"event": "onStatusChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 3 | Subscribe to the onRequestFailed event | Register a WebSocket event listener for `onRequestFailed` to receive `onRequestFailed` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.register", "params": {"event": "onRequestFailed", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 4 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 5 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ### Plugin Pre-condition 5: Configure_Device_Parameter
 
@@ -360,11 +360,11 @@ Verify that the connect method returns an error when the plugin is in a deactiva
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Unsubscribe from the onDiscoveredDevice event | Unregister the WebSocket event listener for `onDiscoveredDevice` to stop receiving `onDiscoveredDevice` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.unregister", "params": {"event": "onDiscoveredDevice", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 2 | Unsubscribe from the onStatusChanged event | Unregister the WebSocket event listener for `onStatusChanged` to stop receiving `onStatusChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.unregister", "params": {"event": "onStatusChanged", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 3 | Unsubscribe from the onRequestFailed event | Unregister the WebSocket event listener for `onRequestFailed` to stop receiving `onRequestFailed` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.unregister", "params": {"event": "onRequestFailed", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 4 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 5 | Unsubscribe from the all event | Unregister the WebSocket event listener for `all` to stop receiving `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "all", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 1 | Unsubscribe from the onDiscoveredDevice event | Unregister the WebSocket event listener for `onDiscoveredDevice` to stop receiving `onDiscoveredDevice` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.unregister", "params": {"event": "onDiscoveredDevice", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 2 | Unsubscribe from the onStatusChanged event | Unregister the WebSocket event listener for `onStatusChanged` to stop receiving `onStatusChanged` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.unregister", "params": {"event": "onStatusChanged", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 3 | Unsubscribe from the onRequestFailed event | Unregister the WebSocket event listener for `onRequestFailed` to stop receiving `onRequestFailed` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.unregister", "params": {"event": "onRequestFailed", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 4 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 5 | Unsubscribe from the all event | Unregister the WebSocket event listener for `all` to stop receiving `all` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "all", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 
 ### Plugin Post-condition 2: Bluetooth_Stack_Disable
 
@@ -376,9 +376,9 @@ Verify that the connect method returns an error when the plugin is in a deactiva
 
 | Attribute | Value |
 | --- | --- |
-| Supported Models | Video Accelerator, RPI Client |
+| Supported Models | Video Accelerator, RPI-Client |
 | Estimated Duration | 35 minutes |
 | Priority | Medium |
 | TDK Release Version | M81 |
 
-<div align="right"><a href="#">&#8593; Go to Top</a></div>
+<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>

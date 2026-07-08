@@ -36,7 +36,7 @@ accessible via JSON-RPC under the callsign `org.rdk.DeviceDiagnostics` (version 
 | --- | --- | --- | --- |
 | 1 | Subscribe to the onAVDecoderStatusChanged event | Register a WebSocket event listener for `onAVDecoderStatusChanged` to capture AV decoder status change notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.register", "params": {"event": "onAVDecoderStatusChanged", "id": "client.events.1"}}` | Event subscription should be established successfully and the event listener should be active |
 | 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to capture plugin state change notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event subscription should be established successfully and the event listener should be active |
-| 3 | Subscribe to the all event | Register a WebSocket event listener for `all` to capture all system event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event subscription should be established successfully and the event listener should be active |
+| 3 | Subscribe to the all event | Register a WebSocket event listener for `all` to capture all system event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event subscription should be established successfully and the event listener should be active |
 
 ### Plugin Pre-condition 3: Configure_Device_Parameter
 
@@ -284,15 +284,15 @@ Validates all event on Activating/deactivating the plugin
 | --- | --- | --- | --- |
 | 1 | Unsubscribe from the onAVDecoderStatusChanged event | Unregister the WebSocket event listener for `onAVDecoderStatusChanged` to stop capturing AV decoder status change notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.unregister", "params": {"event": "onAVDecoderStatusChanged", "id": "client.events.1"}}` | Event unsubscription should be completed successfully and the event listener should be inactive |
 | 2 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop capturing plugin state change notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unsubscription should be completed successfully and the event listener should be inactive |
-| 3 | Unsubscribe from the all event | Unregister the WebSocket event listener for `all` to stop capturing all system event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "all", "id": "client.events.1"}}` | Event unsubscription should be completed successfully and the event listener should be inactive |
+| 3 | Unsubscribe from the all event | Unregister the WebSocket event listener for `all` to stop capturing all system event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "all", "id": "client.events.1"}}` | Event unsubscription should be completed successfully and the event listener should be inactive |
 
 ## Test Attributes
 
 | Attribute | Value |
 | --- | --- |
-| Supported Models | Video Accelerator, RPI Client |
+| Supported Models | Video Accelerator, RPI-Client |
 | Estimated Duration | 20 minutes |
 | Priority | Medium |
 | TDK Release Version | M81 |
 
-<div align="right"><a href="#">&#8593; Go to Top</a></div>
+<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>
