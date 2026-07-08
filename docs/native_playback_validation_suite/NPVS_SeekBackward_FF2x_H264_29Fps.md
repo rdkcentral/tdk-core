@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_237
 
-**TestCase Name**
+## TestCase Name
 NPVS_SeekBackward_FF2x_H264_29Fps
 
 ## Table of Contents
@@ -33,7 +33,7 @@ Validate backward seek operation to prior position within already-played stream 
 | 3 | Register Callbacks and Setup State Machine | Register `first-video-frame-callback` signal via `g_signal_connect()` for frame detection. Set playbin flags (VIDEO, AUDIO, BUFFERING) via `g_object_set(playbin, "flags", flags, NULL)`. Register bus message handler | All signals registered, flags configured, bus monitoring active |
 | 4 | Transition Pipeline to Playing State | Set pipeline state `GST_STATE_PAUSED`. Transition to `GST_STATE_PLAYING` via `gst_element_set_state()`. Query initial position via `gst_element_query_position()`. Monitor first-frame signal | Pipeline state changed to PLAYING, first frame detected, baseline position recorded |
 | 5 | Execute Backward Seek Operation | Query current position via `gst_element_query_position(playbin, GST_FORMAT_TIME, &currentPosition)`. Calculate seek target earlier in stream. Invoke `gst_element_seek(playbin, 1.0, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH, GST_SEEK_TYPE_SET, seekPosition, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE)` | Seek operation completes without errors, pipeline continues playing |
-| 6 | Validate Seek Target Accuracy | Monitor bus for `GST_MESSAGE_ASYNC_DONE` confirming seek completion. Poll `gst_element_query_position()` every 100ms to verify position matches target within ±1000ms | Position queries show currentPosition ≈ seekPosition ±1000ms, seek confirmed |
+| 6 | Validate Seek Target Accuracy | Monitor bus for `GST_MESSAGE_ASYNC_DONE` confirming seek completion. Poll `gst_element_query_position()` every 100ms to verify position matches target within Â±1000ms | Position queries show currentPosition â‰ˆ seekPosition Â±1000ms, seek confirmed |
 | 7 | Monitor Playback and Frame Statistics | Poll westerossink stats every 1 second. Extract rendered_frames and dropped_frames via `gst_structure_get_uint64()`. Verify rendered frames increment, dropped < 1%. Query video-pts for monotonicity | Rendered frames increase per second, dropped < 1%, PTS advances without gaps |
 | 8 | Monitor EOS and Validate Quality | Continue monitoring until `GST_MESSAGE_EOS` on bus or timeout. Verify no `GST_MESSAGE_ERROR` throughout operation | EOS detected or timeout, no errors, PTS strictly increasing |
 | 9 | Release Pipeline Resources | Set pipeline state to `GST_STATE_NULL` via `gst_element_set_state()`. Unreference playbin via `gst_object_unref()`. Close logging, free memory | Pipeline NULL, all resources released, system ready |

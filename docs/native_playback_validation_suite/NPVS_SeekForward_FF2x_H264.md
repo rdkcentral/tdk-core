@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_208
 
-**TestCase Name**
+## TestCase Name
 NPVS_SeekForward_FF2x_H264
 
 ## Table of Contents
@@ -33,7 +33,7 @@ Validate forward seek operation to future position beyond current playback locat
 | 3 | Register Callbacks and Setup State Machine | Register `first-video-frame-callback` signal via `g_signal_connect()` for frame detection. Set playbin flags (VIDEO, AUDIO, BUFFERING) via `g_object_set(playbin, "flags", flags, NULL)`. Register bus message handler for ERROR, EOS, STATE_CHANGED | All signals registered, flags configured, bus monitoring active |
 | 4 | Transition Pipeline to Playing State | Set pipeline state `GST_STATE_PAUSED` via `gst_element_set_state()`. Transition to `GST_STATE_PLAYING` via `gst_element_set_state()`. Query initial position via `gst_element_query_position()`. Monitor first-frame signal for rendering confirmation | Pipeline state changed to PLAYING, first frame signal detected, baseline position recorded |
 | 5 | Execute Forward Seek Operation | Query current playback position via `gst_element_query_position(playbin, GST_FORMAT_TIME, &currentPosition)`. Calculate seek target later in stream (e.g., +30 seconds from current). Invoke `gst_element_seek(playbin, 1.0, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH, GST_SEEK_TYPE_SET, seekPosition, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE)` | Seek operation completes without errors, pipeline continues playing |
-| 6 | Validate Seek Target Accuracy | Monitor bus via `gst_bus_pop_filtered()` for `GST_MESSAGE_ASYNC_DONE` confirming seek completion. Poll `gst_element_query_position()` every 100ms to verify position matches seek target within ±GST_SECOND (±1000ms). Confirm position stabilizes at target | Position queries show currentPosition ≈ seekPosition ±1000ms, seek confirmed successful |
+| 6 | Validate Seek Target Accuracy | Monitor bus via `gst_bus_pop_filtered()` for `GST_MESSAGE_ASYNC_DONE` confirming seek completion. Poll `gst_element_query_position()` every 100ms to verify position matches seek target within Â±GST_SECOND (Â±1000ms). Confirm position stabilizes at target | Position queries show currentPosition â‰ˆ seekPosition Â±1000ms, seek confirmed successful |
 | 7 | Monitor Playback Continuation and Frame Statistics | Continue polling position every 100ms. Every 1 second, poll westerossink stats via `g_object_get(westerossink, "stats", &structure)`. Extract rendered_frames and dropped_frames via `gst_structure_get_uint64()`. Verify rendered frames increment, dropped frames < 1%. Query video-pts via `g_object_get(westerossink, "video-pts", &pts)` | Rendered frame count increases per second, dropped < 1%, PTS advances without gaps |
 | 8 | Monitor EOS and Validate Playback Quality | Continue monitoring until `GST_MESSAGE_EOS` detected on bus via `gst_bus_pop_filtered()`. Verify no `GST_MESSAGE_ERROR` messages detected. Confirm PTS monotonicity maintained - no backward jumps | EOS detected or timeout reached, no errors, PTS strictly increasing |
 | 9 | Release Pipeline Resources | Set pipeline state `GST_STATE_NULL` via `gst_element_set_state(playbin, GST_STATE_NULL)`. Unreference playbin via `gst_object_unref(playbin)`. Close logging, free memory, verify system ready | Pipeline state becomes NULL, all resources released, logging closed |

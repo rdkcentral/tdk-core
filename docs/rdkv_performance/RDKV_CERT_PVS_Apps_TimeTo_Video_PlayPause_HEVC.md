@@ -23,7 +23,6 @@ To validate the time taken for the Lightning/Unified Player application to pause
 | 4 | Confirm PACKAGEMANAGER_FILE_LOCATOR configuration | The `PACKAGEMANAGER_FILE_LOCATOR` key must be set in the device configuration file. | The `PACKAGEMANAGER_FILE_LOCATOR` configuration key should be set with a valid path. |
 | 5 | Confirm PAUSE_TIME_THRESHOLD_VALUE and PLAY_TIME_THRESHOLD_VALUE are configured | The `PAUSE_TIME_THRESHOLD_VALUE`, `PLAY_TIME_THRESHOLD_VALUE`, and `THRESHOLD_OFFSET` values must be set in PerformanceTestVariables. | The timing threshold variables should be configured with valid numeric values. |
 | 6 | Confirm the HEVC video stream URL is configured | The `video_src_url_hevc` variable in PerformanceTestVariables must be configured with a valid HEVC stream URL. The `hevc_url_type` determines whether HLS HEVC, DASH HEVC, or MP4 codec players are used. | The HEVC video URL and URL type should be configured and accessible. |
-| 7 | Confirm required plugins are activated | The DeviceInfo and org.rdk.PersistentStore plugins must be in the activated state. | Both plugins should be in the activated state. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
@@ -40,7 +39,7 @@ To validate the time taken for the Lightning/Unified Player application to pause
 | 8 | Calculate and validate time to pause the HEVC video | Calculate TimeTo_Pause as the difference between the observed_pause_evt timestamp and the expected_pause_evt timestamp. Validate: TimeTo_Pause must be less than or equal to `PAUSE_TIME_THRESHOLD_VALUE` + `THRESHOLD_OFFSET`. | The TimeTo_Pause value should be within the configured `PAUSE_TIME_THRESHOLD_VALUE` + `THRESHOLD_OFFSET` limit. The test step should report SUCCESS if the threshold is met. |
 | 9 | Calculate and validate time to resume the HEVC video | Calculate TimeTo_Play as the difference between the observed_play_evt timestamp and the expected_play_evt timestamp. Validate: TimeTo_Play must be less than or equal to `PLAY_TIME_THRESHOLD_VALUE` + `THRESHOLD_OFFSET`. | The TimeTo_Play value should be within the configured `PLAY_TIME_THRESHOLD_VALUE` + `THRESHOLD_OFFSET` limit. The test step should report SUCCESS if the threshold is met. |
 | 10 | Terminate the unified player application | Terminate the launched application: <br>`{"jsonrpc":"2.0","id":1,"method":"org.rdk.AppManager.1.terminateApp","params":{"appId":"<app_name>"}}` | The application should be terminated successfully. |
-| 11 | Revert plugin states to original configuration | If any plugins were modified during test setup, restore their original states. | All plugin states should be restored to their original configuration. |
+| 11 | Revert plugin states to original configuration | If any plugins were modified during test setup, restore their original states: <br>`{"jsonrpc":"2.0","id":1,"method":"Controller.1.deactivate","params":{"callsign":"<plugin_name>"}}` | All plugin states should be restored to their original configuration as captured before the test began. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes

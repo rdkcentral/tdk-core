@@ -4,7 +4,7 @@
         <!-- Module Id -->
         <moduleId>3ba5524a-595a-4156-b8ae-24a22725c995</moduleId>
         <!-- Module name -->
-        <moduleName>Vulkan</moduleName>
+        <moduleName>Graphics</moduleName>
         <!-- Category of the module -->
         <category>RDKV_RDKSERVICE</category>
         <!-- Execution time out of module -->
@@ -17,15 +17,22 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="318c114e-a29f-470a-bc8d-d65bf66033bb" name="execute_binary">
+            <function id="1e40cb79-b4bb-4697-9118-df5281342d99" name="parse_graphics_output">
                 <parameters>
-                    <parameter id="b82cb8f5-4d09-463f-b44e-e3727f5eef1b" parameterName="present_mode" parameterType="STRING" range="A-Z"/>
-                    <parameter id="d2b06bb6-f717-4289-9bc5-4b3f1e145b48" parameterName="binary" parameterType="STRING" range="A-Z"/>
+                    <parameter id="bff6e31b-b03c-4048-b8f6-3f27ecf2b927" parameterName="graphics_output" parameterType="STRING" range="A-Z"/>
+                    <parameter id="328b0eac-04be-47f3-83e1-839a9e3213de" parameterName="test_app" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="d01e130e-9396-46e5-bd6e-1d4e234a15fd" name="run_test">
+            <function id="318c114e-a29f-470a-bc8d-d65bf66033bb" name="execute_binary">
                 <parameters>
-                    <parameter id="cd192c2a-8a72-4314-9d19-a8304012318c" parameterName="command" parameterType="STRING" range="A-Z"/>
+                    <parameter id="d2b06bb6-f717-4289-9bc5-4b3f1e145b48" parameterName="binary" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b82cb8f5-4d09-463f-b44e-e3727f5eef1b" parameterName="present_mode" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="130b238a-9ebd-4923-ace0-8fb978fd08e3" name="set_prerequisites">
+                <parameters>
+                    <parameter id="78f34b60-2e02-44bb-8f8d-9569ad219021" parameterName="model" parameterType="STRING" range="A-Z"/>
+                    <parameter id="687e9ff8-6e44-48be-88a8-e5713dfd62bd" parameterName="resolution" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="e9e5d120-6a1b-4329-bb1a-5c077b43f33f" name="execute_Cmnd_InDUT">
@@ -33,10 +40,9 @@
                     <parameter id="f69838c4-e48c-4866-aa9b-ef5bd6875456" parameterName="command" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
-            <function id="130b238a-9ebd-4923-ace0-8fb978fd08e3" name="set_prerequisites">
+            <function id="d01e130e-9396-46e5-bd6e-1d4e234a15fd" name="run_test">
                 <parameters>
-                    <parameter id="687e9ff8-6e44-48be-88a8-e5713dfd62bd" parameterName="resolution" parameterType="STRING" range="A-Z"/>
-                    <parameter id="78f34b60-2e02-44bb-8f8d-9569ad219021" parameterName="model" parameterType="STRING" range="A-Z"/>
+                    <parameter id="cd192c2a-8a72-4314-9d19-a8304012318c" parameterName="command" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="12a344e9-6aca-46d6-a935-55552377abb9" name="execute_postrequisites">
@@ -120,6 +126,27 @@
                 <name>execute_postrequisites</name>
                 <funName>execute_postrequisites</funName>
                 <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>b74127dd-605e-42f2-9a77-6e3d3fb4504b</id>
+                <name>parse_graphics_output</name>
+                <funName>parse_graphics_output</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>60c3d369-df74-488c-aa83-86f688e87be6</id>
+                        <parameterName>graphics_output</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>sample_log</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a8c948b3-17a1-4876-9705-3b6945f7764e</id>
+                        <parameterName>test_app</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>Essos_TDKTestApp</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
             </primitivetest>
         </primitivetests>
     </module>

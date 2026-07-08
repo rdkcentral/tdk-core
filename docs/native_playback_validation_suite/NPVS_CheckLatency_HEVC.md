@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_205
 
-**TestCase Name**
+## TestCase Name
 NPVS_CheckLatency_HEVC
 
 ## Table of Contents

@@ -22,7 +22,7 @@ To validate that the time taken to resume a background application to the foregr
 | 2 | Configure google_bundle in PerformanceTestVariables | `google_bundle` must be set to the first application bundle filename (App A) in PerformanceTestVariables. | The google_bundle variable should be configured with a valid application bundle name for App A. |
 | 3 | Configure keytest_bundle in PerformanceTestVariables | `keytest_bundle` must be set to the second application bundle filename (App B) in PerformanceTestVariables. | The keytest_bundle variable should be configured with a valid application bundle name for App B. |
 | 4 | Configure app_download_url in PerformanceTestVariables | `app_download_url` must be set to the base URL where the application bundles are hosted. | The app_download_url should point to a reachable hosting location. |
-| 5 | Configure resume threshold in device config | The device-specific configuration file must contain threshold and offset values used for resume time validation. | Threshold and offset configuration should be present for performance comparison. |
+| 5 | Configure resume threshold in device config | The device-specific configuration file must have `APPMANAGER_LAUNCH_THRESHOLD_VALUE` set to the acceptable resume time in milliseconds, and `THRESHOLD_OFFSET` set to the allowed offset value. | `APPMANAGER_LAUNCH_THRESHOLD_VALUE` and `THRESHOLD_OFFSET` should be correctly configured for resume time performance comparison. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

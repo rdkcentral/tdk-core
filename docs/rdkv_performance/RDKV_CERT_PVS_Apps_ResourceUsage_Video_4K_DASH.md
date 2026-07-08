@@ -22,7 +22,6 @@ To validate the CPU and memory resource usage of the device during 4K DASH video
 | 3 | Confirm LOGGING_METHOD configuration | The `LOGGING_METHOD` key in the device configuration file must be set to either `REST_API` or `WEB_INSPECT`. | The device configuration file should contain a valid `LOGGING_METHOD` value. |
 | 4 | Confirm PACKAGEMANAGER_FILE_LOCATOR configuration | The `PACKAGEMANAGER_FILE_LOCATOR` key must be set in the device configuration file. | The `PACKAGEMANAGER_FILE_LOCATOR` configuration key should be set with a valid path. |
 | 5 | Confirm the 4K DASH video stream URL is configured | The `video_src_url_4k_dash` variable in MediaValidationVariables must be configured with a valid 4K DASH video stream URL. | The 4K DASH video URL should be configured and accessible. |
-| 6 | Confirm required plugins are activated | The DeviceInfo and org.rdk.PersistentStore plugins must be in the activated state. | Both plugins should be in the activated state. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
@@ -38,7 +37,7 @@ To validate the CPU and memory resource usage of the device during 4K DASH video
 | 7 | Monitor application log for 4K DASH video playback confirmation | Monitor the application log (via REST_API log file or WEB_INSPECT WebSocket console) for the "URL Info:" message indicating the application has successfully loaded the 4K DASH video URL and started playback. | The "URL Info:" confirmation message should appear in the application log. |
 | 8 | Validate resource usage during 4K DASH video playback | After receiving the "URL Info:" confirmation, validate the CPU and memory usage using the resource validation step, which internally invokes `DeviceInfo.1.systeminfo`: <br>`{"jsonrpc":"2.0","id":1,"method":"DeviceInfo.1.systeminfo"}` | The CPU and memory usage should be within the expected threshold limits during 4K DASH video playback. The resource usage validation should return SUCCESS with no ERROR status. |
 | 9 | Terminate the unified player application | Terminate the launched application: <br>`{"jsonrpc":"2.0","id":1,"method":"org.rdk.AppManager.1.terminateApp","params":{"appId":"<app_name>"}}` | The application should be terminated successfully. |
-| 10 | Revert plugin states to original configuration | If any plugins were modified during test setup, restore their original states. | All plugin states should be restored to their original configuration. |
+| 10 | Revert plugin states to original configuration | If any plugins were modified during test setup, restore their original states: <br>`{"jsonrpc":"2.0","id":1,"method":"Controller.1.deactivate","params":{"callsign":"<plugin_name>"}}` | All plugin states should be restored to their original configuration as captured before the test began. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes

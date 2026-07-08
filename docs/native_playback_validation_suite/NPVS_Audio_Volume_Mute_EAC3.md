@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_141
 
-**TestCase Name**
+## TestCase Name
 NPVS_Audio_Volume_Mute_EAC3
 
 ## Table of Contents
@@ -33,7 +33,7 @@ Test to verify if audio stream playback volume can be muted (set to 0.0) using G
 | 3 | Transition Pipeline to Playing State | Set pipeline to `GST_STATE_PLAYING` via `gst_element_set_state(playbin, GST_STATE_PLAYING)` to begin EAC3 stream playback at initial full volume. Play stream for 5 seconds at full volume to establish stable playback | Verify pipeline state transitions to PLAYING state, playback begins without errors, stream data flowing to decoders |
 | 4 | Query Initial Playbin Volume Before Mute | Query current playbin volume using `gst_stream_volume_get_volume(GST_STREAM_VOLUME(playbin), GST_STREAM_VOLUME_FORMAT_CUBIC)` to capture initial volume level. Expected value: 1.0 representing 100% volume on CUBIC scale | Verify volume query returns 1.0 confirming playbin initialized with full volume |
 | 5 | Set Playbin Volume to Mute (0.0) Using gst_stream_volume_set_volume API | Execute volume mute operation via `gst_stream_volume_set_volume(GST_STREAM_VOLUME(playbin), GST_STREAM_VOLUME_FORMAT_CUBIC, 0.0)` to set playbin volume to 0.0 (complete mute on CUBIC scale). Immediately verify mute was applied by calling `gst_stream_volume_get_volume(GST_STREAM_VOLUME(playbin), GST_STREAM_VOLUME_FORMAT_CUBIC)` - should return 0.0 | Verify `gst_stream_volume_set_volume()` call completes successfully, immediate follow-up query via `gst_stream_volume_get_volume()` returns 0.0 confirming mute applied |
-| 6 | Monitor Playback Position During Mute State (10 seconds) | Continue playback for 10 seconds while volume is muted (0.0). Query playback position every 100ms via `gst_element_query_position(playbin, GST_FORMAT_TIME, &position)` to verify position advances at expected rate (1 second position per 1 second real-time ±250ms tolerance) with no backward jumps | Verify playback position advances continuously during 10-second mute period within ±250ms tolerance per second, no backward position jumps detected, playback continues smoothly despite mute |
+| 6 | Monitor Playback Position During Mute State (10 seconds) | Continue playback for 10 seconds while volume is muted (0.0). Query playback position every 100ms via `gst_element_query_position(playbin, GST_FORMAT_TIME, &position)` to verify position advances at expected rate (1 second position per 1 second real-time Â±250ms tolerance) with no backward jumps | Verify playback position advances continuously during 10-second mute period within Â±250ms tolerance per second, no backward position jumps detected, playback continues smoothly despite mute |
 | 7 | Verify Final Mute State and Release Resources | Query final playbin volume via `gst_stream_volume_get_volume(GST_STREAM_VOLUME(playbin), GST_STREAM_VOLUME_FORMAT_CUBIC)` - should still return 0.0. Verify test framework output shows `Failures: 0` and `Errors: 0`. Set pipeline to `GST_STATE_NULL` via `gst_element_set_state(playbin, GST_STATE_NULL)` to stop playback. Unreference GStreamer objects: `gst_object_unref(playbin)`, `gst_object_unref(westerossink)` | Verify final volume query returns 0.0 confirming mute maintained throughout playback, test execution shows `Failures: 0, Errors: 0`, pipeline transitions to GST_STATE_NULL, all objects unreferenced and resources released |
 
 ## Test Attributes

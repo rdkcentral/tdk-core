@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_264
 
-**TestCase Name**
+## TestCase Name
 NPVS_Seek_Towards_EOS_Webm
 
 ## Table of Contents
@@ -12,7 +12,7 @@ NPVS_Seek_Towards_EOS_Webm
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Test validates seeking capability towards end-of-stream (EOS) on WebM VP9 video stream by invoking `gst_element_seek()` to reposition playback near the stream's final position. The test verifies that the seek target position is reached within ±1 second tolerance using position queries every 100ms, and that playback continues smoothly through remaining stream until `GST_MESSAGE_EOS` is detected. Validates frame rendering continues with correct PTS monotonicity while webmmux properly handles frame positioning during near-EOS seeking operations.
+Test validates seeking capability towards end-of-stream (EOS) on WebM VP9 video stream by invoking `gst_element_seek()` to reposition playback near the stream's final position. The test verifies that the seek target position is reached within Â±1 second tolerance using position queries every 100ms, and that playback continues smoothly through remaining stream until `GST_MESSAGE_EOS` is detected. Validates frame rendering continues with correct PTS monotonicity while webmmux properly handles frame positioning during near-EOS seeking operations.
 
 ## Preconditions
 
@@ -33,7 +33,7 @@ Test validates seeking capability towards end-of-stream (EOS) on WebM VP9 video 
 | 3 | Register Callbacks and Setup State Machine | Register `first-video-frame-callback` signal via `g_signal_connect()`. Set playbin flags (VIDEO, AUDIO, BUFFERING). Register bus handler for ERROR, EOS, STATE_CHANGED | Signals registered, flags configured, bus monitoring active |
 | 4 | Transition Pipeline to Playing State | Set `GST_STATE_PAUSED`. Query stream duration via `gst_element_query_duration()`. Transition `GST_STATE_PLAYING`. Monitor first-frame signal | Pipeline PLAYING, duration queried, first frame detected |
 | 5 | Execute Seek Towards EOS | Query position via `gst_element_query_position()`. Calculate seek target as (duration - 5 seconds). Invoke `gst_element_seek(playbin, 1.0, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH, GST_SEEK_TYPE_SET, seekPosition, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE)` | Seek completes, VP9 stream positioned near EOS, playback continues |
-| 6 | Validate EOS Seek Target Accuracy | Monitor bus for `GST_MESSAGE_ASYNC_DONE`. Poll `gst_element_query_position()` every 100ms within ±1000ms of target. Confirm position stabilizes | Position matches seek target ±1000ms |
+| 6 | Validate EOS Seek Target Accuracy | Monitor bus for `GST_MESSAGE_ASYNC_DONE`. Poll `gst_element_query_position()` every 100ms within Â±1000ms of target. Confirm position stabilizes | Position matches seek target Â±1000ms |
 | 7 | Monitor Video Rendering Through EOS Boundary | Poll westerossink stats every 1 second. Verify rendered_frames increment, dropped < 1%. Monitor position advancing to stream end | Rendered frames increase, dropped < 1%, position advances to EOS |
 | 8 | Monitor EOS Detection and Stream Completion | Continue until `GST_MESSAGE_EOS` on bus. Verify no `GST_MESSAGE_ERROR`. Confirm stream reaches end without errors | EOS detected at stream end, no errors |
 | 9 | Release Pipeline Resources | Set `GST_STATE_NULL`. Unreference playbin via `gst_object_unref()`. Close logging, free memory | Pipeline NULL, resources released |

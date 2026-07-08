@@ -1,7 +1,7 @@
-**TestCase ID**
+﻿## TestCase ID
 NATIVE_PLAYBACK_266
 
-**TestCase Name**
+## TestCase Name
 NPVS_Seek_Towards_EOS_with_Pause_HLS
 
 ## Table of Contents
@@ -12,7 +12,7 @@ NPVS_Seek_Towards_EOS_with_Pause_HLS
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Test validates seeking capability towards end-of-stream (EOS) on HLS (.m3u8) streaming format with playback pause intervals by invoking `gst_element_seek()` to reposition playback near stream's final position. The test verifies that the seek target is reached within ±1 second tolerance through pause/resume cycles, and validates hlsdemux properly maintains segment state during pause transitions. Validates frame rendering continues with correct PTS monotonicity after pause recovery and EOS is properly detected after pause-resume-seek sequences.
+Test validates seeking capability towards end-of-stream (EOS) on HLS (.m3u8) streaming format with playback pause intervals by invoking `gst_element_seek()` to reposition playback near stream's final position. The test verifies that the seek target is reached within Â±1 second tolerance through pause/resume cycles, and validates hlsdemux properly maintains segment state during pause transitions. Validates frame rendering continues with correct PTS monotonicity after pause recovery and EOS is properly detected after pause-resume-seek sequences.
 
 ## Preconditions
 
@@ -30,10 +30,10 @@ Test validates seeking capability towards end-of-stream (EOS) on HLS (.m3u8) str
 |----|----------|------------------|-----------------|  
 | 1 | Initialize Test Environment | Initialize test environment by sourcing variables from `/opt/TDK/TDK.env` and establish Wayland display session via RDKWindowManager | Verify environment variables load correctly and Wayland display is created |
 | 2 | Configure and Execute Test Application | Retrieve configuration and stream URL, then execute `tdk_mediapipelinetests` with test case name, stream URL, and timeout arguments | Verify configuration is retrieved and `tdk_mediapipelinetests` initializes playbin pipeline |
-| 3 | Construct Pipeline and Initiate Playback | Create `playbin` element with stream URI, set `westerossink` as video sink, trigger `NULL→READY→PAUSED→PLAYING` state transition, verify `first-video-frame-callback` signal | Verify `playbin` reaches `GST_STATE_PLAYING` with first frame rendered, no `GST_MESSAGE_ERROR` |
-| 4 | Execute Seek Operation | Invoke `gst_element_seek()` with `GST_SEEK_FLAG_FLUSH` to reposition playback. Verify position matches the seek target within ±250ms tolerance | Verify test operation completes successfully with expected results |
+| 3 | Construct Pipeline and Initiate Playback | Create `playbin` element with stream URI, set `westerossink` as video sink, trigger `NULLâ†’READYâ†’PAUSEDâ†’PLAYING` state transition, verify `first-video-frame-callback` signal | Verify `playbin` reaches `GST_STATE_PLAYING` with first frame rendered, no `GST_MESSAGE_ERROR` |
+| 4 | Execute Seek Operation | Invoke `gst_element_seek()` with `GST_SEEK_FLAG_FLUSH` to reposition playback. Verify position matches the seek target within Â±250ms tolerance | Verify test operation completes successfully with expected results |
 | 5 | Monitor Playback Progress | Poll `gst_element_query_position()` at 100ms intervals to verify position advances at expected rate | Verify position increments are consistent, no stalls or backward jumps detected |
-| 6 | Validate Frame Rendering | Poll `westerossink→stats` to verify `rendered_frames` increments and `dropped_frames` remains acceptable | Verify frame statistics indicate proper video rendering |
+| 6 | Validate Frame Rendering | Poll `westerossinkâ†’stats` to verify `rendered_frames` increments and `dropped_frames` remains acceptable | Verify frame statistics indicate proper video rendering |
 | 7 | Validate Test Success Indicators | Parse GCheck framework output and verify test-specific metrics match expected values | Verify GCheck shows `Failures: 0`, `Errors: 0`, and metrics are correct |
 | 8 | Release Pipeline Resources | Set pipeline state to `GST_STATE_NULL` and release all codec, decoder, and sink resources | Verify pipeline reaches `GST_STATE_NULL` and system restored to pre-test state |
 
