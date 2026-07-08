@@ -44,7 +44,7 @@ To validate the CPU and memory resource usage of the device during MP4 video pla
 
 **Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 5 min
+**Estimated duration** : 5 mins
 
 **Priority** : High
 

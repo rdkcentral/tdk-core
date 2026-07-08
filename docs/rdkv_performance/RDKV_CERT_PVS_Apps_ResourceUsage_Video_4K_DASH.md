@@ -44,7 +44,7 @@ To validate the CPU and memory resource usage of the device during 4K DASH video
 
 **Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 5 min
+**Estimated duration** : 5 mins
 
 **Priority** : High
 

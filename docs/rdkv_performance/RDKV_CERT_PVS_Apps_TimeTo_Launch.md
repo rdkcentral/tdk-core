@@ -48,7 +48,7 @@ To validate the time taken to launch the Lightning/Unified Player application an
 
 **Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 6 min
+**Estimated duration** : 6 mins
 
 **Priority** : High
 

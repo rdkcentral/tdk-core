@@ -39,7 +39,7 @@ To validate the responsiveness of web applications from the browser using the Sp
 | 10 | Wait for Speedometer benchmark to complete | Wait 2000 seconds for the Speedometer benchmark to complete all its test iterations. | The Speedometer benchmark should complete all iterations within the wait period. |
 | 11 | Retrieve Speedometer benchmark score | Connect to the WebKit webinspect page and extract the main Speedometer score from the benchmark test results. | The Speedometer score should be successfully retrieved and must not contain the value "Unable to get the browser score". |
 | 12 | Validate Speedometer score against threshold | Compare the retrieved Speedometer score against `SPEEDOMETER_THRESHOLD_VALUE` from the device configuration file. | The Speedometer benchmark score should be greater than the configured `SPEEDOMETER_THRESHOLD_VALUE`. |
-| 13 | Terminate Speedometer application | Terminate the Speedometer application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminate", "params": {"appId": "com.rdkcentral.speedometer"}}` | The Speedometer application should be terminated successfully. |
+| 13 | Terminate Speedometer application | Terminate the Speedometer application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "com.rdkcentral.speedometer"}}` | The Speedometer application should be terminated successfully. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes

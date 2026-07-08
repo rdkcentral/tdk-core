@@ -45,7 +45,7 @@ To validate the CPU and memory resource usage of the device while launching the 
 
 **Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 15 min
+**Estimated duration** : 15 mins
 
 **Priority** : High
 
