@@ -6,18 +6,12 @@ RDKV_CERT_AVS_Warehouse
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [WareHouse_Get_STB_Device_Info](#warehouse_get_stb_device_info)
-   - [WareHouse_Set_Front_Panel_State_None](#warehouse_set_front_panel_state_none)
-   - [WareHouse_Set_Front_Panel_State_Download_In_Progress](#warehouse_set_front_panel_state_download_in_progress)
-   - [WareHouse_Set_Front_Panel_State_Download_Failed](#warehouse_set_front_panel_state_download_failed)
-   - [WareHouse_Set_Front_Panel_State_Download_Invalid](#warehouse_set_front_panel_state_download_invalid)
    - [WareHouse_Light_Reset](#warehouse_light_reset)
    - [WareHouse_Check_Is_Clean](#warehouse_check_is_clean)
    - [WareHouse_Reset_Device](#warehouse_reset_device)
    - [WareHouse_Internal_Reset](#warehouse_internal_reset)
    - [WareHouse_Check_Event_On_Device_Reset](#warehouse_check_event_on_device_reset)
    - [Warehouse_ActivateDeactivate_Event_Test](#warehouse_activatedeactivate_event_test)
-   - [WareHouse_Set_Front_Panel_State_EmptyValue](#warehouse_set_front_panel_state_emptyvalue)
    - [Warehouse_ActivateDeactivate_All_Event_Test](#warehouse_activatedeactivate_all_event_test)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
@@ -41,9 +35,9 @@ accessible via JSON-RPC under the callsign `org.rdk.Warehouse` (version 1)
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Subscribe to the resetDone event | Register a WebSocket event listener for `resetDone` to receive `resetDone` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.register", "params": {"event": "resetDone", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 3 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 1 | Subscribe to the resetDone event | Register a WebSocket event listener for `resetDone` to receive `resetDone` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.register", "params": {"event": "resetDone", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 3 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ### Plugin Pre-condition 3: Configure_Device_Parameter
 
@@ -52,102 +46,12 @@ accessible via JSON-RPC under the callsign `org.rdk.Warehouse` (version 1)
 | 1 | Configure NA Tests | `WAREHOUSE_NA_TESTS` must be set to the warehouse test names to skip when not applicable on the DUT | The `WAREHOUSE_NA_TESTS` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
-<a id="warehouse_get_stb_device_info"></a>
-### TestCase Name
-WareHouse_Get_STB_Device_Info
-
-### TestCase ID
-WH_01
-
-### TestCase Objective
-Gets all STB device info
-
-### Test Steps
-
-| Step ID | Step Name | Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Get STB DeviceInfo | Invoke getDeviceInfo on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.getDeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that STB device info is returned successfully with all device details (`success` : `true`) |
-
----
-
-<a id="warehouse_set_front_panel_state_none"></a>
-### TestCase Name
-WareHouse_Set_Front_Panel_State_None
-
-### TestCase ID
-WH_02
-
-### TestCase Objective
-Sets the front panel state to None
-
-### Test Steps
-
-| Step ID | Step Name | Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": -1}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the Front Panel State is set to None successfully  |
-
----
-
-<a id="warehouse_set_front_panel_state_download_in_progress"></a>
-### TestCase Name
-WareHouse_Set_Front_Panel_State_Download_In_Progress
-
-### TestCase ID
-WH_03
-
-### TestCase Objective
-Sets the front panel state to DOWNLOAD IN PROGRESS
-
-### Test Steps
-
-| Step ID | Step Name | Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 1}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the Front Panel State is set to Download In Progress successfully  |
-
----
-
-<a id="warehouse_set_front_panel_state_download_failed"></a>
-### TestCase Name
-WareHouse_Set_Front_Panel_State_Download_Failed
-
-### TestCase ID
-WH_04
-
-### TestCase Objective
-Sets the front panel state to DOWNLOAD FAILED
-
-### Test Steps
-
-| Step ID | Step Name | Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 3}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` and the Front Panel State is set to Download Failed successfully  |
-
----
-
-<a id="warehouse_set_front_panel_state_download_invalid"></a>
-### TestCase Name
-WareHouse_Set_Front_Panel_State_Download_Invalid
-
-### TestCase ID
-WH_05
-
-### TestCase Objective
-Sets the front panel state to invalid value
-
-### Test Steps
-
-| Step ID | Step Name | Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Set FrontPanel State | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState", "params": {"state": 2}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API returns `success`: `false`, indicating an error or unsupported operation  |
-
----
-
 <a id="warehouse_light_reset"></a>
 ### TestCase Name
 WareHouse_Light_Reset
 
 ### TestCase ID
-WH_06
+WH_01
 
 ### TestCase Objective
 Performs a light reset of application data
@@ -165,7 +69,7 @@ Performs a light reset of application data
 WareHouse_Check_Is_Clean
 
 ### TestCase ID
-WH_07
+WH_02
 
 ### TestCase Objective
 Checks locations where customer data may be stored
@@ -183,7 +87,7 @@ Checks locations where customer data may be stored
 WareHouse_Reset_Device
 
 ### TestCase ID
-WH_08
+WH_03
 
 ### TestCase Objective
 Resets the STB to the warehouse state
@@ -202,7 +106,7 @@ Resets the STB to the warehouse state
 WareHouse_Internal_Reset
 
 ### TestCase ID
-WH_09
+WH_04
 
 ### TestCase Objective
 Invokes the internal reset script, which reboots the Warehouse service
@@ -221,7 +125,7 @@ Invokes the internal reset script, which reboots the Warehouse service
 WareHouse_Check_Event_On_Device_Reset
 
 ### TestCase ID
-WH_10
+WH_05
 
 ### TestCase Objective
 Checks if event is received on device reset
@@ -246,7 +150,7 @@ Checks if event is received on device reset
 Warehouse_ActivateDeactivate_Event_Test
 
 ### TestCase ID
-WH_11
+WH_06
 
 ### TestCase Objective
 Validates statechange event on Activating/deactivating the plugin
@@ -274,30 +178,12 @@ Validates statechange event on Activating/deactivating the plugin
 
 ---
 
-<a id="warehouse_set_front_panel_state_emptyvalue"></a>
-### TestCase Name
-WareHouse_Set_Front_Panel_State_EmptyValue
-
-### TestCase ID
-WH_12
-
-### TestCase Objective
-Sets the front panel state to EmptyValue
-
-### Test Steps
-
-| Step ID | Step Name | Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Set FrontPanel State EmptyValue | Invoke setFrontPanelState on org.rdk.Warehouse<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.setFrontPanelState"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `incorrect state` |
-
----
-
 <a id="warehouse_activatedeactivate_all_event_test"></a>
 ### TestCase Name
 Warehouse_ActivateDeactivate_All_Event_Test
 
 ### TestCase ID
-WH_13
+WH_07
 
 ### TestCase Objective
 Validates all event on Activating/deactivating the plugin
@@ -330,18 +216,18 @@ Validates all event on Activating/deactivating the plugin
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Unsubscribe from the resetDone event | Unregister the WebSocket event listener for `resetDone` to stop receiving `resetDone` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.unregister", "params": {"event": "resetDone", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 2 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 3 | Unsubscribe from the all event | Unregister the WebSocket event listener for `all` to stop receiving `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "all", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 1 | Unsubscribe from the resetDone event | Unregister the WebSocket event listener for `resetDone` to stop receiving `resetDone` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Warehouse.1.unregister", "params": {"event": "resetDone", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 2 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 3 | Unsubscribe from the all event | Unregister the WebSocket event listener for `all` to stop receiving `all` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "all", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 
 
 ## Test Attributes
 
 | Attribute | Value |
 | --- | --- |
-| Supported Models | Video Accelerator, RPI Client |
+| Supported Models | Video Accelerator, RPI-Client |
 | Estimated Duration | 15 minutes |
 | Priority | Medium |
 | TDK Release Version | M82 |
 
-<div align="right"><a href="#">&#8593; Go to Top</a></div>
+<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>

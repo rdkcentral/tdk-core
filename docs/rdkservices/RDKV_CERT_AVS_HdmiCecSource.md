@@ -74,11 +74,11 @@ accessible via JSON-RPC under the callsign `org.rdk.HdmiCecSource` (version 1)
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 2 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 3 | Subscribe to the onDeviceInfoUpdated event | Register a WebSocket event listener for `onDeviceInfoUpdated` to receive `onDeviceInfoUpdated` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.register", "params": {"event": "onDeviceInfoUpdated", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 4 | Subscribe to the standbyMessageReceived event | Register a WebSocket event listener for `standbyMessageReceived` to receive `standbyMessageReceived` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.register", "params": {"event": "standbyMessageReceived", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 5 | Subscribe to the onActiveSourceStatusUpdated event | Register a WebSocket event listener for `onActiveSourceStatusUpdated` to receive `onActiveSourceStatusUpdated` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.register", "params": {"event": "onActiveSourceStatusUpdated", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 1 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 2 | Subscribe to the all event | Register a WebSocket event listener for `all` to receive `all` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "all", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 3 | Subscribe to the onDeviceInfoUpdated event | Register a WebSocket event listener for `onDeviceInfoUpdated` to receive `onDeviceInfoUpdated` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.register", "params": {"event": "onDeviceInfoUpdated", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 4 | Subscribe to the standbyMessageReceived event | Register a WebSocket event listener for `standbyMessageReceived` to receive `standbyMessageReceived` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.register", "params": {"event": "standbyMessageReceived", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 5 | Subscribe to the onActiveSourceStatusUpdated event | Register a WebSocket event listener for `onActiveSourceStatusUpdated` to receive `onActiveSourceStatusUpdated` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.register", "params": {"event": "onActiveSourceStatusUpdated", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ## Test Cases
 
@@ -1190,20 +1190,20 @@ Validate by setting up empty Vendor ID
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 2 | Unsubscribe from the all event | Unregister the WebSocket event listener for `all` to stop receiving `all` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "all", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 3 | Unsubscribe from the onDeviceInfoUpdated event | Unregister the WebSocket event listener for `onDeviceInfoUpdated` to stop receiving `onDeviceInfoUpdated` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.unregister", "params": {"event": "onDeviceInfoUpdated", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 4 | Unsubscribe from the standbyMessageReceived event | Unregister the WebSocket event listener for `standbyMessageReceived` to stop receiving `standbyMessageReceived` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.unregister", "params": {"event": "standbyMessageReceived", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 5 | Unsubscribe from the onActiveSourceStatusUpdated event | Unregister the WebSocket event listener for `onActiveSourceStatusUpdated` to stop receiving `onActiveSourceStatusUpdated` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.unregister", "params": {"event": "onActiveSourceStatusUpdated", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 1 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 2 | Unsubscribe from the all event | Unregister the WebSocket event listener for `all` to stop receiving `all` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "all", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 3 | Unsubscribe from the onDeviceInfoUpdated event | Unregister the WebSocket event listener for `onDeviceInfoUpdated` to stop receiving `onDeviceInfoUpdated` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.unregister", "params": {"event": "onDeviceInfoUpdated", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 4 | Unsubscribe from the standbyMessageReceived event | Unregister the WebSocket event listener for `standbyMessageReceived` to stop receiving `standbyMessageReceived` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.unregister", "params": {"event": "standbyMessageReceived", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 5 | Unsubscribe from the onActiveSourceStatusUpdated event | Unregister the WebSocket event listener for `onActiveSourceStatusUpdated` to stop receiving `onActiveSourceStatusUpdated` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.unregister", "params": {"event": "onActiveSourceStatusUpdated", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 
 
 ## Test Attributes
 
 | Attribute | Value |
 | --- | --- |
-| Supported Models | Video Accelerator, RPI Client |
+| Supported Models | Video Accelerator, RPI-Client |
 | Estimated Duration | 15 minutes |
 | Priority | Medium |
 | TDK Release Version | M129 |
 
-<div align="right"><a href="#">&#8593; Go to Top</a></div>
+<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>
