@@ -350,7 +350,7 @@ AppManager_Verify_IsInstalled_With_Whitespace_AppId
 AM_09
 
 ### TestCase Objective
-Verify isInstalled with a appId containing spaces or whitespace characters
+Verify isInstalled with an appId containing spaces or whitespace characters
 
 ### Test Steps
 
@@ -368,7 +368,7 @@ AppManager_Verify_IsInstalled_Mixed_Alphanumeric_SpecialChars
 AM_10
 
 ### TestCase Objective
-Verify isInstalled with a appId containing mixed alphanumeric and special characters
+Verify isInstalled with an appId containing mixed alphanumeric and special characters
 
 ### Test Steps
 
@@ -674,7 +674,7 @@ AppManager_PreloadApp_Special_Char_AppId
 AM_25
 
 ### TestCase Objective
-Verify preloadApp with a appId containing special characters
+Verify preloadApp with an appId containing special characters
 
 ### Test Steps
 
@@ -710,7 +710,7 @@ AppManager_Verify_PreloadApp_with_Numeric_AppId
 AM_27
 
 ### TestCase Objective
-Verify preloadApp with a appId containing only numeric characters
+Verify preloadApp with an appId containing only numeric characters
 
 ### Test Steps
 
@@ -782,7 +782,7 @@ AppManager_PreloadApp_Valid_AppId_Already_Preloaded
 AM_31
 
 ### TestCase Objective
-Verify preloadApp with a appId that is a valid application but is already preloaded
+Verify preloadApp with an appId that is a valid application but is already preloaded
 
 ### TestCase Pre-condition
 
@@ -1083,7 +1083,7 @@ AppManager_StartSystemApp_Special_Char_AppId
 AM_45
 
 ### TestCase Objective
-Verify startSystemApp with a appId containing special characters
+Verify startSystemApp with an appId containing special characters
 
 ### Test Steps
 
@@ -1193,7 +1193,7 @@ AppManager_StopSystemApp_Special_Char_AppId
 AM_51
 
 ### TestCase Objective
-Verify stopSystemApp with a appId containing special characters
+Verify stopSystemApp with an appId containing special characters
 
 ### Test Steps
 
@@ -1211,7 +1211,7 @@ AppManager_StopSystemApp_Numeric_AppId
 AM_52
 
 ### TestCase Objective
-Verify stopSystemApp with a appId containing only numeric values
+Verify stopSystemApp with an appId containing only numeric values
 
 ### Test Steps
 
@@ -1229,7 +1229,7 @@ AppManager_StopSystemApp_Alphanumeric_AppId
 AM_53
 
 ### TestCase Objective
-Verify stopSystemApp with a appId containing a mix of alphanumeric characters
+Verify stopSystemApp with an appId containing a mix of alphanumeric characters
 
 ### Test Steps
 
@@ -1995,7 +1995,7 @@ AppManager_ActivateSystemApp_Special_Char_AppId
 AM_94
 
 ### TestCase Objective
-Verify activateSystemApp with a appId containing special characters
+Verify activateSystemApp with an appId containing special characters
 
 ### Test Steps
 
@@ -2120,7 +2120,7 @@ AppManager_DeactivateSystemApp_Special_Char_AppId
 AM_100
 
 ### TestCase Objective
-Verify deactivateSystemApp with a appId containing special characters
+Verify deactivateSystemApp with an appId containing special characters
 
 ### Test Steps
 
@@ -2245,7 +2245,7 @@ AppManager_HibernateSystemApp_Special_Char_AppId
 AM_106
 
 ### TestCase Objective
-Verify hibernateSystemApp with a appId containing special characters
+Verify hibernateSystemApp with an appId containing special characters
 
 ### Test Steps
 
@@ -2609,7 +2609,7 @@ AppManager_Check_Get_Loaded_Apps_After_Close
 AM_L2_10
 
 ### TestCase Objective
-Verify_that the closed app is no longer reflected in the list of loaded apps
+Verify that the closed app is no longer reflected in the list of loaded apps
 
 ### TestCase Pre-condition
 

@@ -75,7 +75,7 @@
     </testStep>
   </testCase>
 
-  <testCase testCaseId="SYS_04" testCaseName="System_Get_Uptime" desc="Gets system version details">
+  <testCase testCaseId="SYS_04" testCaseName="System_Get_Uptime" desc="Get the uptime of the device">
     <testCaseInfo testCaseType="direct"/>
     <testStep testStepId="1" name="Get_System_Uptime" method="Get_System_Uptime">
       <resultGeneration useMethodTag="system_get_api_info"/>

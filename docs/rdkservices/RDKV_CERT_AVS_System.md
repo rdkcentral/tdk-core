@@ -103,7 +103,7 @@ accessible via JSON-RPC under the callsign `org.rdk.System` (version 1)
 | 4 | Configure Power State Managed By Device | `SYSTEM_POWER_STATE_MANAGED_BY_DEVICE` must be set to 'true' if power state transitions are managed by the DUT, otherwise 'false' | The `SYSTEM_POWER_STATE_MANAGED_BY_DEVICE` value should be correctly configured in the device-specific config file |
 | 5 | Configure Supported HDR Capabilities | `SYSTEM_SUPPORTED_HDR_CAPABILITIES` must be set to the HDR capabilities supported by the DUT | The `SYSTEM_SUPPORTED_HDR_CAPABILITIES` value should be correctly configured in the device-specific config file |
 | 6 | Configure Uptime In Seconds | `SYSTEM_UPTIME_IN_SECONDS` must be set to the minimum device uptime in seconds required before running uptime-related tests | The `SYSTEM_UPTIME_IN_SECONDS` value should be correctly configured in the device-specific config file |
-| 7 | Configure Territorys | `SYSTEM_TERRITORYS` must be set to the territory and region codes to test in format TERRITORY:REGION | The `SYSTEM_TERRITORYS` value should be correctly configured in the device-specific config file |
+| 7 | Configure Territories | `SYSTEM_TERRITORYS` must be set to the territory and region codes to test in format TERRITORY:REGION | The `SYSTEM_TERRITORYS` value should be correctly configured in the device-specific config file |
 | 8 | Configure RFC Parameter Name | `SYSTEM_RFC_PARAMETER_NAME` must be set to the boolean RFC parameter name from /etc/datamodel.xml for enable/disable testing | The `SYSTEM_RFC_PARAMETER_NAME` value should be correctly configured in the device-specific config file |
 | 9 | Configure Device Features | `SYSTEM_DEVICE_FEATURES` must be set to the system feature names supported by the DUT | The `SYSTEM_DEVICE_FEATURES` value should be correctly configured in the device-specific config file |
 | 10 | Configure Rf4ce Mac | `RF4CE_MAC` must be set to 'enable' if RF4CE MAC is applicable for the DUT, otherwise 'disable' | The `RF4CE_MAC` value should be correctly configured in the device-specific config file |
@@ -177,7 +177,7 @@ System_Get_Uptime
 SYS_04
 
 ### TestCase Objective
-Gets system version details
+Get the uptime of the device
 
 ### Test Steps
 
@@ -269,7 +269,7 @@ Set STB mode to NORMAL
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set STB Mode NORMAL | Invoke setMode on org.rdk.System with duration: "<value>", mode: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"duration": "<value>", "mode": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the mode is set successfully |
+| 1 | Set STB Mode NORMAL | Invoke setMode on org.rdk.System with duration: 10, mode: "NORMAL"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"duration": 10, "mode": "NORMAL"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the mode is set successfully |
 
 ---
 

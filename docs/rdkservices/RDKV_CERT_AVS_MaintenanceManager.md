@@ -120,14 +120,14 @@ Check if the start and stop maintenance methods were successful or not
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get MaintenanceActivity Status | Get Maintenance Activity Status from MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceActivityStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the maintenance activity status is returned successfully |
-| 2 | Stop Maintenance | *(Conditional statement executed only if previous step condition is met)*<br>Stop Maintenance on MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance is stopped successfully  |
+| 2 | Stop Maintenance | *(Conditional statement executed only if previous step condition is met)*<br>Stop Maintenance on MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is stopped successfully  |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Start Maintenance | Invoke startMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.startMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance is launched successfully  |
-| 2 | Stop Maintenance | Invoke stopMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance is stopped successfully  |
+| 1 | Start Maintenance | Invoke startMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.startMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is launched successfully  |
+| 2 | Stop Maintenance | Invoke stopMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is stopped successfully  |
 
 ---
 
@@ -148,15 +148,15 @@ Check if the event is triggered when there is a change in the maintenance state
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get MaintenanceActivity Status | Get Maintenance Activity Status from MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceActivityStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the maintenance activity status is returned successfully |
-| 2 | Stop Maintenance | *(Conditional statement executed only if previous step condition is met)*<br>Stop Maintenance on MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance is stopped successfully  |
+| 2 | Stop Maintenance | *(Conditional statement executed only if previous step condition is met)*<br>Stop Maintenance on MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is stopped successfully  |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Start Maintenance | Invoke startMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.startMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance is launched successfully  |
+| 1 | Start Maintenance | Invoke startMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.startMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is launched successfully  |
 | 2 | Check On Maintenance StatusChange Event | Listen for `Event_On_Maintenance_StatusChange` event (timeout: 3s) | Verify that the event is received and validated successfully |
-| 3 | Stop Maintenance | Invoke stopMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance is stopped successfully  |
+| 3 | Stop Maintenance | Invoke stopMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is stopped successfully  |
 
 ---
 
@@ -177,13 +177,13 @@ Check start maintenance API returns success status as false when called twice si
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get MaintenanceActivity Status | Get Maintenance Activity Status from MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceActivityStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the maintenance activity status is returned successfully |
-| 2 | Stop Maintenance | *(Conditional statement executed only if previous step condition is met)*<br>Stop Maintenance on MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance is stopped successfully  |
+| 2 | Stop Maintenance | *(Conditional statement executed only if previous step condition is met)*<br>Stop Maintenance on MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is stopped successfully  |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Start Maintenance | Invoke startMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.startMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance is launched successfully  |
+| 1 | Start Maintenance | Invoke startMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.startMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is launched successfully  |
 | 2 | Start Maintenance | Invoke startMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.startMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
@@ -238,13 +238,13 @@ Check the status of maintenance activity after initiating the start maintenance 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get MaintenanceActivity Status | Get Maintenance Activity Status from MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceActivityStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the maintenance activity status is returned successfully |
-| 2 | Stop Maintenance | *(Conditional statement executed only if previous step condition is met)*<br>Stop Maintenance on MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance is stopped successfully  |
+| 2 | Stop Maintenance | *(Conditional statement executed only if previous step condition is met)*<br>Stop Maintenance on MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is stopped successfully  |
 
 ### Test Steps
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Start Maintenance | Invoke startMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.startMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance is launched successfully  |
+| 1 | Start Maintenance | Invoke startMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.startMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is launched successfully  |
 | 2 | Check MaintenanceActivity Status | Invoke getMaintenanceActivityStatus on org.rdk.MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceActivityStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned status matches the expected value `MAINTENANCE_STARTED`  |
 
 ---
@@ -354,8 +354,8 @@ Check the ability to set and retrieve the maintenance mode as 'Background' and t
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Maintenance Optout Mode | Invoke getMaintenanceMode on org.rdk.MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceMode"}' http://127.0.0.1:9998/jsonrpc` | Verify that the maintenance mode is returned successfully |
-| 2 | Set Maintenance Optout Mode | Invoke setMaintenanceMode on org.rdk.MaintenanceManager with maintenanceMode: "BACKGROUND", optOut: "<MAINTENANCEMANAGER_OPTOUT_MODES>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.setMaintenanceMode", "params": {"maintenanceMode": "BACKGROUND", "optOut": "<MAINTENANCEMANAGER_OPTOUT_MODES>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance mode is set successfully  |
-| 3 | Get Maintenance Optout Mode | Invoke getMaintenanceMode on org.rdk.MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceMode"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` returned value matches the iterated value set in the previous step  |
+| 2 | Set Maintenance Optout Mode | Invoke setMaintenanceMode on org.rdk.MaintenanceManager with maintenanceMode: "BACKGROUND", optOut: "<MAINTENANCEMANAGER_OPTOUT_MODES>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.setMaintenanceMode", "params": {"maintenanceMode": "BACKGROUND", "optOut": "<MAINTENANCEMANAGER_OPTOUT_MODES>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance mode is set successfully  |
+| 3 | Get Maintenance Optout Mode | Invoke getMaintenanceMode on org.rdk.MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceMode"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Returned value matches the iterated value set in the previous step  |
 
 ---
 
@@ -374,8 +374,8 @@ Check the ability to set and retrieve the maintenance mode as 'Foreground' and t
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Maintenance Optout Mode | Invoke getMaintenanceMode on org.rdk.MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceMode"}' http://127.0.0.1:9998/jsonrpc` | Verify that the maintenance mode is returned successfully |
-| 2 | Set Maintenance Optout Mode | Invoke setMaintenanceMode on org.rdk.MaintenanceManager with maintenanceMode: "FOREGROUND", optOut: "<MAINTENANCEMANAGER_OPTOUT_MODES>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.setMaintenanceMode", "params": {"maintenanceMode": "FOREGROUND", "optOut": "<MAINTENANCEMANAGER_OPTOUT_MODES>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` Confirm that maintenance mode is set successfully  |
-| 3 | Get Maintenance Optout Mode | Invoke getMaintenanceMode on org.rdk.MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceMode"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true` returned value matches the iterated value set in the previous step  |
+| 2 | Set Maintenance Optout Mode | Invoke setMaintenanceMode on org.rdk.MaintenanceManager with maintenanceMode: "FOREGROUND", optOut: "<MAINTENANCEMANAGER_OPTOUT_MODES>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.setMaintenanceMode", "params": {"maintenanceMode": "FOREGROUND", "optOut": "<MAINTENANCEMANAGER_OPTOUT_MODES>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance mode is set successfully  |
+| 3 | Get Maintenance Optout Mode | Invoke getMaintenanceMode on org.rdk.MaintenanceManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.getMaintenanceMode"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Returned value matches the iterated value set in the previous step  |
 
 ---
 
