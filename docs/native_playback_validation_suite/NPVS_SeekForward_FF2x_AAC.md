@@ -12,7 +12,7 @@ NPVS_SeekForward_FF2x_AAC
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Test validates forward seeking capability on AAC audio stream by invoking `gst_element_seek()` to jump playback ahead to a position later in the media stream. The test verifies that the seek target position is reached correctly using position queries every 100ms with tolerance of Â±1 second. Validates playback resumes normally from the forward-seeked position with continuous audio frame rendering and no PTS errors detected.
+Test validates forward seeking capability on AAC audio stream by invoking  to jump playback ahead to a position later in the media stream. The test verifies that the seek target position is reached correctly using position queries every 100ms with tolerance of ±1 second. Validates playback resumes normally from the forward-seeked position with continuous audio frame rendering and no PTS errors detected.
 
 ## Preconditions
 
@@ -21,22 +21,22 @@ Test validates forward seeking capability on AAC audio stream by invoking `gst_e
 | 1 | TDK Package Installation | TDK_Package must be installed on the Device Under Test (DUT) with `tdk_mediapipelinetests` binary and all dependent libraries | Verify TDK_Package is installed, binary is executable, and all libraries are available |
 | 2 | Media Stream Provisioning | AAC encoded audio stream (MP4 container) must be accessible via local file system (`filesrc`) or HTTPS (`souphttpsrc`) for forward seek testing. Stream file path configured as `test_streams_base_path + "atfms_291_dash_tdk_avc_aac_fmp4_audio_1.mp4"` in MediaValidationVariables.py | Verify AAC MP4 audio stream is accessible, readable, and contains minimum 60 seconds of AAC audio |
 | 3 | Stream Variable Configuration | Stream variable `audio_src_url_mp4_aac` configured in `MediaValidationVariables.py` with path: `atfms_291_dash_tdk_avc_aac_fmp4_audio_1.mp4` (AAC audio-only stream) | Verify `audio_src_url_mp4_aac` resolves to valid, accessible AAC MP4 file |
-| 4 | Playback Timeout Configuration | `NATIVE_PLAYBACK_MEDIAPLAYBACK_TIMEOUT` must be configured with required timeout value (default: 10 seconds) in Video_Accelerator.config or RPI-Client.config | Verify timeout is set to required value in configuration file |
-| 5 | Platform-Specific Environment Variables | Platform-specific environment variables (`WAYLAND_DISPLAY`, `XDG_RUNTIME_DIR`, `LD_PRELOAD` with vendor libraries, `GST_PLUGIN_PATH`) must be defined in `/opt/TDK/TDK.env` | Verify `/opt/TDK/TDK.env` exists and contains all required environment variables |
+| 4 | Playback Timeout Configuration | `NATIVE_PLAYBACK_MEDIAPLAYBACK_TIMEOUT` must be configured with required timeout value (default: 10 seconds) in Video_Accelerator.config or RPI-Client.config
+| 5 | Platform-Specific Environment Variables | Platform-specific environment variables (`WAYLAND_DISPLAY`, `XDG_RUNTIME_DIR`, `LD_PRELOAD` with vendor libraries, ) must be defined in `/opt/TDK/TDK.env` | Verify `/opt/TDK/TDK.env` exists and contains all required environment variables |
 
 ## Test Steps
 
 | ID | StepName | Step Description | Expected Result |
 |----|----------|------------------|-----------------|  
 | 1 | Initialize Test Environment | Source environment variables from `/opt/TDK/TDK.env` to load GStreamer plugins, AAC codec libraries, audio pipeline libraries, and Wayland display configuration. Establish Wayland display session. Set up logging to `/opt/TDK/mediapipeline_trickplay_test_step.log` | Verify all environment variables load correctly, Wayland display created, GStreamer plugins available, logging initialized |
-| 2 | Create Playbin and Configure Audio Components | Create `playbin` element via `gst_element_factory_make("playbin", NULL)`. Configure URI via `g_object_set(playbin, "uri", audio_stream_url, NULL)` with AAC stream path. Set playbin flags (AUDIO, BUFFERING) via `g_object_set(playbin, "flags", flags, NULL)` | Playbin created, URI set to AAC stream, audio flags configured |
-| 3 | Register Callbacks and Setup Audio Monitoring | Register `first-audio-frame-callback` signal via `g_signal_connect()` for audio frame detection. Register bus message handler via `gst_bus_pop_filtered()` for `GST_MESSAGE_ERROR`, `GST_MESSAGE_EOS`, `GST_MESSAGE_STATE_CHANGED` | All signals registered, bus handler active, async-handling enabled |
-| 4 | Transition Pipeline to Playing State | Set pipeline state to `GST_STATE_PAUSED` via `gst_element_set_state(playbin, GST_STATE_PAUSED)`. Query initial position via `gst_element_query_position(playbin, GST_FORMAT_TIME, &currentPosition)`. Transition to `GST_STATE_PLAYING` via `gst_element_set_state(playbin, GST_STATE_PLAYING)`. Monitor first-audio-frame-callback signal | Pipeline state changed to PLAYING, first audio frame signal detected, baseline position recorded |
-| 5 | Execute Forward Seek Operation | Query current position via `gst_element_query_position(playbin, GST_FORMAT_TIME, &currentPosition)`. Calculate forward seek target (e.g., +30 seconds from current). Invoke `gst_element_seek(playbin, 1.0, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH, GST_SEEK_TYPE_SET, seekPosition, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE)` | Seek operation completes without errors, pipeline continues playing from forward position |
-| 6 | Validate Forward Seek Target Accuracy | Monitor bus for `GST_MESSAGE_ASYNC_DONE` confirming seek completion. Poll `gst_element_query_position()` every 100ms to verify position matches seek target within Â±GST_SECOND (Â±1000ms). Confirm position stabilizes at target | Position queries show currentPosition â‰ˆ seekPosition Â±1000ms, forward seek confirmed |
-| 7 | Monitor Audio Rendering and Validate Continuity | Every 1 second, retrieve audio sink statistics. Continue polling position every 100ms. Verify audio renders continuously without dropouts. Check for `GST_MESSAGE_ERROR` on bus | Audio frames render continuously, no dropouts, position advances at normal rate Â±250ms, no errors |
-| 8 | Monitor EOS and Confirm Test Integrity | Continue monitoring until `GST_MESSAGE_EOS` detected on bus or timeout reached. Verify no `GST_MESSAGE_ERROR` throughout operation | EOS detected or timeout reached, no errors, audio quality maintained |
-| 9 | Release Pipeline Resources | Set pipeline state to `GST_STATE_NULL` via `gst_element_set_state(playbin, GST_STATE_NULL)`. Unreference playbin via `gst_object_unref(playbin)`. Close logging file, free allocated memory | Pipeline state becomes NULL, all resources released, system ready for next test |
+| 2 | Create Playbin and Configure Audio Components | Create `playbin` element via . Configure URI via  with AAC stream path. Set playbin flags (AUDIO, BUFFERING) via  | Playbin created, URI set to AAC stream, audio flags configured |
+| 3 | Register Callbacks and Setup Audio Monitoring | Register `first-audio-frame-callback` signal via  for audio frame detection. Register bus message handler via  for , ,  | All signals registered, bus handler active, async-handling enabled |
+| 4 | Transition Pipeline to Playing State | Set pipeline state to  via . Query initial position via .  via . Monitor first-audio-frame-callback signal | Pipeline state changed to PLAYING, first audio frame signal detected, baseline position recorded |
+| 5 | Execute Forward Seek Operation | Query current position via . Calculate forward seek target (e.g., +30 seconds from current). Invoke  | Seek operation completes without errors, pipeline continues playing from forward position |
+| 6 | Validate Forward Seek Target Accuracy | Monitor bus for  confirming seek completion.  Confirm position stabilizes at target | Position queries show currentPosition ≈ seekPosition ±1000ms, forward seek confirmed |
+| 7 | Monitor Audio Rendering and Validate Continuity | Every 1 second, retrieve audio sink statistics. Continue polling position every 100ms. Verify audio renders continuously without dropouts. Check for  on bus | Audio frames render continuously, no dropouts, position advances at normal rate ±250ms, no errors |
+| 8 | Monitor EOS and Confirm Test Integrity | Continue monitoring until  detected on bus or timeout reached. Verify no  throughout operation | EOS detected or timeout reached, no errors, audio quality maintained |
+| 9 | Release Pipeline Resources | Set pipeline state to  via . Unreference playbin via . Close logging file, free allocated memory | Pipeline state becomes NULL, all resources released, system ready for next test |
 
 ## Test Attributes
 
@@ -47,3 +47,4 @@ Test validates forward seeking capability on AAC audio stream by invoking `gst_e
 **Priority:** High
 
 **Release Version:** M121
+
