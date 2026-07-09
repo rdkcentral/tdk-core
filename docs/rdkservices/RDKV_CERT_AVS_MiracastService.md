@@ -27,17 +27,17 @@ accessible via JSON-RPC under the callsign `org.rdk.MiracastService` (version 1)
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check PluginActive Status | Check Active Status of MiracastService Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MiracastService Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.MiracastService"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of MiracastService Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check plugin active status | Check active status of MiracastService plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MiracastService plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.MiracastService"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of MiracastService plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 2: Activate_MiracastPlayer_Plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check PluginActive Status | Check Active Status of MiracastPlayer Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastPlayer"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MiracastPlayer Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.MiracastPlayer"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of MiracastPlayer Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastPlayer"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check plugin active status | Check active status of MiracastPlayer plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastPlayer"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MiracastPlayer plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.MiracastPlayer"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of MiracastPlayer plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastPlayer"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 3: Register_And_Listen_Events
 
@@ -61,7 +61,7 @@ Check if the getEnable method correctly returns the valid enable status of the m
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Enable | Invoke getEnable on org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` value returned (`true` or `false`)  |
+| 1 | Get MiracastService enabled state | Invoke getEnable on org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` value returned (`true` or `false`)  |
 
 ---
 
@@ -79,16 +79,16 @@ Check if the miracast feature can be enabled or disabled using the setEnable API
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Enable | Invoke getEnable on org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` value returned (`true` or `false`)  |
-| 2 | Set Enable | *(Toggles the enabled value from Step 1: if Step 1 returned true, sets false; if false, sets true)*<br>Invoke setEnable on org.rdk.MiracastService with enabled: "<toggled_value_from_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.setEnable", "params": {"enabled": "<toggled_value_from_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Enable set to toggled value successfully  |
-| 3 | Get Enable | Invoke getEnable on org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value matches the toggled value set in step 1  |
+| 1 | Get MiracastService enabled state | Invoke getEnable on org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` value returned (`true` or `false`)  |
+| 2 | Toggle MiracastService enabled state | *(Toggles the enabled value from Step 1: if Step 1 returned true, sets false; if false, sets true)*<br>Invoke setEnable on org.rdk.MiracastService with enabled: "<toggled_value_from_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.setEnable", "params": {"enabled": "<toggled_value_from_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Enable set to toggled value successfully  |
+| 3 | Get MiracastService enabled state | Invoke getEnable on org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value matches the toggled value set in step 1  |
 
 #### TestCase Post-condition 1: Revert_Enable
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Revert Enable | Set Enable on MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.setEnable", "params": {"enabled": "<original_value_from_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Enable reverted successfully  |
-| 2 | Verify Reverted Enable | Get Enable from MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value matches the original value captured in step 1  |
+| 1 | Revert MiracastService enabled state | Set Enable on MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.setEnable", "params": {"enabled": "<original_value_from_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Enable reverted successfully  |
+| 2 | Verify reverted enable | Get Enable from MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned value matches the original value captured in step 1  |
 
 ---
 
@@ -106,7 +106,7 @@ Check if the setEnable method returns an error when parameter is not provided
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set Enable Without Parameter | Invoke setEnable on org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.setEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
+| 1 | Set enable without parameter | Invoke setEnable on org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.setEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -126,15 +126,15 @@ Check if the method acceptClientConnection successfully accepts a new client con
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Enable | Get Enable from MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` value returned (`true` or `false`)  |
-| 2 | Set Enable | *(Conditional statement executed only if previous step condition is met)*<br>Set Enable on MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.setEnable", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Enable set successfully  |
-| 3 | Get Enable | *(Conditional statement executed only if previous step condition is met)*<br>Get Enable from MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled`: `true` (Miracast feature is enabled)  |
+| 1 | Get MiracastService enabled state | Get Enable from MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` value returned (`true` or `false`)  |
+| 2 | Toggle MiracastService enabled state | *(Conditional statement executed only if previous step condition is met)*<br>Set Enable on MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.setEnable", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Enable set successfully  |
+| 3 | Get MiracastService enabled state | *(Conditional statement executed only if previous step condition is met)*<br>Get Enable from MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled`: `true` (Miracast feature is enabled)  |
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Accept Client Connection | Invoke acceptClientConnection on org.rdk.MiracastService with requestStatus: "Accept"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.acceptClientConnection", "params": {"requestStatus": "Accept"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
+| 1 | Accept client connection | Invoke acceptClientConnection on org.rdk.MiracastService with requestStatus: "Accept"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.acceptClientConnection", "params": {"requestStatus": "Accept"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
 
 ---
 
@@ -154,15 +154,15 @@ Check if the method acceptClientConnection successfully reject a new client conn
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Enable | Get Enable from MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` value returned (`true` or `false`)  |
-| 2 | Set Enable | *(Conditional statement executed only if previous step condition is met)*<br>Set Enable on MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.setEnable", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Enable set successfully  |
-| 3 | Get Enable | *(Conditional statement executed only if previous step condition is met)*<br>Get Enable from MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled`: `true` (Miracast feature is enabled)  |
+| 1 | Get MiracastService enabled state | Get Enable from MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` value returned (`true` or `false`)  |
+| 2 | Toggle MiracastService enabled state | *(Conditional statement executed only if previous step condition is met)*<br>Set Enable on MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.setEnable", "params": {"enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Enable set successfully  |
+| 3 | Get MiracastService enabled state | *(Conditional statement executed only if previous step condition is met)*<br>Get Enable from MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.getEnable"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled`: `true` (Miracast feature is enabled)  |
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Reject Client Connection | Invoke acceptClientConnection on org.rdk.MiracastService with requestStatus: "Reject"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.acceptClientConnection", "params": {"requestStatus": "Reject"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
+| 1 | Reject client connection | Invoke acceptClientConnection on org.rdk.MiracastService with requestStatus: "Reject"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastService.1.acceptClientConnection", "params": {"requestStatus": "Reject"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
 
 ---
 
@@ -180,7 +180,7 @@ Check if the device is able to successfully set the video rectangle
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set VideoRectangle | Invoke setVideoRectangle on org.rdk.MiracastPlayer<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastPlayer.1.setVideoRectangle", "params": {"X": 0, "Y": 0, "W": 1920, "H": 1080}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Video Rectangle set successfully  |
+| 1 | Set Miracast video display rectangle | Invoke setVideoRectangle on org.rdk.MiracastPlayer with X: 0, Y: 0, W: 1920, H: 1080<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MiracastPlayer.1.setVideoRectangle", "params": {"X": 0, "Y": 0, "W": 1920, "H": 1080}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Video Rectangle set successfully  |
 
 ---
 
@@ -192,7 +192,7 @@ MiracastService_ActivateDeactivate_Event_Test
 Miracast_07
 
 ### TestCase Objective
-Validates statechange event on Activating/deactivating the plugin
+Validates statechange event on activating/deactivating the plugin
 
 ### TestCase Pre-condition
 
@@ -200,20 +200,20 @@ Validates statechange event on Activating/deactivating the plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check PluginActive Status | Check Active Status of MiracastService Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MiracastService Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.MiracastService"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of MiracastService Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check plugin active status | Check active status of MiracastService plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MiracastService plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.MiracastService"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of MiracastService plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Deactivate MiracastService Plugin | Invoke deactivate on Controller with callsign: "org.rdk.MiracastService"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.MiracastService"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.miracastservice` with state `"deactivated"` |
-| 3 | Check PluginActive Status | Invoke status on Controller for org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
-| 4 | Activate MiracastService Plugin | Invoke activate on Controller with callsign: "org.rdk.MiracastService"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.MiracastService"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.miracastservice` with state `"activated"` |
-| 6 | Check PluginActive Status | Invoke status on Controller for org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Deactivate MiracastService plugin | Invoke deactivate on Controller with callsign: "org.rdk.MiracastService"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.MiracastService"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.miracastservice` with state `"deactivated"` |
+| 3 | Check plugin active status | Invoke status on Controller for org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+| 4 | Activate MiracastService plugin | Invoke activate on Controller with callsign: "org.rdk.MiracastService"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.MiracastService"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
+| 5 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.miracastservice` with state `"activated"` |
+| 6 | Check plugin active status | Invoke status on Controller for org.rdk.MiracastService<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MiracastService"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ## Plugin Post-conditions
 
@@ -231,7 +231,7 @@ Validates statechange event on Activating/deactivating the plugin
 
 **Estimated duration** : 15 mins
 
-**Priority** : Medium
+**Priority** : High
 
 **Release Version** : M142
 
