@@ -15,7 +15,7 @@ To validate the average FPS value obtained from the browser animation performanc
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Verify WPEFramework status | WPEFramework process must be up and running on the device before test execution begins. | WPEFramework process should be active and accessible on the device. |
 | 2 | Configure pre-requisite reboot | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | Device should be in a clean state prior to performance test execution. |
@@ -25,7 +25,7 @@ To validate the average FPS value obtained from the browser animation performanc
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Reboot device as pre-requisite | If `PRE_REQ_REBOOT_PVS` is configured as Yes, reboot the device by issuing the harakiri command and wait 150 seconds for reboot to complete: `{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.harakiri"}` | Device should reboot successfully and come back online within the wait period. |
 | 2 | Check if animation application is installed | Query the list of installed packages to determine if the animation app (com.rdkcentral.animation) is already present on the device: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}` | The installed packages list should be retrieved successfully. If com.rdkcentral.animation is already installed, the installation workflow is skipped. |
@@ -42,7 +42,7 @@ To validate the average FPS value obtained from the browser animation performanc
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 4 mins
 

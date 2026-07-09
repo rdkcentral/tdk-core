@@ -16,7 +16,7 @@ To measure and validate the time taken to receive the onHidden event from RDKWin
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -28,7 +28,7 @@ To measure and validate the time taken to receive the onHidden event from RDKWin
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Verify and activate required plugins | Check the activation state of the required plugins: org.rdk.DownloadManager, org.rdk.PackageManagerRDKEMS, org.rdk.AppManager, and org.rdk.RDKWindowManager. Activate any that are not already in the activated state. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@<plugin_name>"}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params": {"callsign": "<plugin_name>"}}` | All four required plugins should be in activated state. |
 | 2 | Check if the application is already installed | Query the installed packages list to determine whether the application is already present on the device. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}` | The installed packages list should be returned successfully. |
@@ -45,7 +45,7 @@ To measure and validate the time taken to receive the onHidden event from RDKWin
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 mins
 
