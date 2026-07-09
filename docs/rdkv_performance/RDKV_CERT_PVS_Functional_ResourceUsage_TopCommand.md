@@ -16,7 +16,7 @@ To validate that no individual process on the device exceeds 90% CPU utilization
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm device is accessible via SSH | The device under test must be accessible via SSH with valid credentials configured. | SSH connection to the device should be established successfully. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -24,7 +24,7 @@ To validate that no individual process on the device exceeds 90% CPU utilization
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Establish SSH connection to device | Obtain SSH connection parameters for the device under test to enable remote command execution. | SSH parameters should be retrieved successfully and the connection should be established. |
 | 2 | Check for processes with CPU usage above 90% | SSH into the device and execute the top command sorted by CPU usage. Filter output to list only processes consuming more than 90% CPU: <br>`top -b -n 1 -o +%CPU -w 512 \| awk '/PID USER/,0' \| awk '{print $9,$12}' \| awk '{if($1>90)print $1,$2}'` | The command output should be returned successfully. Ideally, no processes should have CPU usage greater than 90%. |
@@ -35,7 +35,7 @@ To validate that no individual process on the device exceeds 90% CPU utilization
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 mins
 

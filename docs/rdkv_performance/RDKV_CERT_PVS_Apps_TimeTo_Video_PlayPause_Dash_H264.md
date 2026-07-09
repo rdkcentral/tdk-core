@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_PERFORMANCE_39
 ## TestCase Name
-RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_Dash_H264
+RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_DASH_H264
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
@@ -15,7 +15,7 @@ To validate the time taken for the Lightning/Unified Player application to pause
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is operational | The WPEFramework process must be running on the device before test execution begins. | WPEFramework should be up and running on the device. |
 | 2 | Configure PRE_REQ_REBOOT_PVS setting | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot (if configured) and be ready for test execution. |
@@ -27,7 +27,7 @@ To validate the time taken for the Lightning/Unified Player application to pause
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Retrieve device configuration and logging method | Read the device configuration file to obtain the `LOGGING_METHOD` setting. Configure the video test URL using the DASH H.264 video source (`video_src_url_dash_h264`) with video type "dash" and DASH H.264 codec player list (`codec_dash_h264`). Set play and pause operations: `setOperation("pause", 10)` and `setOperation("play", 10)`. | The device configuration file should be read successfully and the `LOGGING_METHOD` value should be retrieved. |
 | 2 | Verify and configure required plugin states | Retrieve the current status of DeviceInfo and org.rdk.PersistentStore plugins: <br>`{"jsonrpc":"2.0","id":1,"method":"Controller.1.status@DeviceInfo"}` <br><br>`{"jsonrpc":"2.0","id":1,"method":"Controller.1.status@org.rdk.PersistentStore"}` <br>If any plugin is not activated, activate it: <br>`{"jsonrpc":"2.0","id":1,"method":"Controller.1.activate","params":{"callsign":"DeviceInfo"}}` <br><br>`{"jsonrpc":"2.0","id":1,"method":"Controller.1.activate","params":{"callsign":"org.rdk.PersistentStore"}}` | Both DeviceInfo and org.rdk.PersistentStore plugins should report an activated status. |
@@ -44,7 +44,7 @@ To validate the time taken for the Lightning/Unified Player application to pause
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 6 mins
 

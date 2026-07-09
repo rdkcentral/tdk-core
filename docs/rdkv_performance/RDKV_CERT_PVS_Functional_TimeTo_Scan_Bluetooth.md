@@ -16,7 +16,7 @@ To validate that the time taken to scan and discover a Bluetooth device is withi
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -25,7 +25,7 @@ To validate that the time taken to scan and discover a Bluetooth device is withi
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Verify and activate the Bluetooth plugin | Query the Bluetooth plugin status and activate it if not already active. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.Bluetooth"}` <br><br>Activate if needed: `{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.Bluetooth"}}` | The org.rdk.Bluetooth plugin should be in the activated state. |
 | 2 | Make Bluetooth emulator discoverable | SSH into the Bluetooth emulator and execute commands to make it discoverable: `bluetoothctl`, `agent NoInputNoOutput`, `default-agent`, `discoverable on`. | The Bluetooth emulator should be made discoverable successfully. |
@@ -37,7 +37,7 @@ To validate that the time taken to scan and discover a Bluetooth device is withi
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 mins
 
