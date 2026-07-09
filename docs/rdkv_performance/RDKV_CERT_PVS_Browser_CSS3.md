@@ -38,7 +38,7 @@ To validate the browser performance score obtained from the CSS3 benchmark test 
 | 9 | Retrieve CSS3 benchmark score | Wait 20 seconds for the CSS3 benchmark to execute, then connect to the WebKit webinspect page and extract the main CSS3 score and all subcategory scores across the CSS3 test categories. | Main CSS3 score and all subcategory scores should be successfully retrieved from the webinspect page and must not contain the value "Unable to get the browser score". |
 | 10 | Validate CSS3 main score against threshold | Compare the retrieved main CSS3 score against `CSS3_THRESHOLD_VALUE` from the device configuration file. | The main CSS3 score should be greater than the configured `CSS3_THRESHOLD_VALUE`. |
 | 11 | Validate CSS3 subcategory scores | Compare each subcategory score against its corresponding threshold from the comma-separated `CSS3_SUBCATEGORY_THRESHOLD_VALUES` device configuration key, iterating over all CSS3 subcategories. | All subcategory scores should be greater than or equal to their respective configured threshold values. |
-| 12 | Terminate CSS3 application | Terminate the CSS3 application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminate", "params": {"appId": "com.rdkcentral.css3"}}` | The CSS3 application should be terminated successfully. |
+| 12 | Terminate CSS3 application | Terminate the CSS3 application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "com.rdkcentral.css3"}}` | The CSS3 application should be terminated successfully. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes

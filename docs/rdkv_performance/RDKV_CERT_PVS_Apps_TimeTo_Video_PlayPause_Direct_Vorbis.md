@@ -46,7 +46,7 @@ To validate the time taken for the Lightning/Unified Player application to pause
 
 **Supported Models** : RPI-Client, Video Accelerator
 
-**Estimated duration** : 6 min
+**Estimated duration** : 6 mins
 
 **Priority** : High
 

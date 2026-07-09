@@ -39,7 +39,7 @@ To validate the browser performance score obtained from the Octane JavaScript be
 | 10 | Retrieve Octane benchmark score | Connect to the WebKit webinspect page and extract the main Octane score along with subcategory scores for Crypto, EarleyBoyer, Splay, SplayLatency, pdf.js, and CodeLoad. | Main Octane score and all subcategory scores should be successfully retrieved and must not contain the value "Unable to get the browser score" or "Running Octane". |
 | 11 | Validate Octane main score against threshold | Compare the retrieved main Octane score against `OCTANE_THRESHOLD_VALUE` from the device configuration file. | The main Octane score should be greater than the configured `OCTANE_THRESHOLD_VALUE`. |
 | 12 | Validate Octane subcategory scores | Compare each subcategory score against its corresponding threshold from the comma-separated `OCTANE_SUBCATEGORY_THRESHOLD_VALUES` device configuration key for all subcategories: Crypto, EarleyBoyer, Splay, SplayLatency, pdf.js, and CodeLoad. | All subcategory scores should be greater than or equal to their respective configured threshold values. |
-| 13 | Terminate Octane application | Terminate the Octane application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminate", "params": {"appId": "com.rdkcentral.octane"}}` | The Octane application should be terminated successfully. |
+| 13 | Terminate Octane application | Terminate the Octane application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "com.rdkcentral.octane"}}` | The Octane application should be terminated successfully. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes

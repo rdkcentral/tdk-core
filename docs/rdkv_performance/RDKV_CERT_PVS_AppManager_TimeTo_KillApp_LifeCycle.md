@@ -19,7 +19,7 @@ To measure and validate the time taken for each lifecycle state transition (APP_
 |#|StepName | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
-| 2 | Configure PRE_REQ_REBOOT_PVS in device config | `PRE_REQ_REBOOT_PVS` must be configured as `Yes` to reboot the device before test execution. The script always passes "yes" to `pre_requisite_reboot`. | The device should reboot successfully before the test begins. |
+| 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
 | 3 | Configure google_bundle in PerformanceTestVariables | `google_bundle` must be set to the application bundle filename in PerformanceTestVariables. | The google_bundle variable should be configured with a valid application bundle name. |
 | 4 | Configure app_download_url in PerformanceTestVariables | `app_download_url` must be set to the base URL where the application bundle is hosted in PerformanceTestVariables. | The app_download_url should point to a reachable hosting location. |
 | 5 | Configure kill threshold in device config | `APPMANAGER_KILL_EVENT_THRESHOLD_VALUE` and `THRESHOLD_OFFSET` must be set in the device-specific configuration file. | Threshold and offset values should be correctly configured for performance comparison. |
