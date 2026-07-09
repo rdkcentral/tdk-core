@@ -24,7 +24,7 @@ accessible via JSON-RPC under the callsign `org.rdk.DeviceDiagnostics` (version 
 
 ### Plugin Pre-condition 1: Activate_DeviceDiagnostics_Plugin
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceDiagnostics Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DeviceDiagnostics"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceDiagnostics Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -32,7 +32,7 @@ accessible via JSON-RPC under the callsign `org.rdk.DeviceDiagnostics` (version 
 
 ### Plugin Pre-condition 2: Register_And_Listen_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Subscribe to the onAVDecoderStatusChanged event | Register a WebSocket event listener for `onAVDecoderStatusChanged` to capture AV decoder status change notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.register", "params": {"event": "onAVDecoderStatusChanged", "id": "client.events.1"}}` | Event subscription should be established successfully and the event listener should be active |
 | 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to capture plugin state change notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event subscription should be established successfully and the event listener should be active |
@@ -40,7 +40,7 @@ accessible via JSON-RPC under the callsign `org.rdk.DeviceDiagnostics` (version 
 
 ### Plugin Pre-condition 3: Configure_Device_Parameter
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Configure RFC Params | `DEVICE_DIAGNOSTICS_RFC_PARAMS` must be set to the RFC parameter names to query | The `DEVICE_DIAGNOSTICS_RFC_PARAMS` value should be correctly configured in the device-specific config file |
 | 2 | Configure Prerequisite Plugins | `DEVICE_DIAGNOSTICS_PREREQ_PLUGINS` must be set to the plugin callsigns to activate as prerequisites for Device Diagnostics testing | The `DEVICE_DIAGNOSTICS_PREREQ_PLUGINS` value should be correctly configured in the device-specific config file |
@@ -62,7 +62,7 @@ Gets value of provided property names
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Configuration | Invoke getConfiguration on org.rdk.DeviceDiagnostics with names: "<DEVICE_DIAGNOSTICS_RFC_PARAMS>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getConfiguration", "params": {"names": "<DEVICE_DIAGNOSTICS_RFC_PARAMS>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that configuration values are returned for the requested property names |
 
@@ -82,7 +82,7 @@ Deactivate and activate the device diagnostics plugin in loop and checks the CPU
 
 > **Stress Loop:** The step sequence below forms one iteration block. It is repeated **`<STRESS_TEST_REPEAT_COUNT>`** times as set in the device configuration file
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate DeviceDiagnostics Plugin | Invoke deactivate on Controller with callsign: "org.rdk.DeviceDiagnostics"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 2 | Activate DeviceDiagnostics Plugin | Invoke activate on Controller with callsign: "org.rdk.DeviceDiagnostics"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
@@ -104,7 +104,7 @@ Checks the AV decoder status in idle and active state on launching and terminati
 
 #### TestCase Pre-condition 1: Activate_Dependent_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | *(Loop: iterates for each plugin listed in <DEVICE_DIAGNOSTICS_PREREQ_PLUGINS>)*<br>Check Plugin Active Status<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status", "params": {"plugin": "<DEVICE_DIAGNOSTICS_PREREQ_PLUGINS>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate <value> Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -112,7 +112,7 @@ Checks the AV decoder status in idle and active state on launching and terminati
 
 #### TestCase Pre-condition 2: Check_Existing_Package_Before_Install
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Existing Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
 | 2 | Uninstall Existing Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -122,14 +122,14 @@ Checks the AV decoder status in idle and active state on launching and terminati
 
 #### TestCase Pre-condition 3: PersistentStore_Set_and_Get_Value
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Set Value on PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "MVS", "key": "lightningURL", "value": "<DEVICE_DIAGNOSTICS_PLAYBACK_URL>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
 | 2 | Get Value | Get Value from PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "MVS", "key": "lightningURL"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the stored playback URL matches the expected value `<DEVICE_DIAGNOSTICS_PLAYBACK_URL>` from the device config file  |
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get AVDecoder Status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the AV decoder status is `"idle"`, indicating no active decoding  |
 | 2 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -142,7 +142,7 @@ Checks the AV decoder status in idle and active state on launching and terminati
 
 #### TestCase Post-condition 1: Terminate_Application
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -165,7 +165,7 @@ Checks the AV decoder status changed event in idle and active state
 
 #### TestCase Pre-condition 1: Activate_Dependent_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | *(Loop: iterates for each plugin listed in <DEVICE_DIAGNOSTICS_PREREQ_PLUGINS>)*<br>Check Plugin Active Status<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status", "params": {"plugin": "<DEVICE_DIAGNOSTICS_PREREQ_PLUGINS>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate <value> Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -173,7 +173,7 @@ Checks the AV decoder status changed event in idle and active state
 
 #### TestCase Pre-condition 2: Check_Existing_Package_Before_Install
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Existing Package | Get Packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
 | 2 | Uninstall Existing Package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -183,14 +183,14 @@ Checks the AV decoder status changed event in idle and active state
 
 #### TestCase Pre-condition 3: PersistentStore_Set_and_Get_Value
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Set Value on PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "MVS", "key": "lightningURL", "value": "<DEVICE_DIAGNOSTICS_PLAYBACK_URL>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
 | 2 | Get Value | Get Value from PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "MVS", "key": "lightningURL"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the stored playback URL matches the expected value `<DEVICE_DIAGNOSTICS_PLAYBACK_URL>` from the device config file  |
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get AVDecoder Status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the AV decoder status is `"idle"`, indicating no active decoding  |
 | 2 | Launch App Valid Params | Invoke launchApp on org.rdk.AppManager with appId: "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -203,7 +203,7 @@ Checks the AV decoder status changed event in idle and active state
 
 #### TestCase Post-condition 1: Terminate_Application
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Loaded Apps | Get Loaded Apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate App Valid Param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
@@ -226,7 +226,7 @@ Validates statechange event on Activating/deactivating the plugin
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceDiagnostics Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DeviceDiagnostics"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceDiagnostics Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -234,7 +234,7 @@ Validates statechange event on Activating/deactivating the plugin
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate DeviceDiagnostics Plugin | Invoke deactivate on Controller with callsign: "org.rdk.DeviceDiagnostics"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 2 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.DeviceDiagnostics` with state `deactivated` |
@@ -259,7 +259,7 @@ Validates all event on Activating/deactivating the plugin
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceDiagnostics Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DeviceDiagnostics"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceDiagnostics Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -267,7 +267,7 @@ Validates all event on Activating/deactivating the plugin
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate DeviceDiagnostics Plugin | Invoke deactivate on Controller with callsign: "org.rdk.DeviceDiagnostics"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 2 | Check All Event | Listen for Event_Controller_All event (timeout: 2s) | Verify that the `all` event is received for callsign `org.rdk.DeviceDiagnostics` with state `deactivated` |
@@ -280,7 +280,7 @@ Validates all event on Activating/deactivating the plugin
 
 ### Plugin Post-condition 1: Unregister_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Unsubscribe from the onAVDecoderStatusChanged event | Unregister the WebSocket event listener for `onAVDecoderStatusChanged` to stop capturing AV decoder status change notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.unregister", "params": {"event": "onAVDecoderStatusChanged", "id": "client.events.1"}}` | Event unsubscription should be completed successfully and the event listener should be inactive |
 | 2 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop capturing plugin state change notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unsubscription should be completed successfully and the event listener should be inactive |
@@ -288,11 +288,12 @@ Validates all event on Activating/deactivating the plugin
 
 ## Test Attributes
 
-| Attribute | Value |
-| --- | --- |
-| Supported Models | Video Accelerator, RPI-Client |
-| Estimated Duration | 20 minutes |
-| Priority | Medium |
-| TDK Release Version | M81 |
+**Supported Models** : Video_Accelerator, RPI-Client
 
-<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>
+**Estimated duration** : 20 mins
+
+**Priority** : Medium
+
+**Release Version** : M81
+
+<div align="right"><a href="#testscript-name">Go to Top</a></div>

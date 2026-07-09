@@ -73,7 +73,7 @@ accessible via JSON-RPC under the callsign `org.rdk.SystemAudioPlayer` (version 
 
 ### Plugin Pre-condition 1: Activate_SystemAudioPlayer_Plugin
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Plugin Active Status | Check Active Status of SystemAudioPlayer Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.SystemAudioPlayer"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate SystemAudioPlayer Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.SystemAudioPlayer"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -81,13 +81,13 @@ accessible via JSON-RPC under the callsign `org.rdk.SystemAudioPlayer` (version 
 
 ### Plugin Pre-condition 2: Register_SAP_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Subscribe to the onsapevents event | Register a WebSocket event listener for `onsapevents` to receive `onsapevents` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.register", "params": {"event": "onsapevents", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ### Plugin Pre-condition 3: Configure_Device_Parameter
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Configure WAV Audio File URL | `SAP_AUDIO_URL_HTTPSRC_WAV` must be set to the HTTPS hosted URL of the WAV audio file for System Audio Player playback testing | The `SAP_AUDIO_URL_HTTPSRC_WAV` value should be correctly configured in the device-specific config file |
 | 2 | Configure MP3 Audio File URL | `SAP_AUDIO_URL_HTTPSRC_MP3` must be set to the HTTPS hosted URL of the MP3 audio file for System Audio Player playback testing | The `SAP_AUDIO_URL_HTTPSRC_MP3` value should be correctly configured in the device-specific config file |
@@ -106,7 +106,7 @@ Opens a player with PCM audio type, HTTP source and system play mode
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player PCM HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "pcm", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "pcm", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Close Player Cleanup | Invoke close on org.rdk.SystemAudioPlayer with id: "<result_step_1>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.close", "params": {"id": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that the close operation is completed successfully |
@@ -125,7 +125,7 @@ Opens a player with MP3 audio type, HTTP source and system play mode
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Close Player Cleanup | Invoke close on org.rdk.SystemAudioPlayer with id: "<result_step_1>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.close", "params": {"id": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that the close operation is completed successfully |
@@ -144,7 +144,7 @@ Opens a player with WAV audio type, HTTP source and system play mode
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Close Player Cleanup | Invoke close on org.rdk.SystemAudioPlayer with id: "<result_step_1>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.close", "params": {"id": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that the close operation is completed successfully |
@@ -163,7 +163,7 @@ Opens a player with PCM audio type, HTTP source and app play mode
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player PCM HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "pcm", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "pcm", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Close Player Cleanup | Invoke close on org.rdk.SystemAudioPlayer with id: "<result_step_1>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.close", "params": {"id": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that the close operation is completed successfully |
@@ -182,7 +182,7 @@ Opens a player with MP3 audio type, HTTP source and app play mode
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Close Player Cleanup | Invoke close on org.rdk.SystemAudioPlayer with id: "<result_step_1>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.close", "params": {"id": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that the close operation is completed successfully |
@@ -201,7 +201,7 @@ Opens a player with WAV audio type, HTTP source and app play mode
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Close Player Cleanup | Invoke close on org.rdk.SystemAudioPlayer with id: "<result_step_1>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.close", "params": {"id": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that the close operation is completed successfully |
@@ -220,7 +220,7 @@ Configures a PCM player with valid format, rate, channels and layout parameters 
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open PCM Player For Config | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "pcm", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "pcm", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Config PCM Player | Invoke config on org.rdk.SystemAudioPlayer with id: "<result_step_1>", format: "S16LE", rate: "2147483647", channels: "1", layout: "interleaved" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.config", "params": {"id": "<result_step_1>", "format": "S16LE", "rate": 2147483647, "channels": 1, "layout": "interleaved"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -240,7 +240,7 @@ Configures a PCM player with valid format, rate, channels and layout parameters 
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open PCM Player For Config | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "pcm", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "pcm", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Config PCM Player | Invoke config on org.rdk.SystemAudioPlayer with id: "<result_step_1>", format: "S16LE", rate: "2147483647", channels: "1", layout: "interleaved" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.config", "params": {"id": "<result_step_1>", "format": "S16LE", "rate": 2147483647, "channels": 1, "layout": "interleaved"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -260,7 +260,7 @@ Gets a session ID for WAV audio format with HTTP source in system play mode
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_WAV>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_WAV>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -283,7 +283,7 @@ Gets a session ID for MP3 audio format with HTTP source in system play mode
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_MP3>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_MP3>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -306,7 +306,7 @@ Gets a session ID for WAV audio format with HTTP source in app play mode
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_WAV>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_WAV>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -329,7 +329,7 @@ Gets a session ID for MP3 audio format with HTTP source in app play mode
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_MP3>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_MP3>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -352,7 +352,7 @@ Checks whether the player is speaking for MP3 audio format with HTTP source in s
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_MP3>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_MP3>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -377,7 +377,7 @@ Checks whether the player is speaking for WAV audio format with HTTP source in s
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_WAV>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_WAV>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -402,7 +402,7 @@ Checks whether the player is speaking for MP3 audio format with HTTP source in a
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_MP3>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_MP3>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -427,7 +427,7 @@ Checks whether the player is speaking for WAV audio format with HTTP source in a
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_WAV>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_WAV>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -452,7 +452,7 @@ Tests play, pause and stop operations for MP3 audio type with HTTP source in sys
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_MP3>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_MP3>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -480,7 +480,7 @@ Tests play, pause and stop operations for WAV audio type with HTTP source in sys
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_WAV>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_WAV>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -508,7 +508,7 @@ Tests play, pause and stop operations for MP3 audio type with HTTP source in app
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_MP3>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_MP3>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -536,7 +536,7 @@ Tests play, pause and stop operations for WAV audio type with HTTP source in app
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_WAV>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_WAV>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -564,7 +564,7 @@ Tests the play, pause, resume and stop functionality of the audio player with MP
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_MP3>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_MP3>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -594,7 +594,7 @@ Tests the play, pause, resume and stop functionality of the audio player with WA
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_WAV>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_WAV>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -624,7 +624,7 @@ Tests the play, pause, resume and stop functionality of the audio player with MP
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_MP3>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_MP3>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -655,7 +655,7 @@ Tests the play, pause, resume and stop functionality of the audio player with WA
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play SAP Audio HTTPSRC | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_WAV>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_WAV>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -686,7 +686,7 @@ Tests setting mixer levels for MP3 audio format with HTTP source in system play 
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Set SAP Mixer Levels | Invoke setMixerLevels on org.rdk.SystemAudioPlayer with id: "<result_step_1>", primaryVolume: "50", playerVolume: "30"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setMixerLevels", "params": {"id": "<result_step_1>", "primaryVolume": 50, "playerVolume": 30}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that mixer levels is set successfully |
@@ -711,7 +711,7 @@ Tests setting mixer levels for WAV audio format with HTTP source in system play 
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Set SAP Mixer Levels | Invoke setMixerLevels on org.rdk.SystemAudioPlayer with id: "<result_step_1>", primaryVolume: "70", playerVolume: "40"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setMixerLevels", "params": {"id": "<result_step_1>", "primaryVolume": 70, "playerVolume": 40}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that mixer levels is set successfully |
@@ -736,7 +736,7 @@ Tests setting mixer levels for MP3 audio format with HTTP source in app play mod
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player MP3 HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Set SAP Mixer Levels | Invoke setMixerLevels on org.rdk.SystemAudioPlayer with id: "<result_step_1>", primaryVolume: "50", playerVolume: "30"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setMixerLevels", "params": {"id": "<result_step_1>", "primaryVolume": 50, "playerVolume": 30}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that mixer levels is set successfully |
@@ -762,7 +762,7 @@ Tests setting mixer levels for WAV audio format with HTTP source in app play mod
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open SAP Player WAV HTTPSRC | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Set SAP Mixer Levels | Invoke setMixerLevels on org.rdk.SystemAudioPlayer with id: "<result_step_1>", primaryVolume: "70", playerVolume: "40"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setMixerLevels", "params": {"id": "<result_step_1>", "primaryVolume": 70, "playerVolume": 40}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that mixer levels is set successfully |
@@ -788,7 +788,7 @@ Tests setting smart volume control for PCM audio format with HTTP source in syst
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For SmartVol Enable | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "pcm", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "pcm", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Enable Smart Vol Control | Invoke setSmartVolControl on org.rdk.SystemAudioPlayer with id: "<result_step_1>", enable: "true", playerAudioLevelThreshold: "0.1", playerDetectTimeMs: "200", playerHoldTimeMs: "1000", primaryDuckingPercent: "50" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setSmartVolControl", "params": {"id": "<result_step_1>", "enable": true, "playerAudioLevelThreshold": 0.1, "playerDetectTimeMs": 200, "playerHoldTimeMs": 1000, "primaryDuckingPercent": 50}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that smart vol control is set successfully |
@@ -808,7 +808,7 @@ Tests setting smart volume control for MP3 audio format with HTTP source in syst
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For SmartVol Enable | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Enable Smart Vol Control | Invoke setSmartVolControl on org.rdk.SystemAudioPlayer with id: "<result_step_1>", enable: "true", playerAudioLevelThreshold: "0.1", playerDetectTimeMs: "200", playerHoldTimeMs: "1000", primaryDuckingPercent: "50" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setSmartVolControl", "params": {"id": "<result_step_1>", "enable": true, "playerAudioLevelThreshold": 0.1, "playerDetectTimeMs": 200, "playerHoldTimeMs": 1000, "primaryDuckingPercent": 50}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that smart vol control is set successfully |
@@ -828,7 +828,7 @@ Tests setting smart volume control for WAV audio format with HTTP source in syst
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For SmartVol Enable | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Enable Smart Vol Control | Invoke setSmartVolControl on org.rdk.SystemAudioPlayer with id: "<result_step_1>", enable: "true", playerAudioLevelThreshold: "0.1", playerDetectTimeMs: "200", playerHoldTimeMs: "1000", primaryDuckingPercent: "50" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setSmartVolControl", "params": {"id": "<result_step_1>", "enable": true, "playerAudioLevelThreshold": 0.1, "playerDetectTimeMs": 200, "playerHoldTimeMs": 1000, "primaryDuckingPercent": 50}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that smart vol control is set successfully |
@@ -848,7 +848,7 @@ Tests setting smart volume control for PCM audio format with HTTP source in app 
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For SmartVol Enable | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "pcm", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "pcm", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Enable Smart Vol Control | Invoke setSmartVolControl on org.rdk.SystemAudioPlayer with id: "<result_step_1>", enable: "true", playerAudioLevelThreshold: "0.1", playerDetectTimeMs: "200", playerHoldTimeMs: "1000", primaryDuckingPercent: "50" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setSmartVolControl", "params": {"id": "<result_step_1>", "enable": true, "playerAudioLevelThreshold": 0.1, "playerDetectTimeMs": 200, "playerHoldTimeMs": 1000, "primaryDuckingPercent": 50}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that smart vol control is set successfully |
@@ -868,7 +868,7 @@ Tests setting smart volume control for MP3 audio format with HTTP source in app 
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For SmartVol Enable | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Enable Smart Vol Control | Invoke setSmartVolControl on org.rdk.SystemAudioPlayer with id: "<result_step_1>", enable: "true", playerAudioLevelThreshold: "0.1", playerDetectTimeMs: "200", playerHoldTimeMs: "1000", primaryDuckingPercent: "50" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setSmartVolControl", "params": {"id": "<result_step_1>", "enable": true, "playerAudioLevelThreshold": 0.1, "playerDetectTimeMs": 200, "playerHoldTimeMs": 1000, "primaryDuckingPercent": 50}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that smart vol control is set successfully |
@@ -888,7 +888,7 @@ Tests setting smart volume control for WAV audio format with HTTP source in app 
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For SmartVol Enable | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Enable Smart Vol Control | Invoke setSmartVolControl on org.rdk.SystemAudioPlayer with id: "<result_step_1>", enable: "true", playerAudioLevelThreshold: "0.1", playerDetectTimeMs: "200", playerHoldTimeMs: "1000", primaryDuckingPercent: "50" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setSmartVolControl", "params": {"id": "<result_step_1>", "enable": true, "playerAudioLevelThreshold": 0.1, "playerDetectTimeMs": 200, "playerHoldTimeMs": 1000, "primaryDuckingPercent": 50}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that smart vol control is set successfully |
@@ -908,7 +908,7 @@ Attempts to open a player with an empty audiotype parameter, expects an error re
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player Empty Audiotype | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -926,7 +926,7 @@ Attempts to open a player with an audiotype value not in the allowed enum (pcm/m
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player Invalid Audiotype Ogg | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "ogg", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "ogg", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -944,7 +944,7 @@ Attempts to open a player with a sourcetype value not in the allowed enum (data/
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player Invalid Sourcetype Value | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "invalidsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "invalidsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -962,7 +962,7 @@ Attempts to open a player with a playmode value not in the allowed enum (system/
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player Invalid Playmode Value | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "pcm", sourcetype: "httpsrc", playmode: "background"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "pcm", "sourcetype": "httpsrc", "playmode": "background"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -980,7 +980,7 @@ Attempts to close a player with a non-existent session ID, expects an error resp
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Close Player With Invalid Id | Invoke close on org.rdk.SystemAudioPlayer with id: "-1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.close", "params": {"id": -1}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -998,7 +998,7 @@ Attempts to play audio with a non-existent player ID, expects an error response
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Play Audio With Invalid Id | Invoke play on org.rdk.SystemAudioPlayer with id: "-1", url: "<SAP_AUDIO_URL_HTTPSRC_MP3>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": -1, "url": "<SAP_AUDIO_URL_HTTPSRC_MP3>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -1016,7 +1016,7 @@ Attempts to play audio with an empty URL parameter, expects an error response
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For Invalid URL Play | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Play Audio With Empty URL | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": ""}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
@@ -1036,7 +1036,7 @@ Attempts to pause audio on a non-existent player ID, expects an error response
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Pause Audio With Invalid Id | Invoke pause on org.rdk.SystemAudioPlayer with id: "-1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.pause", "params": {"id": -1}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -1054,7 +1054,7 @@ Attempts to resume audio on a non-existent player ID, expects an error response
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Resume Audio With Invalid Id | Invoke resume on org.rdk.SystemAudioPlayer with id: "-1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.resume", "params": {"id": -1}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -1072,7 +1072,7 @@ Attempts to stop audio on a non-existent player ID, expects an error response
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Stop Audio With Invalid Id | Invoke stop on org.rdk.SystemAudioPlayer with id: "-1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.stop", "params": {"id": -1}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -1090,7 +1090,7 @@ Attempts to set primary volume above maximum (100), expects an error response
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For Primary OOR | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Set Mixer Primary Volume OOR | Invoke setMixerLevels on org.rdk.SystemAudioPlayer with id: "<result_step_1>", primaryVolume: "200", playerVolume: "7"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setMixerLevels", "params": {"id": "<result_step_1>", "primaryVolume": 200, "playerVolume": 7}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
@@ -1110,7 +1110,7 @@ Attempts to set player volume above maximum (100), expects an error response
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For Player Vol OOR | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Set Mixer Player Volume OOR | Invoke setMixerLevels on org.rdk.SystemAudioPlayer with id: "<result_step_1>", primaryVolume: "20", playerVolume: "150"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setMixerLevels", "params": {"id": "<result_step_1>", "primaryVolume": 20, "playerVolume": 150}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
@@ -1130,7 +1130,7 @@ Attempts to get a session ID with an empty URL parameter, expects an error respo
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Session Id With Empty URL | Invoke getPlayerSessionId on org.rdk.SystemAudioPlayer with url: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.getPlayerSessionId", "params": {"url": ""}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -1148,7 +1148,7 @@ Attempts to configure a player with a non-existent session ID, expects an error 
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Config Player With Invalid Id | Invoke config on org.rdk.SystemAudioPlayer with id: "-1", format: "S16LE", rate: "22050", channels: "1", layout: "interleaved"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.config", "params": {"id": -1, "format": "S16LE", "rate": 22050, "channels": 1, "layout": "interleaved"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
 
@@ -1166,7 +1166,7 @@ Attempts to set smart volume control with audio level threshold above maximum (1
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For SmartVol OOR | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Set SmartVol Threshold OOR | Invoke setSmartVolControl on org.rdk.SystemAudioPlayer with id: "<result_step_1>", enable: "true", playerAudioLevelThreshold: "2.5", playerDetectTimeMs: "200", playerHoldTimeMs: "1000", primaryDuckingPercent: "50"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setSmartVolControl", "params": {"id": "<result_step_1>", "enable": true, "playerAudioLevelThreshold": 2.5, "playerDetectTimeMs": 200, "playerHoldTimeMs": 1000, "primaryDuckingPercent": 50}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `false` (expected error response for invalid input) |
@@ -1186,7 +1186,7 @@ Tests enabling smart volume control, playing audio and then disabling smart volu
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player SmartVol Lifecycle | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Enable SmartVol Before Play | Invoke setSmartVolControl on org.rdk.SystemAudioPlayer with id: "<result_step_1>", enable: "true", playerAudioLevelThreshold: "0.5", playerDetectTimeMs: "300", playerHoldTimeMs: "500", primaryDuckingPercent: "25"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setSmartVolControl", "params": {"id": "<result_step_1>", "enable": true, "playerAudioLevelThreshold": 0.5, "playerDetectTimeMs": 300, "playerHoldTimeMs": 500, "primaryDuckingPercent": 25}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that smart vol control is set successfully |
@@ -1211,7 +1211,7 @@ Verifies that attempting to play on an already-closed player ID returns an error
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For Error State | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Close Player To Create Error State | Invoke close on org.rdk.SystemAudioPlayer with id: "<result_step_1>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.close", "params": {"id": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that the close operation is completed successfully|
@@ -1231,7 +1231,7 @@ Tests setting mixer levels at minimum boundary values (0,0) and verifies playbac
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For Min Mixer | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Set Mixer Min Boundary | Invoke setMixerLevels on org.rdk.SystemAudioPlayer with id: "<result_step_1>", primaryVolume: "0", playerVolume: "0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setMixerLevels", "params": {"id": "<result_step_1>", "primaryVolume": 0, "playerVolume": 0}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that mixer levels is set successfully |
@@ -1255,7 +1255,7 @@ Tests setting mixer levels at maximum boundary values (100,100) and verifies pla
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For Max Mixer | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Set Mixer Max Boundary | Invoke setMixerLevels on org.rdk.SystemAudioPlayer with id: "<result_step_1>", primaryVolume: "100", playerVolume: "100"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.setMixerLevels", "params": {"id": "<result_step_1>", "primaryVolume": 100, "playerVolume": 100}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that mixer levels is set successfully |
@@ -1279,7 +1279,7 @@ Opens two players simultaneously in system and app play modes, plays the system 
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open System Mode Player | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "wav", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "wav", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | Open App Mode Player | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "app"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "app"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
@@ -1304,7 +1304,7 @@ Verifies that a player can successfully stop and restart audio playback on the s
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Open Player For Replay | Invoke open on org.rdk.SystemAudioPlayer with audiotype: "mp3", sourcetype: "httpsrc", playmode: "system"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.open", "params": {"audiotype": "mp3", "sourcetype": "httpsrc", "playmode": "system"}}' http://127.0.0.1:9998/jsonrpc` | Player opened successfully, `id` (player session ID) returned |
 | 2 | First Play Audio | Invoke play on org.rdk.SystemAudioPlayer with id: "<result_step_1>", url: "<SAP_AUDIO_URL_HTTPSRC_MP3>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.play", "params": {"id": "<result_step_1>", "url": "<SAP_AUDIO_URL_HTTPSRC_MP3>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` |
@@ -1323,17 +1323,18 @@ Verifies that a player can successfully stop and restart audio playback on the s
 
 ### Plugin Post-condition 1: Unregister_SAP_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Unsubscribe from the onsapevents event | Unregister the WebSocket event listener for `onsapevents` to stop receiving `onsapevents` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.unregister", "params": {"event": "onsapevents", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 
 ## Test Attributes
 
-| Attribute | Value |
-| --- | --- |
-| Supported Models | Video Accelerator, RPI-Client |
-| Estimated Duration | 20 minutes |
-| Priority | Medium |
-| TDK Release Version | M150 |
+**Supported Models** : Video_Accelerator, RPI-Client
 
-<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>
+**Estimated duration** : 20 mins
+
+**Priority** : Medium
+
+**Release Version** : M150
+
+<div align="right"><a href="#testscript-name">Go to Top</a></div>

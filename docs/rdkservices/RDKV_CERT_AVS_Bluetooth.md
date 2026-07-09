@@ -28,7 +28,7 @@ accessible via JSON-RPC under the callsign `org.rdk.Bluetooth` (version 1)
 
 ### Plugin Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of Bluetooth Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Bluetooth"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate Bluetooth Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.Bluetooth"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -36,7 +36,7 @@ accessible via JSON-RPC under the callsign `org.rdk.Bluetooth` (version 1)
 
 ### Plugin Pre-condition 2: Activate_System_Plugin
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.System"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -44,13 +44,13 @@ accessible via JSON-RPC under the callsign `org.rdk.Bluetooth` (version 1)
 
 ### Plugin Pre-condition 3: Bluetooth_Stack_Enable
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Enable Bluetooth Stack | Enable on Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.enable"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
 
 ### Plugin Pre-condition 4: Register_And_Listen_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Subscribe to the onDiscoveredDevice event | Register a WebSocket event listener for `onDiscoveredDevice` to receive `onDiscoveredDevice` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.register", "params": {"event": "onDiscoveredDevice", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 2 | Subscribe to the onStatusChanged event | Register a WebSocket event listener for `onStatusChanged` to receive `onStatusChanged` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.register", "params": {"event": "onStatusChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
@@ -60,7 +60,7 @@ accessible via JSON-RPC under the callsign `org.rdk.Bluetooth` (version 1)
 
 ### Plugin Pre-condition 5: Configure_Device_Parameter
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Configure Bluetooth Emulator Support | `BT_EMULATOR_SUPPORT` must be set to `yes` if a Bluetooth emulator is available in the test setup, otherwise set to `no` | The Bluetooth emulator support flag should be correctly configured in the device-specific config file |
 | 2 | Configure Bluetooth Emulator IP | `BT_EMU_IP` must be set to the IP address of the Bluetooth emulator device accessible from the DUT. Required only when `BT_EMULATOR_SUPPORT = yes` | The Bluetooth emulator IP address should be correctly configured in the device-specific config file |
@@ -82,7 +82,7 @@ Check whether name of the device can be set and get
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Bluetooth Device Name | Invoke getName on org.rdk.Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.getName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the device name is returned successfully (`success` : `true`) |
 | 2 | Set Bluetooth Device Name | Invoke setName on org.rdk.Bluetooth with name: "Test Value"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.setName", "params": {"name": "Test Value"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the name is set successfully (`success` : `true`) |
@@ -102,7 +102,7 @@ Toggle bluetooth discoverable status
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Is Bluetooth Device Discoverable | Invoke isDiscoverable on org.rdk.Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.isDiscoverable"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current discoverable status is returned as `true` or `false` with `success`: `true`  |
 | 2 | Set Bluetooth Device Discoverable | Invoke setDiscoverable on org.rdk.Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.setDiscoverable", "params": {"discoverable": <toggled_value>, "timeout": 10}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the discoverable status is set successfully (`success` : `true`) |
@@ -122,7 +122,7 @@ Checks on request failed event
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Start Scan | Invoke startScan on org.rdk.Bluetooth with profile: "LOUDSPEAKER"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.startScan", "params": {"timeout": 30, "profile": "LOUDSPEAKER"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the LOUDSPEAKER scan is started successfully with `STATUS`: `AVAILABLE` |
 | 2 | Stop Scan | Invoke stopScan on org.rdk.Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.stopScan"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the scan is closed successfully |
@@ -144,7 +144,7 @@ Checks whether LE profile devices are getting discovered
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Start Scan | Invoke startScan on org.rdk.Bluetooth with profile: "LE"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.startScan", "params": {"timeout": 30, "profile": "LE"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that LE scan is started successfully |
 | 2 | Stop Scan | Invoke stopScan on org.rdk.Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.stopScan"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the scan is closed successfully |
@@ -164,7 +164,7 @@ Checks the API version Number
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get API Version Number | Invoke getApiVersionNumber on org.rdk.Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.getApiVersionNumber"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API version number is returned successfully with value `1` |
 
@@ -184,7 +184,7 @@ Validates statechange event on Activating/deactivating the plugin
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of Bluetooth Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Bluetooth"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate Bluetooth Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.Bluetooth"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -192,7 +192,7 @@ Validates statechange event on Activating/deactivating the plugin
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate Bluetooth Plugin | Invoke deactivate on Controller with callsign: "org.rdk.Bluetooth"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.Bluetooth"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 2 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that the event is received with callsign `org.rdk.bluetooth`, state `deactivated`, and reason `requested`  |
@@ -215,7 +215,7 @@ Verify bluetooth scanning, pairing, discoverydevice, state change, deviceinfo an
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Start Scan | Invoke startScan on org.rdk.Bluetooth with timeout: 30, profile: "LOUDSPEAKER"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.startScan", "params": {"timeout": 30, "profile": "LOUDSPEAKER"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the scan is started successfully |
 | 2 | Stop Scan | Invoke stopScan on org.rdk.Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.stopScan"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the scan is closed successfully |
@@ -235,7 +235,7 @@ Verify bluetooth scanning, pairing, discoverydevice, state change, deviceinfo an
 
 #### TestCase Post-condition 1: Unpairing_BT_EMU_Device
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Paired Devices | Get Paired Devices from Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.getPairedDevices"}' http://127.0.0.1:9998/jsonrpc` | Verify that `<BT_EMU_DEVICE_NAME>` is found in the paired devices list |
 | 2 | Unpair | *(Conditional statement executed only if previous step condition is met)*<br>Unpair on Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.unpair", "params": {"deviceID": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the unpair request is completed successfully with `success`: `true` |
@@ -255,7 +255,7 @@ Verify bluetooth scanning, pairing, discoverydevice, state change, connect, disc
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Start Scan | Invoke startScan on org.rdk.Bluetooth with profile: "LOUDSPEAKER"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.startScan", "params": {"timeout": 30, "profile": "LOUDSPEAKER"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the LOUDSPEAKER scan is started successfully with `STATUS`: `AVAILABLE` |
 | 2 | Stop Scan | Invoke stopScan on org.rdk.Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.stopScan"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the scan is closed successfully |
@@ -277,7 +277,7 @@ Verify bluetooth scanning, pairing, discoverydevice, state change, connect, disc
 
 #### TestCase Post-condition 1: Unpairing_BT_EMU_Device
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Connected Devices | Get Connected Devices from Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.getConnectedDevices"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected devices list is checked for cleanup — disconnects `<BT_EMU_DEVICE_NAME>` if still connected (may be empty if already disconnected)  |
 | 2 | Disconnect | *(Conditional statement executed only if the condition in Step 1 is met)*<br>Disconnect on Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.disconnect", "params": {"deviceID": "<result_step_1>", "deviceType": "LOUDSPEAKER"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the disconnection is successful |
@@ -302,7 +302,7 @@ Validates all event on Activating/deactivating the plugin
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of Bluetooth Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Bluetooth"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate Bluetooth Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.Bluetooth"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -310,7 +310,7 @@ Validates all event on Activating/deactivating the plugin
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate Bluetooth Plugin | Invoke deactivate on Controller with callsign: "org.rdk.Bluetooth"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.Bluetooth"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 2 | Check All Event | Listen for event Event_Controller_All | Verify that the event is received with callsign `org.rdk.bluetooth`, state `deactivated`, and reason `requested`  |
@@ -335,7 +335,7 @@ Verify that the connect method returns an error when the plugin is in a deactiva
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of Bluetooth Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.Bluetooth"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate Bluetooth Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.Bluetooth"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -343,7 +343,7 @@ Verify that the connect method returns an error when the plugin is in a deactiva
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate Bluetooth Plugin | Invoke deactivate on Controller with callsign: "org.rdk.Bluetooth"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.Bluetooth"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 2 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that the event is received with callsign `org.rdk.bluetooth`, state `deactivated`, and reason `requested`  |
@@ -358,7 +358,7 @@ Verify that the connect method returns an error when the plugin is in a deactiva
 
 ### Plugin Post-condition 1: Unregister_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Unsubscribe from the onDiscoveredDevice event | Unregister the WebSocket event listener for `onDiscoveredDevice` to stop receiving `onDiscoveredDevice` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.unregister", "params": {"event": "onDiscoveredDevice", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 | 2 | Unsubscribe from the onStatusChanged event | Unregister the WebSocket event listener for `onStatusChanged` to stop receiving `onStatusChanged` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.unregister", "params": {"event": "onStatusChanged", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
@@ -368,17 +368,18 @@ Verify that the connect method returns an error when the plugin is in a deactiva
 
 ### Plugin Post-condition 2: Bluetooth_Stack_Disable
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Disable Bluetooth Stack | Disable on Bluetooth<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.Bluetooth.1.disable"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 
 ## Test Attributes
 
-| Attribute | Value |
-| --- | --- |
-| Supported Models | Video Accelerator, RPI-Client |
-| Estimated Duration | 35 minutes |
-| Priority | Medium |
-| TDK Release Version | M81 |
+**Supported Models** : Video_Accelerator, RPI-Client
 
-<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>
+**Estimated duration** : 35 mins
+
+**Priority** : Medium
+
+**Release Version** : M81
+
+<div align="right"><a href="#testscript-name">Go to Top</a></div>

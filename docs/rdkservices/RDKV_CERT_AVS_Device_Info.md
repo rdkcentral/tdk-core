@@ -43,7 +43,7 @@ accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
 
 ### Plugin Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -51,7 +51,7 @@ accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
 
 ### Plugin Pre-condition 2: Activate_DisplaySettings_Plugin
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DisplaySettings"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplaySettings Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DisplaySettings"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -59,7 +59,7 @@ accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
 
 ### Plugin Pre-condition 3: Activate_System_Plugin
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.System"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -67,7 +67,7 @@ accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
 
 ### Plugin Pre-condition 4: Activate_HdcpProfile_Plugin
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of HdcpProfile Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdcpProfile"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate HdcpProfile Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.HdcpProfile"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -75,13 +75,13 @@ accessible via JSON-RPC under the callsign `DeviceInfo` (version 1)
 
 ### Plugin Pre-condition 5: Register_And_Listen_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ### Plugin Pre-condition 6: Configure_Device_Parameter
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Configure ESN Support | `DEVICEINFO_ESN_SUPPORT` must be set to 'yes' if ESN support is available on the DUT, otherwise 'no' | The `DEVICEINFO_ESN_SUPPORT` value should be correctly configured in the device-specific config file |
 | 2 | Configure Supported HDCP Version | `DEVICEINFO_SUPPORTED_HDCP_VERSION` must be set to the HDCP version supported by the DUT | The `DEVICEINFO_SUPPORTED_HDCP_VERSION` value should be correctly configured in the device-specific config file |
@@ -102,7 +102,7 @@ Gets all system information
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get System Info | Invoke systeminfo on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.systeminfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that system information is returned successfully |
 
@@ -120,7 +120,7 @@ Gets all network interfaces
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Network Interfaces | Invoke addresses on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.addresses"}' http://127.0.0.1:9998/jsonrpc` | Verify that the DeviceInfo network information is returned and validated successfully  |
 
@@ -138,7 +138,7 @@ Checks the negative scenario for Socket info API
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Socket Info | Invoke socketinfo on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.socketinfo"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Unknown method.` |
 
@@ -156,7 +156,7 @@ Activates and deactivates the plugin
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check DeviceInfo Active Status | Invoke status on Controller for DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
@@ -177,7 +177,7 @@ Checks the serial number
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Serial Number | Invoke serialnumber on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.serialnumber"}' http://127.0.0.1:9998/jsonrpc` | Verify that the DeviceInfo API response is returned and validated successfully  |
 
@@ -195,7 +195,7 @@ Checks the model name of the DUT
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Device Details | Read expected model name by executing: grep FRIENDLY_ID <DEVICEINFO_DEVICE_DETAILS_FILE_PATH> \| cut -d'=' -f2- \| xargs | Verify that the `FRIENDLY_ID` value is retrieved successfully and saved for comparison  |
 | 2 | Get Model Name | Invoke modelname on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.modelname"}' http://127.0.0.1:9998/jsonrpc` | Verify that the model name returned by the API matches the `FRIENDLY_ID` value retrieved in step 1  |
@@ -214,7 +214,7 @@ Checks the firmware version of the DUT
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Current Image Version | Retrieve current firmware image version from device | Verify that the current firmware image version is retrieved from the device successfully |
 | 2 | Get Firmware Version | Invoke firmwareversion on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.firmwareversion"}' http://127.0.0.1:9998/jsonrpc` | Verify that the firmware version matches the expected value retrieved from the device  |
@@ -233,7 +233,7 @@ Check whether settop lists supported audio ports
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Supported Audio Ports | Invoke supportedaudioports on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedaudioports"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported audio ports match the expected value `<SUPPORTED_AUDIO_PORTS>` from the device config file  |
 
@@ -251,7 +251,7 @@ Check whether settop displays supported video displays
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Supported Video Displays | Invoke supportedvideodisplays on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedvideodisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported video displays match the expected value `<SUPPORTED_VIDEO_DISPLAYS>` from the device config file  |
 
@@ -269,7 +269,7 @@ Check the EDID status of host
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Host EDID Details | Invoke hostedid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.hostedid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the hostedid API is not empty  |
 
@@ -287,7 +287,7 @@ Check whether the default resolution is available in supported resolutions
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 | 2 | Get Supported Resolutions | Invoke supportedresolutions on DeviceInfo with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedresolutions", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the supportedresolutions API is not empty  |
@@ -307,7 +307,7 @@ Checks the supported HDCP version
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video displays are returned successfully |
 | 2 | Get Supported HDCP | Invoke supportedhdcp on DeviceInfo with videoDisplay: "<result_step_1>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedhdcp", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the HDCP version matches the expected value from the device configuration  |
@@ -326,7 +326,7 @@ Checks the model id of the DUT
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Device Details | Read expected model id by executing grep ^MODEL_NUM <DEVICEINFO_DEVICE_DETAILS_FILE_PATH> \| cut -d'=' -f2- \| xargs | Verify that the `MODEL_NUM` value is retrieved successfully and saved for comparison |
 | 2 | Get Model ID | Invoke modelid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.modelid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API response matches the expected value from step 1 |
@@ -345,7 +345,7 @@ Checks the device type of the DUT
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Device Type | Invoke devicetype on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.devicetype"}' http://127.0.0.1:9998/jsonrpc` | Verify that the device type returned by the API matches the expected value `<DEVICEINFO_DEVICE_TYPE>` from the device config file  |
 
@@ -365,7 +365,7 @@ Validates statechange event on Activating/deactivating the plugin
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -373,7 +373,7 @@ Validates statechange event on Activating/deactivating the plugin
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate DeviceInfo Plugin | Invoke deactivate on Controller with callsign: "DeviceInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 2 | Check State Change Event | Listen for event Event_Controller_State_Changed | Verify that event data is validated successfully |
@@ -396,7 +396,7 @@ Verify whether the firmware version returned by deviceinfo API matches the firmw
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | DeviceInfo Get Firmware Version | Invoke firmwareversion on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.firmwareversion"}' http://127.0.0.1:9998/jsonrpc` | Verify that the firmware version is retrieved successfully from DeviceInfo API |
 | 2 | System Get Device Image Version | Invoke getDeviceInfo on org.rdk.System with params: "imageVersion"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "imageVersion"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the image version is retrieved successfully from System API |
@@ -416,7 +416,7 @@ Verify whether the serial number returned by deviceinfo API matches the serial n
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | DeviceInfo Get Serial Number | Invoke serialnumber on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.serialnumber"}' http://127.0.0.1:9998/jsonrpc` | Verify that the serial number is retrieved successfully from DeviceInfo API |
 | 2 | System Get Device Serial Number | Invoke getSerialNumber on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getSerialNumber"}' http://127.0.0.1:9998/jsonrpc` | Verify that the serial number is retrieved successfully from System API |
@@ -436,7 +436,7 @@ Verify whether the audio ports returned by deviceinfo API matches the audio port
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | DeviceInfo Get Supported Audio Ports | Invoke supportedaudioports on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedaudioports"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported audio ports are retrieved successfully from DeviceInfo API |
 | 2 | DisplaySettings Get Supported Audio Ports | Invoke getSupportedAudioPorts on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedAudioPorts"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported audio ports returned by `DisplaySettings.getSupportedAudioPorts` match the ports returned by `DeviceInfo.supportedaudioports`  |
@@ -455,7 +455,7 @@ Verify whether the video ports returned by deviceinfo API matches the video port
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | DeviceInfo Get Supported Video Displays | Invoke supportedvideodisplays on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedvideodisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported video displays are retrieved successfully from DeviceInfo API |
 | 2 | DisplaySettings Get Supported Video Displays | Invoke getSupportedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getSupportedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported video displays returned by `DisplaySettings.getSupportedVideoDisplays` match the displays returned by `DeviceInfo.supportedvideodisplays`  |
@@ -474,7 +474,7 @@ Verify whether the host EDID details returned by deviceinfo API matches the EDID
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | DeviceInfo Get Host EDID Details | Invoke hostedid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.hostedid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the host EDID details are retrieved successfully from DeviceInfo API |
 | 2 | DisplaySettings Get Host EDID Details | Invoke readHostEDID on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.readHostEDID"}' http://127.0.0.1:9998/jsonrpc` | Verify that the host EDID details are retrieved successfully from DisplaySettings API |
@@ -494,7 +494,7 @@ Verify whether the HDCP version returned by deviceinfo API matches the HDCP vers
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video display name is retrieved successfully |
 | 2 | DeviceInfo Get Supported HDCP | Invoke supportedhdcp on DeviceInfo with videoDisplay<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.supportedhdcp", "params": {"videoDisplay": "<result_step_1>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the supported HDCP version is retrieved successfully from DeviceInfo API |
@@ -514,7 +514,7 @@ Check whether the default resolution returned by deviceinfo API matches the defa
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check Display Connected Status | Invoke getConnectedVideoDisplays on org.rdk.DisplaySettings<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' http://127.0.0.1:9998/jsonrpc` | Verify that the connected video display name is retrieved successfully |
 | 2 | DeviceInfo Get Default Resolution | Invoke defaultresolution on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.defaultresolution"}' http://127.0.0.1:9998/jsonrpc` | Verify that the default resolution is retrieved successfully from DeviceInfo API |
@@ -534,7 +534,7 @@ Check if the date returned by the systeminfo API matches the DUT date
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get SystemInfo API Date | Invoke systeminfo on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.systeminfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the system date is retrieved successfully from DeviceInfo API |
 | 2 | Get DUT Date | Retrieve current date directly from the DUT system | Verify that the DUT system date is retrieved successfully and saved for comparison  |
@@ -554,7 +554,7 @@ Checks the device SOC Name
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Device SocName | Invoke socname on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.socname"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the socname API is not empty  |
 
@@ -572,7 +572,7 @@ Checks the device manufacturer
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Device Manufacturer | Invoke make on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.make"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the make API is not empty  |
 
@@ -581,17 +581,18 @@ Checks the device manufacturer
 
 ### Plugin Post-condition 1: Unregister_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 
 ## Test Attributes
 
-| Attribute | Value |
-| --- | --- |
-| Supported Models | Video Accelerator, RPI-Client |
-| Estimated Duration | 5 minutes |
-| Priority | Medium |
-| TDK Release Version | M81 |
+**Supported Models** : Video_Accelerator, RPI-Client
 
-<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>
+**Estimated duration** : 5 mins
+
+**Priority** : Medium
+
+**Release Version** : M81
+
+<div align="right"><a href="#testscript-name">Go to Top</a></div>

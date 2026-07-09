@@ -30,7 +30,7 @@ accessible via JSON-RPC under the callsign `org.rdk.PersistentStore` (version 1)
 
 ### Plugin Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of PersistentStore Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PersistentStore"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PersistentStore Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PersistentStore"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -38,7 +38,7 @@ accessible via JSON-RPC under the callsign `org.rdk.PersistentStore` (version 1)
 
 ### Plugin Pre-condition 2: Register_And_Listen_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Subscribe to the onValueChanged event | Register a WebSocket event listener for `onValueChanged` to receive `onValueChanged` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.register", "params": {"event": "onValueChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 | 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
@@ -59,7 +59,7 @@ Sets and gets the particular key value
 
 > **Value Loop (Steps 1–2):** Steps 1–2 repeat **3 times**, once for each value of `value`: `Value_1`, `Value_2`, `Value_3`
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Invoke setValue on org.rdk.PersistentStore with namespace: "Namespace_1", key: "Key_1", value: "<VALUE_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Namespace_1", "key": "Key_1", "value": "<VALUE_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
 | 2 | Get Value | Invoke getValue on org.rdk.PersistentStore with namespace: "Namespace_1", key: "Key_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "Namespace_1", "key": "Key_1"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` returned value matches the iterated value set in the previous step  |
@@ -78,7 +78,7 @@ Deletes the key
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Invoke setValue on org.rdk.PersistentStore with namespace: "Namespace_1", key: "Key_2", value: "Value_2"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Namespace_1", "key": "Key_2", "value": "Value_2"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
 | 2 | Get Keys | Invoke getKeys on org.rdk.PersistentStore with namespace: "Namespace_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getKeys", "params": {"namespace": "Namespace_1"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`, `Key_2` present in the returned keys list  |
@@ -99,7 +99,7 @@ Deletes the Namespace
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Invoke setValue on org.rdk.PersistentStore with namespace: "Namespace_2", key: "Key_1", value: "Value_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Namespace_2", "key": "Key_1", "value": "Value_1"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
 | 2 | Get Namespaces | Invoke getNamespaces on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces"}' http://127.0.0.1:9998/jsonrpc` | Verify that `Namespace_2` is present in the namespaces list as expected  |
@@ -120,7 +120,7 @@ Gets the storage size of the available namespaces
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Namespaces | Invoke getNamespaces on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces"}' http://127.0.0.1:9998/jsonrpc` | Verify that namespaces are returned successfully |
 | 2 | Get Storage Size | Invoke getStorageSize on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getStorageSize"}' http://127.0.0.1:9998/jsonrpc` | Verify that the storage size is returned successfully |
@@ -139,7 +139,7 @@ flushes the database cache
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Flush Cache | Invoke flushCache on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.flushCache"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the cache is cleared successfully |
 
@@ -159,7 +159,7 @@ Sets and gets the particular key value
 
 > **Value Loop (Steps 1–3):** Steps 1–3 repeat **3 times**, once for each value of `value`: `Value_1`, `Value_2`, `Value_3`
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Invoke setValue on org.rdk.PersistentStore with namespace: "Namespace_3", key: "Key_1", value: "<VALUE_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Namespace_3", "key": "Key_1", "value": "<VALUE_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the value is set successfully |
 | 2 | Get Value | Invoke getValue on org.rdk.PersistentStore with namespace: "Namespace_3", key: "Key_1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "Namespace_3", "key": "Key_1"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` returned value matches the iterated value set in the previous step  |
@@ -179,7 +179,7 @@ Set and get storage limits for available namespaces
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Namespaces | Invoke getNamespaces on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces"}' http://127.0.0.1:9998/jsonrpc` | Verify that namespaces are returned successfully |
 | 2 | Delete Namespace | *(Conditional statement executed only if previous step condition is met)*<br>Invoke deleteNamespace on org.rdk.PersistentStore with namespace: "username"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteNamespace", "params": {"namespace": "username"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the namespace is deleted successfully |
@@ -201,7 +201,7 @@ Verify persistent store handles empty, sets and retrieves storage namespace limi
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Namespace Storagelimit | Invoke setNamespaceStorageLimit on org.rdk.PersistentStore with namespace: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setNamespaceStorageLimit", "params": {"namespace": "", "storageLimit": 20}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
 | 2 | Get Namespace Storagelimit | Invoke getNamespaceStorageLimit on org.rdk.PersistentStore with namespace: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaceStorageLimit", "params": {"namespace": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_NOT_EXIST` |
@@ -220,7 +220,7 @@ Verify persistent store handles empty key, set and get operations across namespa
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Invoke setValue on org.rdk.PersistentStore with namespace: "username", key: "", value: "user"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "username", "key": "", "value": "user"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
 | 2 | Get Value | Invoke getValue on org.rdk.PersistentStore with namespace: "username", key: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "username", "key": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_UNKNOWN_KEY` |
@@ -239,7 +239,7 @@ Verify persistent store handles empty namespace, set and get operations
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set Value | Invoke setValue on org.rdk.PersistentStore with namespace: "", key: "username", value: "user"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "", "key": "username", "value": "user"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
 | 2 | Get Value | Invoke getValue on org.rdk.PersistentStore with namespace: "", key: "username"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "", "key": "username"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_NOT_EXIST` |
@@ -258,7 +258,7 @@ Verify that attempting to retrieve the storage namespace limit for a namespace t
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get Namespaces | Invoke getNamespaces on org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces"}' http://127.0.0.1:9998/jsonrpc` | Verify that namespaces are returned successfully |
 | 2 | Delete Namespace | *(Conditional statement executed only if previous step condition is met)*<br>Invoke deleteNamespace on org.rdk.PersistentStore with namespace: "username"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteNamespace", "params": {"namespace": "username"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the namespace is deleted successfully |
@@ -280,7 +280,7 @@ Validates statechange event on Activating/deactivating the plugin
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check PluginActive Status | Check Active Status of PersistentStore Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PersistentStore"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
 | 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PersistentStore Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PersistentStore"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
@@ -288,7 +288,7 @@ Validates statechange event on Activating/deactivating the plugin
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate PersistentStore Plugin | Invoke deactivate on Controller with callsign: "org.rdk.PersistentStore"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.PersistentStore"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
 | 2 | Check State Change Event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.persistentstore` with state `"deactivated"` |
@@ -302,7 +302,7 @@ Validates statechange event on Activating/deactivating the plugin
 
 ### Plugin Post-condition 1: Unregister_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Unsubscribe from the onValueChanged event | Unregister the WebSocket event listener for `onValueChanged` to stop receiving `onValueChanged` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.unregister", "params": {"event": "onValueChanged", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 | 2 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
@@ -310,11 +310,12 @@ Validates statechange event on Activating/deactivating the plugin
 
 ## Test Attributes
 
-| Attribute | Value |
-| --- | --- |
-| Supported Models | Video Accelerator, RPI-Client |
-| Estimated Duration | 5 minutes |
-| Priority | Medium |
-| TDK Release Version | M88 |
+**Supported Models** : Video_Accelerator, RPI-Client
 
-<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>
+**Estimated duration** : 5 mins
+
+**Priority** : Medium
+
+**Release Version** : M88
+
+<div align="right"><a href="#testscript-name">Go to Top</a></div>
