@@ -59,7 +59,7 @@ min_version = (1, 1, 0)
 
 if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('execute_Cmnd_InDUT')
-    command = "XDG_RUNTIME_DIR=/tmp ; vulkaninfo "
+    command = "XDG_RUNTIME_DIR=/tmp vulkaninfo"
     print("Executing command in DUT: ", command)
     tdkTestObj.addParameter("command",command)
     tdkTestObj.executeTestCase(expectedResult);
