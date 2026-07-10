@@ -82,7 +82,7 @@ if "SUCCESS" in result.upper():
             print("FAILURE: could not find Vulkan Instance Version string")
             tdkTestObj.setResultStatus("FAILURE")
 
-        # --- Device apiVersion (actual GPU capability — the one that matters) ---
+        # --- Device apiVersion ---
         api_match = re.search(r"apiVersion\s*=\s*(?:\d+\s*)?\(?(\d+)\.(\d+)\.(\d+)\)?", output)
         if api_match:
             api_version = tuple(int(x) for x in api_match.groups())
