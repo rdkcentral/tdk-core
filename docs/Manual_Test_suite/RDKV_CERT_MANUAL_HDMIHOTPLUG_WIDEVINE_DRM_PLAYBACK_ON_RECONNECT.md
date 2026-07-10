@@ -1,0 +1,42 @@
+## TestCase ID
+RDKV_MANUAL_HDMIHOTPLUG_13
+## TestCase Name
+RDKV_CERT_MANUAL_HDMIHOTPLUG_WIDEVINE_DRM_PLAYBACK_ON_RECONNECT
+
+<a name="head.TOC"></a>
+## Table Of Contents
+- [Objective](#head.Objective)
+- [Precondition](#head.Precondition)
+- [Test Steps](#head.TestSteps)
+- [Test Attributes](#head.Attributes)
+
+<a name="head.Objective"></a>
+## Objective
+To validate that Widevine DRM encrypted stream playback continues without interruption after an HDMI cable reconnect on the DUT.
+
+<a name="head.Precondition"></a>
+## Preconditions
+
+|#|Step Name | Step Description| Expected Result|
+|-|---------|-----------------|----------------|
+| 1 | Connect DUT to network | Connect the DUT to an active network via Wi-Fi or Ethernet prior to the test. | The DUT should be connected to an active network with a valid IP address assigned. |
+| 2 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully. |
+| 3 | Connect HDMI cable and select source | Connect the HDMI cable between the DUT and the TV/display, with the correct input source selected. | The HDMI cable should be connected and the correct input source should be selected on the TV/display. |
+| 4 | Enable OCDM plugin on DUT | Ensure the OCDM plugin is enabled on the DUT. | The OCDM plugin should be enabled and active on the DUT. |
+| 5 | Set required environment variables | Identify and export the required environment variables from /lib/systemd/system/wpeframework.service (e.g., `export LD_PRELOAD=/usr/lib/libwesteros_gl.so.0`) in the serial console or SSH console prior to running aamp-cli commands. | The required environment variables should be set successfully in the console session. |
+| 6 | Stop running video playback | Ensure any currently running video playback is stopped prior to the test. | All video playback on the DUT should be stopped. |
+| 7 | Configure /opt/aamp.cfg for Widevine | Configure /opt/aamp.cfg with the following keys (replace <Widevine License server URL> with the actual URL):<br>`licenseServerUrl=<Widevine License server URL>`<br>`FORCE_SVP=TRUE`<br>`preferredDrm=1`<br>`useWesterosSink=1` | The /opt/aamp.cfg file should be configured correctly with the Widevine DRM settings. |
+
+<a name="head.TestSteps"></a>
+## Test Steps
+
+|#|Step Name | Step Description| Expected Result|
+|-|---------|-----------------|----------------|
+| 1 | Execute aamp-cli for Widevine playback | On the DUT terminal, execute the aamp-cli command to initiate Widevine DRM stream playback.<br>Command: `aamp-cli <Widevine URL>` | Playback should start with proper audio and video output using the Widevine DRM encrypted stream. |
+| 2 | Disconnect and reconnect HDMI cable | Disconnect the HDMI cable from the DUT. Wait approximately 10 seconds, then reconnect the HDMI cable to the DUT. | Playback should continue with proper audio and video output after HDMI reconnection without requiring a restart. |
+| 3 | Exit aamp-cli playback session | Press Enter in the DUT terminal and type exit to terminate the playback session.<br>Command: `exit` | Playback should terminate and the aamp-cli session should exit cleanly. |
+
+<a name="head.Attributes"></a>
+## Test Attributes
+
+**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
