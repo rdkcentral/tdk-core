@@ -1,0 +1,41 @@
+## TestCase ID
+RDKV_MANUAL_XCONF_01
+## TestCase Name
+RDKV_CERT_GT_XCONF_FIRMWARE_UPGRADE_API
+
+<a name="head.TOC"></a>
+## Table Of Contents
+- [Objective](#head.Objective)
+- [Precondition](#head.Precondition)
+- [Test Steps](#head.TestSteps)
+- [Test Attributes](#head.Attributes)
+
+<a name="head.Objective"></a>
+## Objective
+To validate that the XCONF firmware upgrade process can be triggered via the `org.rdk.System.1.firmwareUpdate` RDK service API, and that the DUT successfully downloads and flashes the configured target firmware image as confirmed by the presence of the upgrade success strings in `/opt/logs/swupdate.log`.
+
+<a name="head.Precondition"></a>
+## Preconditions
+
+|#|Step Name | Step Description| Expected Result|
+|-|---------|-----------------|----------------|
+| 1 | Verify DUT network connectivity | Ensure the DUT has active Ethernet network connectivity and can reach the XCONF server. The script validates this automatically via `check_server_connectivity "<xconf_server_url>"` before any test steps execute. | The DUT must have active network connectivity and the XCONF server at `<xconf_server_url>` must be reachable from the DUT prior to test execution. |
+| 2 | Verify DUT platform is XCONF-supported | Confirm the DUT platform is one of the XCONF-supported models: RPI4, AH212, or REALTEKHANK. The script automatically identifies the platform via `platform_type_finder`. The BCM974116SFF platform does not support XCONF image upgrade and will cause the precondition to fail. | The DUT platform must be identified as RPI4, AH212, or REALTEKHANK. If the platform is BCM974116SFF or unidentified, the precondition will exit and the test will not execute. |
+| 3 | Verify target firmware image available on download server | Ensure the target firmware image `<xconf_imagefile_to_upgrade>` is hosted and accessible at the configured firmware download location `<xconf_firmware_dwld_location>` prior to the test. | The target firmware image file must be present and accessible at `<xconf_firmware_dwld_location>` so that the DUT can successfully download and flash it during the upgrade process. |
+| 4 | Validate XCONF firmware config rules for DUT | The script automatically retrieves the DUT Ethernet MAC address via `get_iface_info "eth0" "mac"`, then queries the XCONF server at `<xconf_config_check_url><MAC>` to verify that valid firmware rules exist for the DUT and that the configured `firmwareFilename` and `firmwareLocation` match the expected values `<xconf_imagefile_to_upgrade>` and `<xconf_firmware_dwld_location>` from `device.conf`.<br><br>If the XCONF config does not match, the script prompts: *"Do you want to update the firmware config in XCONF with build `<xconf_imagefile_to_upgrade>`? [yes/no]:"* — responding `yes` triggers an automatic PUT request to `<xconf_restApi_firmware_config>` using `<xconf_API_key_token>` to update the firmware configuration. | Valid XCONF firmware rules must exist for the DUT MAC address, with `firmwareFilename` matching `<xconf_imagefile_to_upgrade>` and `firmwareLocation` matching `<xconf_firmware_dwld_location>`. If auto-updated, the XCONF PUT API must return a response containing the updated firmware config details before test steps execute. |
+
+<a name="head.TestSteps"></a>
+## Test Steps
+
+|#|Step Name | Step Description| Expected Result|
+|-|---------|-----------------|----------------|
+| 1 | Capture current firmware version | Execute the following command on the DUT to record the current firmware version as the baseline before initiating the upgrade:<br>`cat /version.txt` | The current firmware version (imagename) should be displayed from `/version.txt` and recorded as the baseline firmware version prior to the XCONF upgrade. |
+| 2 | Trigger XCONF firmware upgrade via RDK service API | Execute the following curl command to trigger the XCONF firmware upgrade via the `org.rdk.System.1.firmwareUpdate` RDK service API:<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.firmwareUpdate"}' http://127.0.0.1:9998/jsonrpc` | The `org.rdk.System.1.firmwareUpdate` API should return `"success":true` confirming that the XCONF firmware upgrade process has been initiated on the DUT. The DUT will begin contacting the XCONF server and downloading the target firmware in the background. |
+| 3 | Monitor swupdate.log for firmware upgrade success | The script polls `/opt/logs/swupdate.log` at regular intervals for a maximum of 10 minutes, checking for the presence of either of the following upgrade success strings using `check_log_for_string`:<br>- `"doCDL success"`<br>- `"image flashing success"`<br><br>Once a success string is found the firmware flash is complete and the DUT will reboot automatically. The shell script terminates at this point — no further steps execute after the reboot. If neither string is found within 10 minutes the upgrade is considered failed. | The string `"doCDL success"` or `"image flashing success"` must be found in `/opt/logs/swupdate.log` within the 10-minute polling window, confirming that the firmware image `<xconf_imagefile_to_upgrade>` was successfully downloaded and flashed on the DUT. The step is marked PASS when the success string is detected. If neither string appears within 10 minutes the step is marked FAIL. |
+
+<a name="head.Attributes"></a>
+## Test Attributes
+
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

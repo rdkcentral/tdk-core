@@ -1,7 +1,7 @@
 ## TestCase ID
-TC_IPV6_MANUAL_06
+RDKV_MANUAL_IPV6_06
 ## TestCase Name
-RDKV_IPV6_TRACE_API_WIFI_ONLY_GT
+RDKV_CERT_GT_IPV6_TRACE_API_WIFI_ONLY
 
 <a name="head.TOC"></a>
 ## Table Of Contents

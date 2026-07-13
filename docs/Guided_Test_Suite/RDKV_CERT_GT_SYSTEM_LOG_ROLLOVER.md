@@ -1,7 +1,7 @@
 ## TestCase ID
-TC_SYSTEM_MANUAL_03
+RDKV_MANUAL_SYSTEM_03
 ## TestCase Name
-RDKV_SYSTEM_LOG_ROLLOVER_GT
+RDKV_CERT_GT_SYSTEM_LOG_ROLLOVER
 
 <a name="head.TOC"></a>
 ## Table Of Contents

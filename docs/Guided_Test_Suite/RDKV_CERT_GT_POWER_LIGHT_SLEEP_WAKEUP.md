@@ -1,7 +1,7 @@
 ## TestCase ID
-TC_POWER_MANUAL_01
+RDKV_MANUAL_POWER_01
 ## TestCase Name
-RDKV_POWER_LIGHT_SLEEP_WAKEUP_GT
+RDKV_CERT_GT_POWER_LIGHT_SLEEP_WAKEUP
 
 <a name="head.TOC"></a>
 ## Table Of Contents

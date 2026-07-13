@@ -1,7 +1,7 @@
 ## TestCase ID
-TC_IPV6_MANUAL_03
+RDKV_MANUAL_IPV6_03
 ## TestCase Name
-RDKV_IPV6_PUBLIC_IP_WIFI_ONLY_GT
+RDKV_CERT_GT_IPV6_PUBLIC_IP_WIFI_ONLY
 
 <a name="head.TOC"></a>
 ## Table Of Contents

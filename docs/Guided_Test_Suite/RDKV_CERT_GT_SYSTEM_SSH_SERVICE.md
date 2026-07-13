@@ -1,7 +1,7 @@
 ## TestCase ID
-TC_SYSTEM_MANUAL_01
+RDKV_MANUAL_SYSTEM_01
 ## TestCase Name
-RDKV_SYSTEM_SSH_SERVICE_GT
+RDKV_CERT_GT_SYSTEM_SSH_SERVICE
 
 <a name="head.TOC"></a>
 ## Table Of Contents
