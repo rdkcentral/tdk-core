@@ -12,17 +12,18 @@ RDKV_CERT_GT_BT_AUDIO_PAIR_CONNECT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that an external Bluetooth device can be successfully discovered, paired, and connected to the DUT using the org.rdk.Bluetooth plugin APIs via AppManager-based test execution.
+To validate that an external Bluetooth wearable headset can be successfully discovered, paired, and connected to the DUT using the `org.rdk.Bluetooth` plugin APIs, as exercised by the `BT_AUDIO_AUTOMATED.sh` test script. The test covers the complete pair-and-connect workflow — from activating and enabling the Bluetooth plugin via `Controller.1.activate` and `org.rdk.Bluetooth.1.enable`, through scanning, pairing via `org.rdk.Bluetooth.1.pair`, and connecting via `org.rdk.Bluetooth.1.connect` — with verification at each stage using `getPairedDevices` and `getConnectedDevices`. This test confirms the Bluetooth stack on the DUT can discover, pair, and establish an A2DP connection with an external audio device in a certified and repeatable manner.
 
 <a name="head.Precondition"></a>
 ## Preconditions
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Reboot DUT before test | Reboot the DUT before executing the shell script. Verify that the RDK UI home page is visible on the connected HDMI display before proceeding with the test. | The DUT must complete its boot sequence successfully and the RDK UI home page must be visible on the HDMI display prior to test execution. |
-| 2 | Verify interference-free BT environment | Ensure the test is conducted in an environment free from interference caused by multiple active Bluetooth devices. No other Bluetooth devices should be actively scanning or pairing in the test vicinity. | The test environment should have no other Bluetooth devices in discoverable or pairing mode to prevent false device discovery or connection conflicts during the scan. |
-| 3 | Confirm external BT device type | Confirm that the external Bluetooth device to be used in the test is a headphone or a Bluetooth soundbar that supports the A2DP audio profile. | The external BT device must be a headphone or Bluetooth soundbar capable of A2DP profile pairing and audio streaming. |
-| 4 | Set external BT device to pairing mode | Power on the external Bluetooth device and manually place it into pairing/discoverable mode before starting the test script. | The external BT device should be powered on and actively broadcasting in pairing/discoverable mode so that the DUT can detect it during the Bluetooth scan. |
+| 1 | Verify test script files on DUT | Ensure the test script (`BT_AUDIO_AUTOMATED.sh`), the configuration file (`device.conf`), and the helper script (`generic_functions.sh`) are present in the working directory of the DUT before executing the test. The `device.conf` file must be configured with the correct values required for this specific test prior to execution. | The files `BT_AUDIO_AUTOMATED.sh`, `device.conf`, and `generic_functions.sh` must be present and accessible in the DUT's working directory. The `device.conf` file must be populated with all the correct test environment values specific to this test case prior to execution. |
+| 2 | Reboot DUT before test | Reboot the DUT before executing the shell script. Verify that the RDK UI home page is visible on the connected HDMI display before proceeding with the test. | The DUT must complete its boot sequence successfully and the RDK UI home page must be visible on the HDMI display prior to test execution. |
+| 3 | Verify interference-free BT environment | Ensure the test is conducted in an environment free from interference caused by multiple active Bluetooth devices. No other Bluetooth devices should be actively scanning or pairing in the test vicinity. | The test environment should have no other Bluetooth devices in discoverable or pairing mode to prevent false device discovery or connection conflicts during the scan. |
+| 4 | Confirm external BT device type | Confirm that the external Bluetooth device to be used in the test is a headphone or a Bluetooth soundbar that supports the A2DP audio profile. | The external BT device must be a headphone or Bluetooth soundbar capable of A2DP profile pairing and audio streaming. |
+| 5 | Set external BT device to pairing mode | Power on the external Bluetooth device and manually place it into pairing/discoverable mode before starting the test script. | The external BT device should be powered on and actively broadcasting in pairing/discoverable mode so that the DUT can detect it during the Bluetooth scan. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

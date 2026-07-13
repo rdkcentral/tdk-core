@@ -12,7 +12,7 @@ RDKV_CERT_GT_IPV6_PUBLIC_IP_WIFI_ONLY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT returns a valid public IPv6 address via the WiFi interface when connected to an IPv6-supported SSID with Ethernet disconnected.
+To validate that the DUT correctly reports a valid public IPv6 address via the WiFi interface (wlan0) when operating in a WiFi-only configuration with Ethernet disconnected, as tested by the `IPv6_Automated.sh` script. The test exercises the `org.rdk.NetworkManager.1.GetIPSettings` API to retrieve the public IPv6 address assigned to the wlan0 interface and verifies the address is non-empty and in valid IPv6 format. This test confirms the DUT's IPv6 address resolution and reporting capability via the WiFi interface under Ethernet-disconnected conditions.
 
 <a name="head.Precondition"></a>
 ## Preconditions

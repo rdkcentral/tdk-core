@@ -12,14 +12,15 @@ RDKV_CERT_GT_SYSTEM_SSH_SERVICE
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the SSH Dropbear service is active and running on the DUT and that the device build version is correctly identified as an RDK build.
+To validate that the SSH Dropbear service (`dropbear`) is active and running on the DUT, and that the device firmware build version is correctly identified as an RDK-based build, as tested by the `System_Automated.sh` script. The test executes `systemctl show -p ActiveState --value dropbear` and `systemctl show -p SubState --value dropbear` to confirm the service is in `active/running` state, and reads `/version.txt` via `grep -i imagename` to verify the firmware image name matches the expected RDK build format. This test ensures both the SSH daemon availability and the firmware identity are in their expected operational states, which are prerequisites for remote access and certification validation.
 
 <a name="head.Precondition"></a>
 ## Preconditions
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Verify Ethernet connectivity | Verify that the DUT has a valid IPv4 address assigned to the Ethernet interface.<br>Command: `ip -4 addr show eth0 \| awk '/inet / {split($2,a,"/"); print a[1]}'` | The DUT should have a valid IPv4 address assigned to the eth0 interface before test execution begins. |
+| 1 | Verify test script files on DUT | Ensure the test script (`System_Automated.sh`), the configuration file (`device.conf`), and the helper script (`generic_functions.sh`) are present in the working directory of the DUT before executing the test. The `device.conf` file must be configured with the correct values required for this specific test prior to execution. | The files `System_Automated.sh`, `device.conf`, and `generic_functions.sh` must be present and accessible in the DUT's working directory. The `device.conf` file must be populated with all the correct test environment values specific to this test case prior to execution. |
+| 2 | Verify Ethernet connectivity | Verify that the DUT has a valid IPv4 address assigned to the Ethernet interface.<br>Command: `ip -4 addr show eth0 \| awk '/inet / {split($2,a,"/"); print a[1]}'` | The DUT should have a valid IPv4 address assigned to the eth0 interface before test execution begins. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

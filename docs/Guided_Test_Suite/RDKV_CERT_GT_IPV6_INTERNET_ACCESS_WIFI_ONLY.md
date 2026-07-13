@@ -12,7 +12,7 @@ RDKV_CERT_GT_IPV6_INTERNET_ACCESS_WIFI_ONLY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT has IPv6 internet accessibility via the WiFi interface and that AV playback can be initiated via the YouTube application when connected to an IPv6-supported SSID with Ethernet disconnected.
+To validate that the DUT has functional IPv6 internet access via the WiFi interface and that AV playback is operational when only WiFi (IPv6 SSID) is connected with Ethernet disconnected, as tested by the `IPv6_Automated.sh` script. The test verifies IPv6 internet connectivity via `org.rdk.NetworkManager.1.IsConnectedToInternet` with the wlan0 interface, then launches YouTube AV playback via `org.rdk.AppManager.launchApp` and confirms playback via tester input. This test ensures the DUT can access the internet and stream media content over IPv6 in a WiFi-only network configuration.
 
 <a name="head.Precondition"></a>
 ## Preconditions

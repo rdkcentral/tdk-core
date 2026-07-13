@@ -12,17 +12,18 @@ RDKV_CERT_GT_IPV6_INTERNET_CONNECTIVITY_WIFI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT has IPv6 internet connectivity via the WiFi interface when connected to an IPv6-supported SSID with Ethernet disconnected.
+To validate that the DUT has functional IPv6 internet connectivity via the WiFi interface (wlan0) when connected to an IPv6-supported SSID with the Ethernet interface disconnected, as tested by the `IPv6_Automated.sh` script. The test exercises the `org.rdk.NetworkManager.1.IsConnectedToInternet` API with `ipversion: IPv6` to verify that the wlan0 interface returns `connected=true` and `status=FULLY_CONNECTED`. This test confirms the DUT's IPv6 networking stack correctly establishes and reports internet connectivity through the WiFi-only path.
 
 <a name="head.Precondition"></a>
 ## Preconditions
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Connect HDMI display to DUT | Connect an HDMI display/TV to the DUT and ensure the correct HDMI input source is selected on the display. | The HDMI display/TV should be connected to the DUT and the RDK UI should be visible on the screen. |
-| 2 | Connect DUT to IPv6 WiFi SSID | Connect the DUT to an IPv6-supported WiFi SSID configured as `<ipv6_conf_SSID>`. | The DUT should be connected to the configured IPv6-supported WiFi SSID and a valid IPv6 address should be assigned to the wlan0 interface. |
-| 3 | Disconnect Ethernet cable | Disconnect the Ethernet cable from the DUT to ensure only WiFi connectivity is active. | The Ethernet interface (eth0) should have no IPv4 address assigned on the DUT. |
-| 4 | Verify IPv6 SSID connection | Verify the DUT is connected to the correct IPv6 SSID using the NetworkManager API.<br>Command: `curl -d '{"jsonrpc":"2.0","id":42,"method":"org.rdk.NetworkManager.1.GetConnectedSSID"}' http://127.0.0.1:9998/jsonrpc` | The DUT should be connected to `<ipv6_conf_SSID>` and a valid IPv6 address should be present on the wlan0 interface with Ethernet disconnected. |
+| 1 | Verify test script files on DUT | Ensure the test script (`IPv6_Automated.sh`), the configuration file (`device.conf`), and the helper script (`generic_functions.sh`) are present in the working directory of the DUT before executing the test. The `device.conf` file must be configured with the correct values required for this specific test prior to execution. | The files `IPv6_Automated.sh`, `device.conf`, and `generic_functions.sh` must be present and accessible in the DUT's working directory. The `device.conf` file must be populated with all the correct test environment values specific to this test case prior to execution. |
+| 2 | Connect HDMI display to DUT | Connect an HDMI display/TV to the DUT and ensure the correct HDMI input source is selected on the display. | The HDMI display/TV should be connected to the DUT and the RDK UI should be visible on the screen. |
+| 3 | Connect DUT to IPv6 WiFi SSID | Connect the DUT to an IPv6-supported WiFi SSID configured as `<ipv6_conf_SSID>`. | The DUT should be connected to the configured IPv6-supported WiFi SSID and a valid IPv6 address should be assigned to the wlan0 interface. |
+| 4 | Disconnect Ethernet cable | Disconnect the Ethernet cable from the DUT to ensure only WiFi connectivity is active. | The Ethernet interface (eth0) should have no IPv4 address assigned on the DUT. |
+| 5 | Verify IPv6 SSID connection | Verify the DUT is connected to the correct IPv6 SSID using the NetworkManager API.<br>Command: `curl -d '{"jsonrpc":"2.0","id":42,"method":"org.rdk.NetworkManager.1.GetConnectedSSID"}' http://127.0.0.1:9998/jsonrpc` | The DUT should be connected to `<ipv6_conf_SSID>` and a valid IPv6 address should be present on the wlan0 interface with Ethernet disconnected. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

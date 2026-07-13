@@ -12,7 +12,7 @@ RDKV_CERT_GT_IPV6_PING_API_WIFI_ONLY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the NetworkManager Ping API successfully transmits and receives IPv6 packets to an IPv6 endpoint with zero packet loss when the DUT is connected to an IPv6-supported SSID with Ethernet disconnected.
+To validate that the `org.rdk.NetworkManager.1.Ping` API successfully transmits and receives IPv6 ICMP packets to a configured IPv6 endpoint (`<ipv6_ping_endpoint>`) with zero packet loss via the WiFi interface when Ethernet is disconnected, as tested by the `IPv6_Automated.sh` script. The test calls the Ping API with an IPv6 target and verifies the response reports 0% packet loss, confirming IPv6 ICMP reachability over the WiFi-only network path. This test ensures the RDK NetworkManager's IPv6 Ping functionality is operational and the DUT's IPv6 WiFi path has reliable bidirectional packet delivery.
 
 <a name="head.Precondition"></a>
 ## Preconditions

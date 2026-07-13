@@ -12,16 +12,17 @@ RDKV_CERT_GT_IMAGE_FORMAT_WEBP_SUPPORT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the WEBP image format is correctly loaded and rendered by the Browser Test application on the DUT.
+To validate that the `.webp` image format is correctly decoded and rendered by the Browser Test HTML application on the DUT via the `Image_formats.sh` test script. The test automatically navigates to the `.webp` image format test case within the Browser Test app using `org.rdk.RDKWindowManager.generateKey` key navigation, and confirms successful image loading via tester visual verification on the TV display. This test ensures the DUT's WebKit browser engine correctly handles and renders WebP image format content loaded from the configured test server at `<app_download_server>`.
 
 <a name="head.Precondition"></a>
 ## Preconditions
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Install Browser Test app | Install the Browser Test application on the DUT using the configured app bundle (`<browser_test_app_bundle>`) downloaded from the configured server (`<app_download_server>`). | The Browser Test application should be installed successfully on the DUT. |
-| 2 | Kill active Browser Test instance | Terminate any active running instance of the Browser Test application on the DUT. | No active Browser Test app instance should be running before test execution begins. |
-| 3 | Connect HDMI display to DUT | Connect an HDMI display/TV to the DUT and ensure the correct HDMI input source is selected on the display. | HDMI display/TV should be connected to the DUT and the RDK UI should be visible on the screen prior to test execution. |
+| 1 | Verify test script files on DUT | Ensure the test script (`Image_formats.sh`), the configuration file (`device.conf`), and the helper script (`generic_functions.sh`) are present in the working directory of the DUT before executing the test. The `device.conf` file must be configured with the correct values required for this specific test prior to execution. | The files `Image_formats.sh`, `device.conf`, and `generic_functions.sh` must be present and accessible in the DUT's working directory. The `device.conf` file must be populated with all the correct test environment values specific to this test case prior to execution. |
+| 2 | Install Browser Test app | Install the Browser Test application on the DUT using the configured app bundle (`<browser_test_app_bundle>`) downloaded from the configured server (`<app_download_server>`). | The Browser Test application should be installed successfully on the DUT. |
+| 3 | Kill active Browser Test instance | Terminate any active running instance of the Browser Test application on the DUT. | No active Browser Test app instance should be running before test execution begins. |
+| 4 | Connect HDMI display to DUT | Connect an HDMI display/TV to the DUT and ensure the correct HDMI input source is selected on the display. | HDMI display/TV should be connected to the DUT and the RDK UI should be visible on the screen prior to test execution. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

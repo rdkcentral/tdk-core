@@ -12,7 +12,7 @@ RDKV_CERT_GT_IPV6_TRACE_API_WIFI_ONLY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the NetworkManager Trace API correctly traces the route to an IPv6 endpoint when the DUT is connected to an IPv6-supported SSID with Ethernet disconnected.
+To validate that the `org.rdk.NetworkManager.1.TraceRoute` API correctly traces the network path to an IPv6 target endpoint (`<ipv6_trace_endpoint>`) via the WiFi interface when Ethernet is disconnected, as tested by the `IPv6_Automated.sh` script. The test calls the TraceRoute API with an IPv6 endpoint and verifies that the response contains valid route hop data, confirming reachability and route traceability over the IPv6-capable WiFi network. This test ensures the RDK NetworkManager's TraceRoute functionality is operational for IPv6 traffic in a WiFi-only networking scenario.
 
 <a name="head.Precondition"></a>
 ## Preconditions
