@@ -1,7 +1,7 @@
 # Device Settings Audio Port — Requirements
 
 > **Module:** Device Settings Audio Port HAL (`dsAudio`) | **Req ID Prefix:** `VTS-DSAUDIO`
-> **Total requirements:** 33 | **Total test cases:** 158 (134 L1 + 24 L2)
+> **Total requirements:** 35 | **Total test cases:** 158 (134 L1 + 24 L2)
 
 ---
 
@@ -41,4 +41,6 @@
 | `VTS-DSAUDIO-030` | Profile Compliance | SHALL report MS11 multistream decode support via `dsIsAudioMSDecode()` returning `dsERR_NONE` with the result matching the `MS11Decode` field in the device profile, and MS12 multistream decode support via `dsIsAudioMS12Decode()` returning `dsERR_NONE` with the result matching the `MS12Decode` field in the device profile. |
 | `VTS-DSAUDIO-031` | Functional | SHALL retrieve the supported ARC types of the connected ARC/eARC device via `dsGetSupportedARCTypes()` returning `dsERR_NONE` for HDMI ARC-type ports, configure Short Audio Descriptor (SAD) data received from CEC via `dsAudioSetSAD()` returning `dsERR_NONE` for valid SAD lists, and enable and disable ARC/eARC audio routing via `dsAudioEnableARC()` returning `dsERR_NONE`. If ARC/eARC is not supported by the DUT, `dsGetSupportedARCTypes()`, `dsAudioSetSAD()`, and `dsAudioEnableARC()` SHALL return `dsERR_OPERATION_NOT_SUPPORTED`. |
 | `VTS-DSAUDIO-032` | Functional | SHALL report the audio output port connection status via `dsAudioOutIsConnected()` returning `dsERR_NONE`, and SHALL successfully register event callbacks for audio output connection changes via `dsAudioOutRegisterConnectCB()`, audio format updates via `dsAudioFormatUpdateRegisterCB()`, and ATMOS capability changes via `dsAudioAtmosCapsChangeRegisterCB()`, each returning `dsERR_NONE`. If connection status reporting or the connection-change callback is not supported by the DUT, `dsAudioOutIsConnected()` and `dsAudioOutRegisterConnectCB()` SHALL return `dsERR_OPERATION_NOT_SUPPORTED`. |
-| `VTS-DSAUDIO-033` | Error Handling | SHALL enforce the following error code contracts across all `dsAudio` APIs:<br>`dsAudioPortInit()` SHALL return `dsERR_ALREADY_INITIALIZED` when called while already initialized<br>`dsAudioPortTerm()` SHALL return `dsERR_NOT_INITIALIZED` when called without prior initialization or after the module has already been terminated<br>all remaining `dsAudio` APIs SHALL return `dsERR_NOT_INITIALIZED` when invoked before initialization or after termination, and SHALL return `dsERR_INVALID_PARAM` when called with an invalid or null port handle, a NULL output pointer, or an out-of-range parameter value. |
+| `VTS-DSAUDIO-033` | Error Handling | SHALL return `dsERR_ALREADY_INITIALIZED` from `dsAudioPortInit()` when it is called while the module is already initialized. |
+| `VTS-DSAUDIO-034` | Error Handling | SHALL return `dsERR_NOT_INITIALIZED` from every `dsAudio` API when it is invoked without prior initialization or after the module has already been terminated. |
+| `VTS-DSAUDIO-035` | Error Handling | SHALL return `dsERR_INVALID_PARAM` from every `dsAudio` API when it is called with an invalid or null port handle, a NULL output pointer, or an out-of-range parameter value. |

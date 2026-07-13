@@ -1,7 +1,7 @@
 # Device Settings Display — Requirements
 
 > **Module:** Device Settings Display HAL (`dsDisplay`) | **Req ID Prefix:** `VTS-DSDISPLAY`
-> **Total requirements:** 10 | **Total test cases:** 28 (26 L1 + 2 L2)
+> **Total requirements:** 12 | **Total test cases:** 28 (26 L1 + 2 L2)
 
 ---
 
@@ -18,4 +18,6 @@
 | `VTS-DSDISPLAY-007` | Data Integrity | SHALL, for each valid AVI content type, set the value via `dsSetAVIContentType()` returning `dsERR_NONE`, and the value retrieved via `dsGetAVIContentType()` SHALL match the value that was set. |
 | `VTS-DSDISPLAY-008` | Functional | SHALL set the AVI scan information of a valid display handle via `dsSetAVIScanInformation()` returning `dsERR_NONE`, and retrieve it via `dsGetAVIScanInformation()` returning `dsERR_NONE` with a valid value. |
 | `VTS-DSDISPLAY-009` | Functional | SHALL set the Auto Low Latency Mode (ALLM) enabled status of a valid display handle via `dsSetAllmEnabled()` returning `dsERR_NONE`, and retrieve it via `dsGetAllmEnabled()` returning `dsERR_NONE` with a valid value. |
-| `VTS-DSDISPLAY-010` | Error Handling | SHALL enforce the following error code contracts across all `dsDisplay` APIs:<br>`dsDisplayInit()` SHALL return `dsERR_ALREADY_INITIALIZED` when called while already initialized<br>`dsDisplayTerm()` SHALL return `dsERR_NOT_INITIALIZED` when called without prior initialization or after the module has already been terminated<br>all remaining `dsDisplay` APIs SHALL return `dsERR_NOT_INITIALIZED` when invoked before initialization or after termination, and SHALL return `dsERR_INVALID_PARAM` when called with an invalid handle, a NULL output pointer, or an out-of-range parameter value. |
+| `VTS-DSDISPLAY-010` | Error Handling | SHALL return `dsERR_ALREADY_INITIALIZED` from `dsDisplayInit()` when it is called while the module is already initialized. |
+| `VTS-DSDISPLAY-011` | Error Handling | SHALL return `dsERR_NOT_INITIALIZED` from every `dsDisplay` API when it is invoked without prior initialization or after the module has already been terminated. |
+| `VTS-DSDISPLAY-012` | Error Handling | SHALL return `dsERR_INVALID_PARAM` from every `dsDisplay` API when it is called with an invalid handle, a NULL output pointer, or an out-of-range parameter value. |

@@ -1,7 +1,7 @@
 # Device Settings Video Port — Requirements
 
 > **Module:** Device Settings Video Port HAL (`dsVideoPort`) | **Req ID Prefix:** `VTS-DSVIDEOPORT`
-> **Total requirements:** 25 | **Total test cases:** 93 (78 L1 + 15 L2)
+> **Total requirements:** 27 | **Total test cases:** 93 (78 L1 + 15 L2)
 
 ---
 
@@ -33,4 +33,6 @@
 | `VTS-DSVIDEOPORT-022` | Functional | SHALL report the IgnoreEDID status of a supported video port via `dsGetIgnoreEDIDStatus()` returning `dsERR_NONE` with a valid status, or `dsERR_OPERATION_NOT_SUPPORTED` where the operation is not supported. |
 | `VTS-DSVIDEOPORT-023` | Functional | SHALL set the video port background color via `dsSetBackgroundColor()` returning `dsERR_NONE` for valid color values on supported device types, and returning `dsERR_OPERATION_NOT_SUPPORTED` where the operation is not supported. |
 | `VTS-DSVIDEOPORT-024` | Functional | SHALL successfully register event callbacks for video format updates via `dsVideoFormatUpdateRegisterCB()` and for HDCP status changes via `dsRegisterHdcpStatusCallback()`, each returning `dsERR_NONE`. |
-| `VTS-DSVIDEOPORT-025` | Error Handling | SHALL enforce the following error code contracts across all `dsVideoPort` APIs:<br>`dsVideoPortInit()` SHALL return `dsERR_ALREADY_INITIALIZED` when called while already initialized<br>`dsVideoPortTerm()` SHALL return `dsERR_NOT_INITIALIZED` when called without prior initialization or after the module has already been terminated<br>all remaining `dsVideoPort` APIs SHALL return `dsERR_NOT_INITIALIZED` when invoked before initialization or after termination, and SHALL return `dsERR_INVALID_PARAM` when called with an invalid or null port handle, a NULL output pointer, or an out-of-range parameter value. |
+| `VTS-DSVIDEOPORT-025` | Error Handling | SHALL return `dsERR_ALREADY_INITIALIZED` from `dsVideoPortInit()` when it is called while the module is already initialized. |
+| `VTS-DSVIDEOPORT-026` | Error Handling | SHALL return `dsERR_NOT_INITIALIZED` from every `dsVideoPort` API when it is invoked without prior initialization or after the module has already been terminated. |
+| `VTS-DSVIDEOPORT-027` | Error Handling | SHALL return `dsERR_INVALID_PARAM` from every `dsVideoPort` API when it is called with an invalid or null port handle, a NULL output pointer, or an out-of-range parameter value. |

@@ -1,7 +1,7 @@
 # Device Settings Video Device — Requirements
 
 > **Module:** Device Settings Video Device HAL (`dsVideoDevice`) | **Req ID Prefix:** `VTS-DSVIDEODEVICE`
-> **Total requirements:** 12 | **Total test cases:** 34 (30 L1 + 4 L2)
+> **Total requirements:** 14 | **Total test cases:** 34 (30 L1 + 4 L2)
 
 ---
 
@@ -20,4 +20,6 @@
 | `VTS-DSVIDEODEVICE-009` | Functional | SHALL retrieve the current display framerate via `dsGetCurrentDisplayframerate()` returning `dsERR_NONE` with a valid framerate string. |
 | `VTS-DSVIDEODEVICE-010` | Functional | SHALL set the display framerate via `dsSetDisplayframerate()` returning `dsERR_NONE`. |
 | `VTS-DSVIDEODEVICE-011` | Functional | SHALL register the pre-framerate-change callback via `dsRegisterFrameratePreChangeCB()` and the post-framerate-change callback via `dsRegisterFrameratePostChangeCB()`, each returning `dsERR_NONE`. |
-| `VTS-DSVIDEODEVICE-012` | Error Handling | SHALL enforce the following error code contracts across all `dsVideoDevice` APIs:<br>`dsVideoDeviceInit()` SHALL return `dsERR_ALREADY_INITIALIZED` when called while already initialized<br>`dsVideoDeviceTerm()`, `dsGetVideoDevice()`, `dsSetDFC()`, `dsGetDFC()`, `dsGetHDRCapabilities()`, `dsGetSupportedVideoCodingFormats()`, `dsGetVideoCodecInfo()`, `dsForceDisableHDRSupport()`, `dsSetFRFMode()`, `dsGetFRFMode()`, `dsGetCurrentDisplayframerate()`, `dsSetDisplayframerate()`, `dsRegisterFrameratePreChangeCB()`, and `dsRegisterFrameratePostChangeCB()` SHALL each return `dsERR_NOT_INITIALIZED` when invoked before initialization or after termination, and SHALL return `dsERR_INVALID_PARAM` when called with a NULL output pointer, an invalid handle, or an out-of-range value. |
+| `VTS-DSVIDEODEVICE-012` | Error Handling | SHALL return `dsERR_ALREADY_INITIALIZED` from `dsVideoDeviceInit()` when it is called while the module is already initialized. |
+| `VTS-DSVIDEODEVICE-013` | Error Handling | SHALL return `dsERR_NOT_INITIALIZED` from every `dsVideoDevice` API when it is invoked without prior initialization or after the module has already been terminated. |
+| `VTS-DSVIDEODEVICE-014` | Error Handling | SHALL return `dsERR_INVALID_PARAM` from every `dsVideoDevice` API when it is called with a NULL output pointer, an invalid handle, or an out-of-range value. |

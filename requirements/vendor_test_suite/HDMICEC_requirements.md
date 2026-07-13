@@ -1,7 +1,7 @@
 # HDMI CEC — Requirements
 
 > **Module:** HDMI CEC HAL (`HDMICEC`) | **Req ID Prefix:** `VTS-HDMICEC`
-> **Total requirements:** 7 | **Total test cases:** 17 (16 L1 + 1 L2)
+> **Total requirements:** 9 | **Total test cases:** 17 (16 L1 + 1 L2)
 
 ---
 
@@ -15,4 +15,6 @@
 | `VTS-HDMICEC-004` | Functional | SHALL register a receive callback via `HdmiCecSetRxCallback()` returning `HDMI_CEC_IO_SUCCESS`, including acceptance of a NULL callback to deregister. |
 | `VTS-HDMICEC-005` | Functional | SHALL transmit a CEC frame synchronously via `HdmiCecTx()` returning `HDMI_CEC_IO_SUCCESS`; for a frame addressed to a non-existent device the transmission SHALL be reported as sent but not acknowledged (`HDMI_CEC_IO_SENT_BUT_NOT_ACKD`), and a broadcast frame SHALL return `HDMI_CEC_IO_SUCCESS`. |
 | `VTS-HDMICEC-006` | Functional | SHALL, as a source device, report the sink-only logical-address management operations `HdmiCecAddLogicalAddress()` and `HdmiCecRemoveLogicalAddress()` as unsupported by returning `HDMI_CEC_IO_OPERATION_NOT_SUPPORTED` for all invocation scenarios. |
-| `VTS-HDMICEC-007` | Error Handling | SHALL enforce the following error code contracts across the source `HDMICEC` APIs:<br>`HdmiCecOpen()` SHALL return `HDMI_CEC_IO_INVALID_ARGUMENT` for a NULL handle pointer and `HDMI_CEC_IO_ALREADY_OPEN` when called while already open<br>`HdmiCecClose()` SHALL return `HDMI_CEC_IO_NOT_OPENED` when called without a prior open or after close, and `HDMI_CEC_IO_INVALID_HANDLE` for an invalid handle<br>`HdmiCecGetPhysicalAddress()`, `HdmiCecGetLogicalAddress()`, `HdmiCecSetRxCallback()`, and `HdmiCecTx()` SHALL each return `HDMI_CEC_IO_NOT_OPENED` when invoked before open or after close, `HDMI_CEC_IO_INVALID_HANDLE` for an invalid handle, and `HDMI_CEC_IO_INVALID_ARGUMENT` for a NULL data/output pointer or an invalid data length. |
+| `VTS-HDMICEC-007` | Error Handling | SHALL return `HDMI_CEC_IO_ALREADY_OPEN` from `HdmiCecOpen()` when it is called while the CEC HAL is already open. |
+| `VTS-HDMICEC-008` | Error Handling | SHALL return `HDMI_CEC_IO_NOT_OPENED` from every `HDMICEC` API when it is invoked without a prior open or after the handle has been closed. |
+| `VTS-HDMICEC-009` | Error Handling | SHALL return `HDMI_CEC_IO_INVALID_HANDLE` from every `HDMICEC` API when it is called with an invalid handle, and `HDMI_CEC_IO_INVALID_ARGUMENT` when called with a NULL handle, data, or output pointer or an invalid data length. |
