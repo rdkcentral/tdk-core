@@ -353,13 +353,12 @@ def startDebugReportTarFileTracker(obj, profile_type, step, monitor_path=report_
 # Parameters: obj - The TDK scripting library object for sysutil component
 #             profile_type - The type of debug report (static or dynamic)
 #             step - The test step number
-#             wait_time - Maximum duration in seconds to wait for the tracked tar(.tgz) creation
 # Return Value: tdkTestObj - The TDK test object created for the command execution
 #               flag - Flag indicating whether a debug report tar(.tgz) creation was detected or not
 #               report_name - The detected debug report tar(.tgz) file name
 
 
-def isDebugReportTarFileCreated(obj, profile_type, step, wait_time=30):
+def isDebugReportTarFileCreated(obj, profile_type, step):
     expectedresult = "SUCCESS"
     flag = False
     report_name = ""
