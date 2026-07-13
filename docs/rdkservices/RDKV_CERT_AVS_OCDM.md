@@ -83,10 +83,10 @@ Validates statechange event on activating/deactivating the plugin
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate OCDM plugin | Invoke deactivate on Controller with callsign: "OCDM"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "OCDM"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `ocdm` with state `"deactivated"` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `ocdm` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for OCDM<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@OCDM"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate OCDM plugin | Invoke activate on Controller with callsign: "OCDM"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "OCDM"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `ocdm` with state `"activated"` |
+| 5 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `ocdm` with state `"activated"` |
 | 6 | Check plugin active status | Invoke status on Controller for OCDM<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@OCDM"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ## Plugin Post-conditions

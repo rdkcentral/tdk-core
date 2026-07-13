@@ -155,7 +155,7 @@ Check if the event is triggered when there is a change in the maintenance state
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Start maintenance task | Invoke startMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.startMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is launched successfully  |
-| 2 | Check on maintenance StatusChange event | Listen for `Event_On_Maintenance_StatusChange` event (timeout: 3s) | Verify that the event is received and validated successfully |
+| 2 | Check on maintenance StatusChange event | Listen for `Event_On_Maintenance_StatusChange` event and wait up to 3 second(s) | Verify that the event is received and validated successfully |
 | 3 | Stop running maintenance task | Invoke stopMaintenance on org.rdk.MaintenanceManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.MaintenanceManager.1.stopMaintenance"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `true`. Confirm that maintenance is stopped successfully  |
 
 ---
@@ -213,10 +213,10 @@ Validates statechange event on Activating and deactivating the plugin
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate MaintenanceManager plugin | Invoke deactivate on Controller with callsign: "org.rdk.MaintenanceManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.MaintenanceManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is disabled successfully |
-| 2 | Check state change event | Listen for `Event_Controller_State_Changed` event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.maintenancemanager` with state `"deactivated"` |
+| 2 | Check state change event | Listen for `Event_Controller_State_Changed` event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.maintenancemanager` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MaintenanceManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate MaintenanceManager plugin | Invoke activate on Controller with callsign: "org.rdk.MaintenanceManager" (wait 1 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.MaintenanceManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
-| 5 | Check state change event | Listen for `Event_Controller_State_Changed` event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.maintenancemanager` with state `"activated"` |
+| 5 | Check state change event | Listen for `Event_Controller_State_Changed` event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.maintenancemanager` with state `"activated"` |
 | 6 | Check plugin active status | Invoke status on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.MaintenanceManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---

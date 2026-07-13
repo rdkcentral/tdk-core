@@ -193,9 +193,9 @@ Checks the AV decoder status changed event in idle and active state
 | 1 | Get AV decoder status | Invoke getAVDecoderStatus on org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the AV decoder status is `"idle"`, indicating no active decoding  |
 | 2 | Launch app valid params | Invoke launchApp on org.rdk.AppManager with appId: "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check app launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-| 4 | Check onAVDecoderStatusChanged event | Listen for Event_OnAVDecoder_Status_Changed event (timeout: 60s) | Ensure the `onAVDecoderStatusChanged` event is received with `AVDecoderStatus` as `active` |
+| 4 | Check onAVDecoderStatusChanged event | Listen for Event_OnAVDecoder_Status_Changed event and wait up to 60 second(s) | Ensure the `onAVDecoderStatusChanged` event is received with `AVDecoderStatus` as `active` |
 | 5 | Terminate app valid param | Invoke terminateApp on org.rdk.AppManager with appId: "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 6 | Check onAVDecoderStatusChanged event | Listen for Event_OnAVDecoder_Status_Changed event (timeout: 30s) | Ensure the `onAVDecoderStatusChanged` event is received with `AVDecoderStatus` as `idle` |
+| 6 | Check onAVDecoderStatusChanged event | Listen for Event_OnAVDecoder_Status_Changed event and wait up to 30 second(s) | Ensure the `onAVDecoderStatusChanged` event is received with `AVDecoderStatus` as `idle` |
 
 ### TestCase Post-condition
 
@@ -235,10 +235,10 @@ Validates statechange event on activating/deactivating the plugin
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate DeviceDiagnostics plugin | Invoke deactivate on Controller with callsign: "org.rdk.DeviceDiagnostics"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.DeviceDiagnostics` with state `deactivated` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.DeviceDiagnostics` with state `deactivated` |
 | 3 | Check plugin active status | Invoke status on Controller for org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DeviceDiagnostics"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate DeviceDiagnostics plugin | Invoke activate on Controller with callsign: "org.rdk.DeviceDiagnostics"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 5 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.DeviceDiagnostics` with state `activated` |
+| 5 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.DeviceDiagnostics` with state `activated` |
 | 6 | Check plugin active status | Invoke status on Controller for org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DeviceDiagnostics"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
@@ -268,10 +268,10 @@ Validates all event on activating/deactivating the plugin
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate DeviceDiagnostics plugin | Invoke deactivate on Controller with callsign: "org.rdk.DeviceDiagnostics"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 2 | Check all event | Listen for Event_Controller_All event (timeout: 2s) | Verify that the `all` event is received for callsign `org.rdk.DeviceDiagnostics` with state `deactivated` |
+| 2 | Check all event | Listen for Event_Controller_All event and wait up to 2 second(s) | Verify that the `all` event is received for callsign `org.rdk.DeviceDiagnostics` with state `deactivated` |
 | 3 | Check plugin active status | Invoke status on Controller for org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DeviceDiagnostics"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate DeviceDiagnostics plugin | Invoke activate on Controller with callsign: "org.rdk.DeviceDiagnostics"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DeviceDiagnostics"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 5 | Check all event | Listen for Event_Controller_All event (timeout: 2s) | Verify that the `all` event is received for callsign `org.rdk.DeviceDiagnostics` with state `activated` |
+| 5 | Check all event | Listen for Event_Controller_All event and wait up to 2 second(s) | Verify that the `all` event is received for callsign `org.rdk.DeviceDiagnostics` with state `activated` |
 | 6 | Check plugin active status | Invoke status on Controller for org.rdk.DeviceDiagnostics<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DeviceDiagnostics"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ## Plugin Post-conditions

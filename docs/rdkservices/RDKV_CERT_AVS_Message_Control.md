@@ -335,10 +335,10 @@ Validates statechange event on activating/deactivating the plugin
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate MessageControl plugin | Invoke deactivate on Controller with callsign: "MessageControl"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `messagecontrol` with state `"deactivated"` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `messagecontrol` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for MessageControl<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate MessageControl plugin | Invoke activate on Controller with callsign: "MessageControl"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `messagecontrol` with state `"activated"` |
+| 5 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `messagecontrol` with state `"activated"` |
 | 6 | Check plugin active status | Invoke status on Controller for MessageControl<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ## Plugin Post-conditions

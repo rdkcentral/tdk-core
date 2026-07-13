@@ -126,10 +126,10 @@ Validates statechange event on activating/deactivating the plugin
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate monitor plugin | Invoke deactivate on Controller with callsign: "Monitor"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "Monitor"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `monitor` with state `"deactivated"` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `monitor` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for Monitor<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate monitor plugin | Invoke activate on Controller with callsign: "Monitor"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "Monitor"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `monitor` with state `"activated"` |
+| 5 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `monitor` with state `"activated"` |
 | 6 | Check plugin active status | Invoke status on Controller for Monitor<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
@@ -159,10 +159,10 @@ Validates all event on activating/deactivating the plugin
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate monitor plugin | Invoke deactivate on Controller with callsign: "Monitor"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "Monitor"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check all event | Listen for Event_Controller_All event (timeout: 2s) | Verify that the `all` event is received for callsign `monitor` with state `"deactivated"` |
+| 2 | Check all event | Listen for Event_Controller_All event and wait up to 2 second(s) | Verify that the `all` event is received for callsign `monitor` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for Monitor<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate monitor plugin | Invoke activate on Controller with callsign: "Monitor"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "Monitor"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check all event | Listen for Event_Controller_All event (timeout: 2s) | Verify that the `all` event is received for callsign `monitor` with state `"activated"` |
+| 5 | Check all event | Listen for Event_Controller_All event and wait up to 2 second(s) | Verify that the `all` event is received for callsign `monitor` with state `"activated"` |
 | 6 | Check plugin active status | Invoke status on Controller for Monitor<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
@@ -192,11 +192,11 @@ Verify that the restartlimits method returns an error when the plugin is in a de
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate monitor plugin | Invoke deactivate on Controller with callsign: "Monitor"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "Monitor"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `monitor` with state `"deactivated"` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `monitor` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for Monitor<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Check monitor restartlimits API response | Invoke restartlimits on Monitor<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Monitor.1.restartlimits"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
 | 5 | Activate monitor plugin | Invoke activate on Controller with callsign: "Monitor"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "Monitor"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 6 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `monitor` with state `"activated"` |
+| 6 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `monitor` with state `"activated"` |
 | 7 | Check plugin active status | Invoke status on Controller for Monitor<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ## Plugin Post-conditions

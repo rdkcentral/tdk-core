@@ -604,7 +604,7 @@ Check if the ondeviceinfoupdated event was triggered when updating the OSD name
 | 1 | Get OSD name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name is returned successfully |
 | 2 | Set OSD name | Invoke setOSDName on org.rdk.HdmiCecSource with name: "Television"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": "Television"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the OSD name is set successfully |
 | 3 | Get OSD name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television` as expected  |
-| 4 | Check device info updated event | Listen for Event_On_Device_Info_Updated event (timeout: 5s) | Verify that the event is received and validated |
+| 4 | Check device info updated event | Listen for Event_On_Device_Info_Updated event and wait up to 5 second(s) | Verify that the event is received and validated |
 
 ---
 
@@ -631,7 +631,7 @@ Check whether the standbymessagereceived event has been triggered
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check send standby message | Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the standby message is sent successfully |
-| 2 | Check standby MessageReceived event | Listen for Event_Standby_Message_Received event (timeout: 5s) | Verify that the event is received and validated |
+| 2 | Check standby MessageReceived event | Listen for Event_Standby_Message_Received event and wait up to 5 second(s) | Verify that the event is received and validated |
 
 ### TestCase Post-condition
 
@@ -671,7 +671,7 @@ Check whether the onActiveSourceStatusUpdated event has been triggered when the 
 | 1 | Get active source status | Invoke getActiveSourceStatus on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getActiveSourceStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the active source status is returned successfully |
 | 2 | Check perform OTP action | *(Conditional statement executed only if previous step condition is met)*<br>Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
 | 3 | Check send standby message | Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the standby message is sent successfully |
-| 4 | Check on ActiveSource StatusUpdated event | Listen for Event_On_Active_Source_Status_Updated event (timeout: 10s) | Verify that the event is received and validated |
+| 4 | Check on ActiveSource StatusUpdated event | Listen for Event_On_Active_Source_Status_Updated event and wait up to 10 second(s) | Verify that the event is received and validated |
 
 ### TestCase Post-condition
 
@@ -711,7 +711,7 @@ Check whether the onActiveSourceStatusUpdated event has been triggered when the 
 | 1 | Get active source status | Invoke getActiveSourceStatus on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getActiveSourceStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the active source status is returned successfully |
 | 2 | Check send standby message | *(Conditional statement executed only if previous step condition is met)*<br>Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the standby message is sent successfully |
 | 3 | Check perform OTP action | Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true`  |
-| 4 | Check on ActiveSource StatusUpdated event | Listen for Event_On_Active_Source_Status_Updated event (timeout: 10s) | Verify that the event is received and validated |
+| 4 | Check on ActiveSource StatusUpdated event | Listen for Event_On_Active_Source_Status_Updated event and wait up to 10 second(s) | Verify that the event is received and validated |
 
 ---
 
@@ -740,10 +740,10 @@ Validates statechange event on activating/deactivating the plugin
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate HdmiCecSource plugin | Invoke deactivate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate HdmiCecSource plugin | Invoke activate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
+| 5 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
 | 6 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
@@ -773,10 +773,10 @@ Validates all event on activating/deactivating the plugin
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate HdmiCecSource plugin | Invoke deactivate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check all event | Listen for Event_Controller_All event (timeout: 2s) | Verify that the `all` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
+| 2 | Check all event | Listen for Event_Controller_All event and wait up to 2 second(s) | Verify that the `all` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Activate HdmiCecSource plugin | Invoke activate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check all event | Listen for Event_Controller_All event (timeout: 2s) | Verify that the `all` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
+| 5 | Check all event | Listen for Event_Controller_All event and wait up to 2 second(s) | Verify that the `all` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
 | 6 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
@@ -808,7 +808,7 @@ Verify if the onDeviceInfoUpdated event is not triggered when the OSD name is se
 | 3 | Get OSD name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television` as expected  |
 | 4 | Set OSD name | Invoke setOSDName on org.rdk.HdmiCecSource with name: "Television"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": "Television"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the OSD name is set successfully |
 | 5 | Get OSD name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television` as expected  |
-| 6 | Check device info updated event | Listen for Event_On_Device_Info_Updated event (timeout: 5s) | Verify that no event is received during this operation  |
+| 6 | Check device info updated event | Listen for Event_On_Device_Info_Updated event and wait up to 5 second(s) | Verify that no event is received during this operation  |
 
 ---
 
@@ -836,7 +836,7 @@ Verify if the onDeviceInfoUpdated event is not triggered when no changes are mad
 | --- | --- | --- | --- |
 | 1 | Get OSD name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name is returned successfully |
 | 2 | Get vendor ID | Invoke getVendorId on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getVendorId"}' http://127.0.0.1:9998/jsonrpc` | Verify that the vendor ID is returned successfully |
-| 3 | Check device info updated event | Listen for Event_On_Device_Info_Updated event (timeout: 5s) | Verify that no event is received during this operation  |
+| 3 | Check device info updated event | Listen for Event_On_Device_Info_Updated event and wait up to 5 second(s) | Verify that no event is received during this operation  |
 
 ---
 
@@ -867,7 +867,7 @@ Verify if the onDeviceInfoUpdated event is triggered when the OSD name is update
 | 3 | Get OSD name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television` as expected  |
 | 4 | Set OSD name | Invoke setOSDName on org.rdk.HdmiCecSource with name: "Television1"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOSDName", "params": {"name": "Television1"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the OSD name is set successfully |
 | 5 | Get OSD name | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | Verify that the OSD name returned is `Television1` as expected  |
-| 6 | Check device info updated event | Listen for Event_On_Device_Info_Updated event (timeout: 5s) | Verify that the event is received and validated |
+| 6 | Check device info updated event | Listen for Event_On_Device_Info_Updated event and wait up to 5 second(s) | Verify that the event is received and validated |
 
 ---
 
@@ -896,11 +896,11 @@ Verify that the getVendorId method returns an error when the plugin is in a deac
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate HdmiCecSource plugin | Invoke deactivate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Check HdmiCecSource get vendor ID API response | Invoke getVendorId on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getVendorId"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
 | 5 | Activate HdmiCecSource plugin | Invoke activate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 6 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
+| 6 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
 | 7 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
@@ -930,11 +930,11 @@ Verify that the getOSDName method returns an error when the plugin is in a deact
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate HdmiCecSource plugin | Invoke deactivate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Check HdmiCecSource get OSD name API response | Invoke getOSDName on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOSDName"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
 | 5 | Activate HdmiCecSource plugin | Invoke activate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 6 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
+| 6 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
 | 7 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
@@ -964,11 +964,11 @@ Verify that the getDeviceList method returns an error when the plugin is in a de
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate HdmiCecSource plugin | Invoke deactivate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Check HdmiCecSource get device list API response | Invoke getDeviceList on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getDeviceList"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
 | 5 | Activate HdmiCecSource plugin | Invoke activate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 6 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
+| 6 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
 | 7 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
@@ -998,11 +998,11 @@ Verify that the getEnabled method returns an error when the plugin is in a deact
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate HdmiCecSource plugin | Invoke deactivate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Check HdmiCecSource get enabled API response | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
 | 5 | Activate HdmiCecSource plugin | Invoke activate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 6 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
+| 6 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
 | 7 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
@@ -1032,11 +1032,11 @@ Verify that the getOTPEnabled method returns an error when the plugin is in a de
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Deactivate HdmiCecSource plugin | Invoke deactivate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"deactivated"` |
 | 3 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
 | 4 | Check HdmiCecSource get OTP enabled API response | Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
 | 5 | Activate HdmiCecSource plugin | Invoke activate on Controller with callsign: "org.rdk.HdmiCecSource"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.HdmiCecSource"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 6 | Check state change event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
+| 6 | Check state change event | Listen for Event_Controller_State_Changed event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `org.rdk.hdmicecsource` with state `"activated"` |
 | 7 | Check plugin active status | Invoke status on Controller for org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.HdmiCecSource"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ---
