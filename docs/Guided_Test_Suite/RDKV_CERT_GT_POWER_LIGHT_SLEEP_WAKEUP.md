@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_MANUAL_POWER_01
+RDKV_GT_POWER_01
 ## TestCase Name
 RDKV_CERT_GT_POWER_LIGHT_SLEEP_WAKEUP
 
@@ -21,9 +21,8 @@ To validate that the DUT can be correctly transitioned to LIGHT SLEEP power stat
 |-|---------|-----------------|----------------|
 | 1 | Verify test script files on DUT | Copy the test script (`POWER_MGMT_Automated.sh`), the configuration file (`device.conf`), and the helper script (`generic_functions.sh`) to the working directory of the DUT and ensure all files are accessible. Configure the `device.conf` file with all the correct test environment values specific to this test case prior to execution. | The files `POWER_MGMT_Automated.sh`, `device.conf`, and `generic_functions.sh` must be present and accessible in the DUT's working directory. The `device.conf` file must be populated with all the correct test environment values specific to this test case prior to execution. |
 | 2 | Connect HDMI display to DUT | Connect an HDMI display/TV to the DUT and ensure the correct HDMI input source is selected on the display. | The HDMI display/TV should be connected to the DUT and the RDK UI should be visible on the screen. |
-| 3 | Verify YouTube app available | Verify that the YouTube (Cobalt) app is available and accessible on the DUT. | The YouTube app should be present and accessible on the DUT. |
-| 4 | Sign in to YouTube app | Sign in to the YouTube application on the DUT with a valid user account prior to the test. | YouTube should be signed in with a valid user account and AV playback should be accessible. |
-| 5 | Verify DUT powerstate is ON | Execute the getPowerState API to verify the DUT is in ON state and the RDK UI homepage is visible on the TV. The script then prompts: *"Is RDK UI Homepage visible on TV [yes/no]:"* — respond `yes` if the RDK UI homepage is visible.<br>Command: `curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.getPowerState","params":{}}' http://127.0.0.1:9998/jsonrpc` | The DUT should be in ON state, the getPowerState API should return powerState=ON, and the RDK UI homepage should be visible on the TV display. |
+| 3 | Verify and sign in to YouTube app | Verify that the YouTube (Cobalt) app is installed on the DUT and sign in with a valid user account prior to the test. | The YouTube (Cobalt) app must be installed on the DUT and signed in with a valid user account, with AV playback accessible, prior to test execution. |
+| 4 | Verify DUT powerstate is ON | Execute the getPowerState API to verify the DUT is in ON state and the RDK UI homepage is visible on the TV. The script then prompts: *"Is RDK UI Homepage visible on TV [yes/no]:"* — respond `yes` if the RDK UI homepage is visible.<br>Command: `curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.getPowerState","params":{}}' http://127.0.0.1:9998/jsonrpc` | The DUT should be in ON state, the getPowerState API should return powerState=ON, and the RDK UI homepage should be visible on the TV display. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
