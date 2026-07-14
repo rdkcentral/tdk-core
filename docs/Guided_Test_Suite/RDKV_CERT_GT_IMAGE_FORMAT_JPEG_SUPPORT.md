@@ -30,7 +30,7 @@ To validate that the `.jpg` (JPEG) image format is correctly decoded and rendere
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Launch Browser Test app | Launch the Browser Test HTML application on the DUT. | The Browser Test HTML application should launch successfully and the app UI should be displayed on the TV. |
-| 2 | Activate JPEG image format link | The script automatically activates the `.jpg` image format link within the Browser Test HTML application on the DUT. The corresponding image is loaded on screen without any manual selection. | The `.jpg` image format link should be activated by the script and the image should load within the Browser Test HTML application on the TV display. |
+| 2 | Activate JPEG image format link | Activate the `.jpg` image format link within the Browser Test HTML application on the DUT using `org.rdk.RDKWindowManager.generateKey` key navigation. The corresponding image loads on screen automatically. | The `.jpg` image format link should be activated by the script and the image should load within the Browser Test HTML application on the TV display. |
 | 3 | Respond to script confirmation prompt | The script prompts: *"Is jpg image format loaded in Browser_test App and Visible on TV [yes/no]:"* — look at the TV display and respond with `yes` if the `.jpg` image is visible, or `no` if it is not. | The tester should confirm `yes`, indicating the `.jpg` image format is correctly loaded and visible on the TV display connected to the DUT. |
 
 <a name="head.Attributes"></a>

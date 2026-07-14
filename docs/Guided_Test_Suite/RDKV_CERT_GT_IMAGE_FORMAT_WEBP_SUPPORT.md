@@ -30,7 +30,7 @@ To validate that the `.webp` image format is correctly decoded and rendered by t
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Launch Browser Test app | Launch the Browser Test HTML application on the DUT. | The Browser Test HTML application should launch successfully and the app UI should be displayed on the TV. |
-| 2 | Activate WEBP image format link | The script automatically activates the `.webp` image format link within the Browser Test HTML application on the DUT. The corresponding image is loaded on screen without any manual selection. | The `.webp` image format link should be activated by the script and the image should load within the Browser Test HTML application on the TV display. |
+| 2 | Activate WEBP image format link | Activate the `.webp` image format link within the Browser Test HTML application on the DUT using `org.rdk.RDKWindowManager.generateKey` key navigation. The corresponding image loads on screen automatically. | The `.webp` image format link should be activated by the script and the image should load within the Browser Test HTML application on the TV display. |
 | 3 | Respond to script confirmation prompt | The script prompts: *"Is webp image format loaded in Browser_test App and Visible on TV [yes/no]:"* — look at the TV display and respond with `yes` if the `.webp` image is visible, or `no` if it is not. | The tester should confirm `yes`, indicating the `.webp` image format is correctly loaded and visible on the TV display connected to the DUT. |
 
 <a name="head.Attributes"></a>
