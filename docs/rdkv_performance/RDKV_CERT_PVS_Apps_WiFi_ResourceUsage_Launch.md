@@ -15,7 +15,7 @@ To validate the CPU and memory resource usage of the device while launching the 
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is operational | The WPEFramework process must be running on the device before test execution begins. | WPEFramework should be up and running on the device. |
 | 2 | Configure PRE_REQ_REBOOT_PVS setting | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot (if configured) and be ready for test execution. |
@@ -26,7 +26,7 @@ To validate the CPU and memory resource usage of the device while launching the 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Retrieve device configuration and logging method | Read the device configuration file to obtain the `LOGGING_METHOD` setting. | The device configuration file should be read successfully and the `LOGGING_METHOD` value should be retrieved. |
 | 2 | Verify the active network interface is WiFi | Check the current primary network interface by activating org.rdk.NetworkManager (if needed) and querying it: <br>`{"jsonrpc":"2.0","id":1,"method":"Controller.1.activate","params":{"callsign":"org.rdk.NetworkManager"}}` <br><br>`{"jsonrpc":"2.0","id":1,"method":"org.rdk.NetworkManager.1.GetPrimaryInterface"}` <br>If the returned interface is "eth0", the test must not proceed. | The primary network interface should not be "eth0". The device should be connected via WiFi. |
@@ -43,9 +43,9 @@ To validate the CPU and memory resource usage of the device while launching the 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
-**Estimated duration** : 15 min
+**Estimated duration** : 15 mins
 
 **Priority** : High
 

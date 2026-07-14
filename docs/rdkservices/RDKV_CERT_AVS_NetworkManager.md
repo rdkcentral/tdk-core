@@ -117,10 +117,10 @@ accessible via JSON-RPC under the callsign `org.rdk.NetworkManager` (version 1)
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Subscribe to the onInterfaceStateChange event | Register a WebSocket event listener for `onInterfaceStateChange` to receive `onInterfaceStateChange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.register", "params": {"event": "onInterfaceStateChange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 2 | Subscribe to the onAvailableSSIDs event | Register a WebSocket event listener for `onAvailableSSIDs` to receive `onAvailableSSIDs` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.register", "params": {"event": "onAvailableSSIDs", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 3 | Subscribe to the onWiFiStateChange event | Register a WebSocket event listener for `onWiFiStateChange` to receive `onWiFiStateChange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.register", "params": {"event": "onWiFiStateChange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 4 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 1 | Subscribe to the onInterfaceStateChange event | Register a WebSocket event listener for `onInterfaceStateChange` to receive `onInterfaceStateChange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.register", "params": {"event": "onInterfaceStateChange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 2 | Subscribe to the onAvailableSSIDs event | Register a WebSocket event listener for `onAvailableSSIDs` to receive `onAvailableSSIDs` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.register", "params": {"event": "onAvailableSSIDs", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 3 | Subscribe to the onWiFiStateChange event | Register a WebSocket event listener for `onWiFiStateChange` to receive `onWiFiStateChange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.register", "params": {"event": "onWiFiStateChange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 4 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ### Plugin Pre-condition 3: Configure_Device_Parameter
 
@@ -2229,19 +2229,19 @@ Checks the primary interface after the device has been put in sleep mode and the
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Unsubscribe from the onInterfaceStateChange event | Unregister the WebSocket event listener for `onInterfaceStateChange` to stop receiving `onInterfaceStateChange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.unregister", "params": {"event": "onInterfaceStateChange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 2 | Unsubscribe from the onAvailableSSIDs event | Unregister the WebSocket event listener for `onAvailableSSIDs` to stop receiving `onAvailableSSIDs` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.unregister", "params": {"event": "onAvailableSSIDs", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 3 | Unsubscribe from the onWiFiStateChange event | Unregister the WebSocket event listener for `onWiFiStateChange` to stop receiving `onWiFiStateChange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.unregister", "params": {"event": "onWiFiStateChange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 4 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 1 | Unsubscribe from the onInterfaceStateChange event | Unregister the WebSocket event listener for `onInterfaceStateChange` to stop receiving `onInterfaceStateChange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.unregister", "params": {"event": "onInterfaceStateChange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 2 | Unsubscribe from the onAvailableSSIDs event | Unregister the WebSocket event listener for `onAvailableSSIDs` to stop receiving `onAvailableSSIDs` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.unregister", "params": {"event": "onAvailableSSIDs", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 3 | Unsubscribe from the onWiFiStateChange event | Unregister the WebSocket event listener for `onWiFiStateChange` to stop receiving `onWiFiStateChange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.unregister", "params": {"event": "onWiFiStateChange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 4 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 
 
 ## Test Attributes
 
 | Attribute | Value |
 | --- | --- |
-| Supported Models | Video Accelerator, RPI Client |
+| Supported Models | Video Accelerator, RPI-Client |
 | Estimated Duration | 20 minutes |
 | Priority | Medium |
 | TDK Release Version | M133 |
 
-<div align="right"><a href="#">&#8593; Go to Top</a></div>
+<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>

@@ -863,9 +863,9 @@ Verify deleteStorage returns error when appId parameter is missing
 
 | Attribute | Value |
 | --- | --- |
-| Supported Models | Video Accelerator, RPI Client |
+| Supported Models | Video Accelerator, RPI-Client |
 | Estimated Duration | 20 minutes |
 | Priority | Medium |
 | TDK Release Version | M147 |
 
-<div align="right"><a href="#">&#8593; Go to Top</a></div>
+<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>

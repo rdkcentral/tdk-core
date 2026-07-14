@@ -83,7 +83,7 @@ accessible via JSON-RPC under the callsign `org.rdk.SystemAudioPlayer` (version 
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Subscribe to the onsapevents event | Register a WebSocket event listener for `onsapevents` to receive `onsapevents` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.register", "params": {"event": "onsapevents", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 1 | Subscribe to the onsapevents event | Register a WebSocket event listener for `onsapevents` to receive `onsapevents` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.register", "params": {"event": "onsapevents", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ### Plugin Pre-condition 3: Configure_Device_Parameter
 
@@ -1325,15 +1325,15 @@ Verifies that a player can successfully stop and restart audio playback on the s
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Unsubscribe from the onsapevents event | Unregister the WebSocket event listener for `onsapevents` to stop receiving `onsapevents` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.unregister", "params": {"event": "onsapevents", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 1 | Unsubscribe from the onsapevents event | Unregister the WebSocket event listener for `onsapevents` to stop receiving `onsapevents` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.SystemAudioPlayer.1.unregister", "params": {"event": "onsapevents", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 
 ## Test Attributes
 
 | Attribute | Value |
 | --- | --- |
-| Supported Models | Video Accelerator, RPI Client |
+| Supported Models | Video Accelerator, RPI-Client |
 | Estimated Duration | 20 minutes |
 | Priority | Medium |
 | TDK Release Version | M150 |
 
-<div align="right"><a href="#">&#8593; Go to Top</a></div>
+<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>

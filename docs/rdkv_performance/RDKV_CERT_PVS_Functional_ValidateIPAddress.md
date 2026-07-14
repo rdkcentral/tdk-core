@@ -16,7 +16,7 @@ To validate that the device under test has a valid IP address on its active netw
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -26,7 +26,7 @@ To validate that the device under test has a valid IP address on its active netw
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Determine the active network interface | Check the current active network interface of the DUT (eth0 or wlan0) using the NetworkManager plugin to determine which interface config key to use. | The active network interface should be identified as either eth0 (Ethernet) or wlan0 (WiFi). |
 | 2 | Establish SSH connection to device | Obtain SSH connection parameters and retrieve the interface name and IP address type from the device config file. | SSH parameters, interface name, and IP address type should all be retrieved successfully. |
@@ -36,7 +36,7 @@ To validate that the device under test has a valid IP address on its active netw
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 mins
 

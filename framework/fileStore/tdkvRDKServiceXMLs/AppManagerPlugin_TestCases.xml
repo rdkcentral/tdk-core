@@ -250,7 +250,7 @@
     </testCase>
 
     <!-- TestCases 09 -->
-    <testCase testCaseId="AM_09" testCaseName="AppManager_Verify_IsInstalled_With_Whitespace_AppId" desc="Verify isInstalled with a appId containing spaces or whitespace characters">
+    <testCase testCaseId="AM_09" testCaseName="AppManager_Verify_IsInstalled_With_Whitespace_AppId" desc="Verify isInstalled with an appId containing spaces or whitespace characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Verify_IsInstalled_Whitespace_AppId" method="Is_Installed">
             <params>
@@ -261,7 +261,7 @@
     </testCase>
 
     <!-- TestCases 10 -->
-    <testCase testCaseId="AM_10" testCaseName="AppManager_Verify_IsInstalled_Mixed_Alphanumeric_SpecialChars" desc="Verify isInstalled with a appId containing mixed alphanumeric and special characters">
+    <testCase testCaseId="AM_10" testCaseName="AppManager_Verify_IsInstalled_Mixed_Alphanumeric_SpecialChars" desc="Verify isInstalled with an appId containing mixed alphanumeric and special characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Verify_IsInstalled" method="Is_Installed">
             <params>
@@ -495,7 +495,7 @@
     </testCase>
 
     <!-- TestCases 25 -->
-    <testCase testCaseId="AM_25" testCaseName="AppManager_PreloadApp_Special_Char_AppId" desc="Verify preloadApp with a appId containing special characters">
+    <testCase testCaseId="AM_25" testCaseName="AppManager_PreloadApp_Special_Char_AppId" desc="Verify preloadApp with an appId containing special characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Preload_App_Special_Char_AppId" method="Preload_App">
             <params>
@@ -518,7 +518,7 @@
     </testCase>
 
     <!-- TestCases 27 -->
-    <testCase testCaseId="AM_27" testCaseName="AppManager_Verify_PreloadApp_with_Numeric_AppId" desc="Verify preloadApp with a appId containing only numeric characters">
+    <testCase testCaseId="AM_27" testCaseName="AppManager_Verify_PreloadApp_with_Numeric_AppId" desc="Verify preloadApp with an appId containing only numeric characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="PreloadApp_with_Numeric_AppId" method="Numeric_Preload_App">
             <params>
@@ -564,7 +564,7 @@
     </testCase>
 
     <!-- TestCases 31 -->
-    <testCase testCaseId="AM_31" testCaseName="AppManager_PreloadApp_Valid_AppId_Already_Preloaded" desc="Verify preloadApp with a appId that is a valid application but is already preloaded">
+    <testCase testCaseId="AM_31" testCaseName="AppManager_PreloadApp_Valid_AppId_Already_Preloaded" desc="Verify preloadApp with an appId that is a valid application but is already preloaded">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
@@ -824,7 +824,7 @@
     </testCase>
 
     <!--- TestCase 45 -->
-    <testCase testCaseId="AM_45" testCaseName="AppManager_StartSystemApp_Special_Char_AppId" desc="Verify startSystemApp with a appId containing special characters">
+    <testCase testCaseId="AM_45" testCaseName="AppManager_StartSystemApp_Special_Char_AppId" desc="Verify startSystemApp with an appId containing special characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Start_System_App_Special_Char" method="Start_System_App">
             <params>
@@ -903,7 +903,7 @@
     </testCase>
 
     <!-- TestCase 51 -->
-    <testCase testCaseId="AM_51" testCaseName="AppManager_StopSystemApp_Special_Char_AppId" desc="Verify stopSystemApp with a appId containing special characters">
+    <testCase testCaseId="AM_51" testCaseName="AppManager_StopSystemApp_Special_Char_AppId" desc="Verify stopSystemApp with an appId containing special characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Stop_System_App_Special_Char" method="Stop_System_App">
             <params>
@@ -914,7 +914,7 @@
     </testCase>
 
     <!-- TestCase 52 -->
-    <testCase testCaseId="AM_52" testCaseName="AppManager_StopSystemApp_Numeric_AppId" desc="Verify stopSystemApp with a appId containing only numeric values">
+    <testCase testCaseId="AM_52" testCaseName="AppManager_StopSystemApp_Numeric_AppId" desc="Verify stopSystemApp with an appId containing only numeric values">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Stop_System_App_Numeric_AppId" method="Numeric_Stop_System_App">
             <params>
@@ -925,7 +925,7 @@
     </testCase>
 
     <!-- TestCase 53 -->
-    <testCase testCaseId="AM_53" testCaseName="AppManager_StopSystemApp_Alphanumeric_AppId" desc="Verify stopSystemApp with a appId containing a mix of alphanumeric characters">
+    <testCase testCaseId="AM_53" testCaseName="AppManager_StopSystemApp_Alphanumeric_AppId" desc="Verify stopSystemApp with an appId containing a mix of alphanumeric characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Stop_System_App_Alphanumeric_AppId" method="Stop_System_App">
             <params>
@@ -1459,7 +1459,7 @@
     </testCase>
 
     <!-- TestCase 94 -->
-    <testCase testCaseId="AM_94" testCaseName="AppManager_ActivateSystemApp_Special_Char_AppId" desc="Verify activateSystemApp with a appId containing special characters">
+    <testCase testCaseId="AM_94" testCaseName="AppManager_ActivateSystemApp_Special_Char_AppId" desc="Verify activateSystemApp with an appId containing special characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Activate_System_App_Special_Char" method="Activate_System_App">
             <params>
@@ -1550,7 +1550,7 @@
     </testCase>
 
     <!-- TestCase 100 -->
-    <testCase testCaseId="AM_100" testCaseName="AppManager_DeactivateSystemApp_Special_Char_AppId" desc="Verify deactivateSystemApp with a appId containing special characters">
+    <testCase testCaseId="AM_100" testCaseName="AppManager_DeactivateSystemApp_Special_Char_AppId" desc="Verify deactivateSystemApp with an appId containing special characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Deactivate_System_App_Special_Char" method="Deactivate_System_App">
             <params>
@@ -1641,7 +1641,7 @@
     </testCase>
 
     <!-- TestCase 106 -->
-    <testCase testCaseId="AM_106" testCaseName="AppManager_HibernateSystemApp_Special_Char_AppId" desc="Verify hibernateSystemApp with a appId containing special characters">
+    <testCase testCaseId="AM_106" testCaseName="AppManager_HibernateSystemApp_Special_Char_AppId" desc="Verify hibernateSystemApp with an appId containing special characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Hibernate_System_App_Special_Char" method="Hibernate_System_App">
             <params>
@@ -2150,7 +2150,7 @@
     </testCase>
 
     <!-- TestCase L2_10 -->
-    <testCase testCaseId="AM_L2_10" testCaseName="AppManager_Check_Get_Loaded_Apps_After_Close" desc="Verify_that the closed app is no longer reflected in the list of loaded apps">
+    <testCase testCaseId="AM_L2_10" testCaseName="AppManager_Check_Get_Loaded_Apps_After_Close" desc="Verify that the closed app is no longer reflected in the list of loaded apps">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
