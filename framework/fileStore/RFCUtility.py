@@ -21,6 +21,8 @@ from time import sleep
 from RFCVariables import *
 from tdkutility import *
 import json
+import requests
+requests.packages.urllib3.disable_warnings()
 from tdkbVariables import *
 
 # get_mac
@@ -51,7 +53,6 @@ def get_mac(obj):
 def rfc_configure_feature(obj, feature_id, name, param_value_dict):
     # Always treat as dictionary and add tr181 prefix to all parameters
     config_data = {f"tr181.{param}": value for param, value in param_value_dict.items()}
-
     json_data = {
         "id": feature_id,
         "name": name,
@@ -63,23 +64,30 @@ def rfc_configure_feature(obj, feature_id, name, param_value_dict):
         "applicationType": "stb",
         "featureInstance": name
     }
-    command = (
-        f"curl -s -i -X POST {XCONF_URL}/feature?applicationType=stb "
-        f"-H 'Content-Type: application/json' "
-        f"-H 'Accept: application/json' "
-        f"-H 'X-API-KEY:{XCONF_API_KEY}' "
-        f"--data '{json.dumps(json_data)}'"
-    )
-    print("Command : %s" % command)
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-API-KEY": XCONF_API_KEY
+    }
+    url = f"{XCONF_URL}/feature?applicationType=stb"
+    print("POST %s" % url)
+    print("Payload: %s" % json.dumps(json_data))
     tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    # Validation logic: Check if the response contains the feature name and the DM parameter/value.
-    expected_param = list(config_data.keys())[0]
-    expected_value = config_data[expected_param]
-    if name in details and expected_param in details and expected_value in details:
-        actualresult = "SUCCESS"
-    else:
+    tdkTestObj.executeTestCase("SUCCESS")
+    try:
+        resp = requests.post(url, headers=headers, data=json.dumps(json_data), verify=False)
+        details = resp.text
+        print("Response [%d]: %s" % (resp.status_code, details))
+        expected_param = list(config_data.keys())[0]
+        expected_value = config_data[expected_param]
+        if name in details and expected_param in details and expected_value in details:
+            actualresult = "SUCCESS"
+        else:
+            actualresult = "FAILURE"
+    except Exception as e:
+        details = str(e)
         actualresult = "FAILURE"
+        print("Exception during rfc_configure_feature: %s" % details)
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -110,21 +118,28 @@ def rfc_set_feature_rule(obj, rule_id, name, mac):
         "featureIds": [rule_id],
         "applicationType": "stb"
     }
-    command = (
-        f"curl -s -i -X POST {XCONF_URL}/featurerule?applicationType=stb "
-        f"-H 'Content-Type: application/json' "
-        f"-H 'Accept: application/json' "
-        f"-H 'X-API-KEY:{XCONF_API_KEY}' "
-        f"--data '{json.dumps(json_data)}'"
-    )
-    print("Command : %s" % command)
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-API-KEY": XCONF_API_KEY
+    }
+    url = f"{XCONF_URL}/featurerule?applicationType=stb"
+    print("POST %s" % url)
+    print("Payload: %s" % json.dumps(json_data))
     tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    # Validation logic: Check if the response contains the feature name and the MAC address.
-    if name in details and mac.replace(":", "").upper() in details.replace(":", "").upper():
-        actualresult = "SUCCESS"
-    else:
+    tdkTestObj.executeTestCase("SUCCESS")
+    try:
+        resp = requests.post(url, headers=headers, data=json.dumps(json_data), verify=False)
+        details = resp.text
+        print("Response [%d]: %s" % (resp.status_code, details))
+        if name in details and mac.replace(":", "").upper() in details.replace(":", "").upper():
+            actualresult = "SUCCESS"
+        else:
+            actualresult = "FAILURE"
+    except Exception as e:
+        details = str(e)
         actualresult = "FAILURE"
+        print("Exception during rfc_set_feature_rule: %s" % details)
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -139,24 +154,28 @@ def rfc_set_feature_rule(obj, rule_id, name, mac):
 #               actualresult - SUCCESS/FAILURE
 #               details - response from CURL command
 def rfc_validate_feature_rule(obj, mac, feature_name, param_value_dict):
-    sleep(20)
-    command = f"curl -s -i '{RFC_URL}?estbMacAddress={mac}'"
+    sleep(30)
+    url = f"{RFC_URL}?estbMacAddress={mac}"
+    print("GET %s" % url)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    # Validation logic: Check if feature name, DM parameter, and its value are present.
-    is_valid = False
-    # Check for feature name
-    if feature_name in details:
-        # Check for each parameter-value pair
-        for param, value in param_value_dict.items():
-            expected_string = f"\\\"tr181.{param}\\\":\\\"{value}\\\""
-            if expected_string in details:
-                is_valid = True
-                break
-    if is_valid:
-        actualresult = "SUCCESS"
-    else:
+    tdkTestObj.executeTestCase("SUCCESS")
+    try:
+        resp = requests.get(url, verify=False)
+        details = resp.text
+        print("Response [%d]: %s" % (resp.status_code, details))
+        # Validation logic: Check if feature name, DM parameter, and its value are present.
+        is_valid = False
+        if feature_name in details:
+            for param, value in param_value_dict.items():
+                expected_string = f'"tr181.{param}":"{value}"'
+                if expected_string in details:
+                    is_valid = True
+                    break
+        actualresult = "SUCCESS" if is_valid else "FAILURE"
+    except Exception as e:
+        details = str(e)
         actualresult = "FAILURE"
+        print("Exception during rfc_validate_feature_rule: %s" % details)
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -208,56 +227,55 @@ def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
         "applicationType": "stb",
         "featureInstance": name
     }
-    command = (
-        f"curl -X PUT {XCONF_URL}/feature?applicationType=stb "
-        f"-H \"Content-Type: application/json\" "
-        f"-H \"Accept: application/json\" "
-        f"-H \"X-API-KEY:{XCONF_API_KEY}\" "
-        f"-d '{json.dumps(json_data)}'"
-    )
-    print("Command : %s" % command)
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-API-KEY": XCONF_API_KEY
+    }
+    url = f"{XCONF_URL}/feature?applicationType=stb"
+    print("PUT %s" % url)
+    print("Payload: %s" % json.dumps(json_data))
     tdkTestObj = sysobj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    print("PUT command executed. Response: %s" % details)
-    if "SUCCESS" in actualresult and details:
+    tdkTestObj.executeTestCase("SUCCESS")
+    try:
+        resp = requests.put(url, headers=headers, data=json.dumps(json_data), verify=False)
+        sleep(60)
+        details = resp.text
+        actualresult = "SUCCESS"
+        print("Response [%d]: %s" % (resp.status_code, details))
+    except Exception as e:
+        details = str(e)
+        actualresult = "FAILURE"
+        print("Exception during rfc_revert_dm_value PUT: %s" % details)
+    if "SUCCESS" in actualresult:
         print("PUT command executed successfully.")
-        # Restart RFC service
+        # Restart RFC service to apply the reverted config
         print("Restarting RFC service...")
         _, restart_result, restart_details = rfc_restart_service(sysobj)
         if "SUCCESS" in restart_result:
             print("RFC service restarted successfully")
-            sleep(60)
-            print("Sleeping for 1 min after RFC restart...")
-            # Check if DM values have reverted to initial values
+            sleep(10)
+            print("Sleeping for 10 sec after RFC restart...")
+            all_reverted = True
             for param, init_val in param_value_dict.items():
                 tdkTestObj_Tr181_Get = obj.createTestStep('TDKB_TR181Stub_Get')
                 actualresult_get, reverted_value = getTR181Value(tdkTestObj_Tr181_Get, param)
-                if "SUCCESS" in actualresult_get and reverted_value == str(init_val):
+                reverted_value = reverted_value.strip()
+                reverted_ok = "SUCCESS" in actualresult_get and reverted_value == str(init_val)
+                if reverted_ok:
                     tdkTestObj_Tr181_Get.setResultStatus("SUCCESS")
-                    details += f"\n{param} successfully reverted to {reverted_value}"
                     print(f"{param} successfully reverted to {reverted_value}")
+                    details += f"\n{param} successfully reverted to {reverted_value}"
                 else:
                     tdkTestObj_Tr181_Get.setResultStatus("FAILURE")
-                    details += f"\nFailed to revert {param}: got {reverted_value}, expected {str(init_val)}"
                     print(f"Failed to revert {param}: got {reverted_value}, expected {str(init_val)}")
-                    actualresult = "FAILURE"
-            # Only set actualresult to SUCCESS if all parameters were successfully reverted
-            if actualresult == "SUCCESS":
-                for param, init_val in param_value_dict.items():
-                    tdkTestObj_Tr181_Get = obj.createTestStep('TDKB_TR181Stub_Get')
-                    actualresult_get, reverted_value = getTR181Value(tdkTestObj_Tr181_Get, param)
-                    if not ("SUCCESS" in actualresult_get and reverted_value == str(init_val)):
-                        actualresult = "FAILURE"
-                        break
+                    details += f"\nFailed to revert {param}: got {reverted_value}, expected {str(init_val)}"
+                    all_reverted = False
+            actualresult = "SUCCESS" if all_reverted else "FAILURE"
         else:
             actualresult = "FAILURE"
             details += f"\nRFC service restart failed: {restart_details}"
             print("RFC service restart failed: %s" % restart_details)
-    else:
-        print("PUT command failed or no response. Response: %s" % details)
-        tdkTestObj.setResultStatus("FAILURE")
-        actualresult = "FAILURE"
-
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -270,20 +288,27 @@ def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
 #               actualresult - SUCCESS/FAILURE
 #               details - response from CURL command
 def rfc_delete_feature_rule(obj, feature_id):
-    command = (
-        f"curl -X DELETE {XCONF_URL}/featurerule/{feature_id}?applicationType=stb "
-        f"-H \"Content-Type: application/json\" "
-        f"-H \"Accept: application/json\" "
-        f"-H \"X-API-KEY:{XCONF_API_KEY}\""
-    )
-    print("Command : %s" % command)
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-API-KEY": XCONF_API_KEY
+    }
+    url = f"{XCONF_URL}/featurerule/{feature_id}?applicationType=stb"
+    print("DELETE %s" % url)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    if details == "":
-        actualresult = "SUCCESS"
-    else:
+    tdkTestObj.executeTestCase("SUCCESS")
+    try:
+        resp = requests.delete(url, headers=headers, verify=False)
+        details = resp.text
+        print("Response [%d]: %s" % (resp.status_code, details))
+        actualresult = "SUCCESS" if resp.status_code in (200, 204) else "FAILURE"
+        if actualresult == "FAILURE":
+            print(details)
+        sleep(10)
+    except Exception as e:
+        details = str(e)
         actualresult = "FAILURE"
-        print(details)
+        print("Exception during rfc_delete_feature_rule: %s" % details)
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 
@@ -296,19 +321,27 @@ def rfc_delete_feature_rule(obj, feature_id):
 #               actualresult - SUCCESS/FAILURE
 #               details - response from CURL command
 def rfc_delete_feature(obj, feature_id):
-    command = (
-        f"curl -X DELETE {XCONF_URL}/feature/{feature_id}?applicationType=stb "
-        f"-H \"Content-Type: application/json\" "
-        f"-H \"Accept: application/json\" "
-        f"-H \"X-API-KEY:{XCONF_API_KEY}\""
-    )
-    print("Command : %s" % command)
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-API-KEY": XCONF_API_KEY
+    }
+    url = f"{XCONF_URL}/feature/{feature_id}?applicationType=stb"
+    print("DELETE %s" % url)
     tdkTestObj = obj.createTestStep('ExecuteCmd')
-    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
-    if details == "":
-        actualresult = "SUCCESS"
-    else:
+    tdkTestObj.executeTestCase("SUCCESS")
+    try:
+        resp = requests.delete(url, headers=headers, verify=False)
+        details = resp.text
+        print("Response [%d]: %s" % (resp.status_code, details))
+        actualresult = "SUCCESS" if resp.status_code in (200, 204) else "FAILURE"
+        if actualresult == "FAILURE":
+            print(details)
+        sleep(10)
+    except Exception as e:
+        details = str(e)
         actualresult = "FAILURE"
-        print(details)
+        print("Exception during rfc_delete_feature: %s" % details)
     return tdkTestObj, actualresult, details
 ########## End of function ##########
+
