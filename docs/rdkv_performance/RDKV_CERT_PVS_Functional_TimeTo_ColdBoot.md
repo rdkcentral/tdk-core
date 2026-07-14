@@ -16,7 +16,7 @@ To validate that the time taken for a cold boot of the device — measured from 
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -28,7 +28,7 @@ To validate that the time taken for a cold boot of the device — measured from 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Keep device in idle state | Allow the device to remain idle for the configured `COLDBOOT_IDLE_WAIT_TIME` seconds before triggering the cold boot. | The device should remain in idle state for the configured duration. |
 | 2 | Reboot the device and record start time | Record the current system time, then trigger a device reboot via the Controller harakiri method and wait for the device to come back online within `REBOOT_WAIT_TIME`. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.harakiri"}` | The device should reboot and come back online successfully within the configured wait time. |
@@ -39,7 +39,7 @@ To validate that the time taken for a cold boot of the device — measured from 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 360 mins
 

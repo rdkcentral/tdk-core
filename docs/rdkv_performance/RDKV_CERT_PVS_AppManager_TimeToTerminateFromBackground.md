@@ -16,7 +16,7 @@ To validate that the time taken to terminate a background application via the Ap
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure google_bundle in PerformanceTestVariables | `google_bundle` must be set to the first application bundle filename (App A) in PerformanceTestVariables. | The google_bundle variable should be configured with a valid application bundle name. |
@@ -27,7 +27,7 @@ To validate that the time taken to terminate a background application via the Ap
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Verify and activate required plugins | Query and activate all required plugins to ensure they are in the activated state. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.DownloadManager"}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}` <br><br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.AppManager"}` <br>Activate if needed: `{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params": {"callsign": "<plugin_name>"}}` | All required plugins should be in the activated state. |
 | 2 | Download both application bundles | Download both the google app bundle (App A) and the keytest app bundle (App B) from the configured URLs via the DownloadManager without launching either. <br>App A: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<app_download_url>/<bundle_name_A>"}}` <br><br>App B: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<app_download_url>/<bundle_name_B>"}}` | Both downloads should complete successfully and download IDs should be returned. |
@@ -41,7 +41,7 @@ To validate that the time taken to terminate a background application via the Ap
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 10 mins
 

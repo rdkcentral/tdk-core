@@ -15,7 +15,7 @@ To validate the browser performance score obtained from the CSS3 benchmark test 
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Verify WPEFramework status | WPEFramework process must be up and running on the device before test execution begins. | WPEFramework process should be active and accessible on the device. |
 | 2 | Configure pre-requisite reboot | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | Device should be in a clean state prior to performance test execution. |
@@ -25,7 +25,7 @@ To validate the browser performance score obtained from the CSS3 benchmark test 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Reboot device as pre-requisite | If `PRE_REQ_REBOOT_PVS` is configured as Yes, reboot the device by issuing the harakiri command and wait 150 seconds for the reboot to complete: `{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.harakiri"}` | Device should reboot successfully and come back online within the wait period. |
 | 2 | Check if CSS3 application is installed | Query the list of installed packages to determine if the CSS3 app (com.rdkcentral.css3) is already present on the device: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}` | The installed packages list should be retrieved successfully. If com.rdkcentral.css3 is already installed, the installation workflow is skipped. |
@@ -38,12 +38,12 @@ To validate the browser performance score obtained from the CSS3 benchmark test 
 | 9 | Retrieve CSS3 benchmark score | Wait 20 seconds for the CSS3 benchmark to execute, then connect to the WebKit webinspect page and extract the main CSS3 score and all subcategory scores across the CSS3 test categories. | Main CSS3 score and all subcategory scores should be successfully retrieved from the webinspect page and must not contain the value "Unable to get the browser score". |
 | 10 | Validate CSS3 main score against threshold | Compare the retrieved main CSS3 score against `CSS3_THRESHOLD_VALUE` from the device configuration file. | The main CSS3 score should be greater than the configured `CSS3_THRESHOLD_VALUE`. |
 | 11 | Validate CSS3 subcategory scores | Compare each subcategory score against its corresponding threshold from the comma-separated `CSS3_SUBCATEGORY_THRESHOLD_VALUES` device configuration key, iterating over all CSS3 subcategories. | All subcategory scores should be greater than or equal to their respective configured threshold values. |
-| 12 | Terminate CSS3 application | Terminate the CSS3 application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminate", "params": {"appId": "com.rdkcentral.css3"}}` | The CSS3 application should be terminated successfully. |
+| 12 | Terminate CSS3 application | Terminate the CSS3 application after score validation: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "com.rdkcentral.css3"}}` | The CSS3 application should be terminated successfully. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 mins
 

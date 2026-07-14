@@ -40,8 +40,8 @@ accessible via JSON-RPC under the callsign `org.rdk.PersistentStore` (version 1)
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Subscribe to the onValueChanged event | Register a WebSocket event listener for `onValueChanged` to receive `onValueChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.register", "params": {"event": "onValueChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
-| 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 1 | Subscribe to the onValueChanged event | Register a WebSocket event listener for `onValueChanged` to receive `onValueChanged` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.register", "params": {"event": "onValueChanged", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
+| 2 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
 ## Test Cases
 
@@ -304,17 +304,17 @@ Validates statechange event on Activating/deactivating the plugin
 
 | Step ID | Step Name | Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Unsubscribe from the onValueChanged event | Unregister the WebSocket event listener for `onValueChanged` to stop receiving `onValueChanged` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.unregister", "params": {"event": "onValueChanged", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
-| 2 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications.<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 1 | Unsubscribe from the onValueChanged event | Unregister the WebSocket event listener for `onValueChanged` to stop receiving `onValueChanged` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.unregister", "params": {"event": "onValueChanged", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
+| 2 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 
 
 ## Test Attributes
 
 | Attribute | Value |
 | --- | --- |
-| Supported Models | Video Accelerator, RPI Client |
+| Supported Models | Video Accelerator, RPI-Client |
 | Estimated Duration | 5 minutes |
 | Priority | Medium |
 | TDK Release Version | M88 |
 
-<div align="right"><a href="#">&#8593; Go to Top</a></div>
+<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>

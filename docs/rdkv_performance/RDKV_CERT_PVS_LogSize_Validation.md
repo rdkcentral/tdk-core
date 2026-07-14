@@ -16,7 +16,7 @@ To validate that all log files present in the /opt/logs directory on the device 
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -25,7 +25,7 @@ To validate that all log files present in the /opt/logs directory on the device 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Establish SSH connection and read size limit | Obtain SSH connection parameters for the device and retrieve the `SIZE_LIMIT` configuration value from the device config file. | SSH parameters and the size limit value should be retrieved successfully. |
 | 2 | List all log files in /opt/logs | SSH into the device and retrieve the list of all log files present in the /opt/logs directory along with their sizes. | The list of log files and their sizes should be returned successfully. |
@@ -35,7 +35,7 @@ To validate that all log files present in the /opt/logs directory on the device 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 10 mins
 
