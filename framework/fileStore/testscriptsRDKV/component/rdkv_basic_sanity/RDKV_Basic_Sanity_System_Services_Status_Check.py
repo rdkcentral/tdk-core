@@ -78,9 +78,11 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 
+deviceDetails = obj.getDeviceDetails()
+print(deviceDetails)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    configKeyList = ["SANITY_SCRIPT_PATH","SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
+    configKeyList = ["SSH_PORT","SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
     configValues={}
     tdkTestObj = obj.createTestStep('rdkv_basic_sanity_getDeviceConfig')
     #Get each configuration from device config file
@@ -104,31 +106,30 @@ if expectedResult in result.upper():
             if configValues["SSH_PASSWORD"] == "None":
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-            command = "sh " + configValues["SANITY_SCRIPT_PATH"] + "/system_sanity_check.sh 9"
+            command = r"systemctl -a --state=failed,activating | grep 'failed\|activating'"
             #Primitive test case which associated to this Script
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT');
             #Add the parameters to ssh to the DUT and execute the command
             tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+            tdkTestObj.addParameter("sshPort", configValues["SSH_PORT"]);
             tdkTestObj.addParameter("credentials", credentials);
             tdkTestObj.addParameter("command", command);
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
             output = tdkTestObj.getResultDetails();
-            output = str(output)
-            print("[RESPONSE FROM DEVICE]: %s" %(output))
-            if "FAILURE" in output or expectedResult not in output:
-                #Check if the file exists or not
-                if "No such file or directory" in output:
-                    print("FAILURE: File not found")
-                    tdkTestObj.setResultStatus("FAILURE")
-                else:
-                    print("FAILURE: Script Execution was not Successful")
-                    tdkTestObj.setResultStatus("FAILURE")
-            elif "FAILURE" not in output and expectedResult in output:
-                print("SUCCESS: Script Execution Successful")
+            text = str(output)
+            output = text[text.find("\n") + 1:]
+            print(result)
+            print("[RESPONSE FROM DEVICE]:\n%s" %(output))
+            if not output and result == "SUCCESS":
+                print("SUCCESS: No response from the device means no services are in failed or activating successful")
                 tdkTestObj.setResultStatus("SUCCESS")
+            elif result == "FAILURE":
+                print("FAILURE: Unable to execute systemd command in DUT")
+                tdkTestObj.setResultStatus("FAILURE")
             else:
-                print("Error: Error in the Script Execution")
+                print("FAILURE: Above services are in activating or failed state")
+                print("EXPECTED: No services must be in activating or failed state")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
             print("FAILURE: Currently only supports directSSH ssh method")
