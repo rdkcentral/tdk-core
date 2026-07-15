@@ -130,7 +130,7 @@ if expectedResult in result.upper():
                 output = str(tdkTestObj.getResultDetails()).strip()
                 print("[LAUNCH PLAYBACK RESULT] : %s" % result)
                 print("[RESPONSE FROM DEVICE]   : \n%s" % output)
-                if expectedResult in result.upper():
+                if expectedResult in result.upper() and output:
                     tdkTestObj.setResultStatus("SUCCESS")
                     # Check EOS
                     eosTestObj = obj.createTestStep('rdkv_basic_sanity_verifyEOS')
@@ -138,7 +138,7 @@ if expectedResult in result.upper():
                     eosTestObj.executeTestCase(expectedResult)
                     eos_result = eosTestObj.getResult()
                     eos_details = str(eosTestObj.getResultDetails()).strip()
-                    print("[EOS CHECK RESULT] : %s" % eos_result)
+                    print("[EOS CHECK RESULT] : %s" % eos_details)
 
                     # Check progress
                     progressTestObj = obj.createTestStep('rdkv_basic_sanity_checkPlaybackProgress')
@@ -146,17 +146,17 @@ if expectedResult in result.upper():
                     progressTestObj.executeTestCase(expectedResult)
                     progress_result = progressTestObj.getResult()
                     progress_details = str(progressTestObj.getResultDetails()).strip()
-                    print("[PROGRESS CHECK RESULT] : %s" % progress_result)
+                    print("[PROGRESS CHECK RESULT] : %s" % progress_details)
 
                     if expectedResult in eos_result.upper() and expectedResult in progress_result.upper():
                         print("SUCCESS: GStreamer playback completed - EOS detected and progress threshold met")
                         eosTestObj.setResultStatus("SUCCESS")
                         progressTestObj.setResultStatus("SUCCESS")
                     else:
-                        if expectedResult not in eos_result.upper():
+                        if expectedResult not in eos_details.upper():
                             print("FAILURE: EOS check failed - {}".format(eos_details))
                             eosTestObj.setResultStatus("FAILURE")
-                        if expectedResult not in progress_result.upper():
+                        if expectedResult not in progress_details.upper():
                             print("FAILURE: Progress check failed - {}".format(progress_details))
                             progressTestObj.setResultStatus("FAILURE")
                 else:
