@@ -93,9 +93,9 @@ if expectedResult in result.upper():
             tdkTestObj.executeTestCase(expectedResult)
             result  = tdkTestObj.getResult()
             details = tdkTestObj.getResultDetails()
-            print("[%s - STEP 1 - WiFi Scan] : %s | %s" % (band_label, result, details))
+            print("[%s - STEP 1 - WiFi Scan] : %s" % (band_label, details))
             print("")
-            if result == "SUCCESS":
+            if "SUCCESS" in details:
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
@@ -104,7 +104,7 @@ if expectedResult in result.upper():
             # ==============================================================
             # STEP 2: WiFi Connect - trigger connect, wait for state event
             # ==============================================================
-            if "FAILURE" != result:
+            if "SUCCESS" in details:
                 tdkTestObj = obj.createTestStep('rdkv_basic_sanity_wifiConnect')
                 tdkTestObj.addParameter("ssid",        WIFI_SSID)
                 tdkTestObj.addParameter("passphrase",  PASSPHRASE)
@@ -112,9 +112,9 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult)
                 result  = tdkTestObj.getResult()
                 details = tdkTestObj.getResultDetails()
-                print("[%s - STEP 2 - WiFi Connect] : %s | %s" % (band_label, result, details))
+                print("[%s - STEP 2 - WiFi Connect] : %s" % (band_label, details))
                 print("")
-                if result == "SUCCESS":
+                if "SUCCESS" in details:
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
@@ -123,15 +123,15 @@ if expectedResult in result.upper():
             # ==============================================================
             # STEP 3: Verify GetConnectedSSID - first check
             # ==============================================================
-            if "FAILURE" != result:
+            if "SUCCESS" in details:
                 tdkTestObj = obj.createTestStep('rdkv_basic_sanity_wifiVerifyConnectedSSID')
                 tdkTestObj.addParameter("expectedSSID", WIFI_SSID)
                 tdkTestObj.executeTestCase(expectedResult)
                 result  = tdkTestObj.getResult()
                 details = tdkTestObj.getResultDetails()
-                print("[%s - STEP 3 - GetConnectedSSID (first check)] : %s | %s" % (band_label, result, details))
+                print("[%s - STEP 3 - GetConnectedSSID (first check)] : %s" % (band_label, details))
                 print("")
-                if result == "SUCCESS":
+                if "SUCCESS" in details:
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
@@ -140,7 +140,7 @@ if expectedResult in result.upper():
             # ==============================================================
             # STEP 4: Wait then re-verify GetConnectedSSID
             # ==============================================================
-            if "FAILURE" != result:
+            if "SUCCESS" in details:
                 print("INFO: Waiting %ds before re-checking connection..." % VERIFY_WAIT)
                 time.sleep(VERIFY_WAIT)
 
@@ -149,9 +149,9 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult)
                 result  = tdkTestObj.getResult()
                 details = tdkTestObj.getResultDetails()
-                print("[%s - STEP 4 - GetConnectedSSID (re-check)] : %s | %s" % (band_label, result, details))
+                print("[%s - STEP 4 - GetConnectedSSID (re-check)] : %s" % (band_label, details))
                 print("")
-                if result == "SUCCESS":
+                if "SUCCESS" in details:
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
@@ -164,7 +164,7 @@ if expectedResult in result.upper():
             tdkTestObj.executeTestCase(expectedResult)
             disc_result  = tdkTestObj.getResult()
             disc_details = tdkTestObj.getResultDetails()
-            print("[%s - STEP 5 - WiFi Disconnect] : %s | %s" % (band_label, disc_result, disc_details))
+            print("[%s - STEP 5 - WiFi Disconnect] : %s" % (band_label, disc_details))
             print("")
             if disc_result == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
