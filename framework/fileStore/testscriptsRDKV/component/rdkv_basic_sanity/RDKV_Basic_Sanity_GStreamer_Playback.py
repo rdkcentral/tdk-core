@@ -19,11 +19,9 @@
 
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib;
-import urllib.request, urllib.parse, urllib.error
 import MediaValidationVariables
 import json
 import ast
-from rdkv_basic_sanitylib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity","1",standAlone=True);

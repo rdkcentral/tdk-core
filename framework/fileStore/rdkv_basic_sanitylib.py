@@ -133,10 +133,10 @@ def rdkv_basic_sanity_executeInDUT (sshMethod, credentials, command, sshPort):
         print("Secure ssh to CPE")
         pass
     try:
-        if sshPort != 22:
-            output = ssh_and_execute (sshMethod, host_name, user_name, password, command)
-        else:
-            output = ssh_and_execute (sshMethod, host_name, user_name, password, command, sshPort)
+        output = ssh_and_execute(sshMethod, host_name, user_name, password, command, int(sshPort))
+    except (ValueError, TypeError) as e:
+        print(f"Invalid sshPort value: {sshPort!r}")
+        print(e)
     except Exception as e:
         print("Exception occured during ssh session")
         print(e)
