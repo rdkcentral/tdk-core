@@ -19,8 +19,9 @@
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import time
-import urllib.request, urllib.parse, urllib.error
 import json
+import ast
+from rdkv_basic_sanitylib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity","1",standAlone=True);
@@ -35,43 +36,37 @@ result = obj.getLoadModuleResult()
 print("[LIB LOAD STATUS]  :  %s" % result)
 obj.setLoadModuleStatus(result.upper())
 
-thunderPort = None
-# Get the thunder port from REST API
-url = obj.url + '/deviceGroup/getThunderDevicePorts?stbIp=' + ip
-try:
-    data = urllib.request.urlopen(url).read()
-    thunderPortDetails = json.loads(data)
-    thunderPort = thunderPortDetails['thunderPort']
-    print("THUNDER PORT : ", thunderPort)
-except Exception as e:
-    print("Unable to obtain Thunder Port from REST!!!")
-    print("Error message received :\n", e)
-    result = "FAILURE"
-
 expectedResult = "SUCCESS"
 
-if expectedResult in result.upper() and thunderPort is not None:
+if expectedResult in result.upper():
 
     # ------------------------------------------------------------------
-    # Read WiFi config from device config file
+    # Read WiFi config from device config file in a single batch call
     # ------------------------------------------------------------------
     configKeyList = ["WIFI_SSID_NAME", "WIFI_PASSPHRASE", "WIFI_SECURITY_MODE", "WIFI_SSID_NAME_5GHZ", "WIFI_PASSPHRASE_5GHZ", "WIFI_SECURITY_MODE_5GHZ"]
     configValues  = {}
     tdkTestObj    = obj.createTestStep('rdkv_basic_sanity_getDeviceConfig')
-
-    for configKey in configKeyList:
-        tdkTestObj.addParameter("basePath",  obj.realpath)
-        tdkTestObj.addParameter("configKey", configKey)
-        tdkTestObj.executeTestCase(expectedResult)
-        configValues[configKey] = tdkTestObj.getResultDetails()
-        if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print("SUCCESS: Retrieved %s from device config" % configKey)
-            tdkTestObj.setResultStatus("SUCCESS")
-        else:
-            print("FAILURE: Could not retrieve %s from device config" % configKey)
+    tdkTestObj.addParameter("basePath",  obj.realpath)
+    tdkTestObj.addParameter("configKey", json.dumps(configKeyList))
+    tdkTestObj.executeTestCase(expectedResult)
+    configRaw = str(tdkTestObj.getResultDetails()).strip()
+    try:
+        configValues = ast.literal_eval(configRaw)
+        failed_keys = [k for k, v in configValues.items() if "FAILURE" in str(v) or str(v).strip() == ""]
+        for k, v in configValues.items():
+            print("{} : {}".format(k, v))
+        if failed_keys:
+            for k in failed_keys:
+                print("FAILURE: Failed to retrieve %s from device config" % k)
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
-            break
+        else:
+            print("SUCCESS: Successfully retrieved all WiFi config values")
+            tdkTestObj.setResultStatus("SUCCESS")
+    except Exception as e:
+        print("FAILURE: Could not parse device config response: {}".format(e))
+        tdkTestObj.setResultStatus("FAILURE")
+        result = "FAILURE"
 
     if "FAILURE" != result:
         VERIFY_WAIT = 10  # seconds to wait before second connection check
@@ -94,8 +89,6 @@ if expectedResult in result.upper() and thunderPort is not None:
             # STEP 1: WiFi Scan - start, wait for event, verify SSID, stop
             # ==============================================================
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_wifiStartScanAndVerify')
-            tdkTestObj.addParameter("deviceIP",    ip)
-            tdkTestObj.addParameter("thunderPort", thunderPort)
             tdkTestObj.addParameter("targetSSID",  WIFI_SSID)
             tdkTestObj.executeTestCase(expectedResult)
             result  = tdkTestObj.getResult()
@@ -113,8 +106,6 @@ if expectedResult in result.upper() and thunderPort is not None:
             # ==============================================================
             if "FAILURE" != result:
                 tdkTestObj = obj.createTestStep('rdkv_basic_sanity_wifiConnect')
-                tdkTestObj.addParameter("deviceIP",    ip)
-                tdkTestObj.addParameter("thunderPort", thunderPort)
                 tdkTestObj.addParameter("ssid",        WIFI_SSID)
                 tdkTestObj.addParameter("passphrase",  PASSPHRASE)
                 tdkTestObj.addParameter("security",    SECURITY)
@@ -134,8 +125,6 @@ if expectedResult in result.upper() and thunderPort is not None:
             # ==============================================================
             if "FAILURE" != result:
                 tdkTestObj = obj.createTestStep('rdkv_basic_sanity_wifiVerifyConnectedSSID')
-                tdkTestObj.addParameter("deviceIP",     ip)
-                tdkTestObj.addParameter("thunderPort",  thunderPort)
                 tdkTestObj.addParameter("expectedSSID", WIFI_SSID)
                 tdkTestObj.executeTestCase(expectedResult)
                 result  = tdkTestObj.getResult()
@@ -156,8 +145,6 @@ if expectedResult in result.upper() and thunderPort is not None:
                 time.sleep(VERIFY_WAIT)
 
                 tdkTestObj = obj.createTestStep('rdkv_basic_sanity_wifiVerifyConnectedSSID')
-                tdkTestObj.addParameter("deviceIP",     ip)
-                tdkTestObj.addParameter("thunderPort",  thunderPort)
                 tdkTestObj.addParameter("expectedSSID", WIFI_SSID)
                 tdkTestObj.executeTestCase(expectedResult)
                 result  = tdkTestObj.getResult()
@@ -174,8 +161,6 @@ if expectedResult in result.upper() and thunderPort is not None:
             # STEP 5: WiFi Disconnect (always run per band)
             # ==============================================================
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_wifiDisconnect')
-            tdkTestObj.addParameter("deviceIP",    ip)
-            tdkTestObj.addParameter("thunderPort", thunderPort)
             tdkTestObj.executeTestCase(expectedResult)
             disc_result  = tdkTestObj.getResult()
             disc_details = tdkTestObj.getResultDetails()

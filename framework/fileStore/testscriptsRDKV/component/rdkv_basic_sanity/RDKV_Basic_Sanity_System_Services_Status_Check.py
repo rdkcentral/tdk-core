@@ -62,6 +62,8 @@
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
+import json
+import ast
 from rdkv_basic_sanitylib import *
 
 #Test component to be tested
@@ -78,29 +80,32 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 
-deviceDetails = obj.getDeviceDetails()
-print(deviceDetails)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     configKeyList = ["SSH_PORT","SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
     configValues={}
     tdkTestObj = obj.createTestStep('rdkv_basic_sanity_getDeviceConfig')
-    #Get each configuration from device config file
-    for configKey in configKeyList:
-        tdkTestObj.addParameter("basePath",obj.realpath)
-        tdkTestObj.addParameter("configKey",configKey)
-        tdkTestObj.executeTestCase(expectedResult)
-        configValues[configKey] = tdkTestObj.getResultDetails()
-        if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
-            tdkTestObj.setResultStatus("SUCCESS")
-        else:
-            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
-            if configValues[configKey] == "":
-                print("\n Please configure the %s key in the device config file" %(configKey))
+    tdkTestObj.addParameter("basePath", obj.realpath)
+    tdkTestObj.addParameter("configKey", json.dumps(configKeyList))
+    tdkTestObj.executeTestCase(expectedResult)
+    configRaw = str(tdkTestObj.getResultDetails()).strip()
+    try:
+        configValues = ast.literal_eval(configRaw)
+        failed_keys = [k for k, v in configValues.items() if "FAILURE" in str(v) or str(v).strip() == ""]
+        for k, v in configValues.items():
+            print("{} : {}".format(k, v))
+        if failed_keys:
+            for k in failed_keys:
+                print("FAILURE: Failed to retrieve %s configuration from device config file" % k)
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
-            break
+        else:
+            print("SUCCESS: Successfully retrieved all device config values")
+            tdkTestObj.setResultStatus("SUCCESS")
+    except Exception as e:
+        print("FAILURE: Could not parse device config response: {}".format(e))
+        tdkTestObj.setResultStatus("FAILURE")
+        result = "FAILURE"
     if "FAILURE" != result:
         if "directSSH" == configValues["SSH_METHOD"] :
             if configValues["SSH_PASSWORD"] == "None":

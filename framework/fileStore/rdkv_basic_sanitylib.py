@@ -50,8 +50,15 @@ def init_module (libobj, port, deviceInfo):
 #GET DEVICE CONFIGURATION FROM THE DEVICE CONFIG FILE
 # Description  : Read the value of device configuration from the <device>.config file
 # Parameters   : basePath - a string to specify the path of the TM
-#                configKey - a string to specify the configuration whose value needs to be retrieved from the <device>.config file
-# Return Value : value of device configuration or error log in case of failure
+#                configKey - a string specifying the configuration key(s) to retrieve
+#                            from the <device>.config file. Can be:
+#                            - A plain key name (e.g. "SSH_PORT") : returns the single config value
+#                            - A JSON-encoded list of keys (e.g. '["SSH_PORT","SSH_METHOD"]') :
+#                              returns a dict mapping each key to its value
+#                              e.g. {"SSH_PORT": "22", "SSH_METHOD": "directSSH"}
+# Return Value : config value string (if configKey is a plain string),
+#                dict of {key: value} pairs (if configKey is a JSON list),
+#                or error string in case of failure
 #----------------------------------------------------------------------
 def rdkv_basic_sanity_getDeviceConfig (basePath, configKey):
     deviceConfigFile=""
@@ -70,13 +77,30 @@ def rdkv_basic_sanity_getDeviceConfig (basePath, configKey):
         output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
         print(output)
         #print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
+    # Determine whether configKey encodes a list or is a plain key name
+    try:
+        parsed = json.loads(configKey)
+        keyList = parsed if isinstance(parsed, list) else None
+    except (ValueError, TypeError):
+        keyList = None
+
     try:
         if (len (deviceConfigFile) != 0) and (len (configKey) != 0):
             config = configparser.ConfigParser ()
             config.read (deviceConfigFile)
             deviceConfig = config.sections ()[0]
-            configValue =  config.get (deviceConfig, configKey)
-            output = configValue
+            if keyList is not None:
+                result_dict = {}
+                for key in keyList:
+                    try:
+                        result_dict[key] = config.get(deviceConfig, key)
+                    except Exception as keyErr:
+                        result_dict[key] = "FAILURE : Key not found: {}".format(key)
+                        print("FAILURE : Key '{}' not found in config".format(key))
+                output = result_dict
+            else:
+                configValue =  config.get (deviceConfig, configKey)
+                output = configValue
         else:
             output = "FAILURE : DeviceConfig file or key cannot be empty"
             print(output)
@@ -148,13 +172,14 @@ def rdkv_basic_sanity_rebootexecution (sshMethod, credentials, command):
 
 #-------------------------------------------------------------------
 #CREATE DISPLAY AND VERIFY IT APPEARS IN GETAPPS
-# Description  : Creates a display named "testdisplay" using org.rdk.RDKWindowManager.createDisplay
-#                and verifies its presence via org.rdk.RDKWindowManager.getApps
-# Parameters   : deviceIP - string specifying the IP address of the target device
-# Return Value : "SUCCESS" if "testdisplay" is found in getApps result, "FAILURE" otherwise
+# Description  : Creates a display using org.rdk.RDKWindowManager.createDisplay
+#                and verifies its presence via org.rdk.RDKWindowManager.getApps.
+#                Uses global deviceIP and devicePort.
+# Parameters   : DISPLAY_NAME - string specifying the name of the display to create
+# Return Value : "SUCCESS" if DISPLAY_NAME is found in getApps result, "FAILURE" otherwise
 #-------------------------------------------------------------------
-def rdkv_basic_sanity_createAndVerifyDisplay(deviceIP, THUNDER_PORT, DISPLAY_NAME):
-    JSONRPC_URL = "http://{}:{}/jsonrpc".format(deviceIP, THUNDER_PORT)
+def rdkv_basic_sanity_createAndVerifyDisplay(DISPLAY_NAME):
+    JSONRPC_URL = "http://{}:{}/jsonrpc".format(deviceIP, devicePort)
     headers = {"Content-Type": "application/json"}
 
     # Step 1: Check if testdisplay already exists in getApps before creating
@@ -234,14 +259,12 @@ def rdkv_basic_sanity_createAndVerifyDisplay(deviceIP, THUNDER_PORT, DISPLAY_NAM
 # WIFI SCAN: START SCAN, WAIT FOR onAvailableSSIDs, VERIFY TARGET SSID, STOP SCAN
 # Description  : Triggers a WiFi scan via Thunder NetworkManager, waits for the
 #                onAvailableSSIDs WebSocket event, verifies targetSSID is present,
-#                then stops the scan
-# Parameters   : deviceIP    - IP address of the DUT
-#                thunderPort - Thunder JSON-RPC port (e.g. 9998)
-#                targetSSID  - SSID name expected in the scan results
+#                then stops the scan. Uses global deviceIP and devicePort.
+# Parameters   : targetSSID  - SSID name expected in the scan results
 # Return Value : "SUCCESS" or "FAILURE: ..."
 #-------------------------------------------------------------------
-def rdkv_basic_sanity_wifiStartScanAndVerify(deviceIP, thunderPort, targetSSID):
-    wifiUtil.setThunderPort(int(thunderPort))
+def rdkv_basic_sanity_wifiStartScanAndVerify(targetSSID):
+    wifiUtil.setThunderPort(int(devicePort))
     wifiUtil.ssid_event_received = False
     wifiUtil.ssid_list = []
 
@@ -289,16 +312,14 @@ def rdkv_basic_sanity_wifiStartScanAndVerify(deviceIP, thunderPort, targetSSID):
 # WIFI CONNECT: TRIGGER CONNECT, WAIT FOR onWiFiStateChange EVENT
 # Description  : Connects the device to the given SSID via Thunder WiFiConnect,
 #                then waits for the onWiFiStateChange WebSocket event to confirm
-#                the connection attempt completed
-# Parameters   : deviceIP    - IP address of the DUT
-#                thunderPort - Thunder JSON-RPC port (e.g. 9998)
-#                ssid        - SSID to connect to
+#                the connection attempt completed. Uses global deviceIP and devicePort.
+# Parameters   : ssid        - SSID to connect to
 #                passphrase  - WiFi password
 #                security    - Security type integer (e.g. 6 for WPA2)
 # Return Value : "SUCCESS" or "FAILURE: ..."
 #-------------------------------------------------------------------
-def rdkv_basic_sanity_wifiConnect(deviceIP, thunderPort, ssid, passphrase, security):
-    wifiUtil.setThunderPort(int(thunderPort))
+def rdkv_basic_sanity_wifiConnect(ssid, passphrase, security):
+    wifiUtil.setThunderPort(int(devicePort))
     wifiUtil.wifi_state_event_received = False
     wifiUtil.wifi_state_data = {}
 
@@ -333,14 +354,13 @@ def rdkv_basic_sanity_wifiConnect(deviceIP, thunderPort, ssid, passphrase, secur
 #-------------------------------------------------------------------
 # WIFI VERIFY CONNECTION: GET CONNECTED SSID AND COMPARE
 # Description  : Calls GetConnectedSSID via Thunder NetworkManager and verifies
-#                the returned SSID matches the expected SSID
-# Parameters   : deviceIP     - IP address of the DUT
-#                thunderPort  - Thunder JSON-RPC port (e.g. 9998)
-#                expectedSSID - SSID that the device should be connected to
+#                the returned SSID matches the expected SSID.
+#                Uses global deviceIP and devicePort.
+# Parameters   : expectedSSID - SSID that the device should be connected to
 # Return Value : "SUCCESS" or "FAILURE: ..."
 #-------------------------------------------------------------------
-def rdkv_basic_sanity_wifiVerifyConnectedSSID(deviceIP, thunderPort, expectedSSID):
-    wifiUtil.setThunderPort(int(thunderPort))
+def rdkv_basic_sanity_wifiVerifyConnectedSSID(expectedSSID):
+    wifiUtil.setThunderPort(int(devicePort))
     connected_info = wifiUtil.getConnectedSSID(deviceIP)
     conn_ssid    = connected_info.get("ssid", "")
     conn_success = connected_info.get("success", False)
@@ -353,15 +373,175 @@ def rdkv_basic_sanity_wifiVerifyConnectedSSID(deviceIP, thunderPort, expectedSSI
 #-------------------------------------------------------------------
 # WIFI DISCONNECT
 # Description  : Disconnects the device from WiFi via Thunder NetworkManager
-#                and verifies success
-# Parameters   : deviceIP    - IP address of the DUT
-#                thunderPort - Thunder JSON-RPC port (e.g. 9998)
+#                and verifies success. Uses global deviceIP and devicePort.
+# Parameters   : None
 # Return Value : "SUCCESS" or "FAILURE: ..."
 #-------------------------------------------------------------------
-def rdkv_basic_sanity_wifiDisconnect(deviceIP, thunderPort):
-    wifiUtil.setThunderPort(int(thunderPort))
+def rdkv_basic_sanity_wifiDisconnect():
+    wifiUtil.setThunderPort(int(devicePort))
     if wifiUtil.disconnectFromWiFi(deviceIP):
         print("SUCCESS: WiFiDisconnect returned success=true")
         return "SUCCESS"
     else:
         return "FAILURE: WiFiDisconnect did not return success=true"
+
+#-------------------------------------------------------------------
+# HDMI CONNECTION CHECK: GET CONNECTED VIDEO DISPLAYS AND VERIFY HDMI
+# Description  : Calls org.rdk.DisplaySettings.getConnectedVideoDisplays via
+#                Thunder JSON-RPC and verifies that at least one HDMI display
+#                is connected. Uses global deviceIP and devicePort.
+# Parameters   : None
+# Return Value : "SUCCESS" or "FAILURE: ..."
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_hdmiConnectionCheck():
+    jsonrpc_url = "http://{}:{}/jsonrpc".format(deviceIP, devicePort)
+    payload = {
+        "jsonrpc": "2.0",
+        "id": 42,
+        "method": "org.rdk.DisplaySettings.getConnectedVideoDisplays"
+    }
+    try:
+        response = requests.post(jsonrpc_url, json=payload, timeout=10)
+        response_json = response.json()
+        print("INFO: getConnectedVideoDisplays response: {}".format(json.dumps(response_json)))
+        result_obj         = response_json.get("result", {})
+        connected_displays = result_obj.get("connectedVideoDisplays", [])
+        success            = result_obj.get("success", False)
+        print("INFO: connectedVideoDisplays: {}".format(connected_displays))
+        if not success:
+            return "FAILURE: getConnectedVideoDisplays did not return success=true"
+        hdmi_connected = any(str(d).upper().startswith("HDMI") for d in connected_displays)
+        if hdmi_connected:
+            print("SUCCESS: HDMI is connected")
+            return "SUCCESS"
+        else:
+            return "FAILURE: HDMI is not connected. Connected displays: {}".format(connected_displays)
+    except Exception as e:
+        return "FAILURE: Exception during getConnectedVideoDisplays: {}".format(str(e))
+
+#-------------------------------------------------------------------
+# GSTREAMER EOS CHECK: VERIFY "Got EOS" IN GSTREAMER OUTPUT
+# Description  : Checks whether the GStreamer output contains the "Got EOS"
+#                marker, indicating that end-of-stream was reached.
+# Parameters   : gst_output - string output captured from the gst-launch command
+# Return Value : "SUCCESS" if "Got EOS" is found, "FAILURE: ..." otherwise
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_verifyEOS(gst_output):
+    if "Got EOS" in gst_output:
+        print("SUCCESS: 'Got EOS' detected in GStreamer output")
+        return "SUCCESS"
+    else:
+        return "FAILURE: 'Got EOS' was not detected in GStreamer output"
+
+#-------------------------------------------------------------------
+# GSTREAMER PROGRESS CHECK: VERIFY PLAYBACK REACHED >= 99.5% COMPLETION
+# Description  : Parses percentage values from GStreamer output and verifies
+#                that the maximum progress reached is at least 99.5%.
+# Parameters   : gst_output - string output captured from the gst-launch command
+# Return Value : "SUCCESS" if max progress >= 99.5%, "FAILURE: ..." otherwise
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_checkPlaybackProgress(gst_output):
+    import re
+    percentages = [float(m) for m in re.findall(r'\(([0-9]+(?:\.[0-9]+)?)\s*%\)', gst_output)]
+    max_percent = max(percentages) if percentages else 0.0
+    print("INFO: Maximum playback progress detected: {:.1f}%".format(max_percent))
+    if max_percent >= 99.5:
+        print("SUCCESS: Playback reached {:.1f}%, meets >= 99.5% threshold".format(max_percent))
+        return "SUCCESS"
+    else:
+        return "FAILURE: Playback reached only {:.1f}%, expected >= 99.5%".format(max_percent)
+
+#-------------------------------------------------------------------
+# LAUNCH GSTREAMER PLAYBACK: VERIFY STREAM, FORM AND EXECUTE gst-launch
+# Description  : Verifies the given playback stream is accessible, then
+#                forms a gst-launch-1.0 playbin command with the supplied
+#                flags and WAYLAND_DISPLAY env, and executes it on the DUT
+#                via SSH. Stream check: file:/ URIs are verified via SSH,
+#                http/https URIs via HTTP HEAD request.
+# Parameters   : playback_stream - URI of the stream to play (file:/ or http/https)
+#                gst_play_flags  - playbin flags string (e.g. "audio+video")
+#                DISPLAY_NAME    - Wayland display name for WAYLAND_DISPLAY env var
+#                sshMethod       - SSH method string (e.g. "directSSH")
+#                credentials     - comma-separated string "host,username,password"
+#                sshPort         - SSH port (string or int)
+# Return Value : Raw gst-launch stdout on success, "FAILURE: ..." otherwise
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_launchPlayback(playback_stream, gst_play_flags, DISPLAY_NAME, sshMethod, credentials, sshPort):
+    # Verify playback stream is accessible
+    if playback_stream.startswith("file:/"):
+        local_path = playback_stream[len("file:"):]
+        try:
+            check_cmd = '[ -f "{}" ] && echo "exists" || echo "not found"'.format(local_path)
+            check_output = rdkv_basic_sanity_executeInDUT (sshMethod, credentials, check_cmd, sshPort)
+            last_line = check_output.splitlines()[-1].strip() if check_output else ""
+            if last_line != "exists":
+                return "FAILURE: Playback file not found on DUT: {}".format(local_path)
+            print("INFO: Playback file found on DUT: {}".format(local_path))
+        except Exception as e:
+            return "FAILURE: Could not verify playback file on DUT: {}".format(e)
+    else:
+        try:
+            resp = requests.head(playback_stream, timeout=10)
+            if resp.status_code >= 400:
+                return "FAILURE: Playback stream returned HTTP {}: {}".format(resp.status_code, playback_stream)
+            print("INFO: Playback stream is accessible: {}".format(playback_stream))
+        except Exception as e:
+            return "FAILURE: Playback stream is not accessible: {}".format(e)
+
+    # Form and execute the gst-launch command
+    env_set = "WAYLAND_DISPLAY={} XDG_RUNTIME_DIR=/tmp".format(DISPLAY_NAME)
+    gst_cmd = "gst-launch-1.0 -v playbin uri={} flags={}".format(playback_stream, gst_play_flags)
+    command = env_set + " " + gst_cmd
+    return rdkv_basic_sanity_executeInDUT (sshMethod, credentials, command, sshPort)
+
+#-------------------------------------------------------------------
+# GET THE VALUE OF A METHOD VIA JSON-RPC
+# Description  : Executes a Thunder JSON-RPC GET call for the specified method
+#                and returns the result.
+# Parameters   : method - string specifying the full Thunder JSON-RPC method name
+#                         (e.g. "org.rdk.DisplaySettings.getConnectedVideoDisplays")
+# Return Value : Result of the JSON-RPC call or "EXCEPTION OCCURRED" on error
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_getValue(method):
+    data = '"method": "'+method+'"'
+    result = execute_step(data)
+    return result
+
+#-------------------------------------------------------------------
+# SET VALUE FOR A METHOD VIA JSON-RPC
+# Description  : Executes a Thunder JSON-RPC SET call for the specified method
+#                with the given parameters and returns the result.
+# Parameters   : method - string specifying the full Thunder JSON-RPC method name
+#                value  - JSON-formatted string of parameters to pass to the method
+# Return Value : Result of the JSON-RPC call or "EXCEPTION OCCURRED" on error
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_setValue(method,value):
+    data = '"method": "'+method+'","params": '+value
+    result = execute_step(data)
+    return result
+
+#-------------------------------------------------------------------
+# GET THE LIST OF INSTALLED PACKAGES USING PACKAGE MANAGER
+# Description  : Retrieves the list of packages with state "INSTALLED" from
+#                the device via the org.rdk.PackageManagerRDKEMS Thunder plugin.
+# Parameters   : None
+# Return Value : Tuple (status, package_ids) where status is "SUCCESS" or
+#                "FAILURE" and package_ids is a list of installed package ID
+#                strings (empty list on failure)
+#-------------------------------------------------------------------
+def rdkv_get_InstalledPackages():
+    try:
+        print(f"\nGetting the list of installed packages")
+
+        result = rdkv_basic_sanity_getValue("org.rdk.PackageManagerRDKEMS.1.listPackages")
+        if result != "EXCEPTION OCCURRED":
+            package_ids = [item["packageId"] for item in result if item["state"] == "INSTALLED"]
+            print(f"\nList of packages installed in device: {package_ids}")
+            return "SUCCESS", package_ids
+        else:
+            print(f"\nFailed to get the list of installed packages")
+            return "FAILURE", []
+
+    except Exception as e:
+        print(f"\nException occurred while getting the list of installed packages: {e}")
+        return "FAILURE", []

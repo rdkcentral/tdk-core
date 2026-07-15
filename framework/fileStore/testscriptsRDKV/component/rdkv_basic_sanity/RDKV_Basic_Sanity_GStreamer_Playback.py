@@ -22,7 +22,8 @@ import tdklib;
 import urllib.request, urllib.parse, urllib.error
 import MediaValidationVariables
 import json
-import re
+import ast
+from rdkv_basic_sanitylib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity","1",standAlone=True);
@@ -37,27 +38,12 @@ obj.configureTestCase(ip,port,'RDKV_Basic_Sanity_GStreamer_Playback');
 result = obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 
-thunderPort=None
-#Get the thunder port from REST API
-url = obj.url + '/deviceGroup/getThunderDevicePorts?stbIp='+ip
-try:
-     data = urllib.request.urlopen(url).read()
-     thunderPortDetails = json.loads(data)
-     thunderPort= thunderPortDetails['thunderPort']
-     print("THUNDER PORT : ", thunderPort)
-except Exception as e:
-     print("Unable to obtain Thunder Port from REST!!!")
-     print("Error message received :\n",e);
-     result = "FAILURE"
-
 expectedResult = "SUCCESS"
 DISPLAY_NAME = "testdisplay"
 
-if expectedResult in result.upper() and thunderPort is not None:
+if expectedResult in result.upper():
     # Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('rdkv_basic_sanity_createAndVerifyDisplay')
-    tdkTestObj.addParameter("deviceIP", ip)
-    tdkTestObj.addParameter("THUNDER_PORT", thunderPort)
     tdkTestObj.addParameter("DISPLAY_NAME", DISPLAY_NAME)
     tdkTestObj.executeTestCase(expectedResult)
 
@@ -68,25 +54,35 @@ if expectedResult in result.upper() and thunderPort is not None:
         print("SUCCESS: testdisplay was created and verified in getApps")
         tdkTestObj.setResultStatus("SUCCESS")
 
-        # Fetch SSH credentials from device config file
-        configKeyList = ["SSH_PORT", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
-        configValues = {}
+        # Fetch all device config values in a single call using a JSON-encoded key list
+        configKeyList = ["SSH_PORT", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "TEST_STREAMS_BASE_PATH"]
         tdkTestObj = obj.createTestStep('rdkv_basic_sanity_getDeviceConfig')
-        for configKey in configKeyList:
-            tdkTestObj.addParameter("basePath", obj.realpath)
-            tdkTestObj.addParameter("configKey", configKey)
-            tdkTestObj.executeTestCase(expectedResult)
-            configValues[configKey] = tdkTestObj.getResultDetails()
-            if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-                print("SUCCESS: Successfully retrieved %s configuration from device config file" % configKey)
-                tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                print("FAILURE: Failed to retrieve %s configuration from device config file" % configKey)
-                if configValues[configKey] == "":
-                    print("\n Please configure the %s key in the device config file" % configKey)
+        tdkTestObj.addParameter("basePath", obj.realpath)
+        tdkTestObj.addParameter("configKey", json.dumps(configKeyList))
+        tdkTestObj.executeTestCase(expectedResult)
+        configRaw = str(tdkTestObj.getResultDetails()).strip()
+        configValues = {}
+        try:
+            configValues = ast.literal_eval(configRaw)
+            failed_keys = [k for k, v in configValues.items() if "FAILURE" in str(v) or str(v).strip() == ""]
+            # TEST_STREAMS_BASE_PATH is optional — do not treat as failure
+            failed_keys = [k for k in failed_keys if k != "TEST_STREAMS_BASE_PATH"]
+            for k, v in configValues.items():
+                if k == "TEST_STREAMS_BASE_PATH" and not str(v).strip():
+                    continue
+                print("{} : {}".format(k, v))
+            if failed_keys:
+                for k in failed_keys:
+                    print("FAILURE: Failed to retrieve %s configuration from device config file" % k)
                 tdkTestObj.setResultStatus("FAILURE")
                 result = "FAILURE"
-                break
+            else:
+                print("SUCCESS: Successfully retrieved all device config values")
+                tdkTestObj.setResultStatus("SUCCESS")
+        except Exception as e:
+            print("FAILURE: Could not parse device config response: {}".format(e))
+            tdkTestObj.setResultStatus("FAILURE")
+            result = "FAILURE"
 
         if "FAILURE" != result:
             if "directSSH" == configValues["SSH_METHOD"]:
@@ -111,15 +107,10 @@ if expectedResult in result.upper() and thunderPort is not None:
                     print("Defaulting to audio+video: {}".format(e))
                 print("INFO: gst_play_flags set to: {}".format(gst_play_flags))
 
-                env_set = "WAYLAND_DISPLAY={} XDG_RUNTIME_DIR=/tmp".format(DISPLAY_NAME)
                 playback_stream = MediaValidationVariables.video_src_url_short_duration_mp4
 
                 # Optionally override base path if TEST_STREAMS_BASE_PATH is configured
-                tdkTestObj = obj.createTestStep('rdkv_basic_sanity_getDeviceConfig')
-                tdkTestObj.addParameter("basePath", obj.realpath)
-                tdkTestObj.addParameter("configKey", "TEST_STREAMS_BASE_PATH")
-                tdkTestObj.executeTestCase(expectedResult)
-                test_streams_base_path = tdkTestObj.getResultDetails()
+                test_streams_base_path = configValues.get("TEST_STREAMS_BASE_PATH", "")
                 if "FAILURE" not in test_streams_base_path and test_streams_base_path.strip():
                     test_streams_base_path = test_streams_base_path.strip()
                     if hasattr(MediaValidationVariables, 'test_streams_base_path') and MediaValidationVariables.test_streams_base_path:
@@ -128,74 +119,50 @@ if expectedResult in result.upper() and thunderPort is not None:
                         playback_stream = test_streams_base_path + playback_stream
                     print("INFO: TEST_STREAMS_BASE_PATH applied, playback_stream: {}".format(playback_stream))
 
-                # Verify playback stream is accessible before launching GStreamer
-                if playback_stream.startswith("file:/"):
-                    # Local file on DUT — check via SSH
-                    local_path = playback_stream[len("file:"):]
-                    try:
-                        file_check_obj = obj.createTestStep('rdkv_basic_sanity_executeInDUT')
-                        file_check_obj.addParameter("sshMethod", configValues["SSH_METHOD"])
-                        file_check_obj.addParameter("sshPort", configValues["SSH_PORT"])
-                        file_check_obj.addParameter("credentials", credentials)
-                        file_check_obj.addParameter("command", '[ -f "{}" ] && echo "exists" || echo "not found"'.format(local_path))
-                        file_check_obj.executeTestCase(expectedResult)
-                        file_check_output = str(file_check_obj.getResultDetails()).strip()
-                        last_line = file_check_output.splitlines()[-1].strip()
-                        if last_line == "exists":
-                            print("INFO: Playback file found on DUT: {}".format(local_path))
-                        else:
-                            print("FAILURE: Playback file not found on DUT: {}".format(local_path))
-                            result = "FAILURE"
-                    except Exception as e:
-                        print("FAILURE: Could not verify playback file on DUT: {}".format(e))
-                        result = "FAILURE"
-                else:
-                    # Remote URL — check via HTTP HEAD request
-                    try:
-                        req = urllib.request.Request(playback_stream, method="HEAD")
-                        urllib.request.urlopen(req, timeout=10)
-                        print("INFO: Playback stream is accessible: {}".format(playback_stream))
-                    except Exception as e:
-                        print("FAILURE: Playback stream is not accessible: {}".format(e))
-                        result = "FAILURE"
+                # Launch GStreamer playback — stream check, command formation and execution
+                tdkTestObj = obj.createTestStep('rdkv_basic_sanity_launchPlayback')
+                tdkTestObj.addParameter("playback_stream", playback_stream)
+                tdkTestObj.addParameter("gst_play_flags",  gst_play_flags)
+                tdkTestObj.addParameter("DISPLAY_NAME",    DISPLAY_NAME)
+                tdkTestObj.addParameter("sshMethod",       configValues["SSH_METHOD"])
+                tdkTestObj.addParameter("credentials",     credentials)
+                tdkTestObj.addParameter("sshPort",         configValues["SSH_PORT"])
+                tdkTestObj.executeTestCase(expectedResult)
+                result = tdkTestObj.getResult()
+                output = str(tdkTestObj.getResultDetails()).strip()
+                print("[LAUNCH PLAYBACK RESULT] : %s" % result)
+                print("[RESPONSE FROM DEVICE]   : \n%s" % output)
+                if expectedResult in result.upper():
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    # Check EOS
+                    eosTestObj = obj.createTestStep('rdkv_basic_sanity_verifyEOS')
+                    eosTestObj.addParameter("gst_output", output)
+                    eosTestObj.executeTestCase(expectedResult)
+                    eos_result = eosTestObj.getResult()
+                    eos_details = str(eosTestObj.getResultDetails()).strip()
+                    print("[EOS CHECK RESULT] : %s" % eos_result)
 
-                if "FAILURE" != result:
-                    gst_launch_command = "gst-launch-1.0 -v playbin uri={} flags={}".format(playback_stream, gst_play_flags)
-                    command = env_set + " " + gst_launch_command
-                    print("Executing command in DUT: {}".format(command))
-                    # Primitive test case to execute the command in DUT
-                    tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT')
-                    tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"])
-                    tdkTestObj.addParameter("sshPort", configValues["SSH_PORT"])
-                    tdkTestObj.addParameter("credentials", credentials)
-                    tdkTestObj.addParameter("command", command)
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResult()
-                    output = str(tdkTestObj.getResultDetails()).strip()
-                    print("[TEST EXECUTION RESULT] : %s" % result)
-                    print("[RESPONSE FROM DEVICE]  : %s" % output)
-                    if expectedResult in result.upper():
-                        # Check playback reached >= 99.5% completion
-                        percentages = [float(m) for m in re.findall(r'\(([0-9]+(?:\.[0-9]+)?)\s*%\)', output)]
-                        max_percent = max(percentages) if percentages else 0.0
-                        print("INFO: Maximum playback progress detected: {:.1f}%".format(max_percent))
-                        reached_end = max_percent >= 99.5
-                        # Check EOS
-                        eos_detected = "Got EOS" in output
-                        if eos_detected and reached_end:
-                            print("SUCCESS: GStreamer playback completed - Got EOS detected and {:.1f}% reached".format(max_percent))
-                            tdkTestObj.setResultStatus("SUCCESS")
-                        elif not eos_detected:
-                            print("FAILURE: 'Got EOS' was not detected in output")
-                            tdkTestObj.setResultStatus("FAILURE")
-                        else:
-                            print("FAILURE: Playback reached only {:.1f}%, expected >= 99.5%".format(max_percent))
-                            tdkTestObj.setResultStatus("FAILURE")
+                    # Check progress
+                    progressTestObj = obj.createTestStep('rdkv_basic_sanity_checkPlaybackProgress')
+                    progressTestObj.addParameter("gst_output", output)
+                    progressTestObj.executeTestCase(expectedResult)
+                    progress_result = progressTestObj.getResult()
+                    progress_details = str(progressTestObj.getResultDetails()).strip()
+                    print("[PROGRESS CHECK RESULT] : %s" % progress_result)
+
+                    if expectedResult in eos_result.upper() and expectedResult in progress_result.upper():
+                        print("SUCCESS: GStreamer playback completed - EOS detected and progress threshold met")
+                        eosTestObj.setResultStatus("SUCCESS")
+                        progressTestObj.setResultStatus("SUCCESS")
                     else:
-                        print("FAILURE: Failed to execute command in DUT")
-                        tdkTestObj.setResultStatus("FAILURE")
+                        if expectedResult not in eos_result.upper():
+                            print("FAILURE: EOS check failed - {}".format(eos_details))
+                            eosTestObj.setResultStatus("FAILURE")
+                        if expectedResult not in progress_result.upper():
+                            print("FAILURE: Progress check failed - {}".format(progress_details))
+                            progressTestObj.setResultStatus("FAILURE")
                 else:
-                    print("FAILURE: Playback stream is not accessible, skipping GStreamer execution")
+                    print("FAILURE: GStreamer playback launch failed")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
                 print("FAILURE: Currently only supports directSSH ssh method")
@@ -210,4 +177,4 @@ if expectedResult in result.upper() and thunderPort is not None:
     obj.unloadModule("rdkv_basic_sanity")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print("FAILURE: Failed to load module or obtain Thunder port")
+    print("FAILURE: Failed to load module")
