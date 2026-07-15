@@ -40,8 +40,6 @@ if expectedResult in result.upper():
 
     tdkTestObj = obj.createTestStep('rdkv_basic_sanity_hdmiConnectionCheck')
     tdkTestObj.executeTestCase(expectedResult)
-    print("")
-
     result  = tdkTestObj.getResult()
     details = tdkTestObj.getResultDetails()
     print("[HDMI Connection Check] : %s | %s" % (result, details))

@@ -545,3 +545,212 @@ def rdkv_get_InstalledPackages():
     except Exception as e:
         print(f"\nException occurred while getting the list of installed packages: {e}")
         return "FAILURE", []
+
+# Global state for System reboot event listener
+_reboot_event_received = False
+_reboot_event_reason = None
+_reboot_ws_instance = None
+
+def _rdkv_basic_sanity_rebootEventListener():
+    import websocket
+    global _reboot_event_received, _reboot_ws_instance
+
+    ws_url = "ws://{}:{}/jsonrpc".format(deviceIP, devicePort)
+
+    def on_open(ws):
+        register_msg = json.dumps({
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "org.rdk.System.register",
+            "params": {"event": "onRebootRequest", "id": "client.events.1"}
+        })
+        ws.send(register_msg)
+        print("INFO: Registered for onRebootRequest event")
+
+    def on_message(ws, message):
+        global _reboot_event_received, _reboot_event_reason
+        try:
+            msg = json.loads(message)
+            if "onRebootRequest" in msg.get("method", ""):
+                print("INFO: onRebootRequest event received: {}".format(message))
+                _reboot_event_reason = msg.get("params", {}).get("rebootReason", "")
+                _reboot_event_received = True
+                ws.close()
+        except Exception:
+            pass
+
+    def on_error(ws, error):
+        print("INFO: WebSocket error in reboot listener: {}".format(error))
+
+    def on_close(ws, *args):
+        pass
+
+    ws = websocket.WebSocketApp(ws_url, on_open=on_open, on_message=on_message,
+                                on_error=on_error, on_close=on_close)
+    _reboot_ws_instance = ws
+    ws.run_forever()
+
+#-------------------------------------------------------------------
+# REBOOT DEVICE VIA THUNDER AND VERIFY onRebootRequest EVENT
+# Description  : Registers a WebSocket listener for the org.rdk.System
+#                onRebootRequest event, then triggers a reboot via
+#                org.rdk.System.reboot Thunder JSON-RPC call and waits
+#                for the event to confirm the reboot was requested.
+#                Uses global deviceIP and devicePort.
+# Parameters   : None
+# Return Value : "SUCCESS" if reboot triggered and onRebootRequest event
+#                received, "FAILURE: ..." otherwise
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_rebootDevice():
+    global _reboot_event_received, _reboot_event_reason, _reboot_ws_instance
+    _reboot_event_received = False
+    _reboot_event_reason = None
+    _reboot_ws_instance = None
+
+    REBOOT_REASON   = "SANITY_TEST"
+    REBOOT_EVENT_TIMEOUT = 30
+
+    # Start WebSocket listener for onRebootRequest event
+    listener_thread = threading.Thread(target=_rdkv_basic_sanity_rebootEventListener)
+    listener_thread.daemon = True
+    listener_thread.start()
+    time.sleep(2)  # Allow WebSocket to connect and register
+
+    # Trigger reboot via Thunder JSON-RPC
+    jsonrpc_url = "http://{}:{}/jsonrpc".format(deviceIP, devicePort)
+    payload = {
+        "jsonrpc": "2.0",
+        "id": 42,
+        "method": "org.rdk.System.reboot",
+        "params": {"rebootReason": REBOOT_REASON}
+    }
+    try:
+        response = requests.post(jsonrpc_url, json=payload, timeout=10)
+        response_json = response.json()
+        print("INFO: org.rdk.System.reboot response: {}".format(json.dumps(response_json)))
+        result_obj = response_json.get("result", {})
+        iarm_status = result_obj.get("IARM_Bus_Call_STATUS", -1)
+        if not result_obj.get("success", False):
+            if _reboot_ws_instance:
+                _reboot_ws_instance.close()
+            return "FAILURE: org.rdk.System.reboot did not return success=true"
+        if iarm_status != 0:
+            if _reboot_ws_instance:
+                _reboot_ws_instance.close()
+            return "FAILURE: org.rdk.System.reboot returned IARM_Bus_Call_STATUS={} (expected 0)".format(iarm_status)
+        print("INFO: Reboot triggered successfully (IARM_Bus_Call_STATUS=0), waiting for onRebootRequest event...")
+    except Exception as e:
+        if _reboot_ws_instance:
+            _reboot_ws_instance.close()
+        return "FAILURE: Exception during org.rdk.System.reboot: {}".format(e)
+
+    # Wait for onRebootRequest event
+    elapsed = 0
+    while elapsed < REBOOT_EVENT_TIMEOUT:
+        if _reboot_event_received:
+            break
+        time.sleep(1)
+        elapsed += 1
+
+    if _reboot_ws_instance:
+        _reboot_ws_instance.close()
+    listener_thread.join(timeout=5)
+
+    if _reboot_event_received:
+        if _reboot_event_reason == REBOOT_REASON:
+            print("SUCCESS: onRebootRequest event received with rebootReason='{}'".format(_reboot_event_reason))
+            return "SUCCESS"
+        else:
+            return "FAILURE: onRebootRequest event received but rebootReason='{}' (expected '{}')".format(_reboot_event_reason, REBOOT_REASON)
+    else:
+        return "FAILURE: onRebootRequest event not received within {}s".format(REBOOT_EVENT_TIMEOUT)
+
+#-------------------------------------------------------------------
+# DEVICE STATUS CHECK: VERIFY PORTS ARE DOWN OR UP
+# Description  : Checks whether the device SSH port and Thunder port
+#                are accessible or not.
+#                If expectedStatus is "down" : verifies both SSH port and
+#                  Thunder port (devicePort) are not accessible → SUCCESS.
+#                If expectedStatus is "up"   : polls Thunder port (devicePort)
+#                  for up to 3 minutes; returns SUCCESS when it becomes accessible.
+#                Uses global deviceIP and devicePort.
+# Parameters   : expectedStatus - "down" or "up"
+#                sshPort        - SSH port number of the DUT (string or int)
+# Return Value : "SUCCESS" or "FAILURE: ..."
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_deviceStatus(expectedStatus, sshPort):
+    import socket as _socket
+    ssh_port    = int(sshPort)
+    thunder_port = int(devicePort)
+
+    def port_accessible(host, port, timeout=3):
+        try:
+            s = _socket.create_connection((host, port), timeout=timeout)
+            s.close()
+            return True
+        except Exception:
+            return False
+
+    if expectedStatus.lower() == "down":
+        ssh_down    = not port_accessible(deviceIP, ssh_port)
+        thunder_down = not port_accessible(deviceIP, thunder_port)
+        if ssh_down and thunder_down:
+            print("SUCCESS: SSH port ({}) and Thunder port ({}) are both not accessible - device is down".format(ssh_port, thunder_port))
+            return "SUCCESS"
+        else:
+            still_up = []
+            if not ssh_down:
+                still_up.append("SSH port ({})".format(ssh_port))
+            if not thunder_down:
+                still_up.append("Thunder port ({})".format(thunder_port))
+            return "FAILURE: Expected device to be down but {} still accessible".format(", ".join(still_up))
+
+    elif expectedStatus.lower() == "up":
+        POLL_TIMEOUT  = 180
+        POLL_INTERVAL = 5
+        print("INFO: Polling Thunder port ({}) for device to come up (max {}s)...".format(thunder_port, POLL_TIMEOUT))
+        deadline   = time.time() + POLL_TIMEOUT
+        start_time = time.time()
+        while time.time() < deadline:
+            if port_accessible(deviceIP, thunder_port):
+                elapsed = time.time() - start_time
+                print("SUCCESS: Thunder port ({}) is accessible - device is back up after {:.0f}s".format(thunder_port, elapsed))
+                return "SUCCESS"
+            time.sleep(POLL_INTERVAL)
+        return "FAILURE: Device did not come back up within {}s".format(POLL_TIMEOUT)
+
+    else:
+        return "FAILURE: Unknown expectedStatus '{}', must be 'up' or 'down'".format(expectedStatus)
+
+#-------------------------------------------------------------------
+# GET SYSTEM UPTIME VIA THUNDER JSON-RPC
+# Description  : Calls org.rdk.System.requestSystemUptime via Thunder
+#                JSON-RPC and returns the uptime value in seconds.
+#                Uses global deviceIP and devicePort.
+# Parameters   : None
+# Return Value : Uptime as a float string in seconds (e.g. "37.437557")
+#                on success, "FAILURE: ..." otherwise
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_getSystemUptime():
+    jsonrpc_url = "http://{}:{}/jsonrpc".format(deviceIP, devicePort)
+    payload = {
+        "jsonrpc": "2.0",
+        "id": 42,
+        "method": "org.rdk.System.requestSystemUptime"
+    }
+    try:
+        response = requests.post(jsonrpc_url, json=payload, timeout=10)
+        response_json = response.json()
+        print("INFO: requestSystemUptime response: {}".format(json.dumps(response_json)))
+        result_obj  = response_json.get("result", {})
+        success     = result_obj.get("success", False)
+        if not success:
+            return "FAILURE: requestSystemUptime did not return success=true"
+        uptime_str = result_obj.get("systemUptime", "")
+        if uptime_str:
+            print("SUCCESS: System uptime is {} seconds".format(uptime_str))
+            return str(uptime_str)
+        else:
+            return "FAILURE: systemUptime field not found in response"
+    except Exception as e:
+        return "FAILURE: Exception during requestSystemUptime: {}".format(e)

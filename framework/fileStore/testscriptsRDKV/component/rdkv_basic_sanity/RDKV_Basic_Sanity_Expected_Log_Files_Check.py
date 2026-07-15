@@ -40,7 +40,7 @@ obj.setLoadModuleStatus(result.upper())
 expectedResult = "SUCCESS"
 
 if expectedResult in result.upper():
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "SSH_PORT"]
     configValues = {}
 
     tdkTestObj = obj.createTestStep("rdkv_basic_sanity_getDeviceConfig")
@@ -93,6 +93,7 @@ if expectedResult in result.upper():
             ) % (files_arg, LOG_DIR)
 
             tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"])
+            tdkTestObj.addParameter("sshPort", configValues["SSH_PORT"])
             tdkTestObj.addParameter("credentials", credentials)
             tdkTestObj.addParameter("command", command)
             tdkTestObj.executeTestCase(expectedResult)

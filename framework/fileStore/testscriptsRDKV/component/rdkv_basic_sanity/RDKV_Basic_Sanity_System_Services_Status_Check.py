@@ -124,7 +124,6 @@ if expectedResult in result.upper():
             output = tdkTestObj.getResultDetails();
             text = str(output)
             output = text[text.find("\n") + 1:]
-            print(result)
             print("[RESPONSE FROM DEVICE]:\n%s" %(output))
             if not output and result == "SUCCESS":
                 print("SUCCESS: No response from the device means no services are in failed or activating successful")
