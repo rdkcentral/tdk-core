@@ -20,7 +20,7 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
   <version>1</version>
-  <name>RDKV_Basic_Sanity_System_Services_Status_Check</name>
+  <name>RDKV_Basic_Sanity_Check_System_Services_Status</name>
   <primitive_test_id/>
   <primitive_test_name>rdkv_basic_sanity_executeInDUT</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
@@ -52,7 +52,7 @@
     <expected_output>Services which are failed or activating should be listed from systemd services</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_basic_sanity</test_stub_interface>
-    <test_script>RDKV_Basic_Sanity_System_Services_Status_Check</test_script>
+    <test_script>RDKV_Basic_Sanity_Check_System_Services_Status</test_script>
     <skipped>No</skipped>
     <release_version>M110</release_version>
     <remarks/>
@@ -73,7 +73,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Basic_Sanity_System_Services_Status_Check');
+obj.configureTestCase(ip,port,'RDKV_Basic_Sanity_Check_System_Services_Status');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();

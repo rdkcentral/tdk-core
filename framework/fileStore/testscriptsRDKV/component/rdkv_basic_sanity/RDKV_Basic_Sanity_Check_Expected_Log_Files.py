@@ -31,7 +31,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity", "1", standAlone=True)
 # This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,"RDKV_Basic_Sanity_Expected_Log_Files_Check")
+obj.configureTestCase(ip,port,"RDKV_Basic_Sanity_Check_Expected_Log_Files")
 
 result = obj.getLoadModuleResult()
 print("[LIB LOAD STATUS]  :  %s" % result)
