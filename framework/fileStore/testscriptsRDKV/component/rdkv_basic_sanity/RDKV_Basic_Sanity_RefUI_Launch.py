@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,10 +15,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#########################################################################
+##########################################################################
 
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
+import ast
 from rdkv_basic_sanitylib import *
 
 #Test component to be tested
@@ -28,10 +29,8 @@ obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Basic_Sanity_ResidentApp_Launch_Check')
+obj.configureTestCase(ip,port,'RDKV_Basic_Sanity_RefUI_Launch')
 
-#Execution summary variable
-Summ_list=[]
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult()
 print("[LIB LOAD STATUS]  :  %s" %result)
@@ -40,7 +39,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 
 if expectedResult in result.upper():
-    print("\n Launching ResidentApp")
+    print("\n Launching RefUI")
     
     # Get SSH configuration from device config file
     configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
@@ -59,38 +58,18 @@ if expectedResult in result.upper():
             print("FAILURE: Failed to retrieve %s from device config file" %(configKey))
             tdkTestObj.setResultStatus("FAILURE")
     
-    result = "SUCCESS"
+    # Check if RefUI is loaded using the library function
+    print("\n Checking if RefUI is loaded")
+    tdkTestObj = obj.createTestStep('rdkservice_get_loaded_apps')
+    tdkTestObj.executeTestCase(expectedResult)
+    loaded_apps = ast.literal_eval(str(tdkTestObj.getResultDetails()))
     
-    # Check if ResidentApp (refui) is loaded using curl command
-    print("\n Checking if ResidentApp is loaded")
-    if "directSSH" == configValues["SSH_METHOD"]:
-        if configValues["SSH_PASSWORD"] == "None":
-            configValues["SSH_PASSWORD"] = ""
-        
-        credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-        curl_command = 'curl -d \'{ "jsonrpc": 2.0, "id": 8, "method": "org.rdk.AppManager.getLoadedApps" }\' http://127.0.0.1:9998/jsonrpc'
-        
-        tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT')
-        tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"])
-        tdkTestObj.addParameter("credentials", credentials)
-        tdkTestObj.addParameter("command", curl_command)
-        tdkTestObj.executeTestCase(expectedResult)
-        
-        output = tdkTestObj.getResultDetails()
-        output = str(output)
-        print("\n[RESPONSE FROM DEVICE]: %s"%(output))
-        
-        if "refui" in output and expectedResult in tdkTestObj.getResult():
-            print("\n ResidentApp (refui) is loaded successfully")
-            Summ_list.append('\nResidentApp Status : Launched')
-            tdkTestObj.setResultStatus("SUCCESS")
-        else:
-            print("\n ResidentApp (refui) is not loaded")
-            Summ_list.append('ResidentApp Status : Not Loaded')
-            tdkTestObj.setResultStatus("FAILURE")
+    if isinstance(loaded_apps, list) and any("refui" in str(app).lower() for app in loaded_apps):
+        print("\n RefUI is loaded successfully")
+        tdkTestObj.setResultStatus("SUCCESS")
     else:
-        print("FAILURE: Currently only supports directSSH method")
-        Summ_list.append('ResidentApp Status Check : FAILURE')
+        print("\n RefUI is not loaded")
+        tdkTestObj.setResultStatus("FAILURE")
         result = "FAILURE"
     
     obj.unloadModule("rdkv_basic_sanity")
