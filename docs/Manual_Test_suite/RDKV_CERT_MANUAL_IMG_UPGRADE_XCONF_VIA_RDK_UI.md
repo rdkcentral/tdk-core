@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_IMAGEUPGRADE_04
+RDKV_MANUAL_IMG_UPGRADE_04
 ## TestCase Name
-RDKV_CERT_MANUAL_IMG_UPGRADE_XCONF_VIA_RDK_UI
+RDKV_CERT_MANUAL_Img_Upgrade_Xconf_Via_RDK_UI
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IMG_UPGRADE_XCONF_VIA_RDK_UI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the XCONF firmware upgrade behavior when initiated directly from the RDK UI Settings menu.
+To validate the XCONF firmware upgrade behavior when initiated directly from the RDK UI Settings menu. This test exercises the RDK CDL (Code Download) service and the firmware upgrade stack (`XCONF` server configuration, SNMP triggers, or local USB/HTTP methods) to validate the firmware upgrade workflow. The test confirms that the Firmware Update screen should show the upgraded firmware image version in the Firmware Versions field.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -41,4 +41,4 @@ To validate the XCONF firmware upgrade behavior when initiated directly from the
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

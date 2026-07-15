@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_16
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_FIRST_BOOT_HOME_SCREEN
+RDKV_CERT_MANUAL_RDK_UI_First_Boot_Home_Screen
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_FIRST_BOOT_HOME_SCREEN
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that on the very first boot, the RDK UI Home screen displays only two rows -- Recommended Apps and Video on Demand -- with no My Apps row, as no apps are installed.
+To validate that on the very first boot, the RDK UI Home screen displays only two rows -- Recommended Apps and Video on Demand -- with no My Apps row, as no apps are installed. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the UI should have only two rows. The top row should display Recommended Apps, while the bottom row should display Video on Demand (VoD) apps. My Apps row should be hidden as there are no DAC apps installed yet.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -36,4 +36,4 @@ To validate that on the very first boot, the RDK UI Home screen displays only tw
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

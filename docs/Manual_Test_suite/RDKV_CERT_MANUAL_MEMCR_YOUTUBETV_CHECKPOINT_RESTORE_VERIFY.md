@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MEMCR_07
 ## TestCase Name
-RDKV_CERT_MANUAL_MEMCR_YOUTUBETV_CHECKPOINT_RESTORE_VERIFY
+RDKV_CERT_MANUAL_Memcr_Youtubetv_Checkpoint_Restore_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MEMCR_YOUTUBETV_CHECKPOINT_RESTORE_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the YouTube TV application state is serialized to disk upon hibernation (Home key press) and correctly deserialized upon relaunch.
+To validate that the YouTube TV application state is serialized to disk upon hibernation (Home key press) and correctly deserialized upon relaunch. This test exercises the `memcr` memory checkpoint and restore service together with the application lifecycle manager to validate suspend-and-resume behaviour of DAC applications. The test confirms that the directory should be empty — confirming that the state has been deserialized and the app fully restored.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,4 +44,4 @@ To validate that the YouTube TV application state is serialized to disk upon hib
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

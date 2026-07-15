@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_POWER_03
 ## TestCase Name
-RDKV_CERT_MANUAL_PWR_MGMT_DEEP_SLEEP_BT_REMOTE_WAKEUP
+RDKV_CERT_MANUAL_Pwr_Mgmt_Deep_Sleep_BT_Remote_Wakeup
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_PWR_MGMT_DEEP_SLEEP_BT_REMOTE_WAKEUP
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can be set to DEEP SLEEP mode and then woken up using the Power key press from a Bluetooth-paired remote.
+To validate that the DUT can be set to DEEP SLEEP mode and then woken up using the Power key press from a Bluetooth-paired remote. This test exercises the `org.rdk.PowerManager` plugin and the RDK power-state machine (including standby, deep-sleep, and wake triggers) to validate power-mode transitions. The test confirms that the RDK UI should be functioning as expected. Internet should be accessible on the DUT and the launched application should play content with proper Audio and Video.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -34,10 +34,10 @@ To validate that the DUT can be set to DEEP SLEEP mode and then woken up using t
 | 3 | Enter sleep mode via Power key on remote | Press the Power key from the Bluetooth-paired remote control. | The DUT UI should turn off, indicating the device has entered Deep Sleep mode. |
 | 4 | Attempt SSH to verify Deep Sleep state | Attempt to SSH into the DUT from the PC/laptop. | The DUT should not be accessible via SSH, confirming the device is in Deep Sleep mode. |
 | 5 | Wake DUT from Deep Sleep via Power key | Wake up the DUT from Deep Sleep mode by pressing the Power key on the Bluetooth-paired RCU (Remote Control Unit). | The DUT should wake up from Deep Sleep mode and the RDK UI should turn on. |
-| 6 | SSH into DUT and validate power state | SSH into the DUT and validate the power state using the curl command.<br>Command: curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.getPowerState","params":{}}' http://127.0.0.1:9998/jsonrpc | The curl response should be:<br>{"jsonrpc":"2.0","id":3,"result":{"powerState":"ON","success":true}} |
+| 6 | SSH into DUT and validate power state | SSH into the DUT and validate the power state using the curl command.<br>Command: `curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.getPowerState","params":{}}' http://127.0.0.1:9998/jsonrpc` | The curl response should be:<br>{"jsonrpc":"2.0","id":3,"result":{"powerState":"ON","success":true}} |
 | 7 | Validate RDK UI and internet connectivity | Validate that the RDK UI is functioning as expected and internet is accessible on the DUT. Launch any internet-dependent application to confirm. | The RDK UI should be functioning as expected. Internet should be accessible on the DUT and the launched application should play content with proper Audio and Video. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

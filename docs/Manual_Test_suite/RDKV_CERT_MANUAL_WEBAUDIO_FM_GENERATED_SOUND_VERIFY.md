@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WEBAUDIO_07
 ## TestCase Name
-RDKV_CERT_MANUAL_WEBAUDIO_FM_GENERATED_SOUND_VERIFY
+RDKV_CERT_MANUAL_Webaudio_Fm_Generated_Sound_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WEBAUDIO_FM_GENERATED_SOUND_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that FM-modulated synthesized audio can be generated and played back using the WebAudio API on the DUT.
+To validate that FM-modulated synthesized audio can be generated and played back using the WebAudio API on the DUT. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,4 +44,4 @@ To validate that FM-modulated synthesized audio can be generated and played back
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

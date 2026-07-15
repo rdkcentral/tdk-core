@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_12
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_TIME_CHANGE_SETTINGS
+RDKV_CERT_MANUAL_RDK_UI_Time_Change_Settings
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_TIME_CHANGE_SETTINGS
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the displayed time on the RDK UI can be updated by changing the timezone via Settings.
+To validate that the displayed time on the RDK UI can be updated by changing the timezone via Settings. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that selected Timezone should be set and a tick mark should be seen against it. The time on UI should be updated according to the newly selected Time zone.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -35,4 +35,4 @@ To validate that the displayed time on the RDK UI can be updated by changing the
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

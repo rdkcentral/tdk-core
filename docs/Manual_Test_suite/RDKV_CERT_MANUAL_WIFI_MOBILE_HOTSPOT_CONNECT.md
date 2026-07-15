@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WIFI_13
 ## TestCase Name
-RDKV_CERT_MANUAL_WIFI_MOBILE_HOTSPOT_CONNECT
+RDKV_CERT_MANUAL_Wifi_Mobile_Hotspot_Connect
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WIFI_MOBILE_HOTSPOT_CONNECT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can successfully connect to and use a mobile hotspot as a Wi-Fi network.
+To validate that the DUT can successfully connect to and use a mobile hotspot as a Wi-Fi network. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,4 +44,4 @@ To validate that the DUT can successfully connect to and use a mobile hotspot as
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

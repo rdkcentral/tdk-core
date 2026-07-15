@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_IMAGEFORMATS_02
+RDKV_MANUAL_IMG_FORMAT_02
 ## TestCase Name
-RDKV_CERT_MANUAL_IMG_FORMAT_JPEG_SUPPORT_VERIFY
+RDKV_CERT_MANUAL_Img_Format_JPEG_Support_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IMG_FORMAT_JPEG_SUPPORT_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the JPEG image format is correctly rendered and displayed by the DUT via the Browser Test application.
+To validate that the JPEG image format is correctly rendered and displayed by the DUT via the Browser Test application. This test exercises the WPE browser image rendering pipeline and the SVG/HTML test page to validate decoding and display of the target image format. The test confirms that the Browser Test App should terminate gracefully and the RDK UI Home screen should be visible on the TV/display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -43,4 +43,4 @@ To validate that the JPEG image format is correctly rendered and displayed by th
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_17
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_CAST_DIRECT_VIDEO_FROM_DUT
+RDKV_CERT_MANUAL_Xdial_Cast_Direct_Video_From_Dut
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_CAST_DIRECT_VIDEO_FROM_DUT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a video can be selected and played directly from the DUT (TV) using the DUT remote, independently of the external device (smartphone), during an active XDial casting session.
+To validate that a video can be selected and played directly from the DUT (TV) using the DUT remote, independently of the external device (smartphone), during an active XDial casting session. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -43,4 +43,4 @@ To validate that a video can be selected and played directly from the DUT (TV) u
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WIFI_02
 ## TestCase Name
-RDKV_CERT_MANUAL_WIFI_STARTUP_WRONG_CRED
+RDKV_CERT_MANUAL_Wifi_Startup_Wrong_Cred
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WIFI_STARTUP_WRONG_CRED
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that an appropriate connection failure error message is displayed when incorrect credentials are entered during Wi-Fi SSID connection from the startup network selection screen.
+To validate that an appropriate connection failure error message is displayed when incorrect credentials are entered during Wi-Fi SSID connection from the startup network selection screen. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the Wi-Fi network selection screen should be displayed with a clear CONNECTION_FAILED error message explicitly indicating that the failure was due to incorrect credentials.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -40,4 +40,4 @@ To validate that an appropriate connection failure error message is displayed wh
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

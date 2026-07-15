@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_POWER_13
 ## TestCase Name
-RDKV_CERT_MANUAL_PWR_MGMT_DEEP_SLEEP_USB_ETH_WAKEUP
+RDKV_CERT_MANUAL_Pwr_Mgmt_Deep_Sleep_Usb_Eth_Wakeup
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_PWR_MGMT_DEEP_SLEEP_USB_ETH_WAKEUP
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT wakes up from DEEP SLEEP mode upon connection of a USB Ethernet dongle.
+To validate that the DUT wakes up from DEEP SLEEP mode upon connection of a USB Ethernet dongle. This test exercises the `org.rdk.PowerManager` plugin and the RDK power-state machine (including standby, deep-sleep, and wake triggers) to validate power-mode transitions. The test confirms that the application should launch successfully and play content with proper Audio and Video output.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -33,10 +33,10 @@ To validate that the DUT wakes up from DEEP SLEEP mode upon connection of a USB 
 | 2 | Navigate to RDK UI Home screen | Navigate to the RDK UI Home screen by pressing the Home button. | The RDK UI Home screen should launch. |
 | 3 | Enter Deep Sleep mode via Power key | Press the Power button on the Bluetooth-paired remote to put the DUT into Deep Sleep mode. | The DUT UI should turn off. The serial/SSH console should not be accessible, confirming the device has entered Deep Sleep mode. |
 | 4 | Connect USB Ethernet dongle to DUT | Connect a USB Ethernet dongle to the DUT. | The DUT UI should turn on and the serial/SSH console should become accessible, indicating the DUT has woken up from Deep Sleep mode. |
-| 5 | Validate DUT power state via API | Validate the power state of the DUT via the serial/SSH console using the curl command.<br>Command: curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.getPowerState","params":{}}' http://127.0.0.1:9998/jsonrpc | The curl response should be:<br>{"jsonrpc":"2.0","id":3,"result":{"powerState":"ON","success":true}} |
+| 5 | Validate DUT power state via API | Validate the power state of the DUT via the serial/SSH console using the curl command.<br>Command: `curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.getPowerState","params":{}}' http://127.0.0.1:9998/jsonrpc` | The curl response should be:<br>{"jsonrpc":"2.0","id":3,"result":{"powerState":"ON","success":true}} |
 | 6 | Validate internet access and content playback | Validate internet access on the DUT by launching and playing content on an application such as YouTube. | The application should launch successfully and play content with proper Audio and Video output. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

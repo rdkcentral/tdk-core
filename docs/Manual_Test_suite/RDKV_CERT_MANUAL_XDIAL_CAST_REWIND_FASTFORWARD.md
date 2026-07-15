@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_11
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_CAST_REWIND_FASTFORWARD
+RDKV_CERT_MANUAL_Xdial_Cast_Rewind_Fastforward
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_CAST_REWIND_FASTFORWARD
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that fast-forward and rewind controls on the external device (smartphone) function correctly on the DUT during an active YouTube XDial casting session.
+To validate that fast-forward and rewind controls on the external device (smartphone) function correctly on the DUT during an active YouTube XDial casting session. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -46,4 +46,4 @@ To validate that fast-forward and rewind controls on the external device (smartp
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

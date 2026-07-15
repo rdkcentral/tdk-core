@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_APPS_26
 ## TestCase Name
-RDKV_CERT_MANUAL_APP_FEATURED_VOD_THIRD_HOME_EXIT
+RDKV_CERT_MANUAL_App_Featured_Vod_Third_Home_Exit
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_APP_FEATURED_VOD_THIRD_HOME_EXIT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the RDK UI Home screen is launched when the Home button is pressed during the third Featured Video On Demand (VOD) content playback.
+To validate that the RDK UI Home screen is launched when the Home button is pressed during the third Featured Video On Demand (VOD) content playback. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the video should end gracefully and the RDK UI Home screen should launch.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -35,4 +35,4 @@ To validate that the RDK UI Home screen is launched when the Home button is pres
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

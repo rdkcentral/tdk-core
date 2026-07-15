@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_HDCPCOMPLIANCE_03
+RDKV_MANUAL_HDCP_COMP_03
 ## TestCase Name
-RDKV_CERT_MANUAL_HDCP_COMP_AUTH_STATUS_ON_PLAYBACK
+RDKV_CERT_MANUAL_HDCP_Comp_Auth_Status_On_Playback
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDCP_COMP_AUTH_STATUS_ON_PLAYBACK
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that HDCP authentication is successfully initiated and authenticated when A/V stream playback is active on the DUT.
+To validate that HDCP authentication is successfully initiated and authenticated when A/V stream playback is active on the DUT. This test exercises the `org.rdk.HdcpProfile` plugin and the HDMI output manager to validate HDCP handshake and content-protection compliance on the connected display. The test confirms that the application should terminate gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,4 +44,4 @@ To validate that HDCP authentication is successfully initiated and authenticated
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

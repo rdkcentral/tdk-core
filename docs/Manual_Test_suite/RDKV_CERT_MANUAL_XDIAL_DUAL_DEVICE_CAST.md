@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_09
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_DUAL_DEVICE_CAST
+RDKV_CERT_MANUAL_Xdial_Dual_Device_Cast
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_DUAL_DEVICE_CAST
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the DUT behavior when two external devices (smartphones) simultaneously establish a YouTube XDial casting session to the same DUT.
+To validate the DUT behavior when two external devices (smartphones) simultaneously establish a YouTube XDial casting session to the same DUT. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting sessions on both smartphones should be closed.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -48,4 +48,4 @@ To validate the DUT behavior when two external devices (smartphones) simultaneou
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

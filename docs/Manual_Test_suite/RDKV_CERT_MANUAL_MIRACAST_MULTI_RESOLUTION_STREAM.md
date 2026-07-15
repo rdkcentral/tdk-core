@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MIRACAST_10
 ## TestCase Name
-RDKV_CERT_MANUAL_MIRACAST_MULTI_RESOLUTION_STREAM
+RDKV_CERT_MANUAL_Miracast_Multi_Resolution_Stream
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MIRACAST_MULTI_RESOLUTION_STREAM
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can stream Miracast content correctly at different video resolutions (720p, 1080p, 4K).
+To validate that the DUT can stream Miracast content correctly at different video resolutions (720p, 1080p, 4K). This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the video should stream correctly on the DUT at each resolution without errors or quality degradation.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -38,4 +38,4 @@ To validate that the DUT can stream Miracast content correctly at different vide
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_11
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_DEVICE_INFO_DISPLAY
+RDKV_CERT_MANUAL_RDK_UI_Device_Info_Display
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_DEVICE_INFO_DISPLAY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that device information is displayed correctly on the Device Info screen in the RDK UI Settings.
+To validate that device information is displayed correctly on the Device Info screen in the RDK UI Settings. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that info screen should launch. It should have the details of the following things populated. Serial Number Supported DRM & Key System Firmware Version App Info.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -34,4 +34,4 @@ To validate that device information is displayed correctly on the Device Info sc
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

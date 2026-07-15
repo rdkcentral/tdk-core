@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_APPS_08
 ## TestCase Name
-RDKV_CERT_MANUAL_APP_GUIDE_LAUNCH_FROM_HOME
+RDKV_CERT_MANUAL_App_Guide_Launch_From_Home
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_APP_GUIDE_LAUNCH_FROM_HOME
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Guide screen can be successfully launched from the RDK UI Home screen.
+To validate that the Guide screen can be successfully launched from the RDK UI Home screen. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the Guide screen should launch successfully.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -34,4 +34,4 @@ To validate that the Guide screen can be successfully launched from the RDK UI H
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_36
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_ALL_APPS_UNINSTALL_HOME_VIEW
+RDKV_CERT_MANUAL_RDK_UI_All_Apps_Uninstall_Home_View
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_ALL_APPS_UNINSTALL_HOME_VIEW
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that after uninstalling all installed apps, the RDK UI Home screen displays only two rows -- Recommended Apps and Video on Demand.
+To validate that after uninstalling all installed apps, the RDK UI Home screen displays only two rows -- Recommended Apps and Video on Demand. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the My Apps row should no longer be visible in home screen. The home page of the UI should have only two rows - Recommended Apps and Video on Demand.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -38,4 +38,4 @@ To validate that after uninstalling all installed apps, the RDK UI Home screen d
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

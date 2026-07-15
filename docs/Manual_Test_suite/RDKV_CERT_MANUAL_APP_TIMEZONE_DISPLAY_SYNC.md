@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_APPS_10
 ## TestCase Name
-RDKV_CERT_MANUAL_APP_TIMEZONE_DISPLAY_SYNC
+RDKV_CERT_MANUAL_App_Timezone_Display_Sync
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_APP_TIMEZONE_DISPLAY_SYNC
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the time displayed on the RDK UI Home screen accurately reflects the timezone configured in the device settings.
+To validate that the time displayed on the RDK UI Home screen accurately reflects the timezone configured in the device settings. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the Calcutta time zone time should be displayed in the top right corner of the RDK UI Home screen.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -36,4 +36,4 @@ To validate that the time displayed on the RDK UI Home screen accurately reflect
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

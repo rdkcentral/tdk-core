@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_01
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_LOCAL_DISCOVERY_TOGGLE
+RDKV_CERT_MANUAL_Xdial_Local_Discovery_Toggle
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_LOCAL_DISCOVERY_TOGGLE
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the XDial feature can be disabled and re-enabled on the DUT using the Local Device Discovery setting in the RDK UI.
+To validate that the XDial feature can be disabled and re-enabled on the DUT using the Local Device Discovery setting in the RDK UI. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the Local Device Discovery radio button should be turned on. The DUT name should be visible in the XDial casting device list of the mobile YouTube application.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -34,4 +34,4 @@ To validate that the XDial feature can be disabled and re-enabled on the DUT usi
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

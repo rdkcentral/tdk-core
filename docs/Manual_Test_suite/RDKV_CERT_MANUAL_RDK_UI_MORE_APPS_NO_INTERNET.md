@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_21
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_MORE_APPS_NO_INTERNET
+RDKV_CERT_MANUAL_RDK_UI_More_Apps_No_Internet
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_MORE_APPS_NO_INTERNET
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the RDK UI behavior when the More Apps button is pressed and the DUT fails to connect to the App Catalogue server due to a network issue.
+To validate the RDK UI behavior when the More Apps button is pressed and the DUT fails to connect to the App Catalogue server due to a network issue. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that error message should close and return to previous screen.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -37,4 +37,4 @@ To validate the RDK UI behavior when the More Apps button is pressed and the DUT
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_24
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_APP_INSTALL_DUPLICATE_PRESS
+RDKV_CERT_MANUAL_RDK_UI_App_Install_Duplicate_Press
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_APP_INSTALL_DUPLICATE_PRESS
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that pressing an installed app tile from various locations in the RDK UI always launches the application successfully, regardless of the app's previous state (cold or hot launch).
+To validate that pressing an installed app tile from various locations in the RDK UI always launches the application successfully, regardless of the app's previous state (cold or hot launch). This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that launched App should close and The RDK UI Home screen should launch.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -42,4 +42,4 @@ To validate that pressing an installed app tile from various locations in the RD
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

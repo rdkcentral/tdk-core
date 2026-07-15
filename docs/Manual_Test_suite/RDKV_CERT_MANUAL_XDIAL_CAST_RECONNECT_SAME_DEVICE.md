@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_13
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_CAST_RECONNECT_SAME_DEVICE
+RDKV_CERT_MANUAL_Xdial_Cast_Reconnect_Same_Device
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_CAST_RECONNECT_SAME_DEVICE
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that an XDial casting session can be successfully re-established using the same external device (smartphone) after a previous casting session has been properly disconnected.
+To validate that an XDial casting session can be successfully re-established using the same external device (smartphone) after a previous casting session has been properly disconnected. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -47,4 +47,4 @@ To validate that an XDial casting session can be successfully re-established usi
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

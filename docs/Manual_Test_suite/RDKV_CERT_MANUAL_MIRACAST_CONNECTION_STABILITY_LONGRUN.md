@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MIRACAST_07
 ## TestCase Name
-RDKV_CERT_MANUAL_MIRACAST_CONNECTION_STABILITY_LONGRUN
+RDKV_CERT_MANUAL_Miracast_Connection_Stability_Longrun
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MIRACAST_CONNECTION_STABILITY_LONGRUN
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Miracast connection between the mobile device and the DUT remains stable and without interruption over an extended period of time.
+To validate that the Miracast connection between the mobile device and the DUT remains stable and without interruption over an extended period of time. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the Miracast connection should remain stable throughout the duration without any disconnections or significant lag.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -38,4 +38,4 @@ To validate that the Miracast connection between the mobile device and the DUT r
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

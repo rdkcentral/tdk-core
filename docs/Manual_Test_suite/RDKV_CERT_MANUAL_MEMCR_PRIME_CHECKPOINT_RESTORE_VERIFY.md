@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MEMCR_10
 ## TestCase Name
-RDKV_CERT_MANUAL_MEMCR_PRIME_CHECKPOINT_RESTORE_VERIFY
+RDKV_CERT_MANUAL_Memcr_Prime_Checkpoint_Restore_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MEMCR_PRIME_CHECKPOINT_RESTORE_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Amazon Prime Video application state is serialized to disk upon hibernation (Home key press) and correctly deserialized and resumed from the same playback position upon relaunch.
+To validate that the Amazon Prime Video application state is serialized to disk upon hibernation (Home key press) and correctly deserialized and resumed from the same playback position upon relaunch. This test exercises the `memcr` memory checkpoint and restore service together with the application lifecycle manager to validate suspend-and-resume behaviour of DAC applications. The test confirms that the directory should be empty — confirming that the state has been deserialized and the app fully restored.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -45,4 +45,4 @@ To validate that the Amazon Prime Video application state is serialized to disk 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

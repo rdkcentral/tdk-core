@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WIFI_05
 ## TestCase Name
-RDKV_CERT_MANUAL_WIFI_AUTO_SWITCH_TO_ETH
+RDKV_CERT_MANUAL_Wifi_Auto_Switch_To_Eth
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WIFI_AUTO_SWITCH_TO_ETH
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT automatically switches to the Ethernet interface when an Ethernet cable is reconnected while the DUT is connected to a Wi-Fi network.
+To validate that the DUT automatically switches to the Ethernet interface when an Ethernet cable is reconnected while the DUT is connected to a Wi-Fi network. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -46,4 +46,4 @@ To validate that the DUT automatically switches to the Ethernet interface when a
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

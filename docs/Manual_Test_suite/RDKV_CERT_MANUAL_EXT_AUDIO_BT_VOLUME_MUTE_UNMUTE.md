@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_EXTERNALAUDIO_06
+RDKV_MANUAL_EXT_AUDIO_06
 ## TestCase Name
-RDKV_CERT_MANUAL_EXT_AUDIO_BT_VOLUME_MUTE_UNMUTE
+RDKV_CERT_MANUAL_Ext_Audio_BT_Volume_Mute_Unmute
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_EXT_AUDIO_BT_VOLUME_MUTE_UNMUTE
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that audio streaming can be successfully muted and unmuted on an external Bluetooth device during active playback.
+To validate that audio streaming can be successfully muted and unmuted on an external Bluetooth device during active playback. This test exercises the RDK audio output manager, the HDMI ARC/eARC interface, and the audio settings APIs to validate external audio device connectivity and output routing. The test confirms that the launched video application should terminate gracefully and the RDK RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -34,14 +34,14 @@ To validate that audio streaming can be successfully muted and unmuted on an ext
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Execute TC02 steps as prerequisite | Execute all steps from TC_EXTERNALAUDIO_MANUAL_02 (Start streaming from External BT device) as a prerequisite for this test. | Refer to the expected results of TC_EXTERNALAUDIO_MANUAL_02 (Start streaming from External BT device). |
-| 2 | Mute audio stream via BT API | Execute the following curl command to mute the audio stream via the external Bluetooth device (set the mute parameter to 1 to mute).<br>curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 42, "method": "org.rdk.Bluetooth.setDeviceVolumeMuteInfo", "params": {"deviceID": "<deviceID>", "deviceType": "WEARABLE HEADSET", "volume": "150", "mute": "1"}}' http://127.0.0.1:9998/jsonrpc | Audio streaming should be muted and no audio should be heard from the external Bluetooth device and curl response should be like this<br><br>{"jsonrpc":"2.0","id":42,"result":{"success":true}} |
-| 3 | Retrieve volume and mute status | Execute the following curl command to retrieve the current volume and mute status of the external Bluetooth device.<br>curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 42, "method": "org.rdk.Bluetooth.getDeviceVolumeMuteInfo", "params": {"deviceID": "<deviceID>", "deviceType": "WEARABLE HEADSET"}' http://127.0.0.1:9998/jsonrpc | Mute value should return true and curl response should be like this<br><br>{"jsonrpc":"2.0","id":42,"result":{"volumeinfo":{"volume":"150","mute":true},"success":true}} |
-| 4 | Unmute audio stream via BT API | Execute the following curl command to unmute the audio stream via the external Bluetooth device (set the mute parameter to 0 to unmute).<br>curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 42, "method": "org.rdk.Bluetooth.setDeviceVolumeMuteInfo", "params": {"deviceID": "<deviceID>", "deviceType": "WEARABLE HEADSET", "volume": "150", "mute": "0"}}' http://127.0.0.1:9998/jsonrpc | Audio streaming should resume and audio should be heard from the external Bluetooth device and curl response should be like this<br><br>{"jsonrpc":"2.0","id":42,"result":{"success":true}} |
-| 5 | Retrieve volume and mute status | Execute the following curl command to retrieve the current volume and mute status of the external Bluetooth device.<br>curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 42, "method": "org.rdk.Bluetooth.getDeviceVolumeMuteInfo", "params": {"deviceID": "<deviceID>", "deviceType": "WEARABLE HEADSET"}' http://127.0.0.1:9998/jsonrpc | Mute value should return false and curl response should be like this<br><br>{"jsonrpc":"2.0","id":42,"result":{"volumeinfo":{"volume":"150","mute":false},"success":true}} |
+| 2 | Mute audio stream via BT API | Execute the following curl command to mute the audio stream via the external Bluetooth device (set the mute parameter to 1 to mute).<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 42, "method": "org.rdk.Bluetooth.setDeviceVolumeMuteInfo", "params": {"deviceID": "<deviceID>", "deviceType": "WEARABLE HEADSET", "volume": "150", "mute": "1"}}' http://127.0.0.1:9998/jsonrpc` | Audio streaming should be muted and no audio should be heard from the external Bluetooth device and curl response should be like this<br><br>{"jsonrpc":"2.0","id":42,"result":{"success":true}} |
+| 3 | Retrieve volume and mute status | Execute the following curl command to retrieve the current volume and mute status of the external Bluetooth device.<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 42, "method": "org.rdk.Bluetooth.getDeviceVolumeMuteInfo", "params": {"deviceID": "<deviceID>", "deviceType": "WEARABLE HEADSET"}' http://127.0.0.1:9998/jsonrpc` | Mute value should return true and curl response should be like this<br><br>{"jsonrpc":"2.0","id":42,"result":{"volumeinfo":{"volume":"150","mute":true},"success":true}} |
+| 4 | Unmute audio stream via BT API | Execute the following curl command to unmute the audio stream via the external Bluetooth device (set the mute parameter to 0 to unmute).<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 42, "method": "org.rdk.Bluetooth.setDeviceVolumeMuteInfo", "params": {"deviceID": "<deviceID>", "deviceType": "WEARABLE HEADSET", "volume": "150", "mute": "0"}}' http://127.0.0.1:9998/jsonrpc` | Audio streaming should resume and audio should be heard from the external Bluetooth device and curl response should be like this<br><br>{"jsonrpc":"2.0","id":42,"result":{"success":true}} |
+| 5 | Retrieve volume and mute status | Execute the following curl command to retrieve the current volume and mute status of the external Bluetooth device.<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 42, "method": "org.rdk.Bluetooth.getDeviceVolumeMuteInfo", "params": {"deviceID": "<deviceID>", "deviceType": "WEARABLE HEADSET"}' http://127.0.0.1:9998/jsonrpc` | Mute value should return false and curl response should be like this<br><br>{"jsonrpc":"2.0","id":42,"result":{"volumeinfo":{"volume":"150","mute":false},"success":true}} |
 | 6 | Validate audio streaming is functional | Validate audio streaming from the external Bluetooth device. | Audio streaming from the external Bluetooth device should be functioning as expected and audio should be audible. |
 | 7 | Close video app via Back key | Close/exit the launched video application by pressing the Back key on the remote. | The launched video application should terminate gracefully and the RDK RDK UI Home screen should be visible on the display. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

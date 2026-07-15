@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_POWER_09
 ## TestCase Name
-RDKV_CERT_MANUAL_PWR_MGMT_SCREENSAVER_ON_INACTIVITY
+RDKV_CERT_MANUAL_Pwr_Mgmt_Screensaver_On_Inactivity
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_PWR_MGMT_SCREENSAVER_ON_INACTIVITY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the screen saver activates on the DUT after the configured period of user inactivity.
+To validate that the screen saver activates on the DUT after the configured period of user inactivity. This test exercises the `org.rdk.PowerManager` plugin and the RDK power-state machine (including standby, deep-sleep, and wake triggers) to validate power-mode transitions. The test confirms that the screen saver should stop and the RDK UI Home screen should launch.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -40,4 +40,4 @@ To validate that the screen saver activates on the DUT after the configured peri
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

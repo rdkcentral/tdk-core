@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_04
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_REGISTER_PERSIST_POST_REBOOT
+RDKV_CERT_MANUAL_Xdial_Register_Persist_Post_Reboot
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_REGISTER_PERSIST_POST_REBOOT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Dynamic XDial support registration persists on the DUT after a device reboot when an XDial-supported application is already installed.
+To validate that Dynamic XDial support registration persists on the DUT after a device reboot when an XDial-supported application is already installed. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session on the smartphone should be closed.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -43,4 +43,4 @@ To validate that Dynamic XDial support registration persists on the DUT after a 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

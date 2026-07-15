@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_APPS_12
 ## TestCase Name
-RDKV_CERT_MANUAL_APP_YOUTUBE_EXIT_BACK_KEY
+RDKV_CERT_MANUAL_App_Youtube_Exit_Back_Key
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_APP_YOUTUBE_EXIT_BACK_KEY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the YouTube application can be exited gracefully using the Back key press on the remote control.
+To validate that the YouTube application can be exited gracefully using the Back key press on the remote control. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the YouTube application should be terminated gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -41,4 +41,4 @@ To validate that the YouTube application can be exited gracefully using the Back
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

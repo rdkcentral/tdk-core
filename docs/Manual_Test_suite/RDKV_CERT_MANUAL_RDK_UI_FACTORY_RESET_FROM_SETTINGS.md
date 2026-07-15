@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_14
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_FACTORY_RESET_FROM_SETTINGS
+RDKV_CERT_MANUAL_RDK_UI_Factory_Reset_From_Settings
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_FACTORY_RESET_FROM_SETTINGS
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a Factory Reset can be performed from the RDK UI Settings and that all user settings and installed apps are restored to factory defaults after the reset.
+To validate that a Factory Reset can be performed from the RDK UI Settings and that all user settings and installed apps are restored to factory defaults after the reset. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that all of the values set to non default values prior to Factory reset, should be reverted to default values. The Youtube, Prime Video and Netflix logins should be signed out. Wifi connection should be lost Bluetooth should not be in paired state All….
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -39,9 +39,9 @@ To validate that a Factory Reset can be performed from the RDK UI Settings and t
 | 3 | Click Cancel in confirmation dialog | Click on Cancel | The confirmation dialog should close and the screen should return to Settings → Other Settings → Advanced Settings → Device. |
 | 4 | Click Factory Reset button | Click on Factory Reset | A Factory Reset confirmation dialog should appear. |
 | 5 | Click Confirm to proceed with reboot | Click on Confirm | A loading indicator should appear briefly and the DUT should reboot and come up with the RDK splash screen followed by the RDK UI initial setup/pairing screens. |
-| 6 | Validate if the values changed in | Validate if the values changed in precondition(2 to 7 ) are restored to default | All of the values set to non default values prior to Factory reset, should be reverted to default values.<br>The Youtube, Prime Video and Netflix logins should be signed out.<br>Wifi connection should be lost<br>Bluetooth should not be in paired state<br>All installed Apps should be uninstalled or deleted and My Apps section itself could be removed from RDK UI Homepage |
+| 6 | Validate if the values changed are restored to default | Validate if the values changed in precondition(2 to 7 ) are restored to default | All of the values set to non default values prior to Factory reset, should be reverted to default values.<br>The Youtube, Prime Video and Netflix logins should be signed out.<br>Wifi connection should be lost<br>Bluetooth should not be in paired state<br>All installed Apps should be uninstalled or deleted and My Apps section itself could be removed from RDK UI Homepage |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

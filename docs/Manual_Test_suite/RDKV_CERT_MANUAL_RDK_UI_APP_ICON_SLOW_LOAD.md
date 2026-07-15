@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_19
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_APP_ICON_SLOW_LOAD
+RDKV_CERT_MANUAL_RDK_UI_App_Icon_Slow_Load
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_APP_ICON_SLOW_LOAD
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that when app icons take time to load due to network latency, the RDK UI displays a loading/buffering indicator until the Recommended Apps row data fully loads.
+To validate that when app icons take time to load due to network latency, the RDK UI displays a loading/buffering indicator until the Recommended Apps row data fully loads. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that a dedicated page should open which lists all applications available in DAC App Catalogue. The UI should display a loading/buffering indicator (As it is connected to slow network) until the apps row data fully loads.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -35,4 +35,4 @@ To validate that when app icons take time to load due to network latency, the RD
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

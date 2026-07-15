@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_HDMICEC_04
 ## TestCase Name
-RDKV_CERT_MANUAL_HDMI_CEC_TV_POWERON_MIRACAST_NO_IMPACT
+RDKV_CERT_MANUAL_HDMI_CEC_TV_PowerOn_Miracast_No_Impact
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_TV_POWERON_MIRACAST_NO_IMPACT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that powering on the TV via a CEC command does not interrupt or terminate an active Miracast screen casting session.
+To validate that powering on the TV via a CEC command does not interrupt or terminate an active Miracast screen casting session. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that the response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the Miracast casting screen, confirming the casting session was not interrupted.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -37,12 +37,12 @@ To validate that powering on the TV via a CEC command does not interrupt or term
 | 3 | Select DUT from discovered devices list | Select the DUT from the discovered devices list on the mobile device. | The DUT should be selected for Miracast connection. |
 | 4 | Accept Miracast connection request | Accept the Miracast connection request on both the mobile device and the DUT. | The mobile device should connect to the DUT successfully via Miracast. |
 | 5 | Initiate screen mirroring from mobile | Initiate screen mirroring from the mobile device. | The mobile device screen should be mirrored and visible on the DUT via the connected TV/display. |
-| 6 | Query HDMI CEC OTP enabled status | Execute the following curl command in the DUT serial console or SSH terminal to query the HDMI CEC OTP enabled status.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc | The response should confirm OTP is enabled: {"jsonrpc":"2.0","id":3,"result":{"enabled":true,"success":true}} |
-| 7 | Enable HDMI CEC OTP via API | If OTP is not enabled, execute the following command to enable it.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc | The HDMI CEC OTP option should be enabled successfully. |
-| 8 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
-| 9 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the Miracast casting screen, confirming the casting session was not interrupted. |
+| 6 | Query HDMI CEC OTP enabled status | Execute the following curl command in the DUT serial console or SSH terminal to query the HDMI CEC OTP enabled status.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | The response should confirm OTP is enabled: {"jsonrpc":"2.0","id":3,"result":{"enabled":true,"success":true}} |
+| 7 | Enable HDMI CEC OTP via API | If OTP is not enabled, execute the following command to enable it.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc` | The HDMI CEC OTP option should be enabled successfully. |
+| 8 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
+| 9 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the Miracast casting screen, confirming the casting session was not interrupted. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

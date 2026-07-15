@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_APPS_27
 ## TestCase Name
-RDKV_CERT_MANUAL_APP_CLEAR_COOKIES_APP_DATA
+RDKV_CERT_MANUAL_App_Clear_Cookies_App_Data
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_APP_CLEAR_COOKIES_APP_DATA
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that enabling the Clear Cookies and App Data option in the Privacy settings clears all application login sessions on the DUT.
+To validate that enabling the Clear Cookies and App Data option in the Privacy settings clears all application login sessions on the DUT. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that in all the mentioned applications, login sessions should be cleared and the applications should prompt the user to sign in again.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -36,4 +36,4 @@ To validate that enabling the Clear Cookies and App Data option in the Privacy s
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

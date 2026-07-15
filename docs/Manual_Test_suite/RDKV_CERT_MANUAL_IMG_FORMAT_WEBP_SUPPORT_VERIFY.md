@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_IMAGEFORMATS_04
+RDKV_MANUAL_IMG_FORMAT_04
 ## TestCase Name
-RDKV_CERT_MANUAL_IMG_FORMAT_WEBP_SUPPORT_VERIFY
+RDKV_CERT_MANUAL_Img_Format_WebP_Support_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IMG_FORMAT_WEBP_SUPPORT_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the WebP image format is correctly rendered and displayed by the DUT via the Browser Test application.
+To validate that the WebP image format is correctly rendered and displayed by the DUT via the Browser Test application. This test exercises the WPE browser image rendering pipeline and the SVG/HTML test page to validate decoding and display of the target image format. The test confirms that the Browser Test App should terminate gracefully and the RDK UI Home screen should be visible on the TV/display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -37,10 +37,10 @@ To validate that the WebP image format is correctly rendered and displayed by th
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 |  Launch browser test app  | Select the Browser Test App tile under the My Apps section/row of the RDK UI Home screen and press Enter/OK on the remote. If the tile is not visible, launch the app using the org.rdk.AppManager.1.launchApp API.<br>Command: `curl --data-binary '{"jsonrpc":"2.0","id":"3","method":"org.rdk.AppManager.1.launchApp","params":{"appId":"<App_id>"}}' -H 'content-type:text/plain;' http://127.0.0.1:9998/jsonrpc` | The Browser Test App should launch successfully on top of the RDK UI Home screen, displaying the default Browser Test page. The API response should be: {"jsonrpc":"2.0","id":3,"result":null} |
-| 2 |  Navigate to WebP image tile  | Use the Tab key on the keyboard to navigate to the WEBP IMAGE tile under the Image Formats section and press Enter to load the image file. | The WEBP IMAGE tile should load correctly. The .webp image file should be displayed on the RDK UI without errors. |
+| 2 |  Navigate to WebP image tile  | Use the Tab key on the keyboard to navigate to the WebP IMAGE tile under the Image Formats section and press Enter to load the image file. | The WebP IMAGE tile should load correctly. The .webp image file should be displayed on the RDK UI without errors. |
 | 3 |  Close browser test app  | Close the Browser Test App by pressing the Back key on the remote. If the Back key does not close the app, terminate it using the org.rdk.AppManager.terminateApp API.<br>Command: `curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 15, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "<App_Id>"}}' http://127.0.0.1:9998/jsonrpc` | The Browser Test App should terminate gracefully and the RDK UI Home screen should be visible on the TV/display. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

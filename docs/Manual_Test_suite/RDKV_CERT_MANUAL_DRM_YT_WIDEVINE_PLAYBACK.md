@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_DRM_03
 ## TestCase Name
-RDKV_CERT_MANUAL_DRM_YT_WIDEVINE_PLAYBACK
+RDKV_CERT_MANUAL_DRM_YT_Widevine_Playback
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_DRM_YT_WIDEVINE_PLAYBACK
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that YouTube Widevine DRM-protected content playback is functional on the DUT (Operator Specific).
+To validate that YouTube Widevine DRM-protected content playback is functional on the DUT (Operator Specific). This test exercises the RDK DRM plugin (PlayReady or Widevine), the secure content delivery pipeline, and the video player application to validate protected media playback. The test confirms that the YouTube App should be terminated gracefully and the RDK UI Homepage should be visible on the TV.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -39,4 +39,4 @@ To validate that YouTube Widevine DRM-protected content playback is functional o
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

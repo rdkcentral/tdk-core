@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_IMAGEUPGRADE_01
+RDKV_MANUAL_IMG_UPGRADE_01
 ## TestCase Name
-RDKV_CERT_MANUAL_IMG_UPGRADE_XCONF_FW_VIA_API
+RDKV_CERT_MANUAL_Img_Upgrade_Xconf_Fw_Via_Api
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IMG_UPGRADE_XCONF_FW_VIA_API
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the XCONF firmware upgrade behavior from the current test image to a target image using the RDKServices Thunder API.
+To validate the XCONF firmware upgrade behavior from the current test image to a target image using the RDKServices Thunder API. This test exercises the RDK CDL (Code Download) service and the firmware upgrade stack (`XCONF` server configuration, SNMP triggers, or local USB/HTTP methods) to validate the firmware upgrade workflow. The test confirms that the firmware version in /version.txt should reflect the upgraded image version as configured in XCONF (e.g., imagename: ).
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -41,4 +41,4 @@ To validate the XCONF firmware upgrade behavior from the current test image to a
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

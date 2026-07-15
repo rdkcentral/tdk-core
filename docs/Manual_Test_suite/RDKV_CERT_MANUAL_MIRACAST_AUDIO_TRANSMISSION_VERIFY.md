@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MIRACAST_05
 ## TestCase Name
-RDKV_CERT_MANUAL_MIRACAST_AUDIO_TRANSMISSION_VERIFY
+RDKV_CERT_MANUAL_Miracast_Audio_Transmission_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MIRACAST_AUDIO_TRANSMISSION_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that audio is correctly transmitted from the mobile device to the DUT during Miracast screen mirroring, including play and pause controls.
+To validate that audio is correctly transmitted from the mobile device to the DUT during Miracast screen mirroring, including play and pause controls. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the video should resume playing on the DUT with proper audio and video output.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -40,4 +40,4 @@ To validate that audio is correctly transmitted from the mobile device to the DU
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

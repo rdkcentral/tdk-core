@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MEMCR_01
 ## TestCase Name
-RDKV_CERT_MANUAL_MEMCR_PROCESS_ACTIVE_VERIFY
+RDKV_CERT_MANUAL_Memcr_Process_Active_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MEMCR_PROCESS_ACTIVE_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Memcr (checkpoint/restore) process is active and running on the DUT after a hardware reboot.
+To validate that the Memcr (checkpoint/restore) process is active and running on the DUT after a hardware reboot. This test exercises the `memcr` memory checkpoint and restore service together with the application lifecycle manager to validate suspend-and-resume behaviour of DAC applications. The test confirms that the Memcr service status should show Active: active (running). Example output: memcr.service - Memcr checkpoint restore service ... Active: active (running) with Main PID and CGroup entries populated.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -35,4 +35,4 @@ To validate that the Memcr (checkpoint/restore) process is active and running on
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

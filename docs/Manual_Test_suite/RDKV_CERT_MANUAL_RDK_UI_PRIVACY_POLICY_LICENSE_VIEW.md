@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_10
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_PRIVACY_POLICY_LICENSE_VIEW
+RDKV_CERT_MANUAL_RDK_UI_Privacy_Policy_License_View
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_PRIVACY_POLICY_LICENSE_VIEW
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Privacy Policy and License information are accessible and displayed correctly via the RDK UI Settings.
+To validate that the Privacy Policy and License information are accessible and displayed correctly via the RDK UI Settings. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that policy screen should launch and the information should be displayed on screen. The screen should be scrollable to see all the information in screen.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -34,4 +34,4 @@ To validate that the Privacy Policy and License information are accessible and d
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

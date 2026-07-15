@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_09
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_AUDIO_OUTPUT_MODE_SET
+RDKV_CERT_MANUAL_RDK_UI_Audio_Output_Mode_Set
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_AUDIO_OUTPUT_MODE_SET
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the available audio output modes can be set and applied via the RDK UI Settings.
+To validate that the available audio output modes can be set and applied via the RDK UI Settings. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that expected results are similar to steps 3 to 6.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -39,4 +39,4 @@ To validate that the available audio output modes can be set and applied via the
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_HDMICEC_06
 ## TestCase Name
-RDKV_CERT_MANUAL_HDMI_CEC_DISABLE_CONTROL_VIA_UI
+RDKV_CERT_MANUAL_HDMI_CEC_Disable_Control_Via_UI
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_DISABLE_CONTROL_VIA_UI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that CEC control can be disabled from the RDK UI, and that all CEC API commands are rejected with appropriate error responses when CEC is disabled.
+To validate that CEC control can be disabled from the RDK UI, and that all CEC API commands are rejected with appropriate error responses when CEC is disabled. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that the API should reject the command since CEC is disabled. Expected response: {"jsonrpc":"2.0","id":3,"error":{"code":5,"message":"The service is in an illegal state!!!."}}. The TV should not turn off.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -30,11 +30,11 @@ To validate that CEC control can be disabled from the RDK UI, and that all CEC A
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Disable CEC Control toggle via UI | Navigate to Settings > Other Settings > Advanced Settings and disable the CEC Control toggle. | The Settings screen should load and the CEC Control toggle should be turned off successfully. |
-| 2 | Query HDMI CEC OTP enabled status | Execute the following curl command to query the HDMI CEC OTP enabled status.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc | Since CEC is disabled, the API should return an error. Expected response: {"jsonrpc":"2.0","id":3,"error":{"code":5,"message":"The service is in an illegal state!!!."}} |
-| 3 | Enable HDMI CEC OTP via API | Attempt to enable the HDMI CEC OTP option via the API.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc | The API should reject the request since CEC is disabled. Expected response: {"jsonrpc":"2.0","id":3,"error":{"code":5,"message":"The service is in an illegal state!!!."}} |
-| 4 | Send CEC standby command to TV | Attempt to send the CEC standby command to turn the TV off.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc | The API should reject the command since CEC is disabled. Expected response: {"jsonrpc":"2.0","id":3,"error":{"code":5,"message":"The service is in an illegal state!!!."}}. The TV should not turn off. |
+| 2 | Query HDMI CEC OTP enabled status | Execute the following curl command to query the HDMI CEC OTP enabled status.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Since CEC is disabled, the API should return an error. Expected response: {"jsonrpc":"2.0","id":3,"error":{"code":5,"message":"The service is in an illegal state!!!."}} |
+| 3 | Enable HDMI CEC OTP via API | Attempt to enable the HDMI CEC OTP option via the API.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc` | The API should reject the request since CEC is disabled. Expected response: {"jsonrpc":"2.0","id":3,"error":{"code":5,"message":"The service is in an illegal state!!!."}} |
+| 4 | Send CEC standby command to TV | Attempt to send the CEC standby command to turn the TV off.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | The API should reject the command since CEC is disabled. Expected response: {"jsonrpc":"2.0","id":3,"error":{"code":5,"message":"The service is in an illegal state!!!."}}. The TV should not turn off. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_SYSTEM_03
 ## TestCase Name
-RDKV_CERT_MANUAL_SYSTEM_WPEFRAMEWORK_PROCESS_STATUS
+RDKV_CERT_MANUAL_System_Wpeframework_Process_Status
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_SYSTEM_WPEFRAMEWORK_PROCESS_STATUS
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the WPEFramework processes are running successfully and operating as expected on the DUT.
+To validate that the WPEFramework processes are running successfully and operating as expected on the DUT. This test exercises shell commands executed over a serial console or SSH session (such as `systemctl`, `cat`, `ifconfig`, and `journalctl`) to validate the targeted system-level functionality. The test confirms that grep "WPE"`.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -32,4 +32,4 @@ To validate that the WPEFramework processes are running successfully and operati
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

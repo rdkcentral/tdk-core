@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MEMCR_02
 ## TestCase Name
-RDKV_CERT_MANUAL_MEMCR_YOUTUBE_HIBERNATE_ON_HOMEKEY_PRESS
+RDKV_CERT_MANUAL_Memcr_Youtube_Hibernate_On_Homekey_Press
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MEMCR_YOUTUBE_HIBERNATE_ON_HOMEKEY_PRESS
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the YouTube application transitions to the APP_STATE_HIBERNATED state when the Home key is pressed while YouTube is active.
+To validate that the YouTube application transitions to the APP_STATE_HIBERNATED state when the Home key is pressed while YouTube is active. This test exercises the `memcr` memory checkpoint and restore service together with the application lifecycle manager to validate suspend-and-resume behaviour of DAC applications. The test confirms that the YouTube App state returned by getLoadedApps should be APP_STATE_HIBERNATED.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -43,4 +43,4 @@ To validate that the YouTube application transitions to the APP_STATE_HIBERNATED
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

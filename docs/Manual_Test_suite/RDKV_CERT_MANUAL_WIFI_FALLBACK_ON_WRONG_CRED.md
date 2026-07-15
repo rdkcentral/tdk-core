@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WIFI_17
 ## TestCase Name
-RDKV_CERT_MANUAL_WIFI_FALLBACK_ON_WRONG_CRED
+RDKV_CERT_MANUAL_Wifi_Fallback_On_Wrong_Cred
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WIFI_FALLBACK_ON_WRONG_CRED
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT automatically falls back to the previously connected SSID when a connection attempt to a new SSID fails due to incorrect credentials.
+To validate that the DUT automatically falls back to the previously connected SSID when a connection attempt to a new SSID fails due to incorrect credentials. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -47,4 +47,4 @@ To validate that the DUT automatically falls back to the previously connected SS
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

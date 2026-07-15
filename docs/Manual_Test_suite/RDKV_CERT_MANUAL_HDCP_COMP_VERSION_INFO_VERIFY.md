@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_HDCPCOMPLIANCE_06
+RDKV_MANUAL_HDCP_COMP_06
 ## TestCase Name
-RDKV_CERT_MANUAL_HDCP_COMP_VERSION_INFO_VERIFY
+RDKV_CERT_MANUAL_HDCP_Comp_Version_Info_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDCP_COMP_VERSION_INFO_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT correctly reports the supported, receiver, and current HDCP versions via the HDCP Profile API.
+To validate that the DUT correctly reports the supported, receiver, and current HDCP versions via the HDCP Profile API. This test exercises the `org.rdk.HdcpProfile` plugin and the HDMI output manager to validate HDCP handshake and content-protection compliance on the connected display. The test confirms that the application should terminate gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -43,4 +43,4 @@ To validate that the DUT correctly reports the supported, receiver, and current 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

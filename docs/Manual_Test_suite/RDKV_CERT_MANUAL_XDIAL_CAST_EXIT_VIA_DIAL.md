@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_19
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_CAST_EXIT_VIA_DIAL
+RDKV_CERT_MANUAL_Xdial_Cast_Exit_Via_Dial
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_CAST_EXIT_VIA_DIAL
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the YouTube application can be exited on the DUT using the Back button from the external device (smartphone) Dial remote control screen during an active casting session.
+To validate that the YouTube application can be exited on the DUT using the Back button from the external device (smartphone) Dial remote control screen during an active casting session. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that after each Back press, the navigation should move backward through the YouTube interface (video → YouTube Home screen). After further Back presses, the YouTube application should exit and the RDK UI Home Page should be displayed on the TV.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,4 +44,4 @@ To validate that the YouTube application can be exited on the DUT using the Back
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

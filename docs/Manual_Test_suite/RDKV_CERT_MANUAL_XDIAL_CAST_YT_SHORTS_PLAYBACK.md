@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_18
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_CAST_YT_SHORTS_PLAYBACK
+RDKV_CERT_MANUAL_Xdial_Cast_Yt_Shorts_Playback
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_CAST_YT_SHORTS_PLAYBACK
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the behavior when a YouTube Short is selected from the TV during an active XDial casting session, and that the Short plays correctly after the casting session is disconnected.
+To validate the behavior when a YouTube Short is selected from the TV during an active XDial casting session, and that the Short plays correctly after the casting session is disconnected. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -45,4 +45,4 @@ To validate the behavior when a YouTube Short is selected from the TV during an 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_HDCPCOMPLIANCE_07
+RDKV_MANUAL_HDCP_COMP_07
 ## TestCase Name
-RDKV_CERT_MANUAL_HDCP_COMP_DISPLAY_CONNECT_VERIFY
+RDKV_CERT_MANUAL_HDCP_Comp_Display_Connect_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDCP_COMP_DISPLAY_CONNECT_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT correctly reports the HDMI HDCP display connection status via the HDCP Profile API during active A/V playback.
+To validate that the DUT correctly reports the HDMI HDCP display connection status via the HDCP Profile API during active A/V playback. This test exercises the `org.rdk.HdcpProfile` plugin and the HDMI output manager to validate HDCP handshake and content-protection compliance on the connected display. The test confirms that the application should terminate gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,4 +44,4 @@ To validate that the DUT correctly reports the HDMI HDCP display connection stat
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_IPV6_04
 ## TestCase Name
-RDKV_CERT_MANUAL_IPV6_INTERNET_ACCESS_WIFI_WITH_ETH
+RDKV_CERT_MANUAL_IPv6_Internet_Access_Wifi_With_Eth
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IPV6_INTERNET_ACCESS_WIFI_WITH_ETH
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that internet access is functional on the DUT when connected to an IPv6-supporting Wi-Fi SSID with Ethernet also connected.
+To validate that internet access is functional on the DUT when connected to an IPv6-supporting Wi-Fi SSID with Ethernet also connected. This test exercises the RDK network manager, IPv6 address assignment stack (`ip` / `ifconfig` commands), and the router Advertisement handler to validate dual-stack network connectivity. The test confirms that the selected video content A/V playback should start successfully, confirming internet access is functional via IPv6.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -34,11 +34,11 @@ To validate that internet access is functional on the DUT when connected to an I
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Query IPv6 internet connectivity status | Execute the following curl command in the DUT SSH terminal or serial console to query the IPv6 internet connectivity status.<br>Command: curl -d '{ "jsonrpc": "2.0", "id": 42, "method": "org.rdk.NetworkManager.1.IsConnectedToInternet", "params": { "ipversion": "IPv6" } }' http://127.0.0.1:9998/jsonrpc | The response should confirm IPv6 connectivity via the Ethernet interface. Expected response: {"jsonrpc":"2.0","id":42,"result":{"ipversion":"IPv6","interface":"eth0","connected":true,"state":3,"status":"FULLY_CONNECTED","success":true}} |
+| 1 | Query IPv6 internet connectivity status | Execute the following curl command in the DUT SSH terminal or serial console to query the IPv6 internet connectivity status.<br>Command: `curl -d '{ "jsonrpc": "2.0", "id": 42, "method": "org.rdk.NetworkManager.1.IsConnectedToInternet", "params": { "ipversion": "IPv6" } }' http://127.0.0.1:9998/jsonrpc` | The response should confirm IPv6 connectivity via the Ethernet interface. Expected response: {"jsonrpc":"2.0","id":42,"result":{"ipversion":"IPv6","interface":"eth0","connected":true,"state":3,"status":"FULLY_CONNECTED","success":true}} |
 | 2 | Launch YouTube app | Select the YouTube application tile (or any other application that requires internet) from the My Apps / Recommended Apps section and press Enter/OK on the remote. | The YouTube application should launch successfully (cold launch or hot launch based on the app's previous state). |
 | 3 | Select video and initiate YouTube playback | Select any video content from the YouTube application and initiate playback. | The selected video content A/V playback should start successfully, confirming internet access is functional via IPv6. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

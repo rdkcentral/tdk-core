@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_18
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_APPINFO_NO_APPS_INSTALLED
+RDKV_CERT_MANUAL_RDK_UI_AppInfo_No_Apps_Installed
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_APPINFO_NO_APPS_INSTALLED
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the RDK UI behavior on the App Info page when no DAC apps are installed on the DUT.
+To validate the RDK UI behavior on the App Info page when no DAC apps are installed on the DUT. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the error message should close and return the user to user home screen.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -36,4 +36,4 @@ To validate the RDK UI behavior on the App Info page when no DAC apps are instal
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

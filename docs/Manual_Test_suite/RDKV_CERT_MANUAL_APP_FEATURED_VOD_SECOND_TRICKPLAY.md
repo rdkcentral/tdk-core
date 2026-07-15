@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_APPS_24
 ## TestCase Name
-RDKV_CERT_MANUAL_APP_FEATURED_VOD_SECOND_TRICKPLAY
+RDKV_CERT_MANUAL_App_Featured_Vod_Second_Trickplay
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_APP_FEATURED_VOD_SECOND_TRICKPLAY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the trickplay (fast forward, rewind, pause, and resume) functionality for the second Featured Video On Demand (VOD) content from the RDK UI Home screen.
+To validate the trickplay (fast forward, rewind, pause, and resume) functionality for the second Featured Video On Demand (VOD) content from the RDK UI Home screen. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the application should exit and the RDK UI Home screen should launch.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -40,4 +40,4 @@ To validate the trickplay (fast forward, rewind, pause, and resume) functionalit
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

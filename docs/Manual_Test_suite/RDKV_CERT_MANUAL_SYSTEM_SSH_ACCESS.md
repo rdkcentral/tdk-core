@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_SYSTEM_02
 ## TestCase Name
-RDKV_CERT_MANUAL_SYSTEM_SSH_ACCESS
+RDKV_CERT_MANUAL_System_SSH_Access
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_SYSTEM_SSH_ACCESS
 
 <a name="head.Objective"></a>
 ## Objective
-To validate SSH access to the DUT by establishing a remote login session from the PC/laptop using the DUT IP address and valid credentials, and to ensure that the device command prompt is displayed successfully after login.
+To validate SSH access to the DUT by establishing a remote login session from the PC/laptop using the DUT IP address and valid credentials, and to ensure that the device command prompt is displayed successfully after login. This test exercises shell commands executed over a serial console or SSH session (such as `systemctl`, `cat`, `ifconfig`, and `journalctl`) to validate the targeted system-level functionality. The test confirms that a logout message and "Connection to closed." message should be displayed.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -40,4 +40,4 @@ To validate SSH access to the DUT by establishing a remote login session from th
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

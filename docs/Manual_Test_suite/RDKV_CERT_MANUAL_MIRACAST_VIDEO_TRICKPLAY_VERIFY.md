@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MIRACAST_04
 ## TestCase Name
-RDKV_CERT_MANUAL_MIRACAST_VIDEO_TRICKPLAY_VERIFY
+RDKV_CERT_MANUAL_Miracast_Video_Trickplay_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MIRACAST_VIDEO_TRICKPLAY_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that video trick-play operations (play, pause, rewind, fast-forward, seek) performed on the mobile device are correctly reflected on the DUT during Miracast screen mirroring.
+To validate that video trick-play operations (play, pause, rewind, fast-forward, seek) performed on the mobile device are correctly reflected on the DUT during Miracast screen mirroring. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that all trick-play operations performed on the mobile device should be accurately reflected on the DUT display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -39,4 +39,4 @@ To validate that video trick-play operations (play, pause, rewind, fast-forward,
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

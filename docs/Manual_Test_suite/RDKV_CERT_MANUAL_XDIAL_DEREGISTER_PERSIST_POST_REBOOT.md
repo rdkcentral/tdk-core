@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_05
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_DEREGISTER_PERSIST_POST_REBOOT
+RDKV_CERT_MANUAL_Xdial_Deregister_Persist_Post_Reboot
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_DEREGISTER_PERSIST_POST_REBOOT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Dynamic XDial support is de-registered from the DUT after a device reboot when the XDial-supported application is not installed.
+To validate that Dynamic XDial support is de-registered from the DUT after a device reboot when the XDial-supported application is not installed. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the RDK UI Home Page should remain idle without any unexpected behaviors.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -45,4 +45,4 @@ To validate that Dynamic XDial support is de-registered from the DUT after a dev
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

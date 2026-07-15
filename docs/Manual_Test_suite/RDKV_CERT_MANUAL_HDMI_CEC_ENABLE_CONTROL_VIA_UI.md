@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_HDMICEC_01
 ## TestCase Name
-RDKV_CERT_MANUAL_HDMI_CEC_ENABLE_CONTROL_VIA_UI
+RDKV_CERT_MANUAL_HDMI_CEC_Enable_Control_Via_UI
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_ENABLE_CONTROL_VIA_UI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that CEC control can be enabled from the RDK UI and that the DUT can control the TV power state (standby and on) via HDMI CEC commands.
+To validate that CEC control can be enabled from the RDK UI and that the DUT can control the TV power state (standby and on) via HDMI CEC commands. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that the response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -31,12 +31,12 @@ To validate that CEC control can be enabled from the RDK UI and that the DUT can
 |-|---------|-----------------|----------------|
 | 1 | Navigate to Advanced Settings | Navigate to Settings > Other Settings > Advanced Settings. | The Advanced Settings screen should launch with the CEC Control and Device menus in a selectable state. |
 | 2 | Enable CEC Control toggle | Enable the CEC Control toggle if it is currently disabled. | The CEC Control toggle should be turned on. |
-| 3 | Query HDMI CEC OTP enabled status | Execute the following curl command in the DUT serial console or SSH terminal to query the HDMI CEC OTP enabled status.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc | The response should confirm OTP is enabled: {"jsonrpc":"2.0","id":3,"result":{"enabled":true,"success":true}} |
-| 4 | Enable HDMI CEC OTP via API | If OTP is not enabled, execute the following command to enable it.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc | The HDMI CEC OTP option should be enabled successfully. |
-| 5 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
-| 6 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. |
+| 3 | Query HDMI CEC OTP enabled status | Execute the following curl command in the DUT serial console or SSH terminal to query the HDMI CEC OTP enabled status.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | The response should confirm OTP is enabled: {"jsonrpc":"2.0","id":3,"result":{"enabled":true,"success":true}} |
+| 4 | Enable HDMI CEC OTP via API | If OTP is not enabled, execute the following command to enable it.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc` | The HDMI CEC OTP option should be enabled successfully. |
+| 5 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
+| 6 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

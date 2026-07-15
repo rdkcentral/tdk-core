@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WEBAUDIO_02
 ## TestCase Name
-RDKV_CERT_MANUAL_WEBAUDIO_SPEECH_SYNTHESIS_WITH_VOICES
+RDKV_CERT_MANUAL_Webaudio_Speech_Synthesis_With_Voices
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WEBAUDIO_SPEECH_SYNTHESIS_WITH_VOICES
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the WebAudio Speech Synthesis API can synthesize audio output and enumerate the supported speech synthesis voice options on the DUT.
+To validate that the WebAudio Speech Synthesis API can synthesize audio output and enumerate the supported speech synthesis voice options on the DUT. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -45,4 +45,4 @@ To validate that the WebAudio Speech Synthesis API can synthesize audio output a
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

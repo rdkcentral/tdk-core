@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_AV_11
 ## TestCase Name
-RDKV_CERT_MANUAL_AV_CODEC_AC3_PLAYBACK
+RDKV_CERT_MANUAL_AV_Codec_AC3_Playback
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AV_CODEC_AC3_PLAYBACK
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that AC3 audio stream playback is functional on the DUT via GStreamer.
+To validate that AC3 audio stream playback is functional on the DUT via GStreamer. This test exercises the RDK media pipeline, AV decoder plugins, and the video player application to drive codec-specific playback scenarios. The test confirms that the audio playback should end gracefully without any errors or crashes.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -36,4 +36,4 @@ To validate that AC3 audio stream playback is functional on the DUT via GStreame
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

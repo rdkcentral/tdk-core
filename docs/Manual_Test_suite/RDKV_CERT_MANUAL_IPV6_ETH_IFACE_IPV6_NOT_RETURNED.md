@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_IPV6_08
 ## TestCase Name
-RDKV_CERT_MANUAL_IPV6_ETH_IFACE_IPV6_NOT_RETURNED
+RDKV_CERT_MANUAL_IPv6_Eth_Iface_IPv6_Not_Returned
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IPV6_ETH_IFACE_IPV6_NOT_RETURNED
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the GetPublicIP API does not return an IPv6 address for the Ethernet interface when the Ethernet interface does not have a global IPv6 address, even when a Wi-Fi SSID supporting IPv6 is connected.
+To validate that the GetPublicIP API does not return an IPv6 address for the Ethernet interface when the Ethernet interface does not have a global IPv6 address, even when a Wi-Fi SSID supporting IPv6 is connected. This test exercises the RDK network manager, IPv6 address assignment stack (`ip` / `ifconfig` commands), and the router Advertisement handler to validate dual-stack network connectivity. The test confirms that the response should return {"jsonrpc":"2.0","id":42,"result":{"success":false}}, confirming that no global IPv6 address is available on the eth0 interface. The wlan0 IPv6 address should not be returned when eth0 is explicitly queried.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -29,9 +29,9 @@ To validate that the GetPublicIP API does not return an IPv6 address for the Eth
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Query public IPv6 address for eth0 interface | Execute the following curl command to query the public IPv6 address specifically for the Ethernet (eth0) interface.<br>Command: curl -d '{ "jsonrpc": "2.0", "id": 42, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": {"interface": "eth0", "ipversion": "IPv6" } }' http://127.0.0.1:9998/jsonrpc | The response should return {"jsonrpc":"2.0","id":42,"result":{"success":false}}, confirming that no global IPv6 address is available on the eth0 interface. The wlan0 IPv6 address should not be returned when eth0 is explicitly queried. |
+| 1 | Query public IPv6 address for eth0 interface | Execute the following curl command to query the public IPv6 address specifically for the Ethernet (eth0) interface.<br>Command: `curl -d '{ "jsonrpc": "2.0", "id": 42, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": {"interface": "eth0", "ipversion": "IPv6" } }' http://127.0.0.1:9998/jsonrpc` | The response should return {"jsonrpc":"2.0","id":42,"result":{"success":false}}, confirming that no global IPv6 address is available on the eth0 interface. The wlan0 IPv6 address should not be returned when eth0 is explicitly queried. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

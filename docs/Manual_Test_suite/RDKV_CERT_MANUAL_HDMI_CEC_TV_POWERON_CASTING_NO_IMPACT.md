@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_HDMICEC_03
 ## TestCase Name
-RDKV_CERT_MANUAL_HDMI_CEC_TV_POWERON_CASTING_NO_IMPACT
+RDKV_CERT_MANUAL_HDMI_CEC_TV_PowerOn_Casting_No_Impact
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_TV_POWERON_CASTING_NO_IMPACT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that powering on the TV via a CEC command does not interrupt or terminate an active YouTube casting session on the DUT.
+To validate that powering on the TV via a CEC command does not interrupt or terminate an active YouTube casting session on the DUT. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that the response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the YouTube video. The casting session should not be lost and video should continue playing with proper A/V.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -39,12 +39,12 @@ To validate that powering on the TV via a CEC command does not interrupt or term
 | 1 | Reboot DUT | Reboot the DUT. | The DUT should boot successfully and the RDK UI Home screen should be displayed. |
 | 2 | Verify YouTube app is available | Verify that the YouTube App is installed and available in the My Apps / Recommended Apps section. If not installed, follow the instructions in Preconditions 8–11. | The YouTube App tile should be available in the My Apps / Recommended Apps section. |
 | 3 | Cast YouTube from smartphone to DUT | Cast YouTube from the smartphone to the DUT and initiate video playback. | The YouTube application should launch on the DUT and begin playing the video. |
-| 4 | Query HDMI CEC OTP enabled status | Execute the following curl command in the DUT serial console or SSH terminal to query the HDMI CEC OTP enabled status.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc | The response should confirm OTP is enabled: {"jsonrpc":"2.0","id":3,"result":{"enabled":true,"success":true}} |
-| 5 | Enable HDMI CEC OTP via API | If OTP is not enabled, execute the following command to enable it.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc | The HDMI CEC OTP option should be enabled successfully. |
-| 6 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
-| 7 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the YouTube video. The casting session should not be lost and video should continue playing with proper A/V. |
+| 4 | Query HDMI CEC OTP enabled status | Execute the following curl command in the DUT serial console or SSH terminal to query the HDMI CEC OTP enabled status.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | The response should confirm OTP is enabled: {"jsonrpc":"2.0","id":3,"result":{"enabled":true,"success":true}} |
+| 5 | Enable HDMI CEC OTP via API | If OTP is not enabled, execute the following command to enable it.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc` | The HDMI CEC OTP option should be enabled successfully. |
+| 6 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
+| 7 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the YouTube video. The casting session should not be lost and video should continue playing with proper A/V. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

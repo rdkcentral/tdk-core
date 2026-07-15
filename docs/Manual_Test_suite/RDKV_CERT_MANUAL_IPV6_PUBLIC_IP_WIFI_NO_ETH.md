@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_IPV6_03
 ## TestCase Name
-RDKV_CERT_MANUAL_IPV6_PUBLIC_IP_WIFI_NO_ETH
+RDKV_CERT_MANUAL_IPv6_Public_IP_Wifi_No_Eth
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IPV6_PUBLIC_IP_WIFI_NO_ETH
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT returns the public IPv6 address via the Wi-Fi interface when connected to an IPv6-supporting Wi-Fi SSID and Ethernet is disconnected.
+To validate that the DUT returns the public IPv6 address via the Wi-Fi interface when connected to an IPv6-supporting Wi-Fi SSID and Ethernet is disconnected. This test exercises the RDK network manager, IPv6 address assignment stack (`ip` / `ifconfig` commands), and the router Advertisement handler to validate dual-stack network connectivity. The test confirms that the public IPv6 address should be returned via the Wi-Fi interface. The response should be similar to: {"jsonrpc":"2.0","id":42,"result":{"interface":"wlan0","ipaddress":" ","ipversion":"IPv6","success":true}}. The interface field should be wlan0….
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -29,9 +29,9 @@ To validate that the DUT returns the public IPv6 address via the Wi-Fi interface
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Query public IPv6 address via API | Execute the following curl command to retrieve the public IPv6 IP address.<br>Command: curl -d '{ "jsonrpc": "2.0", "id": 42, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": { "ipversion": "IPv6" } }' http://127.0.0.1:9998/jsonrpc | The public IPv6 address should be returned via the Wi-Fi interface. The response should be similar to: {"jsonrpc":"2.0","id":42,"result":{"interface":"wlan0","ipaddress":"<IPv6_Address>","ipversion":"IPv6","success":true}}. The interface field should be wlan0 since Ethernet is disconnected. |
+| 1 | Query public IPv6 address via API | Execute the following curl command to retrieve the public IPv6 IP address.<br>Command: `curl -d '{ "jsonrpc": "2.0", "id": 42, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": { "ipversion": "IPv6" } }' http://127.0.0.1:9998/jsonrpc` | The public IPv6 address should be returned via the Wi-Fi interface. The response should be similar to: {"jsonrpc":"2.0","id":42,"result":{"interface":"wlan0","ipaddress":"<IPv6_Address>","ipversion":"IPv6","success":true}}. The interface field should be wlan0 since Ethernet is disconnected. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

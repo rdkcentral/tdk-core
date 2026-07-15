@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WEBAUDIO_10
 ## TestCase Name
-RDKV_CERT_MANUAL_WEBAUDIO_CODEC_MP3_128K_44KHZ
+RDKV_CERT_MANUAL_Webaudio_Codec_MP3_128k_44khz
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WEBAUDIO_CODEC_MP3_128K_44KHZ
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can successfully decode an MP3 audio file (128 kbps, 44 kHz) using the WebAudio API and report the correct codec metadata.
+To validate that the DUT can successfully decode an MP3 audio file (128 kbps, 44 kHz) using the WebAudio API and report the correct codec metadata. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -43,4 +43,4 @@ To validate that the DUT can successfully decode an MP3 audio file (128 kbps, 44
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

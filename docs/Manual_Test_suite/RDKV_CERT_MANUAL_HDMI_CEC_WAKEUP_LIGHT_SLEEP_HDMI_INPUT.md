@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_HDMICEC_05
 ## TestCase Name
-RDKV_CERT_MANUAL_HDMI_CEC_WAKEUP_LIGHT_SLEEP_HDMI_INPUT
+RDKV_CERT_MANUAL_HDMI_CEC_Wakeup_Light_Sleep_HDMI_Input
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_WAKEUP_LIGHT_SLEEP_HDMI_INPUT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT wakes up from Light Sleep state when the HDMI input source is selected on the connected CEC-enabled TV.
+To validate that the DUT wakes up from Light Sleep state when the HDMI input source is selected on the connected CEC-enabled TV. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that the DUT should wake up from Light Sleep mode and the RDK UI Home screen should be displayed on the TV.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -33,11 +33,11 @@ To validate that the DUT wakes up from Light Sleep state when the HDMI input sou
 |-|---------|-----------------|----------------|
 | 1 | Reboot DUT | Reboot the DUT. | The DUT should boot successfully and the RDK UI Home screen should be displayed. |
 | 2 | Put DUT into Light Sleep mode | Press the Power button on the remote to put the DUT into Light Sleep mode. | The DUT should transition to Light Sleep mode. |
-| 3 | Query HDMI CEC OTP enabled status | Execute the following curl command in the DUT serial console or SSH terminal to query the HDMI CEC OTP enabled status.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc | The response should confirm OTP is enabled: {"jsonrpc":"2.0","id":3,"result":{"enabled":true,"success":true}} |
-| 4 | Enable HDMI CEC OTP via API | If OTP is not enabled, execute the following command to enable it.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc | The HDMI CEC OTP option should be enabled successfully. |
+| 3 | Query HDMI CEC OTP enabled status | Execute the following curl command in the DUT serial console or SSH terminal to query the HDMI CEC OTP enabled status.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | The response should confirm OTP is enabled: {"jsonrpc":"2.0","id":3,"result":{"enabled":true,"success":true}} |
+| 4 | Enable HDMI CEC OTP via API | If OTP is not enabled, execute the following command to enable it.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc` | The HDMI CEC OTP option should be enabled successfully. |
 | 5 | Select HDMI input on TV to wake DUT | On the TV, select the HDMI input source to which the DUT is connected. | The DUT should wake up from Light Sleep mode and the RDK UI Home screen should be displayed on the TV. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

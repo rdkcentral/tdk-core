@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_HDMICEC_02
 ## TestCase Name
-RDKV_CERT_MANUAL_HDMI_CEC_TV_POWERON_SCREEN_RESTORE
+RDKV_CERT_MANUAL_HDMI_CEC_TV_PowerOn_Screen_Restore
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_TV_POWERON_SCREEN_RESTORE
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that when the TV is powered on via a CEC command, the RDK UI restores the screen that was active immediately before the TV was turned off.
+To validate that when the TV is powered on via a CEC command, the RDK UI restores the screen that was active immediately before the TV was turned off. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that the response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the video itself, continuing playback with proper A/V.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -34,26 +34,26 @@ To validate that when the TV is powered on via a CEC command, the RDK UI restore
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Query HDMI CEC OTP enabled status | Execute the following curl command in the DUT serial console or SSH terminal to query the HDMI CEC OTP enabled status.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc | The response should confirm OTP is enabled: {"jsonrpc":"2.0","id":3,"result":{"enabled":true,"success":true}} |
-| 2 | Enable HDMI CEC OTP via API | If OTP is not enabled, execute the following command to enable it.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc | The HDMI CEC OTP option should be enabled successfully. |
-| 3 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
-| 4 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the Settings screen that was active before standby. |
+| 1 | Query HDMI CEC OTP enabled status | Execute the following curl command in the DUT serial console or SSH terminal to query the HDMI CEC OTP enabled status.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | The response should confirm OTP is enabled: {"jsonrpc":"2.0","id":3,"result":{"enabled":true,"success":true}} |
+| 2 | Enable HDMI CEC OTP via API | If OTP is not enabled, execute the following command to enable it.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.setOTPEnabled","params":{"enabled":true}}' http://127.0.0.1:9998/jsonrpc` | The HDMI CEC OTP option should be enabled successfully. |
+| 3 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
+| 4 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the Settings screen that was active before standby. |
 | 5 | Navigate to RDK UI Home screen | Press the Home button on the remote. | The RDK UI Home screen should launch. |
 | 6 | Launch YouTube app | Select the YouTube App tile from the My Apps / Recommended Apps section and press Enter/OK. | The YouTube App should launch successfully (cold launch or hot launch based on the app's previous state). |
 | 7 | Select video and initiate YouTube playback | Select any video content and initiate playback on YouTube. | The selected video content A/V playback should start successfully. |
-| 8 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
-| 9 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the YouTube video itself, continuing playback with proper A/V. |
+| 8 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
+| 9 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the YouTube video itself, continuing playback with proper A/V. |
 | 10 | Navigate to RDK UI Home screen | Press the Home button on the remote. | The RDK UI Home screen should launch. |
 | 11 | Launch another installed app | Select any other installed application tile from the My Apps / Recommended Apps section and press Enter/OK. | The selected application should launch successfully. |
 | 12 | Select or load content in app | Select any video content or load the application content (e.g., screensaver, game, or benchmark app). | The selected video content A/V playback should start, or the application content should load correctly. |
-| 13 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
-| 14 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the application itself, continuing with proper A/V. |
+| 13 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
+| 14 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the application itself, continuing with proper A/V. |
 | 15 | Navigate to RDK UI Home screen | Press the Home button on the remote. | The RDK UI Home screen should launch. |
 | 16 | Play VOD from RDK UI Home screen | Play any Video on Demand content from the RDK UI Home screen. | The video should play with proper audio and video output. |
-| 17 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
-| 18 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the video itself, continuing playback with proper A/V. |
+| 17 | Send CEC standby command to TV | Send the CEC standby command to turn the TV off.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn off. |
+| 18 | Send CEC OTP command to power on TV | Send the CEC OTP command to turn the TV on.<br>Command: `curl -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.HdmiCecSource.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | The response should be {"jsonrpc":"2.0","id":3,"result":{"success":true}} and the TV should turn on. The RDK UI should restore to the video itself, continuing playback with proper A/V. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

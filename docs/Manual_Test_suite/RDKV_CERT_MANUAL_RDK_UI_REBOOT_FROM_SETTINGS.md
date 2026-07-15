@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_13
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_REBOOT_FROM_SETTINGS
+RDKV_CERT_MANUAL_RDK_UI_Reboot_From_Settings
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_REBOOT_FROM_SETTINGS
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can be rebooted from the RDK UI Settings and that the reboot confirmation dialog functions correctly.
+To validate that the DUT can be rebooted from the RDK UI Settings and that the reboot confirmation dialog functions correctly. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that a loading indicator should appear briefly and the DUT should reboot and come up with the RDK splash screen followed by the RDK UI Home screen.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -37,4 +37,4 @@ To validate that the DUT can be rebooted from the RDK UI Settings and that the r
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

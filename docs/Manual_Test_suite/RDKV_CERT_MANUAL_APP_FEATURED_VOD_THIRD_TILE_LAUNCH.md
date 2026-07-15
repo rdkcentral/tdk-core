@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_APPS_06
 ## TestCase Name
-RDKV_CERT_MANUAL_APP_FEATURED_VOD_THIRD_TILE_LAUNCH
+RDKV_CERT_MANUAL_App_Featured_Vod_Third_Tile_Launch
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_APP_FEATURED_VOD_THIRD_TILE_LAUNCH
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the third Featured Video On Demand (VOD) content can be successfully opened from the RDK UI Home screen.
+To validate that the third Featured Video On Demand (VOD) content can be successfully opened from the RDK UI Home screen. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the third Featured Video on Demand content should open and begin playback with proper Audio and Video output.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -34,4 +34,4 @@ To validate that the third Featured Video On Demand (VOD) content can be success
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MEMCR_09
 ## TestCase Name
-RDKV_CERT_MANUAL_MEMCR_PRIME_MEM_REDUCTION_ON_HOMEKEY_PRESS
+RDKV_CERT_MANUAL_Memcr_Prime_Mem_Reduction_On_Homekey_Press
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MEMCR_PRIME_MEM_REDUCTION_ON_HOMEKEY_PRESS
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the memory consumption of the Amazon Prime Video application process is significantly reduced after pressing the Home key, confirming successful Memcr hibernation.
+To validate that the memory consumption of the Amazon Prime Video application process is significantly reduced after pressing the Home key, confirming successful Memcr hibernation. This test exercises the `memcr` memory checkpoint and restore service together with the application lifecycle manager to validate suspend-and-resume behaviour of DAC applications. The test confirms that awk '{print $2$3}'`.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -45,4 +45,4 @@ To validate that the memory consumption of the Amazon Prime Video application pr
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

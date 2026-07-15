@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_03
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_DYNAMIC_APP_DEREGISTER
+RDKV_CERT_MANUAL_Xdial_Dynamic_App_Deregister
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_DYNAMIC_APP_DEREGISTER
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Dynamic XDial support is de-registered from the DUT and the device is no longer discoverable after uninstalling the XDial-supported application via the RDK UI.
+To validate that Dynamic XDial support is de-registered from the DUT and the device is no longer discoverable after uninstalling the XDial-supported application via the RDK UI. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the RDK UI Home Page should remain idle without any unexpected behaviors.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,4 +44,4 @@ To validate that Dynamic XDial support is de-registered from the DUT and the dev
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

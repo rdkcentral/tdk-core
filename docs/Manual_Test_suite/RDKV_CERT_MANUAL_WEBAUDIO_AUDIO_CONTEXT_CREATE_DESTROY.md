@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WEBAUDIO_05
 ## TestCase Name
-RDKV_CERT_MANUAL_WEBAUDIO_AUDIO_CONTEXT_CREATE_DESTROY
+RDKV_CERT_MANUAL_Webaudio_Audio_Context_Create_Destroy
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WEBAUDIO_AUDIO_CONTEXT_CREATE_DESTROY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can continuously create and destroy AudioContext objects via the WebAudio API without crashing or encountering errors.
+To validate that the DUT can continuously create and destroy AudioContext objects via the WebAudio API without crashing or encountering errors. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -43,4 +43,4 @@ To validate that the DUT can continuously create and destroy AudioContext object
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_34
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_FACTORY_RESET_APPS_REMOVED
+RDKV_CERT_MANUAL_RDK_UI_Factory_Reset_Apps_Removed
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_FACTORY_RESET_APPS_REMOVED
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that after a Factory Reset is performed from the RDK UI Settings, all user-installed apps are removed from the RDK UI Home screen.
+To validate that after a Factory Reset is performed from the RDK UI Settings, all user-installed apps are removed from the RDK UI Home screen. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the user should return to the previous screen.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -38,4 +38,4 @@ To validate that after a Factory Reset is performed from the RDK UI Settings, al
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

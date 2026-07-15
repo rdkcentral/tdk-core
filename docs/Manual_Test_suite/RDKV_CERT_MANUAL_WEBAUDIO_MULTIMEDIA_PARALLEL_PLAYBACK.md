@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WEBAUDIO_08
 ## TestCase Name
-RDKV_CERT_MANUAL_WEBAUDIO_MULTIMEDIA_PARALLEL_PLAYBACK
+RDKV_CERT_MANUAL_Webaudio_Multimedia_Parallel_Playback
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WEBAUDIO_MULTIMEDIA_PARALLEL_PLAYBACK
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can simultaneously handle video playback, audio playback, and speech synthesis in parallel using the WebAudio API without any interruption or error.
+To validate that the DUT can simultaneously handle video playback, audio playback, and speech synthesis in parallel using the WebAudio API without any interruption or error. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,4 +44,4 @@ To validate that the DUT can simultaneously handle video playback, audio playbac
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

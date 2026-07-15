@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MIRACAST_03
 ## TestCase Name
-RDKV_CERT_MANUAL_MIRACAST_RESOLUTION_QUALITY_VERIFY
+RDKV_CERT_MANUAL_Miracast_Resolution_Quality_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MIRACAST_RESOLUTION_QUALITY_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the resolution and visual quality of the mirrored screen are maintained when displaying high-resolution images and video content via Miracast.
+To validate that the resolution and visual quality of the mirrored screen are maintained when displaying high-resolution images and video content via Miracast. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the resolution and visual quality of the mirrored content on the DUT should be maintained without degradation.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -38,4 +38,4 @@ To validate that the resolution and visual quality of the mirrored screen are ma
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

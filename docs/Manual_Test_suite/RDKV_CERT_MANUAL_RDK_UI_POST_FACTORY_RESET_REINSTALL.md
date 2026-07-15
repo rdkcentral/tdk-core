@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_35
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_POST_FACTORY_RESET_REINSTALL
+RDKV_CERT_MANUAL_RDK_UI_Post_Factory_Reset_Reinstall
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_POST_FACTORY_RESET_REINSTALL
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that after a Factory Reset, any app can be reinstalled and launched successfully from the My Apps section, More Apps page, and App Info page.
+To validate that after a Factory Reset, any app can be reinstalled and launched successfully from the My Apps section, More Apps page, and App Info page. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that app should be launched.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,4 +44,4 @@ To validate that after a Factory Reset, any app can be reinstalled and launched 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

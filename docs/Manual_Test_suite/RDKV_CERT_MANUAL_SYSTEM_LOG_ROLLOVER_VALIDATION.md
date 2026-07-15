@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_SYSTEM_04
 ## TestCase Name
-RDKV_CERT_MANUAL_SYSTEM_LOG_ROLLOVER_VALIDATION
+RDKV_CERT_MANUAL_System_Log_Rollover_Validation
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_SYSTEM_LOG_ROLLOVER_VALIDATION
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the log rollover mechanism is functioning as expected on the DUT, ensuring that logs are preserved in the PreviousLogs directory after a reboot.
+To validate that the log rollover mechanism is functioning as expected on the DUT, ensuring that logs are preserved in the PreviousLogs directory after a reboot. This test exercises shell commands executed over a serial console or SSH session (such as `systemctl`, `cat`, `ifconfig`, and `journalctl`) to validate the targeted system-level functionality. The test confirms that the PreviousLogs folder should contain log files, and the log entries captured before the reboot should be present in the respective log file.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -35,4 +35,4 @@ To validate that the log rollover mechanism is functioning as expected on the DU
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

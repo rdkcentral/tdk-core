@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WIFI_16
 ## TestCase Name
-RDKV_CERT_MANUAL_WIFI_UI_DISCONNECT_RECONNECT_REBOOT
+RDKV_CERT_MANUAL_Wifi_UI_Disconnect_Reconnect_Reboot
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WIFI_UI_DISCONNECT_RECONNECT_REBOOT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that after manually disconnecting from a Wi-Fi SSID via the RDK UI, the DUT automatically reconnects to that SSID upon reboot.
+To validate that after manually disconnecting from a Wi-Fi SSID via the RDK UI, the DUT automatically reconnects to that SSID upon reboot. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -49,4 +49,4 @@ To validate that after manually disconnecting from a Wi-Fi SSID via the RDK UI, 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

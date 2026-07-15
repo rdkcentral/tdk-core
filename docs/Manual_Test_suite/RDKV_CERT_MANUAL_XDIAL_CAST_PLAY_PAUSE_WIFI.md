@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_10
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_CAST_PLAY_PAUSE_WIFI
+RDKV_CERT_MANUAL_Xdial_Cast_Play_Pause_Wifi
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_CAST_PLAY_PAUSE_WIFI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that video Play and Pause controls on the external device (smartphone) function correctly on the DUT during an active YouTube XDial casting session when the DUT is connected via Wi-Fi.
+To validate that video Play and Pause controls on the external device (smartphone) function correctly on the DUT during an active YouTube XDial casting session when the DUT is connected via Wi-Fi. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -46,4 +46,4 @@ To validate that video Play and Pause controls on the external device (smartphon
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

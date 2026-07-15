@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_29
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_APP_DOWNLOAD_FAIL_CANCEL_BTN
+RDKV_CERT_MANUAL_RDK_UI_App_Download_Fail_Cancel_Btn
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_APP_DOWNLOAD_FAIL_CANCEL_BTN
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that when an app fails to download due to a network issue, the RDK UI displays an appropriate error overlay that can be dismissed using the Cancel button on the overlay.
+To validate that when an app fails to download due to a network issue, the RDK UI displays an appropriate error overlay that can be dismissed using the Cancel button on the overlay. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the overlay should exit and return the user to previous screen.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -42,4 +42,4 @@ To validate that when an app fails to download due to a network issue, the RDK U
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

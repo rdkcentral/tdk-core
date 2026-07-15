@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_IMAGEUPGRADE_03
+RDKV_MANUAL_IMG_UPGRADE_03
 ## TestCase Name
-RDKV_CERT_MANUAL_IMG_UPGRADE_XCONF_VIA_WIFI
+RDKV_CERT_MANUAL_Img_Upgrade_Xconf_Via_Wifi
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IMG_UPGRADE_XCONF_VIA_WIFI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that XCONF firmware upgrade completes successfully when the DUT is connected via Wi-Fi (no Ethernet), and to verify that the Wi-Fi connection persists after the upgrade.
+To validate that XCONF firmware upgrade completes successfully when the DUT is connected via Wi-Fi (no Ethernet), and to verify that the Wi-Fi connection persists after the upgrade. This test exercises the RDK CDL (Code Download) service and the firmware upgrade stack (`XCONF` server configuration, SNMP triggers, or local USB/HTTP methods) to validate the firmware upgrade workflow. The test confirms that the Wi-Fi connection should persist after the XCONF firmware upgrade. A/V playback and network connectivity should function correctly.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -42,4 +42,4 @@ To validate that XCONF firmware upgrade completes successfully when the DUT is c
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_33
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_MULTI_APP_PARALLEL_UNINSTALL
+RDKV_CERT_MANUAL_RDK_UI_Multi_App_Parallel_Uninstall
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_MULTI_APP_PARALLEL_UNINSTALL
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that multiple apps can be uninstalled sequentially from the App Info screen, and that all uninstalled apps are no longer listed in the My Apps section.
+To validate that multiple apps can be uninstalled sequentially from the App Info screen, and that all uninstalled apps are no longer listed in the My Apps section. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that it should not launch the app, as it is already uninstalled. It should try to download the app again.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -41,4 +41,4 @@ To validate that multiple apps can be uninstalled sequentially from the App Info
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

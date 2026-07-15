@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_WEBAUDIO_03
 ## TestCase Name
-RDKV_CERT_MANUAL_WEBAUDIO_SPEECH_SYNTHESIS_MULTILANG
+RDKV_CERT_MANUAL_Webaudio_Speech_Synthesis_Multilang
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_WEBAUDIO_SPEECH_SYNTHESIS_MULTILANG
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the WebAudio Speech Synthesis API can sequentially synthesize text audio output using three different language voices continuously on the DUT.
+To validate that the WebAudio Speech Synthesis API can sequentially synthesize text audio output using three different language voices continuously on the DUT. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -45,4 +45,4 @@ To validate that the WebAudio Speech Synthesis API can sequentially synthesize t
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_XDIAL_23
 ## TestCase Name
-RDKV_CERT_MANUAL_XDIAL_WAKEUP_FROM_NETWORK_STANDBY
+RDKV_CERT_MANUAL_Xdial_Wakeup_From_Network_Standby
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_XDIAL_WAKEUP_FROM_NETWORK_STANDBY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that an XDial cast request from a secondary device (smartphone/iPad) successfully wakes the DUT from Network Standby mode and initiates content playback on the DUT.
+To validate that an XDial cast request from a secondary device (smartphone/iPad) successfully wakes the DUT from Network Standby mode and initiates content playback on the DUT. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -42,4 +42,4 @@ To validate that an XDial cast request from a secondary device (smartphone/iPad)
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

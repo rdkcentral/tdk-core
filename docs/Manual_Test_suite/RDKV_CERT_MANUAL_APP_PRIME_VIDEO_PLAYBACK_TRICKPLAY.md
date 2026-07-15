@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_APPS_14
 ## TestCase Name
-RDKV_CERT_MANUAL_APP_PRIME_VIDEO_PLAYBACK_TRICKPLAY
+RDKV_CERT_MANUAL_App_Prime_Video_Playback_Trickplay
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_APP_PRIME_VIDEO_PLAYBACK_TRICKPLAY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the Amazon Prime Video application AV playback and trickplay (fast forward, rewind, pause, and resume) functionality.
+To validate the Amazon Prime Video application AV playback and trickplay (fast forward, rewind, pause, and resume) functionality. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the Amazon Prime Video application should terminate gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,4 +44,4 @@ To validate the Amazon Prime Video application AV playback and trickplay (fast f
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

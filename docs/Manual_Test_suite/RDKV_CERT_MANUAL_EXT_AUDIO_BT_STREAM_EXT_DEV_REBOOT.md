@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_EXTERNALAUDIO_05
+RDKV_MANUAL_EXT_AUDIO_05
 ## TestCase Name
-RDKV_CERT_MANUAL_EXT_AUDIO_BT_STREAM_EXT_DEV_REBOOT
+RDKV_CERT_MANUAL_Ext_Audio_BT_Stream_Ext_Dev_Reboot
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_EXT_AUDIO_BT_STREAM_EXT_DEV_REBOOT
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the audio streaming behavior when the external Bluetooth device is rebooted while audio streaming is active.
+To validate the audio streaming behavior when the external Bluetooth device is rebooted while audio streaming is active. This test exercises the RDK audio output manager, the HDMI ARC/eARC interface, and the audio settings APIs to validate external audio device connectivity and output routing. The test confirms that the launched video application should terminate gracefully and the RDK RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -41,4 +41,4 @@ To validate the audio streaming behavior when the external Bluetooth device is r
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

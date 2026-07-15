@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_MIRACAST_02
 ## TestCase Name
-RDKV_CERT_MANUAL_MIRACAST_SCREEN_MIRROR_VERIFY
+RDKV_CERT_MANUAL_Miracast_Screen_Mirror_Verify
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_MIRACAST_SCREEN_MIRROR_VERIFY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the mobile device screen is correctly mirrored on the DUT display via Miracast.
+To validate that the mobile device screen is correctly mirrored on the DUT display via Miracast. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that all actions performed on the mobile device should be accurately mirrored on the DUT display in real time.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -38,4 +38,4 @@ To validate that the mobile device screen is correctly mirrored on the DUT displ
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

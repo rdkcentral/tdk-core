@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_APPS_21
 ## TestCase Name
-RDKV_CERT_MANUAL_APP_NETFLIX_EXIT_BACK_KEY
+RDKV_CERT_MANUAL_App_Netflix_Exit_Back_Key
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_APP_NETFLIX_EXIT_BACK_KEY
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Netflix application can be exited gracefully using the Back key press on the remote control.
+To validate that the Netflix application can be exited gracefully using the Back key press on the remote control. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that video playback should end gracefully. The application should close and the RDK UI Home screen should launch.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -41,4 +41,4 @@ To validate that the Netflix application can be exited gracefully using the Back
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

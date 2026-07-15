@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_15
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_VOICE_REMOTE_DETAILS
+RDKV_CERT_MANUAL_RDK_UI_Voice_Remote_Details
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_VOICE_REMOTE_DETAILS
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Voice Remote Control details are accurately populated on the Voice Remote Control screen.
+To validate that the Voice Remote Control details are accurately populated on the Voice Remote Control screen. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that screen should load with MacAddress, RCU Name,Connection Status, Battery Percent and Software Version of the paired Voice Remote. If pairing is not there, then all of these values will be shown as N/A.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -33,4 +33,4 @@ To validate that the Voice Remote Control details are accurately populated on th
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

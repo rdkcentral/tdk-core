@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_26
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_APP_LAUNCH_FAIL_BACK_BTN
+RDKV_CERT_MANUAL_RDK_UI_App_Launch_Fail_Back_Btn
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_APP_LAUNCH_FAIL_BACK_BTN
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that when an app launch fails due to a network issue, an appropriate error overlay is displayed, and the overlay can be dismissed using the Back button press from the remote.
+To validate that when an app launch fails due to a network issue, an appropriate error overlay is displayed, and the overlay can be dismissed using the Back button press from the remote. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the overlay should exit and return the user to previous screen.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -43,4 +43,4 @@ To validate that when an app launch fails due to a network issue, an appropriate
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

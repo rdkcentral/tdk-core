@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_02
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_NO_SCREEN_FLICKERING
+RDKV_CERT_MANUAL_RDK_UI_No_Screen_Flickering
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_NO_SCREEN_FLICKERING
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that no screen flickering occurs during navigation through the RDK UI Home screen and Settings screens.
+To validate that no screen flickering occurs during navigation through the RDK UI Home screen and Settings screens. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that no flickering during navigations.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -34,4 +34,4 @@ To validate that no screen flickering occurs during navigation through the RDK U
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>

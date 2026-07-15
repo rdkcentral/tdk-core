@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_RDKUI_27
 ## TestCase Name
-RDKV_CERT_MANUAL_RDK_UI_APP_INSTALL_KEYPRESS_IGNORE
+RDKV_CERT_MANUAL_RDK_UI_App_Install_Keypress_Ignore
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_APP_INSTALL_KEYPRESS_IGNORE
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that any user key presses on an app tile while the application is in the download/installation state are ignored without causing errors.
+To validate that any user key presses on an app tile while the application is in the download/installation state are ignored without causing errors. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the key press should be ignored and no error should come.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -37,4 +37,4 @@ To validate that any user key presses on an app tile while the application is in
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
