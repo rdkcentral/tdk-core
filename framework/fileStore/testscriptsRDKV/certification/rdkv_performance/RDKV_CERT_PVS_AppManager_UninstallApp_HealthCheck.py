@@ -35,7 +35,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_UninstallApp_StabilityCheck')
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_UninstallApp_HealthCheck')
 
 #The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
 #configured as "Yes".

@@ -1,8 +1,7 @@
 ## TestCase ID
 RDKV_PERFORMANCE_64
 ## TestCase Name
-RDKV_CERT_PVS_AppManager_MultipleLaunchRequests_StressTest
-
+RDKV_CERT_PVS_AppManager_RepeatedLaunch_MultipleApps
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
