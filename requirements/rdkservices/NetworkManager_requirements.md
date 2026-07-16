@@ -1,0 +1,23 @@
+## NetworkManager Plugin — Specifications
+
+
+| Req ID | Test Scope |
+|:-------|:--------------------------------------|
+| `NM‑REQ‑001` | SHALL return the list of available network interfaces and correctly identify the primary interface among them, with the reported primary interface matching one of the entries in the available interfaces list |
+| `NM‑REQ‑002` | SHALL return a valid public IPv4 address, successfully ping a reachable IPv4 endpoint, successfully trace a route to an IPv4 endpoint, and confirm IPv4 internet connectivity via the internet connectivity check method |
+| `NM‑REQ‑003` | SHALL retrieve the current enabled or disabled state of a specified network interface, SET a new enabled state for that interface, and reflect the updated state in both the interface state query and the available interfaces list |
+| `NM‑REQ‑004` | SHALL return an error response when SetInterfaceState is invoked with missing required parameters, an empty interface name, an invalid interface name, or when GetInterfaceState is invoked without a parameter or with an invalid or empty interface value |
+| `NM‑REQ‑005` | SHALL successfully start and stop a WiFi scan, emit an onAvailableSSIDs event when a scan is active, and confirm that the onAvailableSSIDs event is not emitted after the scan is stopped |
+| `NM‑REQ‑006` | SHALL successfully connect to a 2.4 GHz WiFi network using valid credentials, return the connected SSID via GetConnectedSSID, fire the onWiFiStateChange event on both connect and disconnect transitions, and successfully disconnect from the network |
+| `NM‑REQ‑007` | SHALL successfully connect to a 5 GHz WiFi network using valid credentials, return the correct connected SSID via GetConnectedSSID, and successfully disconnect from the 5 GHz network |
+| `NM‑REQ‑008` | SHALL return the current WiFi state, reflect the connected state after a successful WiFi connection, reflect the disconnected state after a WiFi disconnection, reflect the disconnected state during an active WiFi scan, and return an error state when connection to an invalid SSID is attempted |
+| `NM‑REQ‑009` | SHALL return the list of supported WiFi security modes, return an error when RemoveKnownSSID is called with an invalid SSID, accept an empty SSID for removal without error, and return the known SSID list containing the connected SSID after a successful connection |
+| `NM‑REQ‑010` | SHALL retrieve the current STUN endpoint and port, accept a new STUN endpoint and port via the set method, and confirm the updated values are returned by the subsequent get call |
+| `NM‑REQ‑011` | SHALL accept a single connectivity test endpoint via SetConnectivityTestEndpoints, accept up to five connectivity test endpoints, and confirm that GetConnectivityTestEndpoints returns the endpoints previously set |
+| `NM‑REQ‑012` | SHALL retrieve the current log level, set any valid log level value including the lowest, a mid-range, and the highest supported value, and confirm the updated log level is returned by the subsequent get call |
+| `NM‑REQ‑013` | SHALL return a valid public IPv6 address, confirm IPv6 internet connectivity, and return IPv6 IP settings for the device |
+| `NM‑REQ‑014` | SHALL return an error when Ping is invoked with an invalid endpoint and when Ping is invoked with an invalid IP version value |
+| `NM‑REQ‑015` | SHALL emit a statechange event via the platform controller when the NetworkManager plugin is activated and deactivated, with the event payload identifying the correct callsign and target state, and SHALL confirm the updated activation state after each transition |
+| `NM‑REQ‑016` | SHALL return an error response for all API calls invoked with invalid, empty, or missing required parameters, including SetIPSettings, AddToKnownSSIDs, SetStunEndpoint, GetAvailableInterfaces, GetPrimaryInterface, GetPublicIP, Ping, Trace, IsConnectedToInternet, GetInterfaceState, SetInterfaceState, StopWiFiScan, WiFiDisconnect, and WiFiConnect, each returning the expected error payload |
+| `NM‑REQ‑017` | SHALL identify the operating frequency band (2.4 GHz or 5 GHz) of a specified SSID and SHALL successfully initiate a targeted WiFi scan for a specific SSID on both the 2.4 GHz and 5 GHz bands |
+| `NM‑REQ‑018` | SHALL confirm that the primary network interface is correctly reported after the device returns from a light sleep power state transition |
