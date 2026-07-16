@@ -27,7 +27,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Basic_Sanity_HDMI_Connection_Check');
+obj.configureTestCase(ip,port,'RDKV_Basic_Sanity_Check_HDMI_Connection');
 
 # Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult()
