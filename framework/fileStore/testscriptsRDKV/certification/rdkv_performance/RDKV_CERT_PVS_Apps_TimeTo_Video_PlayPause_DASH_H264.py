@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>4</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_Dash_H264</name>
+  <name>RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_DASH_H264</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -75,7 +75,7 @@
     <expected_output>The video must play and pause within expected range of ms.</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_performance</test_stub_interface>
-    <test_script>RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_Dash_H264</test_script>
+    <test_script>RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_DASH_H264</test_script>
     <skipped>No</skipped>
     <release_version>M98</release_version>
     <remarks></remarks>
@@ -99,7 +99,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_Dash_H264');
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_DASH_H264');
 
 webkit_console_socket = None
 

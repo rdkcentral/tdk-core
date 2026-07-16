@@ -12,7 +12,7 @@ RDKV_CERT_NPVS_Play_MPEG
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Validate MPEG2 video codec with MP3 audio using MPEG streaming. Initialize playbin with mpegpsdemux element, configure westerossink as video sink and alsasink for audio output. Query video dimensions and audio stream count via 'current-video' and 'current-audio' properties. Execute 10-second playback monitoring position advancement, frame rendering via westerossink stats, and verify audio-video synchronization throughout stream.
+Validate MPEG2 video codec with MP3 audio using MPEG streaming. Initialize playbin with mpegpsdemux element, configure westerossink as video sink and alsasink for audio output. Query video dimensions and audio stream count via 'current-video' and 'current-audio' properties. Execute 10-second playback monitoring position advancement and frame rendering via westerossink stats.
 ## Preconditions
 
 | # | Step Name | Step Description | Expected Result |

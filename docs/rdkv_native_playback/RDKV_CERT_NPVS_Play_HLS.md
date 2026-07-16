@@ -12,7 +12,7 @@ RDKV_CERT_NPVS_Play_HLS
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Validate H.264 video codec with AAC audio using HLS streaming. Initialize playbin with hlsdemux element, configure westerossink as video sink and alsasink for audio output. Query video dimensions and audio stream count via 'current-video' and 'current-audio' properties. Execute 10-second playback monitoring position advancement, frame rendering via westerossink stats, and verify audio-video synchronization throughout stream.
+Validate H.264 video codec with AAC audio using HLS streaming. Initialize playbin with hlsdemux element, configure westerossink as video sink and alsasink for audio output. Query video dimensions and audio stream count via 'current-video' and 'current-audio' properties. Execute 10-second playback monitoring position advancement and frame rendering via westerossink stats.
 ## Preconditions
 
 | # | Step Name | Step Description | Expected Result |

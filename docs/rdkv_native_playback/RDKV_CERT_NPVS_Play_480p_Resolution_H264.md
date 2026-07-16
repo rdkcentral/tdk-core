@@ -12,7 +12,7 @@ RDKV_CERT_NPVS_Play_480p_Resolution_H264
 - [Test Attributes](#test-attributes)
 
 ## Objective
-Validate 480p (854×480) resolution playback function with H.264 video codec and AAC audio. Initialize playbin with qtdemux demuxing, query video sink properties and verify resolution matches expected 854×480 (+/-5 pixel tolerance). Execute 10-second playback monitoring position, validate frame rendering statistics. Confirm clean pipeline state transitions and error-free playback.
+Validate 480p (854ï¿½480) resolution playback function with H.264 video codec and AAC audio. Initialize playbin with qtdemux demuxing, query video sink properties and verify resolution matches expected 854ï¿½480 (+/-5 pixel tolerance). Execute 10-second playback monitoring position, validate frame rendering statistics. Confirm clean pipeline state transitions and error-free playback.
 ## Preconditions
 
 | # | Step Name | Step Description | Expected Result |
@@ -32,9 +32,8 @@ Validate 480p (854×480) resolution playback function with H.264 video codec and 
 | 4 | Query Video Dimensions and Validate Resolution | Query `g_object_get(westerossink, "video-height")` and `g_object_get(westerossink, "video-width")` via `g_object_get()`;<br>Extract values (854+/-5 height, 480+/-5 width expected) | Verify video-height == 480+/-5 pixels; Verify video-width == 854+/-5 pixels |
 | 5 | Play Stream and Monitor Position | Execute continuous playback for configured timeout (10 seconds);<br>Monitor position via `gst_element_query_position()` at 100ms intervals | Verify position advances at 1x rate (+/-1 second), no stalls |
 | 6 | Validate Frame Rendering at Resolution | Query `g_object_get(westerossink, "stats")` to verify `rendered_frames` increments consistently at 480p resolution;<br>Verify `dropped_frames` < 1% of rendered_frames | Verify frame statistics indicate proper 480p rendering |
-| 7 | Verify Audio-Video Synchronization | Query `g_object_get(playbin, "n-audio")` property to confirm audio stream;<br>Verify audio and video remain synchronized throughout playback | Verify audio stream present; Verify A/V sync maintained |
-| 8 | Monitor GStreamer Bus | Monitor message bus via `gst_bus_pop()` for errors or warnings; Verify clean decoding without format errors | Verify no decoder or format errors |
-| 9 | Release Resources and Verify Success | Call `terminatePipeline(playbin)` to release all resources;<br>Verify test output contains "Failures: 0" confirming 480p playback successful | Verify clean shutdown; Verify test passed |
+| 7 | Monitor GStreamer Bus | Monitor message bus via `gst_bus_pop()` for errors or warnings; Verify clean decoding without format errors | Verify no decoder or format errors |
+| 8 | Release Resources and Verify Success | Call `terminatePipeline(playbin)` to release all resources;<br>Verify test output contains "Failures: 0" confirming 4K playback successful | Verify clean shutdown; Verify test passed |
 
 ## Test Attributes
 

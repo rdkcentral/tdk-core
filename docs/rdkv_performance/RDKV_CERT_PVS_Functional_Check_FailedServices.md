@@ -16,7 +16,7 @@ To validate that no systemd services have failed on the device by running the sy
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm device is accessible via SSH | The device under test must be accessible via SSH with valid credentials configured. | SSH connection to the device should be established successfully. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -24,7 +24,7 @@ To validate that no systemd services have failed on the device by running the sy
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Establish SSH connection to device | Obtain SSH connection parameters for the device under test to enable remote command execution. | SSH parameters should be retrieved successfully and the connection should be established. |
 | 2 | Query all failed systemd services | SSH into the device and execute the systemctl failed services command to retrieve the list of all failed services: <br>`systemctl --failed` | The command output should be returned successfully without an exception. |
@@ -33,7 +33,7 @@ To validate that no systemd services have failed on the device by running the sy
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 10 mins
 
