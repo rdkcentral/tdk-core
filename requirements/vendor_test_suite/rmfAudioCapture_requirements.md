@@ -2,7 +2,7 @@
 
 | Req ID | Test Scope |
 |:-------|:--------------------------------------|
-| `VTS‑RMFAUDIOCAPTURE‑001` | SHALL open an audio capture session via `RMF_AudioCapture_Open()` and a typed primary capture session via `RMF_AudioCapture_Open_Type()` with `RMF_AC_TYPE_PRIMARY`, each returning `RMF_SUCCESS` with a valid non-null handle, and SHALL close an open session via `RMF_AudioCapture_Close()` returning `RMF_SUCCESS`. |
+| `VTS‑RMFAUDIOCAPTURE‑001` | SHALL open an audio capture session via `RMF_AudioCapture_Open()` and a primary audio capture session via `RMF_AudioCapture_Open_Type()` with `RMF_AC_TYPE_PRIMARY`, each returning `RMF_SUCCESS` with a valid non-null handle, and SHALL close an open session via `RMF_AudioCapture_Close()` returning `RMF_SUCCESS`. |
 | `VTS‑RMFAUDIOCAPTURE‑002` | SHALL retrieve the default capture settings via `RMF_AudioCapture_GetDefaultSettings()`, returning `RMF_SUCCESS` with a populated settings structure. |
 | `VTS‑RMFAUDIOCAPTURE‑003` | SHALL start a capture session via `RMF_AudioCapture_Start()` with a valid data-ready callback and stop it via `RMF_AudioCapture_Stop()`, each returning `RMF_SUCCESS`, and during an active capture session non-zero audio data SHALL be delivered to the registered data-ready callback within the expected timeframe. |
 | `VTS‑RMFAUDIOCAPTURE‑004` | SHALL retrieve the capture status via `RMF_AudioCapture_GetStatus()`, returning `RMF_SUCCESS` with a populated status structure. |
