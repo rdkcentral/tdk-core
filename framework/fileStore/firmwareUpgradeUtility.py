@@ -528,7 +528,7 @@ def triggerFirmwareDownload(obj, fw_binary, logFile, step, scenario=""):
         sleep(5)
         step += 1
         #Validate firmware download initiation from logs
-        command = f"grep -i 'failed' {logFile}"
+        command = f"grep -i 'Firmware upgrade is in progress' {logFile}"
         print(f"Command: {command}")
         tdkTestObj = obj.createTestStep('ExecuteCmd')
         actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
@@ -610,3 +610,4 @@ def manageFirmwareUpgradeCronJob(obj, step, enable=False):
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     return flag
 ########## End of function #########
+
