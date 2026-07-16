@@ -22,7 +22,6 @@ from RFCVariables import *
 from tdkutility import *
 import json
 import requests
-requests.packages.urllib3.disable_warnings()
 from tdkbVariables import *
 
 # get_mac
@@ -75,15 +74,14 @@ def rfc_configure_feature(obj, feature_id, name, param_value_dict):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     tdkTestObj.executeTestCase("SUCCESS")
     try:
-        resp = requests.post(url, headers=headers, data=json.dumps(json_data), verify=False)
+        resp = requests.post(url, headers=headers, json=json_data, timeout=30)
         details = resp.text
         print("Response [%d]: %s" % (resp.status_code, details))
-        expected_param = list(config_data.keys())[0]
-        expected_value = config_data[expected_param]
-        if name in details and expected_param in details and expected_value in details:
-            actualresult = "SUCCESS"
-        else:
+        if not resp.ok or not config_data:
             actualresult = "FAILURE"
+        else:
+            missing = [p for p, v in config_data.items() if p not in details or str(v) not in details]
+            actualresult = "SUCCESS" if (name in details and not missing) else "FAILURE"
     except Exception as e:
         details = str(e)
         actualresult = "FAILURE"
@@ -129,7 +127,7 @@ def rfc_set_feature_rule(obj, rule_id, name, mac):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     tdkTestObj.executeTestCase("SUCCESS")
     try:
-        resp = requests.post(url, headers=headers, data=json.dumps(json_data), verify=False)
+        resp = requests.post(url, headers=headers, json=json_data, timeout=30)
         details = resp.text
         print("Response [%d]: %s" % (resp.status_code, details))
         if name in details and mac.replace(":", "").upper() in details.replace(":", "").upper():
@@ -160,18 +158,18 @@ def rfc_validate_feature_rule(obj, mac, feature_name, param_value_dict):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     tdkTestObj.executeTestCase("SUCCESS")
     try:
-        resp = requests.get(url, verify=False)
+        resp = requests.get(url, timeout=30)
         details = resp.text
         print("Response [%d]: %s" % (resp.status_code, details))
-        # Validation logic: Check if feature name, DM parameter, and its value are present.
+        # Normalize JSON to avoid whitespace/formatting issues
+        try:
+            normalized = json.dumps(resp.json(), separators=(",", ":"))
+        except ValueError:
+            normalized = details
         is_valid = False
-        if feature_name in details:
-            for param, value in param_value_dict.items():
-                expected_string = f'"tr181.{param}":"{value}"'
-                if expected_string in details:
-                    is_valid = True
-                    break
-        actualresult = "SUCCESS" if is_valid else "FAILURE"
+        if feature_name in normalized:
+            is_valid = any(f'"tr181.{param}":"{value}"' in normalized for param, value in param_value_dict.items())
+        actualresult = "SUCCESS" if (resp.ok and is_valid) else "FAILURE"
     except Exception as e:
         details = str(e)
         actualresult = "FAILURE"
@@ -215,7 +213,6 @@ def rfc_restart_service(obj):
 def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
     # Always treat as dictionary and add tr181 prefix to all parameters
     config_data = {f"tr181.{param}": value for param, value in param_value_dict.items()}
-
     json_data = {
         "id": feature_id,
         "name": name,
@@ -238,10 +235,10 @@ def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
     tdkTestObj = sysobj.createTestStep('ExecuteCmd')
     tdkTestObj.executeTestCase("SUCCESS")
     try:
-        resp = requests.put(url, headers=headers, data=json.dumps(json_data), verify=False)
-        sleep(60)
+        resp = requests.put(url, headers=headers, json=json_data, timeout=30)
         details = resp.text
-        actualresult = "SUCCESS"
+        actualresult = "SUCCESS" if resp.ok else "FAILURE"
+        sleep(60)
         print("Response [%d]: %s" % (resp.status_code, details))
     except Exception as e:
         details = str(e)
@@ -254,8 +251,8 @@ def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
         _, restart_result, restart_details = rfc_restart_service(sysobj)
         if "SUCCESS" in restart_result:
             print("RFC service restarted successfully")
-            sleep(10)
-            print("Sleeping for 10 sec after RFC restart...")
+            sleep(20)
+            print("Sleeping for 20 sec after RFC restart...")
             all_reverted = True
             for param, init_val in param_value_dict.items():
                 tdkTestObj_Tr181_Get = obj.createTestStep('TDKB_TR181Stub_Get')
@@ -298,13 +295,13 @@ def rfc_delete_feature_rule(obj, feature_id):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     tdkTestObj.executeTestCase("SUCCESS")
     try:
-        resp = requests.delete(url, headers=headers, verify=False)
+        resp = requests.delete(url, headers=headers, timeout=30)
         details = resp.text
         print("Response [%d]: %s" % (resp.status_code, details))
         actualresult = "SUCCESS" if resp.status_code in (200, 204) else "FAILURE"
         if actualresult == "FAILURE":
             print(details)
-        sleep(10)
+        sleep(20)
     except Exception as e:
         details = str(e)
         actualresult = "FAILURE"
@@ -331,13 +328,13 @@ def rfc_delete_feature(obj, feature_id):
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     tdkTestObj.executeTestCase("SUCCESS")
     try:
-        resp = requests.delete(url, headers=headers, verify=False)
+        resp = requests.delete(url, headers=headers, timeout=30)
         details = resp.text
         print("Response [%d]: %s" % (resp.status_code, details))
         actualresult = "SUCCESS" if resp.status_code in (200, 204) else "FAILURE"
         if actualresult == "FAILURE":
             print(details)
-        sleep(10)
+        sleep(20)
     except Exception as e:
         details = str(e)
         actualresult = "FAILURE"
