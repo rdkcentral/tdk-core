@@ -754,3 +754,101 @@ def rdkv_basic_sanity_getSystemUptime():
             return "FAILURE: systemUptime field not found in response"
     except Exception as e:
         return "FAILURE: Exception during requestSystemUptime: {}".format(e)
+
+# Mandatory strings expected in vulkaninfo output
+_VULKAN_MANDATORY_STRINGS = [
+    "VK_KHR_wayland_surface",
+    "VK_KHR_surface",
+    "VK_KHR_get_surface_capabilities2",
+    "deviceName",
+    "deviceType",
+    "driverID",
+    "driverName",
+    "VK_KHR_swapchain",
+    "QUEUE_GRAPHICS",
+    "QUEUE_COMPUTE",
+    "QUEUE_TRANSFER",
+    "MEMORY_HEAP_DEVICE_LOCAL_BIT",
+    "MEMORY_PROPERTY_HOST_VISIBLE_BIT",
+    "MEMORY_PROPERTY_HOST_COHERENT_BIT",
+    "samplerAnisotropy                       = true",
+    "textureCompressionETC2                  = true",
+    "textureCompressionASTC_LDR              = true",
+    "fragmentStoresAndAtomics                = true",
+]
+
+#-------------------------------------------------------------------
+# RUN VULKANINFO ON DUT VIA SSH
+# Description  : Executes the vulkaninfo command on the DUT via SSH and
+#                returns its raw output. Sets XDG_RUNTIME_DIR=/tmp for
+#                Wayland compatibility.
+# Parameters   : sshMethod   - SSH method string (e.g. "directSSH")
+#                credentials - comma-separated string "host,username,password"
+#                sshPort     - SSH port (string or int)
+# Return Value : Raw vulkaninfo stdout on success, "FAILURE: ..." otherwise
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_runVulkaninfo(sshMethod, credentials, sshPort):
+    command = "XDG_RUNTIME_DIR=/tmp vulkaninfo"
+    print("INFO: Executing command in DUT: {}".format(command))
+    output = rdkv_basic_sanity_executeInDUT(sshMethod, credentials, command, sshPort)
+    if not output or not output.strip():
+        return "FAILURE: No output was obtained from vulkaninfo"
+    print("INFO: vulkaninfo output received ({} chars)".format(len(output)))
+    return output
+
+#-------------------------------------------------------------------
+# VERIFY VULKAN MANDATORY PROPERTIES IN vulkaninfo OUTPUT
+# Description  : Checks that all mandatory Vulkan capability strings are
+#                present in the vulkaninfo output. Reports each missing string.
+# Parameters   : vulkan_output - raw string output from vulkaninfo command
+# Return Value : "SUCCESS" if all mandatory strings found, "FAILURE: ..." otherwise
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_verifyVulkanProperties(vulkan_output):
+    if not vulkan_output or "FAILURE" in vulkan_output:
+        return "FAILURE: Invalid or empty vulkaninfo output"
+    missing = [s for s in _VULKAN_MANDATORY_PROPERTIES if s not in vulkan_output]
+    if missing:
+        for s in missing:
+            print("FAILURE: Missing mandatory property - '{}'".format(s))
+        return "FAILURE: {}/{} mandatory property(s) missing in vulkaninfo output".format(
+            len(missing), len(_VULKAN_MANDATORY_PROPERTIES))
+    print("SUCCESS: All {} mandatory properties found in vulkaninfo output".format(len(_VULKAN_MANDATORY_PROPERTIES)))
+    return "SUCCESS"
+
+#-------------------------------------------------------------------
+# VERIFY VULKAN VERSION IN vulkaninfo OUTPUT
+# Description  : Parses the device apiVersion from vulkaninfo output and
+#                verifies it meets the minimum required version (1.1.0).
+#                Also reports the Vulkan Instance Version if present.
+# Parameters   : vulkan_output - raw string output from vulkaninfo command
+# Return Value : "SUCCESS" if device apiVersion >= 1.1.0, "FAILURE: ..." otherwise
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_verifyVulkanVersion(vulkan_output):
+    import re
+    MIN_VERSION = (1, 1, 0)
+    MIN_VERSION_STR = ".".join(str(v) for v in MIN_VERSION)
+
+    if not vulkan_output or "FAILURE" in vulkan_output:
+        return "FAILURE: Invalid or empty vulkaninfo output"
+
+    # Report Vulkan Instance Version (informational)
+    instance_match = re.search(r"Vulkan Instance Version:\s*(\d+)\.(\d+)\.(\d+)", vulkan_output)
+    if instance_match:
+        print("INFO: Vulkan Instance Version: {}".format(".".join(instance_match.groups())))
+    else:
+        print("INFO: Vulkan Instance Version string not found in output")
+
+    # Verify device apiVersion
+    api_match = re.search(r"apiVersion\s*=\s*(?:\d+\s*)?\(?(\d+)\.(\d+)\.(\d+)\)?", vulkan_output)
+    if not api_match:
+        return "FAILURE: Could not find device apiVersion in vulkaninfo output"
+
+    api_version = tuple(int(x) for x in api_match.groups())
+    api_version_str = ".".join(api_match.groups())
+    print("INFO: Device apiVersion: {}".format(api_version_str))
+
+    if api_version >= MIN_VERSION:
+        print("SUCCESS: Device apiVersion {} >= minimum required {}".format(api_version_str, MIN_VERSION_STR))
+        return "SUCCESS"
+    else:
+        return "FAILURE: Device apiVersion {} < minimum required {}".format(api_version_str, MIN_VERSION_STR)
