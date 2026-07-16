@@ -1,6 +1,6 @@
 # Deep Sleep Manager — Specifications
 
-| Req ID | Test Scope *(Verify that the DUT...)* |
+| Req ID | Test Scope |
 |--------|---------------------------------------|
 | `VTS-DEEPSLEEP-001` | SHALL initialize the Deep Sleep Management module via `PLAT_DS_INIT()` returning `DEEPSLEEPMGR_SUCCESS` and terminate it via `PLAT_DS_TERM()` returning `DEEPSLEEPMGR_SUCCESS`, and SHALL support re-initialization after a prior termination without error. |
 | `VTS-DEEPSLEEP-002` | SHALL place the CPE into deep sleep via `PLAT_DS_SetDeepSleep()` for a valid timeout with network standby both disabled and enabled, returning `DEEPSLEEPMGR_SUCCESS`. Following a timed deep sleep cycle, the wakeup reason retrieved via `PLAT_DS_GetLastWakeupReason()` SHALL be the timer wakeup reason (`DEEPSLEEP_WAKEUPREASON_TIMER`). |
