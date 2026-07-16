@@ -27,7 +27,7 @@ obj = tdklib.TDKScriptingLibrary("native_playback_validation_suite","1",standAlo
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_Play_Play_WAV');
+obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_Play_WAV');
 
 #Set device configurations to default values
 checkAVStatus = "no"
