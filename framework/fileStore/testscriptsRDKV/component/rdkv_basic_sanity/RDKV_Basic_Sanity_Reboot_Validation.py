@@ -93,7 +93,7 @@ if expectedResult in result.upper():
         # ==============================================================
         # STEP 2: Verify device is down (SSH port + Thunder port both inaccessible)
         # ==============================================================
-        if "FAILURE" != result:
+        if "FAILURE" not in details:
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_deviceStatus')
             tdkTestObj.addParameter("expectedStatus", "down")
             tdkTestObj.addParameter("sshPort", SSH_PORT)
@@ -110,7 +110,7 @@ if expectedResult in result.upper():
         # ==============================================================
         # STEP 3: Wait for device to come back up (Thunder port accessible)
         # ==============================================================
-        if "FAILURE" != result:
+        if "FAILURE" not in details:
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_deviceStatus')
             tdkTestObj.addParameter("expectedStatus", "up")
             tdkTestObj.addParameter("sshPort", SSH_PORT)
@@ -129,7 +129,7 @@ if expectedResult in result.upper():
         # ==============================================================
         # STEP 4: Get system uptime and verify device freshly rebooted (< 30 secs)
         # ==============================================================
-        if "FAILURE" != result:
+        if "FAILURE" not in details:
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_getSystemUptime')
             tdkTestObj.executeTestCase(expectedResult)
             result      = tdkTestObj.getResult()
