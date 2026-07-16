@@ -755,8 +755,8 @@ def rdkv_basic_sanity_getSystemUptime():
     except Exception as e:
         return "FAILURE: Exception during requestSystemUptime: {}".format(e)
 
-# Mandatory strings expected in vulkaninfo output
-_VULKAN_MANDATORY_STRINGS = [
+# Mandatory properties expected in vulkaninfo output
+_VULKAN_MANDATORY_PROPERTIES = [
     "VK_KHR_wayland_surface",
     "VK_KHR_surface",
     "VK_KHR_get_surface_capabilities2",
