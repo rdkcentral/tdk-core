@@ -535,19 +535,20 @@ def triggerFirmwareDownload(obj, fw_binary, logFile, step, scenario=""):
         print(f"Command Details: {details.strip()}")
         print(f"TEST STEP {step}: Validate firmware upgrade initiation from logs.")
         if scenario == "invalid":
-            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should fail and failure logs should be present")
+            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should fail")
         else:
-            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should be validated successfully without any failure logs")
-        if actualresult in expectedresult and details.strip() == "":
+            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should be validated successfully.")
+        if actualresult in expectedresult and details.strip() != "":
             fw_flag = 1
-            print(f"ACTUAL RESULT {step}: Firmware download initiation is validated from logs.")
+            print(f"ACTUAL RESULT {step}: Firmware download initiation is validated from logs. Details : {details.strip()}")
         else:
-            print(f"ACTUAL RESULT {step}: Failed to validate firmware download initiation from logs. Details : {details.strip()}")
+            print(f"ACTUAL RESULT {step}: Failed to validate firmware download initiation from logs.")
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print(f"ACTUAL RESULT {step}: Failed to trigger firmware download. Details : {details.strip()}")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     return tdkTestObj, fw_flag, step
+
 ########## End of function #########
 
 
