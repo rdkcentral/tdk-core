@@ -19,17 +19,17 @@ To validate that device information is displayed correctly on the Device Info sc
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Pair Bluetooth remote | Ensure the Bluetooth Remote is paired and connected to the DUT. | The Bluetooth Remote should be paired and connected to the DUT successfully. |
-| 2 | Connect DUT to network | Connect the DUT to Ethernet or Wi-Fi with active internet access. | The DUT should be connected to the network with active internet access. |
-| 3 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected. |
+| 1 | Pair Bluetooth remote | Ensure the Bluetooth Remote is paired and connected to the DUT. | The Bluetooth Remote should be paired and connected to the DUT successfully.|
+| 2 | Connect DUT to network | Connect the DUT to Ethernet or Wi-Fi with active internet access. | The DUT should be connected to the network with active internet access.|
+| 3 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Navigate to Device settings screen | Navigate to Settings / Other Settings / Advanced Settings / Device screen | Screen should launch and it should have Info button |
-| 2 | Open Device Info screen | Press on Info button | Info screen should launch.<br>It should have the details of the following things populated.<br>Serial Number<br>Supported DRM & Key System<br>Firmware Version<br>App Info |
+| 1 | Navigate to Device settings screen | Navigate to Settings / Other Settings / Advanced Settings / Device screen | Screen should launch and it should have Info button|
+| 2 | Open Device Info screen | Press on Info button | Info screen should launch.<br>It should have the details of the following things populated.<br>Serial Number<br>Supported DRM & Key System<br>Firmware Version<br>App Info|
 
 <a name="head.Attributes"></a>
 ## Test Attributes

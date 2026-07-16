@@ -19,17 +19,17 @@ To validate that the Privacy Policy and License information are accessible and d
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Pair Bluetooth remote | Ensure the Bluetooth Remote is paired and connected to the DUT. | The Bluetooth Remote should be paired and connected to the DUT successfully. |
-| 2 | Connect DUT to network | Connect the DUT to Ethernet or Wi-Fi with active internet access. | The DUT should be connected to the network with active internet access. |
-| 3 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected. |
+| 1 | Pair Bluetooth remote | Ensure the Bluetooth Remote is paired and connected to the DUT. | The Bluetooth Remote should be paired and connected to the DUT successfully.|
+| 2 | Connect DUT to network | Connect the DUT to Ethernet or Wi-Fi with active internet access. | The DUT should be connected to the network with active internet access.|
+| 3 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Navigate to Privacy Settings screen | Launch Settings / Other Settings / Privacy screen | Navigation should be proper and UI should display the available options[Local Device Discovery, USB Media Devices, Audio Input, Clear Cookies and App data, Privacy Policy and License]. |
-| 2 | Open Privacy Policy and License screen | Click on Privacy policy and License | Policy screen should launch and the information should be displayed on screen. The screen should be scrollable to see all the information in screen |
+| 1 | Navigate to Privacy Settings screen | Launch Settings / Other Settings / Privacy screen | Navigation should be proper and UI should display the available options[Local Device Discovery, USB Media Devices, Audio Input, Clear Cookies and App data, Privacy Policy and License].|
+| 2 | Open Privacy Policy and License screen | Click on Privacy policy and License | Policy screen should launch and the information should be displayed on screen. The screen should be scrollable to see all the information in screen|
 
 <a name="head.Attributes"></a>
 ## Test Attributes

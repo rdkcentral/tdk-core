@@ -19,17 +19,17 @@ To validate that the POWER key press on the paired Bluetooth remote correctly to
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 |  Connect Ethernet cable  | Connect the DUT to an active network via Ethernet prior to the test. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT. |
-| 2 |  Connect HDMI display  | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display. |
-| 3 |  Ensure bluetooth remote already paired  | Ensure the Bluetooth remote is successfully paired with the DUT prior to the test. | The Bluetooth remote should be paired and functional on the DUT. |
+| 1 |  Connect Ethernet cable  | Connect the DUT to an active network via Ethernet prior to the test. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
+| 2 |  Connect HDMI display  | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display.|
+| 3 |  Ensure bluetooth remote already paired  | Ensure the Bluetooth remote is successfully paired with the DUT prior to the test. | The Bluetooth remote should be paired and functional on the DUT.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 |  Press power key to turn off  | Press the Power key on the remote. | The RDK UI should turn off (display/UI should enter standby state). |
-| 2 |  Press power key to turn on  | Press the Power key again on the remote. | The RDK UI should turn on and the RDK UI Home screen should launch successfully. |
+| 1 |  Press power key to turn off  | Press the Power key on the remote. | The RDK UI should turn off (display/UI should enter standby state).|
+| 2 |  Press power key to turn on  | Press the Power key again on the remote. | The RDK UI should turn on and the RDK UI Home screen should launch successfully.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes

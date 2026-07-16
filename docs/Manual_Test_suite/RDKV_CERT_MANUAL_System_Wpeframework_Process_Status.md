@@ -19,15 +19,15 @@ To validate that the WPEFramework processes are running successfully and operati
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 |  Ensure console access to DUT  | Ensure that either SSH or serial console access to the DUT is available to execute commands. | SSH or serial console access should be available and functional on the DUT. |
+| 1 |  Ensure console access to DUT  | Ensure that either SSH or serial console access to the DUT is available to execute commands. | SSH or serial console access should be available and functional on the DUT.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 |  Access device serial console  | Access the device serial console from the PC/laptop using the configured serial terminal utility. | The serial console should be accessible, and the device prompt should be displayed. |
-| 2 |  Validate WPE process status  | Execute the command to validate the WPE process status.<br>Command: `ps -ef \| grep "WPE"` | All the required WPE processes should be running:<br>- WPEProcess<br>- WPEFramework<br>- WPENetworkProcess<br>- WPEWebProcess |
+| 1 |  Access device serial console  | Access the device serial console from the PC/laptop using the configured serial terminal utility. | The serial console should be accessible, and the device prompt should be displayed.|
+| 2 |  Validate WPE process status  | Execute the command to validate the WPE process status.<br>Command: `ps -ef \| grep "WPE"` | All the required WPE processes should be running:<br>- WPEProcess<br>- WPEFramework<br>- WPENetworkProcess<br>- WPEWebProcess|
 
 <a name="head.Attributes"></a>
 ## Test Attributes

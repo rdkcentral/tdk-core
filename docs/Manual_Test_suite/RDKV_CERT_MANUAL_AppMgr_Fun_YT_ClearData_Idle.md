@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_APPMGR_FUNC_11
+RDKV_MANUAL_APPMGR_FUNC_05
 ## TestCase Name
-RDKV_CERT_MANUAL_AppMgr_Fun_Max_Hibernated_Apps
+RDKV_CERT_MANUAL_AppMgr_Fun_YT_ClearData_Idle
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Max_Hibernated_Apps
 
 <a name="head.Objective"></a>
 ## Objective
-To validate and retrieve the maximum number of applications that can be maintained in the hibernated state using the getMaxHibernatedApps property. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that maxHibernatedApps should be in Hibernated state. No Apps should terminate or relaunched.
+To validate that the user account login for the YouTube application is cleared when the clearAppData API is called even if the application has not been launched. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that youTube App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -31,12 +31,12 @@ To validate and retrieve the maximum number of applications that can be maintain
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Query getMaxHibernatedApps via API | Execute the below curl command to gets the maximum number of apps to maintain in the hibernated state : <br>`curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 21, "method": "org.rdk.AppManager.getMaxHibernatedApps"}' http://127.0.0.1:9998/jsonrpc` | The `getMaxHibernatedApps` API should return a successful response containing the `maxHibernatedApps` value, indicating the maximum number of apps that can be maintained in the hibernated state.|
-| 2 | Launch app from Recommended/My Apps | Select the App tile from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Selected App should be launched successfully  (Either cold launch /hot launch based on the app's previous state)|
-| 3 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | Selected Video Content AV playback should start or App should load its content|
-| 4 | Press Home key to suspend app | Press Home key from remote on the launched Apps | App should not terminate but goes to Hibernated state|
-| 5 | Repeat launch/suspend steps up to maxHibernatedApps | Repeat the steps 3 - 5 on other installed Apps upto the same count of maxHibernatedApps in step 2 | Expected Response should be same as step 3 -5 for maxHibernatedApps|
-| 6 | Verify maxHibernatedApps maintained in hibernated state | Validate that upto maxHibernatedApps is maintained in the Hibernated state | maxHibernatedApps should be in Hibernated state. No Apps should terminate or relaunched|
+| 1 | Verify YouTube app is installed | Validate that YouTube App is already Installed and available in the My Apps/Recommended Apps section/row of RDK UI Homepage. If YouTube is not installed follow the instructions of Precondition 4 | YouTube App should be installed and Tile should be Available in My Apps/Recommended Apps section/row of RDK UI Homepage.|
+| 2 | Clear YouTube app data via clearAppData API | Clear the YouTube App data using the clearAppData API by executing below curl command  :<br>`curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 1, "method": "org.rdk.AppManager.clearAppData", "params": {"appId": "<YouTube App ID>"}}' http://127.0.0.1:9998/jsonrpc` | The `clearAppData` API should return a successful response, and the YouTube App should be closed once the API execution is completed.|
+| 3 | Launch youtube app from the my | Launch Youtube App from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | YouTube App should be launched successfully (cold launch)|
+| 4 | Validate that the "sign in" option | Validate that the "Sign in" option is prominently visible in the sidebar or account menu, indicating no account is currently linked | "Sign in" option should be visible in the sidebar or account menu of Youtube App and no account should be linked|
+| 5 | Sign in to YouTube and verify A/V playback | Sign in with a valid user credentials and Check the YouTube App AV playback | Sign in should be successful and YouTube App AV playback should happen as expected / without errors|
+| 6 | Close YouTube app via Back key | Close/Exit the YouTube App by back key press on remote. | YouTube App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
