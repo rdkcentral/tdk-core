@@ -21,7 +21,6 @@
 import tdklib
 import json
 import ast
-from rdkv_basic_sanitylib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity","1",standAlone=True)
