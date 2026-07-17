@@ -27,11 +27,12 @@ obj = tdklib.TDKScriptingLibrary("native_playback_validation_suite","1",standAlo
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_PlayPause_MultipleTimes_AAC');
+obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_PlaySeek_Forward_Repeated_AAC');
 
 #Set device configurations to default values
 checkAVStatus = "no"
 timeoutInSeconds = "10"
+seekStepInSeconds = "10"
 repeatCount = 3
 
 
@@ -71,6 +72,18 @@ if "SUCCESS" in result.upper():
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
         timeoutInSeconds = timeoutConfigValue
 
+    #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_SEEK_STEP' that specifies the value in seconds to which the pipeline should increment seek position each time
+    tdkTestObj = obj.createTestStep('getDeviceConfigValue')
+    tdkTestObj.addParameter("configKey","NATIVE_PLAYBACK_SEEK_STEP")
+    tdkTestObj.executeTestCase(expectedResult);
+    actualresult = tdkTestObj.getResult();
+    seek_step = tdkTestObj.getResultDetails();
+
+    #If the value of NATIVE_PLAYBACK_SEEK_STEP is retrieved correctly and its value is not empty, seek_step value should be used for calculating the seekposition that has to be passed to the test application
+    #if the device config value is empty, default seek position(20sec) is passed
+    if expectedResult in actualresult.upper() and seek_step != "":
+        seekStepInSeconds = seek_step
+
     #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_REPEAT_COUNT' that specifies the number of times the operations should be reapeted
     tdkTestObj = obj.createTestStep('getDeviceConfigValue')
     tdkTestObj.addParameter("configKey","NATIVE_PLAYBACK_REPEAT_COUNT")
@@ -83,31 +96,21 @@ if "SUCCESS" in result.upper():
     if expectedResult in actualresult.upper() and repeatCountConfigValue != "":
         repeatCount = int(repeatCountConfigValue)
 
-    #Construct the trickplay operation string by calling the setOperations() separately for each play/pause operation along with the timeout argument
+    #Construct the trickplay operation string by calling the setOperations() separately for each seek operation along with the timeoutand seekposition (seekposition increamented in steps of NATIVE_PLAYBACK_SEEK_STEP) arguments
     #The operations specifies the operation(fastforward/rewind/seek/play/pause) to be executed from the mediapipeline trickplay test
-    #Sample oprations strings is "operations=play:10,pause:10,play:10,pause:10,play:10,pause:10,play:10,pause:10,play:10,pause:10,play:10,pause:10"
-    #The play and pause operations are added NATIVE_PLAYBACK_REPEAT_COUNT or 3(default) times
-    #For adding the operation to the trickplay operations string, execute setOperations (operation_name_string, arguments...)
-    #eg: setOperations ("play", 10)
-    #For repeating the previous operations, execute setOperations ("repeat", number of operations to be repeated, number of times the operations should be repeated)
-    #Eg: To repeat "play", "pause" operations 3 times, setOperations ("play", 10), setOperations ("pause", 10), setOperations ("repeat", 2, 2)
-    #for iterator in range (repeatCount):
+    #Sample oprations strings is "operations=seek:3:10,seek:3:20,seek:3:30,seek:3:40,seek:3:50,seek:3:60" where 3 is time for which playback should happen and 10, 20, 30, 40, 50 ,60 are the seek positions/duration
+    #The seek operations are added NATIVE_PLAYBACK_REPEAT_COUNT times
+    for iterator in range (1, (repeatCount + 1)):
+        seek_step = str(int(seekStepInSeconds) * iterator)
+        seek_arguments = "%s,%s" % (timeoutInSeconds, seek_step)
+
 
     tdkTestObj = obj.createTestStep('setOperations')
-    i = 0
-    while i <= repeatCount:
-        tdkTestObj.addParameter("operation","play")
-        tdkTestObj.addParameter("arguments",str(timeoutInSeconds))
-        tdkTestObj.executeTestCase(expectedResult);
-        setresult = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("operation","seek")
+    tdkTestObj.addParameter("arguments",str(seek_arguments))
+    tdkTestObj.executeTestCase(expectedResult);
+    setresult = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("operation","pause")
-        tdkTestObj.addParameter("arguments",str(timeoutInSeconds))
-        tdkTestObj.executeTestCase(expectedResult);
-        setresult = tdkTestObj.getResultDetails();
-
-        i += 1
-    
     tdkTestObj = obj.createTestStep('getOperations')
     tdkTestObj.executeTestCase(expectedResult);
     operations = tdkTestObj.getResultDetails();
@@ -140,11 +143,11 @@ if "SUCCESS" in result.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print("Multiple play,pause operations on AAC stream was successfull")
+            print("Forward seek on AAC stream successfull")
             print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("Multiple play,pause operations on AAC stream was failed")
+            print("Forward seek on AAC stream failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print("Mediapipeline test execution failed")
