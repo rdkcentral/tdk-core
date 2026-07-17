@@ -52,6 +52,7 @@ def initiateCall(obj, client1_user, client2_user, dialplan_context, step):
         tdkTestObj.setResultStatus("FAILURE")
         print(f"ACTUAL RESULT {step}: Failed to initiate the call successfully")
         print("[TEST EXECUTION RESULT] : FAILURE")
+    sleep(10)
     return status
 
 # callHangup
@@ -201,7 +202,7 @@ def setTelcoOutboundConfigs(obj, value_list, step):
         tdkTestObj.setResultStatus("FAILURE")
         print(f"ACTUAL RESULT {step}: Failed to set the outbound call configurations")
         print("[TEST EXECUTION RESULT] : FAILURE")
-    sleep(10)
+    sleep(20)
     return set_flag
 
 
@@ -351,3 +352,4 @@ def getTotalCallsProcessed(obj):
         calls_processed = int(calls_processed.strip())
     print(f"Calls Processed: {calls_processed}")
     return tdkTestObj, actualresult, calls_processed
+
