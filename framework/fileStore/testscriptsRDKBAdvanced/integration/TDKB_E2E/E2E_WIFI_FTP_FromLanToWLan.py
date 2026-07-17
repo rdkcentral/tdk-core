@@ -143,7 +143,9 @@ if "SUCCESS" in loadmodulestatus.upper():
                         tdkTestObj.setResultStatus("FAILURE");
                         print("TEST STEP 2: wlanConnectWifiSsid: Failed to connect to the wifi ssid")
                 else:
+                    tdkTestObj.setResultStatus("FAILURE")
                     print("The current ssid and keypassphrase are not same as configured in the device configuration file")
+                    print("[TEST EXECUTION RESULT] : FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 print("TEST STEP 1: Get the current ssid,keypassphrase")
