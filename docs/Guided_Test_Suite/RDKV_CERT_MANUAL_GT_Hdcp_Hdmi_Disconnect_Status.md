@@ -35,6 +35,6 @@ To validate that the DUT correctly detects and processes an HDMI cable disconnec
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator
+**Supported Models** : Video_Accelerator
 
 <div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

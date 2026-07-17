@@ -20,9 +20,10 @@ To validate that the PNG (`.png`) image format is correctly decoded and rendered
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Verify test script files on DUT | Copy the test script (`Image_formats.sh`), the configuration file (`device.conf`), and the helper script (`generic_functions.sh`) to the working directory of the DUT and ensure all files are accessible. Configure the `device.conf` file with all the correct test environment values specific to this test case prior to execution. | The files `Image_formats.sh`, `device.conf`, and `generic_functions.sh` must be present and accessible in the DUT's working directory. The `device.conf` file must be populated with all the correct test environment values specific to this test case prior to execution. |
-| 2 | Install Browser Test app | Install the Browser Test application on the DUT using the configured app bundle (`<browser_test_app_bundle>`) downloaded from the configured server (`<app_download_server>`). | The Browser Test application should be installed successfully on the DUT. |
-| 3 | Kill active Browser Test instance | Terminate any active running instance of the Browser Test application on the DUT. | No active Browser Test app instance should be running before test execution begins. |
-| 4 | Connect HDMI display to DUT | Connect an HDMI display/TV to the DUT and ensure the correct HDMI input source is selected on the display. | HDMI display/TV should be connected to the DUT and the RDK UI should be visible on the screen prior to test execution. |
+| 2 | Verify DUT network connectivity | Ensure the DUT is connected to an active network (WiFi or Ethernet) prior to test execution. | The DUT must have active network connectivity so that the Browser Test application and hosted image resources can be accessed from the configured test server during test execution. |
+| 3 | Connect HDMI display to DUT | Connect an HDMI display/TV to the DUT and ensure the correct HDMI input source is selected on the display. | HDMI display/TV should be connected to the DUT and the RDK UI should be visible on the screen prior to test execution. |
+| 4 | Install Browser Test app | Install the Browser Test application on the DUT using the configured app bundle (`<browser_test_app_bundle>`) downloaded from the configured server (`<app_download_server>`). | The Browser Test application should be installed successfully on the DUT. |
+| 5 | Kill active Browser Test instance | Terminate any active running instance of the Browser Test application on the DUT. | No active Browser Test app instance should be running before test execution begins. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

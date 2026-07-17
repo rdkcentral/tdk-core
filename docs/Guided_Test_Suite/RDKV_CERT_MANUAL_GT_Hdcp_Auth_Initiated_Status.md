@@ -35,6 +35,6 @@ To validate that HDCP authentication initiation is correctly triggered on the DU
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator
+**Supported Models** : Video_Accelerator
 
 <div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

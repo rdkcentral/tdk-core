@@ -20,9 +20,10 @@ To validate that HDCP content protection is enabled on the DUT's HDMI output dur
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Verify test script files on DUT | Copy the test script (`HDCP_COMPLIANCE_AUTOMATED.sh`), the configuration file (`device.conf`), and the helper script (`generic_functions.sh`) to the working directory of the DUT and ensure all files are accessible. Configure the `device.conf` file with all the correct test environment values specific to this test case prior to execution. | The files `HDCP_COMPLIANCE_AUTOMATED.sh`, `device.conf`, and `generic_functions.sh` must be present and accessible in the DUT's working directory. The `device.conf` file must be populated with all the correct test environment values specific to this test case prior to execution. |
-| 2 | Connect HDMI display to DUT | Connect an HDMI display/TV to the DUT and ensure the correct HDMI input source is selected on the display. | The HDMI display/TV should be connected to the DUT and the RDK UI should be visible on the screen. |
-| 3 | Verify and sign in to YouTube app | Verify that the YouTube (Cobalt) app is installed on the DUT and sign in with a valid user account prior to the test. | The YouTube (Cobalt) app must be installed on the DUT and signed in with a valid user account, with AV playback accessible, prior to test execution. |
-| 4 | Verify active HDMI connection | Execute the DisplaySettings API to verify an active HDMI connection is present on the DUT.<br>Command: `curl --data-binary '{"jsonrpc":"2.0","id":3,"method":"org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' -H 'content-type:text/plain;' http://127.0.0.1:9998/jsonrpc` | The API should return `connectedVideoDisplays=HDMI0`, confirming an active HDMI connection is present. |
+| 2 | Verify DUT network connectivity | Ensure the DUT is connected to an active network (WiFi or Ethernet) prior to test execution. | The DUT must have active network connectivity so that YouTube AV playback can be initiated successfully during the test. |
+| 3 | Connect HDMI display to DUT | Connect an HDMI display/TV to the DUT and ensure the correct HDMI input source is selected on the display. | The HDMI display/TV should be connected to the DUT and the RDK UI should be visible on the screen. |
+| 4 | Verify and sign in to YouTube app | Verify that the YouTube app is installed on the DUT and sign in with a valid user account prior to the test. | The YouTube app must be installed on the DUT and signed in with a valid user account, with AV playback accessible, prior to test execution. |
+| 5 | Verify active HDMI connection | Execute the DisplaySettings API to verify an active HDMI connection is present on the DUT.<br>Command: `curl --data-binary '{"jsonrpc":"2.0","id":3,"method":"org.rdk.DisplaySettings.1.getConnectedVideoDisplays"}' -H 'content-type:text/plain;' http://127.0.0.1:9998/jsonrpc` | The API should return `connectedVideoDisplays=HDMI0`, confirming an active HDMI connection is present. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
@@ -36,6 +37,6 @@ To validate that HDCP content protection is enabled on the DUT's HDMI output dur
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator
+**Supported Models** : Video_Accelerator
 
 <div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

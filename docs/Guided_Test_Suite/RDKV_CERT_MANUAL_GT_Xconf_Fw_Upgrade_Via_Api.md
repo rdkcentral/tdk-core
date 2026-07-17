@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_GT_XCONF_01
 ## TestCase Name
-RDKV_CERT_MANUAL_GT_Xconf_Firmware_Upgrade_Api
+RDKV_CERT_MANUAL_GT_Xconf_Fw_Upgrade_Via_Api
 
 <a name="head.TOC"></a>
 ## Table Of Contents
