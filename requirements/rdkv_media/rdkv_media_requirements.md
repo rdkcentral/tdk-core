@@ -1,4 +1,4 @@
-﻿# Media Validation Suite (MVS) — Specifications
+# Media Validation Suite (MVS) — Specifications
 
 | Req ID | Test Scope |
 |:-------|:--------------------------------------|
