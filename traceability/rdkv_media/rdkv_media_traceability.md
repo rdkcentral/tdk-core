@@ -1,4 +1,4 @@
-# Media Validation Suite (MVS) &mdash; Traceability
+# Media Validation Suite (MVS) — Traceability
 
 | Req ID | # Tests | Test Cases |
 |--------|---------|------------|
