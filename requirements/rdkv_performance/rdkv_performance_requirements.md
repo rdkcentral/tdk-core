@@ -16,10 +16,10 @@
 | `PVS-REQ-012` | SHALL validate that app lifecycle state transitions for launch, close, and terminate complete without error and reach the expected final lifecycle state as reported by AppManager. |
 | `PVS-REQ-013` | SHOULD complete repeated install, uninstall, and multiple simultaneous launch request operations without failure or resource exhaustion across the defined iteration count. |
 | `PVS-REQ-014` | SHALL maintain CPU and memory resource usage within defined bounds during MP4 video playback sessions. |
-| `PVS-REQ-015` | CONDITIONAL maintain CPU and memory resource usage within defined bounds during 4K DASH and 4K HLS video playback sessions, applicable only where 4K UHD capability is supported. |
+| `PVS-REQ-015` | SHALL maintain CPU and memory resource usage within defined bounds during 4K DASH and 4K HLS video playback sessions. |
 | `PVS-REQ-016` | SHALL complete app launch within the defined time-to-launch threshold on both a local network and a WiFi connection. |
 | `PVS-REQ-017` | SHALL complete PlayPause operations within the defined response time threshold across standard and HD content — H.264 (DASH/HLS), HEVC, AV1, VP9, HDR, EC3, AC3, AAC, MP4, Vorbis, and WebM. |
-| `PVS-REQ-018` | CONDITIONAL complete PlayPause operations within the defined response time threshold across 4K UHD content — 4K AV1, DASH, HLS, MKV, and VP9, applicable only where 4K UHD capability is supported. |
+| `PVS-REQ-018` | SHALL complete PlayPause operations within the defined response time threshold across 4K content — 4K AV1, DASH, HLS, MKV, and VP9.|
 | `PVS-REQ-019` | SHOULD meet defined performance benchmark scores for JavaScript engine throughput — Octane, Kraken, and Speedometer 2.0 — in the WPEWebkit browser. |
 | `PVS-REQ-020` | SHOULD meet defined performance benchmark scores for CSS3 animation, rendering throughput (MotionMark), and animation frame rate in the WPEWebkit browser. |
 | `PVS-REQ-021` | SHALL complete platform cold boot, standby-to-on wake, and on-to-standby entry within the defined time thresholds. |
