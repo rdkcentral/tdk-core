@@ -3,8 +3,8 @@
 | Req ID | Test Scope |
 |:-------|:--------------------------------------|
 | `NPVS‑REQ‑001` | SHALL manage the full playback pipeline lifecycle — initialization, state transitions to the PLAYING state, graceful shutdown releasing all resources without leaks, and pipeline reinitialization by playing the same asset twice sequentially without errors between playbacks, using the AAC audio codec and the H.264 video codec delivered via DASH streams and HLS streams. |
-| `NPVS‑REQ‑002` | SHALL decode and render video playback at 1x rate with continuous frame rendering and no playback errors across all supported video codecs — H.264 (MP4 container, MOV container, DASH streams, HLS streams), HEVC/H.265 (including HEVC in the MKV container), VP9 (including VP9 HDR), AV1, MPEG, and Dolby Vision. |
-| `NPVS‑REQ‑003` | SHALL decode and render audio-only playback to completion at 1x rate with continuous audio frame rendering across all supported audio codecs — AAC, WAV, OPUS, and Vorbis. |
+| `NPVS‑REQ‑002` | SHALL decode and render video playback at 1x rate with continuous frame rendering and no playback errors across all supported video codecs — H.264 (MP4 container, MOV container, DASH streams, HLS streams, and DASH content with a Dolby Digital audio track), HEVC/H.265 (including HEVC in the MKV container), VP9 (including VP9 HDR), AV1, and MPEG. |
+| `NPVS‑REQ‑003` | SHALL decode and render audio-only playback to completion at 1x rate with continuous audio frame rendering across the supported audio codecs — AAC and WAV. |
 | `NPVS‑REQ‑004` | SHALL play 4K video for the H.264, HEVC (MKV container), VP9, and AV1 codecs and via DASH and HLS adaptive streams, correctly reporting 4K video dimensions and rendering frames at 1x rate without decoding failures or drops. |
 | `NPVS‑REQ‑005` | MAY play video at 360p and 480p resolutions (H.264), correctly reporting the rendered video dimensions at each resolution without decoding failures. |
 | `NPVS‑REQ‑006` | SHALL play video at 720p and 1080p resolutions across the applicable codecs (H.264 and AV1), correctly reporting the rendered video dimensions at each resolution without decoding failures. |
