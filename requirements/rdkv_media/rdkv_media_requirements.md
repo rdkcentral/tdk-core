@@ -1,7 +1,7 @@
 # Media Validation Suite (MVS) — Specifications
 
 | Req ID | Test Scope |
-|:-------|:--------------------------------------|
+|--------|---------------------------------------|
 | `MVS‑REQ‑001` | SHALL decode and render standard video and audio content — including H.264, H.264 (DASH), H.264 (HLS), HEVC, HEVC (MKV container), MKV-container content, MP4-container content, MPEG-container content, MPEG-TS-container content, H.263, VP8, VP9, AV1, EC3, VORBIS, OPUS, AC3, MP3-container content, and WebM-container content — emitting a playing event within the configured playback duration without playback error. |
 | `MVS‑REQ‑002` | SHALL decode and render HEVC (Main10) and H.264 (Main) profile content at the specified codec profile level, emitting a playing event without profile-level decode error. |
 | `MVS‑REQ‑003` | SHALL decode and render HDR video content, emitting a playing event without playback error or HDR tone-mapping failure. |
