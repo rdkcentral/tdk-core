@@ -27,7 +27,7 @@ obj = tdklib.TDKScriptingLibrary("native_playback_validation_suite","1",standAlo
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_PlaySeek_Forward_Stress_H264');
+obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_PlaySeek_Forward_Repeated_DASH');
 
 #Set device configurations to default values
 checkAVStatus = "no"
@@ -46,7 +46,7 @@ if "SUCCESS" in result.upper():
     #The test name specifies the test case to be executed from the mediapipeline test suite
     test_name = "test_trickplay"
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
-    test_url = MediaValidationVariables.video_src_url_dash_h264
+    test_url = MediaValidationVariables.video_src_url_dash
 
     #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     tdkTestObj = obj.createTestStep('getDeviceConfigValue')
@@ -115,7 +115,7 @@ if "SUCCESS" in result.upper():
     tdkTestObj.executeTestCase(expectedResult);
     operations = tdkTestObj.getResultDetails();
 
-    #Sample command = "mediapipelinetests test_trickplay <H264_STREAM_URL> checkavstatus=yes timeout=30"
+    #Sample command = "mediapipelinetests test_trickplay <DASH_STREAM_URL> checkavstatus=yes timeout=30"
     arguments = {"checkavstatus" : checkAVStatus,"operations": operations}
 
     tdkTestObj = obj.createTestStep('getMediaPipelineTestCommand')
@@ -143,11 +143,11 @@ if "SUCCESS" in result.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print("Forward seek on H264 stream successfull")
+            print("Forward seek on DASH stream successfull")
             print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("Forward seek on H264 stream failed")
+            print("Forward seek on DASH stream failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print("Mediapipeline test execution failed")

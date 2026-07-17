@@ -27,7 +27,7 @@ obj = tdklib.TDKScriptingLibrary("native_playback_validation_suite","1",standAlo
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_Audio_Volume_Stress_OPUS');
+obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_Audio_Volume_Repeated_AAC');
 
 #Set device configurations to default values
 checkAVStatus = "no"
@@ -43,7 +43,7 @@ if "SUCCESS" in result.upper():
     #The test name specifies the test case to be executed from the mediapipeline test suite
     test_name = "test_audio_volume_stress"
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
-    test_url = MediaValidationVariables.video_src_url_opus
+    test_url = MediaValidationVariables.video_src_url_aac
 
     #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     tdkTestObj = obj.createTestStep('getDeviceConfigValue')
@@ -69,7 +69,7 @@ if "SUCCESS" in result.upper():
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
         timeoutInSeconds = timeoutConfigValue
 
-    #Sample command = "mediapipelinetests test_audio_volume_stress <OPUS_STREAM_URL> checkavstatus=yes timeout=20"
+    #Sample command = "mediapipelinetests test_audio_volume_stress <AAC_STREAM_URL> checkavstatus=yes timeout=20"
     arguments = {"checkavstatus" : checkAVStatus, "timeout": timeoutInSeconds}
 
     tdkTestObj = obj.createTestStep('getMediaPipelineTestCommand')

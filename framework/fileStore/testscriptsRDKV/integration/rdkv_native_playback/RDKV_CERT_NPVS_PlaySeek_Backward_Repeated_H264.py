@@ -27,11 +27,14 @@ obj = tdklib.TDKScriptingLibrary("native_playback_validation_suite","1",standAlo
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_Audio_Volume_Stress_EAC3');
+obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_PlaySeek_Backward_Repeated_H264');
 
 #Set device configurations to default values
 checkAVStatus = "no"
-timeoutInSeconds = "10"
+timeoutInSeconds = "1"
+seekStepInSeconds = "0"
+repeatCount = 3
+
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -41,9 +44,9 @@ expectedResult="SUCCESS"
 if "SUCCESS" in result.upper():
     
     #The test name specifies the test case to be executed from the mediapipeline test suite
-    test_name = "test_audio_volume_stress"
+    test_name = "test_trickplay"
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
-    test_url = MediaValidationVariables.video_src_url_ec3
+    test_url = MediaValidationVariables.video_src_url_dash_h264
 
     #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     tdkTestObj = obj.createTestStep('getDeviceConfigValue')
@@ -69,8 +72,39 @@ if "SUCCESS" in result.upper():
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
         timeoutInSeconds = timeoutConfigValue
 
-    #Sample command = "mediapipelinetests test_audio_volume_stress <EAC3_STREAM_URL> checkavstatus=yes timeout=20"
-    arguments = {"checkavstatus" : checkAVStatus, "timeout": timeoutInSeconds}
+    #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_STRESS_REPEAT_COUNT' that specifies the number of times the operations should be reapeted
+    tdkTestObj = obj.createTestStep('getDeviceConfigValue')
+    tdkTestObj.addParameter("configKey","NATIVE_PLAYBACK_STRESS_REPEAT_COUNT")
+    tdkTestObj.executeTestCase(expectedResult);
+    actualresult = tdkTestObj.getResult();
+    repeatCountConfigValue = tdkTestObj.getResultDetails();
+
+    #If the value of NATIVE_PLAYBACK_STRESS_REPEAT_COUNT is retrieved correctly and its value is not empty, repeatCount value should be set as the retrieved vale
+    #if the device config value is empty, default repeatCount(3) is passed
+    if expectedResult in actualresult.upper() and repeatCountConfigValue != "":
+        repeatCount = int(repeatCountConfigValue)
+
+    #Construct the trickplay operation string by calling the setOperations() separately for each seek operation along with the timeoutand seekposition (seekposition increamented in steps of NATIVE_PLAYBACK_SEEK_STEP) arguments
+    #The operations specifies the operation(fastbackward/rewind/seek/play/pause) to be executed from the mediapipeline trickplay test
+    #Sample oprations strings is "operations=seek:3:10,seek:3:20,seek:3:30,seek:3:40,seek:3:50,seek:3:60" where 3 is time for which playback should happen and 10, 20, 30, 40, 50 ,60 are the seek positions/duration
+    #The seek operations are added NATIVE_PLAYBACK_STRESS_REPEAT_COUNT times
+    for iterator in range (repeatCount, 0, -1):
+        seek_step = str(int(seekStepInSeconds) * iterator)
+        seek_arguments = "%s,%s" % (timeoutInSeconds, seek_step)
+
+
+    tdkTestObj = obj.createTestStep('setOperations')
+    tdkTestObj.addParameter("operation","seek")
+    tdkTestObj.addParameter("arguments",str(seek_arguments))
+    tdkTestObj.executeTestCase(expectedResult);
+    setresult = tdkTestObj.getResultDetails();
+
+    tdkTestObj = obj.createTestStep('getOperations')
+    tdkTestObj.executeTestCase(expectedResult);
+    operations = tdkTestObj.getResultDetails();
+
+    #Sample command = "mediapipelinetests test_trickplay <H264_STREAM_URL> checkavstatus=yes timeout=30"
+    arguments = {"checkavstatus" : checkAVStatus,"operations": operations}
 
     tdkTestObj = obj.createTestStep('getMediaPipelineTestCommand')
     tdkTestObj.addParameter("arguments",str(arguments))
@@ -97,11 +131,11 @@ if "SUCCESS" in result.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print("Audio Stress playback was successfull")
+            print("Backward seek on H264 stream successfull")
             print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("Audio Stress playback was failed")
+            print("Backward seek on H264 stream failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print("Mediapipeline test execution failed")

@@ -27,12 +27,12 @@ obj = tdklib.TDKScriptingLibrary("native_playback_validation_suite","1",standAlo
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_PlaySeek_Forward_Stress_HLS');
+obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_PlaySeek_Backward_Repeated_HLS');
 
 #Set device configurations to default values
 checkAVStatus = "no"
-timeoutInSeconds = "10"
-seekStepInSeconds = "10"
+timeoutInSeconds = "1"
+seekStepInSeconds = "0"
 repeatCount = 3
 
 
@@ -72,18 +72,6 @@ if "SUCCESS" in result.upper():
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
         timeoutInSeconds = timeoutConfigValue
 
-    #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_SEEK_STEP' that specifies the value in seconds to which the pipeline should increment seek position each time
-    tdkTestObj = obj.createTestStep('getDeviceConfigValue')
-    tdkTestObj.addParameter("configKey","NATIVE_PLAYBACK_SEEK_STEP")
-    tdkTestObj.executeTestCase(expectedResult);
-    actualresult = tdkTestObj.getResult();
-    seek_step = tdkTestObj.getResultDetails();
-
-    #If the value of NATIVE_PLAYBACK_SEEK_STEP is retrieved correctly and its value is not empty, seek_step value should be used for calculating the seekposition that has to be passed to the test application
-    #if the device config value is empty, default seek position(20sec) is passed
-    if expectedResult in actualresult.upper() and seek_step != "":
-        seekStepInSeconds = seek_step
-
     #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_STRESS_REPEAT_COUNT' that specifies the number of times the operations should be reapeted
     tdkTestObj = obj.createTestStep('getDeviceConfigValue')
     tdkTestObj.addParameter("configKey","NATIVE_PLAYBACK_STRESS_REPEAT_COUNT")
@@ -97,10 +85,10 @@ if "SUCCESS" in result.upper():
         repeatCount = int(repeatCountConfigValue)
 
     #Construct the trickplay operation string by calling the setOperations() separately for each seek operation along with the timeoutand seekposition (seekposition increamented in steps of NATIVE_PLAYBACK_SEEK_STEP) arguments
-    #The operations specifies the operation(fastforward/rewind/seek/play/pause) to be executed from the mediapipeline trickplay test
+    #The operations specifies the operation(fastbackward/rewind/seek/play/pause) to be executed from the mediapipeline trickplay test
     #Sample oprations strings is "operations=seek:3:10,seek:3:20,seek:3:30,seek:3:40,seek:3:50,seek:3:60" where 3 is time for which playback should happen and 10, 20, 30, 40, 50 ,60 are the seek positions/duration
     #The seek operations are added NATIVE_PLAYBACK_STRESS_REPEAT_COUNT times
-    for iterator in range (1, (repeatCount + 1)):
+    for iterator in range (repeatCount, 0, -1):
         seek_step = str(int(seekStepInSeconds) * iterator)
         seek_arguments = "%s,%s" % (timeoutInSeconds, seek_step)
 
@@ -143,11 +131,11 @@ if "SUCCESS" in result.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print("Forward seek on HLS stream successfull")
+            print("Backward seek on HLS stream successfull")
             print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("Forward seek on HLS stream failed")
+            print("Backward seek on HLS stream failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print("Mediapipeline test execution failed")

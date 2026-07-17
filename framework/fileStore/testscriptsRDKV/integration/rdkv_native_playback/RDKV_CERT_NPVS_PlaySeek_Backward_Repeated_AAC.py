@@ -27,7 +27,7 @@ obj = tdklib.TDKScriptingLibrary("native_playback_validation_suite","1",standAlo
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_PlaySeek_Backward_Stress_HLS');
+obj.configureTestCase(ip,port,'RDKV_CERT_NPVS_PlaySeek_Backward_Repeated_AAC');
 
 #Set device configurations to default values
 checkAVStatus = "no"
@@ -46,7 +46,7 @@ if "SUCCESS" in result.upper():
     #The test name specifies the test case to be executed from the mediapipeline test suite
     test_name = "test_trickplay"
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
-    test_url = MediaValidationVariables.video_src_url_hls
+    test_url = MediaValidationVariables.video_src_url_aac
 
     #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     tdkTestObj = obj.createTestStep('getDeviceConfigValue')
@@ -103,7 +103,7 @@ if "SUCCESS" in result.upper():
     tdkTestObj.executeTestCase(expectedResult);
     operations = tdkTestObj.getResultDetails();
 
-    #Sample command = "mediapipelinetests test_trickplay <HLS_STREAM_URL> checkavstatus=yes timeout=30"
+    #Sample command = "mediapipelinetests test_trickplay <AAC_STREAM_URL> checkavstatus=yes timeout=30"
     arguments = {"checkavstatus" : checkAVStatus,"operations": operations}
 
     tdkTestObj = obj.createTestStep('getMediaPipelineTestCommand')
@@ -131,11 +131,11 @@ if "SUCCESS" in result.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print("Backward seek on HLS stream successfull")
+            print("Backward seek on AAC stream successfull")
             print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("Backward seek on HLS stream failed")
+            print("Backward seek on AAC stream failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print("Mediapipeline test execution failed")
