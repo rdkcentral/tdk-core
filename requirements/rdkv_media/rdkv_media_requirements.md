@@ -44,10 +44,10 @@
 | `MVS‑REQ‑040` | OPTIONAL — execute complete trick play operations — including fast-forward, seek, and playback rate changes — for 4K AV1, 4K DASH, 4K HLS, and 4K VP9 content without playback error. |
 | `MVS‑REQ‑041` | SHALL play H.264 (DASH), H.264 (HLS), HEVC, HEVC (MKV container), AV1, VP9, MKV-container content, MP4-container content, EC3, and audio-only content in continuous loop mode without playback error or resource leak between iterations. |
 | `MVS‑REQ‑042` | SHALL play 4K AV1, 4K DASH, and 4K VP9 content in continuous loop mode without playback error or resource leak between iterations. |
-| `MVS‑REQ‑043` | SHALL decrypt and play Widevine AES-CTR-encrypted DASH and HLS content covering AAC, AC3, EC3, AV1, HEVC, OPUS, VP8, VP9, and H.264 codecs without decryption failure or licence acquisition error. |
-| `MVS‑REQ‑044` | SHALL decrypt and play Widevine AES-CTR clear-lead-encrypted DASH and HLS content covering AAC, AC3, EC3, AV1, HEVC, VP9, and H.264 codecs without decryption failure or licence acquisition error. |
-| `MVS‑REQ‑045` | SHALL decrypt and play Widevine AES-CTR crypt-skip-byte-block-encrypted DASH and HLS content covering AAC, AC3, EC3, AV1, HEVC, VP9, OPUS, and H.264 codecs without decryption failure or licence acquisition error. |
-| `MVS‑REQ‑046` | SHALL decrypt and play Widevine AES-CTR multi-key-encrypted DASH and HLS content without decryption failure or licence acquisition error. |
+| `MVS‑REQ‑043` | SHALL decrypt and play Widevine AES-CTR-encrypted DASH and HLS content covering AAC, AC3, EC3, AV1, HEVC, OPUS, VP8, VP9, and H.264 codecs without decryption failure or license acquisition error. |
+| `MVS‑REQ‑044` | SHALL decrypt and play Widevine AES-CTR clear-lead-encrypted DASH and HLS content covering AAC, AC3, EC3, AV1, HEVC, VP9, and H.264 codecs without decryption failure or license acquisition error. |
+| `MVS‑REQ‑045` | SHALL decrypt and play Widevine AES-CTR crypt-skip-byte-block-encrypted DASH and HLS content covering AAC, AC3, EC3, AV1, HEVC, VP9, OPUS, and H.264 codecs without decryption failure or license acquisition error. |
+| `MVS‑REQ‑046` | SHALL decrypt and play Widevine AES-CTR multi-key-encrypted DASH and HLS content without decryption failure or license acquisition error. |
 | `MVS‑REQ‑047` | SHALL decrypt and play Widevine CBCS-encrypted DASH and HLS content covering HEVC, VP9, AV1, AC3, EC3, and H.264 codecs without decryption failure. |
 | `MVS‑REQ‑048` | SHALL decrypt and play PlayReady AES-CTR-encrypted DASH and HLS content covering AAC, EC3, AV1, HEVC, and H.264 codecs without decryption failure or licence acquisition error. |
 | `MVS‑REQ‑049` | SHALL decrypt and play PlayReady CBCS-encrypted DASH and HLS content covering AV1, H.264, AAC, and EC3 codecs without decryption failure. |
