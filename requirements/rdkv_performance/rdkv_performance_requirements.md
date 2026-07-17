@@ -15,11 +15,11 @@
 | `PVS-REQ-011` | SHALL maintain CPU and memory resource usage within defined bounds during app bundle download, install, uninstall, and initial app launch operations. |
 | `PVS-REQ-012` | SHALL validate that app lifecycle state transitions for launch, close, and terminate complete without error and reach the expected final lifecycle state as reported by AppManager. |
 | `PVS-REQ-013` | SHOULD complete repeated install, uninstall, and multiple simultaneous launch request operations without failure or resource exhaustion across the defined iteration count. |
-| `PVS-REQ-014` | SHALL maintain CPU and memory resource usage within defined bounds during MP4 video playback sessions. |
-| `PVS-REQ-015` | SHALL maintain CPU and memory resource usage within defined bounds during 4K DASH and 4K HLS video playback sessions. |
+| `PVS-REQ-014` | SHALL maintain CPU and memory resource usage within defined bounds during H.264 video playback in the MP4 container. |
+| `PVS-REQ-015` | SHALL maintain CPU and memory resource usage within defined bounds during HEVC 4K video playback delivered via DASH streams and HLS streams. |
 | `PVS-REQ-016` | SHALL complete app launch within the defined time-to-launch threshold on both a local network and a WiFi connection. |
-| `PVS-REQ-017` | SHALL complete PlayPause operations within the defined response time threshold across standard and HD content — H.264 (DASH/HLS), HEVC, AV1, VP9, HDR, EC3, AC3, AAC, MP4, Vorbis, and WebM. |
-| `PVS-REQ-018` | SHALL complete PlayPause operations within the defined response time threshold across 4K content — 4K AV1, DASH, HLS, MKV, and VP9.|
+| `PVS-REQ-017` | SHALL complete PlayPause operations within the defined response time threshold across video codecs — H.264 (DASH streams, HLS streams, MP4 container), HEVC, AV1, VP9 (including VP9 HDR) — and audio codecs — EC-3, AC-3, AAC, and Vorbis (WebM container). |
+| `PVS-REQ-018` | SHALL complete PlayPause operations within the defined response time threshold across 4K video codecs — AV1, VP9, and HEVC (DASH streams, HLS streams, MKV container). |
 | `PVS-REQ-019` | SHOULD meet defined performance benchmark scores for JavaScript engine throughput — Octane, Kraken, and Speedometer 2.0 — in the WPEWebkit browser. |
 | `PVS-REQ-020` | SHOULD meet defined performance benchmark scores for CSS3 animation, rendering throughput (MotionMark), and animation frame rate in the WPEWebkit browser. |
 | `PVS-REQ-021` | SHALL complete platform cold boot, standby-to-on wake, and on-to-standby entry within the defined time thresholds. |
