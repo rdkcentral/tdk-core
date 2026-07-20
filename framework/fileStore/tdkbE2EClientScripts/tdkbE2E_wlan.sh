@@ -230,8 +230,12 @@ delete_saved_wifi_connections()
         ls_2ghz=""
         ls_5ghz=""
         ls_6ghz=""
+        ls_wifi=""
 
-        if [ "$var2" = "$var3" ] && [ "$var3" = "$var4" ]; then
+        if [ -z "$var3" ] && [ -z "$var4" ]; then
+                ls_wifi="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+
+        elif [ "$var2" = "$var3" ] && [ "$var3" = "$var4" ]; then
                 ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
 
         elif [ "$var2" = "$var3" ]; then
@@ -252,40 +256,56 @@ delete_saved_wifi_connections()
                 ls_6ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var4.nmconnection")"
         fi
 
+        if [ -n "$ls_wifi" ]; then
+                wifi="$(rm -f "/etc/NetworkManager/system-connections/${var2}.nmconnection" && echo SUCCESS || echo FAILURE)"
+                wifi_connection="$(nmcli connection delete "$var2" >/dev/null 2>&1 && echo SUCCESS || echo FAILURE)"
+        else
+                wifi="SUCCESS"
+                wifi_connection="SUCCESS"
+        fi
 
         if [ -n "$ls_2ghz" ]; then
-                wifi_2ghz="$(rm -f /etc/NetworkManager/system-connections/"$var2.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
-                wifi_2ghz_connection="$(nmcli connection delete "$var2" >/dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+                wifi_2ghz="$(rm -f "/etc/NetworkManager/system-connections/${var2}.nmconnection" && echo SUCCESS || echo FAILURE)"
+                wifi_2ghz_connection="$(nmcli connection delete "$var2" >/dev/null 2>&1 && echo SUCCESS || echo FAILURE)"
         else
                 wifi_2ghz="SUCCESS"
                 wifi_2ghz_connection="SUCCESS"
         fi
 
         if [ -n "$ls_5ghz" ]; then
-                wifi_5ghz="$(rm -f /etc/NetworkManager/system-connections/"$var3.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
-                wifi_5ghz_connection="$(nmcli connection delete "$var3" >/dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+                wifi_5ghz="$(rm -f "/etc/NetworkManager/system-connections/${var3}.nmconnection" && echo SUCCESS || echo FAILURE)"
+                wifi_5ghz_connection="$(nmcli connection delete "$var3" >/dev/null 2>&1 && echo SUCCESS || echo FAILURE)"
         else
                 wifi_5ghz="SUCCESS"
                 wifi_5ghz_connection="SUCCESS"
         fi
 
         if [ -n "$ls_6ghz" ]; then
-                wifi_6ghz="$(rm -f /etc/NetworkManager/system-connections/"$var4.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
-                wifi_6ghz_connection="$(nmcli connection delete "$var4" >/dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+                wifi_6ghz="$(rm -f "/etc/NetworkManager/system-connections/${var4}.nmconnection" && echo SUCCESS || echo FAILURE)"
+                wifi_6ghz_connection="$(nmcli connection delete "$var4" >/dev/null 2>&1 && echo SUCCESS || echo FAILURE)"
         else
                 wifi_6ghz="SUCCESS"
                 wifi_6ghz_connection="SUCCESS"
         fi
 
-        if [ "$wifi_2ghz" = "SUCCESS" ] &&
-           [ "$wifi_5ghz" = "SUCCESS" ] &&
-           [ "$wifi_6ghz" = "SUCCESS" ] &&
-           [ "$wifi_2ghz_connection" = "SUCCESS" ] &&
-           [ "$wifi_5ghz_connection" = "SUCCESS" ] &&
-           [ "$wifi_6ghz_connection" = "SUCCESS" ]; then
-                echo "OUTPUT:SUCCESS"
+        if [ -z "$var3" ] && [ -z "$var4" ]; then
+                if [ "$wifi" = "SUCCESS" ] &&
+                   [ "$wifi_connection" = "SUCCESS" ]; then
+                        echo "OUTPUT:SUCCESS"
+                else
+                        echo "OUTPUT:FAILURE"
+                fi
         else
-                echo "OUTPUT:FAILURE"
+                if [ "$wifi_2ghz" = "SUCCESS" ] &&
+                   [ "$wifi_5ghz" = "SUCCESS" ] &&
+                   [ "$wifi_6ghz" = "SUCCESS" ] &&
+                   [ "$wifi_2ghz_connection" = "SUCCESS" ] &&
+                   [ "$wifi_5ghz_connection" = "SUCCESS" ] &&
+                   [ "$wifi_6ghz_connection" = "SUCCESS" ]; then
+                        echo "OUTPUT:SUCCESS"
+                else
+                        echo "OUTPUT:FAILURE"
+                fi
         fi
 }
 
