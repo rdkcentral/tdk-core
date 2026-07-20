@@ -244,7 +244,7 @@ if "SUCCESS" in loadmodulestatus.upper():
 
                                     tdkTestObj.setResultStatus("SUCCESS");
                                     step = step + 1
-                                    print(f"\nTEST STEP {step}: Check the Http connectivity from WLAN to LAN")
+                                    print(f"\nTEST STEP {step}: Check the Http connectivity from WLAN to WAN")
                                     status = wgetToWAN("WGET_HTTP", wlanIP, curIPAddress)
 
                                     if expectedresult in status:
