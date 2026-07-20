@@ -47,12 +47,13 @@ def initiateCall(obj, client1_user, client2_user, dialplan_context, step):
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"ACTUAL RESULT {step}: The call is initiated successfully between the configured SIP Clients")
         print("[TEST EXECUTION RESULT] : SUCCESS")
+        sleep(10)
     else:
         status = False
         tdkTestObj.setResultStatus("FAILURE")
         print(f"ACTUAL RESULT {step}: Failed to initiate the call successfully")
         print("[TEST EXECUTION RESULT] : FAILURE")
-    sleep(10)
+    
     return status
 
 # callHangup
@@ -197,12 +198,12 @@ def setTelcoOutboundConfigs(obj, value_list, step):
         tdkTestObj.setResultStatus("SUCCESS")
         print(f"ACTUAL RESULT {step}: Successfully set the outbound call configurations")
         print("[TEST EXECUTION RESULT] : SUCCESS")
+        sleep(20)
     else:
         set_flag = False
         tdkTestObj.setResultStatus("FAILURE")
         print(f"ACTUAL RESULT {step}: Failed to set the outbound call configurations")
         print("[TEST EXECUTION RESULT] : FAILURE")
-    sleep(20)
     return set_flag
 
 
