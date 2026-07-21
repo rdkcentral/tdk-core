@@ -123,7 +123,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                                                     print("TEST STEP 9:Disconnect from WIFI SSID: FAILED")
                                             else:
                                                 tdkTestObj.setResultStatus("FAILURE");
-                                                print("TEST STEP 8:File download via FTP from WLAN to LAN failed")
+                                                print("TEST STEP 8:File download via FTP from LAN to WLAN failed")
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE");
                                             print("TEST STEP 7: checkIpRange:lan ip address is not in DHCP range")

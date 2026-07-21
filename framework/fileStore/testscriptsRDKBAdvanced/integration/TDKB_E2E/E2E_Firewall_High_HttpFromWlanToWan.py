@@ -282,13 +282,13 @@ if "SUCCESS" in loadmodulestatus.upper():
                                 print(f"\nTEST STEP {step}: WLAN Client IP address is not in the same Gateway DHCP range")
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print(f"\nTEST STEP {step}: Failed to get the WLAN Client IP address")
+                            print(f"\nTEST STEP {step}: Failed to get the LAN IP range")
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print(f"\nTEST STEP {step}: Failed to connect to WIFI SSID")
+                        print(f"\nTEST STEP {step}: Failed to connect get the WLAN client IP address")
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print(f"\nTEST STEP {step}: Failed to get the Gateway IP address")
+                    print(f"\nTEST STEP {step}: Failed to connect to WiFi SSID")
 
             if tdkbE2EUtility.mlo_capability == "False":
                 #Prepare the list of parameter values to be reverted
@@ -327,7 +327,7 @@ if "SUCCESS" in loadmodulestatus.upper():
             tdkTestObj.setResultStatus("FAILURE");
             print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,Radio enable status,firewall level")
             print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
-            print(f"ACTUAL RESULT {step}: %s %s" %(orgValue,firewallValue));
+            print(f"ACTUAL RESULT {step}: {orgValue} {firewallValue}");
             print(f"[TEST EXECUTION RESULT] : FAILURE");
     else:
         obj.setLoadModuleStatus("FAILURE");
