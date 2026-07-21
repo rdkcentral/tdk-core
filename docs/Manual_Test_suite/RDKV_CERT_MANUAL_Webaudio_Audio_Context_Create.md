@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Webaudio_Audio_Context_Create
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that an AudioContext object can be successfully created using the WebAudio API on the DUT. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
-
+To validate that the DUT can successfully create an audio context object via the WebAudio API within the WPE browser environment. This test confirms that the audio context is created without errors and the WebAudio API is operational, ensuring WebAudio audio context creation meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

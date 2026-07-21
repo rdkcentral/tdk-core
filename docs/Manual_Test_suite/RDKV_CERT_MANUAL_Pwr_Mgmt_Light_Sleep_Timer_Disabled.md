@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Pwr_Mgmt_Light_Sleep_Timer_Disabled
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT does not enter LIGHT SLEEP mode when the Sleep Timer is set to OFF via the RDK UI settings. This test exercises the `org.rdk.PowerManager` plugin and the RDK power-state machine (including standby, deep-sleep, and wake triggers) to validate power-mode transitions. The test confirms that the DUT UI should remain active. The DUT should be accessible via SSH and internet should be accessible.
+To validate that the DUT does not enter LIGHT SLEEP mode when the Sleep Timer is disabled via the RDK UI settings. This test confirms that the DUT UI remains active and internet remains accessible after the configured interval, ensuring the LIGHT SLEEP timer-disabled behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

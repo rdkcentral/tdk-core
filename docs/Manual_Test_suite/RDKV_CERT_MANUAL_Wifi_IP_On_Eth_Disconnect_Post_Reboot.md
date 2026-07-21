@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_IP_On_Eth_Disconnect_Post_Reboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT acquires and displays the Wi-Fi IP address after a reboot when the Ethernet cable is subsequently disconnected. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
-
+To validate that the DUT acquires and displays the Wi-Fi IP address after a reboot when the Ethernet cable is subsequently disconnected. This test confirms that the Wi-Fi interface is active with a valid IP address and content playback is functional, ensuring Wi-Fi IP assignment after Ethernet disconnection meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

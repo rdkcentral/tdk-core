@@ -1,7 +1,7 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPS_13
 ## TestCase Name
-RDKV_CERT_MANUAL_App_Youtube_Hibernate_Home_Key
+RDKV_CERT_MANUAL_App_YouTube_Hibernate_Home_Key
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_App_Youtube_Hibernate_Home_Key
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the YouTube application hibernate behavior when the Home key is pressed during playback, and subsequent hot launch from the last hibernated state. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the YouTube AV playback should resume from the previously noted time position after the application is hot launched from hibernation, confirming that hibernation is functioning as expected.
+To validate that the YouTube application hibernates correctly when the Home key is pressed during playback and resumes from the last position on a subsequent hot launch on the DUT. This test confirms that AV playback is restored from the previously noted time position, ensuring that the hibernate and resume lifecycle functions correctly for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_Pair_FromStartupScreen
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a Bluetooth remote control can be successfully paired with the DUT from the startup pairing screen immediately after a fresh firmware flash. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that all navigation key presses should respond correctly and the selected application should launch successfully.
+To validate that a Bluetooth remote can be successfully paired with the DUT from the startup pairing screen immediately after a fresh firmware flash. This test confirms that all navigation key presses respond correctly and the selected application launches successfully, ensuring that startup remote pairing meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

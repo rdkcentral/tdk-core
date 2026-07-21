@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_Startup_SSID_Connect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a user can successfully connect to an available Wi-Fi SSID from the startup network selection screen. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should install and launch successfully. Video playback should start with proper audio and video output.
-
+To validate that a user can successfully connect to an available Wi-Fi SSID from the startup network selection screen. This test confirms that the DUT connects to the selected SSID and content playback is functional after connecting, ensuring Wi-Fi SSID connection via the startup screen meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

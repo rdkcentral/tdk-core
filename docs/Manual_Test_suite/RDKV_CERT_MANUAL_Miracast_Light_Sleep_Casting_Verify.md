@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Light_Sleep_Casting_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Miracast screen casting session is not lost when the DUT enters and exits Light Sleep mode during an active casting session. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the DUT should wake up successfully and the Miracast screen casting session should resume without any interruption or loss.
+To validate that an active Miracast casting session is preserved when the DUT enters and exits Light Sleep mode. This test confirms that the DUT wakes up successfully and Miracast screen mirroring resumes without interruption or loss, ensuring Miracast resilience across power state transitions meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

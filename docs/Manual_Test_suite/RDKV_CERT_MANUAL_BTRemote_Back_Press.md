@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_Back_Press
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the BACK key press on the paired Bluetooth remote navigates back to the previous screen. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that the RDK UI should navigate back to the Home screen successfully.
+To validate that the BACK key press on the paired Bluetooth remote correctly navigates to the previous screen on the DUT. This test confirms that the Back key is mapped correctly and the RDK UI responds with the expected screen transition, ensuring Bluetooth remote key-press functionality meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

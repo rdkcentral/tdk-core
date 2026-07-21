@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Voice_Remote_Details
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Voice Remote Control details are accurately populated on the Voice Remote Control screen. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that screen should load with MacAddress, RCU Name,Connection Status, Battery Percent and Software Version of the paired Voice Remote. If pairing is not there, then all of these values will be shown as N/A.
-
+To validate that the Voice Remote Control details screen in the RDK UI Settings accurately displays the paired remote information. This test confirms that the screen shows all required remote details including MAC address, name, connection status, battery level, and software version, ensuring the voice remote details display meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

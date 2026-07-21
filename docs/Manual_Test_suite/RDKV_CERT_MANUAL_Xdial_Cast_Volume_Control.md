@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Cast_Volume_Control
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the YouTube application volume can be controlled independently using the external device (smartphone) during an active XDial casting session, without affecting the TV system volume. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
-
+To validate that the YouTube application volume can be controlled independently using the smartphone during an active XDial casting session without affecting the TV system volume. This test confirms that volume adjustments from the smartphone are applied to the YouTube app only and do not alter the system volume, ensuring independent app volume control during XDial casting meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

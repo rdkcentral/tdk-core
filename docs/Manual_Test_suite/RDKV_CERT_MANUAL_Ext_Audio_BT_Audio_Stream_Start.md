@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Ext_Audio_BT_Audio_Stream_Start
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that audio streaming from an external Bluetooth device can be successfully initiated and played back through the DUT. This test exercises the `org.rdk.Bluetooth` plugin APIs, including scanning, pairing, connecting, and audio stream initiation, to validate that the DUT routes audio output through the paired Bluetooth device. The test confirms that audio is audible from the external Bluetooth device during active video playback and that streaming operates correctly throughout the session.
+To validate that audio streaming from an external Bluetooth device can be successfully initiated and played back through the DUT during active video playback. This test confirms that audio is routed correctly to the external Bluetooth device and is audible throughout the streaming session, ensuring Bluetooth external audio output meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

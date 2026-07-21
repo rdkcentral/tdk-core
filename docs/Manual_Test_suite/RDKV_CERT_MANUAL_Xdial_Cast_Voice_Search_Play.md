@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Cast_Voice_Search_Play
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Voice Search feature on the external device (smartphone) functions correctly during an active YouTube XDial casting session, and that the searched content can be played on the DUT. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
-
+To validate that the Voice Search feature on the smartphone functions correctly during an active YouTube XDial casting session, and that the searched content can be played on the DUT. This test confirms that voice search results are displayed and content plays on the DUT as expected, ensuring Voice Search integration during XDial casting meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

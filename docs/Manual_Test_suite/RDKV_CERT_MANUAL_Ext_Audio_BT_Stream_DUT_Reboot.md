@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Ext_Audio_BT_Stream_DUT_Reboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the audio streaming behavior when the DUT is rebooted while an external Bluetooth device is actively streaming audio. This test exercises the `org.rdk.Bluetooth` plugin and the DUT reboot sequence to confirm Bluetooth audio reconnection behavior after a device restart. The test confirms that audio streaming resumes automatically to the external Bluetooth device after the DUT reboots and a video application is relaunched.
+To validate the Bluetooth audio streaming behavior when the DUT is rebooted while an external Bluetooth device is actively streaming audio. This test confirms that audio streaming resumes automatically to the external Bluetooth device after the DUT reboots, ensuring Bluetooth audio reconnection behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

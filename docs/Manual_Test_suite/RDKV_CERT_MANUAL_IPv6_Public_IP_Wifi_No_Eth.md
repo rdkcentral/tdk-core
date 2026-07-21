@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IPv6_Public_IP_Wifi_No_Eth
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT returns the public IPv6 address via the Wi-Fi interface when connected to an IPv6-supporting Wi-Fi SSID and Ethernet is disconnected. This test exercises the RDK network manager, IPv6 address assignment stack (`ip` / `ifconfig` commands), and the router Advertisement handler to validate dual-stack network connectivity. The test confirms that the public IPv6 address should be returned via the Wi-Fi interface. The response should be similar to:}. The interface field should be wlan0….
+To validate that the DUT returns the correct public IPv6 address for the Wi-Fi interface when connected to an IPv6-supporting SSID and Ethernet is disconnected. This test confirms that the IPv6 address retrieved is accurately associated with the active Wi-Fi interface, ensuring IPv6 public IP retrieval over Wi-Fi meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

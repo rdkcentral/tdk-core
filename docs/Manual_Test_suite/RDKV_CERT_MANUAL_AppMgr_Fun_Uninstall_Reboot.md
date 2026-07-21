@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Uninstall_Reboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that apps can be uninstalled from the RDK UI and subsequently reinstalled and launched successfully after a DUT reboot. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that launched App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.
+To validate that applications can be uninstalled from the RDK UI and successfully reinstalled and launched after a DUT reboot. This test confirms that the full uninstall-reboot-reinstall-launch cycle completes without errors, ensuring that application management and persistence across reboots meet certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

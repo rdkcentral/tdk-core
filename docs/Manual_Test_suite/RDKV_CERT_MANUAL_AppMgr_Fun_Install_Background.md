@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Install_Background
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that when a user navigates away from the More Apps section after initiating an app download, the download and installation continues in the background. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that launched App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.
+To validate that an application download and installation continues in the background when the user navigates away from the More Apps section on the DUT. This test confirms that the installation completes successfully without requiring continued user interaction, ensuring that background installation behavior meets certification standards.
 
 <a name="head.Precondition"></a>
 ## Preconditions

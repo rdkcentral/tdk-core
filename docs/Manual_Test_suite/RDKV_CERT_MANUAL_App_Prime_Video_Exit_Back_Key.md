@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_App_Prime_Video_Exit_Back_Key
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Amazon Prime Video application can be exited gracefully using the Back key press on the remote control. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that video playback should end gracefully. The application should close and the RDK UI Home screen should launch.
+To validate that the Amazon Prime Video application can be exited gracefully using the Back key on the remote control on the DUT. This test confirms that playback ends cleanly and the RDK UI Home screen is restored, ensuring that application exit behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

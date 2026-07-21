@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_RepairViaKeySequence
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a Bluetooth remote can be successfully re-paired with the DUT using the pairing key sequence after remote pairing has been intentionally removed via the Thunder (WPEFramework) API. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that the remote should pair and connect back to the DUT automatically after a few seconds. All key presses should respond correctly, confirming successful re-pairing.
+To validate that a Bluetooth remote can be successfully re-paired with the DUT using the pairing key sequence after pairing has been intentionally removed. This test confirms that the remote pairs and connects when it is in pairing mode and all key presses respond correctly, ensuring that the re-pairing mechanism meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

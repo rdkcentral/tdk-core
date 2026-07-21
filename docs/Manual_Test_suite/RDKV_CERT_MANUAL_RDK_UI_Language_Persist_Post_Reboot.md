@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Language_Persist_Post_Reboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the RDK UI language setting persists as Spanish even after the DUT is rebooted. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that text in all settings screens should be displayed in Spanish.
-
+To validate that the RDK UI language setting is retained as Spanish after the DUT is rebooted. This test confirms that all Settings screens continue to display text in Spanish following the reboot, ensuring language setting persistence across reboots meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

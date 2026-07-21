@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_DRM_Widevine_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Widevine DRM-encrypted stream playback is functional on the DUT. This test exercises the RDK DRM plugin (PlayReady or Widevine), the secure content delivery pipeline, and the video player application to validate protected media playback. The test confirms that the Widevine encrypted asset should play with proper audio and video without any artifacts or errors.
+To validate that Widevine DRM-encrypted stream playback is functional on the DUT. This test confirms that the Widevine encrypted asset plays with proper audio and video output without artifacts or errors, ensuring Widevine DRM support meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

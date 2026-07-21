@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_Home_Press
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the HOME key press on the paired Bluetooth remote navigates back to the RDK UI Home screen. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that the RDK UI Home screen should launch successfully.
+To validate that the HOME key press on the paired Bluetooth remote correctly navigates to the RDK UI Home screen on the DUT. This test confirms that the Home key is mapped correctly and the RDK UI Home screen launches successfully, ensuring Bluetooth remote key-press functionality meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

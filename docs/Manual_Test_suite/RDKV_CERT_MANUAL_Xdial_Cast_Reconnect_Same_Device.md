@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Cast_Reconnect_Same_Device
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that an XDial casting session can be successfully re-established using the same external device (smartphone) after a previous casting session has been properly disconnected. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
-
+To validate that an XDial casting session can be successfully re-established using the same smartphone after a previous casting session has been properly disconnected. This test confirms that the re-established session initiates video playback correctly on the DUT, ensuring XDial re-connection from the same device meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

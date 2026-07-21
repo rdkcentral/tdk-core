@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Ext_Audio_BT_Stream_Ext_Dev_Reboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the audio streaming behavior when the external Bluetooth device is rebooted while audio streaming is active. This test exercises the `org.rdk.Bluetooth` plugin and the external device reboot sequence to confirm automatic audio reconnection behavior after the Bluetooth peripheral restarts. The test confirms that audio streaming resumes automatically through the external Bluetooth device once it comes back online after reboot.
+To validate the Bluetooth audio streaming behavior when the external Bluetooth device is rebooted while audio streaming is active. This test confirms that audio streaming resumes automatically through the external Bluetooth device once it comes back online, ensuring automatic Bluetooth audio reconnection meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

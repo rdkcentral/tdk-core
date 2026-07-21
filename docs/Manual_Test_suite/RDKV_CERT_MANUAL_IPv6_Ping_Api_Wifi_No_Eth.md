@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IPv6_Ping_Api_Wifi_No_Eth
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the NetworkManager Ping API functions correctly over IPv6 when the DUT is connected to an IPv6-supporting Wi-Fi SSID with Ethernet disconnected. This test exercises the RDK network manager, IPv6 address assignment stack (`ip` / `ifconfig` commands), and the router Advertisement handler to validate dual-stack network connectivity. The test confirms that the ping should complete successfully, with all 3 packets transmitted and received, zero packet loss, and valid round-trip time statistics returned in the API response.
+To validate that IPv6 ping functionality is operational on the DUT when connected to an IPv6-supporting Wi-Fi SSID with Ethernet disconnected. This test confirms that ping packets are successfully transmitted and received over the IPv6 Wi-Fi connection with no packet loss, ensuring IPv6 ping capability meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

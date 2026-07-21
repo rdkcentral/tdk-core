@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Pwr_Mgmt_Deep_Sleep_Timer_UI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT enters DEEP SLEEP mode automatically after the inactivity timer configured via the RDK UI settings expires. This test exercises the `org.rdk.PowerManager` plugin and the RDK power-state machine (including standby, deep-sleep, and wake triggers) to validate power-mode transitions. The test confirms that the DUT UI should come up. The DUT should be accessible via SSH and internet should be accessible.
+To validate that the DUT automatically enters DEEP SLEEP mode after the inactivity timer configured via the RDK UI settings expires. This test confirms that the RDK UI comes up correctly after wake-up and internet remains accessible, ensuring the DEEP SLEEP inactivity timer behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

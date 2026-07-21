@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Disconnect_Error_Handling
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT handles Miracast session errors and disconnections gracefully, including Wi-Fi disruption and re-connection after casting termination. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the Miracast connection should be re-established successfully and screen mirroring should resume.
+To validate that the DUT handles Miracast session errors and disconnections gracefully, including Wi-Fi disruption and re-connection after casting termination. This test confirms that the Miracast connection is re-established successfully and screen mirroring resumes, ensuring Miracast error recovery behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

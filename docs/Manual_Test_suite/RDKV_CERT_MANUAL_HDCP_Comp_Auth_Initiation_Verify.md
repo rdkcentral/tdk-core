@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDCP_Comp_Auth_Initiation_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that HDCP authentication is correctly initiated when the HDMI cable is reconnected to the DUT without any active A/V stream. This test exercises the `org.rdk.HdcpProfile` plugin and the HDMI output manager to validate HDCP handshake and content-protection compliance on the connected display. The test confirms that the following log entries should be present in the console logs: "Updated hotplug to CONNECTED" and "Updated hdcp_status to AUTHENTICATED".
+To validate that HDCP authentication is correctly initiated when the HDMI cable is reconnected to the DUT without any active A/V stream. This test confirms that the HDCP handshake completes and the authentication status is correctly reported in the system logs, ensuring HDCP content protection compliance meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

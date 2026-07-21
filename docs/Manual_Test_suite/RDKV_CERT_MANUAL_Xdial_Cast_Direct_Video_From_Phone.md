@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Cast_Direct_Video_From_Phone
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a video can be selected and played directly from the smartphone during an active XDial casting session, without using the Dial remote control screen. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
-
+To validate that a video can be selected and played directly from the smartphone during an active XDial casting session without using the Dial remote control screen. This test confirms that the selected video plays correctly on the DUT, ensuring direct video selection from the smartphone during XDial casting meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

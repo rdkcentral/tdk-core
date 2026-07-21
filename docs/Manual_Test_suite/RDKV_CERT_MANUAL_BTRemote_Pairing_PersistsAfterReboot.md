@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_Pairing_PersistsAfterReboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Bluetooth remote pairing is preserved and key presses remain functional after a DUT reboot. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that all key presses should respond correctly, confirming that the remote pairing has persisted across the reboot.
+To validate that Bluetooth remote pairing is preserved across a DUT reboot and that key presses remain functional after restart. This test confirms that all key presses respond correctly after the reboot, ensuring that remote pairing persistence meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

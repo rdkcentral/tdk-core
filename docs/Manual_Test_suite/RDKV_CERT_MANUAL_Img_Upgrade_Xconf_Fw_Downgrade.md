@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Img_Upgrade_Xconf_Fw_Downgrade
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the XCONF firmware upgrade (downgrade) behavior from a non-test image back to the test image. This test exercises the RDK CDL (Code Download) service and the firmware upgrade stack (`XCONF` server configuration, SNMP triggers, or local USB/HTTP methods) to validate the firmware upgrade workflow. The test confirms that the firmware version should reflect the test image version as configured in XCONF.
+To validate the XCONF firmware downgrade workflow on the DUT, reverting from a non-test image back to the test image. This test confirms that the firmware version is correctly updated to the test image version as configured in XCONF, ensuring the firmware downgrade capability meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

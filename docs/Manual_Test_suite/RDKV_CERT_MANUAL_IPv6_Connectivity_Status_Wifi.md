@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IPv6_Connectivity_Status_Wifi
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT reports a fully connected IPv6 status when connected to a Wi-Fi SSID that supports IPv6. This test exercises the RDK network manager, IPv6 address assignment stack (`ip` / `ifconfig` commands), and the router Advertisement handler to validate dual-stack network connectivity. The test confirms that the response should confirm IPv6 connectivity.}.
+To validate that the DUT reports a fully connected IPv6 status when connected to a Wi-Fi SSID that supports IPv6. This test confirms that the network manager correctly identifies and reports the IPv6 connectivity state, ensuring IPv6 status reporting meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

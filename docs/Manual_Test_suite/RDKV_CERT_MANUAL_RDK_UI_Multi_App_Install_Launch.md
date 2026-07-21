@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Multi_App_Install_Launch
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that multiple apps can be downloaded and installed, that all installed apps are listed in the My Apps row, and that horizontal navigation within the My Apps row is supported. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that horizontal navigation should be possible.
-
+To validate that multiple apps can be downloaded and installed via the RDK UI, and that all installed apps are correctly listed in the My Apps row with horizontal navigation supported. This test confirms that horizontal scrolling within the My Apps row functions correctly, ensuring multi-app installation and navigation meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

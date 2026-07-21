@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Webaudio_Audio_Context_Create_Destroy
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can continuously create and destroy AudioContext objects via the WebAudio API without crashing or encountering errors. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
-
+To validate that the DUT can continuously create and destroy audio context objects via the WebAudio API without crashing or encountering errors. This test confirms that repeated audio context lifecycle operations complete without memory leaks or instability, ensuring WebAudio audio context lifecycle management meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

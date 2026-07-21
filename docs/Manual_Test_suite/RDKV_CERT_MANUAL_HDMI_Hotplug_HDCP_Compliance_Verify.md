@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_Hotplug_HDCP_Compliance_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate HDCP compliance by verifying A/V playback behavior across HDMI cable disconnect/reconnect and DUT standby/power-on cycles. This test exercises the RDK HDMI hotplug detection service and display manager to validate display connection and disconnection event handling. The test confirms that the RDK UI should be visible on the display and YouTube A/V playback should function correctly with proper audio and video output after HDMI reconnection.
+To validate HDCP compliance by verifying A/V playback behavior across HDMI cable disconnect/reconnect and DUT standby/power-on cycles. This test confirms that the RDK UI is visible and A/V playback functions correctly with proper audio and video output after HDMI reconnection, ensuring HDCP compliance is maintained across hotplug events for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

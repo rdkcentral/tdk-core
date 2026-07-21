@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AV_Codec_MPEG4_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that MPEG4 stream playback is functional on the DUT via GStreamer. This test exercises the RDK media pipeline, AV decoder plugins, and the video player application to drive codec-specific playback scenarios. The test confirms that the video playback should end gracefully without any errors or crashes.
+To validate that MPEG4 video codec playback is functional on the DUT using the RDK media pipeline. This test confirms that the video plays back and completes gracefully without errors or crashes, ensuring MPEG4 codec support meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

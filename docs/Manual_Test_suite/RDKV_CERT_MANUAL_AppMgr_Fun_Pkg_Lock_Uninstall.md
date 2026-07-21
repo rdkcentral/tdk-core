@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_14
 ## TestCase Name
-RDKV_CERT_MANUAL_AppMgr_Fun_Pkg_Lock_Update
+RDKV_CERT_MANUAL_AppMgr_Fun_Pkg_Lock_Uninstall
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Pkg_Lock_Update
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that calling PackageManager.lock via the AppManager successfully prevents the locked package from being updated. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that app should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.. App should be available in MyApps Tab.
+To validate that the package lock mechanism on the DUT prevents an active or locked application from being uninstalled while it is in use. This test confirms that the uninstall operation is correctly rejected and the application remains fully functional and accessible, ensuring that package protection controls work as intended for operational compliance.
 
 <a name="head.Precondition"></a>
 ## Preconditions

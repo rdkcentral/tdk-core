@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Pwr_Mgmt_Screensaver_Deep_Sleep_Combo
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the DUT behavior when the Screen Saver timer is set to 5 minutes and the Deep Sleep inactivity timer is set to 15 minutes. This test exercises the `org.rdk.PowerManager` plugin and the RDK power-state machine (including standby, deep-sleep, and wake triggers) to validate power-mode transitions. The test confirms that the DUT should wake up from Deep Sleep mode. The RDK UI should come up again. The DUT should be accessible via SSH and internet should be accessible.
+To validate the DUT behavior when both the Screen Saver and Deep Sleep inactivity timers are configured concurrently via the RDK UI settings. This test confirms that the screen saver activates first followed by the DUT entering Deep Sleep, and that the RDK UI resumes correctly after wake-up, ensuring the combined screensaver and Deep Sleep timer behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

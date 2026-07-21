@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Video_Trickplay_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that video trick-play operations (play, pause, rewind, fast-forward, seek) performed on the smartphone are correctly reflected on the DUT during Miracast screen mirroring. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that all trick-play operations performed on the smartphone should be accurately reflected on the DUT display.
+To validate that video trick-play operations (play, pause, rewind, fast-forward, and seek) performed on the smartphone are correctly reflected on the DUT during Miracast screen mirroring. This test confirms that all trick-play operations are accurately mirrored on the DUT display, ensuring Miracast video playback control meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

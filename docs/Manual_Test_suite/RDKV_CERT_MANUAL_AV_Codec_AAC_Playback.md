@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AV_Codec_AAC_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that AAC audio stream playback is functional on the DUT. This test exercises the RDK media pipeline, AV decoder plugins, and the video player application to drive codec-specific playback scenarios. The test confirms that the AAC asset should play with proper audio without any distortion or errors.
+To validate that AAC audio codec playback is functional on the DUT using the RDK media pipeline. This test confirms that the AAC asset plays with proper audio output without distortion or errors, ensuring AAC codec support meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

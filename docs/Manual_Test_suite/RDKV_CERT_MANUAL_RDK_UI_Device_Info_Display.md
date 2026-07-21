@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Device_Info_Display
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that device information is displayed correctly on the Device Info screen in the RDK UI Settings. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that info screen should launch. It should have the details of the following things populated. Serial Number Supported DRM & Key System Firmware Version App Info.
-
+To validate that device information is correctly displayed on the Device Info screen accessible via the RDK UI Settings. This test confirms that the Device Info screen shows all required details including serial number, supported DRM, firmware version, and app info, ensuring the device information display meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

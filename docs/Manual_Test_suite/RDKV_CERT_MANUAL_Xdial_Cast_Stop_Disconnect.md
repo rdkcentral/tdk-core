@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Cast_Stop_Disconnect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that an active XDial casting session can be stopped using the Disconnect option from the external device (smartphone), and that subsequent video playback resumes on the smartphone only. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV.
-
+To validate that an active XDial casting session can be stopped using the Disconnect option from the smartphone, and that video playback subsequently resumes on the smartphone only. This test confirms that the DUT returns to the home screen upon disconnection and video continues on the smartphone, ensuring XDial session disconnection behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

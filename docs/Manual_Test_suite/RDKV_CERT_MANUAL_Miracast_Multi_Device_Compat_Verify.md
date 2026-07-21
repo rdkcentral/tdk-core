@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Multi_Device_Compat_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate Miracast compatibility with different smartphones and operating systems (Android, iOS). This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that miracast screen casting should establish successfully with each different smartphone. The results for Steps 1–5 should be consistent across all tested device types.
+To validate Miracast compatibility with different smartphones and operating systems including Android and iOS. This test confirms that screen casting is established successfully with each device type and results are consistent across all tested platforms, ensuring Miracast multi-device compatibility meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

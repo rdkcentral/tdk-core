@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_POWER_04
 ## TestCase Name
-RDKV_CERT_MANUAL_Pwr_Mgmt_Deep_Sleep_Wol_Wakeup
+RDKV_CERT_MANUAL_Pwr_Mgmt_Deep_Sleep_WoL_Wakeup
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Pwr_Mgmt_Deep_Sleep_Wol_Wakeup
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can be set to DEEP SLEEP mode and then woken up using Wake-on-LAN (WoL). This test exercises the `org.rdk.PowerManager` plugin and the RDK power-state machine (including standby, deep-sleep, and wake triggers) to validate power-mode transitions. The test confirms that the RDK UI should be functioning as expected. Internet should be accessible on the DUT and the launched application should play content with proper Audio and Video.
+To validate that the DUT can be set to DEEP SLEEP mode and successfully woken up using Wake-on-LAN (WoL). This test confirms that the RDK UI is operational, internet is accessible, and A/V content playback resumes after WoL wake-up, ensuring Wake-on-LAN as a DEEP SLEEP wake source meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

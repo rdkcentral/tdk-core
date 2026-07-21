@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Webaudio_Speech_Synthesis_Basic
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the WebAudio Speech Synthesis API can successfully synthesize and output a given text as audio on the DUT. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
-
+To validate that the speech synthesis capability of the WebAudio API can successfully synthesize and output a given text as audio on the DUT. This test confirms that the synthesized speech is generated and played back correctly, ensuring basic WebAudio speech synthesis meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

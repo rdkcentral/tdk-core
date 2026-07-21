@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_App_Install_Duplicate_Press
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that pressing an installed app tile from various locations in the RDK UI always launches the application successfully, regardless of the app's previous state (cold or hot launch). This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that launched App should close and The RDK UI Home screen should launch.
-
+To validate that pressing an installed app tile from various locations in the RDK UI always launches the application successfully regardless of whether it is a cold or hot launch. This test confirms that the launched app closes correctly and the RDK UI Home screen is restored, ensuring consistent app launch behavior from multiple UI entry points meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

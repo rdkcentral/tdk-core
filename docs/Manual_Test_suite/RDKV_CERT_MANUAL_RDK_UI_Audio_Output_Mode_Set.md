@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Audio_Output_Mode_Set
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the available audio output modes can be set and applied via the RDK UI Settings. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that expected results are similar to steps 3 to 6.
-
+To validate that available audio output modes can be selected and applied via the RDK UI Settings. This test confirms that each audio output mode is set correctly and the change is reflected on the DUT, ensuring audio output mode configuration via the RDK UI meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

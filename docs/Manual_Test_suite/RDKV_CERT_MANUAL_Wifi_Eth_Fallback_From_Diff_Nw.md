@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_Eth_Fallback_From_Diff_Nw
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT automatically falls back to the Ethernet interface and internet access is restored when an Ethernet cable is reconnected while the DUT is connected to a Wi-Fi network on a different subnet. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
-
+To validate that the DUT automatically falls back to the Ethernet interface and internet access is restored when an Ethernet cable is reconnected while the DUT is on a Wi-Fi network with a different subnet. This test confirms that internet connectivity is re-established via Ethernet and content playback resumes, ensuring Ethernet fallback from a different subnet meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

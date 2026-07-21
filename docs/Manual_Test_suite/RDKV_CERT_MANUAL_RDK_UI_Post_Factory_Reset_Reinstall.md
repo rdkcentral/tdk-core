@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Post_Factory_Reset_Reinstall
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that after a Factory Reset, any app can be reinstalled and launched successfully from the My Apps section, More Apps page, and App Info page. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that app should be launched.
-
+To validate that after a Factory Reset, any app can be reinstalled and launched successfully from the My Apps section, More Apps page, and App Info page. This test confirms that the reinstalled app launches correctly from all UI entry points, ensuring app reinstallation after factory reset meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

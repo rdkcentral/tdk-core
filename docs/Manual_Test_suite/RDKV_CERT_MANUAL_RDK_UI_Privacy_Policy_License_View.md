@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Privacy_Policy_License_View
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Privacy Policy and License information are accessible and displayed correctly via the RDK UI Settings. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that policy screen should launch and the information should be displayed on screen. The screen should be scrollable to see all the information in screen.
-
+To validate that Privacy Policy and License information are accessible and correctly displayed via the RDK UI Settings. This test confirms that the policy screen loads with full content visible and is scrollable to view all information, ensuring the privacy policy and license display behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

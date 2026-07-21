@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_Ok_Press
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the OK key press on the paired Bluetooth remote functions correctly in the RDK UI. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that the selected application or Settings screen should open successfully.
+To validate that the OK key press on the paired Bluetooth remote correctly confirms selections in the RDK UI on the DUT. This test confirms that the OK key is mapped correctly and the selected application or screen opens successfully, ensuring Bluetooth remote key-press functionality meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

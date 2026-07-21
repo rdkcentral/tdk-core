@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_ReconnectAfterBattery_ReInsertion
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a paired Bluetooth remote automatically restores its connection to the DUT after the remote battery is removed and re-inserted. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that the Bluetooth connection should be restored automatically after battery re-insertion. All key presses should respond correctly, confirming that the pairing has been re-established.
+To validate that a paired Bluetooth remote automatically restores its connection to the DUT after the remote battery is removed and re-inserted. This test confirms that the Bluetooth connection is re-established automatically and all key presses respond correctly, ensuring remote reconnection behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

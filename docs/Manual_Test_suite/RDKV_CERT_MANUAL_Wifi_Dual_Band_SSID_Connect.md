@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_Dual_Band_SSID_Connect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can successfully connect to both a 2.4 GHz and a 5 GHz Wi-Fi SSID sequentially, with internet access confirmed for both bands. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should launch successfully and video playback should start with proper audio and video output.
-
+To validate that the DUT can successfully connect to both a 2.4 GHz and a 5 GHz Wi-Fi SSID sequentially, with internet access confirmed for both bands. This test confirms that content playback is functional after connecting to each band, ensuring dual-band Wi-Fi connectivity meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AV_Codec_LPCM_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that LPCM audio stream playback is functional on the DUT. This test exercises the RDK media pipeline, AV decoder plugins, and the video player application to drive codec-specific playback scenarios. The test confirms that the LPCM audio asset should play without any distortion or errors.
+To validate that LPCM audio codec playback is functional on the DUT using the RDK media pipeline. This test confirms that the LPCM audio asset plays without distortion or errors, ensuring LPCM codec support meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AV_Codec_DASH_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that DASH (.mpd) stream playback is functional on the DUT. This test exercises the RDK media pipeline, AV decoder plugins, and the video player application to drive codec-specific playback scenarios. The test confirms that the DASH (.mpd) asset should play with proper audio and video without any artifacts or errors.
+To validate that DASH (.mpd) adaptive streaming playback is functional on the DUT using the RDK media pipeline. This test confirms that the DASH asset plays with proper audio and video output without artifacts or errors, ensuring DASH streaming support meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

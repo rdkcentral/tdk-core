@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IPv6_Trace_Api_Wifi_No_Eth
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the NetworkManager Trace API functions correctly over IPv6 when the DUT is connected to an IPv6-supporting Wi-Fi SSID with Ethernet disconnected. This test exercises the RDK network manager, IPv6 address assignment stack (`ip` / `ifconfig` commands), and the router Advertisement handler to validate dual-stack network connectivity. The test confirms that the traceroute should complete successfully. The response should contain "success":true and a results array listing the hop information to the destination 2001:4860:4860::8888.
+To validate that IPv6 traceroute functionality is operational on the DUT when connected to an IPv6-supporting Wi-Fi SSID with Ethernet disconnected. This test confirms that the traceroute completes successfully with a valid hop path to the destination, ensuring IPv6 trace capability meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

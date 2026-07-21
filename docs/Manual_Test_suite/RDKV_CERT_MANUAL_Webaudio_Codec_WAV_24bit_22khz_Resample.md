@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Webaudio_Codec_WAV_24bit_22khz_Resample
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can successfully decode a WAV audio file (24-bit, 22 kHz with resampling) using the WebAudio API and report the correct codec metadata. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
-
+To validate that the DUT can successfully decode a WAV audio file encoded at 24-bit, 22 kHz with resampling using the WebAudio API. This test confirms that the codec is decoded correctly and the expected metadata is reported accurately, ensuring WAV 24-bit resampled codec support meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

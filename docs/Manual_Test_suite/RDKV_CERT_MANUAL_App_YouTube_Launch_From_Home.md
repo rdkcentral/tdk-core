@@ -1,7 +1,7 @@
-## TestCase ID
-RDKV_MANUAL_APPS_03
+﻿## TestCase ID
+RDKV_MANUAL_APPS_01
 ## TestCase Name
-RDKV_CERT_MANUAL_App_Netflix_Launch_From_Home
+RDKV_CERT_MANUAL_App_YouTube_Launch_From_Home
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_App_Netflix_Launch_From_Home
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Netflix application can be successfully launched from the Featured Content section of the RDK UI Home screen. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the Netflix Home screen should load successfully with content available for browsing.
+To validate that the YouTube application can be successfully launched from the Featured Content section of the RDK UI Home screen on the DUT. This test confirms that the YouTube Home screen loads with content available for browsing, ensuring that app launch from the RDK UI is functional for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -29,8 +29,8 @@ To validate that the Netflix application can be successfully launched from the F
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Launch Netflix from Featured Content section | From the Featured Content section of the RDK UI Home screen, select Netflix and press OK. | Netflix should launch successfully.|
-| 2 | Sign in to Netflix if required | If login is required, enter valid credentials and sign in to Netflix. | The Netflix Home screen should load successfully with content available for browsing.|
+| 1 | Launch YouTube from Featured Content section | From the Featured Content section of the RDK UI Home screen, select YouTube and press OK. | YouTube should launch successfully.|
+| 2 | Sign in to YouTube if required | If login is required, enter valid credentials and sign in to YouTube. | The YouTube Home screen should load successfully with content available for browsing.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes

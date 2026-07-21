@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_Hotspot_Persist_After_Reboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT automatically reconnects to the last connected mobile hotspot SSID after a reboot. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
-
+To validate that the DUT automatically reconnects to the last connected mobile hotspot SSID after a reboot. This test confirms that internet connectivity is restored via the hotspot and content playback resumes successfully, ensuring Wi-Fi hotspot connection persistence across reboots meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Pwr_Mgmt_Screensaver_Disabled
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the screen saver does not activate on the DUT when the Screen Saver option is set to Off. This test exercises the `org.rdk.PowerManager` plugin and the RDK power-state machine (including standby, deep-sleep, and wake triggers) to validate power-mode transitions. The test confirms that after 5 minutes of inactivity, the screen saver should not activate. The DUT UI should remain on the RDK UI Home screen.
+To validate that the screen saver does not activate on the DUT when the Screen Saver option is set to Off in the RDK UI settings. This test confirms that the DUT UI remains on the RDK UI Home screen throughout the inactivity period without any screensaver activation, ensuring the screen saver disable behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_App_Home_Screen_Focus_Left_Pane
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the RDK UI Home screen focus can be restored by pressing the Home icon in the left pane of the RDK UI Home screen. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the focus should move to the last accessed section in the RDK UI Home screen.
+To validate that the RDK UI Home screen focus is correctly restored when the Home icon in the left pane is selected on the DUT. This test confirms that focus navigates to the last accessed section of the Home screen, ensuring that pane-based navigation behaves correctly for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

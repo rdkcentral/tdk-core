@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_TV_PowerOn_Screen_Restore
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that when the TV is powered on via a CEC command, the RDK UI restores the screen that was active immediately before the TV was turned off. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that when the `performOTPAction` CEC command is executed, the TV should power on and the RDK UI should restore to the screen that was active before standby, continuing playback with proper A/V.
+To validate that when the TV is powered on via a CEC command, the RDK UI correctly restores the screen that was active before the TV was turned off. This test confirms that the TV powers on and the previous screen is restored with playback continuing correctly, ensuring CEC-triggered screen restoration meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

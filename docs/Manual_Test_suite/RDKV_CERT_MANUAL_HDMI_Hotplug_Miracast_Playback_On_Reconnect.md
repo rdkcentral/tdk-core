@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_Hotplug_Miracast_Playback_On_Reconnect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Miracast screen casting from a smartphone continues without interruption after an HDMI cable reconnect on the DUT. This test exercises the RDK HDMI hotplug detection service and display manager to validate display connection and disconnection event handling. The test confirms that the Miracast screen casting session should not be interrupted and video playback should continue on the DUT with proper audio and video output after HDMI reconnection.
+To validate that a Miracast screen casting session from a smartphone continues without interruption after an HDMI cable reconnect on the DUT. This test confirms that the casting session is preserved and video playback continues with proper audio and video output after HDMI reconnection, ensuring hotplug resilience for active Miracast sessions meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Reboot_From_Settings
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can be rebooted from the RDK UI Settings and that the reboot confirmation dialog functions correctly. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that a loading indicator should appear briefly and the DUT should reboot and come up with the RDK splash screen followed by the RDK UI Home screen.
-
+To validate that the DUT can be rebooted from the RDK UI Settings using the reboot confirmation dialog. This test confirms that the device reboots successfully and returns to the RDK splash screen followed by the RDK UI Home screen, ensuring the reboot from Settings behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

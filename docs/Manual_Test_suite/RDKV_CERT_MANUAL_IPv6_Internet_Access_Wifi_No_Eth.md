@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IPv6_Internet_Access_Wifi_No_Eth
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that internet access is functional on the DUT when connected to an IPv6-supporting Wi-Fi SSID with Ethernet disconnected. This test exercises the RDK network manager, IPv6 address assignment stack (`ip` / `ifconfig` commands), and the router Advertisement handler to validate dual-stack network connectivity. The test confirms that the selected video content A/V playback should start successfully, confirming internet access is functional via IPv6 over Wi-Fi.
+To validate that internet access is functional on the DUT when connected to an IPv6-supporting Wi-Fi SSID with Ethernet disconnected. This test confirms that A/V content playback starts successfully over the IPv6 Wi-Fi connection, ensuring IPv6-only internet access via Wi-Fi meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_First_Boot_Home_Screen
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that on the very first boot, the RDK UI Home screen displays only two rows -- Recommended Apps and Video on Demand -- with no My Apps row, as no apps are installed. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the UI should have only two rows. The top row should display Recommended Apps, while the bottom row should display Video on Demand (VoD) apps. My Apps row should be hidden as there are no DAC apps installed yet.
-
+To validate that on the very first boot, the RDK UI Home screen displays only the Recommended Apps and Video on Demand rows with no My Apps row, since no apps are installed. This test confirms that the initial home screen layout is correctly rendered without the My Apps section, ensuring the first-boot home screen display meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

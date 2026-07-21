@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_DRM_Amz_Prime_Playready_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Amazon Prime Video PlayReady DRM-protected content playback is functional on the DUT (Operator Specific). This test exercises the RDK DRM plugin (PlayReady or Widevine), the secure content delivery pipeline, and the video player application to validate protected media playback. The test confirms that the Amazon Prime App should be terminated gracefully and the RDK UI Homepage should be visible on the TV.
+To validate that Amazon Prime Video PlayReady DRM-protected content playback is functional on the DUT. This test confirms that the protected content plays with proper audio and video output, ensuring PlayReady DRM integration meets operator-specific certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

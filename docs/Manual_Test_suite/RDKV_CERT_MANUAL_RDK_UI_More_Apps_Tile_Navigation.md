@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_More_Apps_Tile_Navigation
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that selecting the "More Apps" tile at the end of the Recommended Apps row opens a dedicated page listing all available applications in the DAC App Catalogue. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the apps listed in more Apps should match with the apps in App catalogue. In 'More Apps' page, apps should be listed in alphabetical order, arranged in a row-column (n x 5) grid layout.
-
+To validate that selecting the More Apps tile in the Recommended Apps row opens a dedicated page listing all available applications from the DAC App Catalogue in alphabetical order. This test confirms that the More Apps page displays apps matching the App Catalogue in the correct alphabetical and grid layout, ensuring the More Apps tile navigation behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

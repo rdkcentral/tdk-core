@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_TV_PowerOn_Miracast_No_Impact
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that powering on the TV via a CEC command does not interrupt or terminate an active Miracast screen casting session. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that.and the TV should turn on. The RDK UI should restore to the Miracast casting screen, confirming the casting session was not interrupted.
+To validate that powering on the TV via a CEC command does not interrupt or terminate an active Miracast screen casting session. This test confirms that the Miracast casting session is preserved and the RDK UI restores to the casting screen after the TV power-on CEC command, ensuring CEC power commands do not impact active Miracast sessions for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

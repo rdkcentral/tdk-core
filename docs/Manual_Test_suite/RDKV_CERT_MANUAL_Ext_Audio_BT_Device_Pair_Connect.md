@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Ext_Audio_BT_Device_Pair_Connect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that an external Bluetooth device can be successfully paired and connected to the DUT. This test exercises the org.rdk.Bluetooth plugin APIs, including scanning, pairing, and connection operations, to validate external audio device connectivity and output routing. The test confirms that the DUT should remain paired and connected to the specified device ID, and that the paired and connected device lists are correctly updated to reflect the newly paired device.
+To validate that an external Bluetooth device can be successfully paired and connected to the DUT. This test confirms that the DUT remains paired and connected to the specified device and that the paired and connected device lists are correctly updated, ensuring Bluetooth external audio device connectivity meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Max_Inactive_Ram
 
 <a name="head.Objective"></a>
 ## Objective
-To validate and retrieve the maximum RAM available for inactive applications (in mebibytes) using the maxInactiveRamUsage property. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that } , Which indicates max ram available for inactive apps (in mebibytes).
+To validate the maximum RAM available for inactive applications as reported by the AppManager on the DUT. This test confirms that the RAM limit for inactive applications is correctly retrieved and reflects the expected value, ensuring that memory resource management meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

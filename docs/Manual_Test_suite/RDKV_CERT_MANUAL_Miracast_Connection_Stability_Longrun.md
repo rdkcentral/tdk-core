@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Connection_Stability_Longrun
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Miracast connection between the smartphone and the DUT remains stable and without interruption over an extended period of time. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the Miracast connection should remain stable throughout the duration without any disconnections or significant lag.
+To validate that the Miracast connection between the smartphone and the DUT remains stable and uninterrupted over an extended period of time. This test confirms that the connection is maintained throughout the duration without disconnections or significant lag, ensuring Miracast long-run connection stability meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

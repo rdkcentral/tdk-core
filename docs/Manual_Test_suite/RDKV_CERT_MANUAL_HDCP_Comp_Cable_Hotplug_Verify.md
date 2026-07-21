@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDCP_Comp_Cable_Hotplug_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that HDMI cable disconnect and connect events are correctly detected and reported by the DUT via the HDCP Profile API and system logs. This test exercises the `org.rdk.HdcpProfile` plugin and the HDMI output manager to validate HDCP handshake and content-protection compliance on the connected display. The test confirms that the following log entry should be present in the console logs: "Updated hotplug to DISCONNECTED" or "hdcpReason":0.
+To validate that HDMI cable disconnect and reconnect events are correctly detected and reported by the DUT via the HDCP Profile API and system logs. This test confirms that hotplug state changes are accurately reflected in both the API response and console logs, ensuring HDMI hotplug detection and HDCP status reporting meet certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

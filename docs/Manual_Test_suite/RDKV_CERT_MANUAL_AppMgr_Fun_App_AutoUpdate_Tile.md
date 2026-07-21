@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_App_AutoUpdate_Tile
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that if a newer version of an installed application is available, clicking the app tile from the Recommended Apps row automatically updates the application to the latest version. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that app should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.
+To validate that clicking an application tile from the Recommended Apps row automatically triggers an update to the latest version when a newer version is available on the DUT. This test confirms that the auto-update mechanism via the RDK UI works correctly, which is essential for app lifecycle and update compliance certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

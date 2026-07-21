@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Img_Upgrade_Xconf_Fw_Via_Api
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the XCONF firmware upgrade behavior from the current test image to a target image using the RDKServices Thunder API. This test exercises the RDK CDL (Code Download) service and the firmware upgrade stack (`XCONF` server configuration, SNMP triggers, or local USB/HTTP methods) to validate the firmware upgrade workflow. The test confirms that the firmware version in /version.txt should reflect the upgraded image version as configured in XCONF (e.g., imagename: ).
+To validate the XCONF firmware upgrade workflow from the current test image to a target image using the RDKServices Thunder API on the DUT. This test confirms that the firmware version is correctly updated to the upgraded image version as configured in XCONF, ensuring API-triggered firmware upgrade meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

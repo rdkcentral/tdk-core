@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_Hotplug_Prime_Video_Paused_Playback_On_Reconnect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a paused Amazon Prime Video playback remains in the paused state after an HDMI cable reconnect, when paused prior to disconnection. This test exercises the RDK HDMI hotplug detection service and display manager to validate display connection and disconnection event handling. The test confirms that the Amazon Prime Video application should terminate gracefully and the RDK UI Home screen should be visible on the TV/display.
+To validate that a paused Amazon Prime Video playback remains in the paused state after an HDMI cable reconnect, when paused prior to disconnection. This test confirms that the paused state is preserved across the hotplug event and the application remains accessible, ensuring hotplug handling for paused playback meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

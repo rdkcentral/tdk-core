@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_15
 ## TestCase Name
 RDKV_CERT_MANUAL_AppMgr_Fun_Deeplink_Launch
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Deeplink_Launch
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the deeplink launch functionality on deeplink-supported installed applications via the AppManager API. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that all deeplink-supported applications can be successfully launched with the specified deeplink arguments, and that the AppManager API responses confirm successful launch execution across all supported apps.
+To validate that deeplink-supported applications can be launched with specific deeplink parameters via the AppManager on the DUT. This test confirms that each application launches to the expected content or state based on the provided deeplink arguments, ensuring that deeplink launch functionality is fully operational for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -31,9 +31,9 @@ To validate the deeplink launch functionality on deeplink-supported installed ap
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Get YouTube appId via getInstalledApps API | Execute below curl command to get the appId of the installed YouTube App from list :  <br>`curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 5, "method": "org.rdk.AppManager.getInstalledApps"}' http://127.0.0.1:9998/jsonrpc` | The `getInstalledApps` API should return a successful response containing the `appId` of the installed YouTube App (e.g., `com.rdkcentral.youtube`) in the result list.|
-| 2 | Launch YouTube app with deeplink via API | Execute the below curl command  to launch the YouTube app with deeplink using AppManager.1.launchApp API and LaunchArgs : <br>`curl -d '{ "jsonrpc": "2.0", "id": 2, "method": "org.rdk.AppManager.launchApp", "params": { "appId": "com.rdkcentral.youtube", "intent": "<intent>", "launchArgs": "<deeplink videoID>" }}' http://127.0.0.1:9998/jsonrpc` | The `launchApp` API should return a successful response, and the YouTube App should launch with the specified deeplink `launchArgs`.|
-| 3 | Verify YouTube plays deeplink video | Validate that Youtube started playback for the video ID in deeplink URL and verify the uninterrupted AV playback | YouTube App should launch and instantly play the video given in the deeplink URL and AV playback should be fine|
+| 1 | Get YouTube appId via getInstalledApps API | Execute below curl command to get the appId of the installed YouTube App from list :  <br>`curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 5, "method": "org.rdk.AppManager.getInstalledApps"}' http://127.0.0.1:9998/jsonrpc` | The `getInstalledApps` API should return a successful response containing the `appId` of the installed YouTube App (e.g., `com.rdkcentral.YouTube`) in the result list.|
+| 2 | Launch YouTube app with deeplink via API | Execute the below curl command  to launch the YouTube app with deeplink using AppManager.1.launchApp API and LaunchArgs : <br>`curl -d '{ "jsonrpc": "2.0", "id": 2, "method": "org.rdk.AppManager.launchApp", "params": { "appId": "com.rdkcentral.YouTube", "intent": "<intent>", "launchArgs": "<deeplink videoID>" }}' http://127.0.0.1:9998/jsonrpc` | The `launchApp` API should return a successful response, and the YouTube App should launch with the specified deeplink `launchArgs`.|
+| 3 | Verify YouTube plays deeplink video | Validate that YouTube started playback for the video ID in deeplink URL and verify the uninterrupted AV playback | YouTube App should launch and instantly play the video given in the deeplink URL and AV playback should be fine|
 | 4 | Close YouTube app via Back key | Close/Exit the YouTube App by back key press on remote. | All YouTube App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
 | 5 | Get Amazon Prime appId via getInstalledApps API | Execute below curl command to get the appId of the installed Amazon Prime App from list :  <br>`curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 5, "method": "org.rdk.AppManager.getInstalledApps"}' http://127.0.0.1:9998/jsonrpc` | The `getInstalledApps` API should return a successful response containing the `appId` of the installed Amazon Prime App (e.g., `com.rdkcentral.AmazonPrimeWidevine`) in the result list.|
 | 6 | Launch Amazon Prime app with deeplink via API | Execute the below curl command  to launch the Amazon Prime app with deeplink using AppManager.1.launchApp API and LaunchArgs : <br>`curl -d '{ "jsonrpc": "2.0", "id": 2, "method": "org.rdk.AppManager.launchApp", "params": { "appId": "com.rdkcentral.AmazonPrimeWidevine", "intent": "<intent>", "launchArgs": "<deeplink videoID>" }}' http://127.0.0.1:9998/jsonrpc` | The `launchApp` API should return a successful response, and the Amazon Prime App should launch with the specified deeplink `launchArgs`.|

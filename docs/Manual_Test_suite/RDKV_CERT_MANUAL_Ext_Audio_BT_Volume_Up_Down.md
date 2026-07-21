@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Ext_Audio_BT_Volume_Up_Down
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the audio stream volume can be increased and decreased on an external Bluetooth device during active playback. This test exercises the `org.rdk.Bluetooth` plugin's volume control APIs to set the volume level and verify the applied value via a getter call. The test confirms that the volume changes are correctly reflected in the API response and audibly noticeable on the external Bluetooth device.
+To validate that the audio stream volume can be increased and decreased on an external Bluetooth device during active playback on the DUT. This test confirms that volume changes are correctly applied and audibly noticeable on the external Bluetooth device, ensuring Bluetooth audio volume control meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

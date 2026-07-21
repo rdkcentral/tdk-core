@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AV_Codec_HDR_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that HDR video stream playback is functional on the DUT via GStreamer. This test exercises the RDK media pipeline, AV decoder plugins, and the video player application to drive codec-specific playback scenarios. The test confirms that the video playback should end gracefully without any errors or crashes.
+To validate that HDR video stream playback is functional on the DUT using the RDK media pipeline. This test confirms that the HDR video plays back and completes gracefully without errors or crashes, ensuring HDR playback support meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

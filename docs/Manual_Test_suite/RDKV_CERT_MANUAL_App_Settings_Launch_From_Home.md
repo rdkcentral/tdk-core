@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_App_Settings_Launch_From_Home
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Settings screen can be successfully launched from the RDK UI Home screen. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the Settings screen should launch successfully.
+To validate that the Settings screen can be successfully launched from the RDK UI Home screen on the DUT. This test confirms that the Settings screen launches and displays correctly, ensuring that device settings navigation is functional for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Multi_App_Lifecycle
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the lifecycle management behavior of multiple applications launched and suspended from the RDK UI. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that all the apps should resume from the last closed state when its relaunched and playback should be fine.
+To validate the lifecycle management behavior of multiple applications launched and suspended via the RDK UI on the DUT. This test confirms that all applications resume from their last closed state upon relaunch with playback intact, ensuring correct multi-app lifecycle handling for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

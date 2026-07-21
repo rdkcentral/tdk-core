@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Cast_Back_Button
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Back button on the external device (smartphone) remote control screen functions correctly during an active YouTube XDial casting session, stopping video playback and returning to the YouTube Home screen on the DUT. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
-
+To validate that the Back button on the smartphone remote control screen functions correctly during an active YouTube XDial casting session on the DUT. This test confirms that video playback stops and the YouTube Home screen is displayed on the DUT in response to the Back button press, ensuring Back button control behavior during XDial casting meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

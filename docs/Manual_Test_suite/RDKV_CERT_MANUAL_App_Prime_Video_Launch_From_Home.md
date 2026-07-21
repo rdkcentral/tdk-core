@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_App_Prime_Video_Launch_From_Home
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Amazon Prime Video application can be successfully launched from the Featured Content section of the RDK UI Home screen. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the Amazon Prime Video Home screen should load successfully with content available for browsing.
+To validate that the Amazon Prime Video application can be successfully launched from the Featured Content section of the RDK UI Home screen on the DUT. This test confirms that the application Home screen loads with content available for browsing, ensuring that app launch from the RDK UI is functional for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

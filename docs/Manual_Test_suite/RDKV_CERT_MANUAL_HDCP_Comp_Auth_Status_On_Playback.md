@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDCP_Comp_Auth_Status_On_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that HDCP authentication is successfully initiated and authenticated when A/V stream playback is active on the DUT. This test exercises the `org.rdk.HdcpProfile` plugin and the HDMI output manager to validate HDCP handshake and content-protection compliance on the connected display. The test confirms that the application should terminate gracefully and the RDK UI Home screen should be visible on the display.
+To validate that HDCP authentication is successfully initiated and maintained during active A/V stream playback on the DUT. This test confirms that the HDCP handshake completes and the authentication status is correctly reported, ensuring content protection compliance is maintained during playback for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_App_Install_Keypress_Ignore
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that any user key presses on an app tile while the application is in the download/installation state are ignored without causing errors. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the key press should be ignored and no error should come.
-
+To validate that user key presses on an app tile are correctly ignored while the application is in the download or installation state, without causing any errors. This test confirms that the key press is silently disregarded and the installation completes without issues, ensuring key press suppression during active downloads meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

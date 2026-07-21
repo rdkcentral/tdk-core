@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Multi_App_Parallel_Uninstall
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that multiple apps can be uninstalled sequentially from the App Info screen, and that all uninstalled apps are no longer listed in the My Apps section. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that it should not launch the app, as it is already uninstalled. It should try to download the app again.
-
+To validate that multiple apps can be uninstalled sequentially from the App Info screen, and that all uninstalled apps are removed from the My Apps section. This test confirms that uninstalled apps are no longer launchable and prompt re-download when selected, ensuring sequential multi-app uninstallation behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

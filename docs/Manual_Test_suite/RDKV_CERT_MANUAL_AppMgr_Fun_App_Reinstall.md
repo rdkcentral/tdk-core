@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_App_Reinstall
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that previously uninstalled applications can be successfully reinstalled from the Recommended Apps or More Apps section of the RDK UI. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that previously uninstalled applications are successfully reinstalled and that all installation, launch, and status API responses confirm successful execution across the full reinstallation workflow.
+To validate that previously uninstalled applications can be successfully reinstalled from the Recommended Apps or More Apps section of the RDK UI on the DUT. This test confirms that the reinstallation and subsequent launch complete successfully, ensuring that app management and installation workflows meet certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

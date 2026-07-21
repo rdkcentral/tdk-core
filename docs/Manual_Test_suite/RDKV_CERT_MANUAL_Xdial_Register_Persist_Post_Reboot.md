@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_XDIAL_04
 ## TestCase Name
 RDKV_CERT_MANUAL_Xdial_Register_Persist_Post_Reboot
@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Register_Persist_Post_Reboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Dynamic XDial support registration persists on the DUT after a device reboot when an XDial-supported application is already installed. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session on the smartphone should be closed.
-
+To validate that Dynamic XDial support registration persists on the DUT after a device reboot when an XDial-supported application is already installed. This test confirms that the DUT remains discoverable and casting functionality is operational after reboot, ensuring XDial registration persistence across reboots meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 
@@ -35,7 +34,7 @@ To validate that Dynamic XDial support registration persists on the DUT after a 
 |-|---------|-----------------|----------------|
 | 1 | Verify YouTube app is installed | Validate that the YouTube application is installed and available in the My Apps/Recommended Apps section/row of the RDK UI Home Page. If not installed, install it as per the Apps Installation preconditions (Preconditions 4–7). | The YouTube application should be installed and its tile should be available in the My Apps/Recommended Apps section/row.|
 | 2 | Reboot DUT | Reboot the DUT and wait for the RDK UI Home Page to load completely. | The DUT should reboot successfully and the RDK UI Home Page should be displayed.|
-| 3 | Launch the youtube application on the | Launch the YouTube application on the smartphone and tap the cast icon at the top of the screen. | The YouTube application should launch on the smartphone and a popup displaying the list of available cast devices should appear.|
+| 3 | Launch the YouTube application on the | Launch the YouTube application on the smartphone and tap the cast icon at the top of the screen. | The YouTube application should launch on the smartphone and a popup displaying the list of available cast devices should appear.|
 | 4 | Validate that the dut is listed | Validate that the DUT is listed in the cast devices popup. | The DUT should be listed in the cast devices popup along with other available devices.|
 | 5 | Select DUT from cast devices popup | Select the DUT from the cast devices popup. | The smartphone should display "Connecting to <VA Device Name>" followed by "Connected to <VA Device Name>". The YouTube Home screen should load on the TV. A "New Device Connected" notification should appear in the top corner of YouTube on the TV.|
 | 6 | Close YouTube app via Back key | Close/exit the YouTube application by pressing the Back key on the remote. | The YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session on the smartphone should be closed.|

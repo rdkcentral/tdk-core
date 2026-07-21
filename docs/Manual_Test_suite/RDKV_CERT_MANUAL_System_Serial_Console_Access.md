@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_System_Serial_Console_Access
 
 <a name="head.Objective"></a>
 ## Objective
-To validate serial terminal access to the DUT and ensure that the required commands can be executed successfully from the serial console with the expected responses. This test exercises shell commands executed over a serial console or SSH session (such as `systemctl`, `cat`, `ifconfig`, and `journalctl`) to validate the targeted system-level functionality. The test confirms that the eth0 interface details should be displayed along with a valid Ethernet IP address.
+To validate that the serial console on the DUT is accessible and that required system commands can be executed with the expected responses. This test confirms that network interface details are displayed correctly with a valid IP address, ensuring serial console access and basic system command execution meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Webaudio_Speech_Synthesis_Multilang
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the WebAudio Speech Synthesis API can sequentially synthesize text audio output using three different language voices continuously on the DUT. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
-
+To validate that the speech synthesis capability of the WebAudio API can sequentially synthesize text audio output using three different language voices on the DUT. This test confirms that all three language voices are synthesized and played back correctly in sequence, ensuring WebAudio multi-language speech synthesis meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

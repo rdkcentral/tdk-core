@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_Prev_SSID_Reconnect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can successfully reconnect to a previously connected Wi-Fi SSID after switching to a different SSID. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
-
+To validate that the DUT can successfully reconnect to a previously connected Wi-Fi SSID after switching to a different SSID. This test confirms that the DUT reconnects to the prior SSID and content playback resumes successfully, ensuring Wi-Fi SSID re-connection after switching meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Language_Change
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the RDK UI language can be changed from English to Spanish without issues. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that text in all settings screen should be changed to Spanish. The text on buttons should fit on buttons and should not overlap from button.
-
+To validate that the RDK UI language can be changed from English to Spanish via the Settings without any display issues. This test confirms that all text across the Settings screens changes to Spanish and button labels remain properly sized without overflow, ensuring the language change behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

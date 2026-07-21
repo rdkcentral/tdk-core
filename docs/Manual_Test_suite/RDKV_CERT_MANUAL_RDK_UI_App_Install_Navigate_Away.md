@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_App_Install_Navigate_Away
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that if a user navigates away from the More Apps page during an app download, the app continues to download and installs successfully in the background. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that app should be launched.
-
+To validate that navigating away from the More Apps page while an app is downloading does not interrupt the download, and that the app installs and launches successfully in the background. This test confirms that background app downloads complete and the app is launchable after installation, ensuring background download continuity meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

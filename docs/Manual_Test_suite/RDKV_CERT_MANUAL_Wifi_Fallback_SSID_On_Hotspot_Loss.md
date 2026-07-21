@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_Fallback_SSID_On_Hotspot_Loss
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT automatically falls back to a previously connected SSID when the last connected mobile hotspot is unavailable after a reboot. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
-
+To validate that the DUT automatically falls back to a previously connected SSID when the last connected mobile hotspot is unavailable after a reboot. This test confirms that the DUT connects to the fallback SSID and content playback resumes successfully, ensuring Wi-Fi hotspot-loss fallback behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

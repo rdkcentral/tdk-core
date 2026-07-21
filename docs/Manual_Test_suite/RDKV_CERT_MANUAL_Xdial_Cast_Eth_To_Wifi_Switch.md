@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Cast_Eth_To_Wifi_Switch
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that switching the DUT network connection from Ethernet to Wi-Fi during an active XDial casting session terminates the casting session while video playback continues on the DUT. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV.
-
+To validate that switching the DUT network connection from Ethernet to Wi-Fi during an active XDial casting session terminates the casting session while video playback continues on the DUT. This test confirms that the casting session is properly terminated upon the network switch and the DUT returns to the home screen, ensuring XDial session behavior during Ethernet-to-Wi-Fi switching meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

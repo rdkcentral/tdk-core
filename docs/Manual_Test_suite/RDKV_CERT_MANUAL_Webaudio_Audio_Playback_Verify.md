@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Webaudio_Audio_Playback_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that audio playback using the WebAudio API functions correctly on the DUT, including play and stop controls. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
-
+To validate that audio playback via the WebAudio API functions correctly on the DUT, including play and stop controls. This test confirms that audio plays back successfully and stops cleanly in response to control actions, ensuring WebAudio playback and control behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

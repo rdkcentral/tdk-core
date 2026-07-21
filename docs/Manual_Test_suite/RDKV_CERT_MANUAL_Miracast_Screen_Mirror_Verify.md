@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Screen_Mirror_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the smartphone screen is correctly mirrored on the DUT display via Miracast. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that all actions performed on the smartphone should be accurately mirrored on the DUT display in real time.
+To validate that the smartphone screen is correctly mirrored on the DUT display via Miracast. This test confirms that all actions performed on the smartphone are accurately reflected on the DUT display in real time, ensuring Miracast screen mirroring functionality meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_Repair_After_FactoryReset
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Bluetooth remote pairing is lost after a DUT factory reset and that the remote can be successfully re-paired from the startup pairing screen. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that all navigation key presses should respond correctly and the selected application should launch successfully.
+To validate that Bluetooth remote pairing is cleared after a DUT factory reset and that the remote can be successfully re-paired from the startup pairing screen. This test confirms that all navigation key presses respond correctly after re-pairing, ensuring that remote pairing recovery after factory reset meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_Hotplug_Prime_Video_Playback_On_Reconnect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Amazon Prime Video playback resumes correctly from the same playback position after an HDMI cable reconnect. This test exercises the RDK HDMI hotplug detection service and display manager to validate display connection and disconnection event handling. The test confirms that the Amazon Prime Video application should terminate gracefully and the RDK UI Home screen should be visible on the TV/display.
+To validate that Amazon Prime Video playback resumes correctly from the same playback position after an HDMI cable reconnect on the DUT. This test confirms that playback is restored seamlessly after HDMI reconnection without requiring manual intervention, ensuring HDMI hotplug handling for Prime Video playback meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

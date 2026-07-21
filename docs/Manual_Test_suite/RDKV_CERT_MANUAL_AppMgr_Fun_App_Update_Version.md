@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_App_Update_Version
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Update button in the App Info screen is activated based on the versioning information provided by the AppManager. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that app should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.
+To validate that the Update button in the App Info screen is correctly activated based on versioning information when a newer app version is available on the App catalogue server. This test confirms that the update action is available and functional, ensuring that app version management through the RDK UI is correctly handled for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

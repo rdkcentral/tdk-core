@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IPv6_Public_IP_Wifi_With_Eth
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT returns the public IPv6 address via the Ethernet interface when both a Wi-Fi SSID (supporting IPv6) and Ethernet are connected. This test exercises the RDK network manager, IPv6 address assignment stack (`ip` / `ifconfig` commands), and the router Advertisement handler to validate dual-stack network connectivity. The test confirms that the public IPv6 address should be returned via the Ethernet interface. The response should be similar to:}. The interface field should be….
+To validate that the DUT returns the correct public IPv6 address via the Ethernet interface when both an IPv6-supporting Wi-Fi SSID and Ethernet are connected. This test confirms that the returned IPv6 address is associated with the Ethernet interface in a dual-connection configuration, ensuring IPv6 public IP retrieval with both interfaces active meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

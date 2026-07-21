@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Ext_Audio_BT_Volume_Mute_Unmute
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that audio streaming can be successfully muted and unmuted on an external Bluetooth device during active playback. This test exercises the `org.rdk.Bluetooth` plugin's volume and mute control APIs to set the mute state and verify the applied value via a getter call. The test confirms that the mute and unmute states are correctly applied and reflected in the API response during active Bluetooth audio streaming.
+To validate that audio streaming can be successfully muted and unmuted on an external Bluetooth device during active playback on the DUT. This test confirms that the mute and unmute states are correctly applied and reflected after each operation, ensuring Bluetooth audio mute control meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

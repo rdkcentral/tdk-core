@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Resolution_Quality_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the resolution and visual quality of the mirrored screen are maintained when displaying high-resolution images and video content via Miracast. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the resolution and visual quality of the mirrored content on the DUT should be maintained without degradation.
+To validate that the resolution and visual quality of the mirrored screen are maintained when displaying high-resolution images and video content via Miracast. This test confirms that the mirrored content on the DUT is rendered without quality degradation, ensuring Miracast display quality meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

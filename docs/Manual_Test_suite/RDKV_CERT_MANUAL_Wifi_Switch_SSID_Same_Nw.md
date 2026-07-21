@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_Switch_SSID_Same_Nw
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can successfully switch its Wi-Fi connection to a different SSID within the same network while already connected to a Wi-Fi network. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
-
+To validate that the DUT can successfully switch its Wi-Fi connection to a different SSID within the same network while already connected to a Wi-Fi network. This test confirms that the DUT connects to the new SSID with internet access and content playback is functional, ensuring Wi-Fi SSID switching within the same network meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

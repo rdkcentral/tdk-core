@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_System_Wpeframework_Process_Status
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the WPEFramework processes are running successfully and operating as expected on the DUT. This test exercises shell commands executed over a serial console or SSH session (such as `systemctl`, `cat`, `ifconfig`, and `journalctl`) to validate the targeted system-level functionality. The test confirms that grep "WPE"`.
+To validate that the WPEFramework processes are running and operating as expected on the DUT. This test confirms that the WPEFramework processes are active in the process list without errors, ensuring WPEFramework service health meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_Auto_Switch_To_Eth
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT automatically switches to the Ethernet interface when an Ethernet cable is reconnected while the DUT is connected to a Wi-Fi network. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
-
+To validate that the DUT automatically switches to the Ethernet interface when an Ethernet cable is reconnected while the device is connected to a Wi-Fi network. This test confirms that internet connectivity is restored via Ethernet and content playback resumes successfully, ensuring automatic Wi-Fi to Ethernet failover meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

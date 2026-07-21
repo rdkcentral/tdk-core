@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Local_Discovery_Toggle
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the XDial feature can be disabled and re-enabled on the DUT using the Local Device Discovery setting in the RDK UI. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the Local Device Discovery radio button should be turned on. The DUT name should be visible in the XDial casting device list of the mobile YouTube application.
-
+To validate that the XDial feature can be disabled and re-enabled on the DUT using the Local Device Discovery setting in the RDK UI. This test confirms that the DUT is not discoverable when the setting is disabled and becomes discoverable again when re-enabled, ensuring XDial Local Device Discovery toggle behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

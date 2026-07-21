@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Install_Disk_Full
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the system behavior when the DUT disk space is full, validating that app download, installation, and launch operations fail gracefully with appropriate error handling when insufficient disk space is available. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that launched App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.
+To validate the system behavior when the DUT disk space is exhausted during an application download and installation attempt. This test confirms that the operations fail gracefully with appropriate error handling and messaging, ensuring that the device handles low-storage conditions correctly for operational readiness.
 
 <a name="head.Precondition"></a>
 ## Preconditions

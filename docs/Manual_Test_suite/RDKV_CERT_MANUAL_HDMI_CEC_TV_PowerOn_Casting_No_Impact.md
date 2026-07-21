@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_TV_PowerOn_Casting_No_Impact
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that powering on the TV via a CEC command does not interrupt or terminate an active YouTube casting session on the DUT. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The RDK UI should restore to the YouTube video. The casting session should not be lost and video should continue playing with proper A/V.
+To validate that powering on the TV via a CEC command does not interrupt or terminate an active YouTube casting session on the DUT. This test confirms that the casting session is preserved and video continues playing with proper A/V after the TV power-on CEC command, ensuring CEC power commands do not impact active casting sessions for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

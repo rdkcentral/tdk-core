@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Amz_ClearData_Reboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that after a clearAppData operation on the Amazon Prime Video application, the logged-out state persists across a DUT power cycle and that the application remains functional. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that amazon Prime App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.
+To validate that the logged-out state of the Amazon Prime Video application persists across a DUT power cycle after an app data clear operation. This test confirms that the application data remains cleared after reboot and the application continues to function correctly, ensuring the durability of app data management for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -22,26 +22,24 @@ To validate that after a clearAppData operation on the Amazon Prime Video applic
 | 1 | Pair Bluetooth remote | Ensure the Bluetooth Remote is paired and connected to the DUT. | The Bluetooth Remote should be paired and connected to the DUT successfully.|
 | 2 | Connect DUT to network | Connect the DUT to Ethernet or Wi-Fi with active internet access. | The DUT should be connected to the network with active internet access.|
 | 3 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected.|
-| 4 | Install required apps if not present | If the required App is not already installed, select the App tile from the Recommended Apps row (or the More Apps tab if not visible on Recommended row) of the RDK UI Home screen and press Enter/OK to install it. Skip this step if the required App is already available in the My Apps section. | The required App should be installed and available in the My Apps section/row of the RDK UI Home screen, ready to launch. If already installed, this step may be skipped.|
-| 5 | Launch Amazon Prime and sign in | Launch the Amazon Prime App from the My Apps section of the RDK UI Home screen and sign in with valid user credentials prior to test execution. Verify AV playback is working after sign-in. | Amazon Prime App should launch successfully and the user should be signed in with valid credentials. AV playback should be verified as working prior to test execution.|
-| 6 | Verify app launch and AV playback | Verify that all required Apps are launching successfully from the RDK UI Home screen. For Apps that support A/V playback (regardless of whether the App is a Premium App or not), verify that audio and video playback is working correctly prior to test execution. | All required Apps should launch successfully from the RDK UI Home screen. For Apps supporting A/V playback, audio and video playback should be verified as working correctly prior to test execution.|
+| 4 | Install Amazon Prime app | If Amazon Prime Video is not already installed, select its tile from the Recommended Apps row of the RDK UI Home screen and press Enter/OK to install. Skip this step if it is already available in the My Apps section. | Amazon Prime Video should be installed and available in the My Apps section/row of the RDK UI Home screen. If already installed, this step may be skipped.|
+| 5 | Sign in to Amazon Prime Video | Ensure Amazon Prime Video is logged in with valid user credentials on the DUT. | Amazon Prime Video should be signed in with valid user credentials on the DUT.|
+| 6 | Verify playback in Amazon Prime Video | Launch Amazon Prime Video from the RDK UI Home screen and verify that audio and video playback is working correctly prior to test execution. | Amazon Prime Video should launch successfully and AV playback should be verified as working correctly prior to test execution.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Launch Amazon Prime from My Apps | Select Amazon Prime App tile from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Amazon Prime App should be launched successfully  (Either cold launch /hot launch based on the app's previous state)|
-| 2 | Select video and initiate Amazon Prime playback | Select any Video Content from Amazon Prime App and start playback | Selected Video Content AV playback should start|
-| 3 | Clear Amazon Prime app data via clearAppData API | Clear the Amazon Prime App data using the clearAppData API by executing below curl command  :<br>`curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 1, "method": "org.rdk.AppManager.clearAppData", "params": {"appId": "<Amazon App ID>"}}' http://127.0.0.1:9998/jsonrpc` | The `clearAppData` API should return a successful response, and the Amazon Prime App should be closed once the API execution is completed.|
-| 4 | Relaunch Amazon Prime app after data clear | Launch Amazon Prime App again from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Amazon Prime App should be launched successfully (cold launch)|
-| 5 | Validate Amazon Prime sign in page is loaded | Validate that Amazon Prime Sign in page is loaded or not | Amazon Prime App sign in page should be loaded|
-| 6 | Close Amazon Prime app via Back key | Close/Exit the Amazon Prime App by back key press on remote. | Amazon Prime App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
-| 7 | Reboot DUT and wait for bootup | Reboot the DUT and wait for Boot up | Device should be rebooted and RDK UI home page should be displayed on TV|
-| 8 | Relaunch Amazon Prime app after data clear | Launch Amazon Prime App again from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Amazon Prime App should be launched successfully (cold launch)|
-| 9 | Validate Amazon Prime sign in page is loaded | Validate that Amazon Prime Sign in page is loaded or not | Amazon Prime App sign in page should be loaded|
-| 10 | Sign in to Amazon Prime and verify A/V playback | Sign in with a valid user credentials and Check the Amazon Prime App AV playback | Sign in should be successful and Amazon Prime App AV playback should happen as expected / without errors|
-| 11 | Close Amazon Prime app via Back key | Close/Exit the Amazon Prime App by back key press on remote. | Amazon Prime App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
+| 1 | Clear Amazon Prime app data via clearAppData API | Clear the Amazon Prime App data using the clearAppData API by executing below curl command  :<br>`curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 1, "method": "org.rdk.AppManager.clearAppData", "params": {"appId": "<Amazon App ID>"}}' http://127.0.0.1:9998/jsonrpc` | The `clearAppData` API should return a successful response, and the Amazon Prime App should be closed once the API execution is completed.|
+| 2 | Relaunch Amazon Prime app after data clear | Launch Amazon Prime App again from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Amazon Prime App should be launched successfully (cold launch)|
+| 3 | Validate Amazon Prime sign in page is loaded | Validate that Amazon Prime Sign in page is loaded or not | Amazon Prime App sign in page should be loaded|
+| 4 | Close Amazon Prime app via Back key | Close/Exit the Amazon Prime App by back key press on remote. | Amazon Prime App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
+| 5 | Reboot DUT and wait for bootup | Reboot the DUT and wait for Boot up | Device should be rebooted and RDK UI home page should be displayed on TV|
+| 6 | Relaunch Amazon Prime app after data clear | Launch Amazon Prime App again from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Amazon Prime App should be launched successfully (cold launch)|
+| 7 | Validate Amazon Prime sign in page is loaded | Validate that Amazon Prime Sign in page is loaded or not | Amazon Prime App sign in page should be loaded|
+| 8 | Sign in to Amazon Prime and verify A/V playback | Sign in with a valid user credentials and Check the Amazon Prime App AV playback | Sign in should be successful and Amazon Prime App AV playback should happen as expected / without errors|
+| 9 | Close Amazon Prime app via Back key | Close/Exit the Amazon Prime App by back key press on remote. | Amazon Prime App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes

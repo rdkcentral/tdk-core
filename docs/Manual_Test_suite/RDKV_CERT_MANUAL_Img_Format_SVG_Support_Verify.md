@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Img_Format_SVG_Support_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the SVG image format is correctly rendered and displayed by the DUT via the Browser Test application. This test exercises the WPE browser image rendering pipeline and the SVG/HTML test page to validate decoding and display of the target image format. The test confirms that the Browser Test App should terminate gracefully and the RDK UI Home screen should be visible on the TV/display.
+To validate that the SVG image format is correctly decoded and rendered on the display by the DUT via the Browser Test application. This test confirms that the SVG image is displayed without artifacts or errors, ensuring that SVG image format support meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

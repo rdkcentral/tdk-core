@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_XDIAL_05
 ## TestCase Name
 RDKV_CERT_MANUAL_Xdial_Deregister_Persist_Post_Reboot
@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Deregister_Persist_Post_Reboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Dynamic XDial support is de-registered from the DUT after a device reboot when the XDial-supported application is not installed. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the RDK UI Home Page should remain idle without any unexpected behaviors.
-
+To validate that Dynamic XDial support is de-registered from the DUT after a reboot when the XDial-supported application is not installed. This test confirms that the DUT is not discoverable via XDial after the reboot, ensuring XDial de-registration state persistence across reboots meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 
@@ -38,7 +37,7 @@ To validate that Dynamic XDial support is de-registered from the DUT after a dev
 | 3 | Confirm uninstallation | Click the Yes button to confirm uninstallation. | A loading/buffering indicator should be displayed on the YouTube application tile. The application should subsequently be removed from the list on the App Info page.|
 | 4 | Verify YouTube removed from home screen | Press the Home button on the remote and validate that YouTube has been removed from the My Apps row on the RDK UI Home Page. | The RDK UI Home Page should load and the YouTube tile should no longer be visible in the My Apps row.|
 | 5 | Reboot DUT | Reboot the DUT and wait for the RDK UI Home Page to load completely. | The DUT should reboot successfully and the RDK UI Home Page should be displayed.|
-| 6 | Launch the youtube application on the | Launch the YouTube application on the smartphone and tap the cast icon at the top of the screen. | The YouTube application should launch on the smartphone and a popup displaying the list of available cast devices should appear.|
+| 6 | Launch the YouTube application on the | Launch the YouTube application on the smartphone and tap the cast icon at the top of the screen. | The YouTube application should launch on the smartphone and a popup displaying the list of available cast devices should appear.|
 | 7 | Validate that the dut is not | Validate that the DUT is not listed in the cast devices popup. | The DUT should not be listed in the cast devices popup.|
 | 8 | Validate the rdk ui home page | Validate the RDK UI Home Page of the DUT for any unexpected behavior. | The RDK UI Home Page should remain idle without any unexpected behaviors.|
 

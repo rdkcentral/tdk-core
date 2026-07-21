@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Audio_Transmission_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that audio is correctly transmitted from the smartphone to the DUT during Miracast screen mirroring, including play and pause controls. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the video should resume playing on the DUT with proper audio and video output.
+To validate that audio is correctly transmitted from the smartphone to the DUT during Miracast screen mirroring, including play and pause controls. This test confirms that video resumes with proper audio and video output when playback is controlled from the smartphone, ensuring Miracast audio transmission meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

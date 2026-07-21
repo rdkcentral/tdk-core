@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_System_SSH_Access
 
 <a name="head.Objective"></a>
 ## Objective
-To validate SSH access to the DUT by establishing a remote login session from the PC/laptop using the DUT IP address and valid credentials, and to ensure that the device command prompt is displayed successfully after login. This test exercises shell commands executed over a serial console or SSH session (such as `systemctl`, `cat`, `ifconfig`, and `journalctl`) to validate the targeted system-level functionality. The test confirms that a logout message and "Connection to closed." message should be displayed.
+To validate SSH access to the DUT by establishing a remote login session from a PC/laptop using the DUT IP address and valid credentials. This test confirms that the device command prompt is displayed after login and the session terminates cleanly on logout, ensuring SSH remote access meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_App_Timezone_Display_Sync
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the time displayed on the RDK UI Home screen accurately reflects the timezone configured in the device settings. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the Calcutta time zone time should be displayed in the top right corner of the RDK UI Home screen.
+To validate that the time displayed on the RDK UI Home screen accurately reflects the timezone configured in the device settings on the DUT. This test confirms that the configured timezone is correctly applied and the displayed time matches the expected value, ensuring that timezone management and UI synchronization are functional for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

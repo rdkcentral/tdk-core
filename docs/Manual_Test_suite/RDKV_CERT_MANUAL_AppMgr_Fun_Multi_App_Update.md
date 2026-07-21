@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Multi_App_Update
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that multiple installed applications can be updated in parallel from the App Info screen. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that launched App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.
+To validate that multiple installed applications can be updated in parallel using the update mechanism available from the App Info screen on the DUT. This test confirms that all concurrent updates complete successfully and each application reflects the latest version, ensuring that parallel app update functionality meets certification standards.
 
 <a name="head.Precondition"></a>
 ## Preconditions

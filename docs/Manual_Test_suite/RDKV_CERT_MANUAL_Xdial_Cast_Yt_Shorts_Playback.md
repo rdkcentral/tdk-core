@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Cast_Yt_Shorts_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the behavior when a YouTube Short is selected from the TV during an active XDial casting session, and that the Short plays correctly after the casting session is disconnected. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session should be closed.
-
+To validate that a YouTube Short selected from the DUT during an active XDial casting session plays correctly after the casting session is disconnected. This test confirms that the YouTube Short is played back correctly on the DUT after session disconnect, ensuring YouTube Shorts playback behavior during XDial casting meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Language_Msg_Translation
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that error messages and confirmation messages are translated to Spanish after the device language is set to Spanish. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that confirmation message should close.
-
+To validate that error messages and confirmation dialogs displayed in the RDK UI are correctly translated to Spanish after the device language is set to Spanish. This test confirms that all messages appear in Spanish and can be dismissed correctly, ensuring UI message translation accuracy meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

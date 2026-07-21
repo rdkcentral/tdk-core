@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_22
 ## TestCase Name
 RDKV_CERT_MANUAL_AppMgr_Fun_App_Launch_Clear_Err
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_App_Launch_Clear_Err
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that appropriate error messages are displayed when attempting to launch an application after its application data has been cleared. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that selected App should not be launched since app files are removed and app launch failed error message should be displayed on RDK UI.
+To validate that appropriate error messages are displayed when attempting to launch an application after its data has been cleared on the DUT. This test confirms that the application launch fails gracefully with a visible error notification, ensuring robust error handling behavior for AppManager certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -33,7 +33,7 @@ To validate that appropriate error messages are displayed when attempting to lau
 |-|---------|-----------------|----------------|
 | 1 | Launch app from Recommended/My Apps | Select the App tile from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Selected App should be launched successfully  (Either cold launch /hot launch based on the app's previous state)|
 | 2 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | Selected Video Content AV playback should start or App should load its content|
-| 3 | Delete app file from /opt/dac_apps/apps | Naviage to cd /opt/dac_apps/apps and delete the launched app file :<br>Eg : rm com.rdkcentral.youtube | com.rdkcentral.youtube app related file should be removed but App functionality or playback shouldn't get affected.|
+| 3 | Delete app file from apps directory in DUT | In box ssh console, change directory to apps directory and delete the launched app file :<br>Eg : rm com.rdkcentral.YouTube | The app related file(eg:com.rdkcentral.YouTube) should be removed but App functionality or playback shouldn't get affected.|
 | 4 | Close launched apps via Back key | Close/Exit the launched Apps by back key press on remote. | Launched App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
 | 5 | Relaunch closed app from My Apps  | Relaunch closed app from My Apps  the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Selected App should not be launched since app files are removed and app launch failed error message should be displayed on RDK UI|
 

@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Webaudio_Fm_Generated_Sound_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that FM-modulated synthesized audio can be generated and played back using the WebAudio API on the DUT. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
-
+To validate that FM-modulated synthesized audio can be generated and played back using the WebAudio API on the DUT. This test confirms that the FM-generated sound plays back correctly without errors, ensuring WebAudio FM synthesis capability meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

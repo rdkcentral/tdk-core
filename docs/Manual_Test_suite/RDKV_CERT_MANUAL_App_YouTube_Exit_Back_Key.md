@@ -1,7 +1,7 @@
-## TestCase ID
-RDKV_MANUAL_APPS_11
+﻿## TestCase ID
+RDKV_MANUAL_APPS_12
 ## TestCase Name
-RDKV_CERT_MANUAL_App_Youtube_Playback_Trickplay
+RDKV_CERT_MANUAL_App_YouTube_Exit_Back_Key
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_App_Youtube_Playback_Trickplay
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the YouTube application AV playback and trickplay (fast forward, rewind, pause, and resume) functionality. This test exercises the DAC App Manager service, the RDK UI Home screen Recommended Apps / More Apps tiles, and the App Info page to manage application installation and launch. The test confirms that the YouTube application should terminate gracefully and the RDK UI Home screen should be visible on the display.
+To validate that the YouTube application can be exited gracefully using the Back key on the remote control on the DUT. This test confirms that the application terminates cleanly and the RDK UI Home screen is restored, ensuring that application exit behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -35,11 +35,8 @@ To validate the YouTube application AV playback and trickplay (fast forward, rew
 |-|---------|-----------------|----------------|
 | 1 | Launch YouTube app | Select the YouTube application tile from the My Apps/Recommended Apps section/row of the RDK UI Home screen and press Enter/OK on the remote. | The YouTube application should launch successfully (either cold launch or hot launch based on the application's previous state).|
 | 2 | Select video content and initiate YouTube playback | Select any video content from the YouTube application and initiate playback. | The selected video content should start playing with proper Audio and Video output.|
-| 3 | Perform fast forward during playback | Perform fast forward during video playback. | Fast forward should operate without errors.|
-| 4 | Perform rewind during playback | Perform rewind during video playback. | Rewind should operate without errors.|
-| 5 | Pause video playback | Pause the video during playback. | The video should pause successfully.|
-| 6 | Resume video from paused state | Resume playback from the paused state. | The video should resume playback from the paused position with proper audio and video output.|
-| 7 | Exit YouTube via Back key | Close/exit the YouTube application using the Back key press on the remote. | The YouTube application should terminate gracefully and the RDK UI Home screen should be visible on the display.|
+| 3 | Press Back key multiple times to navigate back | Press the Back key multiple times (approximately 3 times) to exit from the YouTube application. | For each Back key press, the screen should navigate one level back. After the final Back key press, the YouTube application should exit gracefully.|
+| 4 | Verify YouTube closed and home screen visible | Validate that the YouTube application has closed and the RDK UI Home screen is displayed. | The YouTube application should be terminated gracefully and the RDK UI Home screen should be visible on the display.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes

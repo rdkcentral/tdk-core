@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_Wakeup_Light_Sleep_HDMI_Input
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT wakes up from Light Sleep state when the HDMI input source is selected on the connected CEC-enabled TV. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that the DUT should wake up from Light Sleep mode and the RDK UI Home screen should be displayed on the TV.
+To validate that the DUT wakes up from Light Sleep state when the HDMI input source is selected on the connected CEC-enabled TV. This test confirms that the DUT exits Light Sleep mode and the RDK UI Home screen is displayed, ensuring CEC-triggered wake-up behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

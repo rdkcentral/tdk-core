@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Resolution_Change
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that resolution changes applied via the RDK UI Settings affect the display clarity without changing the screen size. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that similar Results of steps 1 to 5.
-
+To validate that resolution changes applied via the RDK UI Settings correctly affect the display clarity without altering the screen size. This test confirms that the display reflects the selected resolution change appropriately, ensuring resolution configuration via the RDK UI meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

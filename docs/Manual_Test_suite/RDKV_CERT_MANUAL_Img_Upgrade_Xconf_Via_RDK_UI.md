@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Img_Upgrade_Xconf_Via_RDK_UI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the XCONF firmware upgrade behavior when initiated directly from the RDK UI Settings menu. This test exercises the RDK CDL (Code Download) service and the firmware upgrade stack (`XCONF` server configuration, SNMP triggers, or local USB/HTTP methods) to validate the firmware upgrade workflow. The test confirms that the Firmware Update screen should show the upgraded firmware image version in the Firmware Versions field.
+To validate the XCONF firmware upgrade workflow when initiated directly from the RDK UI Settings menu on the DUT. This test confirms that the firmware is upgraded successfully and the updated version is correctly reflected in the Firmware Versions field, ensuring UI-initiated firmware upgrade meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Rapid_Keypress_Multi_Tiles
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that multiple rapid key presses on different app tiles in the More Apps page queue the downloads sequentially without errors. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the other apps downloads should be queued only. Once the previous downloads, completed, subsequent downloads should start.
-
+To validate that multiple rapid key presses on different app tiles in the More Apps page queue the downloads sequentially without causing errors. This test confirms that downloads are queued correctly and subsequent downloads begin only after previous ones complete, ensuring rapid keypress download queuing meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

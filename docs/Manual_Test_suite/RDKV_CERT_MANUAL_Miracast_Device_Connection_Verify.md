@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Device_Connection_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a smartphone can successfully discover and connect to the DUT using Miracast. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the smartphone should connect to the DUT successfully via Miracast.
+To validate that a smartphone can successfully discover and connect to the DUT using Miracast. This test confirms that the smartphone connects to the DUT and screen mirroring is established successfully, ensuring basic Miracast device connectivity meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

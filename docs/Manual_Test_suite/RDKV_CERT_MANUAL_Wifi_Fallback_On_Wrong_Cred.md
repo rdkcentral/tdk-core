@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_Fallback_On_Wrong_Cred
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT automatically falls back to the previously connected SSID when a connection attempt to a new SSID fails due to incorrect credentials. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
-
+To validate that the DUT automatically falls back to the previously connected SSID when a connection attempt to a new SSID fails due to incorrect credentials. This test confirms that the DUT reconnects to the prior SSID and content playback resumes successfully, ensuring Wi-Fi credential failure fallback behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

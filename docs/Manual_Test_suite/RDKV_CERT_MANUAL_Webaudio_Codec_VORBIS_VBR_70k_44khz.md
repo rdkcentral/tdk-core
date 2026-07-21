@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Webaudio_Codec_VORBIS_VBR_70k_44khz
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can successfully decode a Vorbis audio file (VBR 70 kbps, 44 kHz) using the WebAudio API and report the correct codec metadata. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
-
+To validate that the DUT can successfully decode a Vorbis audio file encoded at VBR 70 kbps and 44 kHz using the WebAudio API. This test confirms that the codec is decoded correctly and the expected metadata is reported accurately, ensuring Vorbis VBR 70k codec support meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

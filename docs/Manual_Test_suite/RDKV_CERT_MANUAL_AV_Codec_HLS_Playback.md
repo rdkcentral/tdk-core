@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AV_Codec_HLS_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that HLS (.m3u8) stream playback is functional on the DUT. This test exercises the RDK media pipeline, AV decoder plugins, and the video player application to drive codec-specific playback scenarios. The test confirms that the HLS (.m3u8) asset should play with proper audio and video without any artifacts or errors.
+To validate that HLS (.m3u8) adaptive streaming playback is functional on the DUT using the RDK media pipeline. This test confirms that the HLS asset plays with proper audio and video output without artifacts or errors, ensuring HLS streaming support meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

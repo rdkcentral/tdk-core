@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Performance_Network_Change
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Miracast streaming performance is maintained when the smartphone switches between different network conditions (e.g., 2.4 GHz to 5 GHz Wi-Fi). This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the video should continue to stream smoothly on the DUT with minimal impact from the network change.
+To validate that Miracast streaming performance is maintained when the smartphone switches between different network conditions such as 2.4 GHz and 5 GHz Wi-Fi. This test confirms that video continues to stream smoothly with minimal impact from the network change, ensuring Miracast performance resilience across network transitions meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

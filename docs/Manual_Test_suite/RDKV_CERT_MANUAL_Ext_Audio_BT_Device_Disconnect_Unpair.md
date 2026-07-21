@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Ext_Audio_BT_Device_Disconnect_Unpair
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a connected external Bluetooth device can be successfully disconnected and unpaired from the DUT. This test exercises the `org.rdk.Bluetooth` plugin disconnect and unpair APIs to remove a paired and connected device from the DUT. The test confirms that the device is no longer listed in the connected or paired device lists after the disconnect and unpair operations are completed.
+To validate that a connected external Bluetooth device can be successfully disconnected and unpaired from the DUT. This test confirms that the device is no longer listed in the connected or paired device lists after the operations complete, ensuring Bluetooth device removal functions correctly for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

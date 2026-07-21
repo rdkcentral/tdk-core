@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_SSID_Persist_After_Reboot
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT retains its Wi-Fi SSID connection and IP address after a reboot when no Ethernet cable is connected. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
-
+To validate that the DUT retains its Wi-Fi SSID connection and IP address after a reboot when no Ethernet cable is connected. This test confirms that the DUT automatically reconnects to the Wi-Fi SSID after reboot and content playback is functional, ensuring Wi-Fi connection persistence across reboots meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

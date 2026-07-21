@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Volume_Key_Overlay
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that volume overlay screens are displayed in the RDK UI when Volume Up, Volume Down, and Mute keys are pressed on the remote. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that an overlay should come in top of the UI where we can see the unmuted icon. The volume should be unmuted in device.
-
+To validate that volume overlay screens are correctly displayed in the RDK UI when Volume Up, Volume Down, and Mute keys are pressed on the remote. This test confirms that the appropriate volume overlay is shown and the mute/unmute state is reflected correctly on the DUT, ensuring volume key overlay behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

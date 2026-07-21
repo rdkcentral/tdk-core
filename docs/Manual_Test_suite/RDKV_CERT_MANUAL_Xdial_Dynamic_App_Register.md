@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Dynamic_App_Register
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Dynamic XDial support is registered on the DUT and the device becomes discoverable after installing an XDial-supported application via the RDK UI. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV, and the casting session on the smartphone should be closed.
-
+To validate that Dynamic XDial support is registered on the DUT and the device becomes discoverable after installing an XDial-supported application via the RDK UI. This test confirms that the DUT is discoverable and a casting session can be established successfully after installation, ensuring dynamic XDial registration on app install meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

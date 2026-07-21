@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_Hotplug_Third_Party_App_Playback_On_Reconnect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that content playback in third-party installed applications continues without interruption after an HDMI cable reconnect. This test exercises the RDK HDMI hotplug detection service and display manager to validate display connection and disconnection event handling. The test confirms that the expected results for each application should be consistent with the outcomes described in Steps 2 and 3.
+To validate that content playback in third-party installed applications continues without interruption after an HDMI cable reconnect on the DUT. This test confirms that each application's playback is preserved and consistent after HDMI reconnection, ensuring hotplug resilience for third-party applications meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

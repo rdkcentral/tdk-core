@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_Hotplug_UI_Restore_On_Reconnect_Settings_Screen
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Settings screen is correctly restored on the display after an HDMI cable reconnect. This test exercises the RDK HDMI hotplug detection service and display manager to validate display connection and disconnection event handling. The test confirms that upon HDMI reconnection, the TV/display should restore and correctly display the Settings screen without any manual intervention.
+To validate that the Settings screen is correctly restored on the display after an HDMI cable reconnect. This test confirms that the Settings screen is restored automatically without manual intervention upon HDMI reconnection, ensuring HDMI hotplug display recovery meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

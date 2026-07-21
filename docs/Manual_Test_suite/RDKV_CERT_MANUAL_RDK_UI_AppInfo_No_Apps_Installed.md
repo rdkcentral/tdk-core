@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_AppInfo_No_Apps_Installed
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the RDK UI behavior on the App Info page when no DAC apps are installed on the DUT. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the error message should close and return the user to user home screen.
-
+To validate the RDK UI App Info page behavior when no DAC apps are installed on the DUT. This test confirms that the appropriate message is displayed and the user is returned to the home screen, ensuring the no-apps-installed UI state meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

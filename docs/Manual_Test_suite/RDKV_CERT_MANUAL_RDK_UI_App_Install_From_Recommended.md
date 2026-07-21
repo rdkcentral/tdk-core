@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_App_Install_From_Recommended
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that selecting an uninstalled app tile from the Recommended Apps row initiates the app download and installation, and that the newly installed app appears in the My Apps row. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that a new row with Title 'My Apps' should be created as first row in RDK UI Home screen. The newly installed APP should be listed here.
-
+To validate that selecting an uninstalled app tile from the Recommended Apps row correctly initiates the download and installation, and that the newly installed app appears in the My Apps row on the home screen. This test confirms that the My Apps row is created and the installed app is listed correctly, ensuring app installation from the Recommended Apps row meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

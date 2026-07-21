@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_No_Screen_Flickering
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that no screen flickering occurs during navigation through the RDK UI Home screen and Settings screens. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that no flickering during navigations.
-
+To validate that no screen flickering occurs during navigation through the RDK UI Home screen and Settings screens. This test confirms that the display remains stable and free of flickering throughout all navigation actions, ensuring RDK UI display stability meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_Power_Press
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the POWER key press on the paired Bluetooth remote correctly toggles the DUT display state. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that the RDK UI should turn on and the RDK UI Home screen should launch successfully.
+To validate that the POWER key press on the paired Bluetooth remote correctly toggles the DUT display state. This test confirms that the display turns on and the RDK UI Home screen launches successfully, ensuring Bluetooth remote power key functionality meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

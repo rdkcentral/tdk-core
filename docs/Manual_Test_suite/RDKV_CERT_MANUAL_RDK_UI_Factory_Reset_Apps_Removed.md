@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Factory_Reset_Apps_Removed
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that after a Factory Reset is performed from the RDK UI Settings, all user-installed apps are removed from the RDK UI Home screen. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the user should return to the previous screen.
-
+To validate that performing a Factory Reset from the RDK UI Settings removes all user-installed apps from the RDK UI Home screen. This test confirms that no previously installed apps remain after the reset and the user is returned to the home screen, ensuring the factory reset app removal behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

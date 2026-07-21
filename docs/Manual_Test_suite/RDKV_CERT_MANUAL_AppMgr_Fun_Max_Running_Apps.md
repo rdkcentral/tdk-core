@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Max_Running_Apps
 
 <a name="head.Objective"></a>
 ## Objective
-To validate and retrieve the maximum number of applications that can be maintained in the running or suspended state using the GetMaxRunningApps property. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that maxRunningApps should be in running or suspended state. No Apps should terminate or relaunched.
+To validate the maximum number of applications that can be maintained in the running or suspended state as enforced by the AppManager on the DUT. This test confirms that the running app capacity limit is correctly applied and no applications are unexpectedly terminated or relaunched, which is essential for resource management certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

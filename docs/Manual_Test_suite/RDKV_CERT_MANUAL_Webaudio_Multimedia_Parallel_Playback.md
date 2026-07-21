@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Webaudio_Multimedia_Parallel_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can simultaneously handle video playback, audio playback, and speech synthesis in parallel using the WebAudio API without any interruption or error. This test exercises the WebAudio API (AudioContext, AudioBuffer, and related nodes) and the WPE browser JavaScript runtime to validate the targeted audio processing capability. The test confirms that the WebAudio Test App should terminate gracefully and the RDK UI Home screen should be visible on the display.
-
+To validate that the DUT can simultaneously handle video playback, audio playback, and speech synthesis in parallel using the WebAudio API without any interruption or error. This test confirms that all three media streams operate concurrently without interference, ensuring WebAudio parallel multimedia playback meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

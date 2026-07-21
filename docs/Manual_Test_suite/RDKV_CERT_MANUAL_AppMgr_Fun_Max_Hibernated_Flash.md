@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AppMgr_Fun_Max_Hibernated_Flash
 
 <a name="head.Objective"></a>
 ## Objective
-To validate and retrieve the maximum flash storage size available for hibernated applications (in mebibytes) using the getMaxHibernatedFlashUsage property. This test exercises the `org.rdk.AppManager` plugin (including APIs such as `clearAppData`, `launchApp`, and `getAppStatus`) and the RDK UI Home screen navigation to drive the application lifecycle. The test confirms that } , Which indicates maximum size of flash to use for hibernated apps.
+To validate the maximum flash storage available for hibernated applications as reported by the AppManager on the DUT. This test confirms that the flash usage limit is correctly retrieved and reflects the expected storage boundary, ensuring that storage resource management for hibernated applications meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

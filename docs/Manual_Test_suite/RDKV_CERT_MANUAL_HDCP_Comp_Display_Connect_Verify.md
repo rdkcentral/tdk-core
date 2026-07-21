@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDCP_Comp_Display_Connect_Verify
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT correctly reports the HDMI HDCP display connection status via the HDCP Profile API during active A/V playback. This test exercises the `org.rdk.HdcpProfile` plugin and the HDMI output manager to validate HDCP handshake and content-protection compliance on the connected display. The test confirms that the application should terminate gracefully and the RDK UI Home screen should be visible on the display.
+To validate that the DUT correctly reports the HDMI HDCP display connection status via the HDCP Profile API during active A/V playback. This test confirms that the connection status is accurately returned and reflects the current display state, ensuring HDCP display connection reporting meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

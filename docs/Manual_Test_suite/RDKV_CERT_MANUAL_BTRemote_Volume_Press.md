@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_Volume_Press
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the Volume Up, Volume Down, and Mute key presses on the paired Bluetooth remote function correctly during A/V content playback. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that the unmute icon should be displayed on screen and the audio should be restored to the previous volume level.
+To validate that the Volume Up, Volume Down, and Mute key presses on the paired Bluetooth remote function correctly during A/V content playback on the DUT. This test confirms that volume changes and mute/unmute operate as expected, ensuring Bluetooth remote volume control functionality meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

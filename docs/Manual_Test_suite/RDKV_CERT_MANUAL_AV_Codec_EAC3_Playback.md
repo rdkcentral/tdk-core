@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AV_Codec_EAC3_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that EAC3 (Enhanced AC-3) audio stream playback is functional on the DUT via GStreamer. This test exercises the RDK media pipeline, AV decoder plugins, and the video player application to drive codec-specific playback scenarios. The test confirms that the audio playback should end gracefully without any errors or crashes.
+To validate that EAC3 (Enhanced AC-3) audio codec playback is functional on the DUT using the RDK media pipeline. This test confirms that the audio plays back and completes gracefully without errors or crashes, ensuring EAC3 codec support meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

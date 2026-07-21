@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_App_Uninstall
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a user can uninstall an installed application via the App Info page, and that the uninstall confirmation dialog functions correctly. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that it should not launch the app, as it is already uninstalled. It should try to download the app again.
-
+To validate that a user can successfully uninstall an installed application via the App Info page using the uninstall confirmation dialog. This test confirms that the app is removed and attempting to launch it prompts a re-download rather than launching, ensuring app uninstallation behavior via the App Info page meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

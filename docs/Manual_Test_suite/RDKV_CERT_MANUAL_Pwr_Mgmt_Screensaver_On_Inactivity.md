@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Pwr_Mgmt_Screensaver_On_Inactivity
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the screen saver activates on the DUT after the configured period of user inactivity. This test exercises the `org.rdk.PowerManager` plugin and the RDK power-state machine (including standby, deep-sleep, and wake triggers) to validate power-mode transitions. The test confirms that the screen saver should stop and the RDK UI Home screen should launch.
+To validate that the screen saver activates on the DUT after the configured period of user inactivity. This test confirms that the screen saver stops and the RDK UI Home screen resumes correctly when the DUT is woken up, ensuring screen saver activation behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

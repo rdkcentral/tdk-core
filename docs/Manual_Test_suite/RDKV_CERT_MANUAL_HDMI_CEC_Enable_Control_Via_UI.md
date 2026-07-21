@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_Enable_Control_Via_UI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that CEC control can be enabled from the RDK UI and that the DUT can control the TV power state (standby and on) via HDMI CEC commands. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that and the TV should turn on.
+To validate that CEC control can be enabled from the RDK UI and that the DUT can control the TV power state via HDMI CEC commands. This test confirms that the TV power state responds correctly to CEC commands when CEC is enabled, ensuring that CEC enable control and TV power management meet certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

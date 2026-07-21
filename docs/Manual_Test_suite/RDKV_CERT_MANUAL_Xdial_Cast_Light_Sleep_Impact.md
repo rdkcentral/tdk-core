@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Xdial_Cast_Light_Sleep_Impact
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the XDial casting session behavior when the DUT is put into Light Sleep (Standby) mode and subsequently woken up during an active casting session. This test exercises the `org.rdk.DialServer` plugin, the DIAL protocol handler, and the application launch bridge to validate the targeted X-DIAL application discovery or launch scenario. The test confirms that the YouTube application should terminate gracefully. The RDK UI Home Page should be displayed on the TV.
-
+To validate the XDial casting session behavior when the DUT enters Light Sleep mode and is subsequently woken up during an active casting session. This test confirms that the casting session terminates upon entering Light Sleep and the DUT returns to the home screen after wake-up, ensuring XDial session handling across Light Sleep power transitions meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

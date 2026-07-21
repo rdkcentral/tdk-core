@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Img_Upgrade_Xconf_User_Settings_Persist
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a XCONF firmware upgrade does not affect user-specific settings, application sign-in states, network connections, and Bluetooth remote pairing. This test exercises the RDK CDL (Code Download) service and the firmware upgrade stack (`XCONF` server configuration, SNMP triggers, or local USB/HTTP methods) to validate the firmware upgrade workflow. The test confirms that the following should persist after the firmware upgrade: YouTube, Prime Video, and Netflix sign-in states should remain active; the Wi-Fi connection should remain connected; the Bluetooth remote should remain paired and all key presses should….
+To validate that a XCONF firmware upgrade does not affect user-specific settings, application sign-in states, network connections, and Bluetooth remote pairing on the DUT. This test confirms that all user settings, app sign-ins, Wi-Fi connectivity, and Bluetooth remote pairing persist correctly after the upgrade, ensuring firmware upgrade does not disrupt user configuration for certification.
 
 <a name="head.Precondition"></a>
 ## Preconditions

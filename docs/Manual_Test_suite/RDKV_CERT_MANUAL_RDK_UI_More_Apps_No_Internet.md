@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_More_Apps_No_Internet
 
 <a name="head.Objective"></a>
 ## Objective
-To validate the RDK UI behavior when the More Apps button is pressed and the DUT fails to connect to the App Catalogue server due to a network issue. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that error message should close and return to previous screen.
-
+To validate the RDK UI behavior when the More Apps tile is selected and the DUT cannot reach the App Catalogue server due to a network issue. This test confirms that an appropriate error message is displayed and dismissed correctly, returning the user to the previous screen, ensuring the no-internet More Apps error handling meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

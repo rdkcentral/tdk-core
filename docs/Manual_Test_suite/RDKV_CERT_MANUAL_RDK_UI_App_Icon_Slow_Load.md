@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_App_Icon_Slow_Load
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that when app icons take time to load due to network latency, the RDK UI displays a loading/buffering indicator until the Recommended Apps row data fully loads. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that a dedicated page should open which lists all applications available in DAC App Catalogue. The UI should display a loading/buffering indicator (As it is connected to slow network) until the apps row data fully loads.
-
+To validate that the RDK UI correctly displays a loading indicator when app icons take time to load due to network latency on the Recommended Apps row. This test confirms that the loading indicator is shown until all app row data is fully loaded, ensuring the slow-network icon loading behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

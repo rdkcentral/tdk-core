@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_Wifi_SSID_Connect_No_Eth
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT can successfully connect to a new Wi-Fi SSID when no Ethernet cable is connected. This test exercises the RDK UI Network Configuration settings, the Wi-Fi connection manager (`wpa_supplicant`), and the network interface stack to validate the targeted Wi-Fi connectivity behaviour. The test confirms that the application should open successfully and content playback should start with proper audio and video output.
-
+To validate that the DUT can successfully connect to a new Wi-Fi SSID when no Ethernet cable is connected. This test confirms that internet connectivity is established via the Wi-Fi interface and content playback is functional, ensuring Wi-Fi SSID connection without Ethernet meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

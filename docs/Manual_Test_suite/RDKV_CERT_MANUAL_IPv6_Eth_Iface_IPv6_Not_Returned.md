@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_IPv6_Eth_Iface_IPv6_Not_Returned
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the GetPublicIP API does not return an IPv6 address for the Ethernet interface when the Ethernet interface does not have a global IPv6 address, even when a Wi-Fi SSID supporting IPv6 is connected. This test exercises the RDK network manager, IPv6 address assignment stack (`ip` / `ifconfig` commands), and the router Advertisement handler to validate dual-stack network connectivity. The test confirms that the response should return}, confirming that no global IPv6 address is available on the eth0 interface. The wlan0 IPv6 address should not be returned when eth0 is explicitly queried.
+To validate that the DUT correctly handles IPv6 address queries per network interface when only the Wi-Fi interface has a global IPv6 address and Ethernet does not. This test confirms that interface-specific IP queries return accurate, isolated results without cross-reporting from other interfaces, ensuring correct IPv6 address resolution behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

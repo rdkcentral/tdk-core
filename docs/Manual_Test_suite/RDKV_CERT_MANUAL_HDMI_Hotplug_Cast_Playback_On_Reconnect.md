@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_Hotplug_Cast_Playback_On_Reconnect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that YouTube video casting from a smartphone to the DUT continues without interruption after an HDMI cable reconnect. This test exercises the RDK HDMI hotplug detection service and display manager to validate display connection and disconnection event handling. The test confirms that the YouTube casting session should not be interrupted and video playback should continue on the DUT with proper audio and video output after HDMI reconnection.
+To validate that YouTube video casting from a smartphone to the DUT continues without interruption after an HDMI cable reconnect. This test confirms that the casting session is preserved and video playback continues with proper audio and video output after HDMI reconnection, ensuring hotplug resilience for active casting sessions meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

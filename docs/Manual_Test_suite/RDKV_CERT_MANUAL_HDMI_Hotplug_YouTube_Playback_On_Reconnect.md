@@ -1,7 +1,7 @@
-## TestCase ID
-RDKV_MANUAL_HDMIHOTPLUG_09
+﻿## TestCase ID
+RDKV_MANUAL_HDMIHOTPLUG_05
 ## TestCase Name
-RDKV_CERT_MANUAL_HDMI_Hotplug_Netflix_Playback_On_Reconnect
+RDKV_CERT_MANUAL_HDMI_Hotplug_YouTube_Playback_On_Reconnect
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_Hotplug_Netflix_Playback_On_Reconnect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Netflix video playback resumes correctly from the same playback position after an HDMI cable reconnect. This test exercises the RDK HDMI hotplug detection service and display manager to validate display connection and disconnection event handling. The test confirms that the Netflix application should terminate gracefully and the RDK UI Home screen should be visible on the TV/display.
+To validate that YouTube video playback resumes correctly from the same playback position after an HDMI cable reconnect on the DUT. This test confirms that playback is restored seamlessly after HDMI reconnection without requiring manual intervention, ensuring HDMI hotplug handling for YouTube playback meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -33,10 +33,10 @@ To validate that Netflix video playback resumes correctly from the same playback
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Reboot DUT and verify home screen | Reboot the DUT and wait for it to fully boot up. | The DUT should boot up successfully and the RDK UI Home screen should be visible on the TV/display.|
-| 2 | Launch Netflix application | From the RDK UI Home screen, navigate to the My Apps / Recommended Apps section, select the Netflix application tile, and press Enter/OK on the remote. | The Netflix application should launch successfully (cold launch or hot launch based on the app's previous state).|
-| 3 | Select and initiate Netflix video playback | Select any video content from the Netflix application and initiate playback. | The selected video content should start playing with proper audio and video output.|
+| 2 | Launch YouTube application | From the RDK UI Home screen, navigate to the My Apps / Recommended Apps section, select the YouTube application tile, and press Enter/OK on the remote. | The YouTube application should launch successfully (cold launch or hot launch based on the app's previous state).|
+| 3 | Select and initiate YouTube video playback | Select any video content from the YouTube application and initiate playback. | The selected video content should start playing with proper audio and video output.|
 | 4 | Disconnect and reconnect HDMI cable | Disconnect the HDMI cable from the DUT. Wait approximately 10 seconds, then reconnect the HDMI cable to the DUT. | The video should resume playing from the position at which the HDMI cable was disconnected, with proper audio and video output.|
-| 5 | Exit Netflix application | Exit the Netflix application by pressing the Back key on the Bluetooth remote. | The Netflix application should terminate gracefully and the RDK UI Home screen should be visible on the TV/display.|
+| 5 | Exit YouTube application | Exit the YouTube application by pressing the Back key on the Bluetooth remote. | The YouTube application should terminate gracefully and the RDK UI Home screen should be visible on the TV/display.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes

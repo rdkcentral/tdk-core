@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Img_Upgrade_Xconf_Via_Wifi
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that XCONF firmware upgrade completes successfully when the DUT is connected via Wi-Fi (no Ethernet), and to verify that the Wi-Fi connection persists after the upgrade. This test exercises the RDK CDL (Code Download) service and the firmware upgrade stack (`XCONF` server configuration, SNMP triggers, or local USB/HTTP methods) to validate the firmware upgrade workflow. The test confirms that the Wi-Fi connection should persist after the XCONF firmware upgrade. A/V playback and network connectivity should function correctly.
+To validate that a XCONF firmware upgrade completes successfully when the DUT is connected via Wi-Fi only, and that the Wi-Fi connection and A/V functionality persist after the upgrade. This test confirms that network connectivity and playback remain functional post-upgrade, ensuring firmware upgrade over Wi-Fi meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_Hotplug_Widevine_DRM_Playback_On_Reconnect
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that Widevine DRM encrypted stream playback continues without interruption after an HDMI cable reconnect on the DUT. This test exercises the RDK HDMI hotplug detection service and display manager to validate display connection and disconnection event handling. The test confirms that playback should terminate and the aamp-cli session should exit cleanly.
+To validate that Widevine DRM encrypted stream playback continues without interruption after an HDMI cable reconnect on the DUT. This test confirms that DRM-protected playback resumes correctly after HDMI reconnection and the session concludes cleanly, ensuring hotplug resilience for DRM-protected content meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

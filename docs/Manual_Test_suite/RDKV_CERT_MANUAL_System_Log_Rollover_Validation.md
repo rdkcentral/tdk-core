@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_System_Log_Rollover_Validation
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the log rollover mechanism is functioning as expected on the DUT, ensuring that logs are preserved in the PreviousLogs directory after a reboot. This test exercises shell commands executed over a serial console or SSH session (such as `systemctl`, `cat`, `ifconfig`, and `journalctl`) to validate the targeted system-level functionality. The test confirms that the PreviousLogs folder should contain log files, and the log entries captured before the reboot should be present in the respective log file.
+To validate that the log rollover mechanism is functioning correctly on the DUT, ensuring that log files are preserved in the PreviousLogs directory after a device reboot. This test confirms that pre-reboot log entries are present in the respective log files under PreviousLogs, ensuring the system log preservation behavior meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

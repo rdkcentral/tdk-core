@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Miracast_Volume_Control_Via_Phone
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the audio volume of content playing via Miracast can be controlled from the smartphone. This test exercises the RDK Miracast Wi-Fi Display service, the P2P Wi-Fi connection stack, and the Miracast settings in the RDK UI to validate screen-mirroring connectivity. The test confirms that the volume on the DUT should increase and decrease accordingly, confirming that audio volume is controlled from the smartphone.
+To validate that the audio volume of content playing via Miracast can be controlled from the smartphone. This test confirms that volume increases and decreases on the DUT are correctly applied in response to smartphone controls, ensuring Miracast volume control functionality meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

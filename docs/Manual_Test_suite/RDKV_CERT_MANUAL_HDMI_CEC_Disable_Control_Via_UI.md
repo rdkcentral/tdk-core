@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_HDMI_CEC_Disable_Control_Via_UI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that CEC control can be disabled from the RDK UI, and that all CEC API commands are rejected with appropriate error responses when CEC is disabled. This test exercises the `org.rdk.HdmiCec` plugin and the HDMI CEC bus to validate device-level CEC command transmission and reception. The test confirms that the API should reject the command since CEC is disabled. The TV should not turn off.
+To validate that CEC control can be disabled from the RDK UI and that all CEC API commands are rejected when CEC is in the disabled state on the DUT. This test confirms that the API correctly rejects CEC commands and the TV does not respond when CEC is disabled, ensuring that CEC disable control meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

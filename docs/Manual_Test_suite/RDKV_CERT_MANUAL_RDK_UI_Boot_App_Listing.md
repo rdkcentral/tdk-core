@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Boot_App_Listing
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that on every device boot, the RDK UI Recommended Apps row lists the first four available apps from the App Catalogue in alphabetical order, along with a "More Apps" tile. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that in Recommended Apps row, the UI should list the first four DAC apps from the App Catalogue in the tiles in alphabetical order, along with a final tile for the "More Apps" option.
-
+To validate that on every device boot, the RDK UI Recommended Apps row lists the first four available apps from the App Catalogue in alphabetical order along with a More Apps tile. This test confirms that the app listing on the home screen is correctly populated in alphabetical order after every boot, ensuring the boot-time app listing behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

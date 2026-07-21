@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_Home_Screen_Boot_Load
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the RDK UI loads successfully on the DUT after a reboot, with no ill effects such as a black screen or display anomalies. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that in Home screen and different settings screens, UI should be proper. Texts should be readable and no overlapping should be there with other screens.
-
+To validate that the RDK UI loads successfully on the DUT after a reboot with no display anomalies such as black screens or overlapping elements. This test confirms that the Home screen and Settings screens are rendered correctly with all text readable and no visual overlap, ensuring the post-reboot UI load behavior meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

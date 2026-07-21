@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_BTRemote_PairAndConnect_In_RDK_UI
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a Bluetooth remote can be successfully paired and connected to the DUT while the RDK UI is active. This test exercises the RDK Bluetooth pairing stack, the remote-control key-mapping service, and the RDK UI to validate remote-control button behaviour. The test confirms that all navigation key presses should function correctly, confirming that the remote is successfully paired and connected to the DUT.
+To validate that a Bluetooth remote can be successfully paired and connected to the DUT while the RDK UI is active. This test confirms that all navigation key presses function correctly after pairing, ensuring that Bluetooth remote pairing and connectivity meet certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions

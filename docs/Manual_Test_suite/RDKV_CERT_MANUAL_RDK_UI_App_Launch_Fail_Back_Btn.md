@@ -12,8 +12,7 @@ RDKV_CERT_MANUAL_RDK_UI_App_Launch_Fail_Back_Btn
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that when an app launch fails due to a network issue, an appropriate error overlay is displayed, and the overlay can be dismissed using the Back button press from the remote. This test exercises the RDK UI home screen, settings menus, and DAC App Manager navigation via Bluetooth remote key-press events to validate the targeted UI behaviour. The test confirms that the overlay should exit and return the user to previous screen.
-
+To validate that when an app launch fails due to a network issue, the RDK UI displays an appropriate error overlay that can be dismissed using the Back button on the remote. This test confirms that the error overlay exits cleanly and returns the user to the previous screen, ensuring app launch failure error handling via the Back button meets certification requirements.
 <a name="head.Precondition"></a>
 ## Preconditions
 

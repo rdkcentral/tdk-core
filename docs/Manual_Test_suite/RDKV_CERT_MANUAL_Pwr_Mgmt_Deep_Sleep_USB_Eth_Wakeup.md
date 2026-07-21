@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_POWER_13
 ## TestCase Name
-RDKV_CERT_MANUAL_Pwr_Mgmt_Deep_Sleep_Usb_Eth_Wakeup
+RDKV_CERT_MANUAL_Pwr_Mgmt_Deep_Sleep_USB_Eth_Wakeup
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_Pwr_Mgmt_Deep_Sleep_Usb_Eth_Wakeup
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT wakes up from DEEP SLEEP mode upon connection of a USB Ethernet dongle. This test exercises the `org.rdk.PowerManager` plugin and the RDK power-state machine (including standby, deep-sleep, and wake triggers) to validate power-mode transitions. The test confirms that the application should launch successfully and play content with proper Audio and Video output.
+To validate that the DUT wakes up from DEEP SLEEP mode upon connection of a USB Ethernet dongle. This test confirms that the application launches successfully and A/V content plays with proper audio and video output after wake-up, ensuring USB Ethernet connection as a DEEP SLEEP wake source meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions
