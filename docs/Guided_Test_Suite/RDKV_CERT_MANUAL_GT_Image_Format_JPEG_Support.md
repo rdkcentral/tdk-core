@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_GT_IMAGEFORMATS_03
+RDKV_MANUAL_GT_IMAGEFORMATS_02
 ## TestCase Name
-RDKV_CERT_MANUAL_GT_Image_Format_Svg_Support
+RDKV_CERT_MANUAL_GT_Image_Format_JPEG_Support
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_GT_Image_Format_Svg_Support
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the SVG (`.svg`) Scalable Vector Graphics image format is correctly decoded and rendered by the WebKit browser engine on the DUT. This test confirms the DUT's browser correctly handles SVG image content, ensuring SVG format support meets RDK certification requirements.
+To validate that the JPEG (`.jpg`) image format is correctly decoded and rendered by the WebKit browser engine on the DUT. This test confirms the DUT's browser correctly handles JPEG image content, ensuring JPEG format support meets RDK certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -31,8 +31,8 @@ To validate that the SVG (`.svg`) Scalable Vector Graphics image format is corre
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Launch Browser Test app | Launch the Browser Test HTML application on the DUT. | The Browser Test HTML application should launch successfully and the app UI should be displayed on the TV. |
-| 2 | Activate SVG image format link | Set focus on the Browser Test application via `org.rdk.RDKWindowManager.setFocus`, then send the following key sequence via `org.rdk.RDKWindowManager.generateKey` to navigate and activate the SVG image format link:<br>— Press the **Tab** key **3 times** to navigate to the `.svg` image format link<br>— Press the **Enter** key **once** to activate the link and load the SVG image on screen | The `.svg` image format link should be activated by the script and the image should load within the Browser Test HTML application on the TV display. |
-| 3 | Respond to script confirmation prompt | The script prompts: *"Is svg image format loaded in Browser_test App and Visible on TV [yes/no]:"* — look at the TV display and respond with `yes` if the `.svg` image is visible, or `no` if it is not. | The tester should confirm `yes`, indicating the `.svg` image format is correctly loaded and visible on the TV display connected to the DUT. |
+| 2 | Activate JPEG image format link | Set focus on the Browser Test application via `org.rdk.RDKWindowManager.setFocus`, then send the following key sequence via `org.rdk.RDKWindowManager.generateKey` to navigate and activate the JPEG image format link:<br>— Press the **Tab** key **2 times** to navigate to the `.jpg` image format link<br>— Press the **Enter** key **once** to activate the link and load the JPEG image on screen | The `.jpg` image format link should be activated by the script and the image should load within the Browser Test HTML application on the TV display. |
+| 3 | Respond to script confirmation prompt | The script prompts: *"Is jpg image format loaded in Browser_test App and Visible on TV [yes/no]:"* — look at the TV display and respond with `yes` if the `.jpg` image is visible, or `no` if it is not. | The tester should confirm `yes`, indicating the `.jpg` image format is correctly loaded and visible on the TV display connected to the DUT. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes

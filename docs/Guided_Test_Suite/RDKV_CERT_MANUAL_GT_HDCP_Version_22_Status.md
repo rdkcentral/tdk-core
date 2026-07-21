@@ -1,7 +1,7 @@
 ## TestCase ID
-RDKV_MANUAL_GT_HDCP_COMP_07
+RDKV_MANUAL_GT_HDCP_COMP_06
 ## TestCase Name
-RDKV_CERT_MANUAL_GT_Hdcp_Compliant_Status
+RDKV_CERT_MANUAL_GT_HDCP_Version_22_Status
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_GT_Hdcp_Compliant_Status
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the DUT achieves and maintains HDCP compliance status during active AV playback with no degradation in audio or video quality. This test confirms end-to-end HDCP compliance on the DUT's HDMI output with a connected display under real media streaming conditions.
+To validate that the DUT reports consistent HDCP 2.2 version information — including supported, received, and current version parameters — during active AV playback. This test confirms that HDCP 2.2 version negotiation between the DUT and the connected HDMI display is functioning correctly.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -32,8 +32,7 @@ To validate that the DUT achieves and maintains HDCP compliance status during ac
 |-|---------|-----------------|----------------|
 | 1 | Hotplug HDMI cable on DUT | A visual alert blinks on the screen: *"PLEASE DISCONNECT HDMI CABLE AND CONNECT IT BACK TO DUT TO PROCEED TEST!!!"* — physically disconnect the HDMI cable from the DUT and then reconnect it. The script then prompts: *"Is HDMI cable hotplugged from DUT and RDK UI showing on TV [yes/no]:"* — respond `yes` once the HDMI is reconnected and the RDK UI is visible on the TV. | The HDMI cable should be hotplugged and the RDK UI should be visible on the TV display after reconnection. |
 | 2 | Start immediate AV playback via YouTube | Launch the YouTube application with immediate AV playback via the AppManager launchApp API using the configured playback URL (`<yt_URL>`):<br>Command: `curl -d '{"jsonrpc":"2.0","id":2,"method":"org.rdk.AppManager.launchApp","params":{"appId":"com.rdkcentral.youtube","intent":"playback","launchArgs":"<yt_URL>"}}' http://localhost:9998/jsonrpc` | The YouTube application should launch successfully and AV playback should start immediately on the DUT. |
-| 3 | Verify HDCP compliant status | Execute the curl command to verify that the DUT is HDCP compliant via the getHDCPStatus API.<br>Command: `curl --data-binary '{"jsonrpc":"2.0","id":3,"method":"org.rdk.HdcpProfile.getHDCPStatus","params":{}}' -H 'content-type:text/plain;' http://127.0.0.1:9998/jsonrpc` | The API response should return `isHDCPCompliant=true` and `success=true`, confirming the DUT is HDCP compliant. |
-| 4 | Confirm continuous AV playback quality | The script prompts: *"Is AV stream playing continuously with proper audio and video in TV [yes/no]:"* — observe the TV display and respond `yes` if AV playback is continuous with proper audio and video quality. | AV playback should be continuous with proper audio and video on the TV display, confirming the DUT maintains HDCP-compliant streaming without interruption. |
+| 3 | Verify supported, receiver and current HDCP versions | Execute the curl command to retrieve and verify all HDCP version fields from the getHDCPStatus API.<br>Command: `curl --data-binary '{"jsonrpc":"2.0","id":3,"method":"org.rdk.HdcpProfile.getHDCPStatus","params":{}}' -H 'content-type:text/plain;' http://127.0.0.1:9998/jsonrpc` | The API response should return `supportedHDCPVersion=2.2`, `receiverHDCPVersion=2.2`, and `currentHDCPVersion=2.2` — all three values should be equal and set to 2.2, and `success=true`. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes

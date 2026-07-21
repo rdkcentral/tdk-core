@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_GT_HDCP_COMP_03
 ## TestCase Name
-RDKV_CERT_MANUAL_GT_Hdcp_Authenticated_Status
+RDKV_CERT_MANUAL_GT_HDCP_Authenticated_Status
 
 <a name="head.TOC"></a>
 ## Table Of Contents

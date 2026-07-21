@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_GT_IPV6_08
 ## TestCase Name
-RDKV_CERT_MANUAL_GT_IPv6_Get_Publicip_Api_Eth
+RDKV_CERT_MANUAL_GT_IPv6_Get_PublicIP_API_Eth
 
 <a name="head.TOC"></a>
 ## Table Of Contents
