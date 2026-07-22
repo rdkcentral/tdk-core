@@ -16,15 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-
-
 import tdklib
 import json
 import ast
-from rdkv_basic_sanitylib import *
-
-LOG_DIR = "/opt/logs"
-EXPECTED_LOG_FILES = ["dropbear.log", "rdk_shell.log", "version.txt", "device_details.log", "wpeframework.log", "wpa_p2p_supplicant.log", "rfcscript.log", "tr69hostif.log", "top_log.txt", "parodus.log", "lighttpd.error.log", "dcmscript.log"]
 
 obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity", "1", standAlone=True)
 
@@ -40,7 +34,7 @@ obj.setLoadModuleStatus(result.upper())
 expectedResult = "SUCCESS"
 
 if expectedResult in result.upper():
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "SSH_PORT"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "SSH_PORT", "SANITY_EXPECTED_LOG_FILES", "SANITY_LOG_FILES_DIR"]
     configValues = {}
 
     tdkTestObj = obj.createTestStep("rdkv_basic_sanity_getDeviceConfig")
@@ -76,7 +70,8 @@ if expectedResult in result.upper():
 
             missing_files = []
             empty_files = []
-
+            LOG_DIR = configValues["SANITY_LOG_FILES_DIR"]
+            EXPECTED_LOG_FILES = json.loads(configValues["SANITY_EXPECTED_LOG_FILES"])
             print("\nChecking expected log files in %s\n" % LOG_DIR)
             files_arg = " ".join(EXPECTED_LOG_FILES)
             command = (
