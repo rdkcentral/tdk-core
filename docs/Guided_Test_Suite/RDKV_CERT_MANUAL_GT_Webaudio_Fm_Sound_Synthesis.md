@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_GT_WEBAUDIO_07
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Webaudio_Fm_Sound_Synthesis

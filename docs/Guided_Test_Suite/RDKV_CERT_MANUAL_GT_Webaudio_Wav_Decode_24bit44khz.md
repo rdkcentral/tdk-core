@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_GT_WEBAUDIO_15
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Webaudio_Wav_Decode_24bit44khz

@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_GT_WEBAUDIO_09
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Webaudio_AAC_Decode_Vbr128k

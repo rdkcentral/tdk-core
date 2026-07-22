@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_GT_WEBAUDIO_10
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Webaudio_Mp3_Decode_128k

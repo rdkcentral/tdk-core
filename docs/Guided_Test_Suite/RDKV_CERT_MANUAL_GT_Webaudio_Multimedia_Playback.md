@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_GT_WEBAUDIO_08
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Webaudio_Multimedia_Playback

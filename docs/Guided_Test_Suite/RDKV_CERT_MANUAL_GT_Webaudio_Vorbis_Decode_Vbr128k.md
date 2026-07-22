@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_GT_WEBAUDIO_13
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Webaudio_Vorbis_Decode_Vbr128k
