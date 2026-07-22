@@ -27,8 +27,6 @@ import tdklib
 from tr69Config import *
 from tdkutility import *
 
-# GenieACS task endpoints may return 200 (OK) or 202 (Accepted).
-TASK_SUCCESS_CODES = (200, 202)
 # Poll configuration for waiting until ACS DB reflects queued task updates.
 ACS_REFLECTION_TIMEOUT_SEC = 120
 ACS_REFLECTION_INTERVAL_SEC = 10
@@ -65,7 +63,9 @@ def extract_task_timestamp(taskResponse):
     # Extract task queue timestamp used for post-queue inform validation.
     if isinstance(taskResponse, dict):
         return taskResponse.get("timestamp")
-    if isinstance(taskResponse, list) and taskResponse:
+    if isinstance(taskResponse, list):
+        if len(taskResponse) == 0:
+            return None
         firstEntry = taskResponse[0]
         if isinstance(firstEntry, dict):
             return firstEntry.get("timestamp")
@@ -80,13 +80,8 @@ def extract_task_timestamp(taskResponse):
 def parse_acs_timestamp(timestamp):
     if not timestamp or not isinstance(timestamp, str):
         return None
-    try:
-        # GenieACS timestamps are typically ISO format with trailing Z.
-        return datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
-    except Exception:
-        pass
-
     # Handle common GenieACS timestamp layouts with/without milliseconds.
+    normalized = timestamp.replace("Z", "+0000")
     formats = [
         "%Y-%m-%d %H:%M:%S.%f %z",
         "%Y-%m-%d %H:%M:%S %z",
@@ -95,7 +90,7 @@ def parse_acs_timestamp(timestamp):
     ]
     for timeFormat in formats:
         try:
-            return datetime.strptime(timestamp, timeFormat)
+            return datetime.strptime(normalized, timeFormat)
         except Exception:
             continue
     return None
@@ -114,7 +109,9 @@ def get_device_last_inform(username):
         if response.status_code != 200:
             return None
         body = response.json()
-        if not isinstance(body, list) or len(body) == 0:
+        if not isinstance(body, list):
+            return None
+        if len(body) == 0:
             return None
         deviceInfo = body[0]
         if not isinstance(deviceInfo, dict):
@@ -159,10 +156,11 @@ def check_device_inform_after_task(username, timeStamp, maxDelaySec=ACS_QUEUED_I
 #             : detail - task detail/fault info when available.
 def getACSTaskStatus(taskId):
     # Use search API for ACS tasks
-    taskStatusUrl = ACS_NBI_URL + f"/tasks/?query={{\"_id\":\"{taskId}\"}}"
-    print(f"task url : {taskStatusUrl}")
+    taskStatusUrl = ACS_NBI_URL + "/tasks"
+    params = {"query": json.dumps({"_id": taskId})}
+    print(f"task url : {taskStatusUrl}, params : {params}")
     try:
-        response = requests.get(taskStatusUrl)
+        response = requests.get(taskStatusUrl, params=params)
         print(f"task status code : {response.status_code}")
         print(f"task status text : {response.text}")
         if response.status_code != 200:
@@ -216,6 +214,8 @@ def waitForTaskTerminalStatus(taskId,timeoutSec=ACS_TASK_STATUS_TIMEOUT_SEC,inte
                 print(f"WARNING: Task {taskId} disappeared without RPC response - device was likely offline or unreachable")
                 return state, None  # Signal offline by returning None
             # Return the task data that had actual execution (response or fault)
+            if state in ("FAULTED", "UNKNOWN"):
+                return state, detail
             return state, lastExecutionData
         if elapsed >= timeoutSec:
             break
@@ -227,8 +227,7 @@ def waitForTaskTerminalStatus(taskId,timeoutSec=ACS_TASK_STATUS_TIMEOUT_SEC,inte
 # waitForTaskCompletionIfQueued
 # Syntax      : waitForTaskCompletionIfQueued(tdkTestObj, status, queryResponse, step, operationName, deviceUsername)
 # Description : When a task returns HTTP 202 (queued), extracts the task ID and polls ACS
-#               until the task reaches a terminal state (COMPLETED, FAULTED, or timeout).
-#               HTTP 200 means the task already completed synchronously - returns True immediately.
+#               until the task reaches a terminal state (COMPLETED, FAULTED, or timeout)..
 # Parameters  : tdkTestObj - Object of the tdk library.
 #             : status - HTTP status code returned by tr069ACSQuery.
 #             : queryResponse - Response body returned by tr069ACSQuery.
@@ -238,9 +237,7 @@ def waitForTaskTerminalStatus(taskId,timeoutSec=ACS_TASK_STATUS_TIMEOUT_SEC,inte
 # Return Value: True if the task execution verifiably succeeded.
 #             : False if queued execution cannot be validated or task failed/timed out.
 def waitForTaskCompletionIfQueued(tdkTestObj, status, queryResponse, step, operationName, deviceUsername=None):
-    if status != 202:
-        # HTTP 200 means task already executed synchronously
-        return True
+    # This helper is called only for queued (HTTP 202) task handling.
     taskId = extract_task_id(queryResponse)
     if not taskId:
         tdkTestObj.setResultStatus("FAILURE")
@@ -274,7 +271,9 @@ def waitForTaskCompletionIfQueued(tdkTestObj, status, queryResponse, step, opera
         # Task had actual response data - proceed
         if taskDetail is None:
             if check_device_inform_after_task(username=taskDevice, timeStamp=taskTimestamp, maxDelaySec=ACS_QUEUED_INFORM_MAX_DELAY_SEC):
-                print("%s task completed without explicit RPC payload, but device informed ACS after task queue time. Treating as successful queued execution." % operationName)
+                tdkTestObj.setResultStatus("SUCCESS")
+                print("ACTUAL RESULT %d: %s task completed without explicit RPC payload, but device informed ACS after task queue time. Treating as successful queued execution." % (step, operationName))
+                print("[TEST EXECUTION RESULT] : SUCCESS")
                 return True
             tdkTestObj.setResultStatus("FAILURE")
             print("ACTUAL RESULT %d: %s task completed but device never responded (no RPC execution). Device may be offline, unreachable, behind NAT, or connection request failed." % (step, operationName))
@@ -361,22 +360,17 @@ def waitForACSValueReflection(username,queryParam,expectedValues=None,timeoutSec
             parsedResponse = parseTR69ACSResponse(queryResponse,queryParam,"search")
             if parsedResponse is not None:
                 # Prevent stale ACS cache from being accepted as queued GET success.
-                if not is_search_response_fresh(queryResponse,queryParam,minTimestamp):
-                    if elapsed >= timeoutSec:
-                        break
-                    sleep(intervalSec)
-                    elapsed += intervalSec
-                    continue
-                if expectedValues is None:
-                    return status, parsedResponse
-                allMatched = True
-                for key, expected in expectedValues.items():
-                    actual = parsedResponse.get(key)
-                    if actual is None or not values_match(actual, expected):
-                        allMatched = False
-                        break
-                if allMatched:
-                    return status, parsedResponse
+                if is_search_response_fresh(queryResponse,queryParam,minTimestamp):
+                    if expectedValues is None:
+                        return status, parsedResponse
+                    allMatched = True
+                    for key, expected in expectedValues.items():
+                        actual = parsedResponse.get(key)
+                        if actual is None or not values_match(actual, expected):
+                            allMatched = False
+                            break
+                    if allMatched:
+                        return status, parsedResponse
         if elapsed >= timeoutSec:
             break
         sleep(intervalSec)
@@ -401,6 +395,7 @@ def tr069ACSPreRequisite(obj,sysobj):
     ConfigStatus = "FAILURE"
     ConnectionStatus = "FAILURE"
     initialValues = []
+    tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Get')
     print("\nChecking the PREREQUISITES")
     #Check for the tr069 process
     print("Check if tr069 process is up and listening to port 7547")
@@ -428,7 +423,6 @@ def tr069ACSPreRequisite(obj,sysobj):
     if tr069paStatus == "SUCCESS":
         #Onboard the device to ACS server.
         print("Get the initial value of Device.ManagementServer.EnableCWMP")
-        tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Get')
         actualresult, details = getTR181Value(tdkTestObj_tr181,"Device.ManagementServer.EnableCWMP")
         if expectedresult in actualresult:
             tdkTestObj_tr181.setResultStatus("SUCCESS")
@@ -516,10 +510,10 @@ def gettr069ACS(tdkTestObj,username,queryParam,step):
     print("EXPECTED RESULT %d: Send GET task request to get %s and receive a valid response successfully via ACS server" % (step,name))
 
     status, queryResponse = tr069ACSQuery(username, queryParam, "get")
-    if status == 200 and queryResponse:
+    if status == 200 and queryResponse is not None:
         # Task executed synchronously - proceed directly
         pass
-    elif status == 202 and queryResponse:
+    elif status == 202 and queryResponse is not None:
         # Task queued - poll for terminal state to detect offline device,
         # connection request failures, or RPC faults before proceeding to search query
         if not waitForTaskCompletionIfQueued(tdkTestObj, status, queryResponse, step, "GET", username):
@@ -613,7 +607,7 @@ def settr069ACS(tdkTestObj,username,queryParam,step):
     print("\nTEST STEP %d: Send SET task request to set the %s to %s and receive a valid response via ACS server" %(step,name,value))
     print("EXPECTED RESULT %d: Send SET task request to set the %s to %s and receive a valid response successfully via ACS server" %(step,name,value))
     status,queryResponse = tr069ACSQuery(username,queryParam,"set")
-    if status == 200 and queryResponse:
+    if status == 200 and queryResponse is not None:
         # Task executed synchronously
         tdkTestObj.setResultStatus("SUCCESS")
         print("ACTUAL RESULT %d: Sent SET task request to set the %s as %s successfully via ACS server" %(step,name,value))
@@ -631,7 +625,7 @@ def settr069ACS(tdkTestObj,username,queryParam,step):
             print("SET task accepted but value was not reflected in ACS database within timeout")
             print("[TEST EXECUTION RESULT] : FAILURE")
             return None,step
-    elif status == 202 and queryResponse:
+    elif status == 202 and queryResponse is not None:
         # Task queued - poll for terminal state to detect offline device,
         # connection request failures, or RPC faults before checking value reflection
         if not waitForTaskCompletionIfQueued(tdkTestObj, status, queryResponse, step, "SET", username):
