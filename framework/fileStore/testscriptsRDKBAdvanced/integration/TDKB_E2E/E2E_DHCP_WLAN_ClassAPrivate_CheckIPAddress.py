@@ -157,10 +157,10 @@ if "SUCCESS" in loadmodulestatus.upper():
 
                         step = step + 1
                         print(f"\nTEST STEP {step}: Check whether wlan ip address is in same DHCP range")
-                        ipstatus = "SUCCESS"
+                        opstatus = "SUCCESS"
                         LanIP = newValues[0]
                         opstatus = checkIpRange(LanIP,wlanIP)
-                        if expectedresult in ipstatus:
+                        if expectedresult in opstatus:
                             tdkTestObj.setResultStatus("SUCCESS")
                             print("checkIpRange: SUCCESS")
 
