@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_MANUAL_GT_SYSTEM_02
 ## TestCase Name
-RDKV_CERT_MANUAL_GT_System_Wpeframework_Process_Status
+RDKV_CERT_MANUAL_GT_System_WPEFramework_Process_Status
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -20,14 +20,14 @@ To validate that all required WPEFramework processes — `WPEProcess`, `WPEFrame
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Verify test script files on DUT | Copy the test script (`System_Automated.sh`), the configuration file (`device.conf`), and the helper script (`generic_functions.sh`) to the working directory of the DUT and ensure all files are accessible. Configure the `device.conf` file with all the correct test environment values specific to this test case prior to execution. | The files `System_Automated.sh`, `device.conf`, and `generic_functions.sh` must be present and accessible in the DUT's working directory. The `device.conf` file must be populated with all the correct test environment values specific to this test case prior to execution. |
-| 2 | Verify Ethernet connectivity | Verify that the DUT has a valid IPv4 address assigned to the Ethernet interface.<br>Command: <code>ip -4 addr show eth0 &#124; awk '/inet / {split($2,a,"/"); print a[1]}'</code> | The DUT should have a valid IPv4 address assigned to the eth0 interface before test execution begins. |
+| 2 | Verify Ethernet connectivity | Verify that the DUT has a valid IPv4 address assigned to the Ethernet interface.<br>Command: `ip -4 addr show eth0 \| awk '/inet / {split($2,a,"/"); print a[1]}'` | The DUT should have a valid IPv4 address assigned to the eth0 interface before test execution begins. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Verify WPE framework processes | Execute the command to verify the running status of all WPEFramework processes on the DUT.<br>Command: `pgrep -l '^WPE'` | All WPEFramework processes should be found and running on the DUT. The following processes should be listed:<br>- WPEProcess<br>- WPEFramework<br>- WPENetworkProcess<br>- WPEWebProcess |
+| 1 | Verify WPEFramework processes | Execute the command to verify the running status of all WPEFramework processes on the DUT.<br>Command: `pgrep -l '^WPE'` | All WPEFramework processes should be found and running on the DUT. The following processes should be listed:<br>- WPEProcess<br>- WPEFramework<br>- WPENetworkProcess<br>- WPEWebProcess |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
