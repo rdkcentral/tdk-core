@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_GT_HDCP_COMP_06
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_HDCP_Version_22_Status
@@ -6,7 +6,7 @@ RDKV_CERT_MANUAL_GT_HDCP_Version_22_Status
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
-- [Precondition](#head.Precondition)
+- [Preconditions](#head.Precondition)
 - [Test Steps](#head.TestSteps)
 - [Test Attributes](#head.Attributes)
 

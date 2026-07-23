@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_GT_BT_AUDIO_07
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_BT_Audio_Device_Info
@@ -6,7 +6,7 @@ RDKV_CERT_MANUAL_GT_BT_Audio_Device_Info
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
-- [Precondition](#head.Precondition)
+- [Preconditions](#head.Precondition)
 - [Test Steps](#head.TestSteps)
 - [Test Attributes](#head.Attributes)
 

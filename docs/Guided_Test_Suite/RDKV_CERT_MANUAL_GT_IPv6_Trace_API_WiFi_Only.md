@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_GT_IPV6_06
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_IPv6_Trace_API_WiFi_Only
@@ -6,7 +6,7 @@ RDKV_CERT_MANUAL_GT_IPv6_Trace_API_WiFi_Only
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
-- [Precondition](#head.Precondition)
+- [Preconditions](#head.Precondition)
 - [Test Steps](#head.TestSteps)
 - [Test Attributes](#head.Attributes)
 

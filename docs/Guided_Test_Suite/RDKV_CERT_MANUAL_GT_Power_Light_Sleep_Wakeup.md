@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_GT_POWER_01
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Power_Light_Sleep_Wakeup
@@ -6,7 +6,7 @@ RDKV_CERT_MANUAL_GT_Power_Light_Sleep_Wakeup
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
-- [Precondition](#head.Precondition)
+- [Preconditions](#head.Precondition)
 - [Test Steps](#head.TestSteps)
 - [Test Attributes](#head.Attributes)
 
@@ -30,7 +30,7 @@ To validate that the DUT correctly transitions to the LIGHT SLEEP power state an
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Disable Energy Saver in RDK UI settings | A visual alert blinks on the screen: *"PLEASE TOGGLE OFF ENERGY SAVER FOR LIGHTSLEEP TO PROCEED TEST!!!"* — navigate manually to **Settings → Other Settings** on the DUT using the BT remote and locate the **Energy Saver** option. Ensure the **Energy Saver toggle is set to OFF** (disabled) to allow the Light Sleep power state to function correctly. The script then prompts: *"Is Energy saver is toggled off on Settings/Other Settings/Energy Saver [yes/no]:"* — respond `yes` once the Energy Saver toggle is confirmed as OFF. | The Energy Saver toggle should be set to **OFF** in **Settings → Other Settings** on the DUT, enabling the Light Sleep power state to be applied correctly via the API. |
+| 1 | Disable Energy Saver in RDK UI settings | A visual alert blinks on the screen: *"PLEASE TOGGLE OFF ENERGY SAVER FOR LIGHTSLEEP TO PROCEED TEST!!!"* — navigate manually to **Settings → Other Settings** on the DUT using the BT remote and locate the **Energy Saver** option. Ensure the **Energy Saver toggle is set to OFF** (disabled) to allow the Light Sleep power state to function correctly. The script then prompts: *"Is Energy Saver toggled off on Settings → Other Settings → Energy Saver [yes/no]:"* — respond `yes` once the Energy Saver toggle is confirmed as OFF. | The Energy Saver toggle should be set to **OFF** in **Settings → Other Settings** on the DUT, enabling the Light Sleep power state to be applied correctly via the API. |
 | 2 | Set powerstate to LIGHT_SLEEP via API | Execute the curl command to set the DUT powerstate to LIGHT_SLEEP via the System API.<br>Command: `curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.setPowerState","params":{"powerState":"LIGHT_SLEEP","standbyReason":"For Testing"}}' http://127.0.0.1:9998/jsonrpc` | The setPowerState API should return success=true, confirming the DUT has been set to LIGHT_SLEEP state. |
 | 3 | Verify DUT is in light sleep state | Execute the getPowerState API to verify the DUT is in LIGHT_SLEEP state. The script then prompts: *"Is RDK UI Homepage visible on TV [yes/no]:"* — respond `no` since the screen should be off in light sleep mode.<br>Command: `curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.getPowerState","params":{}}' http://127.0.0.1:9998/jsonrpc` | The getPowerState API should confirm the DUT is in LIGHT_SLEEP or STANDBY state, and the RDK UI homepage should NOT be visible on the TV display (screen off). |
 | 4 | Set powerstate to ON via API | Execute the curl command to set the DUT powerstate back to ON (wake up) via the System API.<br>Command: `curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.setPowerState","params":{"powerState":"ON","standbyReason":"For Testing"}}' http://127.0.0.1:9998/jsonrpc` | The setPowerState API should return success=true, confirming the DUT has been set to ON state. |

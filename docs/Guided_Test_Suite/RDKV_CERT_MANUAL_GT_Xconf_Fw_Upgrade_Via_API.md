@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_GT_XCONF_01
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Xconf_Fw_Upgrade_Via_API
@@ -6,7 +6,7 @@ RDKV_CERT_MANUAL_GT_Xconf_Fw_Upgrade_Via_API
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
-- [Precondition](#head.Precondition)
+- [Preconditions](#head.Precondition)
 - [Test Steps](#head.TestSteps)
 - [Test Attributes](#head.Attributes)
 

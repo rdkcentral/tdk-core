@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_GT_WEBAUDIO_13
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Webaudio_Vorbis_Decode_Vbr128k
@@ -6,7 +6,7 @@ RDKV_CERT_MANUAL_GT_Webaudio_Vorbis_Decode_Vbr128k
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
-- [Precondition](#head.Precondition)
+- [Preconditions](#head.Precondition)
 - [Test Steps](#head.TestSteps)
 - [Test Attributes](#head.Attributes)
 
@@ -32,7 +32,7 @@ To validate that the DUT's WebKit browser correctly decodes a Vorbis OGG audio f
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Launch WebAudio App | Launch the Webaudio_manual App via the `WEBAUDIO_manual_automated.sh` script using the `org.rdk.AppManager.launchApp` API with empty intent and launchArgs:<br>`curl -d '{ "jsonrpc": "2.0", "id": 2, "method": "org.rdk.AppManager.launchApp", "params": { "appId": "<isAppInstalled_appid>", "intent": "", "launchArgs": "" }}' http://localhost:9998/jsonrpc`<br><br>The script then prompts: *"Is Webaudio_manual App launched successfully [yes/no]:"* — the tester must respond `yes` to confirm. | The `AppManager.launchApp` API should return `"result":null` and the tester should confirm that the Webaudio_manual App launched successfully on the DUT. |
-| 2 | Navigate to Vorbis VBR-128K decode test and verify decoded info on HTML page | The script sets focus on the Webaudio_manual App via `org.rdk.RDKWindowManager.setFocus`, then sends the following key sequence via `org.rdk.RDKWindowManager.generateKey`:<br>— Press the **Tab** key **13 times** to navigate to the Vorbis audio decoding test (vbr-128kbps-44khz), then press the **Enter** key **once** to activate the link and load the inner HTML page.<br><br>The script then prompts: *"Is Audio decoded information of codecs loaded on a html page of Webaudio_manual App [yes/no]:"* — the tester must respond `yes` to confirm the decoded codec info is displayed. | The app should navigate to the Vorbis vbr-128kbps-44khz decode test, the inner HTML page should load and display the decoded audio codec information, and the tester should confirm with `yes`. |
+| 2 | Navigate to Vorbis VBR-128K decode test and verify decoded info on HTML page | The script sets focus on the Webaudio_manual App via `org.rdk.RDKWindowManager.setFocus`, then sends the following key sequence via `org.rdk.RDKWindowManager.generateKey`:<br>— Press the **Tab** key **13 times** to navigate to the Vorbis audio decoding test (vbr-128kbps-44khz), then press the **Enter** key **once** to activate the link and load the inner HTML page.<br><br>The script then prompts: *"Is Audio decoded information of codecs loaded on an HTML page of Webaudio_manual App [yes/no]:"* — the tester must respond `yes` to confirm the decoded codec info is displayed. | The app should navigate to the Vorbis vbr-128kbps-44khz decode test, the inner HTML page should load and display the decoded audio codec information, and the tester should confirm with `yes`. |
 | 3 | Terminate WebAudio App | The script terminates the Webaudio_manual App via `AppManager.terminateApp`:<br>`curl -H "Content-Type: application/json" --data-binary '{"jsonrpc": "2.0", "id": 15, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "<isAppInstalled_appid>"}}' http://127.0.0.1:9998/jsonrpc` | The `AppManager.terminateApp` API should return `"result":null` confirming the Webaudio_manual App instance has been closed successfully. |
 
 <a name="head.Attributes"></a>

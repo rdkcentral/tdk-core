@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_GT_IPV6_02
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_IPv6_Public_IP_Eth_Connected
@@ -6,7 +6,7 @@ RDKV_CERT_MANUAL_GT_IPv6_Public_IP_Eth_Connected
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
-- [Precondition](#head.Precondition)
+- [Preconditions](#head.Precondition)
 - [Test Steps](#head.TestSteps)
 - [Test Attributes](#head.Attributes)
 

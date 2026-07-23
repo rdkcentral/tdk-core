@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_GT_IMAGEFORMATS_02
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Image_Format_JPEG_Support
@@ -6,7 +6,7 @@ RDKV_CERT_MANUAL_GT_Image_Format_JPEG_Support
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
-- [Precondition](#head.Precondition)
+- [Preconditions](#head.Precondition)
 - [Test Steps](#head.TestSteps)
 - [Test Attributes](#head.Attributes)
 

@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_GT_WEBAUDIO_05
 ## TestCase Name
 RDKV_CERT_MANUAL_GT_Webaudio_Audiocontext_Destroy
@@ -6,7 +6,7 @@ RDKV_CERT_MANUAL_GT_Webaudio_Audiocontext_Destroy
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
-- [Precondition](#head.Precondition)
+- [Preconditions](#head.Precondition)
 - [Test Steps](#head.TestSteps)
 - [Test Attributes](#head.Attributes)
 
@@ -32,7 +32,7 @@ To validate that the DUT's WebKit browser can perform repeated AudioContext crea
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Launch WebAudio App | Launch the Webaudio_manual App via the `WEBAUDIO_manual_automated.sh` script using the `org.rdk.AppManager.launchApp` API with empty intent and launchArgs:<br>`curl -d '{ "jsonrpc": "2.0", "id": 2, "method": "org.rdk.AppManager.launchApp", "params": { "appId": "<isAppInstalled_appid>", "intent": "", "launchArgs": "" }}' http://localhost:9998/jsonrpc`<br><br>The script then prompts: *"Is Webaudio_manual App launched successfully [yes/no]:"* — the tester must respond `yes` to confirm. | The `AppManager.launchApp` API should return `"result":null` and the tester should confirm that the Webaudio_manual App launched successfully on the DUT. |
-| 2 | Navigate to AudioContext creation/destruction test and verify HTML page | The script sets focus on the Webaudio_manual App via `org.rdk.RDKWindowManager.setFocus`, then sends the following key sequence via `org.rdk.RDKWindowManager.generateKey`:<br>— Press the **Tab** key **5 times** to navigate to the AudioContext creation/destruction test case, then press the **Enter** key **once** to activate it and load the inner HTML page.<br><br>The script then prompts: *"Is the text message 'This test passes if it does not crash' displayed on a html page of Webaudio_manual App [yes/no]:"* — the tester must respond `yes` to confirm the message is visible. | The app should navigate to the AudioContext creation/destruction test, the inner HTML page should load without crashing, and the tester should confirm with `yes` that the message "This test passes if it does not crash" is displayed on the HTML page. |
+| 2 | Navigate to AudioContext creation/destruction test and verify HTML page | The script sets focus on the Webaudio_manual App via `org.rdk.RDKWindowManager.setFocus`, then sends the following key sequence via `org.rdk.RDKWindowManager.generateKey`:<br>— Press the **Tab** key **5 times** to navigate to the AudioContext creation/destruction test case, then press the **Enter** key **once** to activate it and load the inner HTML page.<br><br>The script then prompts: *"Is the text message 'This test passes if it does not crash' displayed on an HTML page of Webaudio_manual App [yes/no]:"* — the tester must respond `yes` to confirm the message is visible. | The app should navigate to the AudioContext creation/destruction test, the inner HTML page should load without crashing, and the tester should confirm with `yes` that the message "This test passes if it does not crash" is displayed on the HTML page. |
 | 3 | Terminate WebAudio App | The script terminates the Webaudio_manual App via `AppManager.terminateApp`:<br>`curl -H "Content-Type: application/json" --data-binary '{"jsonrpc": "2.0", "id": 15, "method": "org.rdk.AppManager.terminateApp", "params": {"appId": "<isAppInstalled_appid>"}}' http://127.0.0.1:9998/jsonrpc` | The `AppManager.terminateApp` API should return `"result":null` confirming the Webaudio_manual App instance has been closed successfully. |
 
 <a name="head.Attributes"></a>
