@@ -323,7 +323,7 @@ Verify closeApp with valid appId and ERROR closeReason
 CloseApp_ValidAppId_EmptyCloseReason
 
 ### TestCase ID
-LCM_12
+LCM_10
 
 ### TestCase Objective
 Verify closeApp with valid appId and empty closeReason
@@ -341,7 +341,7 @@ Verify closeApp with valid appId and empty closeReason
 CloseApp_Empty_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
-LCM_13
+LCM_11
 
 ### TestCase Objective
 Verify closeApp with empty appId and USER_EXIT closeReason
@@ -359,7 +359,7 @@ Verify closeApp with empty appId and USER_EXIT closeReason
 CloseApp_Empty_AppId_ERROR_CloseReason
 
 ### TestCase ID
-LCM_14
+LCM_12
 
 ### TestCase Objective
 Verify closeApp with empty appId and ERROR closeReason
@@ -377,7 +377,7 @@ Verify closeApp with empty appId and ERROR closeReason
 CloseApp_Empty_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
-LCM_15
+LCM_13
 
 ### TestCase Objective
 Verify closeApp with empty appId and KILL_AND_RUN closeReason
@@ -395,7 +395,7 @@ Verify closeApp with empty appId and KILL_AND_RUN closeReason
 CloseApp_Empty_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
-LCM_16
+LCM_14
 
 ### TestCase Objective
 Verify closeApp with empty appId and KILL_AND_ACTIVATE closeReason
@@ -413,7 +413,7 @@ Verify closeApp with empty appId and KILL_AND_ACTIVATE closeReason
 LifecycleManager_CloseApp_Empty_Params
 
 ### TestCase ID
-LCM_17
+LCM_15
 
 ### TestCase Objective
 Verify closeApp with empty appId and empty closeReason.
@@ -431,7 +431,7 @@ Verify closeApp with empty appId and empty closeReason.
 CloseApp_Without_Parameters
 
 ### TestCase ID
-LCM_18
+LCM_16
 
 ### TestCase Objective
 Verify closeApp without any parameters
@@ -449,7 +449,7 @@ Verify closeApp without any parameters
 CloseApp_Invalid_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
-LCM_19
+LCM_17
 
 ### TestCase Objective
 Verify closeApp with invalid appId and USER_EXIT closeReason
@@ -467,7 +467,7 @@ Verify closeApp with invalid appId and USER_EXIT closeReason
 CloseApp_Invalid_AppId_ERROR_CloseReason
 
 ### TestCase ID
-LCM_20
+LCM_18
 
 ### TestCase Objective
 Verify closeApp with invalid appId and ERROR closeReason
@@ -485,7 +485,7 @@ Verify closeApp with invalid appId and ERROR closeReason
 CloseApp_Invalid_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
-LCM_21
+LCM_19
 
 ### TestCase Objective
 Verify closeApp with invalid appId and KILL_AND_RUN closeReason
@@ -503,7 +503,7 @@ Verify closeApp with invalid appId and KILL_AND_RUN closeReason
 CloseApp_Invalid_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
-LCM_22
+LCM_20
 
 ### TestCase Objective
 Verify closeApp with invalid appId and KILL_AND_ACTIVATE closeReason
@@ -521,7 +521,7 @@ Verify closeApp with invalid appId and KILL_AND_ACTIVATE closeReason
 CloseApp_Numeric_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
-LCM_23
+LCM_21
 
 ### TestCase Objective
 Verify closeApp with numeric value for appId and USER_EXIT closeReason
@@ -539,7 +539,7 @@ Verify closeApp with numeric value for appId and USER_EXIT closeReason
 CloseApp_Numeric_AppId_ERROR_CloseReason
 
 ### TestCase ID
-LCM_24
+LCM_22
 
 ### TestCase Objective
 Verify closeApp with numeric value for appId and ERROR closeReason
@@ -557,7 +557,7 @@ Verify closeApp with numeric value for appId and ERROR closeReason
 CloseApp_Numeric_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
-LCM_25
+LCM_23
 
 ### TestCase Objective
 Verify closeApp with numeric value for appId and KILL_AND_RUN closeReason
@@ -575,7 +575,7 @@ Verify closeApp with numeric value for appId and KILL_AND_RUN closeReason
 CloseApp_Numeric_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
-LCM_26
+LCM_24
 
 ### TestCase Objective
 Verify closeApp with numeric value for appId and KILL_AND_ACTIVATE closeReason
@@ -593,7 +593,7 @@ Verify closeApp with numeric value for appId and KILL_AND_ACTIVATE closeReason
 CloseApp_Special_Char_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
-LCM_27
+LCM_25
 
 ### TestCase Objective
 Verify closeApp with special character string as appId and USER_EXIT closeReason
@@ -611,7 +611,7 @@ Verify closeApp with special character string as appId and USER_EXIT closeReason
 CloseApp_Special_Char_AppId_ERROR_CloseReason
 
 ### TestCase ID
-LCM_28
+LCM_26
 
 ### TestCase Objective
 Verify closeApp with special character string as appId and ERROR closeReason
@@ -629,7 +629,7 @@ Verify closeApp with special character string as appId and ERROR closeReason
 CloseApp_Special_Char_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
-LCM_29
+LCM_27
 
 ### TestCase Objective
 Verify closeApp with special character string as appId and KILL_AND_RUN closeReason
@@ -647,7 +647,7 @@ Verify closeApp with special character string as appId and KILL_AND_RUN closeRea
 CloseApp_Special_Char_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
-LCM_30
+LCM_28
 
 ### TestCase Objective
 Verify closeApp with special character string as appId and KILL_AND_ACTIVATE closeReason
@@ -665,7 +665,7 @@ Verify closeApp with special character string as appId and KILL_AND_ACTIVATE clo
 CloseApp_Boolean_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
-LCM_31
+LCM_29
 
 ### TestCase Objective
 Verify closeApp with boolean value for appId and USER_EXIT closeReason
@@ -683,7 +683,7 @@ Verify closeApp with boolean value for appId and USER_EXIT closeReason
 CloseApp_Boolean_AppId_ERROR_CloseReason
 
 ### TestCase ID
-LCM_32
+LCM_30
 
 ### TestCase Objective
 Verify closeApp with boolean value for appId and ERROR closeReason
@@ -701,7 +701,7 @@ Verify closeApp with boolean value for appId and ERROR closeReason
 CloseApp_Boolean_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
-LCM_33
+LCM_31
 
 ### TestCase Objective
 Verify closeApp with boolean value for appId and KILL_AND_RUN closeReason
@@ -719,7 +719,7 @@ Verify closeApp with boolean value for appId and KILL_AND_RUN closeReason
 CloseApp_Boolean_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
-LCM_34
+LCM_32
 
 ### TestCase Objective
 Verify closeApp with boolean value for appId and KILL_AND_ACTIVATE closeReason
@@ -737,7 +737,7 @@ Verify closeApp with boolean value for appId and KILL_AND_ACTIVATE closeReason
 CloseApp_Long_String_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
-LCM_35
+LCM_33
 
 ### TestCase Objective
 Verify closeApp with very long string as appId and USER_EXIT closeReason
@@ -755,7 +755,7 @@ Verify closeApp with very long string as appId and USER_EXIT closeReason
 CloseApp_Long_String_AppId_ERROR_CloseReason
 
 ### TestCase ID
-LCM_36
+LCM_34
 
 ### TestCase Objective
 Verify closeApp with very long string as appId and ERROR closeReason
@@ -773,7 +773,7 @@ Verify closeApp with very long string as appId and ERROR closeReason
 CloseApp_Long_String_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
-LCM_37
+LCM_35
 
 ### TestCase Objective
 Verify closeApp with very long string as appId and KILL_AND_RUN closeReason
@@ -791,7 +791,7 @@ Verify closeApp with very long string as appId and KILL_AND_RUN closeReason
 CloseApp_Long_String_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
-LCM_38
+LCM_36
 
 ### TestCase Objective
 Verify closeApp with very long string as appId and KILL_AND_ACTIVATE closeReason
@@ -809,7 +809,7 @@ Verify closeApp with very long string as appId and KILL_AND_ACTIVATE closeReason
 CloseApp_Valid_AppId_Numeric_CloseReason
 
 ### TestCase ID
-LCM_39
+LCM_37
 
 ### TestCase Objective
 Verify closeApp with valid appId and numeric value for closeReason
@@ -827,7 +827,7 @@ Verify closeApp with valid appId and numeric value for closeReason
 CloseApp_Valid_AppId_Special_Char_CloseReason
 
 ### TestCase ID
-LCM_40
+LCM_38
 
 ### TestCase Objective
 Verify closeApp with valid appId and special character string as closeReason
@@ -845,7 +845,7 @@ Verify closeApp with valid appId and special character string as closeReason
 CloseApp_Valid_AppId_Boolean_CloseReason
 
 ### TestCase ID
-LCM_41
+LCM_39
 
 ### TestCase Objective
 Verify closeApp with valid appId and boolean value for closeReason
@@ -863,7 +863,7 @@ Verify closeApp with valid appId and boolean value for closeReason
 CloseApp_Valid_AppId_Long_String_CloseReason
 
 ### TestCase ID
-LCM_42
+LCM_40
 
 ### TestCase Objective
 Verify closeApp with valid appId and very long string as closeReason

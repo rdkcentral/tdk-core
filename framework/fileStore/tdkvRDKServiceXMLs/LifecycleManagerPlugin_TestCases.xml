@@ -357,8 +357,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 12 -->
-    <testCase testCaseId="LCM_12" testCaseName="CloseApp_ValidAppId_EmptyCloseReason" desc="Verify closeApp with valid appId and empty closeReason">
+    <!-- TestCase 10 -->
+    <testCase testCaseId="LCM_10" testCaseName="CloseApp_ValidAppId_EmptyCloseReason" desc="Verify closeApp with valid appId and empty closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_ValidAppId_EmptyCloseReason" method="Close_App">
             <params>
@@ -369,8 +369,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 13 -->
-    <testCase testCaseId="LCM_13" testCaseName="CloseApp_Empty_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with empty appId and USER_EXIT closeReason">
+    <!-- TestCase 11 -->
+    <testCase testCaseId="LCM_11" testCaseName="CloseApp_Empty_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with empty appId and USER_EXIT closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Empty_AppId" method="Close_App">
             <params>
@@ -381,8 +381,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 14 -->
-    <testCase testCaseId="LCM_14" testCaseName="CloseApp_Empty_AppId_ERROR_CloseReason" desc="Verify closeApp with empty appId and ERROR closeReason">
+    <!-- TestCase 12 -->
+    <testCase testCaseId="LCM_12" testCaseName="CloseApp_Empty_AppId_ERROR_CloseReason" desc="Verify closeApp with empty appId and ERROR closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Empty_AppId_ERROR" method="Close_App">
             <params>
@@ -393,8 +393,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 15 -->
-    <testCase testCaseId="LCM_15" testCaseName="CloseApp_Empty_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with empty appId and KILL_AND_RUN closeReason">
+    <!-- TestCase 13 -->
+    <testCase testCaseId="LCM_13" testCaseName="CloseApp_Empty_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with empty appId and KILL_AND_RUN closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Empty_AppId_KILL_AND_RUN" method="Close_App">
             <params>
@@ -405,8 +405,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 16 -->
-    <testCase testCaseId="LCM_16" testCaseName="CloseApp_Empty_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with empty appId and KILL_AND_ACTIVATE closeReason">
+    <!-- TestCase 14 -->
+    <testCase testCaseId="LCM_14" testCaseName="CloseApp_Empty_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with empty appId and KILL_AND_ACTIVATE closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Empty_AppId_KILL_AND_ACTIVATE" method="Close_App">
             <params>
@@ -417,8 +417,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 17 -->
-    <testCase testCaseId="LCM_17" testCaseName="LifecycleManager_CloseApp_Empty_Params" desc="Verify closeApp with empty appId and empty closeReason.">
+    <!-- TestCase 15 -->
+    <testCase testCaseId="LCM_15" testCaseName="LifecycleManager_CloseApp_Empty_Params" desc="Verify closeApp with empty appId and empty closeReason.">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Empty_Params" method="Close_App">
             <params>
@@ -429,16 +429,16 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 18 -->
-    <testCase testCaseId="LCM_18" testCaseName="CloseApp_Without_Parameters" desc="Verify closeApp without any parameters">
+    <!-- TestCase 16 -->
+    <testCase testCaseId="LCM_16" testCaseName="CloseApp_Without_Parameters" desc="Verify closeApp without any parameters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_No_Params" method="Close_App">
             <resultGeneration useMethodTag="appmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
 
-    <!-- TestCase 19 -->
-    <testCase testCaseId="LCM_19" testCaseName="CloseApp_Invalid_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with invalid appId and USER_EXIT closeReason">
+    <!-- TestCase 17 -->
+    <testCase testCaseId="LCM_17" testCaseName="CloseApp_Invalid_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with invalid appId and USER_EXIT closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Invalid_AppId" method="Close_App">
             <params>
@@ -449,8 +449,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 20 -->
-    <testCase testCaseId="LCM_20" testCaseName="CloseApp_Invalid_AppId_ERROR_CloseReason" desc="Verify closeApp with invalid appId and ERROR closeReason">
+    <!-- TestCase 18 -->
+    <testCase testCaseId="LCM_18" testCaseName="CloseApp_Invalid_AppId_ERROR_CloseReason" desc="Verify closeApp with invalid appId and ERROR closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Invalid_AppId_ERROR" method="Close_App">
             <params>
@@ -461,8 +461,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 21 -->
-    <testCase testCaseId="LCM_21" testCaseName="CloseApp_Invalid_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with invalid appId and KILL_AND_RUN closeReason">
+    <!-- TestCase 19 -->
+    <testCase testCaseId="LCM_19" testCaseName="CloseApp_Invalid_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with invalid appId and KILL_AND_RUN closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Invalid_AppId_KILL_AND_RUN" method="Close_App">
             <params>
@@ -473,8 +473,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 22 -->
-    <testCase testCaseId="LCM_22" testCaseName="CloseApp_Invalid_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with invalid appId and KILL_AND_ACTIVATE closeReason">
+    <!-- TestCase 20 -->
+    <testCase testCaseId="LCM_20" testCaseName="CloseApp_Invalid_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with invalid appId and KILL_AND_ACTIVATE closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Invalid_AppId_KILL_AND_ACTIVATE" method="Close_App">
             <params>
@@ -485,8 +485,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 23 -->
-    <testCase testCaseId="LCM_23" testCaseName="CloseApp_Numeric_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with numeric value for appId and USER_EXIT closeReason">
+    <!-- TestCase 21 -->
+    <testCase testCaseId="LCM_21" testCaseName="CloseApp_Numeric_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with numeric value for appId and USER_EXIT closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Numeric_AppId" method="Numeric_AppId_Close_App">
             <params>
@@ -497,8 +497,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 24 -->
-    <testCase testCaseId="LCM_24" testCaseName="CloseApp_Numeric_AppId_ERROR_CloseReason" desc="Verify closeApp with numeric value for appId and ERROR closeReason">
+    <!-- TestCase 22 -->
+    <testCase testCaseId="LCM_22" testCaseName="CloseApp_Numeric_AppId_ERROR_CloseReason" desc="Verify closeApp with numeric value for appId and ERROR closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Numeric_AppId_ERROR" method="Numeric_AppId_Close_App">
             <params>
@@ -509,8 +509,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 25 -->
-    <testCase testCaseId="LCM_25" testCaseName="CloseApp_Numeric_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with numeric value for appId and KILL_AND_RUN closeReason">
+    <!-- TestCase 23 -->
+    <testCase testCaseId="LCM_23" testCaseName="CloseApp_Numeric_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with numeric value for appId and KILL_AND_RUN closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Numeric_AppId_KILL_AND_RUN" method="Numeric_AppId_Close_App">
             <params>
@@ -521,8 +521,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 26 -->
-    <testCase testCaseId="LCM_26" testCaseName="CloseApp_Numeric_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with numeric value for appId and KILL_AND_ACTIVATE closeReason">
+    <!-- TestCase 24 -->
+    <testCase testCaseId="LCM_24" testCaseName="CloseApp_Numeric_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with numeric value for appId and KILL_AND_ACTIVATE closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Numeric_AppId_KILL_AND_ACTIVATE" method="Numeric_AppId_Close_App">
             <params>
@@ -533,8 +533,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 27 -->
-    <testCase testCaseId="LCM_27" testCaseName="CloseApp_Special_Char_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with special character string as appId and USER_EXIT closeReason">
+    <!-- TestCase 25 -->
+    <testCase testCaseId="LCM_25" testCaseName="CloseApp_Special_Char_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with special character string as appId and USER_EXIT closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Special_Char_AppId" method="Close_App">
             <params>
@@ -545,8 +545,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 28 -->
-    <testCase testCaseId="LCM_28" testCaseName="CloseApp_Special_Char_AppId_ERROR_CloseReason" desc="Verify closeApp with special character string as appId and ERROR closeReason">
+    <!-- TestCase 26 -->
+    <testCase testCaseId="LCM_26" testCaseName="CloseApp_Special_Char_AppId_ERROR_CloseReason" desc="Verify closeApp with special character string as appId and ERROR closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Special_Char_AppId_ERROR" method="Close_App">
             <params>
@@ -557,8 +557,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 29 -->
-    <testCase testCaseId="LCM_29" testCaseName="CloseApp_Special_Char_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with special character string as appId and KILL_AND_RUN closeReason">
+    <!-- TestCase 27 -->
+    <testCase testCaseId="LCM_27" testCaseName="CloseApp_Special_Char_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with special character string as appId and KILL_AND_RUN closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Special_Char_AppId_KILL_AND_RUN" method="Close_App">
             <params>
@@ -569,8 +569,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 30 -->
-    <testCase testCaseId="LCM_30" testCaseName="CloseApp_Special_Char_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with special character string as appId and KILL_AND_ACTIVATE closeReason">
+    <!-- TestCase 28 -->
+    <testCase testCaseId="LCM_28" testCaseName="CloseApp_Special_Char_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with special character string as appId and KILL_AND_ACTIVATE closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Special_Char_AppId_KILL_AND_ACTIVATE" method="Close_App">
             <params>
@@ -581,8 +581,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 31 -->
-    <testCase testCaseId="LCM_31" testCaseName="CloseApp_Boolean_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with boolean value for appId and USER_EXIT closeReason">
+    <!-- TestCase 29 -->
+    <testCase testCaseId="LCM_29" testCaseName="CloseApp_Boolean_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with boolean value for appId and USER_EXIT closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Boolean_AppId" method="Boolean_AppId_Close_App">
             <params>
@@ -593,8 +593,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 32 -->
-    <testCase testCaseId="LCM_32" testCaseName="CloseApp_Boolean_AppId_ERROR_CloseReason" desc="Verify closeApp with boolean value for appId and ERROR closeReason">
+    <!-- TestCase 30 -->
+    <testCase testCaseId="LCM_30" testCaseName="CloseApp_Boolean_AppId_ERROR_CloseReason" desc="Verify closeApp with boolean value for appId and ERROR closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Boolean_AppId_ERROR" method="Boolean_AppId_Close_App">
             <params>
@@ -605,8 +605,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 33 -->
-    <testCase testCaseId="LCM_33" testCaseName="CloseApp_Boolean_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with boolean value for appId and KILL_AND_RUN closeReason">
+    <!-- TestCase 31 -->
+    <testCase testCaseId="LCM_31" testCaseName="CloseApp_Boolean_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with boolean value for appId and KILL_AND_RUN closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Boolean_AppId_KILL_AND_RUN" method="Boolean_AppId_Close_App">
             <params>
@@ -617,8 +617,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 34 -->
-    <testCase testCaseId="LCM_34" testCaseName="CloseApp_Boolean_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with boolean value for appId and KILL_AND_ACTIVATE closeReason">
+    <!-- TestCase 32 -->
+    <testCase testCaseId="LCM_32" testCaseName="CloseApp_Boolean_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with boolean value for appId and KILL_AND_ACTIVATE closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Boolean_AppId_KILL_AND_ACTIVATE" method="Boolean_AppId_Close_App">
             <params>
@@ -629,8 +629,8 @@
         </testStep>
     </testCase>
 
-        <!-- TestCase 35 -->
-    <testCase testCaseId="LCM_35" testCaseName="CloseApp_Long_String_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with very long string as appId and USER_EXIT closeReason">
+        <!-- TestCase 33 -->
+    <testCase testCaseId="LCM_33" testCaseName="CloseApp_Long_String_AppId_USER_EXIT_CloseReason" desc="Verify closeApp with very long string as appId and USER_EXIT closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Long_String_AppId" method="Close_App">
             <params>
@@ -641,8 +641,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 36 -->
-    <testCase testCaseId="LCM_36" testCaseName="CloseApp_Long_String_AppId_ERROR_CloseReason" desc="Verify closeApp with very long string as appId and ERROR closeReason">
+    <!-- TestCase 34 -->
+    <testCase testCaseId="LCM_34" testCaseName="CloseApp_Long_String_AppId_ERROR_CloseReason" desc="Verify closeApp with very long string as appId and ERROR closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Long_String_AppId_ERROR" method="Close_App">
             <params>
@@ -653,8 +653,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 37 -->
-    <testCase testCaseId="LCM_37" testCaseName="CloseApp_Long_String_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with very long string as appId and KILL_AND_RUN closeReason">
+    <!-- TestCase 35 -->
+    <testCase testCaseId="LCM_35" testCaseName="CloseApp_Long_String_AppId_KILL_AND_RUN_CloseReason" desc="Verify closeApp with very long string as appId and KILL_AND_RUN closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Long_String_AppId_KILL_AND_RUN" method="Close_App">
             <params>
@@ -665,8 +665,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 38 -->
-    <testCase testCaseId="LCM_38" testCaseName="CloseApp_Long_String_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with very long string as appId and KILL_AND_ACTIVATE closeReason">
+    <!-- TestCase 36 -->
+    <testCase testCaseId="LCM_36" testCaseName="CloseApp_Long_String_AppId_KILL_AND_ACTIVATE_CloseReason" desc="Verify closeApp with very long string as appId and KILL_AND_ACTIVATE closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Long_String_AppId_KILL_AND_ACTIVATE" method="Close_App">
             <params>
@@ -677,8 +677,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 39 -->
-    <testCase testCaseId="LCM_39" testCaseName="CloseApp_Valid_AppId_Numeric_CloseReason" desc="Verify closeApp with valid appId and numeric value for closeReason">
+    <!-- TestCase 37 -->
+    <testCase testCaseId="LCM_37" testCaseName="CloseApp_Valid_AppId_Numeric_CloseReason" desc="Verify closeApp with valid appId and numeric value for closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Numeric_CloseReason" method="Numeric_CloseReason_Close_App">
             <params>
@@ -689,8 +689,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 40 -->
-    <testCase testCaseId="LCM_40" testCaseName="CloseApp_Valid_AppId_Special_Char_CloseReason" desc="Verify closeApp with valid appId and special character string as closeReason">
+    <!-- TestCase 38 -->
+    <testCase testCaseId="LCM_38" testCaseName="CloseApp_Valid_AppId_Special_Char_CloseReason" desc="Verify closeApp with valid appId and special character string as closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Special_Char_CloseReason" method="Close_App">
             <params>
@@ -701,8 +701,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 41 -->
-    <testCase testCaseId="LCM_41" testCaseName="CloseApp_Valid_AppId_Boolean_CloseReason" desc="Verify closeApp with valid appId and boolean value for closeReason">
+    <!-- TestCase 39 -->
+    <testCase testCaseId="LCM_39" testCaseName="CloseApp_Valid_AppId_Boolean_CloseReason" desc="Verify closeApp with valid appId and boolean value for closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Boolean_CloseReason" method="Boolean_CloseReason_Close_App">
             <params>
@@ -713,8 +713,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 42 -->
-    <testCase testCaseId="LCM_42" testCaseName="CloseApp_Valid_AppId_Long_String_CloseReason" desc="Verify closeApp with valid appId and very long string as closeReason">
+    <!-- TestCase 40 -->
+    <testCase testCaseId="LCM_40" testCaseName="CloseApp_Valid_AppId_Long_String_CloseReason" desc="Verify closeApp with valid appId and very long string as closeReason">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Close_App_Long_String_CloseReason" method="Close_App">
             <params>
