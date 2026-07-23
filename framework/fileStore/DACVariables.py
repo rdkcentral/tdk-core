@@ -42,7 +42,8 @@ IPERF3_CLIENT_CONTAINER = "test_client"
 INTERFACE_IP = "127.0.0.1"
 
 # USP-PA and DSM Parameters
-DESTINATION_DIR = "/root/destination"
+IPERF3_SERVER_IP = ""  # IP of the iperf3 server to be set in bundle config.json
+DESTINATION_DIR = "destination"
 DU_INSTALL_PARAM = "Device.SoftwareModules.InstallDU"
 DU_UNINSTALL_PARAM_1 = "Device.SoftwareModules.DeploymentUnit.1.Uninstall"
 DU_UNINSTALL_PARAM_2 = "Device.SoftwareModules.DeploymentUnit.2.Uninstall"

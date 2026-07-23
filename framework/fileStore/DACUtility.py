@@ -514,3 +514,30 @@ def verify_directory_contents(obj, dir_path, expected_items):
 
     return tdkTestObj, actualresult, details.strip()
 ########## End of function ##########
+
+# update_iperf3_server_ip
+# Syntax      : update_iperf3_server_ip(obj, config_path, server_ip)
+# Description : Function to update the iperf3 server IP in the bundle config.json.
+#               Replaces the value of the argument following '-c' in process.args.
+# Parameters  : obj - module object
+#               config_path - full path to the config.json file
+#               server_ip - iperf3 server IP to set
+# Return Value: tdkTestObj - test object
+#               actualresult - SUCCESS/FAILURE
+#               details - updated value read back from config.json
+def update_iperf3_server_ip(obj, config_path, server_ip):
+    command = (
+        f"cd ~ && python3 -c 'import json; f=open(\"{config_path}\"); d=json.load(f); f.close(); "
+        f"args=d[\"process\"][\"args\"]; idx=args.index(\"-c\"); args[idx+1]=\"{server_ip}\"; "
+        f"f=open(\"{config_path}\",\"w\"); json.dump(d, f, indent=4); f.close(); print(\"Updated\")'"
+    )
+    print("Command : %s" % command)
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+    details = details.strip()
+    if "Updated" in details:
+        actualresult = "SUCCESS"
+    else:
+        actualresult = "FAILURE"
+    return tdkTestObj, actualresult, details
+########## End of function ##########
