@@ -74,7 +74,7 @@ RDKV_CERT_AVS_AppManager
    - [AppManager_ClearAppData_Empty_AppId](#appmanager_clearappdata_empty_appid)
    - [AppManager_ClearAppData_SpecialCharacters](#appmanager_clearappdata_specialcharacters)
    - [AppManager_ClearAppData_Long_AppId](#appmanager_clearappdata_long_appid)
-   - [ClearAppData_Numeric_AppId](#clearappdata_numeric_appid)
+   - [AppManager_ClearAppData_Numeric_AppId](#appmanager_clearappdata_numeric_appid)
    - [AppManager_ClearAppData_Alphanumeric_AppId](#appmanager_clearappdata_alphanumeric_appid)
    - [AppManager_Clear_All_App_Data](#appmanager_clear_all_app_data)
    - [AppManager_SetAppProperty_ValidAppId_Delay_10](#appmanager_setappproperty_validappid_delay_10)
@@ -1520,9 +1520,9 @@ Verify clearAppData with appId containing a very long string
 
 ---
 
-<a id="clearappdata_numeric_appid"></a>
+<a id="appmanager_clearappdata_numeric_appid"></a>
 ### TestCase Name
-ClearAppData_Numeric_AppId
+AppManager_ClearAppData_Numeric_AppId
 
 ### TestCase ID
 AM_69

@@ -1136,7 +1136,7 @@
     </testCase>
 
     <!-- TestCase 69 -->
-    <testCase testCaseId="AM_69" testCaseName="ClearAppData_Numeric_AppId" desc="Verify clearAppData with appId containing only numeric characters">
+    <testCase testCaseId="AM_69" testCaseName="AppManager_ClearAppData_Numeric_AppId" desc="Verify clearAppData with appId containing only numeric characters">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Clear_App_Data_Numeric_AppId" method="Numeric_Clear_App_Data">
             <params>

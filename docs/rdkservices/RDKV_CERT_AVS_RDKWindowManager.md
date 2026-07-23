@@ -47,6 +47,7 @@ RDKV_CERT_AVS_RDKWindowManager
    - [RWM_Check_User_Active](#rwm_check_user_active)
    - [RWM_Reset_Inactivity_Interval](#rwm_reset_inactivity_interval)
    - [RWM_Check_On_User_Inactivity_Event_Disabled_Reporting](#rwm_check_on_user_inactivity_event_disabled_reporting)
+   - [RWM_Check_On_Screenshot_Complete_Event](#rwm_check_on_screenshot_complete_event)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -950,6 +951,25 @@ Checks whether the user inactivity reporting event is triggered when inactivity 
 | --- | --- | --- | --- |
 | 1 | Set inactivity interval | Invoke setInactivityInterval on org.rdk.RDKWindowManager with interval: 1<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.setInactivityInterval", "params": {"interval": 1}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check on UserInactivity event NoEvent | Listen for event Event_On_User_Inactivity | Verify that no event is triggered during this operation  |
+
+---
+
+<a id="rwm_check_on_screenshot_complete_event"></a>
+### TestCase Name
+RWM_Check_On_Screenshot_Complete_Event
+
+### TestCase ID
+RWM_L2_05
+
+### TestCase Objective
+Checks whether the screenshot complete event is triggered when a screenshot is captured
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Capture screenshot | Invoke getScreenshot on org.rdk.RDKWindowManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.getScreenshot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 2 | Check on screenshot complete event | Listen for `Event_On_Screenshot_Complete` event and wait up to 120 second(s) | Ensure the `onScreenshotComplete` event is received, confirming the screenshot was captured successfully |
 
 ## Plugin Post-conditions
 

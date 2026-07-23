@@ -42,8 +42,8 @@ RDKV_CERT_AVS_HdmiCecSource
    - [HdmiCecSource_Verify_Send_Key_Press_Event_No_KeyCode](#hdmicecsource_verify_send_key_press_event_no_keycode)
    - [HdmiCecSource_Verify_Send_Key_Press_Event_Error_No_Logical_Address](#hdmicecsource_verify_send_key_press_event_error_no_logical_address)
    - [HdmiCecSource_Verify_Send_Key_Press_Event_No_Param](#hdmicecsource_verify_send_key_press_event_no_param)
-   - [Set_Invalid_OSD_Name](#set_invalid_osd_name)
-   - [Set_Empty_VendorID](#set_empty_vendorid)
+   - [HdmiCecSource_Set_Invalid_OSD_Name](#hdmicecsource_set_invalid_osd_name)
+   - [HdmiCecSource_Set_Empty_VendorID](#hdmicecsource_set_empty_vendorid)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -1149,9 +1149,9 @@ Verify if the sendKeyPressEvent method returns an error when neither the logical
 
 ---
 
-<a id="set_invalid_osd_name"></a>
+<a id="hdmicecsource_set_invalid_osd_name"></a>
 ### TestCase Name
-Set_Invalid_OSD_Name
+HdmiCecSource_Set_Invalid_OSD_Name
 
 ### TestCase ID
 HdmiCecSource_37
@@ -1167,9 +1167,9 @@ Validate by setting up invalid OSD Name
 
 ---
 
-<a id="set_empty_vendorid"></a>
+<a id="hdmicecsource_set_empty_vendorid"></a>
 ### TestCase Name
-Set_Empty_VendorID
+HdmiCecSource_Set_Empty_VendorID
 
 ### TestCase ID
 HdmiCecSource_38
