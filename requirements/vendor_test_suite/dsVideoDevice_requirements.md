@@ -15,4 +15,4 @@
 | `VTS‑DSVIDEODEVICE‑009` | SHALL retrieve the current display framerate and report a valid framerate value. |
 | `VTS‑DSVIDEODEVICE‑010` | SHALL set the display framerate. |
 | `VTS‑DSVIDEODEVICE‑011` | SHALL register the pre-framerate-change callback and the post-framerate-change callback. |
-| `VTS‑DSVIDEODEVICE‑012` | SHALL enforce the following error handling contracts across all Device Settings Video Device operations:<br>report an already-initialized error when initialization is attempted while the module is already initialized<br>report a not-initialized error when any operation is attempted without prior initialization or after the module has already been terminated<br>report an invalid-parameter error when any operation is called with a NULL output pointer, an invalid handle, or an out-of-range value. |
+| `VTS‑DSVIDEODEVICE‑012` | SHALL report an already-initialized error on repeated initialization, a not-initialized error for operations invoked before initialization or after termination, and an invalid-parameter error for NULL output pointers, invalid handles, or out-of-range values. |
