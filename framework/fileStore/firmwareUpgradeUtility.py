@@ -18,13 +18,14 @@
 ##########################################################################
 #
 #
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # module imports
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 from firmwareUpgradeVariables import *
 from tdkutility import *
 from tdkbVariables import *
 import json
+import time
 from time import sleep
 from urllib.parse import urlparse
 
@@ -42,8 +43,9 @@ def GetPlatformProperties(obj, config_keys):
     config_values = {}
     actualresult_all = []
     for key in config_keys:
-        command = "sh %s/tdk_utility.sh parseConfigFile %s" % (TDK_PATH, key)
-        tdkTestObj, actualresult, config_values[key] = get_config_values(obj, command)
+        command = f"sh {TDK_PATH}/tdk_utility.sh parseConfigFile {key}"
+        tdkTestObj, actualresult, config_values[key] = get_config_values(
+            obj, command)
         actualresult_all.append(actualresult)
     return tdkTestObj, actualresult_all, config_values
 ########## End of function ##########
@@ -67,14 +69,14 @@ def getCurrentFirmware(obj, step):
         print("Fetched FW_NAME_SUFFIX from the tdk_platform.properties successfully.")
 
         query = 'cat /version.txt | grep -i imagename | cut -c 11- | tr "\n" " "'
-        print("Query: %s" %query)
+        print(f"Query: {query}")
 
         tdkTestObj = obj.createTestStep('ExecuteCmd')
         actualresult, details = doSysutilExecuteCommand(tdkTestObj, query)
 
-        print("TEST STEP %d: Fetch device's current firmware name" %step)
-        print("EXPECTED RESULT %d: Should fetch device's current firmware name" %step)
-        print("ACTUAL RESULT %d: Image name %s " %(step, details))
+        print(f"TEST STEP {step}: Fetch device's current firmware name")
+        print(f"EXPECTED RESULT {step}: Should fetch device's current firmware name")
+        print(f"ACTUAL RESULT {step}: Image name {details} ")
         if expectedresult in actualresult:
             tdkTestObj.setResultStatus("SUCCESS")
             print("[TEST EXECUTION RESULT] : SUCCESS\n")
@@ -116,22 +118,22 @@ def getFirmwareDetailsFromServer(obj, step):
         FirmwareVersion = globals()[TARGET_FIRMWARE_UPGRADE]
         FirmwareFilename = FirmwareVersion + suffix
         query = f"curl -I {FIRMWARE_LOCATION}/{FirmwareFilename}  2>/dev/null | head -n 1"
-        print("Query: %s" %query)
+        print(f"Query: {query}")
         # check target image in HTTP server deployed
         expectedresult = "SUCCESS"
         tdkTestObj = obj.createTestStep('ExecuteCmd')
         actualresult, details = doSysutilExecuteCommand(tdkTestObj, query)
 
-        print("TEST STEP %d: Check whether the target image is available in HTTP server" %step)
-        print("EXPECTED RESULT %d: Should get the target image filename from HTTP server" %step)
+        print(f"TEST STEP {step}: Check whether the target image is available in HTTP server")
+        print(f"EXPECTED RESULT {step}: Should get the target image filename from HTTP server")
         if expectedresult in actualresult and "200 OK" in details:
             tdkTestObj.setResultStatus("SUCCESS")
-            print("ACTUAL RESULT %d: Image %s is available in the server." %(step, FirmwareFilename))
+            print(f"ACTUAL RESULT {step}: Image {FirmwareFilename} is available in the server.")
             print("[TEST EXECUTION RESULT] : SUCCESS\n")
             return (FirmwareVersion, FirmwareFilename)
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("ACTUAL RESULT %d: The %s file is not found in the server" %(step, FirmwareFilename))
+            print(f"ACTUAL RESULT {step}: The {FirmwareFilename} file is not found in the server")
             print("[TEST EXECUTION RESULT] : FAILURE\n")
             return (None, None)
     else:
@@ -140,79 +142,171 @@ def getFirmwareDetailsFromServer(obj, step):
         return (None, None)
 ########## End of function ##########
 
+
+# getFirmwareDownloadConfigValues
+# Syntax      : getFirmwareDownloadConfigValues(FirmwareLocation, FirmwareProtocol)
+# Description : Function to derive the protocol and URL values required by the firmware download TR-181 parameters
+# Parameters  : FirmwareLocation - Location of the firmware file [Image hosting Server URL]
+#               FirmwareProtocol - Protocol used for firmware download
+# Return Value: fw_protocol - Firmware download protocol
+#               fw_download_url - Firmware download URL with the scheme prefix
+
+
+def getFirmwareDownloadConfigValues(FirmwareLocation=FIRMWARE_LOCATION, FirmwareProtocol=FIRMWARE_PROTOCOL):
+    if FirmwareLocation == "":
+        return FirmwareProtocol, ""
+
+    fw_download_url = FirmwareLocation if "://" in FirmwareLocation else f"{FirmwareProtocol}://{FirmwareLocation}"
+    parsed_location = urlparse(fw_download_url)
+
+    fw_protocol = parsed_location.scheme if parsed_location.scheme else FirmwareProtocol
+    fw_download_url = fw_download_url.rstrip("/")
+
+    return fw_protocol, fw_download_url
+########## End of function ##########
+
+
+_XCONF_RESOURCE_IDS = None
+
+
+def getXconfResourceIds():
+    global _XCONF_RESOURCE_IDS
+    if _XCONF_RESOURCE_IDS is None:
+        timestamp = str(int(time.time()))
+        _XCONF_RESOURCE_IDS = {
+            "FWCONFIG_ID": f"TDKB_CURL_Firmware_CONFIG_{timestamp}",
+            "MAC_RULE_ID": f"TDKB_CURL_MACRULE_{timestamp}",
+            "MAC_LIST_ID": f"TDKB_CURL_MACLIST_{timestamp}",
+            "SUPPORTED_MODEL_ID": f"BPI_TDKB_TEST_{timestamp}",
+            "DEFINE_PROPERTIES_ID": f"TDKB_CURL_DEFINE_PROPERTIES_{timestamp}"
+        }
+    return _XCONF_RESOURCE_IDS
+########## End of function ##########
+
 # getFWUpgradeConfig
 # Syntax      : getFWUpgradeConfig(obj, step)
-# Description : Function to get the Firmware Upgrade URL, FirmwareToDownload and FirmwareDownloadNow values
+# Description : Function to get the Firmware Download Protocol, Firmware Upgrade URL, FirmwareToDownload and FirmwareDownloadAndFactoryReset values
 # Parameters  : obj - module object
 #               step - test step number
 # Return Value: flag - 1 if get successfully, else 0
 
 
 def getFWUpgradeConfig(obj, step):
-    fw_params = ["Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadURL","Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareToDownload", "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow"]
+    fw_params = FW_UPGRADE_DM_PARAMS
     flag = 0
-    getResult = [None] * 3
-    fw_values = [None] * 3
+    getResult = [None] * len(fw_params)
+    fw_values = [None] * len(fw_params)
 
-    for index in range(3):
-        print("\nGetting the value of %s" %fw_params[index])
+    for index in range(len(fw_params)):
+        print(f"\nGetting the value of {fw_params[index]}")
         tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Get')
         getResult[index], fw_values[index] = getTR181Value(tdkTestObj, fw_params[index])
 
     details = dict(zip(fw_params, fw_values))
-    print("\nTEST STEP %d : Get the FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadNow values" %step)
-    print("EXPECTED RESULT %d: Should get the values successfully." %step)
+    print(f"\nTEST STEP {step} : Get the FirmwareDownloadProtocol, FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadAndFactoryReset values")
+    print(f"EXPECTED RESULT {step}: Should get the values successfully.")
     if "FAILURE" not in getResult:
         tdkTestObj.setResultStatus("SUCCESS")
-        print("ACTUAL RESULT %d: Successfully retrieved the values.\nRetrieved Values : %s" %(step, details))
+        print(f"ACTUAL RESULT {step}: Successfully retrieved the values.\nRetrieved Values : {details}")
         print("[TEST EXECUTION RESULT] : SUCCESS\n")
         flag = 1
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print("ACTUAL RESULT %d: Failed to get the values.\nDetails : %s" %(step, details))
+        print(f"ACTUAL RESULT {step}: Failed to get the values.\nDetails : {details}")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     return flag, details
 ########## End of function ##########
 
 # setFWUpgradeConfig
-# Syntax      : setFWUpgradeConfig(obj, step, FirmwareFilename, FirmwareLocation)
-# Description : Function to set the Firmware Upgrade URL, FirmwareToDownload and FirmwareDownloadNow values
+# Syntax      : setFWUpgradeConfig(obj, step, FirmwareFilename, FirmwareLocation, FirmwareProtocol, trigger_download)
+# Description : Function to set the Firmware Download Protocol, Firmware Upgrade URL, FirmwareToDownload and optionally trigger FirmwareDownloadAndFactoryReset
 # Parameters  : obj - module object
 #               step - test step number
 #               FirmwareFilename - Targert Image name
 #               FirmwareLocation - Location of the firmware file [Image hosting Server URL]
+#               FirmwareProtocol - Protocol used for firmware download
+#               trigger_download - True to trigger the firmware download, False to update only the config values
 # Return Value: flag - 1 if set successfully, else 0
 
 
-def setFWUpgradeConfig(obj, step, FirmwareFilename, FirmwareLocation=FIRMWARE_LOCATION):
-    fw_params = ["Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadURL","Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareToDownload", "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow"]
-    fw_values = [FirmwareLocation, FirmwareFilename, "true"]
-    fw_datatypes = ["string", "string", "boolean"]
-    flag = 0
-    setResult = [None] * 3
-    details = [None] * 3
+def setFWUpgradeConfig(obj, step, FirmwareFilename, FirmwareLocation=FIRMWARE_LOCATION, FirmwareProtocol=FIRMWARE_PROTOCOL, trigger_download=True):
+    fw_protocol, fw_download_url = getFirmwareDownloadConfigValues(FirmwareLocation, FirmwareProtocol)
+    fw_params = [FW_DOWNLOAD_PROTOCOL_DM,
+                 FW_DOWNLOAD_URL_DM, FW_TO_DOWNLOAD_DM]
+    fw_values = [fw_protocol.upper(), fw_download_url, FirmwareFilename]
+    fw_datatypes = ["string", "string", "string"]
 
-    for index in range(3):
-        print("\nSetting %s to %s" %(fw_params[index], fw_values[index]))
-        if index == 2:
+    if trigger_download:
+        fw_params.append(FW_DOWNLOAD_DM)
+        fw_values.append("1")
+        fw_datatypes.append("int")
+
+    flag = 0
+    setResult = [None] * len(fw_params)
+    details = [None] * len(fw_params)
+
+    for index in range(len(fw_params)):
+        print(f"\nSetting {fw_params[index]} to {fw_values[index]}")
+        if trigger_download and index == len(fw_params) - 1:
             tdkTestObj = obj.createTestStep('TDKB_TR181Stub_SetOnly')
         else:
             tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Set')
 
         setResult[index], details[index] = setTR181Value(tdkTestObj, fw_params[index], fw_values[index], fw_datatypes[index])
 
-    print("TEST STEP %d : Set the FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadNow values" %step)
-    print("EXPECTED RESULT %d: The values must be set successfully" %step)
+    print(f"TEST STEP {step} : Set the FirmwareDownloadProtocol, FirmwareDownloadURL and FirmwareToDownload values")
+    if trigger_download:
+        print(f"EXPECTED RESULT {step}: The firmware download config values must be set and FirmwareDownloadAndFactoryReset must trigger successfully")
+    else:
+        print(f"EXPECTED RESULT {step}: The firmware download config values must be set successfully")
     if "FAILURE" not in setResult:
         tdkTestObj.setResultStatus("SUCCESS")
-        print("ACTUAL RESULT %d: Successfully set the FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadNow. Details : %s" %(step, details))
+        if trigger_download:
+            print(f"ACTUAL RESULT {step}: Successfully set the FirmwareDownloadProtocol, FirmwareDownloadURL, FirmwareToDownload and FirmwareDownloadAndFactoryReset. Details : {details}")
+            sleep(5)
+        else:
+            print(f"ACTUAL RESULT {step}: Successfully set the FirmwareDownloadProtocol, FirmwareDownloadURL and FirmwareToDownload. Details : {details}")
         print("[TEST EXECUTION RESULT] : SUCCESS\n")
         flag = 1
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print("ACTUAL RESULT %d: Failed to set th values. Details : %s" %(step, details))
+        print(f"ACTUAL RESULT {step}: Failed to set the values. Details : {details}")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     return flag
+########## End of function ##########
+
+
+# getFirmwareDownloadStatus
+# Syntax      : getFirmwareDownloadStatus(obj, step, expected_status)
+# Description : Function to get the FirmwareDownloadStatus value and validate it against the expected status when provided
+# Parameters  : obj - module object
+#               step - test step number
+#               expected_status - Expected FirmwareDownloadStatus value, or None to skip value comparison
+# Return Value: tdkTestObj - test object
+#               details - FirmwareDownloadStatus value or error details
+#               status_ok - True if the status get and validation succeeded, else False
+
+
+def getFirmwareDownloadStatus(obj, step, expected_status=None):
+    expectedresult = "SUCCESS"
+    tdkTestObj = obj.createTestStep('TDKB_TR181Stub_Get')
+    actual_result, details = getTR181Value(tdkTestObj, FW_DOWNLOAD_STATUS_DM)
+    print(f"TEST STEP {step} : Get the Firmware Download Status")
+    if expected_status is None:
+        print(f"EXPECTED RESULT {step}: Should get the Firmware Download Status")
+    else:
+        print(f"EXPECTED RESULT {step}: Firmware Download Status should be {expected_status}")
+    print(f"ACTUAL RESULT {step}: Firmware Download Status is {details}")
+
+    status_ok = expectedresult in actual_result and (expected_status is None or details == expected_status)
+    if status_ok:
+        tdkTestObj.setResultStatus("SUCCESS")
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
+
+    return tdkTestObj, details, status_ok
 ########## End of function ##########
 
 # getErouterIP
@@ -228,26 +322,26 @@ def getErouterIP(obj, step):
     expectedresult = "SUCCESS"
     ip = ""
     interface = ""
-    print("TEST STEP %d: Fetch INTERFACE from the tdk_platform.properties" %step)
-    print("EXPECTED RESULT %d: Should fetch INTERFACE from the tdk_platform.properties" %step)
+    print(f"TEST STEP {step}: Fetch INTERFACE from the tdk_platform.properties")
+    print(f"EXPECTED RESULT {step}: Should fetch INTERFACE from the tdk_platform.properties")
     tdkTestObj, actualresult, value = GetPlatformProperties(obj, ["INTERFACE"])
     interface = value["INTERFACE"]
     if expectedresult in actualresult and interface != "":
         tdkTestObj.setResultStatus("SUCCESS")
-        print("ACTUAL RESULT %d: Fetched INTERFACE from the tdk_platform.properties successfully. INTERFACE is %s " %(step, interface))
+        print(f"ACTUAL RESULT {step}: Fetched INTERFACE from the tdk_platform.properties successfully. INTERFACE is {interface} ")
         print("[TEST EXECUTION RESULT] : SUCCESS\n")
 
         query = f"ifconfig {interface} | grep 'inet addr' | awk '{{print $2}}' | cut -d: -f2"
-        print("Query: %s" %query)
+        print(f"Query: {query}")
 
         tdkTestObj = obj.createTestStep('ExecuteCmd')
         actualresult, details = doSysutilExecuteCommand(tdkTestObj, query)
         ip = details.strip()
 
         step += 1
-        print("TEST STEP %d: Get erouter IP" %step)
-        print("EXPECTED RESULT %d: Should get the erouter IP " %step)
-        print("ACTUAL RESULT %d: erouter IP obtained is %s " %(step, details))
+        print(f"TEST STEP {step}: Get erouter IP")
+        print(f"EXPECTED RESULT {step}: Should get the erouter IP ")
+        print(f"ACTUAL RESULT {step}: erouter IP obtained is {details} ")
         if expectedresult in actualresult and ip != "":
             tdkTestObj.setResultStatus("SUCCESS")
             print("[TEST EXECUTION RESULT] : SUCCESS\n")
@@ -256,7 +350,7 @@ def getErouterIP(obj, step):
             print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print("ACTUAL RESULT %d: Failed to fetch INTERFACE from the tdk_platform.properties. INTERFACE is %s" %(step, interface))
+        print(f"ACTUAL RESULT {step}: Failed to fetch INTERFACE from the tdk_platform.properties. INTERFACE is {interface}")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
     return tdkTestObj, ip, step
 
@@ -272,7 +366,7 @@ def getErouterIP(obj, step):
 
 def getMacAddress(obj):
     estbMAC = ""
-    query = "sh %s/tdk_platform_utility.sh getCMMACAddress" %TDK_PATH
+    query = f"sh {TDK_PATH}/tdk_platform_utility.sh getCMMACAddress"
     tdkTestObj = obj.createTestStep('ExecuteCmd')
     actualresult, details = doSysutilExecuteCommand(tdkTestObj, query)
     estbMAC = details.strip()
@@ -290,7 +384,9 @@ def getMacAddress(obj):
 #              scenario - to find if scenario is invalid_url or default
 # Return Value: Curl commands for XCONF server configuration
 
+
 def getXCONFServer_CreateConfigCmd(obj, FirmwareVersion, FirmwareFilename, action, step, scenario=""):
+    xconf_ids = getXconfResourceIds()
     if scenario == "invalid_url":
         fw_location = "http://invalid_url/"
     else:
@@ -321,47 +417,47 @@ def getXCONFServer_CreateConfigCmd(obj, FirmwareVersion, FirmwareFilename, actio
             # Data dicts
             # 1. Model addition
             model_data = {
-                "id": SUPPORTED_MODEL_ID,
+                "id": xconf_ids["SUPPORTED_MODEL_ID"],
                 "description": "Test model"
             }
 
             # 2. MAC list addition
             mac_list_data = {
-                "id": MAC_LIST_ID,
+                "id": xconf_ids["MAC_LIST_ID"],
                 "data": [estbMAC]
             }
 
             # 3. Firmware config with properties
             config_data = {
-                "id": FWCONFIG_ID,
-                "description": FWCONFIG_ID,
-                "supportedModelIds": [SUPPORTED_MODEL_ID],
+                "id": xconf_ids["FWCONFIG_ID"],
+                "description": xconf_ids["FWCONFIG_ID"],
+                "supportedModelIds": [xconf_ids["SUPPORTED_MODEL_ID"]],
                 "firmwareFilename": FirmwareFilename,
                 "firmwareVersion": FirmwareVersion,
                 "applicationType": "stb",
-                "firmwareDownloadProtocol": Protocol,
+                "firmwareDownloadProtocol": FIRMWARE_PROTOCOL,
                 "rebootImmediately": False
             }
 
             # 4. Firmware rule
             mac_rule_data = {
-                "name": MAC_RULE_ID,
-                "macListRef": MAC_LIST_ID,
-                "targetedModelIds": [SUPPORTED_MODEL_ID],
-                "firmwareConfig": {"id": FWCONFIG_ID}
+                "name": xconf_ids["MAC_RULE_ID"],
+                "macListRef": xconf_ids["MAC_LIST_ID"],
+                "targetedModelIds": [xconf_ids["SUPPORTED_MODEL_ID"]],
+                "firmwareConfig": {"id": xconf_ids["FWCONFIG_ID"]}
             }
 
             # 5. Define properties
             define_properties_data = {
-                "id": DEFINE_PROPERTIES_ID,
-                "name": DEFINE_PROPERTIES_ID,
+                "id": xconf_ids["DEFINE_PROPERTIES_ID"],
+                "name": xconf_ids["DEFINE_PROPERTIES_ID"],
                 "applicableAction":
                 {
                     "type": DEFINE_PROPERTIES_TYPE,
                     "actionType": "DEFINE_PROPERTIES",
                     "properties":
                     {
-                        "firmwareDownloadProtocol": Protocol,
+                        "firmwareDownloadProtocol": FIRMWARE_PROTOCOL,
                         "firmwareLocation": fw_location
                     }
                 },
@@ -481,19 +577,21 @@ def checkValidResponse(response):
 # Parameters : None
 # Return Value: Curl commands for deleting XConf configuration
 
+
 def getXCONFServer_DeleteConfigCmd():
+    xconf_ids = getXconfResourceIds()
     # Constructing the curl commands for deleting xconf server configuration in reverse order
     delete_endpoints = [
         # 5. Delete define properties rule
-        f"{XCONF_URL}/firmwarerule/{DEFINE_PROPERTIES_ID}?applicationType=stb",
+        f"{XCONF_URL}/firmwarerule/{xconf_ids['DEFINE_PROPERTIES_ID']}?applicationType=stb",
         # 4. Delete firmware rule
-        f"{XCONF_URL}/delete/rules/macs/{MAC_RULE_ID}?applicationType=stb",
+        f"{XCONF_URL}/delete/rules/macs/{xconf_ids['MAC_RULE_ID']}?applicationType=stb",
         # 3. Delete firmware config
-        f"{XCONF_URL}/delete/firmwares/{FWCONFIG_ID}?applicationType=stb",
+        f"{XCONF_URL}/delete/firmwares/{xconf_ids['FWCONFIG_ID']}?applicationType=stb",
         # 2. Delete MAC list
-        f"{XCONF_URL}/delete/nsLists/{MAC_LIST_ID}",
+        f"{XCONF_URL}/delete/nsLists/{xconf_ids['MAC_LIST_ID']}",
         # 1. Delete model
-        f"{XCONF_URL}/delete/models/{SUPPORTED_MODEL_ID}"
+        f"{XCONF_URL}/delete/models/{xconf_ids['SUPPORTED_MODEL_ID']}"
     ]
     return [build_curl(endpoint, "DELETE") for endpoint in delete_endpoints]
 
@@ -511,6 +609,7 @@ def getXCONFServer_DeleteConfigCmd():
 #               fw_flag - 1 if firmware download is triggered and validated successfully, else 0
 #               step - updated test step number
 
+
 def triggerFirmwareDownload(obj, fw_binary, logFile, step, scenario=""):
     expectedresult = "SUCCESS"
     fw_flag = 0
@@ -527,22 +626,22 @@ def triggerFirmwareDownload(obj, fw_binary, logFile, step, scenario=""):
 
         sleep(5)
         step += 1
-        #Validate firmware download initiation from logs
-        command = f"grep -i 'failed' {logFile}"
+        # Validate firmware download initiation from logs
+        command = f"grep -i 'Firmware upgrade is in progress' {logFile}"
         print(f"Command: {command}")
         tdkTestObj = obj.createTestStep('ExecuteCmd')
         actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
         print(f"Command Details: {details.strip()}")
         print(f"TEST STEP {step}: Validate firmware upgrade initiation from logs.")
         if scenario == "invalid":
-            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should fail and failure logs should be present")
+            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should fail")
         else:
-            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should be validated successfully without any failure logs")
-        if actualresult in expectedresult and details.strip() == "":
+            print(f"EXPECTED RESULT {step}: The firmware upgrade initiation should be validated successfully.")
+        if actualresult in expectedresult and details.strip() != "":
             fw_flag = 1
-            print(f"ACTUAL RESULT {step}: Firmware download initiation is validated from logs.")
+            print(f"ACTUAL RESULT {step}: Firmware download initiation is validated from logs. Details : {details.strip()}")
         else:
-            print(f"ACTUAL RESULT {step}: Failed to validate firmware download initiation from logs. Details : {details.strip()}")
+            print(f"ACTUAL RESULT {step}: Failed to validate firmware download initiation from logs.")
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print(f"ACTUAL RESULT {step}: Failed to trigger firmware download. Details : {details.strip()}")
@@ -590,6 +689,8 @@ def monitorFirmwareUpgrade(obj, FirmwareFilename, FW_DOWNLOAD_PATH, step, scenar
 #               step - test step number
 #               enable - True to enable (postrequisite), False to disable (prerequisite)
 # Return Value: flag - 1 if operation successful, else 0
+
+
 def manageFirmwareUpgradeCronJob(obj, step, enable=False):
     flag = 0
     action = "Enable" if enable else "Disable"
