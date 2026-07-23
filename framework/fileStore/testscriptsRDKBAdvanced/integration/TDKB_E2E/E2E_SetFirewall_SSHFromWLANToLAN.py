@@ -127,6 +127,8 @@ if "SUCCESS" in loadmodulestatus.upper():
         firewallLevel = "Device.X_CISCO_COM_Security.Firewall.FirewallLevel"
 
         #Get the value of the wifi parameters that are currently set.
+        step = 1
+        status = "FAILURE"
         paramList=[ssidName,keyPassPhrase,radioEnable]
         tdkTestObj,status,orgValue = getMultipleParameterValues(obj,paramList)
         tdkTestObj1,retStatus,firewallValue = getParameterValue(obj,firewallLevel)
@@ -134,196 +136,243 @@ if "SUCCESS" in loadmodulestatus.upper():
 
         if expectedresult in status and expectedresult in retStatus:
             tdkTestObj.setResultStatus("SUCCESS");
-            print("TEST STEP 1: Get the current ssid,keypassphrase,Radio enable status")
-            print("EXPECTED RESULT 1: Should retrieve the current ssid,keypassphrase,Radio enable status")
-            print("ACTUAL RESULT 1: %s " %orgValue);
+            print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,Radio enable status,firewall level")
+            print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
+            print(f"ACTUAL RESULT {step}: {orgValue} {firewallValue}");
             print("[TEST EXECUTION RESULT] : SUCCESS");
 
-            # Set the SSID name,password,Radio enable status and firewall level"
-            setValuesList = [tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,'true'];
-            print("Parameter values that are set: %s" %setValuesList)
+            if tdkbE2EUtility.mlo_capability == "False":
+                # Set the SSID name,password and Radio enable status
+                setValuesList = [tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,'true'];
+                print("Parameter values that are set: %s" %setValuesList)
 
-            list1 = [ssidName,tdkbE2EUtility.ssid_2ghz_name,'string']
-            list2 = [keyPassPhrase,tdkbE2EUtility.ssid_2ghz_pwd,'string']
-            list3 = [radioEnable,'true','bool']
+                list1 = [ssidName,tdkbE2EUtility.ssid_2ghz_name,'string']
+                list2 = [keyPassPhrase,tdkbE2EUtility.ssid_2ghz_pwd,'string']
+                list3 = [radioEnable,'true','bool']
 
+                #Concatenate the lists with the elements separated by pipe
+                setParamList = list1 + list2 + list3
+                setParamList = "|".join(map(str, setParamList))
 
-            #Concatenate the lists with the elements separated by pipe
-            setParamList = list1 + list2 + list3
-            setParamList = "|".join(map(str, setParamList))
+                tdkTestObj,actualresult,details = setMultipleParameterValues(obj,setParamList)
+                step = step + 1
 
-            tdkTestObj,actualresult,details = setMultipleParameterValues(obj,setParamList)
-            if expectedresult in actualresult :
-                tdkTestObj.setResultStatus("SUCCESS");
-                print("TEST STEP 2: Set the ssid,keypassphrase,Radio enable status")
-                print("EXPECTED RESULT 2: Should set the ssid,keypassphrase,Radio enable status");
-                print("ACTUAL RESULT 2: %s" %details);
-                print("[TEST EXECUTION RESULT] : SUCCESS");
-
-                #Retrieve the values after set and compare
-                newParamList=[ssidName,keyPassPhrase,radioEnable]
-                tdkTestObj,status,newValues = getMultipleParameterValues(obj,newParamList)
-
-                if expectedresult in status and setValuesList == newValues :
+                if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print("TEST STEP 3: Get the current ssid,keypassphrase,Radio enable status")
-                    print("EXPECTED RESULT 3: Should retrieve the current ssid,keypassphrase,Radio enable status")
-                    print("ACTUAL RESULT 3: %s " %newValues);
+                    print(f"TEST STEP {step}: Set the ssid,keypassphrase,Radio enable status")
+                    print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase,Radio enable status");
+                    print(f"ACTUAL RESULT {step}: {details}");
                     print("[TEST EXECUTION RESULT] : SUCCESS");
 
-                    #Wait for the changes to reflect in client device
-                    time.sleep(60);
+                    #Retrieve the values after set and compare
+                    newParamList=[ssidName,keyPassPhrase,radioEnable]
+                    tdkTestObj,status,newValues = getMultipleParameterValues(obj,newParamList)
+                    step = step + 1
 
-                    print("TEST STEP 4: Get the current LAN IP address DHCP range")
-                    param = "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress"
-                    tdkTestObj,status,curIPAddress = getParameterValue(obj,param)
-                    print("Gateway LAN IP Address: %s" %curIPAddress);
+                    if expectedresult in status and setValuesList == newValues:
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,Radio enable status")
+                        print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,Radio enable status")
+                        print(f"ACTUAL RESULT {step}: {newValues}");
+                        print("[TEST EXECUTION RESULT] : SUCCESS");
+                        status = "SUCCESS"
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,Radio enable status")
+                        print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,Radio enable status")
+                        print(f"ACTUAL RESULT {step}: {newValues}");
+                        print("[TEST EXECUTION RESULT] : FAILURE");
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    details = tdkTestObj.getResultDetails();
+                    print(f"TEST STEP {step}: Set the ssid,keypassphrase,Radio enable status")
+                    print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase,Radio enable status");
+                    print(f"ACTUAL RESULT {step}: {details}");
+                    print("[TEST EXECUTION RESULT] : FAILURE");
+            else:
+                status = "SUCCESS"
 
-                    if expectedresult in status and curIPAddress:
+            if tdkbE2EUtility.mlo_capability == "False":
+                tdkbE2EUtility.ssid_name = tdkbE2EUtility.ssid_2ghz_name
+                tdkbE2EUtility.ssid_pwd = tdkbE2EUtility.ssid_2ghz_pwd
+                tdkbE2EUtility.wlan_interface = tdkbE2EUtility.wlan_2ghz_interface
+
+            if status == "SUCCESS":
+                #Wait for the changes to reflect in client device
+                time.sleep(60);
+
+                step = step + 1
+                print(f"\nTEST STEP {step}: Get the current LAN IP address DHCP range")
+                param = "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress"
+                tdkTestObj,status,curIPAddress = getParameterValue(obj,param)
+                print("Gateway LAN IP Address: %s" %curIPAddress);
+
+                if expectedresult in status and curIPAddress:
+                    tdkTestObj.setResultStatus("SUCCESS");
+
+                    #Connect to LAN client and obtain its IP
+                    step = step + 1
+                    print(f"\nTEST STEP {step}: Get the IP address of the lan client after connecting to it")
+                    lanIP = getLanIPAddress(tdkbE2EUtility.lan_interface);
+                    if lanIP:
                         tdkTestObj.setResultStatus("SUCCESS");
 
-                        #Connect to LAN client and obtain its IP
-                        print("TEST STEP 5: Get the IP address of the lan client after connecting to it")
-                        lanIP = getLanIPAddress(tdkbE2EUtility.lan_interface);
-                        if lanIP:
+                        step = step + 1
+                        print(f"\nTEST STEP {step}: Check whether lan Client IP address is in same DHCP range")
+                        status = "SUCCESS"
+                        status = checkIpRange(curIPAddress,lanIP);
+                        if expectedresult in status:
                             tdkTestObj.setResultStatus("SUCCESS");
 
-                            print("TEST STEP 6: Check whether lan Client IP address is in same DHCP range")
-                            status = "SUCCESS"
-                            status = checkIpRange(curIPAddress,lanIP);
+                            #Connect to the wifi ssid from wlan client
+                            step = step + 1
+                            print(f"\nTEST STEP {step}: From wlan client, Connect to the wifi ssid")
+                            status = wlanConnectWifiSsid(tdkbE2EUtility.ssid_name,tdkbE2EUtility.ssid_pwd,tdkbE2EUtility.wlan_interface);
                             if expectedresult in status:
                                 tdkTestObj.setResultStatus("SUCCESS");
+                                print("wlanConnectWifiSsid: SUCCESS")
 
-                                #Connect to the wifi ssid from wlan client
-                                print("TEST STEP 7: From wlan client, Connect to the wifi ssid")
-                                status = wlanConnectWifiSsid(tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,tdkbE2EUtility.wlan_2ghz_interface);
-                                if expectedresult in status:
+                                step = step + 1
+                                print(f"\nTEST STEP {step}: Get the IP address of the wlan client after connecting to wifi")
+                                wlanIP = getWlanIPAddress(tdkbE2EUtility.wlan_interface);
+                                if wlanIP:
                                     tdkTestObj.setResultStatus("SUCCESS");
-                                    print("wlanConnectWifiSsid: SUCCESS")
+                                    print("getWlanIPAddress: SUCCESS")
 
-                                    print("TEST STEP 8: Get the IP address of the wlan client after connecting to wifi")
-                                    wlanIP = getWlanIPAddress(tdkbE2EUtility.wlan_2ghz_interface);
-                                    if wlanIP:
+                                    step = step + 1
+                                    print(f"\nTEST STEP {step}: Check whether wlan ip address is in same DHCP range")
+                                    status = "SUCCESS"
+                                    status = checkIpRange(curIPAddress,wlanIP);
+                                    if expectedresult in status:
                                         tdkTestObj.setResultStatus("SUCCESS");
-                                        print("getWlanIPAddress: SUCCESS")
+                                        print("checkIpRange: SUCCESS")
 
-                                        print("TEST STEP 9: Check whether wlan ip address is in same DHCP range")
-                                        status = "SUCCESS"
-                                        status = checkIpRange(curIPAddress,wlanIP);
-                                        if expectedresult in status:
-                                            tdkTestObj.setResultStatus("SUCCESS");
-                                            print("checkIpRange: SUCCESS")
-
-                                            for i in range(0,4):
+                                        for i in range(0,4):
+                                            if tdkbE2EUtility.mlo_capability == "False":
                                                 firewallParam = "%s|%s|string" %(firewallLevel,firewallLevels[i])
                                                 tdkTestObj,firewallResult,details = setMultipleParameterValues(obj,firewallParam)
-                                                if expectedresult in actualresult and expectedresult in firewallResult:
+                                                step = step + 1
+
+                                                if expectedresult in firewallResult:
                                                     tdkTestObj.setResultStatus("SUCCESS");
-                                                    print("TEST STEP 10: Set the firewall level")
-                                                    print("EXPECTED RESULT 10: Should set the firewall level");
-                                                    print("ACTUAL RESULT 10: %s" %details);
+                                                    print(f"\nTEST STEP {step}: Set the firewall level to {firewallLevels[i]}")
+                                                    print(f"EXPECTED RESULT {step}: Should set the firewall level");
+                                                    print(f"ACTUAL RESULT {step}: {details}");
                                                     print("[TEST EXECUTION RESULT] : SUCCESS");
+
                                                     tdkTestObj1,retStatus,newFirewallValue = getParameterValue(obj,firewallLevel)
+                                                    step = step + 1
                                                     print("Firewall Level: %s" %newFirewallValue);
 
                                                     if expectedresult in retStatus and newFirewallValue == firewallLevels[i]:
                                                         tdkTestObj.setResultStatus("SUCCESS");
-                                                        print("TEST STEP 11: Get the current firewall level")
-                                                        print("EXPECTED RESULT 11: Should retrieve the current firewall level")
-                                                        print("ACTUAL RESULT 11: %s " %newFirewallValue);
+                                                        print(f"\nTEST STEP {step}: Get the current firewall level")
+                                                        print(f"EXPECTED RESULT {step}: Should retrieve the current firewall level")
+                                                        print(f"ACTUAL RESULT {step}: {newFirewallValue}");
                                                         print("[TEST EXECUTION RESULT] : SUCCESS");
-
-                                                        #Wait for the changes to reflect in client device
-                                                        time.sleep(60);
-                                                        print("TEST STEP 12:Check the SSH connectivity from WLAN to LAN")
-                                                        #Check ssh connectivity from WLAN to LAN client
-                                                        status = sshToClient(tdkbE2EUtility.wan_ip,tdkbE2EUtility.wan_interface,"LAN","WAN",tdkbE2EUtility.wan_inet_address)
-                                                        if expectedresult in status:
-                                                            tdkTestObj.setResultStatus("SUCCESS");
-                                                            print("SUCCESS: SSH connection from LAN to WAN is success with firewall level ", newFirewallValue)
-                                                            sshFromLan = "SUCCESS";
-                                                        else:
-                                                            tdkTestObj.setResultStatus("FAILURE");
-                                                            finalStatus = "FAILURE"
-                                                            print("FAILURE: SSH connection from LAN to WAN is blocked with firewall level ", newFirewallValue)
+                                                        firewallStatus = "SUCCESS"
                                                     else:
                                                         tdkTestObj.setResultStatus("FAILURE");
-                                                        print("TEST STEP 11:failed to retrieve the current firewall level")
+                                                        firewallStatus = "FAILURE"
+                                                        print(f"\nTEST STEP {step}: Failed to retrieve the current firewall level")
                                                 else:
                                                     tdkTestObj.setResultStatus("FAILURE");
-                                                    print("TEST STEP 10:failed to set firewall level")
-                                        else:
-                                            tdkTestObj.setResultStatus("FAILURE");
-                                            print("TEST STEP 9:WLAN Client IP address is not in the same Gateway DHCP range")
+                                                    firewallStatus = "FAILURE"
+                                                    print(f"\nTEST STEP {step}: Failed to set firewall level")
+                                            else:
+                                                level = firewallLevels[i]
+                                                step = step + 1
+                                                firewallStatus, step = firewallSet(obj,level,step)
+
+                                            if expectedresult in firewallStatus:
+                                                #Wait for the changes to reflect in client device
+                                                time.sleep(60);
+
+                                                step = step + 1
+                                                print(f"\nTEST STEP {step}: Check the SSH connectivity from WLAN to LAN")
+
+                                                # Original script uses WAN parameters in sshToClient call.
+                                                # Kept unchanged to avoid changing utility function signature.
+                                                status = sshToClient(tdkbE2EUtility.wan_ip,tdkbE2EUtility.wan_interface,"LAN","WAN",tdkbE2EUtility.wan_inet_address)
+
+                                                if expectedresult in status:
+                                                    tdkTestObj.setResultStatus("SUCCESS");
+                                                    print("SUCCESS: SSH connection from WLAN to LAN is success with firewall level ", firewallLevels[i])
+                                                else:
+                                                    tdkTestObj.setResultStatus("FAILURE");
+                                                    finalStatus = "FAILURE"
+                                                    print("FAILURE: SSH connection from WLAN to LAN is blocked with firewall level ", firewallLevels[i])
+                                            else:
+                                                finalStatus = "FAILURE"
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE");
-                                        print("TEST STEP 8:Failed to get the WLAN Client IP address")
-
-                                    print("TEST STEP 13: From wlan client, Disconnect from the wifi ssid")
-                                    status = wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_2ghz_interface);
-                                    if expectedresult in status:
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                        print("Disconnect from WIFI SSID: SUCCESS")
-                                    else:
-                                        tdkTestObj.setResultStatus("FAILURE");
-                                        print("TEST STEP 13:Disconnect from WIFI SSID: FAILED")
-
+                                        print(f"\nTEST STEP {step}: WLAN Client IP address is not in the same Gateway DHCP range")
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE");
-                                    print("TEST STEP 7:Failed to connect to WIFI SSID")
+                                    print(f"\nTEST STEP {step}: Failed to get the WLAN Client IP address")
+
+                                step = step + 1
+                                print(f"\nTEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
+                                status = wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_interface);
+                                if expectedresult in status:
+                                    tdkTestObj.setResultStatus("SUCCESS");
+                                    print("Disconnect from WIFI SSID: SUCCESS")
+                                else:
+                                    tdkTestObj.setResultStatus("FAILURE");
+                                    finalStatus = "FAILURE"
+                                    print(f"\nTEST STEP {step}: Disconnect from WIFI SSID: FAILED")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE");
-                                print("TEST STEP 6:LAN Client IP address is not in the same Gateway DHCP range")
+                                print(f"\nTEST STEP {step}: Failed to connect to WIFI SSID")
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print("TEST STEP 5:Failed to get the LAN Client IP address")
+                            print(f"\nTEST STEP {step}: LAN Client IP address is not in the same Gateway DHCP range")
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print("TEST STEP 4:Failed to get the Gateway IP address")
+                        print(f"\nTEST STEP {step}: Failed to get the LAN Client IP address")
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print("TEST STEP 3: Get the current ssid,keypassphrase,Radio enable status,firewall level")
-                    print("EXPECTED RESULT 3: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
-                    print("ACTUAL RESULT 3: %s %s" %(newValues,newFirewallValue));
+                    print(f"\nTEST STEP {step}: Failed to get the Gateway IP address")
+
+            if tdkbE2EUtility.mlo_capability == "False":
+                #Prepare the list of parameter values to be reverted
+                list1 = [ssidName,orgValue[0],'string']
+                list2 = [keyPassPhrase,orgValue[1],'string']
+                list3 = [radioEnable,orgValue[2],'bool']
+
+                #Concatenate the lists with the elements separated by pipe
+                revertParamList = list1 + list2 + list3
+                revertParamList = "|".join(map(str, revertParamList))
+
+                firewallParam = "%s|%s|string" %(firewallLevel,firewallValue)
+
+                #Revert the values to original
+                step = step + 1
+                tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
+                tdkTestObj,firewallResult,details = setMultipleParameterValues(obj,firewallParam)
+                print(f"\nTEST STEP {step}: Revert the values to original")
+
+                if expectedresult in actualresult and expectedresult in firewallResult and expectedresult in finalStatus:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase,Radio enable status,firewall level");
+                    print(f"ACTUAL RESULT {step}: %s" %details);
+                    print("[TEST EXECUTION RESULT] : SUCCESS");
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    details = tdkTestObj.getResultDetails();
+                    print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase,Radio enable status,firewall level");
+                    print(f"ACTUAL RESULT {step}: %s" %details);
                     print("[TEST EXECUTION RESULT] : FAILURE");
             else:
-                tdkTestObj.setResultStatus("FAILURE");
-                details = tdkTestObj.getResultDetails();
-                print("TEST STEP 2: Set the ssid,keypassphrase,Radio enable status,firewall level")
-                print("EXPECTED RESULT 2: Should set the ssid,keypassphrase,Radio enable status,firewall level");
-                print("ACTUAL RESULT 2: %s" %details);
-                print("[TEST EXECUTION RESULT] : FAILURE");
-
-            #Prepare the list of parameter values to be reverted
-            list1 = [ssidName,orgValue[0],'string']
-            list2 = [keyPassPhrase,orgValue[1],'string']
-            list3 = [radioEnable,orgValue[2],'bool']
-
-            #Concatenate the lists with the elements separated by pipe
-            revertParamList = list1 + list2 + list3
-            revertParamList = "|".join(map(str, revertParamList))
-
-            firewallParam = "%s|%s|string" %(firewallLevel,firewallValue)
-
-            #Revert the values to original
-            tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
-            tdkTestObj,firewallResult,details = setMultipleParameterValues(obj,firewallParam)
-            if expectedresult in actualresult and expectedresult in firewallResult and expectedresult in finalStatus:
-                tdkTestObj.setResultStatus("SUCCESS");
-                print("EXPECTED RESULT 14: Should set the original ssid,keypassphrase,Radio enable status,firewall level");
-                print("ACTUAL RESULT 14: %s" %details);
-                print("[TEST EXECUTION RESULT] : SUCCESS");
-            else:
-                tdkTestObj.setResultStatus("FAILURE");
-                details = tdkTestObj.getResultDetails();
-                print("EXPECTED RESULT 14: Should set the original ssid,keypassphrase,Radio enable status,firewall level");
-                print("ACTUAL RESULT 14: %s" %details);
-                print("[TEST EXECUTION RESULT] : FAILURE");
+                # Revert the firewall level to original value using firewallSet function
+                level = firewallValue
+                step = step + 1
+                _, _ = firewallSet(obj,level,step,revert="true")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print("TEST STEP 1: Get the current ssid,keypassphrase,Radio enable status,firewall level")
-            print("EXPECTED RESULT 1: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
-            print("ACTUAL RESULT 1: %s %s" %(orgValue,firewallValue));
+            print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,Radio enable status,firewall level")
+            print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
+            print(f"ACTUAL RESULT {step}: {orgValue} {firewallValue}");
             print("[TEST EXECUTION RESULT] : FAILURE");
     else:
         obj.setLoadModuleStatus("FAILURE");
