@@ -166,15 +166,21 @@ def getFirmwareDownloadConfigValues(FirmwareLocation=FIRMWARE_LOCATION, Firmware
 ########## End of function ##########
 
 
+_XCONF_RESOURCE_IDS = None
+
+
 def getXconfResourceIds():
-    timestamp = str(int(time.time()))
-    return {
-        "FWCONFIG_ID": f"TDKB_CURL_Firmware_CONFIG_{timestamp}",
-        "MAC_RULE_ID": f"TDKB_CURL_MACRULE_{timestamp}",
-        "MAC_LIST_ID": f"TDKB_CURL_MACLIST_{timestamp}",
-        "SUPPORTED_MODEL_ID": f"BPI_TDKB_TEST_{timestamp}",
-        "DEFINE_PROPERTIES_ID": f"TDKB_CURL_DEFINE_PROPERTIES_{timestamp}"
-    }
+    global _XCONF_RESOURCE_IDS
+    if _XCONF_RESOURCE_IDS is None:
+        timestamp = str(int(time.time()))
+        _XCONF_RESOURCE_IDS = {
+            "FWCONFIG_ID": f"TDKB_CURL_Firmware_CONFIG_{timestamp}",
+            "MAC_RULE_ID": f"TDKB_CURL_MACRULE_{timestamp}",
+            "MAC_LIST_ID": f"TDKB_CURL_MACLIST_{timestamp}",
+            "SUPPORTED_MODEL_ID": f"BPI_TDKB_TEST_{timestamp}",
+            "DEFINE_PROPERTIES_ID": f"TDKB_CURL_DEFINE_PROPERTIES_{timestamp}"
+        }
+    return _XCONF_RESOURCE_IDS
 ########## End of function ##########
 
 # getFWUpgradeConfig
