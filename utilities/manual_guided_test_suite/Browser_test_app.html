@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Media Test Bench</title>
+    <style>
+        :root {
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --accent: #00d1b2;
+            --text: #ffffff;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); overflow: hidden; }
+
+        /* Sidebar for Navigation Tiles */
+        #sidebar {
+            width: 300px;
+            background: #000;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #333;
+        }
+
+        .section-title { font-size: 0.8rem; text-transform: uppercase; color: #da1414; margin-top: 20px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+
+        .tile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+
+        .tile {
+            background: var(--card-bg);
+            padding: 15px 10px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            border: 1px solid transparent;
+        }
+
+        /* This adds a glow/outline when you navigate using the Tab key */
+        .tile:focus { outline: 2px solid var(--accent); outline-offset: 2px; background: #333; }
+
+        .tile:hover { background: #333; border-color: var(--accent); }
+        .tile.active { background: var(--accent); color: #000; font-weight: bold; }
+
+        /* Main Display Area */
+        #display-container { flex-grow: 1; display: flex; flex-direction: column; position: relative; }
+        
+        #viewer-header { padding: 10px 20px; background: #1a1a1a; font-size: 0.9rem; color: var(--accent); border-bottom: 1px solid #333; }
+
+        #main-viewer { flex-grow: 1; width: 100%; height: 100%; border: none; background: white; }
+
+        /* Special handling for media that isn't an iframe */
+        #media-overlay {
+            position: absolute; top: 40px; left: 0; width: 100%; height: calc(100% - 40px);
+            display: none; background: #222; justify-content: center; align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<div id="sidebar">
+    <h2>RDKV Browser Test</h2>
+    
+    <div class="section-title">Images Formats</div>
+    <div class="tile-grid">
+        <div class="tile" tabindex="0" data-type="image" data-src="https://tdktest.rdkcentral.com:8443/teststreams/Browser_test/bizcom.png">PNG IMAGE</div>
+        <div class="tile" tabindex="0" data-type="image" data-src="https://tdktest.rdkcentral.com:8443/teststreams/Browser_test/JpegSample.jpg">JPEG IMAGE</div>
+        <div class="tile" tabindex="0" data-type="image" data-src="https://tdktest.rdkcentral.com:8443/teststreams/Browser_test/1686728578Deer3b1.svg">SVG IMAGE</div>
+        <div class="tile" tabindex="0" data-type="image" data-src="https://tdktest.rdkcentral.com:8443/teststreams/Browser_test/Cup.webp">WEBP IMAGE</div>
+    </div>
+
+    <div class="section-title">Motion Formats</div>
+    <div class="tile-grid">
+        <div class="tile" tabindex="0" data-type="video" data-src="http://192.168.162.128:8080/images/Webm_CLIP.webm">WebM Video</div>
+    </div>
+
+    <div class="section-title">Live Webpages</div>
+    <div class="tile-grid">
+        <div class="tile" tabindex="0" data-type="url" data-src="https://wikipedia.org">WiKipedia</div>
+        <div class="tile" tabindex="0" data-type="url" data-src="https://example.com">Example</div>
+        <div class="tile" tabindex="0" data-type="external" data-src="https://google.com">Google</div>
+    </div>
+
+    <div class="section-title">HTML Graphics</div>
+    <div class="tile-grid">
+        <div class="tile" tabindex="0" data-type="url" data-src="http://webglsamples.org/aquarium/aquarium.html">Aquarium</div>
+        <div class="tile" tabindex="0" data-type="url" data-src="https://alteredqualia.com/three/examples/webgl_pasta.html">Pasta</div>
+        <div class="tile" tabindex="0" data-type="url" data-src="https://threejs.org/examples/?q=webgl_animation_cloth#webgl_animation_cloth">Cloths</div>
+        <div class="tile" tabindex="0" data-type="url" data-src="https://webglsamples.org/caves/caves.html">Caves</div>
+        <div class="tile" tabindex="0" data-type="url" data-src="https://webglsamples.org/book/book.html">Book Google</div>
+        <div class="tile" tabindex="0" data-type="url" data-src="https://webglsamples.org/blob/blob.html">BLOB</div>
+    </div>
+</div>
+
+<div id="display-container">
+    <div id="viewer-header">Target: <span id="current-url">None selected</span></div>
+    
+    <iframe id="main-viewer" src="about:blank"></iframe>
+
+    <div id="media-overlay">
+        <div id="media-content"></div>
+    </div>
+</div>
+
+<script>
+    // 1. Centralized function to handle the actual loading logic
+    function loadContent(type, source, element) {
+        console.log("Loading:", type, source); // Debugging line
+
+        const viewer = document.getElementById('main-viewer');
+        const overlay = document.getElementById('media-overlay');
+        const content = document.getElementById('media-content');
+        const urlDisplay = document.getElementById('current-url');
+
+        // UI Updates: Remove active class from all tiles, add to current
+        document.querySelectorAll('.tile').forEach(t => t.classList.remove('active'));
+        element.classList.add('active');
+        urlDisplay.innerText = source;
+
+        // Reset Viewport
+        viewer.style.display = "none";
+        overlay.style.display = "none";
+        viewer.src = "about:blank"; // Clear previous iframe content
+        content.innerHTML = "";
+
+        if (type === 'url') {
+            viewer.style.display = "block";
+            viewer.src = source;
+        } 
+        else if (type === 'image') {
+            overlay.style.display = "flex";
+            content.innerHTML = `<img src="${source}" style="max-width:90%; max-height:90%; border: 2px solid #444;">`;
+        }
+        else if (type === 'external') {
+            // This bypasses all CORS/Frame errors by opening a new tab
+            window.open(source, '_blank');
+        } 
+        else if (type === 'video') {
+            overlay.style.display = "flex";
+            content.innerHTML = `<video controls autoplay loop style="max-width:90%;"><source src="${source}" type="video/webm"></video>`;
+        }
+    }
+
+    // 2. Attach Global Listeners for both Mouse and Keyboard
+    document.addEventListener('click', function(e) {
+        // Check if what we clicked is a tile (or inside a tile)
+        const tile = e.target.closest('.tile');
+        if (tile) {
+            // We look for the attributes we defined in the HTML
+            // Note: Ensure your HTML has data attributes now (see below)
+            const type = tile.getAttribute('data-type');
+            const src = tile.getAttribute('data-src');
+            loadContent(type, src, tile);
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            const tile = document.activeElement.closest('.tile');
+            if (tile) {
+                e.preventDefault(); // Stop page jump
+                tile.click(); // Trigger the click listener above
+            }
+        }
+    });
+
+</script>
+
+</body>
+</html>
