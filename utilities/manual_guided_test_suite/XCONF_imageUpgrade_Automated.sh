@@ -270,6 +270,169 @@ update_XCONF_firmware_config() {
 
 
 
+#Function Definition for xconf_verify_rules_response — Step 1: curl XCONF server with DUT MAC and verify firmware update response
+
+
+
+xconf_verify_rules_response() {
+    local step="$1"
+    printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
+    printf "\nStep %s\t\t: Execute curl command to verify DUT is able to get the XCONF firmware update response\n\n\n" "$step"
+    sleep 1
+    get_iface_info "eth0" "mac"
+    local get_iface_info_exit=$?
+    if [ "$get_iface_info_exit" -ne 0 ]; then
+        printf "\n\n[ERROR] Failed to retrieve DUT MAC address from eth0 interface\n\n\n"
+        return 1
+    fi
+    local device_mac_id="$get_iface_result"
+    local final_url="${xconf_config_check_url}${device_mac_id}"
+    printf "\n\ncurl %s\n\n\n" "$final_url"
+    local xconf_response=$(curl --silent --location --connect-timeout 10 "$final_url")
+    printf "\n\nXCONF server response :\n%s\n\n\n" "$xconf_response"
+    local resp_filename=$(get_XCONF_key_values "firmwareFilename" "$xconf_response")
+    local resp_location=$(get_XCONF_key_values "firmwareLocation" "$xconf_response")
+    local resp_version=$(get_XCONF_key_values "firmwareVersion" "$xconf_response")
+    if [ -n "$resp_filename" ] && [ -n "$resp_location" ] && [ -n "$resp_version" ]; then
+        printf "\n\nXCONF firmware update response received successfully for DUT MAC : %s\n\n" "$device_mac_id"
+        printf "\nfirmwareFilename\t:\t%s\n" "$resp_filename"
+        printf "\nfirmwareLocation\t:\t%s\n" "$resp_location"
+        printf "\nfirmwareVersion\t\t:\t%s\n\n\n" "$resp_version"
+        return 0
+    else
+        printf "\n\n[ERROR] XCONF server did not return a valid firmware update response for DUT MAC : %s\n\n\n" "$device_mac_id"
+        return 1
+    fi
+}
+
+
+
+
+#Function Definition for xconf_activate_system_plugin — Step 2: Activate org.rdk.System plugin via Controller.1.activate
+
+
+
+xconf_activate_system_plugin() {
+    local step="$1"
+    printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
+    printf "\nStep %s\t\t: Execute curl command to activate org.rdk.System plugin via Controller.1.activate\n\n\n" "$step"
+    local curl_activate="curl -X POST http://127.0.0.1:9998/jsonrpc -d '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"Controller.1.activate\",\"params\":{\"callsign\":\"org.rdk.System\"}}'"
+    printf "\n%s\n\n\n" "$curl_activate"
+    sleep 1
+    local activate_response=$(curl --silent -X POST http://127.0.0.1:9998/jsonrpc \
+        -d '{"jsonrpc":"2.0","id":1,"method":"Controller.1.activate","params":{"callsign":"org.rdk.System"}}')
+    printf "\n\norg.rdk.System plugin activation response :\n%s\n\n\n" "$activate_response"
+    if echo "$activate_response" | grep -q '"result":null'; then
+        printf "\n\norg.rdk.System plugin activated successfully\n\n\n"
+        return 0
+    else
+        printf "\n\n[ERROR] Failed to activate org.rdk.System plugin. Response : %s\n\n\n" "$activate_response"
+        return 1
+    fi
+}
+
+
+
+
+#Function Definition for xconf_trigger_updateFirmware — Step 3: Trigger XCONF firmware upgrade via org.rdk.System.1.updateFirmware
+
+
+
+xconf_trigger_updateFirmware() {
+    local step="$1"
+    printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
+    printf "\nStep %s\t\t: Execute curl command to trigger XCONF firmware upgrade via org.rdk.System.1.updateFirmware\n\n\n" "$step"
+    local curl_updateFirmware="curl -X POST http://127.0.0.1:9998/jsonrpc -d '{\"jsonrpc\":\"2.0\",\"id\":\"3\",\"method\":\"org.rdk.System.1.updateFirmware\",\"params\":{}}'"
+    printf "\n%s\n\n\n" "$curl_updateFirmware"
+    sleep 1
+    local update_response=$(curl --silent -X POST http://127.0.0.1:9998/jsonrpc \
+        -d '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.updateFirmware","params":{}}')
+    local update_success=$(get_JSON_KEY_values "success" "$update_response")
+    printf "\n\norg.rdk.System.1.updateFirmware API response :\n%s\n\n\n" "$update_response"
+    if [ "$update_success" = "true" ]; then
+        printf "\n\nXCONF firmware upgrade triggered successfully. Firmware download initiated on DUT.\n\n\n"
+        return 0
+    else
+        printf "\n\n[ERROR] Failed to trigger XCONF firmware upgrade. API returned : %s\n\n\n" "$update_success"
+        return 1
+    fi
+}
+
+
+
+
+#Function Definition for xconf_monitor_swupdate_log — Step 4: Monitor swupdate.log for firmware upgrade completion
+
+
+
+xconf_monitor_swupdate_log() {
+    local step="$1"
+    printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
+    printf "\nStep %s\t\t: Monitor swupdate log for XCONF firmware upgrade completion\n\n\n" "$step"
+    sleep 1
+    local log_file="/opt/logs/swupdate.log"
+    local success_pattern_1="doCDL success"
+    local success_pattern_2="Image Flashing is success"
+    local timeout=1200
+    local elapsed=0
+    local check_interval=15
+    printf "\n\nCommand : tail -f %s\n\n" "$log_file"
+    printf "\nMonitoring %s for firmware upgrade completion...\n" "$log_file"
+    printf "\nExpected success strings : \"%s\" OR \"%s\"\n\n\n" "$success_pattern_1" "$success_pattern_2"
+    while [ "$elapsed" -lt "$timeout" ]; do
+        if grep -q "$success_pattern_1" "$log_file" 2>/dev/null || grep -q "$success_pattern_2" "$log_file" 2>/dev/null; then
+            printf "\n\nXCONF firmware upgrade completed successfully. Success log detected in %s\n\n\n" "$log_file"
+            printf "\n\nFirmware image is ready. Please reboot the DUT manually to activate the new firmware version : %s\n\n\n" "$xconf_imagefile_version"
+            return 0
+        fi
+        printf "\rWaiting for firmware upgrade to complete... [%d/%d seconds elapsed]" "$elapsed" "$timeout"
+        sleep "$check_interval"
+        elapsed=$((elapsed + check_interval))
+    done
+    printf "\n\n[ERROR] Timeout : XCONF firmware upgrade did not complete within %d seconds. Check %s for details.\n\n\n" "$timeout" "$log_file"
+    return 1
+}
+
+
+
+
+#Function defnition for testcase TC_XCONF_MANUAL_01
+
+
+
+TC_XCONF_MANUAL_01() {
+
+    local step_num="$1"
+    if [ "$step_num" = "1" ]; then
+        xconf_verify_rules_response "$step_num"
+        local exit_code=$?
+        [ "$exit_code" -eq 0 ] && return 0 || return 1
+
+    elif [ "$step_num" = "2" ]; then
+        xconf_activate_system_plugin "$step_num"
+        local exit_code=$?
+        [ "$exit_code" -eq 0 ] && return 0 || return 1
+
+    elif [ "$step_num" = "3" ]; then
+        xconf_trigger_updateFirmware "$step_num"
+        local exit_code=$?
+        [ "$exit_code" -eq 0 ] && return 0 || return 1
+
+    elif [ "$step_num" = "4" ]; then
+        xconf_monitor_swupdate_log "$step_num"
+        local exit_code=$?
+        [ "$exit_code" -eq 0 ] && return 0 || return 1
+
+    else
+        printf "\n\nDEBUG : Invalid step number for Testcase : TC_XCONF_MANUAL_01\n\n\n"
+        return 1
+    fi
+
+}
+
+
+
+
 #Function Definition for TestCase : tc_XCONF_MANUAL_testsuite
 
 
@@ -290,6 +453,39 @@ tc_XCONF_MANUAL_testsuite() {
     printf '\n\nPre-condition check success. Starting Testcase execution!\n\n\n'
 
 
+    #Step 1 code block for TC_XCONF_MANUAL_01
+
+        if [[ "$TestcaseID" == "TC_XCONF_MANUAL_01" ]]; then
+            execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_XCONF_MANUAL_01"
+            sleep 1
+
+    #Step 2 code block for TC_XCONF_MANUAL_01
+
+            execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_XCONF_MANUAL_01"
+            sleep 1
+
+    #Step 3 code block for TC_XCONF_MANUAL_01
+
+            execute_stepStatusUpdate_steps "3" "$testcase_prefix" "TC_XCONF_MANUAL_01"
+            sleep 1
+
+    #Step 4 code block for TC_XCONF_MANUAL_01
+
+            execute_stepStatusUpdate_steps "4" "$testcase_prefix" "TC_XCONF_MANUAL_01"
+            sleep 1
+            dynamic_current_step_finder "$testcase_prefix" "TC_XCONF_MANUAL"
+        fi
+
+        #TestCase execution Result dynamic updating Function
+        dynamic_test_result_update "$current_step_num" "$TestcaseID" "${testcase_prefix}"
+
+        #Log generation and upload to server function
+        log_generate_operations "$failed_step_num" "XCONF"
+
+        printf "\n\nPost-condition: None\n\n"
+  else
+        printf "\n\nPre-condition check failure. Exiting XCONF Firmware Upgrade Automated Test!\n\n\n"
+  fi
 
 }
 
