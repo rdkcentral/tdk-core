@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAudio Test Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        /* Sidebar Styling */
+        #sidebar {
+            width: 300px;
+            background-color: #293029;
+            color: rgb(255, 255, 255);
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        h2 { font-size: 1.2rem; margin-bottom: 20px; color: #e70909; border-bottom: 1px solid #34495e; padding-bottom: 10px; text-align: center; }
+
+        .url-card {
+            background: #34495e;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: 1px solid transparent;
+        }
+
+        /* This adds a visible glow when you Tab onto a card */
+        .url-card:focus {
+            outline: 3px solid #1abc9c;
+            background: #3e4f5f;
+        }
+
+        .url-card:hover { background: #27d847; }
+        .url-card.active { border-color: #000000; background: #f30b0b; }
+
+        .url-name { font-weight: bold; display: block; }
+        .url-link { font-size: 0.8rem; color: #bdc3c7; }
+
+        /* Main Viewer Styling */
+        #viewer {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #555;
+        }   
+
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <h2>Web Audio Test Page</h2>
+
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/speech_synthesis_test_1.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_01</span>
+            <span class="url-link">speech_synthesis_test_1.html</span>
+        </div>
+
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/speech_synthesis_test_2.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_02</span>
+            <span class="url-link">speech_synthesis_test_2.html</span>
+        </div>
+
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/speech_synthesis_test_3.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_03</span>
+            <span class="url-link">speech_synthesis_test_3.html</span>
+        </div>
+
+        
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/AudioContext.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_04</span>
+            <span class="url-link">AudioContext.html</span>
+        </div>
+
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/audiocontext-destruction-crash.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_05</span>
+            <span class="url-link">audiocontext-destruction-crash.html</span>
+        </div>
+
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/Audio_Playback.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_06</span>
+            <span class="url-link">Audio_Playback.html</span>
+        </div>
+
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/Generated_Sound_FM.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_07</span>
+            <span class="url-link">Generated_Sound_FM.html</span>
+        </div>
+
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/Multi_media_playback.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_08</span>
+            <span class="url-link">Multi_media_playback.html</span>
+        </div>
+
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/codec/aac/vbr-128kbps-44khz.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_09</span>
+            <span class="url-link">vbr-128kbps-44khz.html</span>
+        </div>
+
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/codec/mp3/128kbps-44khz.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_10</span>
+            <span class="url-link">128kbps-44khz.html</span>
+        </div>
+
+        <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_Webcodec/vorbis/Audio/vbr-70kbps-44khz.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_11</span>
+            <span class="url-link">vbr-70kbps-44khz.html</span>
+        </div>
+
+	    <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/codec/vorbis/vbr-96kbps-44khz.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_12</span>
+            <span class="url-link">vbr-96kbps-44khz.html</span>
+        </div>
+
+	    <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/codec/vorbis/vbr-128kbps-44khz.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_13</span>
+            <span class="url-link">vbr-128kbps-44khz.html</span>
+        </div>
+
+	    <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/codec/wav/24bit-22khz-resample.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_14</span>
+            <span class="url-link">24bit-22khz-resample.html</span>
+        </div>
+
+	    <div class="url-card" tabindex="0" data-url="https://tdktest.rdkcentral.com:8443/teststreams/Manual_WebAudio/codec/wav/24bit-44khz.html">
+            <span class="url-name">TC_WEBAUDIO_MANUAL_15</span>
+            <span class="url-link">24bit-44khz.html</span>
+        </div>
+
+    </div>
+
+    <div id="viewer">
+        Use TAB → ENTER to launch tests (Check console for logs)
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const cards = document.querySelectorAll('.url-card');
+
+            cards.forEach(card => {
+                const url = card.getAttribute('data-url');
+
+                card.addEventListener('click', () => {
+                    loadPage(card, url);
+                });
+
+                card.addEventListener('keydown', (event) => {
+                    if (event.key === "Enter" || event.keyCode === 13) {
+                        event.preventDefault();
+                        loadPage(card, url);
+                    }
+                });
+            });
+        });
+
+        function loadPage(element, url) {
+            console.log("Navigating to:", url);
+
+            if (!url) {
+                console.error("No URL found");
+                return;
+            }
+
+            const cards = document.querySelectorAll('.url-card');
+            cards.forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+
+            // Full-page navigation
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
