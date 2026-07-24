@@ -348,7 +348,7 @@ def startDebugReportTarFileTracker(obj, profile_type, step, monitor_path=report_
 ########## End of function ##########
 
 # isDebugReportTarFileCreated
-# Syntax: isDebugReportTarFileCreated(obj, profile_type, step, wait_time)
+# Syntax: isDebugReportTarFileCreated(obj, profile_type, step)
 # Description: Function to check whether a tar(.tgz) file creation was captured by the background tracker and return its name.
 # Parameters: obj - The TDK scripting library object for sysutil component
 #             profile_type - The type of debug report (static or dynamic)
