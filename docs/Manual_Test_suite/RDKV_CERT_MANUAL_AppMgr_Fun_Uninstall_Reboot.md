@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_19
 ## TestCase Name
 RDKV_CERT_MANUAL_AppMgr_Fun_Uninstall_Reboot
@@ -31,18 +31,20 @@ To validate that applications can be uninstalled from the RDK UI and successfull
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Navigate to app info icon in | Navigate to App Info icon in left side of the RDK UI Home screen and press enter/Ok button on remote | "App Info page should launch where we should see the Installed app's Info. Each row in App Info page displays the details of a specific application -- including the app icon, app name, app version,<br>runtime package version, and three management option -- Launch, Update, and Uninstall"|
-| 2 | Uninstall app via App Info page | Select Uninstall Button and press enter/Ok button on remote and again press enter on Yes option in the dialogue box to confirm Uninstall | In App Info page, when the user clicks Uninstall, a confirmation dialog YES or NO will appear to verify whether the user truly intends to remove the application. Upon Pressing YES A loading/buffering icon should come and uninstall should be done. After some time, uninstall operation should be completed and the row for the uninstalled app should be removed from App Info page|
+| 1 | Navigate to app info icon in | Navigate to App Info icon in left side of the RDK UI Home screen and press Enter/OK on the remote | "App Info page should launch where we should see the Installed app's Info. Each row in App Info page displays the details of a specific application -- including the app icon, app name, app version,<br>runtime package version, and three management option -- Launch, Update, and Uninstall"|
+| 2 | Uninstall app via App Info page | Select Uninstall Button and press Enter/OK on the remote and again press enter on Yes option in the dialogue box to confirm Uninstall | In App Info page, when the user clicks Uninstall, a confirmation dialog YES or NO will appear to verify whether the user truly intends to remove the application. Upon Pressing YES A loading/buffering icon should come and uninstall should be done. After some time, uninstall operation should be completed and the row for the uninstalled app should be removed from App Info page|
 | 3 | Repeat uninstall for all installed apps | Repeat step 3 on all available installed App | Expected response should be same as step 3|
 | 4 | Reboot DUT and wait for bootup | Reboot the DUT and wait for Boot up | Device should be rebooted and RDK UI home page should be displayed on TV|
-| 5 | Navigate to More Apps page | Select More Apps button from Recommended Apps section and press enter/Ok button on remote | More Apps page should load where all apps available in App catalogue are visible|
-| 6 | Select uninstalled app tile of step | Select uninstalled App tile of step 3 and press enter/Ok button on remote | When App tile is selected a buffering/loading indicator should be displayed on<br>the app tile which indicates app bundle download and installation started once installation completed a green tick will shown on the app tile for 2 sec.|
-| 7 | Verify app installed in background and appears in My Apps | Validate that app installation completed and available in the My Apps/Recommended Apps section/row of RDK UI Homepage | App should be installed and Tile should be Available in My Apps/Recommended Apps section/row of RDK UI Homepage|
-| 8 | Launch installed app from My Apps  | Select the Installed App tile from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Selected App should be launched successfully  (Either cold launch /hot launch based on the app's previous state)|
+| 5 | Navigate to More Apps page | Select More Apps button from Recommended Apps section and press Enter/OK on the remote | More Apps page should load where all apps available in App catalogue are visible|
+| 6 | Select uninstalled app tile of step | Select uninstalled App tile of step 3 and press Enter/OK on the remote | When App tile is selected a buffering/loading indicator should be displayed on<br>the app tile which indicates app bundle download and installation started once installation completed a green tick will shown on the app tile for 2 sec.|
+| 7 | Verify app installed in background and appears in My Apps | Validate that app installation completed and available in the My Apps/Recommended Apps section/row of RDK UI Home screen | App should be installed and Tile should be Available in My Apps/Recommended Apps section/row of RDK UI Home screen|
+| 8 | Launch installed app from My Apps  | Select the Installed App tile from the My Apps/Recommended Apps section/row of RDK UI Home screen and press Enter/OK on the remote | Selected App should be launched successfully  either as a cold launch or hot launch depending on the app's previous state.|
 | 9 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | Selected Video Content AV playback should start or App should load its content|
 | 10 | Close launched apps via Back key | Close/Exit the launched Apps by back key press on remote. | Launched App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

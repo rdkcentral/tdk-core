@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_10
 ## TestCase Name
 RDKV_CERT_MANUAL_AppMgr_Fun_Max_Running_Apps
@@ -32,7 +32,7 @@ To validate the maximum number of applications that can be maintained in the run
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Query getMaxRunningApps via API | Execute the below curl command to gets the maximum number of apps to maintain in the running or suspended state : <br>`curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 24, "method": "org.rdk.AppManager.getMaxRunningApps"}' http://127.0.0.1:9998/jsonrpc` | The `getMaxRunningApps` API should return a successful response containing the `maxRunningApps` value, indicating the maximum number of apps the AppManager plugin can maintain in the running or suspended state.|
-| 2 | Launch app from Recommended/My Apps | Select the App tile from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Selected App should be launched successfully  (Either cold launch /hot launch based on the app's previous state)|
+| 2 | Launch app from Recommended/My Apps | Select the App tile from the My Apps/Recommended Apps section/row of RDK UI Home screen and press Enter/OK on the remote | Selected App should be launched successfully  either as a cold launch or hot launch depending on the app's previous state.|
 | 3 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | Selected Video Content AV playback should start or App should load its content|
 | 4 | Press Home key to suspend app | Press Home key from remote on the launched Apps | App should not terminate but goes to a suspended state|
 | 5 | Repeat launch/suspend steps up to maxRunningApps | Repeat the steps 3 - 5 on other installed Apps upto the same count of maxRunningApps in step 2 | Expected Response should be same as step 3 -5 for maxRunningApps|
@@ -41,4 +41,6 @@ To validate the maximum number of applications that can be maintained in the run
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

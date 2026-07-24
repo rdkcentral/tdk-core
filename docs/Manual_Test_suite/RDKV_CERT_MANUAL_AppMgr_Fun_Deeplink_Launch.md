@@ -39,9 +39,11 @@ To validate that deeplink-supported applications can be launched with specific d
 | 6 | Launch Amazon Prime app with deeplink via API | Execute the below curl command  to launch the Amazon Prime app with deeplink using AppManager.1.launchApp API and LaunchArgs : <br>`curl -d '{ "jsonrpc": "2.0", "id": 2, "method": "org.rdk.AppManager.launchApp", "params": { "appId": "com.rdkcentral.AmazonPrimeWidevine", "intent": "<intent>", "launchArgs": "<deeplink videoID>" }}' http://127.0.0.1:9998/jsonrpc` | The `launchApp` API should return a successful response, and the Amazon Prime App should launch with the specified deeplink `launchArgs`.|
 | 7 | Verify Amazon Prime plays deeplink video | Validate that Amazon Prime started playback for the video ID in deeplink URL and verify the uninterrupted AV playback | Amazon Prime App should launch and instantly play the video given in the deeplink URL and AV playback should be fine|
 | 8 | Close/exit the Amazon Prime app | Close/Exit the Amazon Prime App by back key press on remote. | Amazon Prime App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
-| 9 | Repeat deeplink launch steps for all supported apps | Repeat steps 1 - 5 all other deeplink launch supported installed Apps from RDK UI Homepage | Expected response should be same as Step 1 - 5 on all supported Apps|
+| 9 | Repeat deeplink launch steps for all supported apps | Repeat steps 1 - 5 all other deeplink launch supported installed Apps from RDK UI Home screen | Expected response should be same as Step 1 - 5 on all supported Apps|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

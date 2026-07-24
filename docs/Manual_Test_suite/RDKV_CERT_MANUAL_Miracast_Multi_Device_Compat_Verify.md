@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_MIRACAST_08
 ## TestCase Name
 RDKV_CERT_MANUAL_Miracast_Multi_Device_Compat_Verify
@@ -21,7 +21,7 @@ To validate Miracast compatibility with different smartphones and operating syst
 |-|---------|-----------------|----------------|
 | 1 | Connect HDMI display | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display.|
 | 2 | Enable Miracast on DUT | Ensure that Miracast is enabled on the DUT. | Miracast should be enabled and functional on the DUT.|
-| 3 | Enable Wi-Fi on both devices | Ensure that Wi-Fi is turned on on both the smartphone and the DUT. | Wi-Fi should be active on both the smartphone and the DUT.|
+| 3 | Enable Wi-Fi on both devices | Ensure that Wi-Fi is enabled on both the smartphone and the DUT. | Wi-Fi should be active on both the smartphone and the DUT.|
 | 4 | Connect smartphone to Wi-Fi SSID | Connect the smartphone to a Wi-Fi SSID prior to the test. | The smartphone should be connected to a Wi-Fi SSID with a valid IP address assigned.|
 
 <a name="head.TestSteps"></a>
@@ -39,4 +39,6 @@ To validate Miracast compatibility with different smartphones and operating syst
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

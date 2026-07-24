@@ -1,7 +1,7 @@
 ﻿## TestCase ID
-RDKV_MANUAL_AV_03
+RDKV_MANUAL_DRM_01
 ## TestCase Name
-RDKV_CERT_MANUAL_AV_Codec_MPEG_DASH_Playback
+RDKV_CERT_MANUAL_DRM_PlayReady_Playback
 
 <a name="head.TOC"></a>
 ## Table Of Contents
@@ -12,7 +12,7 @@ RDKV_CERT_MANUAL_AV_Codec_MPEG_DASH_Playback
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that MPEG-DASH adaptive streaming playback is functional on the DUT using the RDK media pipeline. This test confirms that the MPEG-DASH asset plays with proper audio and video output without artifacts or errors, ensuring MPEG-DASH streaming support meets certification requirements.
+To validate that PlayReady DRM-encrypted stream playback is functional on the DUT. This test confirms that the PlayReady encrypted asset plays with proper audio and video output without artifacts or errors, ensuring PlayReady DRM support meets certification requirements.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -28,10 +28,11 @@ To validate that MPEG-DASH adaptive streaming playback is functional on the DUT 
 | 7 | Configure BOLT package host path | Configure `MediaValidationVariables.bolt_packages_base_path` with the BOLT packages hosting server URL (e.g., `http://<TM_IP>:<port>/images/signed-packages/`). | The BOLT package host path should be configured and accessible. |
 | 8 | Verify BOLT app download URL | Verify that `MediaValidationVariables.unified_player_app_download_url` resolves correctly to the BOLT app package URL. | The BOLT app package URL should be valid and accessible for download. |
 | 9 | Set close interval configuration | Set `MediaValidationVariables.close_interval` to the required close interval value (in seconds). | The close interval configuration value should be set correctly. |
-| 10 | Configure MPEG-DASH stream URL | Configure the stream variable `video_src_url_mpeg` in `MediaValidationVariables.py` as `test_streams_base_path + "TDK_Asset_Sunrise_MPEGAV.mpeg"` to point to the MPEG-DASH test stream. | The `video_src_url_mpeg` variable should resolve to a valid, accessible stream location. |
-| 11 | Check app installation status | Query the installed package list to check whether the player app is already installed on the device. | The installed app package list should be retrievable and the app installation status should be confirmed. |
-| 12 | Download app package if not installed | If the app is not already installed, download the app package from the configured download URL using the DownloadManager API. | The app package should be downloaded successfully if it was not already installed. |
-| 13 | Install app via PackageManager | Install the downloaded app package using the PackageManagerRDKEMS.install API with the appropriate `packageId` and file locator. | The app package should be installed successfully on the device. |
+| 10 | Configure PlayReady stream URL | Configure the stream variable `video_src_url_playready_multikey_dash` in `MediaValidationVariables.py` with a valid, accessible PlayReady MultiKey DASH stream URL. | The `video_src_url_playready_multikey_dash` variable should be configured with a valid, accessible stream URL in `MediaValidationVariables.py`. |
+| 11 | Configure PlayReady DRM settings | Configure the DRM variable `video_src_url_playready_multikey_dash_drmconfigs` in `MediaValidationVariables.py` with the PlayReady license server URL and required HTTP headers using the format: `com.microsoft.playready[<license_url>]\|headers[<header_name>:<header_value>]`. | The `video_src_url_playready_multikey_dash_drmconfigs` variable should be configured with valid PlayReady DRM license server details. |
+| 12 | Check app installation status | Query the installed package list to check whether the PlayReady player app is already installed on the device. | The installed app package list should be retrievable and the app installation status should be confirmed. |
+| 13 | Download app package if not installed | If the app is not already installed, download the app package from the configured download URL using the DownloadManager API. | The app package should be downloaded successfully if it was not already installed. |
+| 14 | Install app via PackageManager | Install the downloaded app package using the PackageManagerRDKEMS.install API with the appropriate `packageId` and file locator. | The app package should be installed successfully on the device. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
@@ -39,12 +40,12 @@ To validate that MPEG-DASH adaptive streaming playback is functional on the DUT 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Select DUT from TDK left pane | Select the DUT from the left pane of TDK Test Manager. | Popup should launch where scripts can be selected for execution. |
-| 2 | Execute MPEG-DASH test script | Select the script `RDKV_CERT_MVS_Video_Play_MPEG` and click on 'Execute Now' button. | The script should start execution. |
-| 3 | Verify video playback on TV | Verify if the video started playing on the TV and monitor it. | The MPEG-DASH asset should play with proper audio and video without any artifacts or errors. |
+| 2 | Execute PlayReady test script | Select the script `RDKV_CERT_MVS_Video_Play_PlayReady_MultiKey_DASH` and click on 'Execute Now' button. | The script should start execution. |
+| 3 | Verify video playback on TV | Verify if the video started playing on the TV and monitor it. | The PlayReady encrypted asset should play with proper audio and video without any artifacts or errors. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator
+**Supported Models** : Video_Accelerator
 
 <div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

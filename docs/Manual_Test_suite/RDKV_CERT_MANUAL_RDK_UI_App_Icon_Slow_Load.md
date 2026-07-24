@@ -28,10 +28,12 @@ To validate that the RDK UI correctly displays a loading indicator when app icon
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Reboot DUT | Reboot the DUT | The DUT should come up with the RDK UI Home screen.|
-| 2 | Verify loading indicator on Recommended Apps | Validate whether a a loading icon shows over Recommended Apps until data fully loads | The UI should display a<br>loading/buffering indicator (As it is connected to slow network) until the Recommended Apps row data fully loads|
+| 2 | Verify loading indicator on Recommended Apps | Validate whether a loading icon shows over Recommended Apps until data fully loads | The UI should display a<br>loading/buffering indicator (As it is connected to slow network) until the Recommended Apps row data fully loads|
 | 3 | Navigate to More Apps page | Click on More Apps button | A dedicated page should open which lists all applications available in DAC App Catalogue. The UI should display a<br>loading/buffering indicator (As it is connected to slow network) until the apps row data fully loads|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

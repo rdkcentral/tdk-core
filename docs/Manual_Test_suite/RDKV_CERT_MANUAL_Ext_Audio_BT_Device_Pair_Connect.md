@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_EXT_AUDIO_01
 ## TestCase Name
 RDKV_CERT_MANUAL_Ext_Audio_BT_Device_Pair_Connect
@@ -35,13 +35,15 @@ To validate that an external Bluetooth device can be successfully paired and con
 | 4 | Enable org.rdk.Bluetooth plugin | Enable the org.rdk.Bluetooth plugin by executing the following curl command.<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 2, "method": "org.rdk.Bluetooth.1.enable"}' http://127.0.0.1:9998/jsonrpc` | The org.rdk.Bluetooth plugin should be enabled.|
 | 5 | Start Bluetooth scanning | Start Bluetooth scanning by executing the following curl command.<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.startScan", "params": {"timeout": "90", "profile": "DEFAULT"}}' http://127.0.0.1:9998/jsonrpc` | Bluetooth scanning should start and remain active until the timeout.|
 | 6 | Retrieve discovered Bluetooth devices | Retrieve the list of discovered Bluetooth devices by executing the following curl command.<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.getDiscoveredDevices"}' http://127.0.0.1:9998/jsonrpc` | The discovered device list should be listed in the jsonrpc response.|
-| 7 | Pair external Bluetooth device | Identify the target device ID from the discovered list, update the deviceID parameter in the curl command, and execute the following curl command to pair the external Bluetooth device.<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.pair", "params": {"deviceID": "163411684589145"}}' http://127.0.0.1:9998/jsonrpc` | The DUT should be successfully paired with the specified device ID|
+| 7 | Pair external Bluetooth device | Identify the target device ID from the discovered list, update the deviceID parameter in the curl command, and execute the following curl command to pair the external Bluetooth device.<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.pair", "params": {"deviceID": "<Ext_BT_deviceID>"}}' http://127.0.0.1:9998/jsonrpc` | The DUT should be successfully paired with the specified device ID|
 | 8 | Retrieve paired Bluetooth devices | Retrieve the list of paired Bluetooth devices by executing the following curl command.<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.getPairedDevices"}' http://127.0.0.1:9998/jsonrpc` | The paired device should appear in the response with the device ID used for pairing.|
-| 9 | Connect paired Bluetooth device | Identify the target device ID from the paired list, update the deviceID parameter in the curl command, and execute the following curl command to connect the paired Bluetooth device.<br>`curl --header "Content-Type: application/json" --request POST --data ' {"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.connect", "params": {"deviceID": "163411684589145", "deviceType": "WEARABLE HEADSET", "profile": "DEFAULT"}}' http://127.0.0.1:9998/jsonrpc` | The DUT should be successfully connected to the specified paired device ID|
+| 9 | Connect paired Bluetooth device | Identify the target device ID from the paired list, update the deviceID parameter in the curl command, and execute the following curl command to connect the paired Bluetooth device.<br>`curl --header "Content-Type: application/json" --request POST --data ' {"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.connect", "params": {"deviceID": "<Ext_BT_deviceID>", "deviceType": "WEARABLE HEADSET", "profile": "DEFAULT"}}' http://127.0.0.1:9998/jsonrpc` | The DUT should be successfully connected to the specified paired device ID|
 | 10 | Retrieve connected Bluetooth devices | Retrieve the list of connected Bluetooth devices by executing the following curl command.<br>`curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.getConnectedDevices"}' http://127.0.0.1:9998/jsonrpc` | It has to show the connected device which we just connected and|
 | 11 | Verify pairing and connection persist | Re-execute Step 8 and Step 10 to validate that the pairing and connection persist for the specified device ID. | The DUT should remain paired and connected to the specified device ID. The curl responses should match those from Step 8 and Step 10.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_XDIAL_04
 ## TestCase Name
 RDKV_CERT_MANUAL_Xdial_Register_Persist_Post_Reboot
@@ -42,4 +42,6 @@ To validate that Dynamic XDial support registration persists on the DUT after a 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

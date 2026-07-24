@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_HDMIHOTPLUG_06
 ## TestCase Name
 RDKV_CERT_MANUAL_HDMI_Hotplug_YouTube_Paused_Playback_On_Reconnect
@@ -42,4 +42,6 @@ To validate that a paused YouTube video remains in the paused state after an HDM
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

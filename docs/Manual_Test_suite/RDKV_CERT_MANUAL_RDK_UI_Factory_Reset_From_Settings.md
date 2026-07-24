@@ -38,9 +38,11 @@ To validate that a Factory Reset can be performed from the RDK UI Settings and t
 | 3 | Click Cancel in confirmation dialog | Click on Cancel | The confirmation dialog should close and the screen should return to Settings → Other Settings → Advanced Settings → Device.|
 | 4 | Click Factory Reset button | Click on Factory Reset | A Factory Reset confirmation dialog should appear.|
 | 5 | Click Confirm to proceed with reboot | Click on Confirm | A loading indicator should appear briefly and the DUT should reboot and come up with the RDK splash screen followed by the RDK UI initial setup/pairing screens.|
-| 6 | Validate if the values changed are restored to default | Validate if the values changed in precondition(2 to 7 ) are restored to default | All of the values set to non default values prior to Factory reset, should be reverted to default values.<br>The YouTube, Prime Video and Netflix logins should be signed out.<br>Wifi connection should be lost<br>Bluetooth should not be in paired state<br>All installed Apps should be uninstalled or deleted and My Apps section itself could be removed from RDK UI Homepage|
+| 6 | Validate if the values changed are restored to default | Validate if the values changed in precondition(2 to 7 ) are restored to default | All of the values set to non default values prior to Factory reset, should be reverted to default values.<br>The YouTube, Prime Video and Netflix logins should be signed out.<br>WiFi connection should be lost<br>Bluetooth should not be in paired state<br>All installed Apps should be uninstalled or deleted and My Apps section itself could be removed from RDK UI Home screen|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

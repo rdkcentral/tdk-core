@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_APPS_11
 ## TestCase Name
 RDKV_CERT_MANUAL_App_YouTube_Playback_Trickplay
@@ -44,4 +44,6 @@ To validate the YouTube application AV playback and trickplay (fast forward, rew
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

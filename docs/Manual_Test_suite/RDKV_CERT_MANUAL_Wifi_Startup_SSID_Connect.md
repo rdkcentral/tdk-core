@@ -21,7 +21,7 @@ To validate that a user can successfully connect to an available Wi-Fi SSID from
 | 1 | Connect HDMI display | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display.|
 | 2 | Flash DUT or factory reset | Flash the DUT freshly prior to the test. If Wi-Fi is being tested after other tests have already been conducted, perform a factory reset via Settings > Other Settings > Advanced Settings > Device to restore the startup screens on the next boot. | The DUT should be freshly flashed or factory reset, and the startup screens should be restored on the next boot.|
 | 3 | Connect Ethernet cable | Connect the Ethernet cable to the DUT and ensure a valid Ethernet IP address is available. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
-| 4 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. Refer to the Bluetooth Remote test module for pairing instructions. | The Bluetooth remote should be paired and connected to the DUT successfully.|
+| 4 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT prior to test execution. | The Bluetooth remote should be paired and connected to the DUT successfully.|
 | 5 | Complete language selection | Complete language selection from the startup screen and navigate to the Network Configuration screen. | The language selection should be completed and the Network Configuration screen should be displayed.|
 | 6 | Ensure same network | Ensure the DUT and the PC/laptop used for SSH are on the same network. | The DUT and the PC/laptop should be on the same network.|
 | 7 | Connect serial cable | Connect the required serial cable or USB-to-serial adapter between the DUT and the PC/laptop and ensure the appropriate drivers are installed. | The serial cable or USB-to-serial adapter should be connected and the drivers should be installed and recognized.|
@@ -45,4 +45,6 @@ To validate that a user can successfully connect to an available Wi-Fi SSID from
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

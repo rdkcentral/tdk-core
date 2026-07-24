@@ -31,13 +31,15 @@ To validate that appropriate error messages are displayed when attempting to lau
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Launch app from Recommended/My Apps | Select the App tile from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Selected App should be launched successfully  (Either cold launch /hot launch based on the app's previous state)|
+| 1 | Launch app from Recommended/My Apps | Select the App tile from the My Apps/Recommended Apps section/row of RDK UI Home screen and press Enter/OK on the remote | Selected App should be launched successfully  either as a cold launch or hot launch depending on the app's previous state.|
 | 2 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | Selected Video Content AV playback should start or App should load its content|
 | 3 | Delete app file from apps directory in DUT | In box ssh console, change directory to apps directory and delete the launched app file :<br>Eg : rm com.rdkcentral.YouTube | The app related file(eg:com.rdkcentral.YouTube) should be removed but App functionality or playback shouldn't get affected.|
 | 4 | Close launched apps via Back key | Close/Exit the launched Apps by back key press on remote. | Launched App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
-| 5 | Relaunch closed app from My Apps  | Relaunch closed app from My Apps  the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Selected App should not be launched since app files are removed and app launch failed error message should be displayed on RDK UI|
+| 5 | Relaunch closed app from My Apps  | Relaunch closed app from My Apps  the My Apps/Recommended Apps section/row of RDK UI Home screen and press Enter/OK on the remote | Selected App should not be launched since app files are removed and app launch failed error message should be displayed on RDK UI|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

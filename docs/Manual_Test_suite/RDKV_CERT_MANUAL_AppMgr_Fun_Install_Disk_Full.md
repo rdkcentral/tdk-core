@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_20
 ## TestCase Name
 RDKV_CERT_MANUAL_AppMgr_Fun_Install_Disk_Full
@@ -29,9 +29,9 @@ To validate the system behavior when the DUT disk space is exhausted during an a
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Fill disk space using fallocate command | Navigate to /opt directory and execute fallocate command to use full memory :<br>cd /opt<br>fallocate -l <size to fillup> test.img | while checking the disk space using df -h it should show 100% usage for /opt|
-| 2 | Navigate to More Apps page | Select More Apps button from Recommended Apps section and press enter/Ok button on remote | More Apps page should load where all apps available in App catalogue are visible|
-| 3 | Select required app tile and press OK button| Select required App tile and press enter/Ok button on remote | Selected App should not start installing since disk space is full instead an error message should be displayed based on disk space full|
-| 4 | Launch installed app from My Apps  | Select the Installed App tile from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Selected App shouldn't launch|
+| 2 | Navigate to More Apps page | Select More Apps button from Recommended Apps section and press Enter/OK on the remote | More Apps page should load where all apps available in App catalogue are visible|
+| 3 | Select required app tile and press OK button| Select required App tile and press Enter/OK on the remote | Selected App should not start installing since disk space is full instead an error message should be displayed based on disk space full|
+| 4 | Launch installed app from My Apps  | Select the Installed App tile from the My Apps/Recommended Apps section/row of RDK UI Home screen and press Enter/OK on the remote | Selected App shouldn't launch|
 | 5 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | AV playback shouldn't start|
 | 6 | Repeat disk-full failure steps for multiple apps | Perform steps 2 - 5 on multiple apps available in more Apps tab | Expected response should be same as step 2 - 5|
 | 7 | Close launched apps via Back key | Close/Exit the launched Apps by back key press on remote. | Launched App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
@@ -39,4 +39,6 @@ To validate the system behavior when the DUT disk space is exhausted during an a
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

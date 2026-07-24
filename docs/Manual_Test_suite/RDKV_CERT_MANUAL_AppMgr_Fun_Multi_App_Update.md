@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_21
 ## TestCase Name
 RDKV_CERT_MANUAL_AppMgr_Fun_Multi_App_Update
@@ -31,13 +31,15 @@ To validate that multiple installed applications can be updated in parallel usin
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Navigate to app info icon in UI| Navigate to App Info icon in left side of the RDK UI Home screen and press enter/Ok button on remote | "App Info page should launch where we should see the Installed app's Info. Each row in App Info page displays the details of a specific application -- including the app icon, app name, app version,<br>runtime package version, and three management option -- Launch, Update, and Uninstall"|
-| 2 | Select multiple app Update buttons in parallel | Select update Button and press enter/Ok button on remote. In parallel select and press enter/ok button on remote for multiple apps from App info page | Multiple Apps should be downloaded and updated in parallel if new version of the app is available|
-| 3 | Select launch button and press enter/ok | Select launch Button and press enter/Ok button on remote to launch any required App | Selected App should be launched successfully with latest version (Either cold launch /hot launch based on the app's previous state)|
+| 1 | Navigate to app info icon in UI| Navigate to App Info icon in left side of the RDK UI Home screen and press Enter/OK on the remote | "App Info page should launch where we should see the Installed app's Info. Each row in App Info page displays the details of a specific application -- including the app icon, app name, app version,<br>runtime package version, and three management option -- Launch, Update, and Uninstall"|
+| 2 | Select multiple app Update buttons in parallel | Select update Button and press Enter/OK on the remote. In parallel select and press Enter/OK on the remote for multiple apps from App info page | Multiple Apps should be downloaded and updated in parallel if new version of the app is available|
+| 3 | Select launch button and press enter/ok | Select launch Button and press Enter/OK on the remote to launch any required App | Selected App should be launched successfully with latest version either as a cold launch or hot launch depending on the app's previous state.|
 | 4 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | Selected Video Content AV playback should start or App should load its content|
 | 5 | Close launched apps via Back key | Close/Exit the launched Apps by back key press on remote. | Launched App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

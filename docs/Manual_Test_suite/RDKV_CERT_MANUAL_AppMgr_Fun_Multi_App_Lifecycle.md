@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_08
 ## TestCase Name
 RDKV_CERT_MANUAL_AppMgr_Fun_Multi_App_Lifecycle
@@ -31,10 +31,10 @@ To validate the lifecycle management behavior of multiple applications launched 
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Verify YouTube app is installed | Validate that YouTube App is already Installed and available in the My Apps/Recommended Apps section/row of RDK UI Homepage. If YouTube is not installed follow the instructions of Precondition 4 | YouTube App should be installed and Tile should be Available in My Apps/Recommended Apps section/row of RDK UI Homepage.|
-| 2 | Verify Amazon Prime app is installed | Validate that Amazon Prime App is already Installed and available in the My Apps/Recommended Apps section/row of RDK UI Homepage. If Amazon Prime is not installed follow the instructions of Precondition 4 | Amazon Prime App should be installed and Tile should be Available in My Apps/Recommended Apps section/row of RDK UI Homepage.|
-| 3 | Verify other apps are installed | Validate that other Apps is already Installed and available in the My Apps/Recommended Apps section/row of RDK UI Homepage. If Other Apps are not installed follow the instructions of Precondition 4 | Other App should be installed and Tile should be Available in My Apps/Recommended Apps section/row of RDK UI Homepage.|
-| 4 | Launch any installed app from home screen | Select any installed Apps from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Installed Apps should be launched successfully (cold launch)|
+| 1 | Verify YouTube app is installed | Validate that YouTube App is already Installed and available in the My Apps/Recommended Apps section/row of RDK UI Home screen. If YouTube is not installed follow the instructions of Precondition 4 | YouTube App should be installed and Tile should be Available in My Apps/Recommended Apps section/row of RDK UI Home screen.|
+| 2 | Verify Amazon Prime app is installed | Validate that Amazon Prime App is already Installed and available in the My Apps/Recommended Apps section/row of RDK UI Home screen. If Amazon Prime is not installed follow the instructions of Precondition 4 | Amazon Prime App should be installed and Tile should be Available in My Apps/Recommended Apps section/row of RDK UI Home screen.|
+| 3 | Verify other apps are installed | Validate that other Apps is already Installed and available in the My Apps/Recommended Apps section/row of RDK UI Home screen. If Other Apps are not installed follow the instructions of Precondition 4 | Other App should be installed and Tile should be Available in My Apps/Recommended Apps section/row of RDK UI Home screen.|
+| 4 | Launch any installed app from home screen | Select any installed Apps from the My Apps/Recommended Apps section/row of RDK UI Home screen and press Enter/OK on the remote | Installed Apps should be launched successfully (cold launch)|
 | 5 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | Selected Video Content AV playback should start or App should load its content|
 | 6 | Press Home key to suspend app | Press Home key from remote on the launched Apps | App should not terminate but goes to a suspended or hibernated state|
 | 7 | Repeat launch/suspend steps for multiple apps | Repeat the steps 4 - 6 on multiple Apps | Expected Response should be same as step 4 -6|
@@ -43,4 +43,6 @@ To validate the lifecycle management behavior of multiple applications launched 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

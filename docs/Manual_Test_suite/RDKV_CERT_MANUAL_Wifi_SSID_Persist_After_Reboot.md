@@ -35,10 +35,12 @@ To validate that the DUT retains its Wi-Fi SSID connection and IP address after 
 | 1 | Reboot DUT | Reboot the DUT. | The DUT should reboot successfully and the RDK UI Home screen should be displayed.|
 | 2 | Verify network info after reboot | Navigate to Settings > Network Configuration > Network Info and verify the details. | The SSID, IP address, and all other details of the previously connected Wi-Fi network should be populated correctly.|
 | 3 | SSH via wlan0 IP | SSH to the DUT using the wlan0 IP address. | The SSH connection should be established successfully using the wlan0 IP address.|
-| 4 | Verify internet via ping | In the SSH console, execute the ping command.<br>Command: `ping google.com` | Ping packets should be transmitted and received successfully, confirming internet connectivity is maintained after reboot.|
+| 4 | Verify internet via ping | In the SSH console, execute the ping command.<br>Command: `ping -c 5 google.com` | Ping packets should be transmitted and received successfully, confirming internet connectivity is maintained after reboot.|
 | 5 | Launch app and play content | On the RDK UI Home screen, open any application that requires internet and play any content. | The application should open successfully and content playback should start with proper audio and video output.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

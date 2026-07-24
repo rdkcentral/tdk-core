@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_14
 ## TestCase Name
 RDKV_CERT_MANUAL_AppMgr_Fun_Pkg_Lock_Uninstall
@@ -31,7 +31,7 @@ To validate that the package lock mechanism on the DUT prevents an active or loc
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Launch app from Recommended/My Apps | Select the App tile from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | Selected App should be launched successfully  (Either cold launch /hot launch based on the app's previous state)|
+| 1 | Launch app from Recommended/My Apps | Select the App tile from the My Apps/Recommended Apps section/row of RDK UI Home screen and press Enter/OK on the remote | Selected App should be launched successfully  either as a cold launch or hot launch depending on the app's previous state.|
 | 2 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | Selected Video Content AV playback should start or App should load its content|
 | 3 | Attempt to uninstall active app (expect failure) | Execute the below curl commands to Uninstall the Active App :<br>`curl -d '{ "jsonrpc": 2.0, "id": 15, "method": "org.rdk.PackageManagerRDKEMS.uninstall", "params": { "packageId": "<Package_name>" } }' http://127.0.0.1:9998/jsonrpc` | The uninstall API should return an error response, confirming that active or locked packages cannot be uninstalled while in use.|
 | 4 | Verify active app functionality is unaffected | Validate that App playback or functionality got affected or not | Active App functionality shouldn't get affected and App shouldn't close unexpectedly or playback should not close|
@@ -40,4 +40,6 @@ To validate that the package lock mechanism on the DUT prevents an active or loc
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

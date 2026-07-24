@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_WIFI_06
 ## TestCase Name
 RDKV_CERT_MANUAL_Wifi_Switch_SSID_Diff_Nw
@@ -33,9 +33,9 @@ To validate that the DUT can successfully switch its Wi-Fi connection to a diffe
 |-|---------|-----------------|----------------|
 | 1 | Reboot DUT | Reboot the DUT. | The DUT should reboot successfully and the RDK UI Home screen should be displayed.|
 | 2 | Navigate to Settings | Navigate to Settings using the remote. | The Settings screen should launch.|
-| 3 | Open network configuration | Select "Network Configuration". | The Network Configuration screen should load with the Network Interface value displayed as WiFi.|
-| 4 | Select network interface | Select "Network Interface". | The Network Interface selection screen should launch.|
-| 5 | Select WiFi interface | Select "WiFi". | The Wi-Fi network selection screen should load with the currently connected SSID in a ticked state. All available SSIDs (both 2.4 GHz and 5 GHz) should be listed.|
+| 3 | Open network configuration | From the Settings menu, select "Network Configuration" using the Bluetooth remote to open the network configuration options. | The Network Configuration screen should load with the Network Interface value displayed as WiFi.|
+| 4 | Select network interface | On the Network Configuration screen, select "Network Interface" using the Bluetooth remote to open the interface type selection options. | The Network Interface selection screen should launch.|
+| 5 | Select WiFi interface | On the Network Interface selection screen, select "WiFi" using the Bluetooth remote to open the Wi-Fi SSID list. | The Wi-Fi network selection screen should load with the currently connected SSID in a ticked state. All available SSIDs (both 2.4 GHz and 5 GHz) should be listed.|
 | 6 | Select SSID on different network | Select a different SSID from a different network. | The password entry screen should launch with an on-screen keyboard and Connect/Cancel buttons.|
 | 7 | Enter password and connect | Enter the correct password and press Connect. | The DUT should connect to the newly selected SSID. The Wi-Fi network selection screen should reload with the new SSID in a ticked state.|
 | 8 | Navigate back to settings | Press the Back button twice. | The Network Configuration screen should load with the Network Interface value as WiFi.|
@@ -48,4 +48,6 @@ To validate that the DUT can successfully switch its Wi-Fi connection to a diffe
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

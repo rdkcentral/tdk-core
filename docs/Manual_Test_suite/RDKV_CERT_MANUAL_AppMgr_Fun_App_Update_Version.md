@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_16
 ## TestCase Name
 RDKV_CERT_MANUAL_AppMgr_Fun_App_Update_Version
@@ -28,14 +28,16 @@ To validate that the Update button in the App Info screen is correctly activated
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Navigate to app info icon in | Navigate to App Info icon in left side of the RDK UI Home screen and press enter/Ok button on remote | "App Info page should launch where we should see the Installed app's Info. Each row in App Info page displays the details of a specific application -- including the app icon, app name, app version,<br>runtime package version, and three management option -- Launch, Update, and Uninstall"|
+| 1 | Navigate to app info icon in | Navigate to App Info icon in left side of the RDK UI Home screen and press Enter/OK on the remote | "App Info page should launch where we should see the Installed app's Info. Each row in App Info page displays the details of a specific application -- including the app icon, app name, app version,<br>runtime package version, and three management option -- Launch, Update, and Uninstall"|
 | 2 | Verify Update button state in App Info page | Validate that Update button is active or grayed out. | Based on this versioning info from App catalogue server if new version of App is available update button should be displayed as active and if App is already been in latest version then update button should be in grayed out state|
-| 3 | If update button is in active | If Update button is in active state select and  press enter/Ok button on remote | A buffering/loading indicator should be displayed on the app tile during updating to the latest version and a green tick should be displayed for 2-3 seconds on the app tile after successful update.|
-| 4 | Launch updated app from App Info page | Select Launch button of the same App and press enter/Ok button on remote | Updated Selected App with latest vesrion should be launched successfully|
+| 3 | If update button is in active | If Update button is in active state select and  press Enter/OK on the remote | A buffering/loading indicator should be displayed on the app tile during updating to the latest version and a green tick should be displayed for 2-3 seconds on the app tile after successful update.|
+| 4 | Launch updated app from App Info page | Select Launch button of the same App and press Enter/OK on the remote | Updated Selected App with latest version should be launched successfully|
 | 5 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | Selected Video Content AV playback should start or App should load its content|
 | 6 | Close apps via Back key | Close/Exit the Apps by back key press on remote. | App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

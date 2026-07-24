@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_XDIAL_05
 ## TestCase Name
 RDKV_CERT_MANUAL_Xdial_Deregister_Persist_Post_Reboot
@@ -44,4 +44,6 @@ To validate that Dynamic XDial support is de-registered from the DUT after a reb
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

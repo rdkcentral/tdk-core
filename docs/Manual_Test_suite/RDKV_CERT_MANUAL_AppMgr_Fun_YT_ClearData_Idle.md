@@ -32,7 +32,7 @@ To validate that the user account login data for the YouTube application is clea
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Clear YouTube app data via clearAppData API | Clear the YouTube App data using the clearAppData API by executing below curl command  :<br>`curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 1, "method": "org.rdk.AppManager.clearAppData", "params": {"appId": "<YouTube App ID>"}}' http://127.0.0.1:9998/jsonrpc` | The `clearAppData` API should return a successful response, and the YouTube App should be closed once the API execution is completed.|
-| 2 | Launch YouTube app from My Apps | Launch YouTube App from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | YouTube App should be launched successfully (cold launch)|
+| 2 | Launch YouTube app from My Apps | Launch YouTube App from the My Apps/Recommended Apps section/row of RDK UI Home screen and press Enter/OK on the remote | YouTube App should be launched successfully (cold launch)|
 | 3 | Validate that the "sign in" option is visible | Validate that the "Sign in" option is prominently visible in the sidebar or account menu, indicating no account is currently linked | "Sign in" option should be visible in the sidebar or account menu of YouTube App and no account should be linked|
 | 4 | Sign in to YouTube and verify A/V playback | Sign in with a valid user credentials and Check the YouTube App AV playback | Sign in should be successful and YouTube App AV playback should happen as expected / without errors|
 | 5 | Close YouTube app via Back key | Close/Exit the YouTube App by back key press on remote. | YouTube App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
@@ -40,4 +40,6 @@ To validate that the user account login data for the YouTube application is clea
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

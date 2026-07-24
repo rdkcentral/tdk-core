@@ -29,9 +29,11 @@ To validate that the DUT correctly handles IPv6 address queries per network inte
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Query public IPv6 address for eth0 interface | Execute the following curl command to query the public IPv6 address specifically for the Ethernet (eth0) interface.<br>Command: `curl -d '{ "jsonrpc": "2.0", "id": 42, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": {"interface": "eth0", "ipversion": "IPv6" } }' http://127.0.0.1:9998/jsonrpc` | The response should return}, confirming that no global IPv6 address is available on the eth0 interface. The wlan0 IPv6 address should not be returned when eth0 is explicitly queried.|
+| 1 | Query public IPv6 address for eth0 interface | Execute the following curl command to query the public IPv6 address specifically for the Ethernet (eth0) interface.<br>Command: `curl -d '{ "jsonrpc": "2.0", "id": 42, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": {"interface": "eth0", "ipversion": "IPv6" } }' http://127.0.0.1:9998/jsonrpc` | The API response should return `"success":false` or an empty `publicIP` field, confirming that no global IPv6 address is available on the eth0 interface. The wlan0 IPv6 address should not be returned when eth0 is explicitly queried.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPMGR_FUNC_07
 ## TestCase Name
 RDKV_CERT_MANUAL_AppMgr_Fun_ClearAll_AppData
@@ -36,7 +36,7 @@ To validate that user account logins for all installed applications are simultan
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Clear all installed app data via clearAllAppData API | Clear all the installed App data using the clearAllAppData API by executing below curl command  :<br>`curl -H 'content-type:text/plain;' --data-binary '{"jsonrpc": 2.0, "id": 0, "method": "org.rdk.AppManager.clearAllAppData"}' http://127.0.0.1:9998/jsonrpc` | The `clearAllAppData` API should return a successful response, confirming that all installed app data has been cleared.|
-| 2 | Launch all installed apps one by one | Launch all the installed Apps one by one from the My Apps/Recommended Apps section/row of RDK UI Homepage and press enter/Ok button on remote | All the installed Apps should be launched successfully (cold launch)|
+| 2 | Launch all installed apps one by one | Launch all the installed Apps one by one from the My Apps/Recommended Apps section/row of RDK UI Home screen and press Enter/OK on the remote | All the installed Apps should be launched successfully (cold launch)|
 | 3 | Validate all apps show sign in page | Validate that All the Apps have Sign in page is loaded or not | All installed Apps sign in page should be loaded indicating successful clear data on all apps|
 | 4 | Sign in to all apps and verify A/V playback | Sign in with a valid user credentials and Check the AV playback of all tha Apps | Sign in should be successful and App AV playback should happen as expected / without errors on all the Apps|
 | 5 | Close apps via Back key | Close/Exit the Apps by back key press on remote. | All Apps should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
@@ -44,4 +44,6 @@ To validate that user account logins for all installed applications are simultan
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_APPS_12
 ## TestCase Name
 RDKV_CERT_MANUAL_App_YouTube_Exit_Back_Key
@@ -41,4 +41,6 @@ To validate that the YouTube application can be exited gracefully using the Back
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

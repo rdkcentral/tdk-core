@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_APPS_13
 ## TestCase Name
 RDKV_CERT_MANUAL_App_YouTube_Hibernate_Home_Key
@@ -43,4 +43,6 @@ To validate that the YouTube application hibernates correctly when the Home key 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

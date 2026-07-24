@@ -40,4 +40,6 @@ To validate that the DUT automatically enters DEEP SLEEP mode after the inactivi
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

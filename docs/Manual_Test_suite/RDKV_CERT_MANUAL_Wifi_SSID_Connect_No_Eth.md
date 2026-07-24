@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_WIFI_08
 ## TestCase Name
 RDKV_CERT_MANUAL_Wifi_SSID_Connect_No_Eth
@@ -34,7 +34,7 @@ To validate that the DUT can successfully connect to a new Wi-Fi SSID when no Et
 | 1 | Open network configuration | Navigate to Settings > Network Configuration from the RDK UI Home screen. | The Network Configuration screen should load with the Network Interface value displayed as WiFi.|
 | 2 | Open network info | Select "Network Info" and press OK. | The Network Info screen should load with Status displayed as "Disconnected" and all other fields as N/A.|
 | 3 | Navigate to network interface | Press Back, navigate to "Network Interface", and press OK. | The Network Interface selection screen should launch listing WiFi and Ethernet as options.|
-| 4 | Select WiFi interface | Select "WiFi". | The Wi-Fi network selection screen should load with the Wi-Fi On/Off toggle in the ON state. All available SSIDs (both 2.4 GHz and 5 GHz) should be listed.|
+| 4 | Select WiFi interface | On the Network Interface selection screen, select "WiFi" using the Bluetooth remote to open the Wi-Fi SSID list. | The Wi-Fi network selection screen should load with the Wi-Fi On/Off toggle in the ON state. All available SSIDs (both 2.4 GHz and 5 GHz) should be listed.|
 | 5 | Select SSID and connect | Select any available SSID, enter the correct password using the on-screen keyboard, and press Connect. | The DUT should connect to the selected SSID. The Wi-Fi network selection screen should reload with the connected SSID in a ticked state.|
 | 6 | Navigate back to settings | Press the Back button twice. | The Network Configuration screen should load with the Network Interface value as WiFi.|
 | 7 | Verify network info | Navigate to "Network Info" and press OK. | The Network Info screen should load displaying the Wi-Fi IP address and SSID details with all fields correctly populated.|
@@ -46,4 +46,6 @@ To validate that the DUT can successfully connect to a new Wi-Fi SSID when no Et
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

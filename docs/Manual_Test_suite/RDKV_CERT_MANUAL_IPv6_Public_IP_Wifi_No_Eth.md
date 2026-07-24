@@ -29,9 +29,11 @@ To validate that the DUT returns the correct public IPv6 address for the Wi-Fi i
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Query public IPv6 address via API | Execute the following curl command to retrieve the public IPv6 IP address.<br>Command: `curl -d '{ "jsonrpc": "2.0", "id": 42, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": { "ipversion": "IPv6" } }' http://127.0.0.1:9998/jsonrpc` | The public IPv6 address should be returned via the Wi-Fi interface. The response should be similar to:}. The interface field should be wlan0 since Ethernet is disconnected.|
+| 1 | Query public IPv6 address via API | Execute the following curl command to retrieve the public IPv6 IP address.<br>Command: `curl -d '{ "jsonrpc": "2.0", "id": 42, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": { "ipversion": "IPv6" } }' http://127.0.0.1:9998/jsonrpc` | The public IPv6 address should be returned via the Wi-Fi interface. The API response should return `"success":true` with a valid public IPv6 address in the `publicIP` field. The `interface` field should be `wlan0` since Ethernet is disconnected.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_WIFI_11
 ## TestCase Name
 RDKV_CERT_MANUAL_Wifi_Dual_Band_SSID_Connect
@@ -35,7 +35,7 @@ To validate that the DUT can successfully connect to both a 2.4 GHz and a 5 GHz 
 | 1 | Reboot DUT | Reboot the DUT. | The DUT should reboot successfully and the RDK UI Home screen should be displayed.|
 | 2 | Navigate to Settings | Navigate to Settings (gear icon at top right of the RDK UI Home screen) using the remote. | The Settings screen should launch.|
 | 3 | Open network configuration | Select "Network Configuration" from the Settings menu. | The Network Configuration screen should load with the Network Interface value displayed as ETHERNET.|
-| 4 | Select network interface | Select "Network Interface". | The Network Interface selection screen should launch.|
+| 4 | Select network interface | On the Network Configuration screen, select "Network Interface" using the Bluetooth remote to open the interface type selection options. | The Network Interface selection screen should launch.|
 | 5 | Select WiFi interface | Select "WiFi" from the Network Interface screen. | The Wi-Fi network selection screen should load with the Wi-Fi On/Off toggle in the ON state. All available SSIDs (both 2.4 GHz and 5 GHz) should be listed. The previously connected SSID should be in a ticked state.|
 | 6 | Select 2.4 GHz SSID | Select a 2.4 GHz Wi-Fi SSID and press OK. | The password entry screen should launch.|
 | 7 | Enter password and connect | Enter the correct password using the on-screen keyboard and press the Connect button. | The DUT should connect to the selected 2.4 GHz SSID. The Wi-Fi network selection screen should reload with the connected SSID in a ticked state.|
@@ -47,7 +47,7 @@ To validate that the DUT can successfully connect to both a 2.4 GHz and a 5 GHz 
 | 13 | Launch video app on 2.4 GHz | Navigate to the RDK UI Home screen and install any video app (like YouTube), launch it and play any video. | The application should be installed and launch successfully and video playback should start with proper audio and video output.|
 | 14 | Navigate to Settings | Navigate to Settings using the remote. | The Settings screen should launch.|
 | 15 | Open network configuration | Select "Network Configuration" from the Settings menu. | The Network Configuration screen should load with the Network Interface value displayed as WiFi.|
-| 16 | Select network interface | Select "Network Interface". | The Network Interface selection screen should launch.|
+| 16 | Select network interface | On the Network Configuration screen, select "Network Interface" using the Bluetooth remote to open the interface type selection options. | The Network Interface selection screen should launch.|
 | 17 | Select WiFi interface | Select "WiFi" from the Network Interface screen. | The Wi-Fi network selection screen should load with the Wi-Fi On/Off toggle in the ON state. All available SSIDs (both 2.4 GHz and 5 GHz) should be listed.|
 | 18 | Select 5 GHz SSID | Select a 5 GHz Wi-Fi SSID and press OK. | The password entry screen should launch.|
 | 19 | Enter password and connect | Enter the correct password using the on-screen keyboard and press the Connect button. | The DUT should connect to the selected 5 GHz SSID. The Wi-Fi network selection screen should reload with the connected SSID in a ticked state.|
@@ -59,4 +59,6 @@ To validate that the DUT can successfully connect to both a 2.4 GHz and a 5 GHz 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

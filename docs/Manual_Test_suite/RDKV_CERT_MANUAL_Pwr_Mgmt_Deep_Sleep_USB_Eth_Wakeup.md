@@ -39,4 +39,6 @@ To validate that the DUT wakes up from DEEP SLEEP mode upon connection of a USB 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

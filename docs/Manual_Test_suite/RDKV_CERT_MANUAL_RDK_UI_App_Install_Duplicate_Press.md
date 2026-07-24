@@ -30,7 +30,7 @@ To validate that pressing an installed app tile from various locations in the RD
 |-|---------|-----------------|----------------|
 | 1 | Launch installed app from Recommended Apps | Navigate to Recommended Apps and press on any App tile which is already installed | The selected App should launch|
 | 2 | Close app via Back key | Press Back button(number of back button presses may vary depending on the app and app state)  so that app can be closed | Launched App should close and The RDK UI Home screen should launch.|
-| 3 | Open More Apps page | Press on More Apps buutton and press on the same App tile (which we opened in step 1) | The selected App should launch|
+| 3 | Open More Apps page | Press on More Apps button and press on the same App tile (which we opened in step 1) | The selected App should launch|
 | 4 | Close app via Back key | Press Back button(number of back button presses may vary depending on the app and app state)  so that app can be closed | Launched App should close and The RDK UI Home screen should launch.|
 | 5 | Launch installed app from My Apps | In My Apps section, press on the same App tile (which we opened in step 1) | The selected App should launch|
 | 6 | Close app via Back key | Press Back button(number of back button presses may vary depending on the app and app state)  so that app can be closed | Launched App should close and The RDK UI Home screen should launch.|
@@ -41,4 +41,6 @@ To validate that pressing an installed app tile from various locations in the RD
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

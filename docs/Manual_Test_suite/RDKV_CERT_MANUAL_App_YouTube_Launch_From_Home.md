@@ -1,4 +1,4 @@
-﻿## TestCase ID
+## TestCase ID
 RDKV_MANUAL_APPS_01
 ## TestCase Name
 RDKV_CERT_MANUAL_App_YouTube_Launch_From_Home
@@ -35,4 +35,6 @@ To validate that the YouTube application can be successfully launched from the F
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>
