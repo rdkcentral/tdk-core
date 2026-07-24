@@ -473,6 +473,13 @@ Refer to [Section 8](#8-test-results-and-logs) for instructions on retrieving th
 - Ensure the DUT has network access to the `app_download_server` to download and install the Browser Test application.
 - Confirm `browser_test_app_bundle` and `installed_app_ver` in `device.conf` match the bundle available on your test server.
 
+> **App Bundle Setup — Required Before First Execution**: The `browser_test_app_bundle` is a custom RDK application built from `Browser_test_app.html`. Before running these tests for the first time, complete the following setup:
+>
+> 1. Locate the source files in the `image_formats_test_resources/` directory: `Browser_test_app.html`, `JpegSample.jpg`, `bizcom.png`, `1.webp`, `Cup.webp`.
+> 2. Upload all files from `image_formats_test_resources/` to your web server so they are accessible via a browser URL.
+> 3. Create the bundle JSON configuration file (`com.rdkcentral.browser_test.json`) and set the hosted `Browser_test_app.html` URL (e.g. `https://<server>/Browser_test_app.html`) as the application entry point. Follow the full packaging procedure described in the RDK wiki: [Building App packages — RDK Central Wiki](https://wiki.rdkcentral.com/spaces/RDK/pages/463539631/Building+App+packages)
+> 4. Upload the generated `.bolt` bundle to the `app_download_server` and update `browser_test_app_bundle` and `app_download_server` in `device.conf` to match.
+
 **Test Cases**:
 
 | # | TC ID | Description |
@@ -595,6 +602,14 @@ Refer to [Section 8](#8-test-results-and-logs) for instructions on retrieving th
 **Module Prerequisites**:
 - Ensure the DUT has network access to the `app_download_server` to download and install the WebAudio manual test application.
 - Confirm `webaudio_app_bundle` and `installed_app_ver` in `device.conf` match the bundle available on your test server.
+
+> **App Bundle Setup — Required Before First Execution**: The `webaudio_app_bundle` is a custom RDK application built from `WebAudio_test_Manual.html`. Before running these tests for the first time, complete the following setup:
+>
+> 1. Obtain `WebAudio_test_Manual.html` and download the required WebAudio test components (audio files and inner HTML pages) from the WebAudio test resources wiki: `<WebAudio_Components_Wiki_URL>`.
+> 2. Upload `WebAudio_test_Manual.html` and all test components to your web server so they are accessible via a browser URL.
+> 3. Create the bundle JSON configuration file (`com.rdkcentral.webaudio_manual.json`) and set the hosted `WebAudio_test_Manual.html` URL (e.g. `https://<server>/WebAudio_test_Manual.html`) as the application entry point. Follow the full packaging procedure described in the RDK wiki: [Building App packages — RDK Central Wiki](https://wiki.rdkcentral.com/spaces/RDK/pages/463539631/Building+App+packages)
+> 4. Upload the generated `.bolt` bundle to the `app_download_server` and update `webaudio_app_bundle` and `app_download_server` in `device.conf` to match.
+
 - Connect a speaker or headset to the DUT — these tests require auditory confirmation of audio output.
 
 **Test Cases**:
