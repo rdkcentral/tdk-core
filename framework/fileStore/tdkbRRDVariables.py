@@ -29,8 +29,18 @@ dynamic_json_file = "/tmp/RDK-RRD-Device/etc/rrd/remote_debugger.json"
 #RRD Log file
 rrd_log_file = "/rdklogs/logs/remote-debugger.log.0"
 
-#Upload/Download Server URL
-server_url = ""
+#The upload and download server IP can be the same, with port number differentiating upload server url from download server url.
+
+#Upload Server URL
+#Format - http://<server_ip>:<port>
+upload_server_url = ""
+
+#Download Server URL - No need to specify port
+#Format - http://<server_ip>
+download_server_url = ""
 
 #UPSTREAM_RRD_URL Path
 upstream_rrd_url_path = "/lib/rdk/uploadRRDLogs.sh"
+
+# Debug Report Tracker File - This file is used to track the debug reports that have been seen by the RRD Debug Report Tracker process.
+debug_report_tracker_file = "/tmp/rrd_debug_report_seen.txt"
