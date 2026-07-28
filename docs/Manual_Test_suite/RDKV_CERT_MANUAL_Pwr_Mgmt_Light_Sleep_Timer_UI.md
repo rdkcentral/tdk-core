@@ -29,8 +29,8 @@ To validate that the DUT automatically enters LIGHT SLEEP mode after the inactiv
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Navigate to Energy Saver settings | In RDK UI, navigate to Settings → Other Settings → Energy Saver. | The Energy Saver screen should load successfully and display two options: Deep Sleep and Light Sleep.|
-| 2 | Validate and select Light Sleep mode | Validate that the Light Sleep option is selected (indicated by a tick mark). If not, select Light Sleep. | Light Sleep should be the default sleep mode after a fresh flash. A tick mark should appear next to the Light Sleep option upon selection.|
+| 1 | Navigate to Energy Saver settings | In RDK UI, navigate to Settings → Other Settings → Energy Saver. | The Energy Saver screen should load successfully and display the Energy Saver toggle option. |
+| 2 | Ensure Energy Saver toggle is disabled | Ensure the Energy Saver toggle is set to OFF. | The Energy Saver toggle should be set to OFF, activating Light Sleep mode. |
 | 3 | Navigate to Sleep Timer settings | In RDK UI, navigate to Settings → Other Settings → Sleep Timer. | The Sleep Timer screen should load and display the available time frame options: OFF, 15 Minutes, 30 Minutes, 45 Minutes, and 1 Hour.|
 | 4 | Select 15 Minutes sleep timer | Select the 15 Minutes radio button and navigate to the RDK UI Home screen by pressing the Home key. | The 15 Minutes option should be selected and the RDK UI Home screen should launch upon pressing the Home key.|
 | 5 | Remain idle to trigger sleep mode | Remain idle on the RDK UI Home screen for more than 15 minutes without any key presses. | No changes should occur for the first 15 minutes. After 15 minutes of inactivity, the DUT UI should turn off, indicating the device has entered Light Sleep mode.|

@@ -23,7 +23,7 @@ To validate that the DUT wakes up from Light Sleep state when the HDMI input sou
 | 2 | Enable CEC feature on TV | Ensure the connected TV has the CEC feature enabled. | The CEC feature should be enabled on the connected TV.|
 | 3 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
 | 4 | Enable CEC Control on DUT | Enable the CEC Control toggle on the DUT from Settings > Other Settings > Advanced Settings. | The CEC Control toggle should be turned ON on the DUT.|
-| 5 | Configure Energy Saver to Light Sleep | Configure Energy Saver to "Light Sleep" mode from Settings > Other Settings. | The Energy Saver should be set to Light Sleep mode on the DUT.|
+| 5 | Configure Energy Saver for Light Sleep | Ensure the Energy Saver toggle is set to OFF from Settings > Other Settings > Energy Saver. | The Energy Saver toggle should be set to OFF, activating Light Sleep mode.|
 | 6 | Ensure SSH or console access | Ensure that SSH access or serial console access to the DUT is available from the PC/laptop. | SSH or serial console access should be available and functional on the DUT.|
 
 <a name="head.TestSteps"></a>

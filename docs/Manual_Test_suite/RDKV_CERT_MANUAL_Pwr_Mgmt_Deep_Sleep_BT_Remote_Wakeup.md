@@ -29,8 +29,8 @@ To validate that the DUT enters and exits DEEP SLEEP mode correctly when woken u
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Navigate to Energy Saver settings | In RDK UI, navigate to Settings → Other Settings → Energy Saver. | The Energy Saver screen should load successfully and display two options: Deep Sleep and Light Sleep.|
-| 2 | Select Deep Sleep mode | Select the Deep Sleep option. | A tick mark should appear next to the Deep Sleep option upon selection.|
+| 1 | Navigate to Energy Saver settings | In RDK UI, navigate to Settings → Other Settings → Energy Saver. | The Energy Saver screen should load successfully and display the Energy Saver toggle option. |
+| 2 | Enable Energy Saver toggle | Enable the Energy Saver toggle by setting it to ON. | The Energy Saver toggle should be set to ON, activating Deep Sleep mode. |
 | 3 | Enter sleep mode via Power key on remote | Press the Power key from the Bluetooth-paired remote control. | The DUT UI should turn off, indicating the device has entered Deep Sleep mode.|
 | 4 | Attempt SSH to verify Deep Sleep state | Attempt to SSH into the DUT from the PC/laptop. | The DUT should not be accessible via SSH, confirming the device is in Deep Sleep mode.|
 | 5 | Wake DUT from Deep Sleep via Power key | Wake up the DUT from Deep Sleep mode by pressing the Power key on the Bluetooth-paired RCU (Remote Control Unit). | The DUT should wake up from Deep Sleep mode and the RDK UI should turn on.|

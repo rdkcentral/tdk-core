@@ -29,7 +29,7 @@ To validate that the DUT wakes up from DEEP SLEEP mode upon connection of a USB 
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Navigate to Energy Saver settings | From the RDK UI Home screen, navigate to Settings → Other Settings → Energy Saver and select the Deep Sleep option. | The Deep Sleep mode should be enabled with a tick mark next to the Deep Sleep option.|
+| 1 | Navigate to Energy Saver settings | From the RDK UI Home screen, navigate to Settings → Other Settings → Energy Saver and enable the Energy Saver toggle by setting it to ON. | The Energy Saver toggle should be set to ON, activating Deep Sleep mode. |
 | 2 | Navigate to RDK UI Home screen | Navigate to the RDK UI Home screen by pressing the Home button. | The RDK UI Home screen should launch.|
 | 3 | Enter Deep Sleep mode via Power key | Press the Power button on the Bluetooth-paired remote to put the DUT into Deep Sleep mode. | The DUT UI should turn off. The serial/SSH console should not be accessible, confirming the device has entered Deep Sleep mode.|
 | 4 | Connect USB Ethernet dongle to DUT | Connect a USB Ethernet dongle to the DUT. | The DUT UI should turn on and the serial/SSH console should become accessible, indicating the DUT has woken up from Deep Sleep mode.|

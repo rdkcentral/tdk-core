@@ -30,8 +30,8 @@ To validate the DUT behavior when both the Screen Saver and Light Sleep inactivi
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Navigate to Energy Saver settings | In RDK UI, navigate to Settings → Other Settings → Energy Saver. | The Energy Saver screen should load successfully and display two options: Deep Sleep and Light Sleep.|
-| 2 | Validate and select Light Sleep mode | Validate that the Light Sleep option is selected (indicated by a tick mark). If not, select Light Sleep. | Light Sleep should be the default sleep mode after a fresh flash. A tick mark should appear next to the Light Sleep option upon selection.|
+| 1 | Navigate to Energy Saver settings | In RDK UI, navigate to Settings → Other Settings → Energy Saver. | The Energy Saver screen should load successfully and display the Energy Saver toggle option. |
+| 2 | Ensure Energy Saver toggle is disabled | Ensure the Energy Saver toggle is set to OFF. | The Energy Saver toggle should be set to OFF, activating Light Sleep mode. |
 | 3 | Navigate to Sleep Timer settings | In RDK UI, navigate to Settings → Other Settings → Sleep Timer. | The Sleep Timer screen should load and display the available time frame options: OFF, 15 Minutes, 30 Minutes, 45 Minutes, and 1 Hour.|
 | 4 | Select 15 Minutes sleep timer | Select the 15 Minutes radio button and press the Back button. | The 15 Minutes option should be selected and the Settings → Other Settings screen should launch.|
 | 5 | Validate Screen Saver setting | Validate the Screen Saver value in Settings → Other Settings. | The Screen Saver value should be set to Off by default (unless previously changed).|

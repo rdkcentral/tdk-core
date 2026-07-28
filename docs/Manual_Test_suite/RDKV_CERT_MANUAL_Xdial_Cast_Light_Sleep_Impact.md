@@ -26,6 +26,7 @@ To validate the XDial casting session behavior when the DUT enters Light Sleep m
 | 6 | Sign in to YouTube and verify A/V playback | Since YouTube is a premium application, sign in with valid user credentials and validate AV playback prior to test execution. | Sign-in should succeed and A/V playback should be functional in the YouTube application.|
 | 7 | Verify YouTube launch and premium features | Validate that YouTube launches from the RDK UI and that purchased contents and premium features are accessible. | The YouTube application should launch correctly from the RDK UI and purchased content and premium features should be accessible.|
 | 8 | Pair Bluetooth remote | The Bluetooth remote shall be paired and connected to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
+| 9 | Configure Energy Saver for Light Sleep | Ensure the Energy Saver toggle is set to OFF from Settings > Other Settings > Energy Saver. | The Energy Saver toggle should be set to OFF, activating Light Sleep mode.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps
