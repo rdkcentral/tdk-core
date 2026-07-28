@@ -175,6 +175,7 @@ pre_condition_description() {
             $'\n\n\nTestcaseID : TC_SYSTEM_MANUAL_02\n\n\nTestcase description : Verify the running status of Wpe framework processes\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. Device should be connected to either Wifi or etherent network\n\n\n'
             $'\n\n\nTestcaseID : TC_SYSTEM_MANUAL_03\n\n\nTestcase description : Verify the log rollover RDK functionality\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\n\n'
             $'\n\n\nTestcaseID : __TC_ID__\n\n\nTestcase description : Verify the Speech synthesis TTS | Audio decoding | Audio Context details via WebAudio App\n\n[TEST STEPS]\n\nPre-condition   : 1. WebAudio App should be installed if its not installed in device\n\t\t  2. TV should be connected with the HDMI port and source should be selected\n\t\t  3. Required Audio files and inner Htmls should be hosted in the same server where Webaudio App is hosted\n\t\t  4. Device should be connected to network\n\n\n'
+            $'\n\n\nTestcaseID : TC_XCONF_MANUAL_01\n\n\nTestcase description : Verify the XCONF Firmware upgrade behaviour using rdkservice API\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be connected to network via Ethernet prior to testcase execution\n\t\t  2. DUT should have valid XCONF rules/Configuration available from the XCONF server\n\t\t  3. Firmware file to upgrade should be available on the configured download server\n\t\t  4. device.conf should be configured with valid XCONF server URL, firmware filename, and API key token\n\n\n'
 
    )
     
@@ -227,6 +228,7 @@ pre_condition_description() {
    "TC_SYSTEM_MANUAL_02")        printf "%s" "${pre_description_arr[45]}" ;; 
    "TC_SYSTEM_MANUAL_03")        printf "%s" "${pre_description_arr[46]}" ;;
    TC_WEBAUDIO_MANUAL_0[1-9]|TC_WEBAUDIO_MANUAL_1[0-5]) printf "%s" "${pre_description_arr[47]//__TC_ID__/$testcase_id}" ;;
+   "TC_XCONF_MANUAL_01")         printf "%s" "${pre_description_arr[48]}" ;;
    *) printf "\nInvalid Testcase ID !!\n" ;;
    esac
 
@@ -321,6 +323,11 @@ dynamic_current_step_finder(){
       "tc4_step"|"tc5_step"|"tc9_step"|"tc10_step"|"tc11_step"|"tc12_step"|"tc13_step"|"tc14_step"|"tc15_step")  current_step_num=3 ;;
       *) printf "\nInvalid testCase step number. Unable to detect current step number!!!\n\n\n" ;;
       esac    
+   elif [[ "$testcase_name" == "TC_XCONF_MANUAL" ]]; then
+      case "$tc_prifix" in
+      "tc1_step") current_step_num=4 ;;
+      *) printf "\nInvalid testCase step number. Unable to detect current step number!!!\n\n\n" ;;
+      esac
    else
       printf "\nInvalid testCase name. Unable to detect current step number!!!\n\n\n"
    fi
@@ -1995,7 +2002,7 @@ execute_stepStatusUpdate_steps() {
       declare "${testcase_prefix}_num_${step_no}=${step_no}"
       local tc_dynamic_var_name="${testcase_prefix}_num_${step_no}"
       case "$step_func_name" in
-         "TC_MEMCR_MANUAL_01"|"TC_HDCPCOMPLIANCE_MANUAL_01"|"TC_HDCPCOMPLIANCE_MANUAL_02"|"TC_HDCPCOMPLIANCE_MANUAL_03"|"TC_HDCPCOMPLIANCE_MANUAL_04"|"TC_HDCPCOMPLIANCE_MANUAL_05"|"TC_HDCPCOMPLIANCE_MANUAL_06"|"TC_HDCPCOMPLIANCE_MANUAL_07"|"TC_IPv6_MANUAL_01"|"TC_IPv6_MANUAL_02"|"TC_IPv6_MANUAL_03"|"TC_IPv6_MANUAL_06"|"TC_IPv6_MANUAL_07"|"TC_IPv6_MANUAL_08"|"TC_POWER_MANUAL_01"|"TC_SYSTEM_MANUAL_01"|"TC_SYSTEM_MANUAL_02"|"TC_SYSTEM_MANUAL_03")
+         "TC_MEMCR_MANUAL_01"|"TC_HDCPCOMPLIANCE_MANUAL_01"|"TC_HDCPCOMPLIANCE_MANUAL_02"|"TC_HDCPCOMPLIANCE_MANUAL_03"|"TC_HDCPCOMPLIANCE_MANUAL_04"|"TC_HDCPCOMPLIANCE_MANUAL_05"|"TC_HDCPCOMPLIANCE_MANUAL_06"|"TC_HDCPCOMPLIANCE_MANUAL_07"|"TC_IPv6_MANUAL_01"|"TC_IPv6_MANUAL_02"|"TC_IPv6_MANUAL_03"|"TC_IPv6_MANUAL_06"|"TC_IPv6_MANUAL_07"|"TC_IPv6_MANUAL_08"|"TC_POWER_MANUAL_01"|"TC_SYSTEM_MANUAL_01"|"TC_SYSTEM_MANUAL_02"|"TC_SYSTEM_MANUAL_03"|"TC_XCONF_MANUAL_01")
             "$step_func_name" "${!tc_dynamic_var_name}"
             ;;
          "TC_MEMCR_MANUAL_02_step2"|"TC_MEMCR_MANUAL_02_step4") 
@@ -3349,6 +3356,38 @@ testcase_result_display_menu() {
                   ;;      
             esac
             ;;              
+         "TC_XCONF_MANUAL")
+            printf "\n"
+            printf '\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n'
+            printf "                                                   ******* TestCase Execution Results Menu :  %s *******                                                                    " "$testCase_ID"
+            printf '\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n'
+            printf '01. Test Execution Result : TC_XCONF_MANUAL_01        :\t[ Verify the XCONF Firmware upgrade behaviour using rdkservice API ] \n\n'
+            printf '02. Overall TestSuite Execution Status\n\n'
+            printf '03. Delete all Test Execution reports\n\n'
+            printf '04. Return to the Main Menu\n\n'
+            printf "\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n"
+
+            read -p "Enter an Option to proceed : " menu_choice_1_1
+            printf '\n\n'
+            case "$menu_choice_1_1" in 
+               1)
+                  trigger_from_Execution_Result_menu "TC_XCONF_MANUAL_01" "tc1_step" "tc_XCONF_MANUAL_testsuite"
+                  ;;
+               2)
+                  overall_testsuite_execution_status "TC_XCONF_MANUAL_"
+                  ;;
+               3)
+                  cleanup_testExecution_reports "TC_XCONF_MANUAL_"
+                  ;;    
+               4)
+                  printf '\n\nExiting TestCase Execution Results Menu.....\n\n\n' 
+                  break
+                  ;;  
+               *)
+                  printf '\nInvalid option selected. Please Try Again !!!\n\n\n'
+                  ;;      
+            esac
+            ;;
          *)
            printf "\nInvalid Testsuite ID :[ %s ] detected.|...Exiting...|\n\n\n"
            break

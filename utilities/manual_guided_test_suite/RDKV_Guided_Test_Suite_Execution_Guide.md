@@ -475,10 +475,26 @@ Refer to [Section 8](#8-test-results-and-logs) for instructions on retrieving th
 
 > **App Bundle Setup — Required Before First Execution**: The `browser_test_app_bundle` is a custom RDK application built from `Browser_test_app.html`. Before running these tests for the first time, complete the following setup:
 >
-> 1. Locate the source files in the `image_formats_test_resources/` directory: `Browser_test_app.html`, `JpegSample.jpg`, `bizcom.png`, `1.webp`, `Cup.webp`.
-> 2. Upload all files from `image_formats_test_resources/` to your web server so they are accessible via a browser URL.
-> 3. Create the bundle JSON configuration file (`com.rdkcentral.browser_test.json`) and set the hosted `Browser_test_app.html` URL (e.g. `https://<server>/Browser_test_app.html`) as the application entry point. Follow the full packaging procedure described in the RDK wiki: [Building App packages — RDK Central Wiki](https://wiki.rdkcentral.com/spaces/RDK/pages/463539631/Building+App+packages)
-> 4. Upload the generated `.bolt` bundle to the `app_download_server` and update `browser_test_app_bundle` and `app_download_server` in `device.conf` to match.
+> 1. Locate `Browser_test_app.html` in the cloned repository under the `image_formats_test_resources/` directory (cloned in [Section 2](#2-repository-structure)).
+>
+> 2. Download one royalty-free test image for each of the four image formats from the sources listed below:
+>
+>    | Format | Download Source |
+>    |--------|----------------|
+>    | SVG    | [SVGRepo](https://www.svgrepo.com) — search for any SVG and download |
+>    | PNG    | [Wikimedia Commons — PNG sample](https://commons.wikimedia.org/wiki/File:PNG_transparency_demonstration_1.png) |
+>    | JPEG   | [Wikimedia Commons — JPEG sample](https://commons.wikimedia.org/wiki/File:JPEG_example_JPG_RIP_100.jpg) |
+>    | WebP   | [Google WebP Gallery](https://www.gstatic.com/webp/gallery/1.webp) |
+>
+> 3. Upload all four downloaded image files to your web server so that each file is accessible via a direct browser URL (e.g. `https://<your-server>/test_image.png`).
+>
+> 4. Open `Browser_test_app.html` and update the `data-src` attribute values for the four image tiles — replace each `<Your_image_hosted_server>` placeholder with the actual base URL of your server (e.g. `https://<your-server>/test_image.png`).
+>
+> 5. Upload the edited `Browser_test_app.html` to the same web server. Open the URL in a browser and verify that all four image tiles load and display correctly before proceeding.
+>
+> 6. Create the bundle JSON configuration file (`com.rdkcentral.browser_test.json`) and set the hosted `Browser_test_app.html` URL (e.g. `https://<server>/Browser_test_app.html`) as the application entry point. Follow the full packaging procedure described in the RDK wiki: [Building App packages — RDK Central Wiki](https://wiki.rdkcentral.com/spaces/RDK/pages/463539631/Building+App+packages)
+>
+> 7. Upload the generated `.bolt` bundle to the `app_download_server` and update `browser_test_app_bundle` and `app_download_server` in `device.conf` to match.
 
 **Test Cases**:
 
@@ -605,10 +621,49 @@ Refer to [Section 8](#8-test-results-and-logs) for instructions on retrieving th
 
 > **App Bundle Setup — Required Before First Execution**: The `webaudio_app_bundle` is a custom RDK application built from `WebAudio_test_Manual.html`. Before running these tests for the first time, complete the following setup:
 >
-> 1. Obtain `WebAudio_test_Manual.html` and download the required WebAudio test components (audio files and inner HTML pages) from the WebAudio test resources wiki: `<WebAudio_Components_Wiki_URL>`.
-> 2. Upload `WebAudio_test_Manual.html` and all test components to your web server so they are accessible via a browser URL.
-> 3. Create the bundle JSON configuration file (`com.rdkcentral.webaudio_manual.json`) and set the hosted `WebAudio_test_Manual.html` URL (e.g. `https://<server>/WebAudio_test_Manual.html`) as the application entry point. Follow the full packaging procedure described in the RDK wiki: [Building App packages — RDK Central Wiki](https://wiki.rdkcentral.com/spaces/RDK/pages/463539631/Building+App+packages)
-> 4. Upload the generated `.bolt` bundle to the `app_download_server` and update `webaudio_app_bundle` and `app_download_server` in `device.conf` to match.
+> 1. Locate `WebAudio_test_Manual.html` in the cloned repository under the `Manual_WebAudio/` directory (cloned in [Section 2](#2-repository-structure)). The directory already contains all 15 inner HTML files in the structure below.
+>
+>    | TC ID | Inner HTML File (path relative to `Manual_WebAudio/`) |
+>    |-------|-------------------------------------------------------|
+>    | `TC_WEBAUDIO_MANUAL_01` | `speech_synthesis_test_1.html` |
+>    | `TC_WEBAUDIO_MANUAL_02` | `speech_synthesis_test_2.html` |
+>    | `TC_WEBAUDIO_MANUAL_03` | `speech_synthesis_test_3.html` |
+>    | `TC_WEBAUDIO_MANUAL_04` | `AudioContext.html` |
+>    | `TC_WEBAUDIO_MANUAL_05` | `audiocontext-destruction-crash.html` |
+>    | `TC_WEBAUDIO_MANUAL_06` | `Audio_Playback.html` |
+>    | `TC_WEBAUDIO_MANUAL_07` | `Generated_Sound_FM.html` |
+>    | `TC_WEBAUDIO_MANUAL_08` | `Multi_media_playback.html` |
+>    | `TC_WEBAUDIO_MANUAL_09` | `codec/aac/vbr-128kbps-44khz.html` |
+>    | `TC_WEBAUDIO_MANUAL_10` | `codec/mp3/128kbps-44khz.html` |
+>    | `TC_WEBAUDIO_MANUAL_11` | `vorbis/Audio/vbr-70kbps-44khz.html` |
+>    | `TC_WEBAUDIO_MANUAL_12` | `codec/vorbis/vbr-96kbps-44khz.html` |
+>    | `TC_WEBAUDIO_MANUAL_13` | `codec/vorbis/vbr-128kbps-44khz.html` |
+>    | `TC_WEBAUDIO_MANUAL_14` | `codec/wav/24bit-22khz-resample.html` |
+>    | `TC_WEBAUDIO_MANUAL_15` | `codec/wav/24bit-44khz.html` |
+>
+> 2. For `TC_WEBAUDIO_MANUAL_09` through `TC_WEBAUDIO_MANUAL_15` (codec decoding tests), the codec subfolders exist in the repository as **empty placeholders**. Download a suitable codec audio test stream for each test and place it in the corresponding subfolder. The audio file must match the bitrate and sample rate specification for that test case.
+>
+>    | TC ID | Codec Subfolder (inside `Manual_WebAudio/`) | Required Audio Spec |
+>    |-------|---------------------------------------------|----------------------|
+>    | `TC_WEBAUDIO_MANUAL_09` | `codec/aac/` | AAC — VBR 128 kbps / 44 kHz |
+>    | `TC_WEBAUDIO_MANUAL_10` | `codec/mp3/` | MP3 — 128 kbps / 44 kHz |
+>    | `TC_WEBAUDIO_MANUAL_11` | `vorbis/Audio/` | Vorbis (OGG) — VBR 70 kbps / 44 kHz |
+>    | `TC_WEBAUDIO_MANUAL_12` | `codec/vorbis/` | Vorbis (OGG) — VBR 96 kbps / 44 kHz |
+>    | `TC_WEBAUDIO_MANUAL_13` | `codec/vorbis/` | Vorbis (OGG) — VBR 128 kbps / 44 kHz |
+>    | `TC_WEBAUDIO_MANUAL_14` | `codec/wav/` | WAV — 24-bit / 22 kHz |
+>    | `TC_WEBAUDIO_MANUAL_15` | `codec/wav/` | WAV — 24-bit / 44 kHz |
+>
+> 3. Open each inner HTML file for `TC_WEBAUDIO_MANUAL_09` through `TC_WEBAUDIO_MANUAL_15` and update the audio file source reference (the `src` attribute or equivalent) to match the exact filename of the codec audio file you placed in that folder in step 2. Inner HTML files for `TC_WEBAUDIO_MANUAL_01` through `TC_WEBAUDIO_MANUAL_08` require no additional assets and are ready to use as-is.
+>
+> 4. Upload all inner HTML files and codec audio assets to your web server, preserving the complete `Manual_WebAudio/` directory structure (e.g. `https://<your-server>/Manual_WebAudio/codec/mp3/128kbps-44khz.html`).
+>
+> 5. Open `WebAudio_test_Manual.html` and update the `data-url` attribute values for all 15 URL cards — replace each `<Your_WebAudio_files_hosted_server>` placeholder with the actual base URL of your server (e.g. `https://<your-server>`).
+>
+> 6. Upload the edited `WebAudio_test_Manual.html` to the same web server. Open the URL in a browser and verify that all 15 URL cards load and navigate to the correct inner HTML pages before proceeding.
+>
+> 7. Create the bundle JSON configuration file (`com.rdkcentral.webaudio_manual.json`) and set the hosted `WebAudio_test_Manual.html` URL (e.g. `https://<server>/WebAudio_test_Manual.html`) as the application entry point. Follow the full packaging procedure described in the RDK wiki: [Building App packages — RDK Central Wiki](https://wiki.rdkcentral.com/spaces/RDK/pages/463539631/Building+App+packages)
+>
+> 8. Upload the generated `.bolt` bundle to the `app_download_server` and update `webaudio_app_bundle` and `app_download_server` in `device.conf` to match.
 
 - Connect a speaker or headset to the DUT — these tests require auditory confirmation of audio output.
 

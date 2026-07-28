@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FM Synthesis with Web Audio API</title>
+</head>
+<body>
+    <button onclick="startSynth()">Start Synthesis</button>
+    <script>
+        var context = new (window.AudioContext || window.webkitAudioContext)();
+        var carrier, modulator, gainNode;
+
+        function startSynth() {
+            carrier = context.createOscillator();
+            modulator = context.createOscillator();
+            gainNode = context.createGain();
+
+            modulator.connect(gainNode);
+            gainNode.connect(carrier.frequency);
+
+            carrier.connect(context.destination);
+            modulator.frequency.value = 5.0; // Frequency of the modulator
+            gainNode.gain.value = 50.0; // Depth of the modulation
+
+            carrier.start(context.currentTime);
+            modulator.start(context.currentTime);
+        }
+    </script>
+</body>
+</html>
