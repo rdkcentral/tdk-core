@@ -1,11 +1,29 @@
 #!/bin/bash
 
+##########################################################################
+# If not stated otherwise in this file or this component's Licenses.txt
+# file the following copyright and licenses apply:
+#
+# Copyright 2023 RDK Management
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##########################################################################
+
 
 source device.conf
 source generic_functions.sh
 
 
-#Author : aharil144@cable.comcast.com
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 
@@ -48,7 +66,7 @@ TC_IMAGEFORMATS_MANUAL_test() {
   local user_choice_img_format="user_choice_img_format"
   local query_img_format=$(printf "\n\nIs %s image format loaded in %s App and Visible on TV [yes/no]: " "$image_format" "$app_name" )
   printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
-  printf "\nStep %s\t\t: Launch %s App and load %s image fromat\n\n\n" "$step_num" "$app_name" "$image_format" 
+  printf "\nStep %s\t\t: Launch %s App and load %s image format\n\n\n" "$step_num" "$app_name" "$image_format" 
   
   anyApp_launch "$installed_appID" "$app_name"
   local anyApp_launch_exit=$?
