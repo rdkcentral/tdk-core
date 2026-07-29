@@ -48,8 +48,8 @@ pre_condition_status = check_device_state(obj)
 if expectedResult in (result.upper() and pre_condition_status):
     status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated"}
+    plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager", "org.rdk.RDKWindowManager"]
+    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated","org.rdk.AppManager":"activated", "org.rdk.RDKWindowManager":"activated"}
     curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
     if curr_plugins_status_dict != plugin_status_needed:
         status = StabilityTestUtility.set_plugins_status(obj,plugin_status_needed)
@@ -57,7 +57,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     if status == "SUCCESS":
         test_count = StabilityTestVariables.AppManager_test_count
         app_bundle_name = PerformanceTestVariables.google_bundle
-        app_name= "com.rdkcentral.css3"
+        app_name= "com.rdkcentral.test_app"
         app_download_url = PerformanceTestVariables.app_download_url
         status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url,launch =False)
         if status == "SUCCESS":
@@ -74,7 +74,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 tdkTestObj.executeTestCase(expectedResult)
                 status = tdkTestObj.getResult()
                 result = tdkTestObj.getResultDetails()
-                if not result:
+                if status == "SUCCESS":
                     time.sleep(10)
                     STATE_FLAG = False
                     result = rdkservice_getValue("org.rdk.AppManager.getLoadedApps")
@@ -82,8 +82,8 @@ if expectedResult in (result.upper() and pre_condition_status):
                     if result != "EXCEPTION OCCURRED":
                         for item in result:
                             if item.get("appId") == app_name and item.get("lifecycleState") == item.get("targetLifecycleState"):
-                                print(f"TargetLifecycle: {item.get("targetLifecycleState")}")
-                                print(f"LifecycleChange: {item.get("lifecycleState")}")
+                                print(f"TargetLifecycle: {item.get('targetLifecycleState')}")
+                                print(f"LifecycleChange: {item.get('lifecycleState')}")
                                 STATE_FLAG = True
                                 break
                     if STATE_FLAG :
@@ -105,8 +105,8 @@ if expectedResult in (result.upper() and pre_condition_status):
                             if result != "EXCEPTION OCCURRED":
                                 for item in result:
                                     if item.get("appId") == app_name and item.get("lifecycleState") == item.get("targetLifecycleState"):
-                                        print(f"TargetLifecycle: {item.get("targetLifecycleState")}")
-                                        print(f"LifecycleChange: {item.get("lifecycleState")}")
+                                        print(f"TargetLifecycle: {item.get('targetLifecycleState')}")
+                                        print(f"LifecycleChange: {item.get('lifecycleState')}")
                                         STATE_FLAG = True
                                         break
                             if STATE_FLAG :
@@ -127,8 +127,8 @@ if expectedResult in (result.upper() and pre_condition_status):
                                     if result != "EXCEPTION OCCURRED":
                                         for item in result:
                                             if item.get("appId") == app_name and item.get("lifecycleState") == item.get("targetLifecycleState"):
-                                                print(f"TargetLifecycle: {item.get("targetLifecycleState")}")
-                                                print(f"LifecycleChange: {item.get("lifecycleState")}")
+                                                print(f"TargetLifecycle: {item.get('targetLifecycleState')}")
+                                                print(f"LifecycleChange: {item.get('lifecycleState')}")
                                                 STATE_FLAG = True
                                                 break
                                     if STATE_FLAG :

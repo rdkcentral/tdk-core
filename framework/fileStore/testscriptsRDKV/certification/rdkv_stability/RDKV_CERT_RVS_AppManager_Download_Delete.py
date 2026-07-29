@@ -50,8 +50,8 @@ if expectedResult in result.upper():
     status ="SUCCESS"
     download_id_List = []
     print("\nCheck the status of AppManagers in the device")
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated","org.rdk.AppManager":"activated"}
+    plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager", "org.rdk.RDKWindowManager"]
+    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated","org.rdk.AppManager":"activated", "org.rdk.RDKWindowManager":"activated"}
     curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
     if curr_plugins_status_dict != plugin_status_needed:
         status = StabilityTestUtility.set_plugins_status(obj,plugin_status_needed)
@@ -64,11 +64,11 @@ if expectedResult in result.upper():
         time.sleep(5)
         app_bundle_name = PerformanceTestVariables.google_bundle
         app_download_url = PerformanceTestVariables.app_download_url
+        app_download_url = app_download_url + "/" + app_bundle_name
         test_count = StabilityTestVariables.AppManager_test_count
         for iteration in range(test_count):
             print(f"\n################################# Iteration {iteration+1} #################################")
             print(f"\nStart download of {app_bundle_name}")
-            app_download_url = app_download_url + "/" + app_bundle_name
             tdkTestObj = obj.createTestStep('rdkservice_download_app_bundle')
             tdkTestObj.addParameter("download_url", app_download_url)
             tdkTestObj.executeTestCase(expectedResult)
@@ -115,14 +115,18 @@ if expectedResult in result.upper():
                                 #Get SSH parameters from configuration file
                                 ssh_params = rdkv_performancelib.rdkservice_getSSHParams(obj.realpath, ip)
                                 if ssh_params == "" or ssh_params == "{}":
-                                    raise Exception("Failed to get SSH parameters from configuration")
+                                    print("Failed to get SSH parameters from configuration")
+                                    obj.setLoadModuleStatus("FAILURE")
+                                    break
                                 
                                 ssh_params_dict = json.loads(ssh_params)
                                 ssh_method = ssh_params_dict.get("ssh_method")
                                 credentials = ssh_params_dict.get("credentials")
                                 
                                 if not ssh_method or not credentials:
-                                    raise Exception("SSH method or credentials not found in configuration")
+                                    print("SSH method or credentials not found in configuration")
+                                    obj.setLoadModuleStatus("FAILURE")
+                                    break
 
                                 parsed = urlparse(filelocator_url)
                                 file_path = parsed.path if parsed.path else filelocator_url
@@ -146,7 +150,7 @@ if expectedResult in result.upper():
                         else:
                             print(f"Iteration {iteration+1}: Failed to download package with download ID :{download_id}")                   
                     else:
-                        print(f"Iteration {iteration+1}: Download ID for {app_name} is already present in the list")
+                        print(f"Iteration {iteration+1}: Download ID for {app_bundle_name} is already present in the list")
                         obj.setLoadModuleStatus("FAILURE")    
                         break
                 else:
@@ -154,7 +158,7 @@ if expectedResult in result.upper():
                     obj.setLoadModuleStatus("FAILURE")
                     break    
             else:
-                print(f"Iteration {iteration+1}: Failed to download {app_name} from {app_download_url}")
+                print(f"Iteration {iteration+1}: Failed to download {app_bundle_name} from {app_download_url}")
                 obj.setLoadModuleStatus("FAILURE") 
                 break
     else:

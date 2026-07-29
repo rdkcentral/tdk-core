@@ -114,4 +114,4 @@ appmanager_test_apps=[]
 lifecycle_count=100
 AppManager_test_count = 100
 Redownload_Package_Size_MB = 10
-Ten_MB_File = "10_MB_File.bin"
+Small_Validation_File = "10_MB_File.bin"
