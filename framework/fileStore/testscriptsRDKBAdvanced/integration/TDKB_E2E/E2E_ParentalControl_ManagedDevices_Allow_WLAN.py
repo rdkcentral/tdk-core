@@ -56,88 +56,28 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
         #Assign the WIFI parameters names to a variable
         ssidName = "Device.WiFi.SSID.%s.SSID" % tdkbE2EUtility.ssid_2ghz_index
         keyPassPhrase = "Device.WiFi.AccessPoint.%s.Security.KeyPassphrase" % tdkbE2EUtility.ssid_2ghz_index
-        securityMode = "Device.WiFi.AccessPoint.%s.Security.ModeEnabled" % tdkbE2EUtility.ssid_2ghz_index
         managedDeviceEnable = "Device.X_Comcast_com_ParentalControl.ManagedDevices.Enable"
         allowAll = "Device.X_Comcast_com_ParentalControl.ManagedDevices.AllowAll"
 
         #Get the value of the wifi parameters that are currently set.
-        paramList = [ssidName, keyPassPhrase, managedDeviceEnable, allowAll, securityMode]
+        paramList = [ssidName, keyPassPhrase, managedDeviceEnable, allowAll]
         tdkTestObj,status,orgValue = getMultipleParameterValues(obj, paramList)
 
         if expectedresult in status:
             tdkTestObj.setResultStatus("SUCCESS")
-            print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
-            print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
+            print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,managedDeviceEnable and allowAll")
+            print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,managedDeviceEnable and allowAll")
             print(f"ACTUAL RESULT {step}: {orgValue}")
             print("[TEST EXECUTION RESULT] : SUCCESS")
 
             if tdkbE2EUtility.mlo_capability == "False":
-                # Set the SSID name,password,securityMode,managedDeviceEnable and allowAll
+                # Set the SSID name,password,managedDeviceEnable and allowAll
                 step = step + 1
-                setValuesList = [tdkbE2EUtility.ssid_2ghz_name, tdkbE2EUtility.ssid_2ghz_pwd, 'true', 'true', 'WPA2-Personal']
+                setValuesList = [tdkbE2EUtility.ssid_2ghz_name, tdkbE2EUtility.ssid_2ghz_pwd, 'true', 'true']
                 print("Parameter values that are set: %s" % setValuesList)
 
                 list1 = [ssidName, tdkbE2EUtility.ssid_2ghz_name, 'string']
                 list2 = [keyPassPhrase, tdkbE2EUtility.ssid_2ghz_pwd, 'string']
-                list3 = [securityMode, 'WPA2-Personal', 'string']
-                list4 = [managedDeviceEnable, 'true', 'bool']
-                list5 = [allowAll, 'true', 'bool']
-
-                #Concatenate the lists with the elements separated by pipe
-                setParamList = list1 + list2 + list3
-                setParamList = "|".join(map(str, setParamList))
-                setParamList1 = list4 + list5
-                setParamList1 = "|".join(map(str, setParamList1))
-
-                tdkTestObj,actualresult,details = setMultipleParameterValues(obj, setParamList)
-                tdkTestObj,actualresult1,details = setMultipleParameterValues(obj, setParamList1)
-                if expectedresult in actualresult and expectedresult in actualresult1:
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"\nTEST STEP {step}: Set the ssid,keypassphrase,securityMode,managedDeviceEnable and allowAll")
-                    print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase,securityMode,managedDeviceEnable and allowAll")
-                    print(f"ACTUAL RESULT {step}: {details}")
-                    print("[TEST EXECUTION RESULT] : SUCCESS")
-
-                    #Retrieve the values after set and compare
-                    step = step + 1
-                    newParamList = [ssidName, keyPassPhrase, managedDeviceEnable, allowAll, securityMode]
-                    tdkTestObj,status,newValues = getMultipleParameterValues(obj, newParamList)
-
-                    if expectedresult in status and setValuesList == newValues:
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
-                        print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
-                        print(f"ACTUAL RESULT {step}: {newValues}")
-                        print("[TEST EXECUTION RESULT] : SUCCESS")
-                        time.sleep(60)
-                    else:
-                        tdkTestObj.setResultStatus("FAILURE")
-                        print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
-                        print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
-                        print(f"ACTUAL RESULT {step}: {newValues}")
-                        print("[TEST EXECUTION RESULT] : FAILURE")
-                        status = "FAILURE"
-                else:
-                    tdkTestObj.setResultStatus("FAILURE")
-                    details = tdkTestObj.getResultDetails()
-                    print(f"\nTEST STEP {step}: Set the ssid,keypassphrase,securityMode,managedDeviceEnable and allowAll")
-                    print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase,securityMode,managedDeviceEnable and allowAll")
-                    print(f"ACTUAL RESULT {step}: {details}")
-                    print("[TEST EXECUTION RESULT] : FAILURE")
-                    status = "FAILURE"
-
-                # Assign global values
-                tdkbE2EUtility.ssid_name = tdkbE2EUtility.ssid_2ghz_name
-                tdkbE2EUtility.ssid_pwd = tdkbE2EUtility.ssid_2ghz_pwd
-                tdkbE2EUtility.wlan_interface = tdkbE2EUtility.wlan_2ghz_interface
-            else:
-                # MLO=True: Set the ssid,keypassphrase,managedDeviceEnable and allowAll (no securityMode change)
-                step = step + 1
-                setValuesList = [tdkbE2EUtility.ssid_name, tdkbE2EUtility.ssid_pwd, 'true', 'true']
-                print("Parameter values that are set: %s" % setValuesList)
-
-                list1 = [ssidName, tdkbE2EUtility.ssid_name, 'string']
-                list2 = [keyPassPhrase, tdkbE2EUtility.ssid_pwd, 'string']
                 list3 = [managedDeviceEnable, 'true', 'bool']
                 list4 = [allowAll, 'true', 'bool']
 
@@ -180,6 +120,59 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     details = tdkTestObj.getResultDetails()
                     print(f"\nTEST STEP {step}: Set the ssid,keypassphrase,managedDeviceEnable and allowAll")
                     print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase,managedDeviceEnable and allowAll")
+                    print(f"ACTUAL RESULT {step}: {details}")
+                    print("[TEST EXECUTION RESULT] : FAILURE")
+                    status = "FAILURE"
+
+                # Assign global values
+                tdkbE2EUtility.ssid_name = tdkbE2EUtility.ssid_2ghz_name
+                tdkbE2EUtility.ssid_pwd = tdkbE2EUtility.ssid_2ghz_pwd
+                tdkbE2EUtility.wlan_interface = tdkbE2EUtility.wlan_2ghz_interface
+            else:
+                # MLO=True: Set managedDeviceEnable and allowAll only
+                step = step + 1
+                setValuesList = ['true', 'true']
+                print("Parameter values that are set: %s" % setValuesList)
+
+                list1 = [managedDeviceEnable, 'true', 'bool']
+                list2 = [allowAll, 'true', 'bool']
+
+                #Concatenate the lists with the elements separated by pipe
+                setParamList = list1 + list2
+                setParamList = "|".join(map(str, setParamList))
+
+                tdkTestObj,actualresult,details = setMultipleParameterValues(obj, setParamList)
+                if expectedresult in actualresult:
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    print(f"\nTEST STEP {step}: Set the managedDeviceEnable and allowAll")
+                    print(f"EXPECTED RESULT {step}: Should set the managedDeviceEnable and allowAll")
+                    print(f"ACTUAL RESULT {step}: {details}")
+                    print("[TEST EXECUTION RESULT] : SUCCESS")
+
+                    #Retrieve the values after set and compare
+                    step = step + 1
+                    newParamList = [managedDeviceEnable, allowAll]
+                    tdkTestObj,status,newValues = getMultipleParameterValues(obj, newParamList)
+
+                    if expectedresult in status and setValuesList == newValues:
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print(f"\nTEST STEP {step}: Get the current managedDeviceEnable and allowAll")
+                        print(f"EXPECTED RESULT {step}: Should retrieve the current managedDeviceEnable and allowAll")
+                        print(f"ACTUAL RESULT {step}: {newValues}")
+                        print("[TEST EXECUTION RESULT] : SUCCESS")
+                        time.sleep(60)
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE")
+                        print(f"\nTEST STEP {step}: Get the current managedDeviceEnable and allowAll")
+                        print(f"EXPECTED RESULT {step}: Should retrieve the current managedDeviceEnable and allowAll")
+                        print(f"ACTUAL RESULT {step}: {newValues}")
+                        print("[TEST EXECUTION RESULT] : FAILURE")
+                        status = "FAILURE"
+                else:
+                    tdkTestObj.setResultStatus("FAILURE")
+                    details = tdkTestObj.getResultDetails()
+                    print(f"\nTEST STEP {step}: Set the managedDeviceEnable and allowAll")
+                    print(f"EXPECTED RESULT {step}: Should set the managedDeviceEnable and allowAll")
                     print(f"ACTUAL RESULT {step}: {details}")
                     print("[TEST EXECUTION RESULT] : FAILURE")
                     status = "FAILURE"
@@ -470,35 +463,6 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                 #Prepare the list of parameter values to be reverted
                 list1 = [ssidName, orgValue[0], 'string']
                 list2 = [keyPassPhrase, orgValue[1], 'string']
-                list3 = [securityMode, orgValue[4], 'string']
-                list4 = [managedDeviceEnable, orgValue[2], 'bool']
-                list5 = [allowAll, orgValue[3], 'bool']
-
-                #Concatenate the lists with the elements separated by pipe
-                revertParamList = list1 + list2 + list3
-                revertParamList = "|".join(map(str, revertParamList))
-                revertParamList1 = list4 + list5
-                revertParamList1 = "|".join(map(str, revertParamList1))
-
-                tdkTestObj,actualresult,details = setMultipleParameterValues(obj, revertParamList)
-                tdkTestObj,actualresult1,details = setMultipleParameterValues(obj, revertParamList1)
-                step = step + 1
-                print(f"\nTEST STEP {step}: Revert the values to original")
-                if expectedresult in actualresult and expectedresult in actualresult1 and expectedresult in finalStatus:
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase,securityMode,managedDeviceEnable and allowAll")
-                    print(f"ACTUAL RESULT {step}: {details}")
-                    print("[TEST EXECUTION RESULT] : SUCCESS")
-                else:
-                    tdkTestObj.setResultStatus("FAILURE")
-                    details = tdkTestObj.getResultDetails()
-                    print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase,securityMode,managedDeviceEnable and allowAll")
-                    print(f"ACTUAL RESULT {step}: {details}")
-                    print("[TEST EXECUTION RESULT] : FAILURE")
-            else:
-                #Revert ssid,keypassphrase,managedDeviceEnable and allowAll
-                list1 = [ssidName, orgValue[0], 'string']
-                list2 = [keyPassPhrase, orgValue[1], 'string']
                 list3 = [managedDeviceEnable, orgValue[2], 'bool']
                 list4 = [allowAll, orgValue[3], 'bool']
 
@@ -523,10 +487,33 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase,managedDeviceEnable and allowAll")
                     print(f"ACTUAL RESULT {step}: {details}")
                     print("[TEST EXECUTION RESULT] : FAILURE")
+            else:
+                #Revert managedDeviceEnable and allowAll only
+                list1 = [managedDeviceEnable, orgValue[2], 'bool']
+                list2 = [allowAll, orgValue[3], 'bool']
+
+                #Concatenate the lists with the elements separated by pipe
+                revertParamList = list1 + list2
+                revertParamList = "|".join(map(str, revertParamList))
+
+                tdkTestObj,actualresult,details = setMultipleParameterValues(obj, revertParamList)
+                step = step + 1
+                print(f"\nTEST STEP {step}: Revert the values to original")
+                if expectedresult in actualresult and expectedresult in finalStatus:
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    print(f"EXPECTED RESULT {step}: Should set the original managedDeviceEnable and allowAll")
+                    print(f"ACTUAL RESULT {step}: {details}")
+                    print("[TEST EXECUTION RESULT] : SUCCESS")
+                else:
+                    tdkTestObj.setResultStatus("FAILURE")
+                    details = tdkTestObj.getResultDetails()
+                    print(f"EXPECTED RESULT {step}: Should set the original managedDeviceEnable and allowAll")
+                    print(f"ACTUAL RESULT {step}: {details}")
+                    print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print(f"TEST STEP {step}: Get the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
-            print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,managedDeviceEnable,allowAll and securityMode")
+            print(f"TEST STEP {step}: Get the current ssid,keypassphrase,managedDeviceEnable and allowAll")
+            print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,managedDeviceEnable and allowAll")
             print(f"ACTUAL RESULT {step}: {orgValue}")
             print("[TEST EXECUTION RESULT] : FAILURE")
     else:
