@@ -75,6 +75,9 @@ def parseDeviceConfig(obj):
         global setup_type
         setup_type = config.get(deviceConfig, 'SETUP_TYPE')
 
+        global mlo_capability
+        mlo_capability = config.get(deviceConfig, 'MLO_ENABLE')
+
         global wlan_os_type
         wlan_os_type = config.get(deviceConfig, 'WLAN_OS_TYPE')
 
@@ -108,23 +111,27 @@ def parseDeviceConfig(obj):
         global wlan_ftp_password
         wlan_ftp_password = config.get(deviceConfig, "WLAN_FTP_PASSWORD")
 
-        global wlan_2ghz_interface
-        wlan_2ghz_interface = config.get(deviceConfig, "WLAN_2GHZ_INTERFACE")
+        if mlo_capability == "False":
+            global wlan_2ghz_interface
+            wlan_2ghz_interface = config.get(deviceConfig, "WLAN_2GHZ_INTERFACE")
 
-        global wlan_5ghz_interface
-        wlan_5ghz_interface = config.get(deviceConfig, "WLAN_5GHZ_INTERFACE")
+            global wlan_5ghz_interface
+            wlan_5ghz_interface = config.get(deviceConfig, "WLAN_5GHZ_INTERFACE")
 
-        global wlan_6ghz_interface
-        wlan_6ghz_interface = config.get(deviceConfig, "WLAN_6GHZ_INTERFACE")
+            global wlan_6ghz_interface
+            wlan_6ghz_interface = config.get(deviceConfig, "WLAN_6GHZ_INTERFACE")
 
-        global wlan_2ghz_public_ssid_interface
-        wlan_2ghz_public_ssid_interface = config.get(deviceConfig, "WLAN_2GHZ_PUBLIC_SSID_INTERFACE")
+            global wlan_2ghz_public_ssid_interface
+            wlan_2ghz_public_ssid_interface = config.get(deviceConfig, "WLAN_2GHZ_PUBLIC_SSID_INTERFACE")
 
-        global wlan_5ghz_public_ssid_interface
-        wlan_5ghz_public_ssid_interface = config.get(deviceConfig, "WLAN_5GHZ_PUBLIC_SSID_INTERFACE")
+            global wlan_5ghz_public_ssid_interface
+            wlan_5ghz_public_ssid_interface = config.get(deviceConfig, "WLAN_5GHZ_PUBLIC_SSID_INTERFACE")
 
-        global wlan_6ghz_public_ssid_interface
-        wlan_6ghz_public_ssid_interface = config.get(deviceConfig, "WLAN_6GHZ_PUBLIC_SSID_INTERFACE")
+            global wlan_6ghz_public_ssid_interface
+            wlan_6ghz_public_ssid_interface = config.get(deviceConfig, "WLAN_6GHZ_PUBLIC_SSID_INTERFACE")
+        else:
+            global wlan_interface
+            wlan_interface = config.get(deviceConfig, "WLAN_INTERFACE")
 
         global wlan_inet_address
         wlan_inet_address = config.get(deviceConfig, "WLAN_INET_ADDRESS")
@@ -132,48 +139,54 @@ def parseDeviceConfig(obj):
         global wlan_inet6_address
         wlan_inet6_address = config.get(deviceConfig, "WLAN_INET6_ADDRESS")
 
-
         global wlan_subnet_mask
         wlan_subnet_mask = config.get(deviceConfig, "WLAN_SUBNET_MASK")
 
         global wlan_script
         wlan_script = config.get(deviceConfig, "WLAN_SCRIPT")
 
-        global wlan_2ghz_ssid_connect_status
-        wlan_2ghz_ssid_connect_status = config.get(deviceConfig, "WLAN_2GHZ_SSID_CONNECT_STATUS")
+        if mlo_capability == "False":
+            global wlan_2ghz_ssid_connect_status
+            wlan_2ghz_ssid_connect_status = config.get(deviceConfig, "WLAN_2GHZ_SSID_CONNECT_STATUS")
 
-        global wlan_5ghz_ssid_connect_status
-        wlan_5ghz_ssid_connect_status = config.get(deviceConfig, "WLAN_5GHZ_SSID_CONNECT_STATUS")
+            global wlan_5ghz_ssid_connect_status
+            wlan_5ghz_ssid_connect_status = config.get(deviceConfig, "WLAN_5GHZ_SSID_CONNECT_STATUS")
 
-        global wlan_6ghz_ssid_connect_status
-        wlan_6ghz_ssid_connect_status = config.get(deviceConfig, "WLAN_6GHZ_SSID_CONNECT_STATUS")
+            global wlan_6ghz_ssid_connect_status
+            wlan_6ghz_ssid_connect_status = config.get(deviceConfig, "WLAN_6GHZ_SSID_CONNECT_STATUS")
 
-        global wlan_2ghz_ssid_disconnect_status
-        wlan_2ghz_ssid_disconnect_status = config.get(deviceConfig, "WLAN_2GHZ_SSID_DISCONNECT_STATUS")
+            global wlan_2ghz_ssid_disconnect_status
+            wlan_2ghz_ssid_disconnect_status = config.get(deviceConfig, "WLAN_2GHZ_SSID_DISCONNECT_STATUS")
 
-        global wlan_5ghz_ssid_disconnect_status
-        wlan_5ghz_ssid_disconnect_status = config.get(deviceConfig, "WLAN_5GHZ_SSID_DISCONNECT_STATUS")
+            global wlan_5ghz_ssid_disconnect_status
+            wlan_5ghz_ssid_disconnect_status = config.get(deviceConfig, "WLAN_5GHZ_SSID_DISCONNECT_STATUS")
 
-        global wlan_6ghz_ssid_disconnect_status
-        wlan_6ghz_ssid_disconnect_status = config.get(deviceConfig, "WLAN_6GHZ_SSID_DISCONNECT_STATUS")
+            global wlan_6ghz_ssid_disconnect_status
+            wlan_6ghz_ssid_disconnect_status = config.get(deviceConfig, "WLAN_6GHZ_SSID_DISCONNECT_STATUS")
 
-        global wlan_2ghz_public_ssid_connect_status
-        wlan_2ghz_public_ssid_connect_status = config.get(deviceConfig, "WLAN_2GHZ_PUBLIC_SSID_CONNECT_STATUS")
+            global wlan_2ghz_public_ssid_connect_status
+            wlan_2ghz_public_ssid_connect_status = config.get(deviceConfig, "WLAN_2GHZ_PUBLIC_SSID_CONNECT_STATUS")
 
-        global wlan_5ghz_public_ssid_connect_status
-        wlan_5ghz_public_ssid_connect_status = config.get(deviceConfig, "WLAN_5GHZ_PUBLIC_SSID_CONNECT_STATUS")
+            global wlan_5ghz_public_ssid_connect_status
+            wlan_5ghz_public_ssid_connect_status = config.get(deviceConfig, "WLAN_5GHZ_PUBLIC_SSID_CONNECT_STATUS")
 
-        global wlan_6ghz_public_ssid_connect_status
-        wlan_6ghz_public_ssid_connect_status = config.get(deviceConfig, "WLAN_6GHZ_PUBLIC_SSID_CONNECT_STATUS")
+            global wlan_6ghz_public_ssid_connect_status
+            wlan_6ghz_public_ssid_connect_status = config.get(deviceConfig, "WLAN_6GHZ_PUBLIC_SSID_CONNECT_STATUS")
 
-        global wlan_2ghz_public_ssid_disconnect_status
-        wlan_2ghz_public_ssid_disconnect_status = config.get(deviceConfig, "WLAN_2GHZ_PUBLIC_SSID_DISCONNECT_STATUS")
+            global wlan_2ghz_public_ssid_disconnect_status
+            wlan_2ghz_public_ssid_disconnect_status = config.get(deviceConfig, "WLAN_2GHZ_PUBLIC_SSID_DISCONNECT_STATUS")
 
-        global wlan_5ghz_public_ssid_disconnect_status
-        wlan_5ghz_public_ssid_disconnect_status = config.get(deviceConfig, "WLAN_5GHZ_PUBLIC_SSID_DISCONNECT_STATUS")
+            global wlan_5ghz_public_ssid_disconnect_status
+            wlan_5ghz_public_ssid_disconnect_status = config.get(deviceConfig, "WLAN_5GHZ_PUBLIC_SSID_DISCONNECT_STATUS")
 
-        global wlan_6ghz_public_ssid_disconnect_status
-        wlan_6ghz_public_ssid_disconnect_status = config.get(deviceConfig, "WLAN_6GHZ_PUBLIC_SSID_DISCONNECT_STATUS")
+            global wlan_6ghz_public_ssid_disconnect_status
+            wlan_6ghz_public_ssid_disconnect_status = config.get(deviceConfig, "WLAN_6GHZ_PUBLIC_SSID_DISCONNECT_STATUS")
+        else:
+            global wlan_ssid_connect_status
+            wlan_ssid_connect_status = config.get(deviceConfig, "WLAN_SSID_CONNECT_STATUS")
+
+            global wlan_ssid_disconnect_status
+            wlan_ssid_disconnect_status = config.get(deviceConfig, "WLAN_SSID_DISCONNECT_STATUS")
 
         global lan_os_type
         lan_os_type = config.get(deviceConfig, 'LAN_OS_TYPE')
@@ -247,17 +260,18 @@ def parseDeviceConfig(obj):
         global wan_script
         wan_script = config.get(deviceConfig, "WAN_SCRIPT")
 
-        global ssid_2ghz_name
-        ssid_2ghz_name = config.get(deviceConfig, "SSID_2GHZ_NAME")
+        if mlo_capability == "False":
+            global ssid_2ghz_name
+            ssid_2ghz_name = config.get(deviceConfig, "SSID_2GHZ_NAME")
 
-        global ssid_2ghz_public_name
-        ssid_2ghz_public_name = config.get(deviceConfig, "SSID_2GHZ_PUBLIC_NAME")
+            global ssid_2ghz_public_name
+            ssid_2ghz_public_name = config.get(deviceConfig, "SSID_2GHZ_PUBLIC_NAME")
 
-        global ssid_2ghz_pwd
-        ssid_2ghz_pwd = config.get(deviceConfig, "SSID_2GHZ_PWD")
+            global ssid_2ghz_pwd
+            ssid_2ghz_pwd = config.get(deviceConfig, "SSID_2GHZ_PWD")
 
-        global ssid_2ghz_invalid_pwd
-        ssid_2ghz_invalid_pwd = config.get(deviceConfig, "SSID_2GHZ_INVALID_PWD")
+            global ssid_2ghz_invalid_pwd
+            ssid_2ghz_invalid_pwd = config.get(deviceConfig, "SSID_2GHZ_INVALID_PWD")
 
         global ssid_2ghz_index
         global radio_2ghz_index
@@ -290,29 +304,36 @@ def parseDeviceConfig(obj):
             ssid_5ghz_index = config.get(deviceConfig, "WEBPA_SSID_5GHZ_PUBLIC_INDEX")
             ssid_6ghz_index = config.get(deviceConfig, "WEBPA_SSID_6GHZ_PUBLIC_INDEX")
 
-        global ssid_5ghz_name
-        ssid_5ghz_name = config.get(deviceConfig, "SSID_5GHZ_NAME")
+        if mlo_capability == "False":
+            global ssid_5ghz_name
+            ssid_5ghz_name = config.get(deviceConfig, "SSID_5GHZ_NAME")
 
-        global ssid_5ghz_public_name
-        ssid_5ghz_public_name = config.get(deviceConfig, "SSID_5GHZ_PUBLIC_NAME")
+            global ssid_5ghz_public_name
+            ssid_5ghz_public_name = config.get(deviceConfig, "SSID_5GHZ_PUBLIC_NAME")
 
-        global ssid_5ghz_pwd
-        ssid_5ghz_pwd = config.get(deviceConfig, "SSID_5GHZ_PWD")
+            global ssid_5ghz_pwd
+            ssid_5ghz_pwd = config.get(deviceConfig, "SSID_5GHZ_PWD")
 
-        global ssid_5ghz_invalid_pwd
-        ssid_5ghz_invalid_pwd = config.get(deviceConfig, "SSID_5GHZ_INVALID_PWD")
+            global ssid_5ghz_invalid_pwd
+            ssid_5ghz_invalid_pwd = config.get(deviceConfig, "SSID_5GHZ_INVALID_PWD")
 
-        global ssid_6ghz_name
-        ssid_6ghz_name = config.get(deviceConfig, "SSID_6GHZ_NAME")
+            global ssid_6ghz_name
+            ssid_6ghz_name = config.get(deviceConfig, "SSID_6GHZ_NAME")
 
-        global ssid_6ghz_public_name
-        ssid_6ghz_public_name = config.get(deviceConfig, "SSID_6GHZ_PUBLIC_NAME")
+            global ssid_6ghz_public_name
+            ssid_6ghz_public_name = config.get(deviceConfig, "SSID_6GHZ_PUBLIC_NAME")
 
-        global ssid_6ghz_pwd
-        ssid_6ghz_pwd = config.get(deviceConfig, "SSID_6GHZ_PWD")
+            global ssid_6ghz_pwd
+            ssid_6ghz_pwd = config.get(deviceConfig, "SSID_6GHZ_PWD")
 
-        global ssid_6ghz_invalid_pwd
-        ssid_6ghz_invalid_pwd = config.get(deviceConfig, "SSID_6GHZ_INVALID_PWD")
+            global ssid_6ghz_invalid_pwd
+            ssid_6ghz_invalid_pwd = config.get(deviceConfig, "SSID_6GHZ_INVALID_PWD")
+        else:
+            global ssid_name
+            ssid_name = config.get(deviceConfig, "MLO_SSID")
+
+            global ssid_pwd
+            ssid_pwd = config.get(deviceConfig, "MLO_PASSWORD")
 
         global connection_timeout
         connection_timeout = config.get(deviceConfig, "CONNECTION_TIMEOUT")
@@ -512,23 +533,30 @@ def parseDeviceConfig(obj):
         global perf_test_poll_interval
         perf_test_poll_interval = config.get(deviceConfig, "PERF_TEST_POLL_INTERVAL")
 
-        global wlan_2ghz_throughput_to_wan
-        wlan_2ghz_throughput_to_wan = config.get(deviceConfig, "WLAN_2GHZ_THROUGHPUT_TO_WAN")
+        if mlo_capability == "False":
+            global wlan_2ghz_throughput_to_wan
+            wlan_2ghz_throughput_to_wan = config.get(deviceConfig, "WLAN_2GHZ_THROUGHPUT_TO_WAN")
 
-        global wlan_2ghz_throughput_to_lan
-        wlan_2ghz_throughput_to_lan = config.get(deviceConfig, "WLAN_2GHZ_THROUGHPUT_TO_LAN")
+            global wlan_2ghz_throughput_to_lan
+            wlan_2ghz_throughput_to_lan = config.get(deviceConfig, "WLAN_2GHZ_THROUGHPUT_TO_LAN")
 
-        global wlan_5ghz_throughput_to_wan
-        wlan_5ghz_throughput_to_wan = config.get(deviceConfig, "WLAN_5GHZ_THROUGHPUT_TO_WAN")
+            global wlan_5ghz_throughput_to_wan
+            wlan_5ghz_throughput_to_wan = config.get(deviceConfig, "WLAN_5GHZ_THROUGHPUT_TO_WAN")
 
-        global wlan_5ghz_throughput_to_lan
-        wlan_5ghz_throughput_to_lan = config.get(deviceConfig, "WLAN_5GHZ_THROUGHPUT_TO_LAN")
+            global wlan_5ghz_throughput_to_lan
+            wlan_5ghz_throughput_to_lan = config.get(deviceConfig, "WLAN_5GHZ_THROUGHPUT_TO_LAN")
 
-        global wlan_6ghz_throughput_to_wan
-        wlan_6ghz_throughput_to_wan = config.get(deviceConfig, "WLAN_6GHZ_THROUGHPUT_TO_WAN")
+            global wlan_6ghz_throughput_to_wan
+            wlan_6ghz_throughput_to_wan = config.get(deviceConfig, "WLAN_6GHZ_THROUGHPUT_TO_WAN")
 
-        global wlan_6ghz_throughput_to_lan
-        wlan_6ghz_throughput_to_lan = config.get(deviceConfig, "WLAN_6GHZ_THROUGHPUT_TO_LAN")
+            global wlan_6ghz_throughput_to_lan
+            wlan_6ghz_throughput_to_lan = config.get(deviceConfig, "WLAN_6GHZ_THROUGHPUT_TO_LAN")
+        else:
+            global wlan_mlo_throughput_to_wan
+            wlan_mlo_throughput_to_wan = config.get(deviceConfig, "WLAN_MLO_THROUGHPUT_TO_WAN")
+
+            global wlan_mlo_throughput_to_lan
+            wlan_mlo_throughput_to_lan = config.get(deviceConfig, "WLAN_MLO_THROUGHPUT_TO_LAN")
 
         global lan_throughput_to_wlan
         lan_throughput_to_wlan = config.get(deviceConfig, "LAN_THROUGHPUT_TO_WLAN")
@@ -539,14 +567,18 @@ def parseDeviceConfig(obj):
         global lan_throughput_outfile
         lan_throughput_outfile = config.get(deviceConfig, "LAN_THROUGHPUT_OUTFILE")
 
-        global wlan_5ghz_throughput_outfile
-        wlan_5ghz_throughput_outfile = config.get(deviceConfig, "WLAN_5GHZ_THROUGHPUT_OUTFILE")
+        if mlo_capability == "False":
+            global wlan_5ghz_throughput_outfile
+            wlan_5ghz_throughput_outfile = config.get(deviceConfig, "WLAN_5GHZ_THROUGHPUT_OUTFILE")
 
-        global wlan_2ghz_throughput_outfile
-        wlan_2ghz_throughput_outfile = config.get(deviceConfig, "WLAN_2GHZ_THROUGHPUT_OUTFILE")
+            global wlan_2ghz_throughput_outfile
+            wlan_2ghz_throughput_outfile = config.get(deviceConfig, "WLAN_2GHZ_THROUGHPUT_OUTFILE")
 
-        global wlan_6ghz_throughput_outfile
-        wlan_6ghz_throughput_outfile = config.get(deviceConfig, "WLAN_6GHZ_THROUGHPUT_OUTFILE")
+            global wlan_6ghz_throughput_outfile
+            wlan_6ghz_throughput_outfile = config.get(deviceConfig, "WLAN_6GHZ_THROUGHPUT_OUTFILE")
+        else:
+            global wlan_mlo_throughput_outfile
+            wlan_mlo_throughput_outfile = config.get(deviceConfig, "WLAN_MLO_THROUGHPUT_OUTFILE")
 
         global tm_logs_location
         tm_logs_location = config.get(deviceConfig, "TM_LOGS_LOCATION")
@@ -733,7 +765,7 @@ def checkSsidAvailable(ssidName):
 ########## End of Function ##########
 
 
-def wifiConnect(ssidName,ssidPwd,securityType):
+def wifiConnect(ssidName,ssidPwd,securityType="Protected"):
 
 # wifiConnect
 
@@ -802,11 +834,18 @@ def wifiDisconnect(wlanInterface):
         if status == "SUCCESS":
             if wlan_os_type == "UBUNTU":
                 status = getConnectedSsidName(wlanInterface)
-                if ssid_2ghz_name in status or ssid_5ghz_name in status or ssid_6ghz_name in status:
-                    command="sudo sh %s wifi_ssid_disconnect %s" %(wlan_script,wlanInterface)
-                    status = executeCommand(command)
+                if mlo_capability == "False":
+                    if ssid_2ghz_name in status or ssid_5ghz_name in status or ssid_6ghz_name in status:
+                        command="sudo sh %s wifi_ssid_disconnect %s" %(wlan_script,wlanInterface)
+                        status = executeCommand(command)
+                    else:
+                        status = "SSID is already disconnected"
                 else:
-                    status = "SSID is already disconnected"
+                    if ssid_name in status:
+                        command="sudo sh %s wifi_ssid_disconnect %s" %(wlan_script,wlanInterface)
+                        status = executeCommand(command)
+                    else:
+                        status = "SSID is already disconnected"
             else:
                 status = "Only UBUNTU platform supported!!!"
         else:
@@ -843,15 +882,26 @@ def wlanConnectWifiSsid(ssidName,ssidPwd,wlanInterface,securityType= "Protected"
             status = checkSsidAvailable(ssidName)
             if ssidName in status:
                 status = wifiConnect(ssidName,ssidPwd,securityType)
-                if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status or wlan_2ghz_public_ssid_connect_status in status or wlan_5ghz_public_ssid_connect_status in status or wlan_6ghz_public_ssid_connect_status:
-                    sleep(60);
-                    status = getConnectedSsidName(wlanInterface)
-                    if ssidName in status:
-                        return "SUCCESS"
+                if mlo_capability == "False":
+                    if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status or wlan_2ghz_public_ssid_connect_status in status or wlan_5ghz_public_ssid_connect_status in status or wlan_6ghz_public_ssid_connect_status:
+                        sleep(60);
+                        status = getConnectedSsidName(wlanInterface)
+                        if ssidName in status:
+                            return "SUCCESS"
+                        else:
+                            return "Failed to get the connected SSID Name"
                     else:
-                        return "Failed to get the connected SSID Name"
+                        return "Failed to connect to wifi ssid"
                 else:
-                    return "Failed to connect to wifi ssid"
+                    if wlan_ssid_connect_status in status:
+                        sleep(60);
+                        status = getConnectedSsidName(wlanInterface)
+                        if ssidName in status:
+                            return "SUCCESS"
+                        else:
+                            return "Failed to get the connected SSID Name"
+                    else:
+                        return "Failed to connect to wifi ssid"
             else:
                 return "Couldn't find the SSID in available SSIDs list"
         else:
@@ -904,10 +954,16 @@ def wlanDisconnectWifiSsid(wlanInterface):
 
     try:
         status = wifiDisconnect(wlanInterface)
-        if wlan_2ghz_ssid_disconnect_status in status or wlan_5ghz_ssid_disconnect_status in status or wlan_6ghz_ssid_disconnect_status in status or wlan_2ghz_public_ssid_disconnect_status in status or wlan_5ghz_public_ssid_disconnect_status in status or wlan_6ghz_public_ssid_disconnect_status in status or "SSID is already disconnected" in status:
-            return "SUCCESS"
+        if mlo_capability == "False":
+            if wlan_2ghz_ssid_disconnect_status in status or wlan_5ghz_ssid_disconnect_status in status or wlan_6ghz_ssid_disconnect_status in status or wlan_2ghz_public_ssid_disconnect_status in status or wlan_5ghz_public_ssid_disconnect_status in status or wlan_6ghz_public_ssid_disconnect_status in status or "SSID is already disconnected" in status:
+                return "SUCCESS"
+            else:
+                return "Failed to disconnect from wifi ssid"
         else:
-            return "Failed to disconnect from wifi ssid"
+            if wlan_ssid_disconnect_status in status:
+                return "SUCCESS"
+            else:
+                return "Failed to disconnect from wifi ssid"
 
     except Exception as e:
         print(e);
@@ -1587,7 +1643,10 @@ def verifyNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_ip,sour
             if wlan_os_type == "UBUNTU":
                 if source == "WLAN":
                     script_name = wlan_script;
-                    interface = wlan_2ghz_interface
+                    if mlo_capability == "True":
+                        interface = wlan_interface
+                    else:
+                        interface = wlan_2ghz_interface
                 elif source == "WLAN_6G":
                     script_name = wlan_script
                     interface = wlan_6ghz_interface
@@ -1639,7 +1698,10 @@ def verifyIPv6NetworkConnectivity(connectivityType,host_name,interface,source="W
             if wlan_os_type == "UBUNTU":
                 if source == "WLAN":
                     script_name = wlan_script
-                    interface = wlan_2ghz_interface
+                    if mlo_capability == "True":
+                        interface = wlan_interface
+                    else:
+                        interface = wlan_2ghz_interface
                 elif source == "WLAN_6G":
                     script_name = wlan_script
                     interface = wlan_6ghz_interface
@@ -1792,8 +1854,12 @@ def deleteSavedWifiConnections():
         status = clientConnect("WLAN")
         if status == "SUCCESS":
             if wlan_os_type == "UBUNTU":
-                command="sudo sh %s delete_saved_wifi_connections %s %s %s" %(wlan_script,ssid_2ghz_name,ssid_5ghz_name,ssid_6ghz_name)
-                status = executeCommand(command)
+                if mlo_capability == "False":
+                    command="sudo sh %s delete_saved_wifi_connections %s %s %s" %(wlan_script,ssid_2ghz_name,ssid_5ghz_name,ssid_6ghz_name)
+                    status = executeCommand(command)
+                else:
+                    command="sudo sh %s delete_saved_wifi_connections %s" %(wlan_script,ssid_name)
+                    status = executeCommand(command)
             else:
                 status = "Only UBUNTU platform supported!!!"
         else:
@@ -2132,11 +2198,6 @@ def tcp_udpInClients(source,destination,dest_ip,src_ip,connectivityType="TCP"):
                     #last entry in throughput list from iperf is average itself, but not making use of it in current implementation
 #                       clientOutput_avg = clientOutput[-1]
                     outputValue = "server throughput not required"
-                    status = scpLogFromClientToTM(source, perf_out_file)
-                    if status == "SUCCESS":
-                        print("Log file transfer to test manger is success")
-                    else:
-                        print("log file transfer to test manager failed")
                 else:
                     validationStatus,outputValue = validateTcpUdpOutput(source,destination,connectivityType)
                     if validationStatus == "SUCCESS" and connectivityType == "UDP":
@@ -3259,10 +3320,12 @@ def postExecutionCleanup():
 # Description : Function to perform any post execution cleanup
 # Parameters  : None
 # Return Value: None
-
-    wifiDisconnect(wlan_2ghz_interface);
-    wifiDisconnect(wlan_5ghz_interface);
-    wifiDisconnect(wlan_6ghz_interface);
+    if mlo_capability == "False":
+        wifiDisconnect(wlan_2ghz_interface);
+        wifiDisconnect(wlan_5ghz_interface);
+        wifiDisconnect(wlan_6ghz_interface);
+    else:
+        wifiDisconnect(wlan_interface);
     deleteSavedWifiConnections();
     clientDisconnect();
 
@@ -3319,15 +3382,26 @@ def wlanConnectWifiSsidBssid(ssidName,ssidPwd,bssid,wlanInterface,securityType= 
             status = checkSsidAvailable(ssidName)
             if ssidName in status:
                 status = wifiConnectBssid(ssidName,ssidPwd,bssid,securityType)
-                if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status:
-                    sleep(60);
-                    status = getConnectedSsidName(wlanInterface)
-                    if ssidName in status:
-                        return "SUCCESS"
+                if mlo_capability == "False":
+                    if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status:
+                        sleep(60);
+                        status = getConnectedSsidName(wlanInterface)
+                        if ssidName in status:
+                            return "SUCCESS"
+                        else:
+                            return "Failed to get the connected SSID Name"
                     else:
-                        return "Failed to get the connected SSID Name"
+                        return "Failed to connect to wifi ssid and bssid"
                 else:
-                    return "Failed to connect to wifi ssid and bssid"
+                    if wlan_ssid_connect_status in status:
+                        sleep(60);
+                        status = getConnectedSsidName(wlanInterface)
+                        if ssidName in status:
+                            return "SUCCESS"
+                        else:
+                            return "Failed to get the connected SSID Name"
+                    else:
+                        return "Failed to connect to wifi ssid and bssid"
             else:
                 return "Couldn't find the SSID in available SSIDs list"
         else:
@@ -3427,4 +3501,124 @@ def verifyLongRunNetworkConnectivity(dest_ip,connectivityType,source_ip,gateway_
     print("Status of verifyLongRunNetworkConnectivity :%s" %status)
     return status
 
+########## End of Function ##########
+
+def getThroughputInMbps(serverOutput):
+
+# getThroughputInMbps
+
+# Syntax      : getThroughputInMbps(serverOutput)
+# Description : Function to parse iperf throughput output and convert it to Mbps
+# Parameters  : serverOutput - Throughput output string like "95.2 Mbits/sec"
+# Return Value: throughput in Mbps (float)
+
+    throughput = 0.0
+    try:
+        if serverOutput:
+            parts = serverOutput.split(" ")
+            bandwidth = float(parts[0])
+            if "Gbits/sec" in serverOutput:
+                throughput = bandwidth * 1000
+            elif "Kbits/sec" in serverOutput:
+                throughput = bandwidth * 0.001
+            else:
+                throughput = bandwidth
+    except Exception as e:
+        print(e)
+        throughput = 0.0
+    return throughput
+
+########## End of Function ##########
+
+def firewallSet(obj,level,step,revert="false"):
+# firewallSet
+# Syntax      : firewallSet(obj,level,step,revert="false")
+# Description : Function to set the firewall level
+# Parameters  : obj - tdkb_e2e object
+#             : level - firewall level to be set
+#               step - current step
+#               revert - if revert = false, SET will be validated with GET and not validated otherwise
+# Return Value: status - returns the status of firewall level set operation
+#               step - current step level
+    expectedresult = "SUCCESS"
+    status = "FAILURE"
+    tdkTestObj,firewallResult,details = setMultipleParameterValues(obj,"Device.X_CISCO_COM_Security.Firewall.FirewallLevel|%s|string" %level)
+
+    print(f"\nTEST STEP {step}: Set the firewall level to {level}")
+    print(f"EXPECTED RESULT {step}: Should set the firewall level to {level} successfully")
+    if expectedresult in firewallResult and details != "":
+        print(f"ACTUAL RESULT {step}: Firewall level set to {level} successfully")
+        print(f"TEST EXECUTION RESULT : SUCCESS")
+        tdkTestObj.setResultStatus("SUCCESS")
+
+        if revert == "false":
+            # Get and cross check the SET operation
+            tdkTestObj,firewallResult,details = getParameterValue(obj,"Device.X_CISCO_COM_Security.Firewall.FirewallLevel")
+            step = step + 1
+            print(f"\nTEST STEP {step}: Get the firewall level to cross check the SET operation")
+            print(f"EXPECTED RESULT {step}: Should get the firewall level successfully")
+            if expectedresult in firewallResult and details == level:
+                print(f"ACTUAL RESULT {step}: Firewall level is {level} as expected")
+                print(f"TEST EXECUTION RESULT : SUCCESS")
+                tdkTestObj.setResultStatus("SUCCESS")
+                status = "SUCCESS"
+            else:
+                print(f"ACTUAL RESULT {step}: Firewall level is NOT {level} as expected")
+                print(f"TEST EXECUTION RESULT : FAILURE")
+                tdkTestObj.setResultStatus("FAILURE")
+        else:
+            status = "SUCCESS"
+    else:
+        print(f"ACTUAL RESULT {step}: Firewall level NOT set to {level} successfully")
+        print(f"TEST EXECUTION RESULT : FAILURE")
+        tdkTestObj.setResultStatus("FAILURE")
+
+    return status, step
+
+########## End of Function ##########
+
+def lanManagementSet(obj,setList,step,revert="false"):
+# firewallSet
+# Syntax      : lanManagementSet(obj,setList,step,revert="false")
+# Description : Function to set the Lan Management IP and address ranges
+# Parameters  : obj - tdkb_e2e object
+#             : setList - Lan Management IP and address ranges to be SET
+# Return Value: status - Returns the status of set operation
+#               step - test step number
+#               details - list of values SET/Response from GET operation
+
+    expectedresult = "SUCCESS"
+    status = "FAILURE"
+    tdkTestObj,result,details = setMultipleParameterValues(obj,"Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress|%s|string|Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanSubnetMask|%s|string|Device.DHCPv4.Server.Pool.1.MinAddress|%s|string|Device.DHCPv4.Server.Pool.1.MaxAddress|%s|string" %(setList[0], setList[1], setList[2], setList[3]))
+    print(f"\nTEST STEP {step}: Set the values - Lan IP: {setList[0]}, Lan submet mask: {setList[1]}, Min address: {setList[2]}, Max address: {setList[3]}")
+    print(f"EXPECTED RESULT {step}: Should set the LAN Management values to the required values successfully")
+
+    if expectedresult in result and details != "":
+        print(f"ACTUAL RESULT {step}: Lan Management values set successfully")
+        print(f"TEST EXECUTION RESULT : SUCCESS")
+        tdkTestObj.setResultStatus("SUCCESS")
+
+        if revert == "false":
+            # Get and cross check the SET operation
+            tdkTestObj,result,details = getMultipleParameterValues(obj,["Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress", "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanSubnetMask", "Device.DHCPv4.Server.Pool.1.MinAddress", "Device.DHCPv4.Server.Pool.1.MaxAddress"])
+            step = step + 1
+            print(f"\nTEST STEP {step}: Get the Lan Management parameters to cross check the SET operation")
+            print(f"EXPECTED RESULT {step}: Should get the Lan Management parameters successfully")
+            if expectedresult in result and details == setList:
+                print(f"ACTUAL RESULT {step}: Lan management parameters are set as expected")
+                print(f"TEST EXECUTION RESULT : SUCCESS")
+                tdkTestObj.setResultStatus("SUCCESS")
+                status = "SUCCESS"
+            else:
+                print(f"ACTUAL RESULT {step}: Lan Management parameters are not set as expected")
+                print(f"TEST EXECUTION RESULT : FAILURE")
+                tdkTestObj.setResultStatus("FAILURE")
+        else:
+            status = "SUCCESS"
+    else:
+        print(f"ACTUAL RESULT {step}: Lan Mangement parameters are not SET successfully")
+        print(f"TEST EXECUTION RESULT : FAILURE")
+        tdkTestObj.setResultStatus("FAILURE")
+
+    return status, step, details
 ########## End of Function ##########
