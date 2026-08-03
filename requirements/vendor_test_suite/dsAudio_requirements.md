@@ -1,0 +1,39 @@
+# Device Settings Audio Port — Specifications
+
+## Requirements
+
+| Req ID | Test Scope |
+|:-------|:--------------------------------------|
+| `VTS‑DSAUDIO‑001` | SHALL successfully initialize the Device Settings Audio Port sub-system, successfully terminate it, and support re-initialization after a prior termination without error. |
+| `VTS‑DSAUDIO‑002` | SHALL return a valid, non-null audio port handle for each supported port type and index, with repeated requests for the same port type and index returning an equal handle. |
+| `VTS‑DSAUDIO‑003` | SHALL retrieve the current audio stream format of a valid audio port and report a valid format value. |
+| `VTS‑DSAUDIO‑004` | SHALL enable and disable each supported audio port, with the reported enable state matching the state that was set. |
+| `VTS‑DSAUDIO‑005` | SHALL set the audio compression level of a supported audio port, with the reported level matching the level that was set. |
+| `VTS‑DSAUDIO‑006` | SHALL set the dialog enhancement level of a supported audio port, with the reported value matching the level that was set; if dialog enhancement is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑007` | SHALL set the Dolby volume mode of a supported audio port, with the reported mode matching the value that was set; if Dolby volume mode is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑008` | SHALL set the intelligent equalizer mode of a supported audio port, with the reported mode matching the value that was set; if the intelligent equalizer is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑009` | SHALL set the volume leveller mode and level of a supported audio port, with the reported settings matching the values that were set; if the volume leveller is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑010` | SHALL set the bass enhancer boost level of a supported audio port, with the reported level matching the value that was set; if the bass enhancer is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑011` | SHALL enable and disable the surround decoder of a supported audio port, with the reported enable state matching the state that was set; if the surround decoder is not supported by the DUT, the enable and query operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑012` | SHALL set the DRC (Dynamic Range Control) mode of a supported audio port, with the reported mode matching the value that was set; if DRC is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑013` | SHALL set the surround virtualizer mode and boost of a supported audio port, with the reported settings matching the values that were set; if the surround virtualizer is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑014` | SHALL set the Media Intelligent (MI) steering enable state of a supported audio port, with the reported state matching the value that was set; if MI steering is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑015` | SHALL set the graphic equalizer mode of a supported audio port, with the reported mode matching the value that was set; if the graphic equalizer is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑016` | SHALL enable and disable the loudness equivalence (LE) configuration of a supported audio port, with the reported configuration matching the state that was set; if LE configuration is not supported by the DUT, the enable and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑017` | SHALL retrieve the list of supported MS12 audio profiles, retrieve the currently active MS12 audio profile, and set an MS12 audio profile for valid profile names on supported ports; if MS12 audio profiles are not supported by the DUT, these operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑018` | SHALL set the stereo mode of a supported audio port, with the reported mode matching the value that was set. |
+| `VTS‑DSAUDIO‑019` | SHALL set the stereo auto mode of a supported audio port, with the reported mode matching the value that was set; if stereo auto mode is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑020` | SHALL set the audio gain of a supported audio port, with the reported gain matching the value that was set; if audio gain control is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑021` | SHALL set the audio volume level of a supported audio port, with the reported level matching the value that was set; if audio volume level control is not supported by the DUT, the set and get operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑022` | SHALL set the audio delay of a supported audio port, with the reported delay matching the value that was set. |
+| `VTS‑DSAUDIO‑023` | SHALL mute and unmute the audio output of a supported audio port, with the reported mute state matching the state that was set. |
+| `VTS‑DSAUDIO‑024` | SHALL configure the Dolby ATMOS output mode of a supported audio port, and retrieve the ATMOS capability of the connected sink device reporting a valid capability value. |
+| `VTS‑DSAUDIO‑025` | SHALL enable and disable associated audio mixing, with the reported mixing state matching the state that was set. |
+| `VTS‑DSAUDIO‑026` | SHALL set the fader control mixer balance in the range [-32, +32], with the reported balance matching the value that was set. |
+| `VTS‑DSAUDIO‑027` | SHALL configure the audio input mixer levels for each supported audio input type for valid volume values; if audio mixer level control is not supported by the DUT, the operation reports an operation-not-supported error. |
+| `VTS‑DSAUDIO‑028` | SHALL set the AC4 primary and secondary language codes for valid 3-letter language codes, with the reported codes matching the codes that were set. |
+| `VTS‑DSAUDIO‑029` | SHALL retrieve the audio capabilities of each audio port matching the audio capabilities declared in the device profile, and the MS12 capabilities matching the MS12 capabilities declared in the device profile. |
+| `VTS‑DSAUDIO‑030` | SHALL report MS11 multistream decode support matching the corresponding field in the device profile, and MS12 multistream decode support matching the corresponding field in the device profile. |
+| `VTS‑DSAUDIO‑031` | SHALL retrieve the supported ARC types of the connected ARC/eARC device for HDMI ARC-type ports, configure Short Audio Descriptor (SAD) data received from CEC for valid SAD lists, and enable and disable ARC/eARC audio routing; if ARC/eARC is not supported by the DUT, these operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑032` | SHALL report the audio output port connection status, and successfully register event callbacks for audio output connection changes, audio format updates, and ATMOS capability changes; if connection status reporting or the connection-change callback is not supported by the DUT, those operations report an operation-not-supported error. |
+| `VTS‑DSAUDIO‑033` | SHALL report an already-initialized error on repeated initialization, a not-initialized error for operations invoked before initialization or after termination, and an invalid-parameter error for invalid or null port handles, NULL output pointers, or out-of-range parameter values. |

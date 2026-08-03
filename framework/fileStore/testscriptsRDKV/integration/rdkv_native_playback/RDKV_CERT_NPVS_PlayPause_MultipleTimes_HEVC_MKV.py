@@ -71,14 +71,14 @@ if "SUCCESS" in result.upper():
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
         timeoutInSeconds = timeoutConfigValue
 
-    #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_STRESS_REPEAT_COUNT' that specifies the number of times the operations should be reapeted
+    #Retrieve the value of configuration parameter 'NATIVE_PLAYBACK_REPEAT_COUNT' that specifies the number of times the operations should be reapeted
     tdkTestObj = obj.createTestStep('getDeviceConfigValue')
-    tdkTestObj.addParameter("configKey","NATIVE_PLAYBACK_STRESS_REPEAT_COUNT")
+    tdkTestObj.addParameter("configKey","NATIVE_PLAYBACK_REPEAT_COUNT")
     tdkTestObj.executeTestCase(expectedResult);
     actualresult = tdkTestObj.getResult();
     repeatCountConfigValue = tdkTestObj.getResultDetails();
 
-    #If the value of NATIVE_PLAYBACK_STRESS_REPEAT_COUNT is retrieved correctly and its value is not empty, repeatCount value should be set as the retrieved vale
+    #If the value of NATIVE_PLAYBACK_REPEAT_COUNT is retrieved correctly and its value is not empty, repeatCount value should be set as the retrieved vale
     #if the device config value is empty, default repeatCount(3) is passed
     if expectedResult in actualresult.upper() and repeatCountConfigValue != "":
         repeatCount = int(repeatCountConfigValue)
@@ -86,7 +86,7 @@ if "SUCCESS" in result.upper():
     #Construct the trickplay operation string by calling the setOperations() separately for each play/pause operation along with the timeout argument
     #The operations specifies the operation(fastforward/rewind/seek/play/pause) to be executed from the mediapipeline trickplay test
     #Sample oprations strings is "operations=play:10,pause:10,play:10,pause:10,play:10,pause:10,play:10,pause:10,play:10,pause:10,play:10,pause:10"
-    #The play and pause operations are added NATIVE_PLAYBACK_STRESS_REPEAT_COUNT or 3(default) times
+    #The play and pause operations are added NATIVE_PLAYBACK_REPEAT_COUNT or 3(default) times
     #For adding the operation to the trickplay operations string, execute setOperations (operation_name_string, arguments...)
     #eg: setOperations ("play", 10)
     #For repeating the previous operations, execute setOperations ("repeat", number of operations to be repeated, number of times the operations should be repeated)
