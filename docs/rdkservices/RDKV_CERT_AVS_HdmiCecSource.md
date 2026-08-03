@@ -6,42 +6,42 @@ RDKV_CERT_AVS_HdmiCecSource
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [HdmiCecSource_Verify_Get_Device_List](#hdmicecsource_verify_get_device_list)
-   - [HdmiCecSource_Check_Empty_Device_List](#hdmicecsource_check_empty_device_list)
+   - [HdmiCecSource_Get_Device_List](#hdmicecsource_get_device_list)
+   - [HdmiCecSource_Empty_Device_List](#hdmicecsource_empty_device_list)
    - [HdmiCecSource_Enable_Disable_HdmiCec_Driver](#hdmicecsource_enable_disable_hdmicec_driver)
-   - [HdmiCecSource_Verify_Get_OSD_Name](#hdmicecsource_verify_get_osd_name)
+   - [HdmiCecSource_Get_OSD_Name](#hdmicecsource_get_osd_name)
    - [HdmiCecSource_Enable_Disable_OTP_Option](#hdmicecsource_enable_disable_otp_option)
-   - [HdmiCecSource_Verify_Get_Vendor_Id](#hdmicecsource_verify_get_vendor_id)
-   - [HdmiCecSource_Verify_Send_Standby_Message](#hdmicecsource_verify_send_standby_message)
-   - [HdmiCecSource_Verify_Send_Standby_Message_Error_When_HdmiCec_Driver_Not_Enabled](#hdmicecsource_verify_send_standby_message_error_when_hdmicec_driver_not_enabled)
+   - [HdmiCecSource_Get_Vendor_Id](#hdmicecsource_get_vendor_id)
+   - [HdmiCecSource_Send_Standby_Message](#hdmicecsource_send_standby_message)
+   - [HdmiCecSource_Send_Standby_Message_Error_When_HdmiCec_Driver_Not_Enabled](#hdmicecsource_send_standby_message_error_when_hdmicec_driver_not_enabled)
    - [HdmiCecSource_Set_Enabled_No_Params](#hdmicecsource_set_enabled_no_params)
    - [HdmiCecSource_Set_OTP_Enabled_No_Params](#hdmicecsource_set_otp_enabled_no_params)
-   - [HdmiCecSource_Verify_Set_Vendor_Id](#hdmicecsource_verify_set_vendor_id)
-   - [HdmiCecSource_Verify_Perform_OTP_Action_Error_When_OTP_Action_Not_Enabled](#hdmicecsource_verify_perform_otp_action_error_when_otp_action_not_enabled)
-   - [HdmiCecSource_Verify_SendKeyPressEvent_without_Params](#hdmicecsource_verify_sendkeypressevent_without_params)
-   - [HdmiCecSource_Check_Empty_DeviceList_with_No-CEC-Devices_Connected](#hdmicecsource_check_empty_devicelist_with_no-cec-devices_connected)
-   - [HdmiCecSource_Verify_Get_Active_Source_Status_False](#hdmicecsource_verify_get_active_source_status_false)
-   - [HdmiCecSource_Verify_Get_Active_Source_Status_True](#hdmicecsource_verify_get_active_source_status_true)
-   - [HdmiCecSource_Verify_OnDevice_InfoUpdated Event](#hdmicecsource_verify_ondevice_infoupdated-event)
-   - [HdmiCecSource_Verify_Standby_MessageReceived_Event](#hdmicecsource_verify_standby_messagereceived_event)
-   - [HdmiCecSource_Verify_On_ActiveSource_StatusUpdated_Event_when_StandbyCalled](#hdmicecsource_verify_on_activesource_statusupdated_event_when_standbycalled)
-   - [HdmiCecSource_Verify_On_ActiveSource_StatusUpdated_Event_when_PerformOTPCalled](#hdmicecsource_verify_on_activesource_statusupdated_event_when_performotpcalled)
+   - [HdmiCecSource_Set_Vendor_Id](#hdmicecsource_set_vendor_id)
+   - [HdmiCecSource_Perform_OTP_Action_Error_When_OTP_Action_Not_Enabled](#hdmicecsource_perform_otp_action_error_when_otp_action_not_enabled)
+   - [HdmiCecSource_SendKeyPressEvent_without_Params](#hdmicecsource_sendkeypressevent_without_params)
+   - [HdmiCecSource_Empty_DeviceList_with_No-CEC-Devices_Connected](#hdmicecsource_empty_devicelist_with_no-cec-devices_connected)
+   - [HdmiCecSource_Get_Active_Source_Status_False](#hdmicecsource_get_active_source_status_false)
+   - [HdmiCecSource_Get_Active_Source_Status_True](#hdmicecsource_get_active_source_status_true)
+   - [HdmiCecSource_On_DeviceInfoUpdated_Event](#hdmicecsource_on_deviceinfoupdated_event)
+   - [HdmiCecSource_Standby_MessageReceived_Event](#hdmicecsource_standby_messagereceived_event)
+   - [HdmiCecSource_On_ActiveSource_StatusUpdated_Event_when_StandbyCalled](#hdmicecsource_on_activesource_statusupdated_event_when_standbycalled)
+   - [HdmiCecSource_On_ActiveSource_StatusUpdated_Event_when_PerformOTPCalled](#hdmicecsource_on_activesource_statusupdated_event_when_performotpcalled)
    - [HdmiCecSource_ActivateDeactivate_Event_Test](#hdmicecsource_activatedeactivate_event_test)
    - [HdmiCecSource_ActivateDeactivate_All_Event_Test](#hdmicecsource_activatedeactivate_all_event_test)
-   - [HdmiCecSource_Verify_onDeviceInfoUpdated_event_not_triggered_same_OSD_name](#hdmicecsource_verify_ondeviceinfoupdated_event_not_triggered_same_osd_name)
-   - [HdmiCecSource_Verify_onDeviceInfoUpdated_event_not_triggered_no_changes](#hdmicecsource_verify_ondeviceinfoupdated_event_not_triggered_no_changes)
-   - [HdmiCecSource_Verify_onDeviceInfoUpdated_event_triggered](#hdmicecsource_verify_ondeviceinfoupdated_event_triggered)
-   - [HdmiCecSource_Verify_Get_Vendor_ID_Error](#hdmicecsource_verify_get_vendor_id_error)
-   - [HdmiCecSource_Verify_Get_OSD_Name_Error](#hdmicecsource_verify_get_osd_name_error)
-   - [HdmiCecSource_Verify_Get_Device_List_Error](#hdmicecsource_verify_get_device_list_error)
-   - [HdmiCecSource_Verify_Get_Enabled_Error](#hdmicecsource_verify_get_enabled_error)
-   - [HdmiCecSource_Verify_Get_OTP_Enabled_Error](#hdmicecsource_verify_get_otp_enabled_error)
-   - [HdmiCecSource_Verify_Send_Key_Press_Event_Invalid_LogicalAddress](#hdmicecsource_verify_send_key_press_event_invalid_logicaladdress)
-   - [HdmiCecSource_Verify_Send_Key_Press_Event_Invalid_Keycode](#hdmicecsource_verify_send_key_press_event_invalid_keycode)
-   - [HdmiCecSource_Verify_Send_Key_Press_Event_Invalid_Params](#hdmicecsource_verify_send_key_press_event_invalid_params)
-   - [HdmiCecSource_Verify_Send_Key_Press_Event_No_KeyCode](#hdmicecsource_verify_send_key_press_event_no_keycode)
-   - [HdmiCecSource_Verify_Send_Key_Press_Event_Error_No_Logical_Address](#hdmicecsource_verify_send_key_press_event_error_no_logical_address)
-   - [HdmiCecSource_Verify_Send_Key_Press_Event_No_Param](#hdmicecsource_verify_send_key_press_event_no_param)
+   - [HdmiCecSource_On_DeviceInfoUpdated_Event_Not_Triggered_Same_OSD_Name](#hdmicecsource_on_deviceinfoupdated_event_not_triggered_same_osd_name)
+   - [HdmiCecSource_On_DeviceInfoUpdated_Event_Not_Triggered_No_Changes](#hdmicecsource_on_deviceinfoupdated_event_not_triggered_no_changes)
+   - [HdmiCecSource_On_DeviceInfoUpdated_Event_With_Multiple_Updates](#hdmicecsource_on_deviceinfoupdated_event_with_multiple_updates)
+   - [HdmiCecSource_Get_Vendor_ID_Error](#hdmicecsource_get_vendor_id_error)
+   - [HdmiCecSource_Get_OSD_Name_Error](#hdmicecsource_get_osd_name_error)
+   - [HdmiCecSource_Get_Device_List_Error](#hdmicecsource_get_device_list_error)
+   - [HdmiCecSource_Get_Enabled_Error](#hdmicecsource_get_enabled_error)
+   - [HdmiCecSource_Get_OTP_Enabled_Error](#hdmicecsource_get_otp_enabled_error)
+   - [HdmiCecSource_Send_Key_Press_Event_Invalid_LogicalAddress](#hdmicecsource_send_key_press_event_invalid_logicaladdress)
+   - [HdmiCecSource_Send_Key_Press_Event_Invalid_Keycode](#hdmicecsource_send_key_press_event_invalid_keycode)
+   - [HdmiCecSource_Send_Key_Press_Event_Invalid_Params](#hdmicecsource_send_key_press_event_invalid_params)
+   - [HdmiCecSource_Send_Key_Press_Event_No_KeyCode](#hdmicecsource_send_key_press_event_no_keycode)
+   - [HdmiCecSource_Send_Key_Press_Event_Error_No_Logical_Address](#hdmicecsource_send_key_press_event_error_no_logical_address)
+   - [HdmiCecSource_Send_Key_Press_Event_No_Param](#hdmicecsource_send_key_press_event_no_param)
    - [HdmiCecSource_Set_Invalid_OSD_Name](#hdmicecsource_set_invalid_osd_name)
    - [HdmiCecSource_Set_Empty_VendorID](#hdmicecsource_set_empty_vendorid)
 4. [Plugin Post-conditions](#plugin-post-conditions)
@@ -82,9 +82,9 @@ accessible via JSON-RPC under the callsign `org.rdk.HdmiCecSource` (version 1)
 
 ## Test Cases
 
-<a id="hdmicecsource_verify_get_device_list"></a>
+<a id="hdmicecsource_get_device_list"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Get_Device_List
+HdmiCecSource_Get_Device_List
 
 ### TestCase ID
 HdmiCecSource_01
@@ -111,9 +111,9 @@ Verify that the getDeviceList method returns a list of devices that support CEC
 
 ---
 
-<a id="hdmicecsource_check_empty_device_list"></a>
+<a id="hdmicecsource_empty_device_list"></a>
 ### TestCase Name
-HdmiCecSource_Check_Empty_Device_List
+HdmiCecSource_Empty_Device_List
 
 ### TestCase ID
 HdmiCecSource_02
@@ -187,9 +187,9 @@ Enables and disables hdmicec driver
 
 ---
 
-<a id="hdmicecsource_verify_get_osd_name"></a>
+<a id="hdmicecsource_get_osd_name"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Get_OSD_Name
+HdmiCecSource_Get_OSD_Name
 
 ### TestCase ID
 HdmiCecSource_04
@@ -261,9 +261,9 @@ Enables and Disables the HdmiCec OTP option
 
 ---
 
-<a id="hdmicecsource_verify_get_vendor_id"></a>
+<a id="hdmicecsource_get_vendor_id"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Get_Vendor_Id
+HdmiCecSource_Get_Vendor_Id
 
 ### TestCase ID
 HdmiCecSource_06
@@ -287,9 +287,9 @@ Verify that the getVendorId method returns the correct vendor ID when called
 
 ---
 
-<a id="hdmicecsource_verify_send_standby_message"></a>
+<a id="hdmicecsource_send_standby_message"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Send_Standby_Message
+HdmiCecSource_Send_Standby_Message
 
 ### TestCase ID
 HdmiCecSource_07
@@ -324,9 +324,9 @@ Verify if the sendStandbyMessage method sends a CEC standby message to the logic
 
 ---
 
-<a id="hdmicecsource_verify_send_standby_message_error_when_hdmicec_driver_not_enabled"></a>
+<a id="hdmicecsource_send_standby_message_error_when_hdmicec_driver_not_enabled"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Send_Standby_Message_Error_When_HdmiCec_Driver_Not_Enabled
+HdmiCecSource_Send_Standby_Message_Error_When_HdmiCec_Driver_Not_Enabled
 
 ### TestCase ID
 HdmiCecSource_08
@@ -399,9 +399,9 @@ Verify if the setOTPEnabled method returns an error when 'enabled' parameter is 
 
 ---
 
-<a id="hdmicecsource_verify_set_vendor_id"></a>
+<a id="hdmicecsource_set_vendor_id"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Set_Vendor_Id
+HdmiCecSource_Set_Vendor_Id
 
 ### TestCase ID
 HdmiCecSource_11
@@ -427,9 +427,9 @@ Verify if the setVendorId method successfully sets the vendor ID when a valid ve
 
 ---
 
-<a id="hdmicecsource_verify_perform_otp_action_error_when_otp_action_not_enabled"></a>
+<a id="hdmicecsource_perform_otp_action_error_when_otp_action_not_enabled"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Perform_OTP_Action_Error_When_OTP_Action_Not_Enabled
+HdmiCecSource_Perform_OTP_Action_Error_When_OTP_Action_Not_Enabled
 
 ### TestCase ID
 HdmiCecSource_12
@@ -466,9 +466,9 @@ Verify if the performOTPAction method returns an error when the OTP action is no
 
 ---
 
-<a id="hdmicecsource_verify_sendkeypressevent_without_params"></a>
+<a id="hdmicecsource_sendkeypressevent_without_params"></a>
 ### TestCase Name
-HdmiCecSource_Verify_SendKeyPressEvent_without_Params
+HdmiCecSource_SendKeyPressEvent_without_Params
 
 ### TestCase ID
 HdmiCecSource_13
@@ -484,9 +484,9 @@ Verify that the sendKeyPressEvent method returns an error when both the logical 
 
 ---
 
-<a id="hdmicecsource_check_empty_devicelist_with_no-cec-devices_connected"></a>
+<a id="hdmicecsource_empty_devicelist_with_no-cec-devices_connected"></a>
 ### TestCase Name
-HdmiCecSource_Check_Empty_DeviceList_with_No-CEC-Devices_Connected
+HdmiCecSource_Empty_DeviceList_with_No-CEC-Devices_Connected
 
 ### TestCase ID
 HdmiCecSource_14
@@ -510,9 +510,9 @@ Verify that the getDeviceList method returns an empty list when no CEC-enabled d
 
 ---
 
-<a id="hdmicecsource_verify_get_active_source_status_false"></a>
+<a id="hdmicecsource_get_active_source_status_false"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Get_Active_Source_Status_False
+HdmiCecSource_Get_Active_Source_Status_False
 
 ### TestCase ID
 HdmiCecSource_15
@@ -550,9 +550,9 @@ Verify that the getActiveSourceStatus method returns the correct active source s
 
 ---
 
-<a id="hdmicecsource_verify_get_active_source_status_true"></a>
+<a id="hdmicecsource_get_active_source_status_true"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Get_Active_Source_Status_True
+HdmiCecSource_Get_Active_Source_Status_True
 
 ### TestCase ID
 HdmiCecSource_16
@@ -579,9 +579,9 @@ Verify that the getActiveSourceStatus method returns the correct active source s
 
 ---
 
-<a id="hdmicecsource_verify_ondevice_infoupdated-event"></a>
+<a id="hdmicecsource_on_deviceinfoupdated_event"></a>
 ### TestCase Name
-HdmiCecSource_Verify_OnDevice_InfoUpdated Event
+HdmiCecSource_On_DeviceInfoUpdated_Event
 
 ### TestCase ID
 HdmiCecSource_17
@@ -608,9 +608,9 @@ Check if the ondeviceinfoupdated event was triggered when updating the OSD name
 
 ---
 
-<a id="hdmicecsource_verify_standby_messagereceived_event"></a>
+<a id="hdmicecsource_standby_messagereceived_event"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Standby_MessageReceived_Event
+HdmiCecSource_Standby_MessageReceived_Event
 
 ### TestCase ID
 HdmiCecSource_18
@@ -646,9 +646,9 @@ Check whether the standbymessagereceived event has been triggered
 
 ---
 
-<a id="hdmicecsource_verify_on_activesource_statusupdated_event_when_standbycalled"></a>
+<a id="hdmicecsource_on_activesource_statusupdated_event_when_standbycalled"></a>
 ### TestCase Name
-HdmiCecSource_Verify_On_ActiveSource_StatusUpdated_Event_when_StandbyCalled
+HdmiCecSource_On_ActiveSource_StatusUpdated_Event_when_StandbyCalled
 
 ### TestCase ID
 HdmiCecSource_19
@@ -686,9 +686,9 @@ Check whether the onActiveSourceStatusUpdated event has been triggered when the 
 
 ---
 
-<a id="hdmicecsource_verify_on_activesource_statusupdated_event_when_performotpcalled"></a>
+<a id="hdmicecsource_on_activesource_statusupdated_event_when_performotpcalled"></a>
 ### TestCase Name
-HdmiCecSource_Verify_On_ActiveSource_StatusUpdated_Event_when_PerformOTPCalled
+HdmiCecSource_On_ActiveSource_StatusUpdated_Event_when_PerformOTPCalled
 
 ### TestCase ID
 HdmiCecSource_20
@@ -781,9 +781,9 @@ Validates all event on activating/deactivating the plugin
 
 ---
 
-<a id="hdmicecsource_verify_ondeviceinfoupdated_event_not_triggered_same_osd_name"></a>
+<a id="hdmicecsource_on_deviceinfoupdated_event_not_triggered_same_osd_name"></a>
 ### TestCase Name
-HdmiCecSource_Verify_onDeviceInfoUpdated_event_not_triggered_same_OSD_name
+HdmiCecSource_On_DeviceInfoUpdated_Event_Not_Triggered_Same_OSD_Name
 
 ### TestCase ID
 HdmiCecSource_23
@@ -812,9 +812,9 @@ Verify if the onDeviceInfoUpdated event is not triggered when the OSD name is se
 
 ---
 
-<a id="hdmicecsource_verify_ondeviceinfoupdated_event_not_triggered_no_changes"></a>
+<a id="hdmicecsource_on_deviceinfoupdated_event_not_triggered_no_changes"></a>
 ### TestCase Name
-HdmiCecSource_Verify_onDeviceInfoUpdated_event_not_triggered_no_changes
+HdmiCecSource_On_DeviceInfoUpdated_Event_Not_Triggered_No_Changes
 
 ### TestCase ID
 HdmiCecSource_24
@@ -840,9 +840,9 @@ Verify if the onDeviceInfoUpdated event is not triggered when no changes are mad
 
 ---
 
-<a id="hdmicecsource_verify_ondeviceinfoupdated_event_triggered"></a>
+<a id="hdmicecsource_on_deviceinfoupdated_event_with_multiple_updates"></a>
 ### TestCase Name
-HdmiCecSource_Verify_onDeviceInfoUpdated_event_triggered
+HdmiCecSource_On_DeviceInfoUpdated_Event_With_Multiple_Updates
 
 ### TestCase ID
 HdmiCecSource_25
@@ -871,9 +871,9 @@ Verify if the onDeviceInfoUpdated event is triggered when the OSD name is update
 
 ---
 
-<a id="hdmicecsource_verify_get_vendor_id_error"></a>
+<a id="hdmicecsource_get_vendor_id_error"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Get_Vendor_ID_Error
+HdmiCecSource_Get_Vendor_ID_Error
 
 ### TestCase ID
 HdmiCecSource_26
@@ -905,9 +905,9 @@ Verify that the getVendorId method returns an error when the plugin is in a deac
 
 ---
 
-<a id="hdmicecsource_verify_get_osd_name_error"></a>
+<a id="hdmicecsource_get_osd_name_error"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Get_OSD_Name_Error
+HdmiCecSource_Get_OSD_Name_Error
 
 ### TestCase ID
 HdmiCecSource_27
@@ -939,9 +939,9 @@ Verify that the getOSDName method returns an error when the plugin is in a deact
 
 ---
 
-<a id="hdmicecsource_verify_get_device_list_error"></a>
+<a id="hdmicecsource_get_device_list_error"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Get_Device_List_Error
+HdmiCecSource_Get_Device_List_Error
 
 ### TestCase ID
 HdmiCecSource_28
@@ -973,9 +973,9 @@ Verify that the getDeviceList method returns an error when the plugin is in a de
 
 ---
 
-<a id="hdmicecsource_verify_get_enabled_error"></a>
+<a id="hdmicecsource_get_enabled_error"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Get_Enabled_Error
+HdmiCecSource_Get_Enabled_Error
 
 ### TestCase ID
 HdmiCecSource_29
@@ -1007,9 +1007,9 @@ Verify that the getEnabled method returns an error when the plugin is in a deact
 
 ---
 
-<a id="hdmicecsource_verify_get_otp_enabled_error"></a>
+<a id="hdmicecsource_get_otp_enabled_error"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Get_OTP_Enabled_Error
+HdmiCecSource_Get_OTP_Enabled_Error
 
 ### TestCase ID
 HdmiCecSource_30
@@ -1041,9 +1041,9 @@ Verify that the getOTPEnabled method returns an error when the plugin is in a de
 
 ---
 
-<a id="hdmicecsource_verify_send_key_press_event_invalid_logicaladdress"></a>
+<a id="hdmicecsource_send_key_press_event_invalid_logicaladdress"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Send_Key_Press_Event_Invalid_LogicalAddress
+HdmiCecSource_Send_Key_Press_Event_Invalid_LogicalAddress
 
 ### TestCase ID
 HdmiCecSource_31
@@ -1059,9 +1059,9 @@ Verify if the sendKeyPressEvent method returns an error when an invalid logical 
 
 ---
 
-<a id="hdmicecsource_verify_send_key_press_event_invalid_keycode"></a>
+<a id="hdmicecsource_send_key_press_event_invalid_keycode"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Send_Key_Press_Event_Invalid_Keycode
+HdmiCecSource_Send_Key_Press_Event_Invalid_Keycode
 
 ### TestCase ID
 HdmiCecSource_32
@@ -1077,9 +1077,9 @@ Verify if the sendKeyPressEvent method returns an error when an invalid keycode 
 
 ---
 
-<a id="hdmicecsource_verify_send_key_press_event_invalid_params"></a>
+<a id="hdmicecsource_send_key_press_event_invalid_params"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Send_Key_Press_Event_Invalid_Params
+HdmiCecSource_Send_Key_Press_Event_Invalid_Params
 
 ### TestCase ID
 HdmiCecSource_33
@@ -1095,9 +1095,9 @@ Verify if the sendKeyPressEvent method returns an error when both the logical ad
 
 ---
 
-<a id="hdmicecsource_verify_send_key_press_event_no_keycode"></a>
+<a id="hdmicecsource_send_key_press_event_no_keycode"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Send_Key_Press_Event_No_KeyCode
+HdmiCecSource_Send_Key_Press_Event_No_KeyCode
 
 ### TestCase ID
 HdmiCecSource_34
@@ -1113,9 +1113,9 @@ Verify if the sendKeyPressEvent method returns an error when the logical address
 
 ---
 
-<a id="hdmicecsource_verify_send_key_press_event_error_no_logical_address"></a>
+<a id="hdmicecsource_send_key_press_event_error_no_logical_address"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Send_Key_Press_Event_Error_No_Logical_Address
+HdmiCecSource_Send_Key_Press_Event_Error_No_Logical_Address
 
 ### TestCase ID
 HdmiCecSource_35
@@ -1131,9 +1131,9 @@ Verify if the sendKeyPressEvent method returns an error when the keycode is vali
 
 ---
 
-<a id="hdmicecsource_verify_send_key_press_event_no_param"></a>
+<a id="hdmicecsource_send_key_press_event_no_param"></a>
 ### TestCase Name
-HdmiCecSource_Verify_Send_Key_Press_Event_No_Param
+HdmiCecSource_Send_Key_Press_Event_No_Param
 
 ### TestCase ID
 HdmiCecSource_36

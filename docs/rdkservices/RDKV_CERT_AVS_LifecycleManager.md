@@ -6,46 +6,46 @@ RDKV_CERT_AVS_LifecycleManager
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [Verify_AppReady_Valid_AppId](#verify_appready_valid_appid)
-   - [Verify_AppReady_Empty_AppId](#verify_appready_empty_appid)
-   - [Verify_AppReady_Numeric_AppId](#verify_appready_numeric_appid)
-   - [Verify_AppReady_Special_Char_AppId](#verify_appready_special_char_appid)
-   - [Verify_AppReady_Long_String_AppId](#verify_appready_long_string_appid)
-   - [LifecycleManager_Verify_AppReady_Boolean_AppId](#lifecyclemanager_verify_appready_boolean_appid)
-   - [LifecycleManager_Verify_AppReady_Without_Parameters](#lifecyclemanager_verify_appready_without_parameters)
-   - [CloseApp_Valid_AppId_USER_EXIT_CloseReason](#closeapp_valid_appid_user_exit_closereason)
-   - [CloseApp_Valid_AppId_ERROR_CloseReason](#closeapp_valid_appid_error_closereason)
-   - [CloseApp_ValidAppId_EmptyCloseReason](#closeapp_validappid_emptyclosereason)
-   - [CloseApp_Empty_AppId_USER_EXIT_CloseReason](#closeapp_empty_appid_user_exit_closereason)
-   - [CloseApp_Empty_AppId_ERROR_CloseReason](#closeapp_empty_appid_error_closereason)
-   - [CloseApp_Empty_AppId_KILL_AND_RUN_CloseReason](#closeapp_empty_appid_kill_and_run_closereason)
-   - [CloseApp_Empty_AppId_KILL_AND_ACTIVATE_CloseReason](#closeapp_empty_appid_kill_and_activate_closereason)
+   - [LifecycleManager_AppReady_Valid_AppId](#lifecyclemanager_appready_valid_appid)
+   - [LifecycleManager_AppReady_Empty_AppId](#lifecyclemanager_appready_empty_appid)
+   - [LifecycleManager_AppReady_Numeric_AppId](#lifecyclemanager_appready_numeric_appid)
+   - [LifecycleManager_AppReady_Special_Char_AppId](#lifecyclemanager_appready_special_char_appid)
+   - [LifecycleManager_AppReady_Long_String_AppId](#lifecyclemanager_appready_long_string_appid)
+   - [LifecycleManager_AppReady_Boolean_AppId](#lifecyclemanager_appready_boolean_appid)
+   - [LifecycleManager_AppReady_Without_Parameters](#lifecyclemanager_appready_without_parameters)
+   - [LifecycleManager_CloseApp_Valid_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_valid_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Valid_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_valid_appid_error_closereason)
+   - [LifecycleManager_CloseApp_ValidAppId_EmptyCloseReason](#lifecyclemanager_closeapp_validappid_emptyclosereason)
+   - [LifecycleManager_CloseApp_Empty_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_empty_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Empty_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_empty_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Empty_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_empty_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Empty_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_empty_appid_kill_and_activate_closereason)
    - [LifecycleManager_CloseApp_Empty_Params](#lifecyclemanager_closeapp_empty_params)
-   - [CloseApp_Without_Parameters](#closeapp_without_parameters)
-   - [CloseApp_Invalid_AppId_USER_EXIT_CloseReason](#closeapp_invalid_appid_user_exit_closereason)
-   - [CloseApp_Invalid_AppId_ERROR_CloseReason](#closeapp_invalid_appid_error_closereason)
-   - [CloseApp_Invalid_AppId_KILL_AND_RUN_CloseReason](#closeapp_invalid_appid_kill_and_run_closereason)
-   - [CloseApp_Invalid_AppId_KILL_AND_ACTIVATE_CloseReason](#closeapp_invalid_appid_kill_and_activate_closereason)
-   - [CloseApp_Numeric_AppId_USER_EXIT_CloseReason](#closeapp_numeric_appid_user_exit_closereason)
-   - [CloseApp_Numeric_AppId_ERROR_CloseReason](#closeapp_numeric_appid_error_closereason)
-   - [CloseApp_Numeric_AppId_KILL_AND_RUN_CloseReason](#closeapp_numeric_appid_kill_and_run_closereason)
-   - [CloseApp_Numeric_AppId_KILL_AND_ACTIVATE_CloseReason](#closeapp_numeric_appid_kill_and_activate_closereason)
-   - [CloseApp_Special_Char_AppId_USER_EXIT_CloseReason](#closeapp_special_char_appid_user_exit_closereason)
-   - [CloseApp_Special_Char_AppId_ERROR_CloseReason](#closeapp_special_char_appid_error_closereason)
-   - [CloseApp_Special_Char_AppId_KILL_AND_RUN_CloseReason](#closeapp_special_char_appid_kill_and_run_closereason)
-   - [CloseApp_Special_Char_AppId_KILL_AND_ACTIVATE_CloseReason](#closeapp_special_char_appid_kill_and_activate_closereason)
-   - [CloseApp_Boolean_AppId_USER_EXIT_CloseReason](#closeapp_boolean_appid_user_exit_closereason)
-   - [CloseApp_Boolean_AppId_ERROR_CloseReason](#closeapp_boolean_appid_error_closereason)
-   - [CloseApp_Boolean_AppId_KILL_AND_RUN_CloseReason](#closeapp_boolean_appid_kill_and_run_closereason)
-   - [CloseApp_Boolean_AppId_KILL_AND_ACTIVATE_CloseReason](#closeapp_boolean_appid_kill_and_activate_closereason)
-   - [CloseApp_Long_String_AppId_USER_EXIT_CloseReason](#closeapp_long_string_appid_user_exit_closereason)
-   - [CloseApp_Long_String_AppId_ERROR_CloseReason](#closeapp_long_string_appid_error_closereason)
-   - [CloseApp_Long_String_AppId_KILL_AND_RUN_CloseReason](#closeapp_long_string_appid_kill_and_run_closereason)
-   - [CloseApp_Long_String_AppId_KILL_AND_ACTIVATE_CloseReason](#closeapp_long_string_appid_kill_and_activate_closereason)
-   - [CloseApp_Valid_AppId_Numeric_CloseReason](#closeapp_valid_appid_numeric_closereason)
-   - [CloseApp_Valid_AppId_Special_Char_CloseReason](#closeapp_valid_appid_special_char_closereason)
-   - [CloseApp_Valid_AppId_Boolean_CloseReason](#closeapp_valid_appid_boolean_closereason)
-   - [CloseApp_Valid_AppId_Long_String_CloseReason](#closeapp_valid_appid_long_string_closereason)
+   - [LifecycleManager_CloseApp_Without_Parameters](#lifecyclemanager_closeapp_without_parameters)
+   - [LifecycleManager_CloseApp_Invalid_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_invalid_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Invalid_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_invalid_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Invalid_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_invalid_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Invalid_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_invalid_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Numeric_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_numeric_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Numeric_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_numeric_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Numeric_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_numeric_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Numeric_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_numeric_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Special_Char_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_special_char_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Special_Char_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_special_char_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Special_Char_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_special_char_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Special_Char_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_special_char_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Boolean_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_boolean_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Boolean_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_boolean_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Boolean_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_boolean_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Boolean_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_boolean_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Long_String_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_long_string_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Long_String_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_long_string_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Long_String_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_long_string_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Long_String_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_long_string_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Valid_AppId_Numeric_CloseReason](#lifecyclemanager_closeapp_valid_appid_numeric_closereason)
+   - [LifecycleManager_CloseApp_Valid_AppId_Special_Char_CloseReason](#lifecyclemanager_closeapp_valid_appid_special_char_closereason)
+   - [LifecycleManager_CloseApp_Valid_AppId_Boolean_CloseReason](#lifecyclemanager_closeapp_valid_appid_boolean_closereason)
+   - [LifecycleManager_CloseApp_Valid_AppId_Long_String_CloseReason](#lifecyclemanager_closeapp_valid_appid_long_string_closereason)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -72,13 +72,13 @@ accessible via JSON-RPC under the callsign `org.rdk.LifecycleManager` (version 1
 | 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
 | 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
-### Plugin Pre-condition 3: Activate_PackageManagerRDKEMS_Plugin
+### Plugin Pre-condition 3: Activate_AppPackageManager_Plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PackageManagerRDKEMS"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check plugin active status | Check active status of AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppPackageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppPackageManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppPackageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 4: Activate_AppManager_Plugin
 
@@ -100,11 +100,11 @@ accessible via JSON-RPC under the callsign `org.rdk.LifecycleManager` (version 1
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check existing package | Get packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
-| 2 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 1 | Check existing package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
+| 2 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Download valid parameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
-| 4 | Install package on device | Install on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Verify installed package | Get packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
+| 4 | Install package on device | Install on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | Verify installed package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
 
 ### Plugin Pre-condition 7: Configure_Device_Parameter
 
@@ -118,9 +118,9 @@ accessible via JSON-RPC under the callsign `org.rdk.LifecycleManager` (version 1
 | 6 | Configure packagemanager application MD5 checksum value | `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` must be set to the expected MD5 checksum of the application package for download integrity verification | The `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
-<a id="verify_appready_valid_appid"></a>
+<a id="lifecyclemanager_appready_valid_appid"></a>
 ### TestCase Name
-Verify_AppReady_Valid_AppId
+LifecycleManager_AppReady_Valid_AppId
 
 ### TestCase ID
 LCM_01
@@ -154,9 +154,9 @@ Verify appReady with a valid appId string
 
 ---
 
-<a id="verify_appready_empty_appid"></a>
+<a id="lifecyclemanager_appready_empty_appid"></a>
 ### TestCase Name
-Verify_AppReady_Empty_AppId
+LifecycleManager_AppReady_Empty_AppId
 
 ### TestCase ID
 LCM_02
@@ -172,9 +172,9 @@ Verify appReady with an empty appId string
 
 ---
 
-<a id="verify_appready_numeric_appid"></a>
+<a id="lifecyclemanager_appready_numeric_appid"></a>
 ### TestCase Name
-Verify_AppReady_Numeric_AppId
+LifecycleManager_AppReady_Numeric_AppId
 
 ### TestCase ID
 LCM_03
@@ -190,9 +190,9 @@ Verify appReady with a numeric value for appId
 
 ---
 
-<a id="verify_appready_special_char_appid"></a>
+<a id="lifecyclemanager_appready_special_char_appid"></a>
 ### TestCase Name
-Verify_AppReady_Special_Char_AppId
+LifecycleManager_AppReady_Special_Char_AppId
 
 ### TestCase ID
 LCM_04
@@ -208,9 +208,9 @@ Verify appReady with a special character string as appId.
 
 ---
 
-<a id="verify_appready_long_string_appid"></a>
+<a id="lifecyclemanager_appready_long_string_appid"></a>
 ### TestCase Name
-Verify_AppReady_Long_String_AppId
+LifecycleManager_AppReady_Long_String_AppId
 
 ### TestCase ID
 LCM_05
@@ -226,9 +226,9 @@ Verify appReady with a very long string as appId.
 
 ---
 
-<a id="lifecyclemanager_verify_appready_boolean_appid"></a>
+<a id="lifecyclemanager_appready_boolean_appid"></a>
 ### TestCase Name
-LifecycleManager_Verify_AppReady_Boolean_AppId
+LifecycleManager_AppReady_Boolean_AppId
 
 ### TestCase ID
 LCM_06
@@ -244,9 +244,9 @@ Verify appReady with a boolean value for appId
 
 ---
 
-<a id="lifecyclemanager_verify_appready_without_parameters"></a>
+<a id="lifecyclemanager_appready_without_parameters"></a>
 ### TestCase Name
-LifecycleManager_Verify_AppReady_Without_Parameters
+LifecycleManager_AppReady_Without_Parameters
 
 ### TestCase ID
 LCM_07
@@ -262,9 +262,9 @@ Verify appReady without any parameters
 
 ---
 
-<a id="closeapp_valid_appid_user_exit_closereason"></a>
+<a id="lifecyclemanager_closeapp_valid_appid_user_exit_closereason"></a>
 ### TestCase Name
-CloseApp_Valid_AppId_USER_EXIT_CloseReason
+LifecycleManager_CloseApp_Valid_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
 LCM_08
@@ -290,9 +290,9 @@ Verify closeApp with valid appId and USER_EXIT closeReason
 
 ---
 
-<a id="closeapp_valid_appid_error_closereason"></a>
+<a id="lifecyclemanager_closeapp_valid_appid_error_closereason"></a>
 ### TestCase Name
-CloseApp_Valid_AppId_ERROR_CloseReason
+LifecycleManager_CloseApp_Valid_AppId_ERROR_CloseReason
 
 ### TestCase ID
 LCM_09
@@ -318,9 +318,9 @@ Verify closeApp with valid appId and ERROR closeReason
 
 ---
 
-<a id="closeapp_validappid_emptyclosereason"></a>
+<a id="lifecyclemanager_closeapp_validappid_emptyclosereason"></a>
 ### TestCase Name
-CloseApp_ValidAppId_EmptyCloseReason
+LifecycleManager_CloseApp_ValidAppId_EmptyCloseReason
 
 ### TestCase ID
 LCM_10
@@ -336,9 +336,9 @@ Verify closeApp with valid appId and empty closeReason
 
 ---
 
-<a id="closeapp_empty_appid_user_exit_closereason"></a>
+<a id="lifecyclemanager_closeapp_empty_appid_user_exit_closereason"></a>
 ### TestCase Name
-CloseApp_Empty_AppId_USER_EXIT_CloseReason
+LifecycleManager_CloseApp_Empty_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
 LCM_11
@@ -354,9 +354,9 @@ Verify closeApp with empty appId and USER_EXIT closeReason
 
 ---
 
-<a id="closeapp_empty_appid_error_closereason"></a>
+<a id="lifecyclemanager_closeapp_empty_appid_error_closereason"></a>
 ### TestCase Name
-CloseApp_Empty_AppId_ERROR_CloseReason
+LifecycleManager_CloseApp_Empty_AppId_ERROR_CloseReason
 
 ### TestCase ID
 LCM_12
@@ -372,9 +372,9 @@ Verify closeApp with empty appId and ERROR closeReason
 
 ---
 
-<a id="closeapp_empty_appid_kill_and_run_closereason"></a>
+<a id="lifecyclemanager_closeapp_empty_appid_kill_and_run_closereason"></a>
 ### TestCase Name
-CloseApp_Empty_AppId_KILL_AND_RUN_CloseReason
+LifecycleManager_CloseApp_Empty_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
 LCM_13
@@ -390,9 +390,9 @@ Verify closeApp with empty appId and KILL_AND_RUN closeReason
 
 ---
 
-<a id="closeapp_empty_appid_kill_and_activate_closereason"></a>
+<a id="lifecyclemanager_closeapp_empty_appid_kill_and_activate_closereason"></a>
 ### TestCase Name
-CloseApp_Empty_AppId_KILL_AND_ACTIVATE_CloseReason
+LifecycleManager_CloseApp_Empty_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
 LCM_14
@@ -426,9 +426,9 @@ Verify closeApp with empty appId and empty closeReason.
 
 ---
 
-<a id="closeapp_without_parameters"></a>
+<a id="lifecyclemanager_closeapp_without_parameters"></a>
 ### TestCase Name
-CloseApp_Without_Parameters
+LifecycleManager_CloseApp_Without_Parameters
 
 ### TestCase ID
 LCM_16
@@ -444,9 +444,9 @@ Verify closeApp without any parameters
 
 ---
 
-<a id="closeapp_invalid_appid_user_exit_closereason"></a>
+<a id="lifecyclemanager_closeapp_invalid_appid_user_exit_closereason"></a>
 ### TestCase Name
-CloseApp_Invalid_AppId_USER_EXIT_CloseReason
+LifecycleManager_CloseApp_Invalid_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
 LCM_17
@@ -462,9 +462,9 @@ Verify closeApp with invalid appId and USER_EXIT closeReason
 
 ---
 
-<a id="closeapp_invalid_appid_error_closereason"></a>
+<a id="lifecyclemanager_closeapp_invalid_appid_error_closereason"></a>
 ### TestCase Name
-CloseApp_Invalid_AppId_ERROR_CloseReason
+LifecycleManager_CloseApp_Invalid_AppId_ERROR_CloseReason
 
 ### TestCase ID
 LCM_18
@@ -480,9 +480,9 @@ Verify closeApp with invalid appId and ERROR closeReason
 
 ---
 
-<a id="closeapp_invalid_appid_kill_and_run_closereason"></a>
+<a id="lifecyclemanager_closeapp_invalid_appid_kill_and_run_closereason"></a>
 ### TestCase Name
-CloseApp_Invalid_AppId_KILL_AND_RUN_CloseReason
+LifecycleManager_CloseApp_Invalid_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
 LCM_19
@@ -498,9 +498,9 @@ Verify closeApp with invalid appId and KILL_AND_RUN closeReason
 
 ---
 
-<a id="closeapp_invalid_appid_kill_and_activate_closereason"></a>
+<a id="lifecyclemanager_closeapp_invalid_appid_kill_and_activate_closereason"></a>
 ### TestCase Name
-CloseApp_Invalid_AppId_KILL_AND_ACTIVATE_CloseReason
+LifecycleManager_CloseApp_Invalid_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
 LCM_20
@@ -516,9 +516,9 @@ Verify closeApp with invalid appId and KILL_AND_ACTIVATE closeReason
 
 ---
 
-<a id="closeapp_numeric_appid_user_exit_closereason"></a>
+<a id="lifecyclemanager_closeapp_numeric_appid_user_exit_closereason"></a>
 ### TestCase Name
-CloseApp_Numeric_AppId_USER_EXIT_CloseReason
+LifecycleManager_CloseApp_Numeric_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
 LCM_21
@@ -534,9 +534,9 @@ Verify closeApp with numeric value for appId and USER_EXIT closeReason
 
 ---
 
-<a id="closeapp_numeric_appid_error_closereason"></a>
+<a id="lifecyclemanager_closeapp_numeric_appid_error_closereason"></a>
 ### TestCase Name
-CloseApp_Numeric_AppId_ERROR_CloseReason
+LifecycleManager_CloseApp_Numeric_AppId_ERROR_CloseReason
 
 ### TestCase ID
 LCM_22
@@ -552,9 +552,9 @@ Verify closeApp with numeric value for appId and ERROR closeReason
 
 ---
 
-<a id="closeapp_numeric_appid_kill_and_run_closereason"></a>
+<a id="lifecyclemanager_closeapp_numeric_appid_kill_and_run_closereason"></a>
 ### TestCase Name
-CloseApp_Numeric_AppId_KILL_AND_RUN_CloseReason
+LifecycleManager_CloseApp_Numeric_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
 LCM_23
@@ -570,9 +570,9 @@ Verify closeApp with numeric value for appId and KILL_AND_RUN closeReason
 
 ---
 
-<a id="closeapp_numeric_appid_kill_and_activate_closereason"></a>
+<a id="lifecyclemanager_closeapp_numeric_appid_kill_and_activate_closereason"></a>
 ### TestCase Name
-CloseApp_Numeric_AppId_KILL_AND_ACTIVATE_CloseReason
+LifecycleManager_CloseApp_Numeric_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
 LCM_24
@@ -588,9 +588,9 @@ Verify closeApp with numeric value for appId and KILL_AND_ACTIVATE closeReason
 
 ---
 
-<a id="closeapp_special_char_appid_user_exit_closereason"></a>
+<a id="lifecyclemanager_closeapp_special_char_appid_user_exit_closereason"></a>
 ### TestCase Name
-CloseApp_Special_Char_AppId_USER_EXIT_CloseReason
+LifecycleManager_CloseApp_Special_Char_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
 LCM_25
@@ -606,9 +606,9 @@ Verify closeApp with special character string as appId and USER_EXIT closeReason
 
 ---
 
-<a id="closeapp_special_char_appid_error_closereason"></a>
+<a id="lifecyclemanager_closeapp_special_char_appid_error_closereason"></a>
 ### TestCase Name
-CloseApp_Special_Char_AppId_ERROR_CloseReason
+LifecycleManager_CloseApp_Special_Char_AppId_ERROR_CloseReason
 
 ### TestCase ID
 LCM_26
@@ -624,9 +624,9 @@ Verify closeApp with special character string as appId and ERROR closeReason
 
 ---
 
-<a id="closeapp_special_char_appid_kill_and_run_closereason"></a>
+<a id="lifecyclemanager_closeapp_special_char_appid_kill_and_run_closereason"></a>
 ### TestCase Name
-CloseApp_Special_Char_AppId_KILL_AND_RUN_CloseReason
+LifecycleManager_CloseApp_Special_Char_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
 LCM_27
@@ -642,9 +642,9 @@ Verify closeApp with special character string as appId and KILL_AND_RUN closeRea
 
 ---
 
-<a id="closeapp_special_char_appid_kill_and_activate_closereason"></a>
+<a id="lifecyclemanager_closeapp_special_char_appid_kill_and_activate_closereason"></a>
 ### TestCase Name
-CloseApp_Special_Char_AppId_KILL_AND_ACTIVATE_CloseReason
+LifecycleManager_CloseApp_Special_Char_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
 LCM_28
@@ -660,9 +660,9 @@ Verify closeApp with special character string as appId and KILL_AND_ACTIVATE clo
 
 ---
 
-<a id="closeapp_boolean_appid_user_exit_closereason"></a>
+<a id="lifecyclemanager_closeapp_boolean_appid_user_exit_closereason"></a>
 ### TestCase Name
-CloseApp_Boolean_AppId_USER_EXIT_CloseReason
+LifecycleManager_CloseApp_Boolean_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
 LCM_29
@@ -678,9 +678,9 @@ Verify closeApp with boolean value for appId and USER_EXIT closeReason
 
 ---
 
-<a id="closeapp_boolean_appid_error_closereason"></a>
+<a id="lifecyclemanager_closeapp_boolean_appid_error_closereason"></a>
 ### TestCase Name
-CloseApp_Boolean_AppId_ERROR_CloseReason
+LifecycleManager_CloseApp_Boolean_AppId_ERROR_CloseReason
 
 ### TestCase ID
 LCM_30
@@ -696,9 +696,9 @@ Verify closeApp with boolean value for appId and ERROR closeReason
 
 ---
 
-<a id="closeapp_boolean_appid_kill_and_run_closereason"></a>
+<a id="lifecyclemanager_closeapp_boolean_appid_kill_and_run_closereason"></a>
 ### TestCase Name
-CloseApp_Boolean_AppId_KILL_AND_RUN_CloseReason
+LifecycleManager_CloseApp_Boolean_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
 LCM_31
@@ -714,9 +714,9 @@ Verify closeApp with boolean value for appId and KILL_AND_RUN closeReason
 
 ---
 
-<a id="closeapp_boolean_appid_kill_and_activate_closereason"></a>
+<a id="lifecyclemanager_closeapp_boolean_appid_kill_and_activate_closereason"></a>
 ### TestCase Name
-CloseApp_Boolean_AppId_KILL_AND_ACTIVATE_CloseReason
+LifecycleManager_CloseApp_Boolean_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
 LCM_32
@@ -732,9 +732,9 @@ Verify closeApp with boolean value for appId and KILL_AND_ACTIVATE closeReason
 
 ---
 
-<a id="closeapp_long_string_appid_user_exit_closereason"></a>
+<a id="lifecyclemanager_closeapp_long_string_appid_user_exit_closereason"></a>
 ### TestCase Name
-CloseApp_Long_String_AppId_USER_EXIT_CloseReason
+LifecycleManager_CloseApp_Long_String_AppId_USER_EXIT_CloseReason
 
 ### TestCase ID
 LCM_33
@@ -750,9 +750,9 @@ Verify closeApp with very long string as appId and USER_EXIT closeReason
 
 ---
 
-<a id="closeapp_long_string_appid_error_closereason"></a>
+<a id="lifecyclemanager_closeapp_long_string_appid_error_closereason"></a>
 ### TestCase Name
-CloseApp_Long_String_AppId_ERROR_CloseReason
+LifecycleManager_CloseApp_Long_String_AppId_ERROR_CloseReason
 
 ### TestCase ID
 LCM_34
@@ -768,9 +768,9 @@ Verify closeApp with very long string as appId and ERROR closeReason
 
 ---
 
-<a id="closeapp_long_string_appid_kill_and_run_closereason"></a>
+<a id="lifecyclemanager_closeapp_long_string_appid_kill_and_run_closereason"></a>
 ### TestCase Name
-CloseApp_Long_String_AppId_KILL_AND_RUN_CloseReason
+LifecycleManager_CloseApp_Long_String_AppId_KILL_AND_RUN_CloseReason
 
 ### TestCase ID
 LCM_35
@@ -786,9 +786,9 @@ Verify closeApp with very long string as appId and KILL_AND_RUN closeReason
 
 ---
 
-<a id="closeapp_long_string_appid_kill_and_activate_closereason"></a>
+<a id="lifecyclemanager_closeapp_long_string_appid_kill_and_activate_closereason"></a>
 ### TestCase Name
-CloseApp_Long_String_AppId_KILL_AND_ACTIVATE_CloseReason
+LifecycleManager_CloseApp_Long_String_AppId_KILL_AND_ACTIVATE_CloseReason
 
 ### TestCase ID
 LCM_36
@@ -804,9 +804,9 @@ Verify closeApp with very long string as appId and KILL_AND_ACTIVATE closeReason
 
 ---
 
-<a id="closeapp_valid_appid_numeric_closereason"></a>
+<a id="lifecyclemanager_closeapp_valid_appid_numeric_closereason"></a>
 ### TestCase Name
-CloseApp_Valid_AppId_Numeric_CloseReason
+LifecycleManager_CloseApp_Valid_AppId_Numeric_CloseReason
 
 ### TestCase ID
 LCM_37
@@ -822,9 +822,9 @@ Verify closeApp with valid appId and numeric value for closeReason
 
 ---
 
-<a id="closeapp_valid_appid_special_char_closereason"></a>
+<a id="lifecyclemanager_closeapp_valid_appid_special_char_closereason"></a>
 ### TestCase Name
-CloseApp_Valid_AppId_Special_Char_CloseReason
+LifecycleManager_CloseApp_Valid_AppId_Special_Char_CloseReason
 
 ### TestCase ID
 LCM_38
@@ -840,9 +840,9 @@ Verify closeApp with valid appId and special character string as closeReason
 
 ---
 
-<a id="closeapp_valid_appid_boolean_closereason"></a>
+<a id="lifecyclemanager_closeapp_valid_appid_boolean_closereason"></a>
 ### TestCase Name
-CloseApp_Valid_AppId_Boolean_CloseReason
+LifecycleManager_CloseApp_Valid_AppId_Boolean_CloseReason
 
 ### TestCase ID
 LCM_39
@@ -858,9 +858,9 @@ Verify closeApp with valid appId and boolean value for closeReason
 
 ---
 
-<a id="closeapp_valid_appid_long_string_closereason"></a>
+<a id="lifecyclemanager_closeapp_valid_appid_long_string_closereason"></a>
 ### TestCase Name
-CloseApp_Valid_AppId_Long_String_CloseReason
+LifecycleManager_CloseApp_Valid_AppId_Long_String_CloseReason
 
 ### TestCase ID
 LCM_40
@@ -882,8 +882,8 @@ Verify closeApp with valid appId and very long string as closeReason
 | --- | --- | --- | --- |
 | 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate app valid param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate app on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 3 | Check package info | Get packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
-| 4 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Check package info | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
+| 4 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ## Test Attributes
 
