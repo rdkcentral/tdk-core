@@ -17,7 +17,7 @@
 # limitations under the License.
 ##########################################################################
 
-# use tdklib library,which provides a wrapper for tdk testcase script
+# use tdklib library, which provides a wrapper for tdk testcase script
 import tdklib
 import time
 import tdkbE2EUtility
@@ -27,13 +27,13 @@ from tdkbE2EUtility import *
 obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1")
 
 #IP and Port of box, No need to change,
-#This will be replaced with correspoing Box Ip and port while executing script
+#This will be replaced with corresponding Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'E2E_DHCP_WLAN_SetSubnetMask_255.0.0.0')
 
 #Get the result of connection with test component
-loadmodulestatus =obj.getLoadModuleResult()
+loadmodulestatus = obj.getLoadModuleResult()
 print("[LIB LOAD STATUS]  :  %s" %loadmodulestatus)
 
 if "SUCCESS" in loadmodulestatus.upper():
@@ -148,7 +148,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                     print("wlanConnectWifiSsid: SUCCESS")
 
                     step = step + 1
-                    print(f"\nTEST STEP {step}: Get the subnetmask of the wlan client after connecting to wifi")
+                    print(f"\nTEST STEP {step}: Get the subnet mask of the wlan client after connecting to wifi")
                     wlanSubnetMask = getWlanSubnetMask(tdkbE2EUtility.wlan_interface)
                     if wlanSubnetMask:
                         tdkTestObj.setResultStatus("SUCCESS")
@@ -206,7 +206,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                 step = step + 1
                 tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
                 tdkTestObj,actualresult1,details = setMultipleParameterValues(obj,revertParamList1)
-                print(f"\nTEST STEP {step}: Revert the values to original")
+                print(f"\nTEST STEP {step}: Revert the ssid,keypassphrase,lanIPAddress,lanSubnetMask,minAddress and maxAddress to initial values")
                 if expectedresult in actualresult and expectedresult in actualresult1 and expectedresult in finalStatus:
                     tdkTestObj.setResultStatus("SUCCESS")
                     print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase,lanIPAddress,lanSubnetMask,minAddress and maxAddress")
@@ -221,6 +221,7 @@ if "SUCCESS" in loadmodulestatus.upper():
             else:
                 #Revert the Lan IP Address, Lan Subnet Mask, Min and Max address
                 step = step + 1
+                print(f"\nTEST STEP {step}: Revert the lanIPAddress,lanSubnetMask,minAddress and maxAddress to initial values")
                 setList = [orgValue[2], orgValue[3], orgValue[4], orgValue[5]]
                 _, _, _ = lanManagementSet(obj,setList,step,revert="true")
         else:
