@@ -1,0 +1,14 @@
+# Robustness Validation Suite (RVS) — Traceability
+
+| Req ID | # Tests | Test Cases |
+|--------|---------|------------|
+| `RVS‑REQ‑001` | 4 | [RDKV_CERT_RVS_AppManager_LaunchApp_LifeCycle](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_AppManager_LaunchApp_LifeCycle.md)<br> [RDKV_CERT_RVS_AppManager_CloseApp_LifeCycle](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_AppManager_CloseApp_LifeCycle.md) <br>[RDKV_CERT_RVS_AppManager_TerminateApp_LifeCycle](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_AppManager_TerminateApp_LifeCycle.md) <br>[RDKV_CERT_RVS_AppManager_LifeCycleManagement](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_AppManager_LifeCycleManagement.md) |
+| `RVS-REQ-002` | 3 | [RDKV_CERT_RVS_AppManager_Launch_Close](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_AppManager_Launch_Close.md) <br>[RDKV_CERT_RVS_AppManager_Launch_Kill](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_AppManager_Launch_Kill.md)<br> [RDKV_CERT_RVS_AppManager_Launch_Terminate](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_AppManager_Launch_Terminate.md) |
+| `RVS-REQ-003` | 1 | [RDKV_CERT_RVS_AppManager_Install_UnInstall](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_AppManager_Install_UnInstall.md) |
+| `RVS-REQ-004` | 1 | [RDKV_CERT_RVS_AppManager_Install_UnInstall_MultipleApps](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_AppManager_Install_UnInstall_MultipleApps.md) |
+| `RVS-REQ-005` | 1 | [RDKV_CERT_RVS_LongDuration_HLS_VideoPlayback](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_LongDuration_HLS_VideoPlayback.md) |
+| `RVS-REQ-006` | 2 | [RDKV_CERT_RVS_LongDuration_VideoPlayback_4K_DASH](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_LongDuration_VideoPlayback_4K_DASH.md)<br> [RDKV_CERT_RVS_LongDuration_VideoPlayback_4K_HLS](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_LongDuration_VideoPlayback_4K_HLS.md) |
+| `RVS-REQ-007` | 1 | [RDKV_CERT_RVS_RDKService_APIs_SynchronousCall](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_RDKService_APIs_SynchronousCall.md) |
+| `RVS-REQ-008` | 1 | [RDKV_CERT_RVS_Reboot](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_Reboot.md) |
+| `RVS-REQ-009` | 1 | [RDKV_CERT_RVS_Toggle_PowerStates](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_Toggle_PowerStates.md) |
+| `RVS-REQ-010` | 1 | [RDKV_CERT_RVS_WebKitBrowser_Load_GraphicsApp](https://github.com/rdkcentral/tdk-core/blob/main/docs/rdkv_stability/RDKV_CERT_RVS_WebKitBrowser_Load_GraphicsApp.md) |
