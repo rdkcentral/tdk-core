@@ -57,7 +57,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     if status == "SUCCESS":
         test_count = StabilityTestVariables.AppManager_test_count
         app_bundle_name = PerformanceTestVariables.google_bundle
-        app_name= "com.rdkcentral.test_app"
+        app_name= "com.rdkcentral.css3"
         app_download_url = PerformanceTestVariables.app_download_url
         status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url,launch =False)
         if status == "SUCCESS":

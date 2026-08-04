@@ -25,13 +25,14 @@ from StabilityTestUtility import *
 import PerformanceTestVariables
 import rdkv_performancelib
 import StabilityTestVariables
+import ast
 
 obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True)
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_Verify_App_Switch');
+obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_App_Switch');
 
 #The device will reboot before starting the stability testing if "pre_req_reboot" is
 #configured as "Yes".
@@ -107,7 +108,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                             Zorder_App_2 = ast.literal_eval(result_2)
                             print(f"\nZorde of App 1: {Zorder_App_1}")
                             print(f"\nZorde of App 1: {Zorder_App_2}")
-                            for iteration in range(3):
+                            for iteration in range(test_count):
                                 print(f"###################Iteration {iteration+1}###################")
                                 print("Switching Zorder...")
                                 Zorder_App_1,Zorder_App_2 = Zorder_App_2,Zorder_App_1
@@ -228,3 +229,5 @@ if expectedResult in (result.upper() and pre_condition_status):
 else:
     obj.setLoadModuleStatus("FAILURE")
     print("Failed to load module")
+
+

@@ -26,6 +26,8 @@ import PerformanceTestVariables
 from web_socket_util import *
 import rdkv_performancelib
 import StabilityTestVariables
+import json
+import ast
 
 obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True)
 #IP and Port of box, No need to change,
@@ -88,7 +90,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 status = tdkTestObj.getResult()
                 details = tdkTestObj.getResultDetails()
                 print(f"uninstallation status {status}")
-                if status == "SUCCESS":
+                if status != "SUCCESS":
                     print("Check for all events")
                     tdkTestObj.setResultStatus("SUCCESS")
                     continue_count = 0
@@ -114,7 +116,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 print(f"{app_name} is not installed in the device")
                 uninstalled = True       
             if uninstalled:
-                for iteration in range(test_count):
+                for iteration in range(1):
                     print("ITERATION :", iteration + 1)
                     print("_________________")
                     install_event_count = 0

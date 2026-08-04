@@ -26,6 +26,7 @@ import PerformanceTestVariables
 from web_socket_util import *
 import rdkv_performancelib
 import StabilityTestVariables
+from datetime import datetime
 
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 #IP and Port of box, No need to change,

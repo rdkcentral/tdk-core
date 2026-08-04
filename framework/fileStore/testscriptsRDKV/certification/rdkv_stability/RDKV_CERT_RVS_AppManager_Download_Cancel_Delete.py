@@ -68,7 +68,7 @@ if expectedResult in result.upper():
             
             if not ssh_method or not credentials:
                 print("SSH method or credentials not found in configuration")
-                obj.setLoadModuleStatus("FAILURE")
+                tdkTestObj.setResultStatus("FAILURE")
             else:
                 cmd = "du -sk " + shlex.quote(file_locator) + " | awk '{print $1}'" 
                 output = rdkv_performancelib.rdkservice_getRequiredLog(ssh_method, credentials, cmd)
@@ -190,7 +190,7 @@ if expectedResult in result.upper():
                             break   
                     else:
                         print(f"Iteration {iteration+1}: Failed to download {app_bundle_name} from {app_download_url}")
-                        obj.setLoadModuleStatus("FAILURE") 
+                        tdkTestObj.setResultStatus("FAILURE") 
                         break  
                 event_listener.disconnect()   
         else:

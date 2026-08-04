@@ -73,7 +73,7 @@ if expectedResult in result.upper():
             
             if not ssh_method or not credentials:
                 print("SSH method or credentials not found in configuration") 
-                obj.setLoadModuleStatus("FAILURE")  
+                tdkTestObj.setResultStatus("FAILURE")
             else:         
                 cmd = "du -sk " + shlex.quote(file_locator) + " | awk '{print $1}'" 
                 output = rdkv_performancelib.rdkservice_getRequiredLog(ssh_method, credentials, cmd)
@@ -246,11 +246,11 @@ if expectedResult in result.upper():
                                                                 break          
                                                         else:
                                                             print(f"Iteration {iteration+1}: Download ID for {app_bundle_name} is already present in the list")
-                                                            obj.setLoadModuleStatus("FAILURE")    
+                                                            tdkTestObj.setResultStatus("FAILURE")    
                                                             break
                                                 else:
                                                     print(f"Iteration {iteration+1}: Failed to re-download the package from the device")
-                                                    obj.setLoadModuleStatus("FAILURE") 
+                                                    tdkTestObj.setResultStatus("FAILURE") 
                                                     break
                                             else:
                                                 print(f"Iteration {iteration+1}: Verification failed: package still exists on DUT. ls output:\n", output)
@@ -270,20 +270,20 @@ if expectedResult in result.upper():
                                     break
                             else:
                                 print(f"Iteration {iteration+1}: Download ID for {app_bundle_name} is already present in the list")
-                                obj.setLoadModuleStatus("FAILURE")    
+                                tdkTestObj.setResultStatus("FAILURE")   
                                 break
                         else:
                             print(f"Iteration {iteration+1}: Failed to receive the download event")
-                            obj.setLoadModuleStatus("FAILURE")
+                            tdkTestObj.setResultStatus("FAILURE")
                             break    
                     else:
                         print(f"Iteration {iteration+1}: Failed to download {app_bundle_name} from {app_download_url}")
-                        obj.setLoadModuleStatus("FAILURE") 
+                        tdkTestObj.setResultStatus("FAILURE") 
                         break
                 event_listener.disconnect()  
         else:
             print("Failed to get SSH parameters from configuration")
-            obj.setLoadModuleStatus("FAILURE")     
+            tdkTestObj.setResultStatus("FAILURE")     
     else:
         print("The download manager is not active")
         obj.setLoadModuleStatus("FAILURE")  

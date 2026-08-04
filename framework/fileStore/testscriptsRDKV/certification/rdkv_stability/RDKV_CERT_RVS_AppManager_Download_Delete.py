@@ -116,7 +116,7 @@ if expectedResult in result.upper():
                                 ssh_params = rdkv_performancelib.rdkservice_getSSHParams(obj.realpath, ip)
                                 if ssh_params == "" or ssh_params == "{}":
                                     print("Failed to get SSH parameters from configuration")
-                                    obj.setLoadModuleStatus("FAILURE")
+                                    tdkTestObj.setResultStatus("FAILURE")
                                     break
                                 
                                 ssh_params_dict = json.loads(ssh_params)
@@ -125,7 +125,7 @@ if expectedResult in result.upper():
                                 
                                 if not ssh_method or not credentials:
                                     print("SSH method or credentials not found in configuration")
-                                    obj.setLoadModuleStatus("FAILURE")
+                                    tdkTestObj.setResultStatus("FAILURE")
                                     break
 
                                 parsed = urlparse(filelocator_url)
@@ -148,22 +148,24 @@ if expectedResult in result.upper():
                                 tdkTestObj.setResultStatus("FAILURE")   
                                 break 
                         else:
-                            print(f"Iteration {iteration+1}: Failed to download package with download ID :{download_id}")                   
+                            print(f"Iteration {iteration+1}: Failed to download package with download ID :{download_id}")
+                            tdkTestObj.setResultStatus("FAILURE")
+                            break                   
                     else:
                         print(f"Iteration {iteration+1}: Download ID for {app_bundle_name} is already present in the list")
-                        obj.setLoadModuleStatus("FAILURE")    
+                        tdkTestObj.setResultStatus("FAILURE")    
                         break
                 else:
                     print(f"Iteration {iteration+1}: Failed to receive the download event")
-                    obj.setLoadModuleStatus("FAILURE")
+                    tdkTestObj.setResultStatus("FAILURE")
                     break    
             else:
                 print(f"Iteration {iteration+1}: Failed to download {app_bundle_name} from {app_download_url}")
-                obj.setLoadModuleStatus("FAILURE") 
+                tdkTestObj.setResultStatus("FAILURE") 
                 break
     else:
         print("The download manager is not active")
-        obj.setLoadModuleStatus("FAILURE")
+        tdkTestObj.setResultStatus("FAILURE")
     event_listener.disconnect()    
     obj.unloadModule("rdkv_stability");
 else:

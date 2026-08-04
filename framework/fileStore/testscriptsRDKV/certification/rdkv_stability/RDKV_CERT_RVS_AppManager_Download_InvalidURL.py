@@ -66,7 +66,7 @@ if expectedResult in result.upper():
             
             if not ssh_method or not credentials:   
                 print("SSH method or credentials not found in configuration") 
-                obj.setLoadModuleStatus("FAILURE")        
+                tdkTestObj.setResultStatus("FAILURE")        
             else:
                 print("Register for the Download event")
                 thunder_port = rdkv_performancelib.devicePort
@@ -81,9 +81,9 @@ if expectedResult in result.upper():
                     print(f"\n################################# Iteration {iteration + 1} #################################")
                     event_listener.clearEventsBuffer()
                     print("------Attempting to download package from an invalid URL------")
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method", "org.rdk.DownloadManager.1.download")
-                    tdkTestObj.addParameter("value", json.dumps({"url": failing_app_download_url}))
+                    tdkTestObj = obj.createTestStep('rdkservice_download_app_bundle')
+                    tdkTestObj.addParameter("download_url", failing_app_download_url)
+                    tdkTestObj.executeTestCase(expectedResult)
                     tdkTestObj.executeTestCase(expectedResult)
                     time.sleep(5)
                     failure_status = tdkTestObj.getResult()
@@ -105,9 +105,9 @@ if expectedResult in result.upper():
                             print("Received Download Failure event")
                             event_listener.clearEventsBuffer()
                             print("------Attempting to download package from a valid URL------")
-                            tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                            tdkTestObj.addParameter("method", "org.rdk.DownloadManager.1.download")
-                            tdkTestObj.addParameter("value", json.dumps({"url": valid_app_download_url}))
+                            tdkTestObj = obj.createTestStep('rdkservice_download_app_bundle')
+                            tdkTestObj.addParameter("download_url", valid_app_download_url)
+                            tdkTestObj.executeTestCase(expectedResult)
                             tdkTestObj.executeTestCase(expectedResult)
                             status = tdkTestObj.getResult()
                             result = tdkTestObj.getResultDetails()
@@ -161,17 +161,19 @@ if expectedResult in result.upper():
                                     else:
                                         print(f"Iteration {iteration+1}: Failed to download package with download ID :{download_id}")
                                         tdkTestObj.setResultStatus("FAILURE") 
+                                        break
                                 else:
                                     print(f"Iteration {iteration+1}: Failed to receive the download event")
-                                    obj.setLoadModuleStatus("FAILURE")
+                                    tdkTestObj.setResultStatus("FAILURE")
                                     break  
                             else:
                                 print(f"Iteration {iteration+1}: Failed to download {app_bundle_name} from {valid_app_download_url}")
-                                obj.setLoadModuleStatus("FAILURE") 
+                                tdkTestObj.setResultStatus("FAILURE")
                                 break
                         else:
                             print(f"Iteration {iteration+1}: Failed to receive DOWNLOAD FAILURE event")   
                             tdkTestObj.setResultStatus("FAILURE") 
+                            break
                     else:
                         print(f"Iteration {iteration+1}: Download API accepting invalid URL")
                         tdkTestObj.setResultStatus("FAILURE")
@@ -180,7 +182,7 @@ if expectedResult in result.upper():
                 
         else:
             print("Failed to get SSH parameters from configuration")
-            obj.setLoadModuleStatus("FAILURE")     
+            tdkTestObj.setResultStatus("FAILURE")
     else:
         print("The download manager is not active")
         obj.setLoadModuleStatus("FAILURE")  
