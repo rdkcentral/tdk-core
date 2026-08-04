@@ -273,6 +273,7 @@ def rfc_revert_dm_value(sysobj, obj, feature_id, name, param_value_dict):
             actualresult = "FAILURE"
             details += f"\nRFC service restart failed: {restart_details}"
             print("RFC service restart failed: %s" % restart_details)
+    tdkTestObj.setResultStatus(actualresult)
     return tdkTestObj, actualresult, details
 ########## End of function ##########
 

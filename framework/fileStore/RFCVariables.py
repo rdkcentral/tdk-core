@@ -23,7 +23,7 @@ Feature_name="Test_Feat"
 RFC_LOG_FILE="/rdklogs/logs/dcmrfc.log"
 #The user is required to configure the XCONF API key here
 XCONF_API_KEY=""
-# DM Parameters for RFC testing - User is required to populate DMs
+# DM Parameters for RFC testing
 RFC_DM_1 = "Device.X_Comcast_com_ParentalControl.ManagedSites.Enable"
 RFC_DM_2 = "Device.X_Comcast_com_ParentalControl.ManagedServices.Enable"
 RFC_DM_3 = "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PresenceDetect.Enable"
