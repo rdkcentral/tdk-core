@@ -222,7 +222,7 @@ def getFWUpgradeConfig(obj, step):
 # Description : Function to set the Firmware Download Protocol, Firmware Upgrade URL, FirmwareToDownload and optionally trigger FirmwareDownloadAndFactoryReset
 # Parameters  : obj - module object
 #               step - test step number
-#               FirmwareFilename - Targert Image name
+#               FirmwareFilename - Target Image name
 #               FirmwareLocation - Location of the firmware file [Image hosting Server URL]
 #               FirmwareProtocol - Protocol used for firmware download
 #               trigger_download - True to trigger the firmware download, False to update only the config values
