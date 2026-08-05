@@ -1,0 +1,45 @@
+﻿## TestCase ID
+RDKV_MANUAL_APPMGR_FUNC_21
+## TestCase Name
+RDKV_CERT_MANUAL_AppMgr_Fun_Multi_App_Update
+
+<a name="head.TOC"></a>
+## Table Of Contents
+- [Objective](#head.Objective)
+- [Precondition](#head.Precondition)
+- [Test Steps](#head.TestSteps)
+- [Test Attributes](#head.Attributes)
+
+<a name="head.Objective"></a>
+## Objective
+To validate that multiple installed applications can be updated in parallel using the update mechanism available from the App Info screen on the DUT. This test confirms that all concurrent updates complete successfully and each application reflects the latest version, ensuring that parallel app update functionality meets certification standards.
+
+<a name="head.Precondition"></a>
+## Preconditions
+
+|#|Step Name | Step Description| Expected Result|
+|-|---------|-----------------|----------------|
+| 1 | Pair Bluetooth remote | Ensure the Bluetooth Remote is paired and connected to the DUT. | The Bluetooth Remote should be paired and connected to the DUT successfully.|
+| 2 | Connect DUT to network | Connect the DUT to Ethernet or Wi-Fi with active internet access. | The DUT should be connected to the network with active internet access.|
+| 3 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected.|
+| 4 | Install required apps if not present | If the required App is not already installed, select the App tile from the Recommended Apps row (or the More Apps tab if not visible on Recommended row) of the RDK UI Home screen and press Enter/OK to install it. Skip this step if the required App is already available in the My Apps section. | The required App should be installed and available in the My Apps section/row of the RDK UI Home screen, ready to launch. If already installed, this step may be skipped.|
+| 5 | Sign in to premium apps if applicable | This step is applicable only if the required App is a Premium App (such as YouTube, Amazon Prime, or Netflix). If applicable, sign in with valid user credentials and verify AV playback prior to test execution. | If the required App is a Premium App, it should be signed in with valid user credentials and AV playback should be verified successfully prior to test execution.|
+| 6 | Verify app launch and AV playback | Verify that all required Apps are launching successfully from the RDK UI Home screen. For Apps that support A/V playback (regardless of whether the App is a Premium App or not), verify that audio and video playback is working correctly prior to test execution. | All required Apps should launch successfully from the RDK UI Home screen. For Apps supporting A/V playback, audio and video playback should be verified as working correctly prior to test execution.|
+
+<a name="head.TestSteps"></a>
+## Test Steps
+
+|#|Step Name | Step Description| Expected Result|
+|-|---------|-----------------|----------------|
+| 1 | Navigate to app info icon in UI| Navigate to App Info icon in left side of the RDK UI Home screen and press Enter/OK on the remote | "App Info page should launch where we should see the Installed app's Info. Each row in App Info page displays the details of a specific application -- including the app icon, app name, app version,<br>runtime package version, and three management option -- Launch, Update, and Uninstall"|
+| 2 | Select multiple app Update buttons in parallel | Select update Button and press Enter/OK on the remote. In parallel select and press Enter/OK on the remote for multiple apps from App info page | Multiple Apps should be downloaded and updated in parallel if new version of the app is available|
+| 3 | Select launch button and press enter/ok | Select launch Button and press Enter/OK on the remote to launch any required App | Selected App should be launched successfully with latest version either as a cold launch or hot launch depending on the app's previous state.|
+| 4 | Select content or load app | Select any Video Content from launched Apps or (load the App if its not a video App). | Selected Video Content AV playback should start or App should load its content|
+| 5 | Close launched apps via Back key | Close/Exit the launched Apps by back key press on remote. | Launched App should be terminated/ Closed gracefully and the RDK UI Home screen should be visible on the display.|
+
+<a name="head.Attributes"></a>
+## Test Attributes
+
+**Supported Models** : RPI-Client, Video_Accelerator
+
+<div align="right"><sup><a href="#head.TOC">Go To Top</a></sup></div>

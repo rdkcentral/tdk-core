@@ -29,7 +29,7 @@ To launch a Video Player integrated with lightning application via AppManager an
 ## Test Steps
 |#| Step Name | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
-| 1 | Set playback operations for the scenario. | Configure the `playtillend(0)` operations: the video player will play till end of content for 0 seconds. | Ensure playback operations are set as specified. |
+| 1 | Set playback operations for the scenario. | Configure the `playtillend(0)` operation: the player will play the video until the content completes its playback naturally. | Ensure playback operations are set as specified. |
 | 2 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/unifiedplayer/build/index.html?url=<video_src_url_dash_segement_base>.mpd&operations=playtillend(0)&autotest=true&type=dash` | Ensure that the launch URL is stored in PersistentStore. |
 | 3 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.lightning-unified-player"}}</code>. | Ensure that the app launches successfully via AppManager. |
 | 4 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.lightning-unified-player is present in the loaded apps list. |
