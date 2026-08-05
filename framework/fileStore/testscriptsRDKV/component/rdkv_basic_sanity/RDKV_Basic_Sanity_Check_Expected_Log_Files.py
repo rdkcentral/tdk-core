@@ -19,6 +19,7 @@
 import tdklib
 import json
 import ast
+import time
 
 obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity", "1", standAlone=True)
 
@@ -59,6 +60,29 @@ if expectedResult in result.upper():
         print("FAILURE: Could not parse device config response: {}".format(e))
         tdkTestObj.setResultStatus("FAILURE")
         result = "FAILURE"
+
+    if "FAILURE" != result:
+        time.sleep(20)
+        uptime_secs = 0
+        while uptime_secs < 120:
+            tdkTestObj = obj.createTestStep('rdkv_basic_sanity_getSystemUptime')
+            tdkTestObj.executeTestCase(expectedResult)
+            result      = tdkTestObj.getResult()
+            uptime_str  = str(tdkTestObj.getResultDetails()).strip()
+            print("[System Uptime] : %s" % uptime_str)
+            if result != "SUCCESS" or "FAILURE" in uptime_str:
+                print("FAILURE: Could not retrieve system uptime")
+                tdkTestObj.setResultStatus("FAILURE")
+            else:
+                try:
+                    uptime_secs = float(uptime_str)
+                except ValueError:
+                    print("FAILURE: Could not parse uptime value: {}".format(uptime_str))
+                    tdkTestObj.setResultStatus("FAILURE")
+            sleep_time = int(120 - uptime_secs)
+            if sleep_time > 0:
+                time.sleep(sleep_time)
+        print("Uptime is greater than 2 mins. Proceeding to verify log files....")
 
     if "FAILURE" != result:
         if configValues["SSH_METHOD"] == "directSSH":
