@@ -382,6 +382,14 @@ tcp_init_server_perf()
 tcp_request_perf()
 {
         iperf -f m -c $var2 -B $var3 -t $var5 -i $var6 > $var4 2>&1 &
+        bindStatus="$(cat $var4 | grep "bind failed:" && echo "FAILURE" || echo "SUCCESS")"
+        echo "bindStatus:$bindStatus"
+        if [ $bindStatus = "SUCCESS" ]; then
+                value="$(cat $var4 | grep bits/sec | awk '{ print $7 }' | tail -1)"
+                echo "OUTPUT:$value"
+        else
+                echo "OUTPUT:"
+        fi
 }
 
 #To parse the output from iperf client and find the throughput data of machine under test
@@ -436,7 +444,7 @@ tcp_request()
 #To get the bandwidth from server
 validate_tcp_server_output()
 {
-        serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
+        serverOutput="$(awk '/bits\/sec/ {for(i=1;i<=NF;i++) if($i ~ /bits\/sec/) {bw=$(i-1)}} END {print bw}' $var2)"
         echo "OUTPUT:$serverOutput"
         deleteTmpFile="$(sudo rm $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
 }
@@ -444,11 +452,8 @@ validate_tcp_server_output()
 #To get the throughput from server
 validate_tcp_server_output_throughput()
 {
-        # Uncomment below 2 lines and comment out next 2 lines if Ubuntu version < 22.04
-        # serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
-        # size="$(cat $var2 | grep bits/sec | cut -d ' ' -f 12)"
-        serverOutput="$(cat $var2 | grep bits/sec | awk '{ print $7 }' | tail -1)"
-        size="$(cat $var2 | grep bits/sec | awk '{ print $8 }' | tail -1)"
+        serverOutput="$(awk '/bits\/sec/ {for(i=1;i<=NF;i++) if($i ~ /bits\/sec/) {bw=$(i-1)}} END {print bw}' $var2)"
+        size="$(awk '/bits\/sec/ {for(i=1;i<=NF;i++) if($i ~ /bits\/sec/) {unit=$i}} END {print unit}' $var2)"
         echo "OUTPUT:$serverOutput $size"
         deleteTmpFile="$(sudo rm $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
 }
