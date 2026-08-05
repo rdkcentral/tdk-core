@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_POWER_06
 ## TestCase Name
 RDKV_CERT_MANUAL_Pwr_Mgmt_Light_Sleep_Timer_Disabled
@@ -22,7 +22,8 @@ To validate that the DUT does not enter LIGHT SLEEP mode when the Sleep Timer is
 | 1 | Pair Bluetooth remote | Ensure the Bluetooth Remote is paired with the DUT. | The Bluetooth Remote should be paired and connected to the DUT successfully.|
 | 2 | Ensure RDK UI is accessible | Ensure the RDK UI is visible and accessible on the DUT. | The RDK UI should be visible and accessible on the DUT.|
 | 3 | Connect DUT to network | Connect the DUT to Ethernet or Wi-Fi with active internet access. | The DUT should be connected to the network with active internet access.|
-| 4 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected.|
+| 4 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected. |
+| 5 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
@@ -36,7 +37,7 @@ To validate that the DUT does not enter LIGHT SLEEP mode when the Sleep Timer is
 | 5 | Remain idle to trigger sleep mode | Remain idle on the RDK UI Home screen for more than 15 minutes without any key presses. | No changes should occur. The DUT UI should not turn off, confirming that Light Sleep mode is not triggered when the timer is set to OFF.|
 | 6 | Validate DUT accessible via SSH | Validate that the DUT is accessible via SSH from the PC/laptop. | The DUT should be accessible via SSH.|
 | 7 | Validate DUT power state via API | Validate the power state using the curl command.<br>Command: `curl --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0","id":"3","method":"org.rdk.System.1.getPowerState","params":{}}' http://127.0.0.1:9998/jsonrpc` | The API should return a successful response with the power state indicating `ON`, confirming the DUT remains active and has not entered Light Sleep mode.|
-| 8 | Validate the rdk ui display, ssh | Validate the RDK UI display, SSH accessibility, and internet connectivity on the DUT. | The DUT UI should remain active. The DUT should be accessible via SSH and internet should be accessible.|
+| 8 | Validate RDK UI display, SSH and internet | Validate the RDK UI display, SSH accessibility, and internet connectivity on the DUT. | The DUT UI should remain active. The DUT should be accessible via SSH and internet should be accessible.|
 
 <a name="head.Attributes"></a>
 ## Test Attributes

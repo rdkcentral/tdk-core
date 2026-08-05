@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_XDIAL_01
 ## TestCase Name
 RDKV_CERT_MANUAL_Xdial_Local_Discovery_Toggle
@@ -18,8 +18,9 @@ To validate that the XDial feature can be disabled and re-enabled on the DUT usi
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Power on DUT and connect HDMI display | The DUT shall be powered on with a display connected to the correct HDMI input source. | The DUT should be powered on and the RDK UI should be visible on the TV/display.|
-| 2 | Connect DUT and two smartphones to same network | The DUT and the external device (smartphone) shall be connected to the same network. | The DUT and both smartphones should be on the same network and reachable from each other.|
+| 1 | Power on DUT and connect HDMI display | The DUT shall be powered on with a display connected to the correct HDMI input source. | The DUT should be powered on and the RDK UI should be visible on the TV/display. |
+| 2 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 3 | Connect DUT and two smartphones to same network | The DUT and the external device (smartphone) shall be connected to the same network. | The DUT and both smartphones should be on the same network and reachable from each other.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

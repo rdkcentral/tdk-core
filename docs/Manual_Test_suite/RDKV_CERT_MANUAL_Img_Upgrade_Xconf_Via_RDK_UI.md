@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_IMG_UPGRADE_04
 ## TestCase Name
 RDKV_CERT_MANUAL_Img_Upgrade_Xconf_Via_RDK_UI
@@ -19,11 +19,12 @@ To validate the XCONF firmware upgrade workflow when initiated directly from the
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Connect HDMI display | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display.|
-| 2 | Connect Ethernet cable | Connect the Ethernet cable to the DUT and ensure a valid IP address is available. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
-| 3 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
-| 4 | Flash DUT with test firmware image | Flash the DUT with the test firmware image prior to the test. | The DUT should be successfully flashed with the test firmware image and booted up.|
-| 5 | Configure DUT in XCONF with target firmware | Configure the DUT in the XCONF application with the target firmware image details as per the XCONF configuration guide at <XCONF_Configuration_Guide_URL>. | The DUT should be correctly configured in XCONF with the target firmware image details.|
+| 1 | Connect HDMI display | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display. |
+| 2 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 3 | Connect Ethernet cable | Connect the Ethernet cable to the DUT and ensure a valid IP address is available. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
+| 4 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
+| 5 | Flash DUT with test firmware image | Flash the DUT with the test firmware image prior to the test. | The DUT should be successfully flashed with the test firmware image and booted up.|
+| 6 | Configure DUT in XCONF with target firmware | Configure the DUT in the XCONF application with the target firmware image details as per the XCONF configuration guide at <XCONF_Configuration_Guide_URL>. | The DUT should be correctly configured in XCONF with the target firmware image details.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

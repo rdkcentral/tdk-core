@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_HDMIHOTPLUG_02
 ## TestCase Name
 RDKV_CERT_MANUAL_HDMI_Hotplug_UI_Restore_On_Reconnect_Settings_Screen
@@ -21,7 +21,8 @@ To validate that the Settings screen is correctly restored on the display after 
 |-|---------|-----------------|----------------|
 | 1 | Connect DUT to network | Connect the DUT to an active network via Wi-Fi or Ethernet prior to the test. | The DUT should be connected to an active network with a valid IP address assigned.|
 | 2 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
-| 3 | Connect HDMI cable and select source | Connect the HDMI cable between the DUT and the TV/display, with the correct input source selected. | The HDMI cable should be connected and the correct input source should be selected on the TV/display.|
+| 3 | Connect HDMI cable and select source | Connect the HDMI cable between the DUT and the TV/display, with the correct input source selected. | The HDMI cable should be connected and the correct input source should be selected on the TV/display. |
+| 4 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_BLUETOOTH_09
 ## TestCase Name
 RDKV_CERT_MANUAL_BTRemote_PairAndConnect_In_RDK_UI
@@ -20,9 +20,10 @@ To validate that a Bluetooth remote can be successfully paired and connected to 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 |  Connect Ethernet cable  | Connect the DUT to an active network via Ethernet prior to the test. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
-| 2 |  Connect HDMI display  | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display.|
-| 3 |  Conduct test in isolated environment  | Conduct the test in an isolated environment free of other VA/Bluetooth devices to prevent unintended Bluetooth interference. | The test environment should be free of Bluetooth interference from other devices.|
-| 4 |  Ensure remote is not currently paired  | Ensure the remote to be paired is not currently paired or connected to any DUT. If the remote is already paired to a DUT, clear the pairing information by pressing and holding the CH UP and VOL DOWN keys simultaneously for a few seconds before starting the test. | The remote should have no existing pairing and should be ready for a fresh pairing with the DUT.|
+| 2 |  Connect HDMI display  | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display. |
+| 3 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 4 |  Conduct test in isolated environment  | Conduct the test in an isolated environment free of other VA/Bluetooth devices to prevent unintended Bluetooth interference. | The test environment should be free of Bluetooth interference from other devices.|
+| 5 |  Ensure remote is not currently paired  | Ensure the remote to be paired is not currently paired or connected to any DUT. If the remote is already paired to a DUT, clear the pairing information by pressing and holding the CH UP and VOL DOWN keys simultaneously for a few seconds before starting the test. | The remote should have no existing pairing and should be ready for a fresh pairing with the DUT.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

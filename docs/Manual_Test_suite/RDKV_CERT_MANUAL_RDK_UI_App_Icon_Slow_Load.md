@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_RDKUI_19
 ## TestCase Name
 RDKV_CERT_MANUAL_RDK_UI_App_Icon_Slow_Load
@@ -20,7 +20,8 @@ To validate that the RDK UI correctly displays a loading indicator when app icon
 |-|---------|-----------------|----------------|
 | 1 | Pair Bluetooth remote | Ensure the Bluetooth Remote is paired and connected to the DUT. | The Bluetooth Remote should be paired and connected to the DUT successfully.|
 | 2 | Connect DUT to slow network | Connect the DUT to a slow network to simulate network latency conditions. | The DUT should be connected to a slow network to simulate latency.|
-| 3 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected.|
+| 3 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected. |
+| 4 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

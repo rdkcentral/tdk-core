@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_APPS_13
 ## TestCase Name
 RDKV_CERT_MANUAL_App_YouTube_Hibernate_Home_Key
@@ -23,10 +23,11 @@ To validate that the YouTube application hibernates correctly when the Home key 
 | 2 | Pair Bluetooth remote | Ensure a Bluetooth-paired remote control is available and functional for DUT navigation. | The Bluetooth remote should be paired and functional for DUT navigation.|
 | 3 | Connect DUT to network | Connect the DUT to Ethernet or Wi-Fi with active internet access. | The DUT should be connected to the network with active internet access.|
 | 4 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected.|
-| 5 | Install YouTube if not present | If YouTube is not already available in the My Apps section/row of the RDK UI Home screen, select the YouTube tile from the Recommended Apps row (or the More Apps tab if not visible) and press Enter/OK on the remote. On successful installation, a green tick icon should appear on the tile for approximately 2 seconds before disappearing. | The YouTube application should be installed successfully on the DUT.|
-| 6 | Verify YouTube listed on home screen | Validate that the installed YouTube application is listed under the My Apps section/row and App Info page of the RDK UI Home screen, confirming it is ready to launch. | The YouTube application should be visible in the My Apps section and on the App Info page, ready to launch.|
-| 7 | Sign in to YouTube and verify A/V playback | Sign in to YouTube with valid user credentials and validate A/V playback prior to test execution. | Sign-in should succeed and A/V playback should be functional in the YouTube application.|
-| 8 | Verify YouTube launch and content access | Validate that YouTube launches successfully from the RDK UI and that content is accessible prior to test execution. | YouTube should launch correctly from the RDK UI and content should be accessible.|
+| 5 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully.|
+| 6 | Install YouTube if not present | If YouTube is not already available in the My Apps section/row of the RDK UI Home screen, select the YouTube tile from the Recommended Apps row (or the More Apps tab if not visible) and press Enter/OK on the remote. On successful installation, a green tick icon should appear on the tile for approximately 2 seconds before disappearing. | The YouTube application should be installed successfully on the DUT.|
+| 7 | Verify YouTube listed on home screen | Validate that the installed YouTube application is listed under the My Apps section/row and App Info page of the RDK UI Home screen, confirming it is ready to launch. | The YouTube application should be visible in the My Apps section and on the App Info page, ready to launch.|
+| 8 | Sign in to YouTube and verify A/V playback | Sign in to YouTube with valid user credentials and validate A/V playback prior to test execution. | Sign-in should succeed and A/V playback should be functional in the YouTube application.|
+| 9 | Verify YouTube launch and content access | Validate that YouTube launches successfully from the RDK UI and that content is accessible prior to test execution. | YouTube should launch correctly from the RDK UI and content should be accessible.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

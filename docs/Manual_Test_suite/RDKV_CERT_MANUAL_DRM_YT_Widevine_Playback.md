@@ -21,9 +21,10 @@ To validate that YouTube Widevine DRM-protected content playback is functional o
 |-|---------|-----------------|----------------|
 | 1 | Purchase Widevine videos for YouTube account | Purchase Widevine encrypted videos for the YouTube account to be used for testing. | Widevine encrypted videos should be purchased and available in the YouTube account.|
 | 2 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
-| 3 | Connect DUT to Smart TV via HDMI | Connect the DUT to a Smart TV via HDMI and select the correct HDMI input source on the display. | The DUT should be connected to the Smart TV via HDMI and the correct source should be selected and visible.|
-| 4 | Verify YouTube app on home screen | Validate that the YouTube App is available in the My Apps section/row of the RDK UI Home screen. If not present, install the YouTube App from the Recommended Apps row. | The YouTube App should be available and ready to launch from the RDK UI Home screen.|
-| 5 | Sign in to YouTube and verify DRM content | After installation and launch of the YouTube App, sign in with valid user credentials and validate that purchased DRM video content is available prior to test execution. | The sign-in should succeed and purchased DRM video content should be visible and accessible in the YouTube account.|
+| 3 | Connect DUT to Smart TV via HDMI | Connect the DUT to a Smart TV via HDMI and select the correct HDMI input source on the display. | The DUT should be connected to the Smart TV via HDMI and the correct source should be selected and visible. |
+| 4 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 5 | Verify YouTube app on home screen | Validate that the YouTube App is available in the My Apps section/row of the RDK UI Home screen. If not present, install the YouTube App from the Recommended Apps row. | The YouTube App should be available and ready to launch from the RDK UI Home screen.|
+| 6 | Sign in to YouTube and verify DRM content | After installation and launch of the YouTube App, sign in with valid user credentials and validate that purchased DRM video content is available prior to test execution. | The sign-in should succeed and purchased DRM video content should be visible and accessible in the YouTube account.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

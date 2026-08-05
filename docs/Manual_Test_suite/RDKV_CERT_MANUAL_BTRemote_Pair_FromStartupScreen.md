@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_BLUETOOTH_01
 ## TestCase Name
 RDKV_CERT_MANUAL_BTRemote_Pair_FromStartupScreen
@@ -20,7 +20,7 @@ To validate that a Bluetooth remote can be successfully paired with the DUT from
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 |  Connect Ethernet cable  | Connect the DUT to an active network via Ethernet prior to the test. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
-| 2 |  Connect HDMI display  | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display.|
+| 2 |  Connect HDMI display  | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display. |
 | 3 |  Conduct test in isolated environment  | Conduct the test in an isolated environment free of other VA/Bluetooth devices to prevent unintended Bluetooth interference. | The test environment should be free of Bluetooth interference from other devices.|
 | 4 |  Flash DUT firmware  | Perform the test immediately after flashing the DUT firmware so that the "Pair your remote control" startup screen is presented on boot. | The DUT should be freshly flashed and ready to present the startup pairing screen on the next boot.|
 | 5 |  Prepare universal remote  | Use a Universal Remote (Tatlow RDK — display name in RDK UI) as the primary remote for this test. If unavailable, any other supported Bluetooth remote may be used. Note: Key combinations for pairing and clearing pairing info are specific to the Tatlow RDK remote and may differ for other remote models. | The Bluetooth remote should be available and ready for pairing with the DUT.|

@@ -20,9 +20,10 @@ To validate that Amazon Prime Video PlayReady DRM-protected content playback is 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
-| 2 | Connect DUT to Smart TV via HDMI | Connect the DUT to a Smart TV via HDMI and select the correct HDMI input source on the display. | The DUT should be connected to the Smart TV via HDMI and the correct source should be selected and visible.|
-| 3 | Verify Amazon Prime app on home screen | Validate that the Amazon Prime App is available in the My Apps section/row of the RDK UI Home screen. If not present, install the Amazon Prime App from the Recommended Apps row. | The Amazon Prime App should be available and ready to launch from the RDK UI Home screen.|
-| 4 | Sign in to Amazon Prime and verify DRM content | After installation and launch of the Amazon Prime App, sign in with valid user credentials and validate that purchased DRM video content is available prior to test execution. | The sign-in should succeed and purchased DRM video content should be visible and accessible in the Amazon Prime account.|
+| 2 | Connect DUT to Smart TV via HDMI | Connect the DUT to a Smart TV via HDMI and select the correct HDMI input source on the display. | The DUT should be connected to the Smart TV via HDMI and the correct source should be selected and visible. |
+| 3 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 4 | Verify Amazon Prime app on home screen | Validate that the Amazon Prime App is available in the My Apps section/row of the RDK UI Home screen. If not present, install the Amazon Prime App from the Recommended Apps row. | The Amazon Prime App should be available and ready to launch from the RDK UI Home screen.|
+| 5 | Sign in to Amazon Prime and verify DRM content | After installation and launch of the Amazon Prime App, sign in with valid user credentials and validate that purchased DRM video content is available prior to test execution. | The sign-in should succeed and purchased DRM video content should be visible and accessible in the Amazon Prime account.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

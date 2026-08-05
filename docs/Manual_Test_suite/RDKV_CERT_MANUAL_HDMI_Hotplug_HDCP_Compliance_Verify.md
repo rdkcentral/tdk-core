@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_HDMIHOTPLUG_14
 ## TestCase Name
 RDKV_CERT_MANUAL_HDMI_Hotplug_HDCP_Compliance_Verify
@@ -21,10 +21,11 @@ To validate HDCP compliance by verifying A/V playback behavior across HDMI cable
 |-|---------|-----------------|----------------|
 | 1 | Connect DUT to network | Connect the DUT to an active network via Wi-Fi or Ethernet prior to the test. | The DUT should be connected to an active network with a valid IP address assigned.|
 | 2 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
-| 3 | Connect HDMI cable to HDCP-compliant display | Connect the HDMI cable between the DUT and an HDCP-compliant TV/display, with the correct input source selected. | The HDMI cable should be connected to an HDCP-compliant TV/display and the correct input source should be selected.|
-| 4 | Install YouTube application | Navigate to the Recommended Apps row on the RDK UI Home screen (or the More Apps tab if the YouTube application is not visible), select the YouTube application tile, and press Enter/OK on the remote. Verify that a buffering/loading indicator appears on the tile, indicating that the app bundle download and installation has started. On successful installation, a green tick icon should appear on the tile for approximately 2 seconds. | The YouTube application should be installed successfully on the DUT.|
-| 5 | Verify YouTube app listed on home screen | Verify that the YouTube application is listed under the My Apps section/row and on the App Info page of the RDK UI Home screen, confirming it is ready to launch. | The YouTube application should be visible in the My Apps section and on the App Info page, ready to launch.|
-| 6 | Sign in to YouTube and verify playback | Sign in to the YouTube application with valid user credentials and verify A/V playback is functional prior to test execution. | Sign-in should succeed and A/V playback should be functional in the YouTube application.|
+| 3 | Connect HDMI cable to HDCP-compliant display | Connect the HDMI cable between the DUT and an HDCP-compliant TV/display, with the correct input source selected. | The HDMI cable should be connected to an HDCP-compliant TV/display and the correct input source should be selected. |
+| 4 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 5 | Install YouTube application | Navigate to the Recommended Apps row on the RDK UI Home screen (or the More Apps tab if the YouTube application is not visible), select the YouTube application tile, and press Enter/OK on the remote. Verify that a buffering/loading indicator appears on the tile, indicating that the app bundle download and installation has started. On successful installation, a green tick icon should appear on the tile for approximately 2 seconds. | The YouTube application should be installed successfully on the DUT.|
+| 6 | Verify YouTube app listed on home screen | Verify that the YouTube application is listed under the My Apps section/row and on the App Info page of the RDK UI Home screen, confirming it is ready to launch. | The YouTube application should be visible in the My Apps section and on the App Info page, ready to launch.|
+| 7 | Sign in to YouTube and verify playback | Sign in to the YouTube application with valid user credentials and verify A/V playback is functional prior to test execution. | Sign-in should succeed and A/V playback should be functional in the YouTube application.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

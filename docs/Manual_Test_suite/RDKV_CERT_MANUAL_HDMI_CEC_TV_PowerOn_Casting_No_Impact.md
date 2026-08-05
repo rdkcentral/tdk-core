@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_HDMICEC_03
 ## TestCase Name
 RDKV_CERT_MANUAL_HDMI_CEC_TV_PowerOn_Casting_No_Impact
@@ -19,17 +19,18 @@ To validate that powering on the TV via a CEC command does not interrupt or term
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Connect HDMI display to DUT | An HDMI display (CEC-enabled TV) shall be connected to the DUT via HDMI and the correct HDMI input source shall be selected. | The HDMI display should be connected to the DUT and the correct HDMI input source should be selected.|
-| 2 | Enable CEC feature on TV | Ensure the connected TV has the CEC feature enabled. | The CEC feature should be enabled on the connected TV.|
-| 3 | Enable CEC Control on DUT | Enable the CEC Control toggle on the DUT from Settings > Other Settings > Advanced Settings. | The CEC Control toggle should be turned ON on the DUT.|
-| 4 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
-| 5 | Enable XDial (Local Device Discovery) | Enable XDial on the DUT from Settings > Other Settings > Privacy > Local Device Discovery. | XDial should be enabled and the DUT should be discoverable on the local network.|
-| 6 | Ensure internet access and same network | Ensure internet access is available on both the DUT and the smartphone, and both are connected to the same network. | Internet access should be available on both devices and they should be on the same network.|
-| 7 | Ensure SSH or console access | Ensure that SSH access or serial console access to the DUT is available from the PC/laptop. | SSH or serial console access should be available and functional on the DUT.|
-| 8 | Install required application | Navigate to the Recommended Apps row on the RDK UI Home screen (or the More Apps tab if the required application is not visible), select the required application tile, and press Enter/OK on the remote. Verify that a buffering/loading indicator appears on the tile. On successful installation, a green tick icon should appear on the tile for approximately 2 seconds. | The required application should be installed successfully on the DUT.|
-| 9 | Verify app listed on home screen | Verify that the installed application is listed under the My Apps section/row and on the App Info page of the RDK UI Home screen, confirming it is ready to launch. | The installed application should be visible in the My Apps section and on the App Info page, ready to launch.|
-| 10 | Sign in to premium application | If the installed application is a premium application (such as YouTube or Amazon Prime), sign in with valid user credentials and verify A/V playback is functional prior to test execution. | Sign-in should succeed and A/V playback should be functional.|
-| 11 | Verify app launch and content access | Verify that all installed applications launch correctly from the RDK UI, and that any purchased content and premium features are accessible prior to test execution. | All installed applications should launch correctly and content should be accessible.|
+| 1 | Connect HDMI display to DUT | An HDMI display (CEC-enabled TV) shall be connected to the DUT via HDMI and the correct HDMI input source shall be selected. | The HDMI display should be connected to the DUT and the correct HDMI input source should be selected. |
+| 2 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 3 | Enable CEC feature on TV | Ensure the connected TV has the CEC feature enabled. | The CEC feature should be enabled on the connected TV.|
+| 4 | Enable CEC Control on DUT | Enable the CEC Control toggle on the DUT from Settings > Other Settings > Advanced Settings. | The CEC Control toggle should be turned ON on the DUT.|
+| 5 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
+| 6 | Enable XDial (Local Device Discovery) | Enable XDial on the DUT from Settings > Other Settings > Privacy > Local Device Discovery. | XDial should be enabled and the DUT should be discoverable on the local network.|
+| 7 | Ensure internet access and same network | Ensure internet access is available on both the DUT and the smartphone, and both are connected to the same network. | Internet access should be available on both devices and they should be on the same network.|
+| 8 | Ensure SSH or console access | Ensure that SSH access or serial console access to the DUT is available from the PC/laptop. | SSH or serial console access should be available and functional on the DUT.|
+| 9 | Install required application | Navigate to the Recommended Apps row on the RDK UI Home screen (or the More Apps tab if the required application is not visible), select the required application tile, and press Enter/OK on the remote. Verify that a buffering/loading indicator appears on the tile. On successful installation, a green tick icon should appear on the tile for approximately 2 seconds. | The required application should be installed successfully on the DUT.|
+| 10 | Verify app listed on home screen | Verify that the installed application is listed under the My Apps section/row and on the App Info page of the RDK UI Home screen, confirming it is ready to launch. | The installed application should be visible in the My Apps section and on the App Info page, ready to launch.|
+| 11 | Sign in to premium application | If the installed application is a premium application (such as YouTube or Amazon Prime), sign in with valid user credentials and verify A/V playback is functional prior to test execution. | Sign-in should succeed and A/V playback should be functional.|
+| 12 | Verify app launch and content access | Verify that all installed applications launch correctly from the RDK UI, and that any purchased content and premium features are accessible prior to test execution. | All installed applications should launch correctly and content should be accessible.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_AV_11
 ## TestCase Name
 RDKV_CERT_MANUAL_AV_Codec_AC3_Playback

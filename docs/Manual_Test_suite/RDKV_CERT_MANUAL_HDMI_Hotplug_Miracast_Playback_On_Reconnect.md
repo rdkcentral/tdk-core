@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_HDMIHOTPLUG_11
 ## TestCase Name
 RDKV_CERT_MANUAL_HDMI_Hotplug_Miracast_Playback_On_Reconnect
@@ -21,8 +21,9 @@ To validate that a Miracast screen casting session from a smartphone continues w
 |-|---------|-----------------|----------------|
 | 1 | Connect DUT to active Wi-Fi network | Connect the DUT to an active Wi-Fi network and ensure it is reachable from the smartphone prior to the test. | The DUT should be connected to an active Wi-Fi network and reachable from the smartphone.|
 | 2 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
-| 3 | Connect HDMI cable and select source | Connect the HDMI cable between the DUT and the TV/display, with the correct input source selected. | The HDMI cable should be connected and the correct input source should be selected on the TV/display.|
-| 4 | Connect smartphone to same Wi-Fi network | Connect the smartphone and the DUT to the same Wi-Fi network. | Both the smartphone and the DUT should be on the same Wi-Fi network.|
+| 3 | Connect HDMI cable and select source | Connect the HDMI cable between the DUT and the TV/display, with the correct input source selected. | The HDMI cable should be connected and the correct input source should be selected on the TV/display. |
+| 4 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 5 | Connect smartphone to same Wi-Fi network | Connect the smartphone and the DUT to the same Wi-Fi network. | Both the smartphone and the DUT should be on the same Wi-Fi network.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

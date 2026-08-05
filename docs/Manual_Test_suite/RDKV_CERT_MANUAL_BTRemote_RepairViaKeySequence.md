@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_BLUETOOTH_11
 ## TestCase Name
 RDKV_CERT_MANUAL_BTRemote_RepairViaKeySequence
@@ -20,9 +20,10 @@ To validate that a Bluetooth remote can be successfully re-paired with the DUT u
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 |  Connect Ethernet cable  | Connect the DUT to an active network via Ethernet prior to the test. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
-| 2 |  Connect HDMI display  | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display.|
-| 3 |  Conduct test in isolated environment  | Conduct the test in an isolated environment free of other VA/Bluetooth devices to prevent unintended Bluetooth interference. | The test environment should be free of Bluetooth interference from other devices.|
-| 4 |  Ensure bluetooth remote already paired  | Ensure the Bluetooth remote is successfully paired with the DUT and all key presses are confirmed to be functioning correctly prior to the test. | The Bluetooth remote should be paired and all key presses should be functional on the DUT.|
+| 2 |  Connect HDMI display  | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display. |
+| 3 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 4 |  Conduct test in isolated environment  | Conduct the test in an isolated environment free of other VA/Bluetooth devices to prevent unintended Bluetooth interference. | The test environment should be free of Bluetooth interference from other devices.|
+| 5 |  Ensure bluetooth remote already paired  | Ensure the Bluetooth remote is successfully paired with the DUT and all key presses are confirmed to be functioning correctly prior to the test. | The Bluetooth remote should be paired and all key presses should be functional on the DUT.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

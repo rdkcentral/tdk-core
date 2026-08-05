@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_RDKUI_28
 ## TestCase Name
 RDKV_CERT_MANUAL_RDK_UI_App_Download_Fail_Back_Btn
@@ -22,7 +22,8 @@ To validate that when an app download fails due to a network issue, the RDK UI d
 | 2 | Connect DUT to network | Connect the DUT to a network prior to this test. | The DUT should be connected to a network.|
 | 3 | Ensure some apps are already installed | Ensure some apps are already installed on the DUT. | Some apps should be installed on the DUT.|
 | 4 | Verify Recommended Apps row is populated | Ensure the Recommended Apps row lists the apps available in the App Catalogue. | The Recommended Apps row should be populated with available apps.|
-| 5 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected.|
+| 5 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected. |
+| 6 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
@@ -31,12 +32,12 @@ To validate that when an app download fails due to a network issue, the RDK UI d
 |-|---------|-----------------|----------------|
 | 1 | Disconnect network on DUT | Disconnect the network | The DUT should not be accessible via SSH as the network is disconnected.|
 | 2 | Click on an app in recommended | Click on an app in Recommended Apps which is not installed yet | Error overlay indicating the reason as Network Issue should be displayed|
-| 3 | Exit the error overlay by back | Exit the error overlay by back button press from remote | The overlay should exit and return the user to previous screen|
+| 3 | Exit error overlay via back button | Exit the error overlay by back button press from remote | The overlay should exit and return the user to previous screen|
 | 4 | Reconnect network on DUT | Connect to a network | Connection should be successful|
 | 5 | Navigate to More Apps page | Click on More Apps button | More Apps page should load|
 | 6 | Disconnect network on DUT | Disconnect the network | The DUT should not be accessible via SSH as the network is disconnected.|
 | 7 | Attempt to install app from More Apps (network off) | Click on an app which is not installed yet | Error overlay indicating the reason as Network Issue should be displayed|
-| 8 | Exit the error overlay by back | Exit the error overlay by back button press from remote | The overlay should exit and return the user to previous screen|
+| 8 | Exit error overlay via back button | Exit the error overlay by back button press from remote | The overlay should exit and return the user to previous screen|
 
 <a name="head.Attributes"></a>
 ## Test Attributes

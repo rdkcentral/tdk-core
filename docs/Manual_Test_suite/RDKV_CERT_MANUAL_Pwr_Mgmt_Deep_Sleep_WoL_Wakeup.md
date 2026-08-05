@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_POWER_04
 ## TestCase Name
 RDKV_CERT_MANUAL_Pwr_Mgmt_Deep_Sleep_WoL_Wakeup
@@ -23,7 +23,8 @@ To validate that the DUT can be set to DEEP SLEEP mode and successfully woken up
 | 2 | Ensure RDK UI is accessible | Ensure the RDK UI is visible and accessible on the DUT. | The RDK UI should be visible and accessible on the DUT.|
 | 3 | Connect Ethernet and confirm IP | Connect the Ethernet cable to the DUT and ensure a valid Ethernet IP address is available. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
 | 4 | Configure DUT in WoL utility | Pre-configure the DUT in the Wake-on-LAN (WoL) utility on the PC/laptop. | The DUT should be pre-configured in the Wake-on-LAN utility and ready to be woken remotely.|
-| 5 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected.|
+| 5 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected. |
+| 6 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps

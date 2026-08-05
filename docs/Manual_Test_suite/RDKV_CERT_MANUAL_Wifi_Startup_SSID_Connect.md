@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_WIFI_01
 ## TestCase Name
 RDKV_CERT_MANUAL_Wifi_Startup_SSID_Connect
@@ -18,7 +18,7 @@ To validate that a user can successfully connect to an available Wi-Fi SSID from
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Connect HDMI display | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display.|
+| 1 | Connect HDMI display | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display. |
 | 2 | Flash DUT or factory reset | Flash the DUT freshly prior to the test. If Wi-Fi is being tested after other tests have already been conducted, perform a factory reset via Settings > Other Settings > Advanced Settings > Device to restore the startup screens on the next boot. | The DUT should be freshly flashed or factory reset, and the startup screens should be restored on the next boot.|
 | 3 | Connect Ethernet cable | Connect the Ethernet cable to the DUT and ensure a valid Ethernet IP address is available. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
 | 4 | Pair Bluetooth remote | Pair and connect the Bluetooth remote to the DUT prior to test execution. | The Bluetooth remote should be paired and connected to the DUT successfully.|

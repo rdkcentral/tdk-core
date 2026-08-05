@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_IMG_UPGRADE_05
 ## TestCase Name
 RDKV_CERT_MANUAL_Img_Upgrade_Xconf_User_Settings_Persist
@@ -19,14 +19,15 @@ To validate that a XCONF firmware upgrade does not affect user-specific settings
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Connect HDMI display | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display.|
-| 2 | Connect Ethernet cable | Connect the Ethernet cable to the DUT and ensure a valid IP address is available. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
-| 3 | Pair Bluetooth remote and verify key presses | Pair and connect the Bluetooth remote to the DUT, and confirm that all key presses are functional. | The Bluetooth remote should be paired, connected, and all key presses should respond correctly on the DUT.|
-| 4 | Sign in to streaming applications | Sign in to the YouTube, Prime Video, and Netflix applications with valid user credentials prior to the test. | Sign-in should succeed for all three applications and the accounts should remain active on the DUT.|
-| 5 | Change display and audio settings to non-default | Change the display resolution and audio mode to non-default values prior to the test. | The display resolution and audio mode should be changed to the specified non-default values on the DUT.|
-| 6 | Connect DUT to Wi-Fi SSID | Connect the DUT to a Wi-Fi SSID prior to the test. | The DUT should be connected to the Wi-Fi SSID with a valid IP address assigned.|
-| 7 | Flash DUT with test firmware image | Flash the DUT with the test firmware image prior to the test. | The DUT should be successfully flashed with the test firmware image and booted up.|
-| 8 | Configure DUT in XCONF with target firmware | Configure the DUT in the XCONF application with the target firmware image details as per the XCONF configuration guide at <XCONF_Configuration_Guide_URL>. | The DUT should be correctly configured in XCONF with the target firmware image details.|
+| 1 | Connect HDMI display | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display. |
+| 2 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 3 | Connect Ethernet cable | Connect the Ethernet cable to the DUT and ensure a valid IP address is available. | The Ethernet cable should be connected and a valid IP address should be assigned to the DUT.|
+| 4 | Pair Bluetooth remote and verify key presses | Pair and connect the Bluetooth remote to the DUT, and confirm that all key presses are functional. | The Bluetooth remote should be paired, connected, and all key presses should respond correctly on the DUT.|
+| 5 | Sign in to streaming applications | Sign in to the YouTube, Prime Video, and Netflix applications with valid user credentials prior to the test. | Sign-in should succeed for all three applications and the accounts should remain active on the DUT.|
+| 6 | Change display and audio settings to non-default | Change the display resolution and audio mode to non-default values prior to the test. | The display resolution and audio mode should be changed to the specified non-default values on the DUT.|
+| 7 | Connect DUT to Wi-Fi SSID | Connect the DUT to a Wi-Fi SSID prior to the test. | The DUT should be connected to the Wi-Fi SSID with a valid IP address assigned.|
+| 8 | Flash DUT with test firmware image | Flash the DUT with the test firmware image prior to the test. | The DUT should be successfully flashed with the test firmware image and booted up.|
+| 9 | Configure DUT in XCONF with target firmware | Configure the DUT in the XCONF application with the target firmware image details as per the XCONF configuration guide at <XCONF_Configuration_Guide_URL>. | The DUT should be correctly configured in XCONF with the target firmware image details.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

@@ -19,14 +19,15 @@ To validate that a Factory Reset can be performed from the RDK UI Settings and t
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Pair Bluetooth remote | Ensure the Bluetooth Remote is paired and connected to the DUT. | The Bluetooth Remote should be paired and connected to the DUT successfully.|
-| 2 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected.|
-| 3 | Connect DUT to Wi-Fi | Connect the DUT to a Wi-Fi network with active internet access. | The DUT should be connected to Wi-Fi with active internet access.|
-| 4 | Sign in to streaming apps | Ensure YouTube, Amazon Prime Video, and Netflix (whichever the platform supports) are signed in with valid user credentials. | All specified streaming applications should be signed in with valid user credentials.|
-| 5 | Change display resolution and audio mode to non-default | Change the display resolution and audio output mode to non-default values. | The display resolution and audio output mode should be set to non-default values.|
-| 6 | Configure multiple settings to non-default values | Configure the following settings to non-default values: Sleep Timer (15 min), Screen Saver (5 min), Energy Saver (Deep Sleep), Language (Spanish), Local Device Discovery (Off), USB Media Devices (Off), and CEC Control (Off). | All specified settings should be configured to the stated non-default values.|
-| 7 | Install streaming apps if not present | If YouTube, Amazon Prime Video, or Netflix are not already available in the My Apps section, install them from the Recommended Apps row. | The specified streaming apps should be installed and available in the My Apps section.|
-| 8 | Verify installed apps listed on home screen | Validate that the installed apps are listed under the My Apps section/row and App Info page of the RDK UI Home screen. | The installed apps should be visible in the My Apps section and on the App Info page, ready to launch.|
-| 9 | Verify app launch and content access | Validate that the installed apps launch successfully from the RDK UI and that content is accessible. | All installed apps should launch correctly and content should be accessible.|
+| 2 | Connect DUT to TV/display via HDMI | Connect the DUT to a TV or display and select the correct HDMI source. | The DUT should be connected to the TV/display and the correct HDMI source should be selected. |
+| 3 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 4 | Connect DUT to Wi-Fi | Connect the DUT to a Wi-Fi network with active internet access. | The DUT should be connected to Wi-Fi with active internet access.|
+| 5 | Sign in to streaming apps | Ensure YouTube, Amazon Prime Video, and Netflix (whichever the platform supports) are signed in with valid user credentials. | All specified streaming applications should be signed in with valid user credentials.|
+| 6 | Change display resolution and audio mode to non-default | Change the display resolution and audio output mode to non-default values. | The display resolution and audio output mode should be set to non-default values.|
+| 7 | Configure multiple settings to non-default values | Configure the following settings to non-default values: Sleep Timer (15 min), Screen Saver (5 min), Energy Saver (Deep Sleep), Language (Spanish), Local Device Discovery (Off), USB Media Devices (Off), and CEC Control (Off). | All specified settings should be configured to the stated non-default values.|
+| 8 | Install streaming apps if not present | If YouTube, Amazon Prime Video, or Netflix are not already available in the My Apps section, install them from the Recommended Apps row. | The specified streaming apps should be installed and available in the My Apps section.|
+| 9 | Verify installed apps listed on home screen | Validate that the installed apps are listed under the My Apps section/row and App Info page of the RDK UI Home screen. | The installed apps should be visible in the My Apps section and on the App Info page, ready to launch.|
+| 10 | Verify app launch and content access | Validate that the installed apps launch successfully from the RDK UI and that content is accessible. | All installed apps should launch correctly and content should be accessible.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_SYSTEM_01
 ## TestCase Name
 RDKV_CERT_MANUAL_System_Serial_Console_Access
@@ -19,12 +19,13 @@ To validate that the serial console on the DUT is accessible and that required s
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 |  Power on DUT and connect HDMI  | Power on the DUT and connect it to a TV via HDMI. | The DUT should be powered on and the RDK UI should be visible on the TV screen.|
-| 2 |  Connect serial cable  | Connect the required serial cable or USB-to-serial adapter between the DUT and the PC/laptop. | The serial cable or USB-to-serial adapter should be physically connected between the DUT and PC/laptop.|
-| 3 |  Install serial/usb drivers  | Install the appropriate serial/USB-to-serial drivers on the PC/laptop. | The serial/USB drivers should be installed and the COM port should be recognized on the PC/laptop.|
-| 4 |  Connect Ethernet cable  | Connect the Ethernet cable to the DUT as per the required test setup. | The Ethernet cable should be connected and the network interface should be active on the DUT.|
-| 5 |  Install serial terminal utility  | Install a serial terminal utility such as Minicom, Tera Term, or an equivalent utility on the PC/laptop. | The serial terminal utility should be installed and ready to use on the PC/laptop.|
-| 6 |  Configure serial terminal  | Configure the serial terminal as per the device specification, including COM port, baud rate, data bits, parity, stop bits, and flow control. | The serial terminal should be configured correctly and ready to establish a connection to the DUT.|
+| 1 |  Power on DUT and connect HDMI  | Power on the DUT and connect it to a TV via HDMI. | The DUT should be powered on and the RDK UI should be visible on the TV screen. |
+| 2 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 3 |  Connect serial cable  | Connect the required serial cable or USB-to-serial adapter between the DUT and the PC/laptop. | The serial cable or USB-to-serial adapter should be physically connected between the DUT and PC/laptop.|
+| 4 |  Install serial/usb drivers  | Install the appropriate serial/USB-to-serial drivers on the PC/laptop. | The serial/USB drivers should be installed and the COM port should be recognized on the PC/laptop.|
+| 5 |  Connect Ethernet cable  | Connect the Ethernet cable to the DUT as per the required test setup. | The Ethernet cable should be connected and the network interface should be active on the DUT.|
+| 6 |  Install serial terminal utility  | Install a serial terminal utility such as Minicom, Tera Term, or an equivalent utility on the PC/laptop. | The serial terminal utility should be installed and ready to use on the PC/laptop.|
+| 7 |  Configure serial terminal  | Configure the serial terminal as per the device specification, including COM port, baud rate, data bits, parity, stop bits, and flow control. | The serial terminal should be configured correctly and ready to establish a connection to the DUT.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

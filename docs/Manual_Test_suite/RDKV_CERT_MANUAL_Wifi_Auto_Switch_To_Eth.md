@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_WIFI_05
 ## TestCase Name
 RDKV_CERT_MANUAL_Wifi_Auto_Switch_To_Eth
@@ -18,14 +18,15 @@ To validate that the DUT automatically switches to the Ethernet interface when a
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 |  Connect HDMI display  | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display.|
-| 2 |  Ensure DUT connected to Wi-Fi  | Ensure that the DUT is already connected to a Wi-Fi network prior to the test. | The DUT should have an active Wi-Fi connection with a valid IP address.|
-| 3 |  Disconnect Ethernet cable  | Disconnect the Ethernet cable from the DUT. | The Ethernet cable should be disconnected from the DUT.|
-| 4 |  Pair bluetooth remote  | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
-| 5 |  Ensure DUT and PC on same network  | Ensure that the DUT and the PC/laptop used for SSH are connected to the same network. | The DUT and PC/laptop should be on the same network and reachable from each other.|
-| 6 |  Connect serial cable  | Connect the required serial cable or USB-to-serial adapter between the DUT and the PC/laptop and ensure the appropriate drivers are installed. | The serial cable or USB-to-serial adapter should be connected and the drivers should be installed and recognized.|
-| 7 |  Configure serial terminal  | Install and configure a serial terminal utility (such as Minicom, TeraTerm, or equivalent) on the PC/laptop. | The serial terminal utility should be installed, properly configured, and ready to connect to the DUT.|
-| 8 |  Install SSH client  | Install an SSH client (such as TeraTerm or PuTTY) on the PC/laptop. | The SSH client should be installed and ready for use on the PC/laptop.|
+| 1 |  Connect HDMI display  | Connect the HDMI display to the DUT and select the correct HDMI input source on the display. | The HDMI display should be connected and the correct HDMI input source should be selected on the display. |
+| 2 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully. |
+| 3 |  Ensure DUT connected to Wi-Fi  | Ensure that the DUT is already connected to a Wi-Fi network prior to the test. | The DUT should have an active Wi-Fi connection with a valid IP address.|
+| 4 |  Disconnect Ethernet cable  | Disconnect the Ethernet cable from the DUT. | The Ethernet cable should be disconnected from the DUT.|
+| 5 |  Pair Bluetooth remote  | Pair and connect the Bluetooth remote to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
+| 6 |  Ensure DUT and PC on same network  | Ensure that the DUT and the PC/laptop used for SSH are connected to the same network. | The DUT and PC/laptop should be on the same network and reachable from each other.|
+| 7 |  Connect serial cable  | Connect the required serial cable or USB-to-serial adapter between the DUT and the PC/laptop and ensure the appropriate drivers are installed. | The serial cable or USB-to-serial adapter should be connected and the drivers should be installed and recognized.|
+| 8 |  Configure serial terminal  | Install and configure a serial terminal utility (such as Minicom, TeraTerm, or equivalent) on the PC/laptop. | The serial terminal utility should be installed, properly configured, and ready to connect to the DUT.|
+| 9 |  Install SSH client  | Install an SSH client (such as TeraTerm or PuTTY) on the PC/laptop. | The SSH client should be installed and ready for use on the PC/laptop.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps

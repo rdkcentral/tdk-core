@@ -1,4 +1,4 @@
-## TestCase ID
+﻿## TestCase ID
 RDKV_MANUAL_XDIAL_23
 ## TestCase Name
 RDKV_CERT_MANUAL_Xdial_Wakeup_From_Network_Standby
@@ -21,11 +21,12 @@ To validate that an XDial cast request from a secondary device successfully wake
 | 1 | Ensure DUT in Network Standby | The DUT shall be in Network Standby mode prior to test execution. | The DUT should be in Network Standby mode prior to test execution.|
 | 2 | Connect DUT and two smartphones to same network | The DUT and the secondary device (smartphone/iPad) shall be connected to the same network. | The DUT and both smartphones should be on the same network and reachable from each other.|
 | 3 | Ensure DUT in Network Standby | Local Device Discovery shall be enabled in Settings > Other Settings > Privacy on the RDK UI (configured prior to the DUT entering Network Standby). | The DUT should be in Network Standby mode prior to test execution.|
-| 4 | Install YouTube application | Select the YouTube tile on the Recommended Apps row (or navigate to the More Apps tab if not visible) and press Enter/OK on the remote. A loading/buffering indicator should appear on the tile, followed by a green tick icon upon successful installation. | The YouTube application should be installed successfully on the DUT.|
-| 5 | Verify YouTube app listed on home screen | Validate that the installed YouTube application is listed under the My Apps section/row and App Info page of the RDK UI Home Page, ready to launch. | The YouTube application should be visible in the My Apps section and on the App Info page, ready to launch.|
-| 6 | Sign in to YouTube and verify A/V playback | Sign in to YouTube with valid user credentials and validate AV playback prior to test execution. | Sign-in should succeed and A/V playback should be functional in the YouTube application.|
-| 7 | Verify YouTube launch and premium features | Validate that YouTube launches from the RDK UI and that purchased contents and premium features are accessible. | The YouTube application should launch correctly from the RDK UI and purchased content and premium features should be accessible.|
-| 8 | Pair Bluetooth remote | The Bluetooth remote shall be paired and connected to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
+| 4 | Connect DUT to Application Catalog | Navigate to the Settings screen on the RDK UI and connect the DUT to the Application Catalog if it is not already connected. | The DUT should be connected to the Application Catalog successfully.|
+| 5 | Install YouTube application | Select the YouTube tile on the Recommended Apps row (or navigate to the More Apps tab if not visible) and press Enter/OK on the remote. A loading/buffering indicator should appear on the tile, followed by a green tick icon upon successful installation. | The YouTube application should be installed successfully on the DUT.|
+| 6 | Verify YouTube app listed on home screen | Validate that the installed YouTube application is listed under the My Apps section/row and App Info page of the RDK UI Home Page, ready to launch. | The YouTube application should be visible in the My Apps section and on the App Info page, ready to launch.|
+| 7 | Sign in to YouTube and verify A/V playback | Sign in to YouTube with valid user credentials and validate AV playback prior to test execution. | Sign-in should succeed and A/V playback should be functional in the YouTube application.|
+| 8 | Verify YouTube launch and premium features | Validate that YouTube launches from the RDK UI and that purchased contents and premium features are accessible. | The YouTube application should launch correctly from the RDK UI and purchased content and premium features should be accessible.|
+| 9 | Pair Bluetooth remote | The Bluetooth remote shall be paired and connected to the DUT. | The Bluetooth remote should be paired and connected to the DUT successfully.|
 
 <a name="head.TestSteps"></a>
 ## Test Steps
