@@ -551,6 +551,18 @@ _reboot_event_received = False
 _reboot_event_reason = None
 _reboot_ws_instance = None
 
+#-----------------------------------------------------------------------
+# SYSTEM REBOOT EVENT LISTENER (WEBSOCKET, BACKGROUND THREAD)
+# Description  : Opens a WebSocket connection to the device's JSON-RPC
+#                endpoint and registers for the "onRebootRequest" event
+#                from System plugin. Runs in the background and 
+#                updates the global state variables
+#                (_reboot_event_received, _reboot_event_reason) when the
+#                event is received.
+# Parameters   : None
+# Return Value : None (updates global state; intended to be run in a
+#                separate thread)
+#-----------------------------------------------------------------------
 def _rdkv_basic_sanity_rebootEventListener():
     import websocket
     global _reboot_event_received, _reboot_ws_instance
