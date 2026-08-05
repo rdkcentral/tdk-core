@@ -124,6 +124,7 @@ if expectedResult in result.upper():
             # STEP 3: Verify GetConnectedSSID - first check
             # ==============================================================
             if "SUCCESS" in details:
+                time.sleep(VERIFY_WAIT)
                 tdkTestObj = obj.createTestStep('rdkv_basic_sanity_wifiVerifyConnectedSSID')
                 tdkTestObj.addParameter("expectedSSID", WIFI_SSID)
                 tdkTestObj.executeTestCase(expectedResult)
