@@ -57,7 +57,7 @@ if "SUCCESS" in result.upper():
         
         # Step 2 : Check the status of the dependent plugins
         print("\n")
-        pluginlist = ["org.rdk.AppManager", "org.rdk.PackageManagerRDKEMS"]
+        pluginlist = ["org.rdk.AppManager", "org.rdk.AppPackageManager"]
         tdkTestObj = obj.createTestStep('appmanagers_checkpluginstatus')
         tdkTestObj.addParameter("pluginlist",pluginlist)
         tdkTestObj.executeTestCase(expectedResult)
@@ -85,7 +85,7 @@ if "SUCCESS" in result.upper():
                 # Step 4 : Uninstall the package
                 print("\n")
                 time.sleep(3)
-                method = "org.rdk.PackageManagerRDKEMS.1.uninstall"
+                method = "org.rdk.AppPackageManager.1.uninstall"
                 value = '{"packageId": "'+application_name+'"}'
                 tdkTestObj = obj.createTestStep('appmanagers_setvalue')
                 tdkTestObj.addParameter("method",method)

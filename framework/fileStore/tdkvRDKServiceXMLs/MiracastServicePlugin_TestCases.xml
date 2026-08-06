@@ -182,7 +182,7 @@
 
 	<!-- Test case 07 -->
 	<!-- setLogging API has been deprecated in the documentation, so the test case has been commented out -->
-	<!--testCase testCaseId="Miracast_07" testCaseName="MiracastPlayer_Set_Logging_Level"  desc="Check whether it is possible to set different logging levels using miracastplayer setLogging API">
+	<!--testCase testCaseId="Miracast_07" testCaseName="MiracastService_Set_Logging_Level"  desc="Check whether it is possible to set different logging levels using miracastplayer setLogging API">
                 <testCaseInfo testCaseType="loop"/>
 		<testStep testStepId="1" name="MiracastPlayer_Set_Logging_Level" testStepType="loop">
 		<subtestStep testStepId="1" name="Set_Logging_Level" method="MiracastPlayer_setLogging" pluginName="MiracastPlayer">
@@ -210,7 +210,7 @@
 	
 	<!-- Test case 09 -->
 	<!-- setPlayerState API has been deprecated in the documentation, so the test case has been commented out -->
-        <!--testCase testCaseId="Miracast_09" testCaseName="MiracastPlayer_Set_PlayerState_Without_Parameter"  desc="Check if the setPlayerState method returns an error when parameter is not provided">
+        <!--testCase testCaseId="Miracast_09" testCaseName="MiracastService_Set_PlayerState_Without_Parameter"  desc="Check if the setPlayerState method returns an error when parameter is not provided">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_PlayerState_Without_Parameter" method="MiracastPlayer_setPlayerState" pluginName="MiracastPlayer">
                         <resultGeneration useMethodTag="success_negative_status_validation"/>
