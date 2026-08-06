@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_Media_Validation_11
+RDKV_MEDIA_11
 ## TestCase Name
 RDKV_CERT_MVS_Animation_Check_Graphics_workload
 <a name="head.TOC"></a>
@@ -11,14 +11,14 @@ RDKV_CERT_MVS_Animation_Check_Graphics_workload
 
 <a name="head.Objective"></a>
 ## Objective
-Test Script to perform animation of multiple objects for multiple object counts one by one for the provided duration using lightning application and check how many objects can be rendered by the device with expected FPS value.
+To launch a Lightning Multi Animation application via AppManager and perform animation of multiple objects for multiple object counts one by one for the provided duration and check how many objects can be rendered by the device with expected FPS value. The test confirms that the graphics rendering performance across multiple animation object counts meets the expected FPS threshold over the configured duration.
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#| StepName | Step Description | Expected Result |
+|#| Step Name | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
 | 1 | Verify that the WPEFramework process is running on the device. | WPEFramework process should be up and running in the device. | WPEFramework should be active and running on the device. |
-| 2 | Verify that the BOLT package host path is configured correctly. | MediaValidationVariables.bolt_packages_base_path must be configured with the BOLT packages hosting server URL.<br>(E.g. http://<TM_IP>:<port>/images/signed-packages/) | Ensure that the BOLT package host path is configured and accessible. |
+| 2 | Verify that the BOLT package host path is configured correctly. | MediaValidationVariables.bolt_packages_base_path must be configured with the BOLT packages hosting server URL.<br>(E.g. `http://<TM_IP>:<port>/images/signed-packages/`) | Ensure that the BOLT package host path is configured and accessible. |
 | 3 | Verify that the BOLT app download URL resolves correctly. | MediaValidationVariables.multi_animation_app_download_url is derived from the base path and must resolve to the BOLT app package URL. | Ensure that the BOLT app package URL is valid and accessible for download. |
 | 4 | Verify that the required interval configuration is set correctly. | MediaValidationVariables.animation_duration should be set to the desired animation duration (in seconds). | Ensure that the required configuration value is set correctly. |
 | 5 | Check whether the app is already installed on the device. | Query the installed package list using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}</code>. | Verify that the app is installed on the device. |
@@ -27,15 +27,14 @@ Test Script to perform animation of multiple objects for multiple object counts 
 
 <a name="head.TestSteps"></a>
 ## Test Steps
-
-|#| StepName | Step Description | Expected Result |
+|#| Step Name | Step Description | Expected Result |
 |-|---------|-----------------|----------------|
 | 1 | Set playback operations for the scenario. | Configure the multi-animation app URL with parameters: `testtype=generic`, `duration=60` seconds, `fps=<expected_fps>`, `threshold=<threshold>`. | Ensure playback operations are set as specified. |
 | 2 | Store the launch URL in PersistentStore. | Store the constructed URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/multianimations/build/index.html?port=<device_port>&duration=60&testtype=generic&autotest=true&fps=<expected_fps>&threshold=<threshold>` | Ensure that the launch URL is stored in PersistentStore. |
 | 3 | Launch the app through AppManager. | Launch the test app through AppManager using the URL stored in PersistentStore using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.multi-animation-app"}}</code>. | Ensure that the app launches successfully via AppManager. |
 | 4 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.multi-animation-app is present in the loaded apps list. |
-| 5 | Run playback operations and validate media events. | App performs animation of multiple objects for multiple object counts one by one for the provided duration. | Ensure that expected media events are observed for the configured operations. |
-| 6 | Validate observed events and update test result. | If expected event is observed, app gives the validation result as SUCCESS or else FAILURE. Update the test script result as SUCCESS/FAILURE based on event validation result and proc check status (if applicable). | Ensure that the test result is updated as SUCCESS or FAILURE based on event validation and proc check status. |
+| 5 | Run animation rendering and capture performance metrics. | The animation app renders multiple animation objects for each configured object count one by one, with each rendering lasting the configured duration. The FPS and threshold metrics are monitored for each object count configuration. The test validates that rendering performance meets the expected threshold for each configuration. | Ensure that the performance metrics are captured during the animation rendering period. |
+| 6 | Validate graphics performance result and update test result. | If the observed FPS meets the expected threshold for all object count configurations tested, the app reports SUCCESS, otherwise FAILURE. The test result is updated as SUCCESS or FAILURE based on the performance validation result and process check status. | Ensure that the test result is updated as SUCCESS or FAILURE based on the performance validation result. |
 | 7 | Terminate app and restore test environment. | Terminate the test app through AppManager using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.terminateApp", "params":{"appId": "com.rdkcentral.multi-animation-app"}}</code> and restore the test environment. | Ensure that the app is terminated and the test environment is restored. |
 
 <a name="head.Attributes"></a>

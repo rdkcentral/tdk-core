@@ -28,15 +28,15 @@ accessible via JSON-RPC under the callsign `MessageControl` (version 1)
 
 ### Plugin Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check PluginActive Status | Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check Plugin Active Status | Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Check Plugin Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 2: Register_And_Listen_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Subscribe to the statechange event | Register a WebSocket event listener for `statechange` to receive `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.register", "params": {"event": "statechange", "id": "client.events.1"}}` | Event registration should be established successfully and the event listener should be active |
 
@@ -54,17 +54,13 @@ Toggles all traces levels of the application module
 
 ### Test Steps
 
-> **Value Loop (Step 1):** Step 1 repeats **6 times**, once for each value of `category`: `Activity`, `WebFlow`, `SocketFlow`, `TextFlow`, `Information`, `Discovery`.
-
-> **Value Loop (Steps 2–5):** Steps 2–5 repeat **6 times**, once for each value of `category`: `Activity`, `WebFlow`, `SocketFlow`, `TextFlow`, `Information`, `Discovery`.
-
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Application Tracelevel | Invoke controls on MessageControl with module: "Application", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Application", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains the current `enabled` state (boolean) for the requested `module`/`category` combination  |
-| 2 | Set Application Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Application", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Application", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 3 | Get Application Tracelevel | Invoke controls on MessageControl with module: "Application", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Application", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field confirms the toggled value — if Step 1 returned `true`, now `false`; if Step 1 returned `false`, now `true`  |
-| 4 | Revert Application Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Application", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Application", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Get Application Tracelevel | Invoke controls on MessageControl with module: "Application", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Application", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field matches the original value captured in Step 1 — trace level successfully restored to its pre-test state  |
+| 1 | Controls | *(Value loop: iterates for each `category` value: `Activity`, `WebFlow`, `SocketFlow`, `TextFlow`, `Information`, `Discovery`)*<br>Invoke controls on MessageControl with module: "Application", category: each of Activity, WebFlow, SocketFlow, TextFlow, Information, Discovery<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Application", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and Messagecontrol get controls |
+| 2 | Enable | *(Value loop: iterates for each `category` value: `Activity`, `WebFlow`, `SocketFlow`, `TextFlow`, `Information`, `Discovery`)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Application", category: each of Activity, WebFlow, SocketFlow, TextFlow, Information, Discovery<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Application", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Application", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Application", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state matches toggled value from step 1 |
+| 4 | Enable | *(Value loop: runs once per `category` value iteration)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Application", category: each of Activity, WebFlow, SocketFlow, TextFlow, Information, Discovery<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Application", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 5 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Application", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Application", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and messagecontrol get original state matches value from step 1 |
 
 ---
 
@@ -80,17 +76,13 @@ Toggles all traces levels of the SysLog module
 
 ### Test Steps
 
-> **Value Loop (Step 1):** Step 1 repeats **5 times**, once for each value of `category`: `Crash`, `Startup`, `Shutdown`, `ParsingError`, `Notification`.
-
-> **Value Loop (Steps 2–5):** Steps 2–5 repeat **5 times**, once for each value of `category`: `Crash`, `Startup`, `Shutdown`, `ParsingError`, `Notification`.
-
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get SysLog Tracelevel | Invoke controls on MessageControl with module: "SysLog", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "SysLog", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains the current `enabled` state (boolean) for the requested `module`/`category` combination  |
-| 2 | Set SysLog Tracelevel | Invoke enable on MessageControl with type: "Logging", enabled: "<result_step_1>", module: "SysLog", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Logging", "enabled": "<result_step_1>", "module": "SysLog", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 3 | Get SysLog Tracelevel | Invoke controls on MessageControl with module: "SysLog", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "SysLog", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field confirms the toggled value — if Step 1 returned `true`, now `false`; if Step 1 returned `false`, now `true`  |
-| 4 | Revert SysLog Tracelevel | Invoke enable on MessageControl with type: "Logging", enabled: "<result_step_1>", module: "SysLog", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Logging", "enabled": "<result_step_1>", "module": "SysLog", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Get SysLog Tracelevel | Invoke controls on MessageControl with module: "SysLog", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "SysLog", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field matches the original value captured in Step 1 — trace level successfully restored to its pre-test state  |
+| 1 | Controls | *(Value loop: iterates for each `category` value: `Crash`, `Startup`, `Shutdown`, `ParsingError`, `Notification`)*<br>Invoke controls on MessageControl with module: "SysLog", category: each of Crash, Startup, Shutdown, ParsingError, Notification<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "SysLog", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and Messagecontrol get controls |
+| 2 | Enable | *(Value loop: iterates for each `category` value: `Crash`, `Startup`, `Shutdown`, `ParsingError`, `Notification`)*<br>Invoke enable on MessageControl with type: "Logging", enabled: "<result_step_1>", module: "SysLog", category: each of Crash, Startup, Shutdown, ParsingError, Notification<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Logging", "enabled": "<result_step_1>", "module": "SysLog", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "SysLog", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "SysLog", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state matches toggled value from step 1 |
+| 4 | Enable | *(Value loop: runs once per `category` value iteration)*<br>Invoke enable on MessageControl with type: "Logging", enabled: "<result_step_1>", module: "SysLog", category: each of Crash, Startup, Shutdown, ParsingError, Notification<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Logging", "enabled": "<result_step_1>", "module": "SysLog", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 5 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "SysLog", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "SysLog", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and messagecontrol get original state matches value from step 1 |
 
 ---
 
@@ -108,25 +100,21 @@ Toggles all traces levels of the OCDM module
 
 #### TestCase Pre-condition 1: Activate_OCDM_Plugin
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check OCDM Active Status | Check Active Status of OCDM Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@OCDM"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate OCDM Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "OCDM"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate OCDM Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "OCDM"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
 | 3 | Check OCDM Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of OCDM Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@OCDM"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
-> **Value Loop (Step 1):** Step 1 repeats **4 times**, once for each value of `category`: `Information`, `Error`, `Fatal`, `Warning`.
-
-> **Value Loop (Steps 2–5):** Steps 2–5 repeat **4 times**, once for each value of `category`: `Information`, `Error`, `Fatal`, `Warning`.
-
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get OCDM Tracelevel | Invoke controls on MessageControl with module: "Plugin_OCDM", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_OCDM", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains the current `enabled` state (boolean) for the requested `module`/`category` combination  |
-| 2 | Set OCDM Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_OCDM", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_OCDM", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 3 | Get OCDM Tracelevel | Invoke controls on MessageControl with module: "Plugin_OCDM", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_OCDM", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field confirms the toggled value — if Step 1 returned `true`, now `false`; if Step 1 returned `false`, now `true`  |
-| 4 | Revert OCDM Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_OCDM", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_OCDM", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Get OCDM Tracelevel | Invoke controls on MessageControl with module: "Plugin_OCDM", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_OCDM", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field matches the original value captured in Step 1 — trace level successfully restored to its pre-test state  |
+| 1 | Controls | *(Value loop: iterates for each `category` value: `Information`, `Error`, `Fatal`, `Warning`)*<br>Invoke controls on MessageControl with module: "Plugin_OCDM", category: each of Information, Error, Fatal, Warning<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_OCDM", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and Messagecontrol get controls |
+| 2 | Enable | *(Value loop: iterates for each `category` value: `Information`, `Error`, `Fatal`, `Warning`)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_OCDM", category: each of Information, Error, Fatal, Warning<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_OCDM", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_OCDM", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_OCDM", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state matches toggled value from step 1 |
+| 4 | Enable | *(Value loop: runs once per `category` value iteration)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_OCDM", category: each of Information, Error, Fatal, Warning<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_OCDM", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 5 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_OCDM", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_OCDM", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and messagecontrol get original state matches value from step 1 |
 
 ---
 
@@ -144,25 +132,21 @@ Toggles all traces levels of the System module
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check PluginActive Status | Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.System"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check Plugin Active Status | Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.System"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Check Plugin Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of System Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
-> **Value Loop (Step 1):** Step 1 repeats **2 times**, once for each value of `category`: `Information`, `Error`.
-
-> **Value Loop (Steps 2–5):** Steps 2–5 repeat **2 times**, once for each value of `category`: `Information`, `Error`.
-
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get System Tracelevel | Invoke controls on MessageControl with module: "Plugin_SystemServices", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_SystemServices", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains the current `enabled` state (boolean) for the requested `module`/`category` combination  |
-| 2 | Set System Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_SystemServices", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_SystemServices", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 3 | Get System Tracelevel | Invoke controls on MessageControl with module: "Plugin_SystemServices", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_SystemServices", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field confirms the toggled value — if Step 1 returned `true`, now `false`; if Step 1 returned `false`, now `true`  |
-| 4 | Revert System Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_SystemServices", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_SystemServices", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Get System Tracelevel | Invoke controls on MessageControl with module: "Plugin_SystemServices", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_SystemServices", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field matches the original value captured in Step 1 — trace level successfully restored to its pre-test state  |
+| 1 | Controls | *(Value loop: iterates for each `category` value: `Information`, `Error`)*<br>Invoke controls on MessageControl with module: "Plugin_SystemServices", category: each of Information, Error<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_SystemServices", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and Messagecontrol get controls |
+| 2 | Enable | *(Value loop: iterates for each `category` value: `Information`, `Error`)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_SystemServices", category: each of Information, Error<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_SystemServices", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_SystemServices", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_SystemServices", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state matches toggled value from step 1 |
+| 4 | Enable | *(Value loop: runs once per `category` value iteration)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_SystemServices", category: each of Information, Error<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_SystemServices", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 5 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_SystemServices", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_SystemServices", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and messagecontrol get original state matches value from step 1 |
 
 ---
 
@@ -180,25 +164,21 @@ Toggles all traces levels of the Monitor module
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check PluginActive Status | Check Active Status of Monitor Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate Monitor Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "Monitor"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of Monitor Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check Plugin Active Status | Check Active Status of Monitor Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate Monitor Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "Monitor"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Check Plugin Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of Monitor Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@Monitor"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
-> **Value Loop (Step 1):** Step 1 repeats **3 times**, once for each value of `category`: `Information`, `Error`, `Fatal`.
-
-> **Value Loop (Steps 2–5):** Steps 2–5 repeat **3 times**, once for each value of `category`: `Information`, `Error`, `Fatal`.
-
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get Monitor Tracelevel | Invoke controls on MessageControl with module: "Plugin_Monitor", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_Monitor", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains the current `enabled` state (boolean) for the requested `module`/`category` combination  |
-| 2 | Set Monitor Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_Monitor", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_Monitor", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 3 | Get Monitor Tracelevel | Invoke controls on MessageControl with module: "Plugin_Monitor", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_Monitor", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field confirms the toggled value — if Step 1 returned `true`, now `false`; if Step 1 returned `false`, now `true`  |
-| 4 | Revert Monitor Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_Monitor", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_Monitor", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Get Monitor Tracelevel | Invoke controls on MessageControl with module: "Plugin_Monitor", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_Monitor", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field matches the original value captured in Step 1 — trace level successfully restored to its pre-test state  |
+| 1 | Controls | *(Value loop: iterates for each `category` value: `Information`, `Error`, `Fatal`)*<br>Invoke controls on MessageControl with module: "Plugin_Monitor", category: each of Information, Error, Fatal<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_Monitor", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and Messagecontrol get controls |
+| 2 | Enable | *(Value loop: iterates for each `category` value: `Information`, `Error`, `Fatal`)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_Monitor", category: each of Information, Error, Fatal<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_Monitor", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_Monitor", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_Monitor", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state matches toggled value from step 1 |
+| 4 | Enable | *(Value loop: runs once per `category` value iteration)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_Monitor", category: each of Information, Error, Fatal<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_Monitor", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 5 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_Monitor", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_Monitor", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and messagecontrol get original state matches value from step 1 |
 
 ---
 
@@ -216,25 +196,21 @@ Toggles all traces levels of the DisplayInfo  module
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check PluginActive Status | Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DisplayInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check Plugin Active Status | Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DisplayInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Check Plugin Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DisplayInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DisplayInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
-> **Value Loop (Step 1):** Step 1 repeats **2 times**, once for each value of `category`: `Information`, `Error`.
-
-> **Value Loop (Steps 2–5):** Steps 2–5 repeat **2 times**, once for each value of `category`: `Information`, `Error`.
-
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get DisplayInfo Tracelevel | Invoke controls on MessageControl with module: "Plugin_DisplayInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DisplayInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains the current `enabled` state (boolean) for the requested `module`/`category` combination  |
-| 2 | Set DisplayInfo Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_DisplayInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_DisplayInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 3 | Get DisplayInfo Tracelevel | Invoke controls on MessageControl with module: "Plugin_DisplayInfo", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DisplayInfo", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field confirms the toggled value — if Step 1 returned `true`, now `false`; if Step 1 returned `false`, now `true`  |
-| 4 | Revert DisplayInfo Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_DisplayInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_DisplayInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Get DisplayInfo Tracelevel | Invoke controls on MessageControl with module: "Plugin_DisplayInfo", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DisplayInfo", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field matches the original value captured in Step 1 — trace level successfully restored to its pre-test state  |
+| 1 | Controls | *(Value loop: iterates for each `category` value: `Information`, `Error`)*<br>Invoke controls on MessageControl with module: "Plugin_DisplayInfo", category: each of Information, Error<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DisplayInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and Messagecontrol get controls |
+| 2 | Enable | *(Value loop: iterates for each `category` value: `Information`, `Error`)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_DisplayInfo", category: each of Information, Error<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_DisplayInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_DisplayInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DisplayInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state matches toggled value from step 1 |
+| 4 | Enable | *(Value loop: runs once per `category` value iteration)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_DisplayInfo", category: each of Information, Error<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_DisplayInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 5 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_DisplayInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DisplayInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and messagecontrol get original state matches value from step 1 |
 
 ---
 
@@ -252,25 +228,21 @@ Toggles all traces levels of the DeviceInfo module
 
 #### TestCase Pre-condition 1: Activate_DeviceInfo_Plugin
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check DeviceInfo Active Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check DeviceInfo Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check Device Info Active Status | Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "DeviceInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Check Device Info Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of DeviceInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@DeviceInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
-> **Value Loop (Step 1):** Step 1 repeats **1 times**, once for each value of `category`: `Information`.
-
-> **Value Loop (Steps 2–5):** Steps 2–5 repeat **1 times**, once for each value of `category`: `Information`.
-
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get DeviceInfo Tracelevel | Invoke controls on MessageControl with module: "Plugin_DeviceInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DeviceInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains the current `enabled` state (boolean) for the requested `module`/`category` combination  |
-| 2 | Set DeviceInfo Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_DeviceInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_DeviceInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 3 | Get DeviceInfo Tracelevel | Invoke controls on MessageControl with module: "Plugin_DeviceInfo", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DeviceInfo", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field confirms the toggled value — if Step 1 returned `true`, now `false`; if Step 1 returned `false`, now `true`  |
-| 4 | Revert DeviceInfo Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_DeviceInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_DeviceInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Get DeviceInfo Tracelevel | Invoke controls on MessageControl with module: "Plugin_DeviceInfo", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DeviceInfo", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field matches the original value captured in Step 1 — trace level successfully restored to its pre-test state  |
+| 1 | Controls | *(Value loop: iterates for each `category` value: `Information`)*<br>Invoke controls on MessageControl with module: "Plugin_DeviceInfo", category: each of Information<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DeviceInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and Messagecontrol get controls |
+| 2 | Enable | *(Value loop: iterates for each `category` value: `Information`)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_DeviceInfo", category: each of Information<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_DeviceInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_DeviceInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DeviceInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state matches toggled value from step 1 |
+| 4 | Enable | *(Value loop: runs once per `category` value iteration)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_DeviceInfo", category: each of Information<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_DeviceInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 5 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_DeviceInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_DeviceInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and messagecontrol get original state matches value from step 1 |
 
 ---
 
@@ -288,25 +260,21 @@ Toggles all traces levels of the PlayerInfo module
 
 #### TestCase Pre-condition 1: Activate_PlayerInfo_Plugin
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check PlayerInfo Active Status | Check Active Status of PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PlayerInfo Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check Player Info Active Status | Check Active Status of PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Check Player Info Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of PlayerInfo Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
-> **Value Loop (Step 1):** Step 1 repeats **2 times**, once for each value of `category`: `Error`, `Warning`.
-
-> **Value Loop (Steps 2–5):** Steps 2–5 repeat **2 times**, once for each value of `category`: `Error`, `Warning`.
-
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get PlayerInfo Tracelevel | Invoke controls on MessageControl with module: "Plugin_PlayerInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_PlayerInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains the current `enabled` state (boolean) for the requested `module`/`category` combination  |
-| 2 | Set PlayerInfo Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_PlayerInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_PlayerInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 3 | Get PlayerInfo Tracelevel | Invoke controls on MessageControl with module: "Plugin_PlayerInfo", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_PlayerInfo", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field confirms the toggled value — if Step 1 returned `true`, now `false`; if Step 1 returned `false`, now `true`  |
-| 4 | Revert PlayerInfo Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_PlayerInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_PlayerInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Get PlayerInfo Tracelevel | Invoke controls on MessageControl with module: "Plugin_PlayerInfo", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_PlayerInfo", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field matches the original value captured in Step 1 — trace level successfully restored to its pre-test state  |
+| 1 | Controls | *(Value loop: iterates for each `category` value: `Error`, `Warning`)*<br>Invoke controls on MessageControl with module: "Plugin_PlayerInfo", category: each of Error, Warning<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_PlayerInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and Messagecontrol get controls |
+| 2 | Enable | *(Value loop: iterates for each `category` value: `Error`, `Warning`)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_PlayerInfo", category: each of Error, Warning<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_PlayerInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_PlayerInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_PlayerInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state matches toggled value from step 1 |
+| 4 | Enable | *(Value loop: runs once per `category` value iteration)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_PlayerInfo", category: each of Error, Warning<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_PlayerInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 5 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_PlayerInfo", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_PlayerInfo", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and messagecontrol get original state matches value from step 1 |
 
 ---
 
@@ -324,25 +292,21 @@ Toggles all traces levels of the MessageControl module
 
 #### TestCase Pre-condition 1: Activate_MessageControl_Plugin
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check MessageControl Active Status | Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check MessageControl Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check Message Control Active Status | Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Check Message Control Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
-> **Value Loop (Step 1):** Step 1 repeats **1 times**, once for each value of `category`: `Information`.
-
-> **Value Loop (Steps 2–5):** Steps 2–5 repeat **1 times**, once for each value of `category`: `Information`.
-
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get MessageControl Tracelevel | Invoke controls on MessageControl with module: "Plugin_MessageControl", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_MessageControl", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the response contains the current `enabled` state (boolean) for the requested `module`/`category` combination  |
-| 2 | Set MessageControl Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_MessageControl", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_MessageControl", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 3 | Get MessageControl Tracelevel | Invoke controls on MessageControl with module: "Plugin_MessageControl", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_MessageControl", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field confirms the toggled value — if Step 1 returned `true`, now `false`; if Step 1 returned `false`, now `true`  |
-| 4 | Revert MessageControl Tracelevel | Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_MessageControl", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_MessageControl", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Get MessageControl Tracelevel | Invoke controls on MessageControl with module: "Plugin_MessageControl", category: "<value>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_MessageControl", "category": "<value>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `enabled` field matches the original value captured in Step 1 — trace level successfully restored to its pre-test state  |
+| 1 | Controls | *(Value loop: iterates for each `category` value: `Information`)*<br>Invoke controls on MessageControl with module: "Plugin_MessageControl", category: each of Information<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_MessageControl", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and Messagecontrol get controls |
+| 2 | Enable | *(Value loop: iterates for each `category` value: `Information`)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_MessageControl", category: each of Information<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_MessageControl", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_MessageControl", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_MessageControl", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state matches toggled value from step 1 |
+| 4 | Enable | *(Value loop: runs once per `category` value iteration)*<br>Invoke enable on MessageControl with type: "Tracing", enabled: "<result_step_1>", module: "Plugin_MessageControl", category: each of Information<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.enable", "params": {"type": "Tracing", "enabled": "<result_step_1>", "module": "Plugin_MessageControl", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 5 | Controls | *(Value loop: runs once per `category` value iteration)*<br>Invoke controls on MessageControl with module: "Plugin_MessageControl", category: "<CATEGORY_VALUE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "MessageControl.1.controls", "params": {"module": "Plugin_MessageControl", "category": "<CATEGORY_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and messagecontrol get original state matches value from step 1 |
 
 ---
 
@@ -360,40 +324,39 @@ Validates statechange event on Activating/deactivating the plugin
 
 #### TestCase Pre-condition 1: Activate_Plugins
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check PluginActive Status | Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check PluginActive Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check Plugin Active Status | Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate Plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 3 | Check Plugin Active Status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check Active Status of MessageControl Plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Deactivate MessageControl Plugin | Invoke deactivate on Controller with callsign: "MessageControl"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `messagecontrol` with state `"deactivated"` |
-| 3 | Check PluginActive Status | Invoke status on Controller for MessageControl<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
-| 4 | Activate MessageControl Plugin | Invoke activate on Controller with callsign: "MessageControl"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check State Change Event | Listen for Event_Controller_State_Changed event (timeout: 2s) | Verify that the `statechange` event is received for callsign `messagecontrol` with state `"activated"` |
-| 6 | Check PluginActive Status | Invoke status on Controller for MessageControl<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Deactivate | Invoke deactivate on Controller with callsign: "MessageControl"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is disabled successfully |
+| 2 | Listen for event controller state changed event | Listen for `Event_Controller_State_Changed` event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `messagecontrol` with state `deactivated` |
+| 3 | Status | Invoke status on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+| 4 | Activate | Invoke activate on Controller with callsign: "MessageControl" (wait 1 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "MessageControl"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is enabled successfully |
+| 5 | Listen for event controller state changed event | Listen for `Event_Controller_State_Changed` event and wait up to 2 second(s) | Verify that the `statechange` event is received for callsign `messagecontrol` with state `activated` |
+| 6 | Status | Invoke status on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@MessageControl"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ## Plugin Post-conditions
 
-
 ### Plugin Post-condition 1: Unregister_Events
 
-| Step ID | Step Name | Description | Expected Result |
+| # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Unsubscribe from the statechange event | Unregister the WebSocket event listener for `statechange` to stop receiving `statechange` event notifications<br>`{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.unregister", "params": {"event": "statechange", "id": "client.events.1"}}` | Event unregistration should be completed successfully and the event listener should be inactive |
 
-
 ## Test Attributes
 
-| Attribute | Value |
-| --- | --- |
-| Supported Models | Video Accelerator, RPI-Client |
-| Estimated Duration | 10 minutes |
-| Priority | Medium |
-| TDK Release Version | M120 |
+**Supported Models** : Video_Accelerator, RPI-Client
 
-<div align="right"><a href="#testscript-name">&#8593; Go to Top</a></div>
+**Estimated duration** : 10 mins
+
+**Priority** : High
+
+**Release Version** : M120
+
+<div align="right"><a href="#testscript-name">Go to Top</a></div>
