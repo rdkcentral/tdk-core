@@ -1260,8 +1260,8 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        # PackageManager Events response result parser steps
-        elif tag == "packagemanager_check_appinstallationstatus_event":
+        # AppPackageManager Events response result parser steps
+        elif tag == "app_packagemanager_check_appinstallationstatus_event":
             try:
                 if result:
                     package_id = json.loads(result[0]["jsonresponse"])[0]["packageId"]
