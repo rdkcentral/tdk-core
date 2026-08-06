@@ -2,8 +2,8 @@
 
 | Req ID | Test Scope |
 |--------|---------------------------------------|
-| `RVS‑REQ‑001` | SHALL sustain repeated app lifecycle operations (launch, close, and terminate ) as well as combined full lifecycle management sequences — via AppManager without crash, state error, or resource leak across the defined iteration count. |
-| `RVS-REQ-002` | SHALL sustain repeated sequences of app launch followed by each supported closure mechanism — graceful close, force-kill, and forced-terminate — via AppManager without failure, process leak, or unrecoverable state across the defined stress iteration count. |
+| `RVS‑REQ‑001` | SHALL sustain repeated app lifecycle operations (launch, close, and terminate ) as well as combined full lifecycle management sequences via AppManager without crash, state error, or resource leak across the defined iteration count. |
+| `RVS-REQ-002` | SHALL sustain repeated sequences of app launch followed by each supported closure mechanism graceful close, force-kill, and forced-terminate via AppManager without failure, process leak, or unrecoverable state across the defined stress iteration count. |
 | `RVS-REQ-003` | SHALL complete repeated single-app install and uninstall operations via AppManager without installation failure, storage corruption, or resource exhaustion across the defined stress iteration count. |
 | `RVS-REQ-004` | SHOULD complete repeated concurrent install and uninstall operations across multiple applications via AppManager without failure, storage corruption, scheduling conflict, or resource exhaustion across the defined stress iteration count. |
 | `RVS-REQ-005` | SHALL sustain long-duration continuous HLS video playback at standard resolution for the defined minimum duration without pipeline crash, stream interruption, or memory growth beyond defined thresholds. |
