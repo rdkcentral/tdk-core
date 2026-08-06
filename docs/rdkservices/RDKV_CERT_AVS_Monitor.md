@@ -11,7 +11,7 @@ RDKV_CERT_AVS_Monitor
    - [Monitor_Restart_Limits_NetworkManager](#monitor_restart_limits_networkmanager)
    - [Monitor_ActivateDeactivate_Event_Test](#monitor_activatedeactivate_event_test)
    - [Monitor_ActivateDeactivate_All_Event_Test](#monitor_activatedeactivate_all_event_test)
-   - [Monitor_Verify_restartlimits_Info_Error](#monitor_verify_restartlimits_info_error)
+   - [Monitor_Restartlimits_Info_Error](#monitor_restartlimits_info_error)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -167,9 +167,9 @@ Validates all event on activating/deactivating the plugin
 
 ---
 
-<a id="monitor_verify_restartlimits_info_error"></a>
+<a id="monitor_restartlimits_info_error"></a>
 ### TestCase Name
-Monitor_Verify_restartlimits_Info_Error
+Monitor_Restartlimits_Info_Error
 
 ### TestCase ID
 MN_06

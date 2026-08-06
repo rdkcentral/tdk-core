@@ -6,16 +6,16 @@ RDKV_CERT_AVS_Bluetooth
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [Set_And_Get_Name](#set_and_get_name)
+   - [Bluetooth_Set_And_Get_Name](#bluetooth_set_and_get_name)
    - [Bluetooth_Toggle_Discoverable_Status](#bluetooth_toggle_discoverable_status)
    - [Bluetooth_On_Request_Failed](#bluetooth_on_request_failed)
    - [Bluetooth_Get_Discovered_LE_Profile_Devices](#bluetooth_get_discovered_le_profile_devices)
-   - [Check_API_Version_Number](#check_api_version_number)
+   - [Bluetooth_API_Version_Number](#bluetooth_api_version_number)
    - [Bluetooth_ActivateDeactivate_Event_Test](#bluetooth_activatedeactivate_event_test)
    - [Bluetooth_Pair_Unpair_LoudSpeaker_Device](#bluetooth_pair_unpair_loudspeaker_device)
    - [Bluetooth_Connect_Disconnect_LoudSpeaker_Device](#bluetooth_connect_disconnect_loudspeaker_device)
    - [Bluetooth_ActivateDeactivate_All_Event_Test](#bluetooth_activatedeactivate_all_event_test)
-   - [Bluetooth_Verify_Connect_Error](#bluetooth_verify_connect_error)
+   - [Bluetooth_Connect_Error](#bluetooth_connect_error)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -70,9 +70,9 @@ accessible via JSON-RPC under the callsign `org.rdk.Bluetooth` (version 1)
 
 ## Test Cases
 
-<a id="set_and_get_name"></a>
+<a id="bluetooth_set_and_get_name"></a>
 ### TestCase Name
-Set_And_Get_Name
+Bluetooth_Set_And_Get_Name
 
 ### TestCase ID
 BT_01
@@ -152,9 +152,9 @@ Checks whether LE profile devices are getting discovered
 
 ---
 
-<a id="check_api_version_number"></a>
+<a id="bluetooth_api_version_number"></a>
 ### TestCase Name
-Check_API_Version_Number
+Bluetooth_API_Version_Number
 
 ### TestCase ID
 BT_05
@@ -321,9 +321,9 @@ Validates all event on activating/deactivating the plugin
 
 ---
 
-<a id="bluetooth_verify_connect_error"></a>
+<a id="bluetooth_connect_error"></a>
 ### TestCase Name
-Bluetooth_Verify_Connect_Error
+Bluetooth_Connect_Error
 
 ### TestCase ID
 BT_10

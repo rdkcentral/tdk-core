@@ -137,7 +137,7 @@
             </testStep>
         </testCase>     
 
-        <testCase testCaseId="PS_06" testCaseName="PersistentStore_Check_On_Value_Changed_Event"  desc="Sets and gets the particular key value">
+        <testCase testCaseId="PS_06" testCaseName="PersistentStore_On_Value_Changed_Event"  desc="Sets and gets the particular key value">
             <testCaseInfo testCaseType="loop" />
             <testStep testStepId="1" name="check_set_value" testStepType="loop" >
                <subtestStep subtestStepId="1" name="Set_Value" method="Set_Value">
@@ -199,7 +199,7 @@
 	</testCase>
 
 	<!-- Test case 08 -->
-	<testCase testCaseId="PS_08" testCaseName="PersistentStore_Check_Set_And_Get_Empty_Storage_Limits"  desc="Verify persistent store handles empty, sets and retrieves storage namespace limits">
+	<testCase testCaseId="PS_08" testCaseName="PersistentStore_Set_And_Get_Empty_Storage_Limits"  desc="Verify persistent store handles empty, sets and retrieves storage namespace limits">
             <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Set_Namespace_Storagelimit" method="Set_Namespace_Storagelimit" >
                 <params>
@@ -217,7 +217,7 @@
         </testCase>
 
 	<!-- Test case 09 -->
-        <testCase testCaseId="PS_09" testCaseName="PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Key_Operations"  desc="Verify persistent store handles empty key, set and get operations across namespaces">
+        <testCase testCaseId="PS_09" testCaseName="PersistentStore_SetValue_And_GetValue_API_with_Empty_Key_Operations"  desc="Verify persistent store handles empty key, set and get operations across namespaces">
             <testCaseInfo testCaseType="direct" />
 	    <testStep testStepId="1" name="Set_Value" method="Set_Value">
                   <params>
@@ -237,7 +237,7 @@
         </testCase>
 
 	<!-- Test case 10 -->
-        <testCase testCaseId="PS_10" testCaseName="PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Namespce_Operations"  desc="Verify persistent store handles empty namespace, set and get operations">
+        <testCase testCaseId="PS_10" testCaseName="PersistentStore_SetValue_And_GetValue_API_with_Empty_Namespce_Operations"  desc="Verify persistent store handles empty namespace, set and get operations">
             <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Set_Value" method="Set_Value">
                   <params>
