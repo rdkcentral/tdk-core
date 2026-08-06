@@ -274,7 +274,7 @@
   </testCase>
 
   <!-- Test case 06 -->
-  <testCase testCaseId="MN_06" testCaseName="Monitor_Verify_restartlimits_Info_Error" desc="Verify that the restartlimits method returns an error when the plugin is in a deactivated state">
+  <testCase testCaseId="MN_06" testCaseName="Monitor_Restartlimits_Info_Error" desc="Verify that the restartlimits method returns an error when the plugin is in a deactivated state">
     <testCaseInfo testCaseType="direct" />
     <testCasePreRequisite>
       <prerequisite requisiteId="1" requisiteName="Activate_Plugins">

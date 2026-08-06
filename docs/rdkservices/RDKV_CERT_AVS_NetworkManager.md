@@ -7,42 +7,42 @@ RDKV_CERT_AVS_NetworkManager
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
    - [NetworkManager_Get_Device_Interfaces](#networkmanager_get_device_interfaces)
-   - [NetworkManager_Get_Primary/Default_Interface](#networkmanager_get_primary-default_interface)
+   - [NetworkManager_Get_Primary_Interface](#networkmanager_get_primary_interface)
    - [NetworkManager_Validate_Public_IPv4_IP](#networkmanager_validate_public_ipv4_ip)
    - [NetworkManager_Ping_IPv4_Endpoint](#networkmanager_ping_ipv4_endpoint)
    - [NetworkManager_Trace_IPv4_Endpoint](#networkmanager_trace_ipv4_endpoint)
-   - [NetworkManager_Check_Internet_IPv4_Connectivity](#networkmanager_check_internet_ipv4_connectivity)
-   - [NetworkManager_GetAvailableInterfaces_With_Enabled/Disabled_Interface](#networkmanager_getavailableinterfaces_with_enabled-disabled_interface)
-   - [NetworkManager_Check_On_Interface_StateChange_Event](#networkmanager_check_on_interface_statechange_event)
+   - [NetworkManager_Internet_IPv4_Connectivity](#networkmanager_internet_ipv4_connectivity)
+   - [NetworkManager_GetAvailableInterfaces_With_Interface_Toggle](#networkmanager_getavailableinterfaces_with_interface_toggle)
+   - [NetworkManager_On_Interface_StateChange_Event](#networkmanager_on_interface_statechange_event)
    - [NetworkManager_Wifi_Start_Stop_Scan](#networkmanager_wifi_start_stop_scan)
-   - [NetworkManager_Check_On_AvailableSSIDs_Event](#networkmanager_check_on_availablessids_event)
+   - [NetworkManager_On_AvailableSSIDs_Event](#networkmanager_on_availablessids_event)
    - [NetworkManager_Get_Interface_State](#networkmanager_get_interface_state)
    - [NetworkManager_SetandGet_Interface_State](#networkmanager_setandget_interface_state)
    - [NetworkManager_Wifi_Connect_Disconnect](#networkmanager_wifi_connect_disconnect)
-   - [NetworkManager_Check_Get_Connected_SSID](#networkmanager_check_get_connected_ssid)
+   - [NetworkManager_Get_Connected_SSID](#networkmanager_get_connected_ssid)
    - [NetworkManager_Get_Supported_Security_Modes](#networkmanager_get_supported_security_modes)
-   - [NetworkManager_Check_On_WifiStateChange_Event](#networkmanager_check_on_wifistatechange_event)
-   - [NetworkManager_Check_WifiConnect_With_Invalid_SSID_Passphrase](#networkmanager_check_wificonnect_with_invalid_ssid_passphrase)
-   - [NetworkManager_Check_On_AvailableSSIDs_Event_Not_Triggered](#networkmanager_check_on_availablessids_event_not_triggered)
+   - [NetworkManager_On_WifiStateChange_Event](#networkmanager_on_wifistatechange_event)
+   - [NetworkManager_WifiConnect_With_Invalid_SSID_Passphrase](#networkmanager_wificonnect_with_invalid_ssid_passphrase)
+   - [NetworkManager_On_AvailableSSIDs_Event_Not_Triggered](#networkmanager_on_availablessids_event_not_triggered)
    - [NetworkManager_SetandGet_Stun_Endpoint](#networkmanager_setandget_stun_endpoint)
    - [NetworkManager_5GHz_Wifi_Connect_Disconnect](#networkmanager_5ghz_wifi_connect_disconnect)
-   - [NetworkManager_Check_5GHz_Get_Connected_SSID](#networkmanager_check_5ghz_get_connected_ssid)
+   - [NetworkManager_5GHz_Get_Connected_SSID](#networkmanager_5ghz_get_connected_ssid)
    - [NetworkManager_SetInterfaceState_Without_Enable_Parameter](#networkmanager_setinterfacestate_without_enable_parameter)
    - [NetworkManager_SetInterfaceState_Without_Parameter](#networkmanager_setinterfacestate_without_parameter)
    - [NetworkManager_GetInterfaceState_With_Invalid_Parameter](#networkmanager_getinterfacestate_with_invalid_parameter)
-   - [NetworkManager_Check_Logging_Level](#networkmanager_check_logging_level)
+   - [NetworkManager_Logging_Level](#networkmanager_logging_level)
    - [NetworkManager_Set_Lowest_Logging_Level](#networkmanager_set_lowest_logging_level)
    - [NetworkManager_Set_Mid-range_Logging_Level](#networkmanager_set_mid-range_logging_level)
    - [NetworkManager_Set_Highest_Logging_Level](#networkmanager_set_highest_logging_level)
-   - [NetworkManager_Check_Wifi_State](#networkmanager_check_wifi_state)
-   - [NetworkManager_Connect_Wifi_And_Check_Wifi_State](#networkmanager_connect_wifi_and_check_wifi_state)
+   - [NetworkManager_Get_Wifi_State](#networkmanager_get_wifi_state)
+   - [NetworkManager_Connect_Wifi_And_Get_Wifi_State](#networkmanager_connect_wifi_and_get_wifi_state)
    - [NetworkManager_Set_Single_Connectivity_Test_Endpoints](#networkmanager_set_single_connectivity_test_endpoints)
    - [NetworkManager_Set_Five_Connectivity_Test_Endpoints](#networkmanager_set_five_connectivity_test_endpoints)
-   - [NetworkManager_Check_Wifi_State_After_Connecting_To_Wifi](#networkmanager_check_wifi_state_after_connecting_to_wifi)
-   - [NetworkManager_Start_Scan_And_Check_Wifi_State](#networkmanager_start_scan_and_check_wifi_state)
-   - [NetworkManager_Check_Wifi_State_On_Connecting_To_Invalid_Wifi_SSID](#networkmanager_check_wifi_state_on_connecting_to_invalid_wifi_ssid)
+   - [NetworkManager_Get_Wifi_State_After_Connecting_To_Wifi](#networkmanager_get_wifi_state_after_connecting_to_wifi)
+   - [NetworkManager_Start_Scan_And_Get_Wifi_State](#networkmanager_start_scan_and_get_wifi_state)
+   - [NetworkManager_Get_Wifi_State_On_Connecting_To_Invalid_Wifi_SSID](#networkmanager_get_wifi_state_on_connecting_to_invalid_wifi_ssid)
    - [NetworkManager_SetandGet_Connectivity_Test_Endpoints](#networkmanager_setandget_connectivity_test_endpoints)
-   - [NetworkManager_Check_WiFi_StateChange_Event_On_Connecting_To_Wifi](#networkmanager_check_wifi_statechange_event_on_connecting_to_wifi)
+   - [NetworkManager_WiFi_StateChange_Event_On_Connecting_To_Wifi](#networkmanager_wifi_statechange_event_on_connecting_to_wifi)
    - [NetworkManager_Set_Invalid_Interface_State](#networkmanager_set_invalid_interface_state)
    - [NetworkManager_GetInterfaceState_With_Empty_Parameter](#networkmanager_getinterfacestate_with_empty_parameter)
    - [NetworkManager_Ping_Invalid_Endpoint](#networkmanager_ping_invalid_endpoint)
@@ -50,10 +50,8 @@ RDKV_CERT_AVS_NetworkManager
    - [NetworkManager_Remove_Invalid_SSID](#networkmanager_remove_invalid_ssid)
    - [NetworkManager_Remove_Empty_SSID](#networkmanager_remove_empty_ssid)
    - [NetworkManager_GetInterfaceState_Without_Parameter](#networkmanager_getinterfacestate_without_parameter)
-   - [NetworkManager_Check_Get_Known_SSID](#networkmanager_check_get_known_ssid)
-   - [NetworkManager_ActivateDeactivate_Event_Test](#networkmanager_activatedeactivate_event_test)
+   - [NetworkManager_Get_Known_SSID](#networkmanager_get_known_ssid)
    - [NetworkManager_GetIPSettings_With_Invalid_Parameter](#networkmanager_getipsettings_with_invalid_parameter)
-   - [NetworkManager_Verify_Wifi_Connect_Error](#networkmanager_verify_wifi_connect_error)
    - [NetworkManager_SetInterfaceState_Without_Interface_Parameter](#networkmanager_setinterfacestate_without_interface_parameter)
    - [NetworkManager_SetInterfaceState_With_Invalid_Parameters](#networkmanager_setinterfacestate_with_invalid_parameters)
    - [NetworkManager_Add_and_Remove_SSID](#networkmanager_add_and_remove_ssid)
@@ -74,27 +72,29 @@ RDKV_CERT_AVS_NetworkManager
    - [NetworkManager_SetIPSettings_With_Invalid_Gateway](#networkmanager_setipsettings_with_invalid_gateway)
    - [NetworkManager_SetIPSettings_With_Invalid_PrimaryDNS](#networkmanager_setipsettings_with_invalid_primarydns)
    - [NetworkManager_SetIPSettings_With_Invalid_SecondaryDNS](#networkmanager_setipsettings_with_invalid_secondarydns)
-   - [NetworkManager_Check_GetAvailableInterfaces_Error](#networkmanager_check_getavailableinterfaces_error)
-   - [NetworkManager_Check_GetPrimaryInterface_Error](#networkmanager_check_getprimaryinterface_error)
-   - [NetworkManager_Check_GetPublicIP_Error](#networkmanager_check_getpublicip_error)
-   - [NetworkManager_Check_Ping_Error](#networkmanager_check_ping_error)
-   - [NetworkManager_Check_Trace_Error](#networkmanager_check_trace_error)
-   - [NetworkManager_Check_IsConnectedToInternet_Error](#networkmanager_check_isconnectedtointernet_error)
-   - [NetworkManager_Check_GetInterfaceState_Error](#networkmanager_check_getinterfacestate_error)
-   - [NetworkManager_Check_SetInterfaceState_Error](#networkmanager_check_setinterfacestate_error)
-   - [NetworkManager_Check_StopWiFiScan_Error](#networkmanager_check_stopwifiscan_error)
-   - [NetworkManager_Check_WiFiDisconnect_Error](#networkmanager_check_wifidisconnect_error)
-   - [NetworkManager_SSID_Frequency_Checker_2.4GHz](#networkmanager_ssid_frequency_checker_2-4ghz)
+   - [NetworkManager_SSID_Frequency_Checker_2.4GHz](#networkmanager_ssid_frequency_checker_2.4ghz)
    - [NetworkManager_SSID_Frequency_Checker_5GHz](#networkmanager_ssid_frequency_checker_5ghz)
-   - [NetworkManager_Scan_Specific_SSID_2.4GHz](#networkmanager_scan_specific_ssid_2-4ghz)
+   - [NetworkManager_Scan_Specific_SSID_2.4GHz](#networkmanager_scan_specific_ssid_2.4ghz)
    - [NetworkManager_Scan_Specific_SSID_5GHz](#networkmanager_scan_specific_ssid_5ghz)
    - [NetworkManager_Trace_Empty_Endpoint](#networkmanager_trace_empty_endpoint)
    - [NetworkManager_Trace_Without_Parameter](#networkmanager_trace_without_parameter)
    - [NetworkManager_Wifi_Connect_Without_Parameter](#networkmanager_wifi_connect_without_parameter)
    - [NetworkManager_Get_Public_IPv6_IP](#networkmanager_get_public_ipv6_ip)
-   - [NetworkManager_Check_Internet_IPv6_Connectivity](#networkmanager_check_internet_ipv6_connectivity)
+   - [NetworkManager_Internet_IPv6_Connectivity](#networkmanager_internet_ipv6_connectivity)
    - [NetworkManager_Get_IPSettings_IPv6](#networkmanager_get_ipsettings_ipv6)
-   - [NetworkManager_Check_Primary_Interface_After_LightSleep](#networkmanager_check_primary_interface_after_lightsleep)
+   - [NetworkManager_Primary_Interface_After_LightSleep](#networkmanager_primary_interface_after_lightsleep)
+   - [NetworkManager_ActivateDeactivate_Event_Test](#networkmanager_activatedeactivate_event_test)
+   - [NetworkManager_Wifi_Connect_Error](#networkmanager_wifi_connect_error)
+   - [NetworkManager_GetAvailableInterfaces_Error](#networkmanager_getavailableinterfaces_error)
+   - [NetworkManager_GetPrimaryInterface_Error](#networkmanager_getprimaryinterface_error)
+   - [NetworkManager_GetPublicIP_Error](#networkmanager_getpublicip_error)
+   - [NetworkManager_Ping_Error](#networkmanager_ping_error)
+   - [NetworkManager_Trace_Error](#networkmanager_trace_error)
+   - [NetworkManager_IsConnectedToInternet_Error](#networkmanager_isconnectedtointernet_error)
+   - [NetworkManager_GetInterfaceState_Error](#networkmanager_getinterfacestate_error)
+   - [NetworkManager_SetInterfaceState_Error](#networkmanager_setinterfacestate_error)
+   - [NetworkManager_StopWiFiScan_Error](#networkmanager_stopwifiscan_error)
+   - [NetworkManager_WiFiDisconnect_Error](#networkmanager_wifidisconnect_error)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -174,9 +174,9 @@ Gets list of interfaces supported by device
 
 ---
 
-<a id="networkmanager_get_primary-default_interface"></a>
+<a id="networkmanager_get_primary_interface"></a>
 ### TestCase Name
-NetworkManager_Get_Primary/Default_Interface
+NetworkManager_Get_Primary_Interface
 
 ### TestCase ID
 NM_02
@@ -248,9 +248,9 @@ Traces the specified end point
 
 ---
 
-<a id="networkmanager_check_internet_ipv4_connectivity"></a>
+<a id="networkmanager_internet_ipv4_connectivity"></a>
 ### TestCase Name
-NetworkManager_Check_Internet_IPv4_Connectivity
+NetworkManager_Internet_IPv4_Connectivity
 
 ### TestCase ID
 NM_06
@@ -266,9 +266,9 @@ Seeks whether the device has internet connectivity
 
 ---
 
-<a id="networkmanager_getavailableinterfaces_with_enabled-disabled_interface"></a>
+<a id="networkmanager_getavailableinterfaces_with_interface_toggle"></a>
 ### TestCase Name
-NetworkManager_GetAvailableInterfaces_With_Enabled/Disabled_Interface
+NetworkManager_GetAvailableInterfaces_With_Interface_Toggle
 
 ### TestCase ID
 NM_07
@@ -287,9 +287,9 @@ Verify that the GetAvailableInterfaces method returns the correct list of availa
 
 ---
 
-<a id="networkmanager_check_on_interface_statechange_event"></a>
+<a id="networkmanager_on_interface_statechange_event"></a>
 ### TestCase Name
-NetworkManager_Check_On_Interface_StateChange_Event
+NetworkManager_On_Interface_StateChange_Event
 
 ### TestCase ID
 NM_08
@@ -338,9 +338,9 @@ Check if the start and stop wifi scan methods can successfully initiate and stop
 
 ---
 
-<a id="networkmanager_check_on_availablessids_event"></a>
+<a id="networkmanager_on_availablessids_event"></a>
 ### TestCase Name
-NetworkManager_Check_On_AvailableSSIDs_Event
+NetworkManager_On_AvailableSSIDs_Event
 
 ### TestCase ID
 NM_10
@@ -440,9 +440,9 @@ Check if the connect and disconnect wifi methods can successfully establish and 
 
 ---
 
-<a id="networkmanager_check_get_connected_ssid"></a>
+<a id="networkmanager_get_connected_ssid"></a>
 ### TestCase Name
-NetworkManager_Check_Get_Connected_SSID
+NetworkManager_Get_Connected_SSID
 
 ### TestCase ID
 NM_14
@@ -492,9 +492,9 @@ Returns the Wifi security modes that the device supports
 
 ---
 
-<a id="networkmanager_check_on_wifistatechange_event"></a>
+<a id="networkmanager_on_wifistatechange_event"></a>
 ### TestCase Name
-NetworkManager_Check_On_WifiStateChange_Event
+NetworkManager_On_WifiStateChange_Event
 
 ### TestCase ID
 NM_16
@@ -528,9 +528,9 @@ Check whether the wifistatechange event is triggered upon connecting to and disc
 
 ---
 
-<a id="networkmanager_check_wificonnect_with_invalid_ssid_passphrase"></a>
+<a id="networkmanager_wificonnect_with_invalid_ssid_passphrase"></a>
 ### TestCase Name
-NetworkManager_Check_WifiConnect_With_Invalid_SSID_Passphrase
+NetworkManager_WifiConnect_With_Invalid_SSID_Passphrase
 
 ### TestCase ID
 NM_17
@@ -546,9 +546,9 @@ Check if the wifi connect method fails when provided with an invalid SSID and pa
 
 ---
 
-<a id="networkmanager_check_on_availablessids_event_not_triggered"></a>
+<a id="networkmanager_on_availablessids_event_not_triggered"></a>
 ### TestCase Name
-NetworkManager_Check_On_AvailableSSIDs_Event_Not_Triggered
+NetworkManager_On_AvailableSSIDs_Event_Not_Triggered
 
 ### TestCase ID
 NM_18
@@ -631,9 +631,9 @@ Check if the connect and disconnect wifi methods can successfully establish and 
 
 ---
 
-<a id="networkmanager_check_5ghz_get_connected_ssid"></a>
+<a id="networkmanager_5ghz_get_connected_ssid"></a>
 ### TestCase Name
-NetworkManager_Check_5GHz_Get_Connected_SSID
+NetworkManager_5GHz_Get_Connected_SSID
 
 ### TestCase ID
 NM_21
@@ -719,9 +719,9 @@ Check if the GetInterfaceState method returns an error when invalid parameter is
 
 ---
 
-<a id="networkmanager_check_logging_level"></a>
+<a id="networkmanager_logging_level"></a>
 ### TestCase Name
-NetworkManager_Check_Logging_Level
+NetworkManager_Logging_Level
 
 ### TestCase ID
 NM_25
@@ -799,9 +799,9 @@ Check if able to set and get the highest logging level
 
 ---
 
-<a id="networkmanager_check_wifi_state"></a>
+<a id="networkmanager_get_wifi_state"></a>
 ### TestCase Name
-NetworkManager_Check_Wifi_State
+NetworkManager_Get_Wifi_State
 
 ### TestCase ID
 NM_29
@@ -817,9 +817,9 @@ Returns the current Wifi State
 
 ---
 
-<a id="networkmanager_connect_wifi_and_check_wifi_state"></a>
+<a id="networkmanager_connect_wifi_and_get_wifi_state"></a>
 ### TestCase Name
-NetworkManager_Connect_Wifi_And_Check_Wifi_State
+NetworkManager_Connect_Wifi_And_Get_Wifi_State
 
 ### TestCase ID
 NM_30
@@ -889,9 +889,9 @@ Check if able to set upto 5 endpoints
 
 ---
 
-<a id="networkmanager_check_wifi_state_after_connecting_to_wifi"></a>
+<a id="networkmanager_get_wifi_state_after_connecting_to_wifi"></a>
 ### TestCase Name
-NetworkManager_Check_Wifi_State_After_Connecting_To_Wifi
+NetworkManager_Get_Wifi_State_After_Connecting_To_Wifi
 
 ### TestCase ID
 NM_33
@@ -924,9 +924,9 @@ Check the wifi state after connecting to the wifi ssid
 
 ---
 
-<a id="networkmanager_start_scan_and_check_wifi_state"></a>
+<a id="networkmanager_start_scan_and_get_wifi_state"></a>
 ### TestCase Name
-NetworkManager_Start_Scan_And_Check_Wifi_State
+NetworkManager_Start_Scan_And_Get_Wifi_State
 
 ### TestCase ID
 NM_34
@@ -956,9 +956,9 @@ Check the wifi state on scanning for the wifi
 
 ---
 
-<a id="networkmanager_check_wifi_state_on_connecting_to_invalid_wifi_ssid"></a>
+<a id="networkmanager_get_wifi_state_on_connecting_to_invalid_wifi_ssid"></a>
 ### TestCase Name
-NetworkManager_Check_Wifi_State_On_Connecting_To_Invalid_Wifi_SSID
+NetworkManager_Get_Wifi_State_On_Connecting_To_Invalid_Wifi_SSID
 
 ### TestCase ID
 NM_35
@@ -1009,9 +1009,9 @@ Check GetConnectivityTestEndpoints method returns the correct test endpoint set 
 
 ---
 
-<a id="networkmanager_check_wifi_statechange_event_on_connecting_to_wifi"></a>
+<a id="networkmanager_wifi_statechange_event_on_connecting_to_wifi"></a>
 ### TestCase Name
-NetworkManager_Check_WiFi_StateChange_Event_On_Connecting_To_Wifi
+NetworkManager_WiFi_StateChange_Event_On_Connecting_To_Wifi
 
 ### TestCase ID
 NM_37
@@ -1170,9 +1170,9 @@ Check if the GetInterfaceState method returns an error when interface parameter 
 
 ---
 
-<a id="networkmanager_check_get_known_ssid"></a>
+<a id="networkmanager_get_known_ssid"></a>
 ### TestCase Name
-NetworkManager_Check_Get_Known_SSID
+NetworkManager_Get_Known_SSID
 
 ### TestCase ID
 NM_45
@@ -1205,9 +1205,9 @@ Check if the GetKnownSSIDs method returns the connected SSID name
 
 ---
 
-<a id="networkmanager_activatedeactivate_event_test"></a>
+<a id="networkmanager_getipsettings_with_invalid_parameter"></a>
 ### TestCase Name
-NetworkManager_ActivateDeactivate_Event_Test
+NetworkManager_GetIPSettings_With_Invalid_Parameter
 
 ### TestCase ID
 NM_46
@@ -1238,9 +1238,9 @@ Validates statechange event on activating/deactivating the plugin
 
 ---
 
-<a id="networkmanager_getipsettings_with_invalid_parameter"></a>
+<a id="networkmanager_setinterfacestate_without_interface_parameter"></a>
 ### TestCase Name
-NetworkManager_GetIPSettings_With_Invalid_Parameter
+NetworkManager_SetInterfaceState_Without_Interface_Parameter
 
 ### TestCase ID
 NM_47
@@ -1256,9 +1256,9 @@ Check if the GetIPSettings method returns an error when invalid interface parame
 
 ---
 
-<a id="networkmanager_verify_wifi_connect_error"></a>
+<a id="networkmanager_setinterfacestate_with_invalid_parameters"></a>
 ### TestCase Name
-NetworkManager_Verify_Wifi_Connect_Error
+NetworkManager_SetInterfaceState_With_Invalid_Parameters
 
 ### TestCase ID
 NM_48
@@ -1290,9 +1290,9 @@ Verify that the WifiConnect method returns an error when the plugin is in a deac
 
 ---
 
-<a id="networkmanager_setinterfacestate_without_interface_parameter"></a>
+<a id="networkmanager_add_and_remove_ssid"></a>
 ### TestCase Name
-NetworkManager_SetInterfaceState_Without_Interface_Parameter
+NetworkManager_Add_and_Remove_SSID
 
 ### TestCase ID
 NM_49
@@ -1308,9 +1308,9 @@ Check if the SetInterfaceState method returns an error when interface parameter 
 
 ---
 
-<a id="networkmanager_setinterfacestate_with_invalid_parameters"></a>
+<a id="networkmanager_setstunendpoint_with_invalid_endpoint"></a>
 ### TestCase Name
-NetworkManager_SetInterfaceState_With_Invalid_Parameters
+NetworkManager_SetStunEndpoint_With_Invalid_Endpoint
 
 ### TestCase ID
 NM_50
@@ -1326,9 +1326,9 @@ Check if the SetInterfaceState method returns an error when both interface and e
 
 ---
 
-<a id="networkmanager_add_and_remove_ssid"></a>
+<a id="networkmanager_setstunendpoint_with_invalid_port"></a>
 ### TestCase Name
-NetworkManager_Add_and_Remove_SSID
+NetworkManager_SetStunEndpoint_With_Invalid_Port
 
 ### TestCase ID
 NM_51
@@ -1361,9 +1361,9 @@ Check that an SSID can be added and then removed successfully
 
 ---
 
-<a id="networkmanager_setstunendpoint_with_invalid_endpoint"></a>
+<a id="networkmanager_setstunendpoint_without_endpoint"></a>
 ### TestCase Name
-NetworkManager_SetStunEndpoint_With_Invalid_Endpoint
+NetworkManager_SetStunEndpoint_Without_Endpoint
 
 ### TestCase ID
 NM_52
@@ -1379,9 +1379,9 @@ Check if the SetStunEndpoint method throws an error when an invalid endpoint par
 
 ---
 
-<a id="networkmanager_setstunendpoint_with_invalid_port"></a>
+<a id="networkmanager_setstunendpoint_without_port"></a>
 ### TestCase Name
-NetworkManager_SetStunEndpoint_With_Invalid_Port
+NetworkManager_SetStunEndpoint_Without_Port
 
 ### TestCase ID
 NM_53
@@ -1397,9 +1397,9 @@ Check if the SetStunEndpoint method throws an error when an invalid port paramet
 
 ---
 
-<a id="networkmanager_setstunendpoint_without_endpoint"></a>
+<a id="networkmanager_setstunendpoint_without_parameters"></a>
 ### TestCase Name
-NetworkManager_SetStunEndpoint_Without_Endpoint
+NetworkManager_SetStunEndpoint_Without_Parameters
 
 ### TestCase ID
 NM_54
@@ -1415,9 +1415,9 @@ Check if the SetStunEndpoint method throws an error when endpoint parameter is n
 
 ---
 
-<a id="networkmanager_setstunendpoint_without_port"></a>
+<a id="networkmanager_addtoknownssids_with_empty_ssid"></a>
 ### TestCase Name
-NetworkManager_SetStunEndpoint_Without_Port
+NetworkManager_AddToKnownSSIDs_With_Empty_SSID
 
 ### TestCase ID
 NM_55
@@ -1433,9 +1433,9 @@ Check if the SetStunEndpoint method throws an error when port parameter is not p
 
 ---
 
-<a id="networkmanager_setstunendpoint_without_parameters"></a>
+<a id="networkmanager_addtoknownssids_with_empty_passphrase"></a>
 ### TestCase Name
-NetworkManager_SetStunEndpoint_Without_Parameters
+NetworkManager_AddToKnownSSIDs_With_Empty_Passphrase
 
 ### TestCase ID
 NM_56
@@ -1451,9 +1451,9 @@ Check if the SetStunEndpoint method throws an error when parameters are not pass
 
 ---
 
-<a id="networkmanager_addtoknownssids_with_empty_ssid"></a>
+<a id="networkmanager_addtoknownssids_with_empty_ssid_passphrase"></a>
 ### TestCase Name
-NetworkManager_AddToKnownSSIDs_With_Empty_SSID
+NetworkManager_AddToKnownSSIDs_With_Empty_SSID_Passphrase
 
 ### TestCase ID
 NM_57
@@ -1469,9 +1469,9 @@ Check if the AddToKnownSSIDs method returns an error when the SSID parameter is 
 
 ---
 
-<a id="networkmanager_addtoknownssids_with_empty_passphrase"></a>
+<a id="networkmanager_addtoknownssids_without_parameters"></a>
 ### TestCase Name
-NetworkManager_AddToKnownSSIDs_With_Empty_Passphrase
+NetworkManager_AddToKnownSSIDs_Without_Parameters
 
 ### TestCase ID
 NM_58
@@ -1487,9 +1487,9 @@ Check if the AddToKnownSSIDs method returns an error when the passphrase paramet
 
 ---
 
-<a id="networkmanager_addtoknownssids_with_empty_ssid_passphrase"></a>
+<a id="networkmanager_setipsettings_with_empty_interface"></a>
 ### TestCase Name
-NetworkManager_AddToKnownSSIDs_With_Empty_SSID_Passphrase
+NetworkManager_SetIPSettings_With_Empty_Interface
 
 ### TestCase ID
 NM_59
@@ -1505,9 +1505,9 @@ Check if the AddToKnownSSIDs method returns an error when the SSID and passphras
 
 ---
 
-<a id="networkmanager_addtoknownssids_without_parameters"></a>
+<a id="networkmanager_setipsettings_with_invalid_interface"></a>
 ### TestCase Name
-NetworkManager_AddToKnownSSIDs_Without_Parameters
+NetworkManager_SetIPSettings_With_Invalid_Interface
 
 ### TestCase ID
 NM_60
@@ -1523,9 +1523,9 @@ Check if the AddToKnownSSIDs method returns an error when parameters are not pro
 
 ---
 
-<a id="networkmanager_setipsettings_with_empty_interface"></a>
+<a id="networkmanager_setipsettings_with_empty_ipversion"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Empty_Interface
+NetworkManager_SetIPSettings_With_Empty_Ipversion
 
 ### TestCase ID
 NM_61
@@ -1541,9 +1541,9 @@ Check if the SetIPSettings method returns an error when the interface parameter 
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_interface"></a>
+<a id="networkmanager_setipsettings_with_invalid_ipversion"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_Interface
+NetworkManager_SetIPSettings_With_Invalid_Ipversion
 
 ### TestCase ID
 NM_62
@@ -1559,9 +1559,9 @@ Check if the SetIPSettings method returns an error when the interface parameter 
 
 ---
 
-<a id="networkmanager_setipsettings_with_empty_ipversion"></a>
+<a id="networkmanager_setipsettings_with_invalid_ipaddress"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Empty_Ipversion
+NetworkManager_SetIPSettings_With_Invalid_Ipaddress
 
 ### TestCase ID
 NM_63
@@ -1577,9 +1577,9 @@ Check if the SetIPSettings method returns an error when the ipversion parameter 
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_ipversion"></a>
+<a id="networkmanager_setipsettings_with_invalid_gateway"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_Ipversion
+NetworkManager_SetIPSettings_With_Invalid_Gateway
 
 ### TestCase ID
 NM_64
@@ -1595,9 +1595,9 @@ Check if the SetIPSettings method returns an error when the ipversion parameter 
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_ipaddress"></a>
+<a id="networkmanager_setipsettings_with_invalid_primarydns"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_Ipaddress
+NetworkManager_SetIPSettings_With_Invalid_PrimaryDNS
 
 ### TestCase ID
 NM_65
@@ -1613,9 +1613,9 @@ Check if the SetIPSettings method returns an error when the ipaddress parameter 
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_gateway"></a>
+<a id="networkmanager_setipsettings_with_invalid_secondarydns"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_Gateway
+NetworkManager_SetIPSettings_With_Invalid_SecondaryDNS
 
 ### TestCase ID
 NM_66
@@ -1631,9 +1631,9 @@ Check if the SetIPSettings method returns an error when the gateway parameter is
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_primarydns"></a>
+<a id="networkmanager_ssid_frequency_checker_2.4ghz"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_PrimaryDNS
+NetworkManager_SSID_Frequency_Checker_2.4GHz
 
 ### TestCase ID
 NM_67
@@ -1649,9 +1649,9 @@ Check if the SetIPSettings method returns an error when the primarydns parameter
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_secondarydns"></a>
+<a id="networkmanager_ssid_frequency_checker_5ghz"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_SecondaryDNS
+NetworkManager_SSID_Frequency_Checker_5GHz
 
 ### TestCase ID
 NM_68
@@ -1667,9 +1667,9 @@ Check if the SetIPSettings method returns an error when the secondarydns paramet
 
 ---
 
-<a id="networkmanager_check_getavailableinterfaces_error"></a>
+<a id="networkmanager_scan_specific_ssid_2.4ghz"></a>
 ### TestCase Name
-NetworkManager_Check_GetAvailableInterfaces_Error
+NetworkManager_Scan_Specific_SSID_2.4GHz
 
 ### TestCase ID
 NM_69
@@ -1695,9 +1695,9 @@ Check if the GetAvailableInterfaces method returns an error when the plugin is i
 
 ---
 
-<a id="networkmanager_check_getprimaryinterface_error"></a>
+<a id="networkmanager_scan_specific_ssid_5ghz"></a>
 ### TestCase Name
-NetworkManager_Check_GetPrimaryInterface_Error
+NetworkManager_Scan_Specific_SSID_5GHz
 
 ### TestCase ID
 NM_70
@@ -1723,9 +1723,9 @@ Check if the GetPrimaryInterface method returns an error when the plugin is in a
 
 ---
 
-<a id="networkmanager_check_getpublicip_error"></a>
+<a id="networkmanager_trace_empty_endpoint"></a>
 ### TestCase Name
-NetworkManager_Check_GetPublicIP_Error
+NetworkManager_Trace_Empty_Endpoint
 
 ### TestCase ID
 NM_71
@@ -1751,9 +1751,9 @@ Check if the GetPublicIP method returns an error when the plugin is in a deactiv
 
 ---
 
-<a id="networkmanager_check_ping_error"></a>
+<a id="networkmanager_trace_without_parameter"></a>
 ### TestCase Name
-NetworkManager_Check_Ping_Error
+NetworkManager_Trace_Without_Parameter
 
 ### TestCase ID
 NM_72
@@ -1779,9 +1779,9 @@ Check if the Ping method returns an error when the plugin is in a deactivated st
 
 ---
 
-<a id="networkmanager_check_trace_error"></a>
+<a id="networkmanager_wifi_connect_without_parameter"></a>
 ### TestCase Name
-NetworkManager_Check_Trace_Error
+NetworkManager_Wifi_Connect_Without_Parameter
 
 ### TestCase ID
 NM_73
@@ -1807,9 +1807,9 @@ Check if the Trace method returns an error when the plugin is in a deactivated s
 
 ---
 
-<a id="networkmanager_check_isconnectedtointernet_error"></a>
+<a id="networkmanager_get_public_ipv6_ip"></a>
 ### TestCase Name
-NetworkManager_Check_IsConnectedToInternet_Error
+NetworkManager_Get_Public_IPv6_IP
 
 ### TestCase ID
 NM_74
@@ -1835,9 +1835,9 @@ Check if the IsConnectedToInternet method returns an error when the plugin is in
 
 ---
 
-<a id="networkmanager_check_getinterfacestate_error"></a>
+<a id="networkmanager_internet_ipv6_connectivity"></a>
 ### TestCase Name
-NetworkManager_Check_GetInterfaceState_Error
+NetworkManager_Internet_IPv6_Connectivity
 
 ### TestCase ID
 NM_75
@@ -1863,9 +1863,9 @@ Check if the GetInterfaceState method returns an error when the plugin is in a d
 
 ---
 
-<a id="networkmanager_check_setinterfacestate_error"></a>
+<a id="networkmanager_get_ipsettings_ipv6"></a>
 ### TestCase Name
-NetworkManager_Check_SetInterfaceState_Error
+NetworkManager_Get_IPSettings_IPv6
 
 ### TestCase ID
 NM_76
@@ -1891,9 +1891,9 @@ Check if the SetInterfaceState method returns an error when the plugin is in a d
 
 ---
 
-<a id="networkmanager_check_stopwifiscan_error"></a>
+<a id="networkmanager_primary_interface_after_lightsleep"></a>
 ### TestCase Name
-NetworkManager_Check_StopWiFiScan_Error
+NetworkManager_Primary_Interface_After_LightSleep
 
 ### TestCase ID
 NM_77
@@ -1919,9 +1919,9 @@ Check if the StopWiFiScan method returns an error when the plugin is in a deacti
 
 ---
 
-<a id="networkmanager_check_wifidisconnect_error"></a>
+<a id="networkmanager_activatedeactivate_event_test"></a>
 ### TestCase Name
-NetworkManager_Check_WiFiDisconnect_Error
+NetworkManager_ActivateDeactivate_Event_Test
 
 ### TestCase ID
 NM_78
@@ -1947,9 +1947,9 @@ Check if the WiFiDisconnect method returns an error when the plugin is in a deac
 
 ---
 
-<a id="networkmanager_ssid_frequency_checker_2-4ghz"></a>
+<a id="networkmanager_wifi_connect_error"></a>
 ### TestCase Name
-NetworkManager_SSID_Frequency_Checker_2.4GHz
+NetworkManager_Wifi_Connect_Error
 
 ### TestCase ID
 NM_79
@@ -1978,9 +1978,9 @@ Scan for 2.4GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs e
 
 ---
 
-<a id="networkmanager_ssid_frequency_checker_5ghz"></a>
+<a id="networkmanager_getavailableinterfaces_error"></a>
 ### TestCase Name
-NetworkManager_SSID_Frequency_Checker_5GHz
+NetworkManager_GetAvailableInterfaces_Error
 
 ### TestCase ID
 NM_80
@@ -2009,9 +2009,9 @@ Scan for 5GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs eve
 
 ---
 
-<a id="networkmanager_scan_specific_ssid_2-4ghz"></a>
+<a id="networkmanager_getprimaryinterface_error"></a>
 ### TestCase Name
-NetworkManager_Scan_Specific_SSID_2.4GHz
+NetworkManager_GetPrimaryInterface_Error
 
 ### TestCase ID
 NM_81
@@ -2040,9 +2040,9 @@ This test case checks if NetworkManager can scan for a specific SSID on the 2.4G
 
 ---
 
-<a id="networkmanager_scan_specific_ssid_5ghz"></a>
+<a id="networkmanager_getpublicip_error"></a>
 ### TestCase Name
-NetworkManager_Scan_Specific_SSID_5GHz
+NetworkManager_GetPublicIP_Error
 
 ### TestCase ID
 NM_82
@@ -2071,9 +2071,9 @@ This test case checks if NetworkManager can scan for a specific SSID on the 5GHz
 
 ---
 
-<a id="networkmanager_trace_empty_endpoint"></a>
+<a id="networkmanager_ping_error"></a>
 ### TestCase Name
-NetworkManager_Trace_Empty_Endpoint
+NetworkManager_Ping_Error
 
 ### TestCase ID
 NM_83
@@ -2089,9 +2089,9 @@ Traces the empty endpoint
 
 ---
 
-<a id="networkmanager_trace_without_parameter"></a>
+<a id="networkmanager_trace_error"></a>
 ### TestCase Name
-NetworkManager_Trace_Without_Parameter
+NetworkManager_Trace_Error
 
 ### TestCase ID
 NM_84
@@ -2107,9 +2107,9 @@ Check if the Trace method returns an error when parameters are not provided
 
 ---
 
-<a id="networkmanager_wifi_connect_without_parameter"></a>
+<a id="networkmanager_isconnectedtointernet_error"></a>
 ### TestCase Name
-NetworkManager_Wifi_Connect_Without_Parameter
+NetworkManager_IsConnectedToInternet_Error
 
 ### TestCase ID
 NM_85
@@ -2125,9 +2125,9 @@ Check if the WifiConnect method returns an error when parameter is not provided
 
 ---
 
-<a id="networkmanager_get_public_ipv6_ip"></a>
+<a id="networkmanager_getinterfacestate_error"></a>
 ### TestCase Name
-NetworkManager_Get_Public_IPv6_IP
+NetworkManager_GetInterfaceState_Error
 
 ### TestCase ID
 NM_86
@@ -2143,9 +2143,9 @@ Validate public IPv6 IP address of the device
 
 ---
 
-<a id="networkmanager_check_internet_ipv6_connectivity"></a>
+<a id="networkmanager_setinterfacestate_error"></a>
 ### TestCase Name
-NetworkManager_Check_Internet_IPv6_Connectivity
+NetworkManager_SetInterfaceState_Error
 
 ### TestCase ID
 NM_87
@@ -2161,9 +2161,9 @@ Seeks whether the device has internet connectivity
 
 ---
 
-<a id="networkmanager_get_ipsettings_ipv6"></a>
+<a id="networkmanager_stopwifiscan_error"></a>
 ### TestCase Name
-NetworkManager_Get_IPSettings_IPv6
+NetworkManager_StopWiFiScan_Error
 
 ### TestCase ID
 NM_88
@@ -2179,9 +2179,9 @@ Gets the IP setting for the given interface
 
 ---
 
-<a id="networkmanager_check_primary_interface_after_lightsleep"></a>
+<a id="networkmanager_wifidisconnect_error"></a>
 ### TestCase Name
-NetworkManager_Check_Primary_Interface_After_LightSleep
+NetworkManager_WiFiDisconnect_Error
 
 ### TestCase ID
 NM_89

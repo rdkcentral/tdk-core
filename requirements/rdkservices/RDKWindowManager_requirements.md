@@ -14,3 +14,5 @@
 | `RWM‑REQ‑009` | SHALL successfully set the visibility of a valid client to true and false, and return an error response when setVisible is invoked with an invalid client |
 | `RWM‑REQ‑010` | SHALL successfully signal render-ready for a valid clientId, enable and disable display render for a valid clientId, and set and verify the Z-order for a valid clientId; return an error response when renderReady, enableDisplayRender, setZOrder, or getZOrder is invoked with invalid or empty clientId values |
 | `RWM‑REQ‑011` | SHALL emit the onUserInactivity event after the configured inactivity interval expires, not emit the event when inactivity reporting is disabled, and confirm user-active status via the userActive API |
+| `RWM‑REQ‑012` | SHALL emit the onScreenshotComplete event when a screenshot is captured |
+

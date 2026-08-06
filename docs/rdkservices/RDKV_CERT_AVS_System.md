@@ -23,35 +23,35 @@ RDKV_CERT_AVS_System
    - [System_Get_rf4ce_mac](#system_get_rf4ce_mac)
    - [System_Get_Bluetooth_mac](#system_get_bluetooth_mac)
    - [System_Get_WiFi_Mac](#system_get_wifi_mac)
-   - [Check_Power_State_Before_Reboot](#check_power_state_before_reboot)
-   - [System_Check_On_SystemMode_Changed](#system_check_on_systemmode_changed)
-   - [System_Check_Reboot_Reason_Event](#system_check_reboot_reason_event)
-   - [Enable_And_Disable_Telemetry_OptOut_Status](#enable_and_disable_telemetry_optout_status)
+   - [System_Power_State_Before_Reboot](#system_power_state_before_reboot)
+   - [System_On_SystemMode_Changed](#system_on_systemmode_changed)
+   - [System_Reboot_Reason_Event](#system_reboot_reason_event)
+   - [System_Enable_And_Disable_Telemetry_OptOut_Status](#system_enable_and_disable_telemetry_optout_status)
    - [System_Validate_Firmware_Upgrade](#system_validate_firmware_upgrade)
-   - [System_Check_Model_Number](#system_check_model_number)
-   - [System_Check_Device_Mac_Address](#system_check_device_mac_address)
-   - [System_Check_Firmware_Upgrade_Status](#system_check_firmware_upgrade_status)
-   - [System_Check_Public_IP_Address](#system_check_public_ip_address)
-   - [System_Check_HDR_Capabilities](#system_check_hdr_capabilities)
-   - [SetAndGet_All_Time_Zones](#setandget_all_time_zones)
+   - [System_Model_Number](#system_model_number)
+   - [System_Device_Mac_Address](#system_device_mac_address)
+   - [System_Firmware_Upgrade_Status](#system_firmware_upgrade_status)
+   - [System_Public_IP_Address](#system_public_ip_address)
+   - [System_HDR_Capabilities](#system_hdr_capabilities)
+   - [System_SetAndGet_All_Time_Zones](#system_setandget_all_time_zones)
    - [System_Toggle_Network_Standby_Mode_Status](#system_toggle_network_standby_mode_status)
-   - [Check_Power_State_Before_Reboot_On_Standby_State](#check_power_state_before_reboot_on_standby_state)
-   - [Check_Time_Zones_Persist_After_Reboot](#check_time_zones_persist_after_reboot)
-   - [System_Reboot_And_Check_System_Uptime](#system_reboot_and_check_system_uptime)
-   - [System_Check_On_TimeZoneDST_Changed_Event](#system_check_on_timezonedst_changed_event)
-   - [System_Check_RFC_Status](#system_check_rfc_status)
+   - [System_Power_State_Before_Reboot_On_Standby_State](#system_power_state_before_reboot_on_standby_state)
+   - [System_Time_Zones_Persist_After_Reboot](#system_time_zones_persist_after_reboot)
+   - [System_Reboot_And_System_Uptime](#system_reboot_and_system_uptime)
+   - [System_On_TimeZoneDST_Changed_Event](#system_on_timezonedst_changed_event)
+   - [System_RFC_Status](#system_rfc_status)
    - [System_SetandGet_Friendly_Name](#system_setandget_friendly_name)
-   - [System_Check_Friendly_Name_Persist](#system_check_friendly_name_persist)
+   - [System_Friendly_Name_Persist](#system_friendly_name_persist)
    - [System_Set_Invalid_TimeZone_DST](#system_set_invalid_timezone_dst)
-   - [System_Check_RFCList_with_Empty_Value](#system_check_rfclist_with_empty_value)
-   - [System_Check_Device_Type](#system_check_device_type)
-   - [System_Check_Device_SSH_State_After_Reboot_On_Standby_State](#system_check_device_ssh_state_after_reboot_on_standby_state)
+   - [System_RFCList_with_Empty_Value](#system_rfclist_with_empty_value)
+   - [System_Device_Type](#system_device_type)
+   - [System_Device_SSH_State_After_Reboot_On_Standby_State](#system_device_ssh_state_after_reboot_on_standby_state)
    - [System_Set_Invalid_Territory_And_Region](#system_set_invalid_territory_and_region)
    - [System_Set_Empty_Territory_And_Region](#system_set_empty_territory_and_region)
    - [System_Set_Invalid_Territory_And_Valid_Region](#system_set_invalid_territory_and_valid_region)
    - [System_Set_Empty_Territory_And_Valid_Region](#system_set_empty_territory_and_valid_region)
    - [System_Set_And_Get_Territory_Region](#system_set_and_get_territory_region)
-   - [System_Verify_Set_Territory_without_Params](#system_verify_set_territory_without_params)
+   - [System_Set_Territory_without_Params](#system_set_territory_without_params)
    - [System_Set_Valid_Territory_And_Set_Invalid_Region](#system_set_valid_territory_and_set_invalid_region)
    - [System_Set_Valid_Territory_And_Set_Empty_Region](#system_set_valid_territory_and_set_empty_region)
    - [System_Get_Mfg_Serial_Number](#system_get_mfg_serial_number)
@@ -436,9 +436,9 @@ Gets device WiFi mac
 
 ---
 
-<a id="check_power_state_before_reboot"></a>
+<a id="system_power_state_before_reboot"></a>
 ### TestCase Name
-Check_Power_State_Before_Reboot
+System_Power_State_Before_Reboot
 
 ### TestCase ID
 SYS_18
@@ -456,9 +456,9 @@ Checks the powerstate before reboot
 
 ---
 
-<a id="system_check_on_systemmode_changed"></a>
+<a id="system_on_systemmode_changed"></a>
 ### TestCase Name
-System_Check_On_SystemMode_Changed
+System_On_SystemMode_Changed
 
 ### TestCase ID
 SYS_19
@@ -476,9 +476,9 @@ Checks for the system mode changed event
 
 ---
 
-<a id="system_check_reboot_reason_event"></a>
+<a id="system_reboot_reason_event"></a>
 ### TestCase Name
-System_Check_Reboot_Reason_Event
+System_Reboot_Reason_Event
 
 ### TestCase ID
 SYS_20
@@ -495,9 +495,9 @@ Retrieve basic information about a reboot
 
 ---
 
-<a id="enable_and_disable_telemetry_optout_status"></a>
+<a id="system_enable_and_disable_telemetry_optout_status"></a>
 ### TestCase Name
-Enable_And_Disable_Telemetry_OptOut_Status
+System_Enable_And_Disable_Telemetry_OptOut_Status
 
 ### TestCase ID
 SYS_21
@@ -558,9 +558,9 @@ Upgrades to specified firmware version
 
 ---
 
-<a id="system_check_model_number"></a>
+<a id="system_model_number"></a>
 ### TestCase Name
-System_Check_Model_Number
+System_Model_Number
 
 ### TestCase ID
 SYS_23
@@ -577,9 +577,9 @@ Checks the model number of the DUT
 
 ---
 
-<a id="system_check_device_mac_address"></a>
+<a id="system_device_mac_address"></a>
 ### TestCase Name
-System_Check_Device_Mac_Address
+System_Device_Mac_Address
 
 ### TestCase ID
 SYS_24
@@ -596,9 +596,9 @@ Checks the device MAC address
 
 ---
 
-<a id="system_check_firmware_upgrade_status"></a>
+<a id="system_firmware_upgrade_status"></a>
 ### TestCase Name
-System_Check_Firmware_Upgrade_Status
+System_Firmware_Upgrade_Status
 
 ### TestCase ID
 SYS_25
@@ -615,9 +615,9 @@ Checks the firmware upgrade status
 
 ---
 
-<a id="system_check_public_ip_address"></a>
+<a id="system_public_ip_address"></a>
 ### TestCase Name
-System_Check_Public_IP_Address
+System_Public_IP_Address
 
 ### TestCase ID
 SYS_26
@@ -634,9 +634,9 @@ Checks the public IP address
 
 ---
 
-<a id="system_check_hdr_capabilities"></a>
+<a id="system_hdr_capabilities"></a>
 ### TestCase Name
-System_Check_HDR_Capabilities
+System_HDR_Capabilities
 
 ### TestCase ID
 SYS_27
@@ -668,9 +668,9 @@ Checks the HDR Capabilities of the device
 
 ---
 
-<a id="setandget_all_time_zones"></a>
+<a id="system_setandget_all_time_zones"></a>
 ### TestCase Name
-SetAndGet_All_Time_Zones
+System_SetAndGet_All_Time_Zones
 
 ### TestCase ID
 SYS_28
@@ -709,9 +709,9 @@ Toggle Network Standby Mode Status
 
 ---
 
-<a id="check_power_state_before_reboot_on_standby_state"></a>
+<a id="system_power_state_before_reboot_on_standby_state"></a>
 ### TestCase Name
-Check_Power_State_Before_Reboot_On_Standby_State
+System_Power_State_Before_Reboot_On_Standby_State
 
 ### TestCase ID
 SYS_30
@@ -740,9 +740,9 @@ Checks the powerstate before reboot
 
 ---
 
-<a id="check_time_zones_persist_after_reboot"></a>
+<a id="system_time_zones_persist_after_reboot"></a>
 ### TestCase Name
-Check_Time_Zones_Persist_After_Reboot
+System_Time_Zones_Persist_After_Reboot
 
 ### TestCase ID
 SYS_31
@@ -761,9 +761,9 @@ Checks whether time zone setting is persist after reboot
 
 ---
 
-<a id="system_reboot_and_check_system_uptime"></a>
+<a id="system_reboot_and_system_uptime"></a>
 ### TestCase Name
-System_Reboot_And_Check_System_Uptime
+System_Reboot_And_System_Uptime
 
 ### TestCase ID
 SYS_32
@@ -781,9 +781,9 @@ To reboot and check the system uptime
 
 ---
 
-<a id="system_check_on_timezonedst_changed_event"></a>
+<a id="system_on_timezonedst_changed_event"></a>
 ### TestCase Name
-System_Check_On_TimeZoneDST_Changed_Event
+System_On_TimeZoneDST_Changed_Event
 
 ### TestCase ID
 SYS_33
@@ -805,9 +805,9 @@ Checks whether time zone setting is persist after reboot
 
 ---
 
-<a id="system_check_rfc_status"></a>
+<a id="system_rfc_status"></a>
 ### TestCase Name
-System_Check_RFC_Status
+System_RFC_Status
 
 ### TestCase ID
 SYS_34
@@ -850,9 +850,9 @@ Check whether able to set and get friendly name
 
 ---
 
-<a id="system_check_friendly_name_persist"></a>
+<a id="system_friendly_name_persist"></a>
 ### TestCase Name
-System_Check_Friendly_Name_Persist
+System_Friendly_Name_Persist
 
 ### TestCase ID
 SYS_36
@@ -889,9 +889,9 @@ Checks whether able to set invalid timezone
 
 ---
 
-<a id="system_check_rfclist_with_empty_value"></a>
+<a id="system_rfclist_with_empty_value"></a>
 ### TestCase Name
-System_Check_RFCList_with_Empty_Value
+System_RFCList_with_Empty_Value
 
 ### TestCase ID
 SYS_38
@@ -907,9 +907,9 @@ Check RFC configurations list with empty value
 
 ---
 
-<a id="system_check_device_type"></a>
+<a id="system_device_type"></a>
 ### TestCase Name
-System_Check_Device_Type
+System_Device_Type
 
 ### TestCase ID
 SYS_39
@@ -925,9 +925,9 @@ Check the device type of the DUT with getPlatformConfiguration API
 
 ---
 
-<a id="system_check_device_ssh_state_after_reboot_on_standby_state"></a>
+<a id="system_device_ssh_state_after_reboot_on_standby_state"></a>
 ### TestCase Name
-System_Check_Device_SSH_State_After_Reboot_On_Standby_State
+System_Device_SSH_State_After_Reboot_On_Standby_State
 
 ### TestCase ID
 SYS_40
@@ -1049,9 +1049,9 @@ Check whether able to set and get territory and region
 
 ---
 
-<a id="system_verify_set_territory_without_params"></a>
+<a id="system_set_territory_without_params"></a>
 ### TestCase Name
-System_Verify_Set_Territory_without_Params
+System_Set_Territory_without_Params
 
 ### TestCase ID
 SYS_46
