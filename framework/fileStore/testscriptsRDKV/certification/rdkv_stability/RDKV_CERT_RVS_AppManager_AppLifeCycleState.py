@@ -31,7 +31,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_Check_AppLifeCycleState');
+obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_AppLifeCycleState');
 
 #The device will reboot before starting the stability testing if "pre_req_reboot" is
 #configured as "Yes".
