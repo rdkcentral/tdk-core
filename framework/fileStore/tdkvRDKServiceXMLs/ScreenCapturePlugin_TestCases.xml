@@ -45,7 +45,7 @@
 
         </pluginPreRequisite>
 
-        <testCase testCaseId="SC_01" testCaseName="ScreenCapture_Check_Upload_Screen_Invalid_Url" desc="Check screen upload with invalid url">
+        <testCase testCaseId="SC_01" testCaseName="ScreenCapture_Upload_Screen_Invalid_Url" desc="Check screen upload with invalid url">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
                   <param tag="url" useConfigFile="true" key="SC_INVALID_UPLOAD_URL"/>
@@ -54,7 +54,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="SC_02" testCaseName="ScreenCapture_Upload_Screen" desc="Uploads the screenshott">
+        <testCase testCaseId="SC_02" testCaseName="ScreenCapture_Upload_Screen" desc="Uploads the screenshot">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
                   <param tag="url" configBasedResultId="true" key="SC_UPLOAD_URL"/>
@@ -63,7 +63,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="SC_03" testCaseName="ScreenCapture_Check_Upload_Complete_Event" desc="Upload screen and receive uploadComplete Event">
+        <testCase testCaseId="SC_03" testCaseName="ScreenCapture_Upload_Complete_Event" desc="Upload screen and receive uploadComplete Event">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
                   <param tag="url" configBasedResultId="true" key="SC_UPLOAD_URL"/>
@@ -75,7 +75,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="SC_04" testCaseName="ScreenCapture_Check_Upload_Complete_Event_Invalid_Url" desc="Uploads screen and checks if uploadComplete Event is received for invalid url">
+        <testCase testCaseId="SC_04" testCaseName="ScreenCapture_Upload_Complete_Event_Invalid_Url" desc="Uploads screen and checks if uploadComplete Event is received for invalid url">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
                   <param tag="url" useConfigFile="true" key="SC_INVALID_UPLOAD_URL"/>
@@ -87,7 +87,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="SC_05" testCaseName="ScreenCapture_Check_CallGUID" desc="Upload screen and check GUID in  uploadComplete Event">
+        <testCase testCaseId="SC_05" testCaseName="ScreenCapture_CallGUID" desc="Upload screen and check GUID in  uploadComplete Event">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
                   <param tag="url" configBasedResultId="true" key="SC_UPLOAD_URL"/>

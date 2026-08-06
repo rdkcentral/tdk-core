@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <module>
+        <!-- Module Id -->
+        <moduleId>80466bd8-8787-4f77-9e3f-b1e97852a2a5</moduleId>
+        <!-- Module name -->
+        <moduleName>IPV6</moduleName>
+        <!-- Category of the module -->
+        <category>RDKB</category>
+        <!-- Execution time out of module -->
+        <executionTimeOut>10</executionTimeOut>
+        <!-- Test Group of the module -->
+        <testGroup>Component</testGroup>
+        <!-- Logs File Names of module -->
+        <logFileNames>[/rdklogs/logs]</logFileNames>
+        <!-- Crash File Names of the module  -->
+        <crashFileNames>[/rdklogs/logs]</crashFileNames>
+        <!-- Total functions corresponding modules -->
+        <functions>
+            <function id="68c82e9e-6566-4e1c-b563-a74537dc1a99" name="IPV6_DoNothing">
+                <parameters/>
+            </function>
+        </functions>
+        <!-- Primitive tests associated with this module -->
+        <primitivetests>
+            <primitivetest>
+                <id>a6f01799-2147-42c4-bdf0-58b794b9c563</id>
+                <name>IPV6_DoNothing</name>
+                <funName>IPV6_DoNothing</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+        </primitivetests>
+    </module>
+</xml>

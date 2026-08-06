@@ -628,7 +628,7 @@
 
     <!-- DeviceDiagnostics Plugin Information -->
     <plugin pluginName="DeviceDiagnostics" serviceName="org.rdk.DeviceDiagnostics" serviceVersion="1">
-        <method name="Get_Configuration" api="getConfiguration" type="method" desc="RDK API interface for the WebPA service" >
+        <method name="Get_Configuration" api="getConfiguration" type="method" desc="Gets the values associated with the corresponding property names" >
             <params>
                 <param tag="names" defaultValue="null" type="list" />
             </params>
@@ -3544,8 +3544,8 @@
         </method>
     </plugin>
 
-    <!-- PackageManager Plugin Information -->
-    <plugin pluginName="PackageManager" serviceName="org.rdk.PackageManagerRDKEMS" serviceVersion="1">
+    <!-- AppPackageManager Plugin Information -->
+    <plugin pluginName="AppPackageManager" serviceName="org.rdk.AppPackageManager" serviceVersion="1">
         <!-- Method Definitions -->
         <method name="List_Package_Info" api="listPackages" type="method" desc="Retrieves information about packages"/>
         <method name="Install_Package" api="install" type="method" desc="Installs a package">

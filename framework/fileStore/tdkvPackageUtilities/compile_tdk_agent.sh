@@ -29,11 +29,9 @@ SRC_META_RDK_VIDEO="https://github.com/rdkcentral/meta-rdk-video.git"
 
 #Git repositories
 SRC_CURL="https://curl.se/download/curl-7.82.0.tar.xz"
-SRC_JSONRPC="https://github.com/cinemast/libjson-rpc-cpp.git"
 SRC_JSONCPP="https://github.com/open-source-parsers/jsoncpp/archive/refs/tags/1.8.4.tar.gz"
 SRC_TINYXML2="https://github.com/leethomason/tinyxml2.git"
 SRC_TDK="https://github.com/rdkcentral/tdk-video.git"
-SRC_ZLIB="https://sourceforge.net/projects/libpng/files/zlib/1.2.11/zlib-1.2.11.tar.xz"
 SRC_ASSIMP="https://github.com/assimp/assimp.git"
 
 #HAL source
@@ -69,6 +67,7 @@ SRC_WDMP_C="https://github.com/xmidt-org/wdmp-c.git"
 SRC_RFCAPI="https://github.com/rdkcentral/rfc.git"
 SRC_VULKAN_HEADER="https://github.com/KhronosGroup/Vulkan-Headers.git"
 SRC_VULKAN_TOOLS="https://github.com/KhronosGroup/Vulkan-Tools.git"
+SRC_OSS_REFERENCE="https://github.com/rdkcentral/meta-rdk-oss-reference.git"
 
 #Platformwise repositories
 SRC_RPI4="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
@@ -77,12 +76,10 @@ SRC_RPI4="https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk"
 DIR_MHD="libmicrohttpd-0.9.70"
 DIR_HIREDIS="hiredis-0.14.0"
 DIR_ARGTABLE="argtable2-2.13"
-DIR_JSONRPC="libjson-rpc-cpp"
 DIR_CURL="curl-7.82.0"
 DIR_JSONCPP="jsoncpp-1.8.4"
 DIR_TINYXML2="tinyxml2"
 DIR_XKBCOMMON="libxkbcommon-0.5.0"
-DIR_ZLIB="zlib-1.2.11"
 DIR_TDK="tdk-video"
 
 ROOT_DIR=$PWD
@@ -179,7 +176,7 @@ fi
 download_source_code()
 {
     echo -e "Download the source code of all dependent packages\n" 2>&1 | tee -a $LOG_FILE
-    packages="CURL JSONCPP JSONRPC TINYXML2 XKBCOMMON ZLIB"    
+    packages="CURL JSONCPP TINYXML2 XKBCOMMON"
     for package in $packages; do
         DIR=DIR_$package
 	SRC_URL=SRC_$package
@@ -231,7 +228,7 @@ install_sdk()
     SYSROOT=$SDK_INSTALL_PATH/sysroots/$SYSROOT_PATH
 
     echo "SDK_INSTALL_PATH : $SDK_INSTALL_PATH"
-    source $SDK_INSTALL_PATH/environment-setup-armv7vet2hf-neon-oe-linux-gnueabi
+    source $SDK_INSTALL_PATH/environment-setup-armv7vet2hf-neon-rdk-linux-gnueabi
     echo -e "\e[1;42m SOURCE SDK : SUCCESS \e[0m \n" 2>&1 | tee -a $LOG_FILE
     export includedir="/usr/include/"
 	
@@ -371,28 +368,6 @@ get_component_versions()
 
     echo "Deleting meta-middleware-generic-support as versions are obtained"
     cd ../;rm -rf meta-middleware-generic-support
-}
-
-# Function: compile_ZLIB
-# Description: Compiles ZLIB if it is not already compiled and copies to sysroot of toolchain.
-# Parameters: None
-# Return: None
-compile_ZLIB()
-{
-    echo -e "Entering $DIR_ZLIB\n" 2>&1 | tee -a $LOG_FILE
-    cd $DIR_ZLIB
-
-    compile_status="$(find $SYSROOT -iname libz.so)"
-    if [ ! -z "${compile_status}" ]; then
-        echo -e "ZLIB is already compiled and library is present in the current directory\n" 2>&1 | tee -a $LOG_FILE
-        echo -e "\e[1;42m COMPILE ZLIB : SKIPPED \e[0m \n" 2>&1 | tee -a $LOG_FILE
-    else
-        echo -e "Compiling ZLIB \n"
-	./configure >> $LOG_FILE 2>&1
-	make >> $LOG_FILE 2>&1
-	sudo cp libz.* $SYSROOT/usr/lib
-    fi
-    cd $ROOT_DIR
 }
 
 # Function: compile_XKBCOMMON
@@ -585,12 +560,11 @@ install_packages()
     if [ -z "${wayland_protocols_pkgconfig}" ]; then
         echo -e "Copying wayland protocols\n" 2>&1 | tee -a $LOG_FILE
         cd $SDKTARGETSYSROOT
-        cp -u $wayland_protocols_package $SDKTARGETSYSROOT/usr/share/
+        cp -u $wayland_protocols_package $SDKTARGETSYSROOT
         wayland_protocols_package_name=$(basename "$wayland_protocols_package")
-	cd usr/share
         tar -xf $wayland_protocols_package_name
         find $SDKTARGETSYSROOT -iname wayland-protocols.pc
-        rm $SDKTARGETSYSROOT/usr/share/$wayland_protocols_package_name
+        rm $SDKTARGETSYSROOT/$wayland_protocols_package_name
     fi
     glm_package="$(find $ROOT_DIR -iname glm.tgz)"
     glm_pkgconfig="$(find $SDKTARGETSYSROOT -iname glm.pc)"
@@ -614,7 +588,7 @@ install_packages()
         tar -xf $vulkan_loader_package_name
         rm $SDKTARGETSYSROOT/$vulkan_loader_package_name
     fi
-    pcreposix_package="$(find $ROOT_DIR -iname additional_libs.tgz)"
+    pcreposix_package="$(find $ROOT_DIR -iname additionial_libs.tgz)"
     pcreposix_lib="$(find $SDKTARGETSYSROOT -iname libpcrecpp.so)"
     if [ ! -z "${pcreposix_package}" ] && [ -z "${pcreposix_lib}" ]; then
 	echo -e "Copying additional_libs \n" 2>&1 | tee -a $LOG_FILE
@@ -622,11 +596,11 @@ install_packages()
 	cp $pcreposix_package $SDKTARGETSYSROOT
 	pcreposix_package_name=$(basename "$pcreposix_package")
 	tar -xf $pcreposix_package_name
-	cd $SDKTARGETSYSROOT/additional_libs/usr/lib
+	cd $SDKTARGETSYSROOT/additionial_libs/usr/lib
 	cp * $SDKTARGETSYSROOT/usr/lib/
-	cd $SDKTARGETSYSROOT/additional_libs/lib
+	cd $SDKTARGETSYSROOT/additionial_libs/lib
 	cp * $SDKTARGETSYSROOT/lib
-	rm -rf $SDKTARGETSYSROOT/additional_libs
+	rm -rf $SDKTARGETSYSROOT/additionial_libs
 	rm $SDKTARGETSYSROOT/$pcreposix_package_name
     fi
     cd $ROOT_DIR
@@ -682,82 +656,6 @@ compile_assimp()
 	DESTDIR=${SYSROOT} make install >> $LOG_FILE 2>&1
 	cd ${ROOT_DIR}
     fi
-}
-
-# Function: compile_JSONRPC
-# Description: Compiles JSON-RPC library and installs it in sysroot.
-# Parameters: None
-# Return: None
-compile_JSONRPC()
-{
-    echo -e "Entering $DIR_JSONRPC\n" 2>&1 | tee -a $LOG_FILE
-    cd $DIR_JSONRPC
-    git checkout c696f6932113b81cd20cd4a34fdb1808e773f23e >> $LOG_FILE 2>&1
-    server="$(find .  -iname libjsonrpccpp-server.so.1.3.0)"
-    client="$(find . -iname libjsonrpccpp-client.so.1.3.0)"
-    common="$(find . -iname libjsonrpccpp-common.so.1.3.0)"
-    if [ ! -z "${server}" ] && [ ! -z "${client}" ] && [ ! -z "${common}" ]; then
-	echo -e "JSONRPC is already compiled and library is present in the current directory\n" 2>&1 | tee -a $LOG_FILE
-	echo -e "\e[1;42m COMPILE JSONRPC : SKIPPED \e[0m \n" 2>&1 | tee -a $LOG_FILE
-    else
-	#clone a patch for tdk related changes
-	if [ ! -d ../meta-rdk-ext ];then
-            git clone https://code.rdkcentral.com/r/rdk/components/generic/rdk-oe/meta-rdk-ext ../meta-rdk-ext >> $LOG_FILE 2>&1
-	fi
-	if git apply --check ../meta-rdk-ext/recipes-devtools/jsonrpc/jsonrpc/0001-jsonrpc-v1.3.0-ipv6.patch; then
-	    git apply --reject --whitespace=fix  ../meta-rdk-ext/recipes-devtools/jsonrpc/jsonrpc/0001-jsonrpc-v1.3.0-ipv6.patch  >> $LOG_FILE 2>&1
-	fi
-	rm -rf ../meta-rdk-ext
-	#Enable TCP SOCKET SERVE and CLIENT. Also disabling the unit testing of the libraries
-	sed -i  's/.*set(TCP_SOCKET_SERVER.*/set(TCP_SOCKET_SERVER YES CACHE BOOL "Include Tcp Socket server")/' CMakeLists.txt
-        sed -i  's/.*set(TCP_SOCKET_CLIENT.*/set(TCP_SOCKET_CLIENT YES CACHE BOOL "Include Tcp Socket client")/' CMakeLists.txt
-        sed -i  's/.*set(COMPILE_STUBGEN.*/set(COMPILE_STUBGEN NO CACHE BOOL "Compile the stubgenerator")/' CMakeLists.txt
-        sed -i  's/.*set(COMPILE_EXAMPLES.*/set(COMPILE_EXAMPLES NO CACHE BOOL "Compile example programs")/' CMakeLists.txt
-        sed -i  's/.*set(COMPILE_TESTS.*/set(COMPILE_TESTS NO CACHE BOOL "Compile test framework")/' CMakeLists.txt
-	mkdir -p build
-	cd build
-	cmake -DHTTP_SERVER=NO -DREDIS_SERVER=NO -DREDIS_CLIENT=NO .. >> $LOG_FILE 2>&1 && make >> $LOG_FILE 2>&1
-	cd ../
-	echo -e "\n\n" >> $LOG_FILE 2>&1
-	echo "Check for the JSONRPC shared libraries" 2>&1 | tee -a $LOG_FILE
-	server="$(find ./ -iname libjsonrpccpp-server.so.1.3.0)"
-	client="$(find ./ -iname libjsonrpccpp-client.so.1.3.0)"
-	common="$(find ./ -iname libjsonrpccpp-common.so.1.3.0)"
-	if [ ! -z "${server}" ] && [ ! -z "${client}" ] && [ ! -z "${common}" ]; then
-	    echo -e "\e[1;42m COMPILE JSONRPC : SUCCESS \e[0m \n" 2>&1 | tee -a $LOG_FILE
-	else
-	    echo -e "\e[1;41m COMPILE JSONRPC : FAILURE \e[0m \n" 2>&1 | tee -a $LOG_FILE
-	    exit
-	fi
-    fi
-    #Copy the shared library and header files to sysroot folder
-    if [ ! -f "$SYSROOT/usr/lib/libjsonrpccpp-server.so.1.3.0" ]; then
-	echo -e "Deleting any other libs for JSONCPP"
-        find $SYSROOT/usr/lib  -iname "libjsonrpccpp*" | while read -r file; do
-             echo "Deleting $file"
-             rm "$file"
-        done
-	echo -e "Copying libs and header for JSONRPC to sysroot folder" 2>&1 | tee -a $LOG_FILE
-        cp build/lib/libjsonrpccpp-*.so.1.3.0 $SYSROOT/usr/lib
-        cp -r src/jsonrpccpp $SYSROOT/usr/include/
-        ln -s $SYSROOT/usr/lib/libjsonrpccpp-server.so.1.3.0 $SYSROOT/usr/lib/libjsonrpccpp-server.so
-        ln -s $SYSROOT/usr/lib/libjsonrpccpp-client.so.1.3.0 $SYSROOT/usr/lib/libjsonrpccpp-client.so
-        ln -s $SYSROOT/usr/lib/libjsonrpccpp-common.so.1.3.0 $SYSROOT/usr/lib/libjsonrpccpp-common.so
-    fi
-    if [ ! -f "$SYSROOT/usr/include/jsonrpccpp" ]; then
-	mkdir -p $SYSROOT/usr/include/jsonrpccpp/server/connectors
-	mkdir -p $SYSROOT/usr/include/jsonrpccpp/client/connectors
-	mkdir -p $SYSROOT/usr/include/jsonrpccpp/common
-	cp build/gen/jsonrpccpp/common/jsonparser.h $SYSROOT/usr/include/ 
-	cp build/gen/jsonrpccpp/common/jsonparser.h $SYSROOT/usr/include/jsonrpccpp/common/
-	cp src/jsonrpccpp/common/*.h $SYSROOT/usr/include/jsonrpccpp/common
-        cp src/jsonrpccpp/*.h $SYSROOT/usr/include/jsonrpccpp/
-        cp src/jsonrpccpp/server/*.h $SYSROOT/usr/include/jsonrpccpp/server
-        cp src/jsonrpccpp/server/connectors/*.h $SYSROOT/usr/include/jsonrpccpp/server/connectors/
-        cp src/jsonrpccpp/client/*.h $SYSROOT/usr/include/jsonrpccpp/client
-        cp src/jsonrpccpp/client/connectors/*.h $SYSROOT/usr/include/jsonrpccpp/client/connectors/
-    fi
-    cd ../
 }
 
 # Function: clone_tdk
@@ -1308,6 +1206,16 @@ compile_vkmark()
     echo "Compiling vkmark for $PLATFORM platform"
 
     ############################################
+    # Directories used to collect vkmark patches.
+    # Patches from meta-rdk-oss-reference are applied
+    # first, followed by the platform SOC OSS patches.
+    ############################################
+    VKMARK_REF_PATCHES_DIR="$ROOT_DIR/vkmark_patches_ref"
+    VKMARK_PLATFORM_PATCHES_DIR="$ROOT_DIR/vkmark_patches_platform"
+    rm -rf "$VKMARK_REF_PATCHES_DIR" "$VKMARK_PLATFORM_PATCHES_DIR"
+    mkdir -p "$VKMARK_REF_PATCHES_DIR" "$VKMARK_PLATFORM_PATCHES_DIR"
+
+    ############################################
     # Platform Vendor Manifest
     ############################################
 
@@ -1322,13 +1230,13 @@ compile_vkmark()
             VENDOR_MANIFEST_REPO=$REALTEK_VENDOR_MANIFEST_REPO
             VENDOR_VERSION="$REALTEK_VENDOR_VERSION"
 	    SOC_OSS_REPO="meta-rdk-soc-realtek"
-	    MAX_SOC_OSS_VERSION="2.4.4"
+	    MAX_SOC_OSS_VERSION="2.5.0"
             ;;
 	BROADCOM)
 	    VENDOR_MANIFEST_REPO=$BROADCOM_VENDOR_MANIFEST_REPO
             VENDOR_VERSION="$BROADCOM_VENDOR_VERSION"
             SOC_OSS_REPO="meta-vendor-rdke-broadcom-oss"
-	    MAX_SOC_OSS_VERSION="3.3.2"
+	    MAX_SOC_OSS_VERSION="3.3.6"
             ;;
         *)
             echo "Unsupported platform: $PLATFORM"
@@ -1390,31 +1298,64 @@ compile_vkmark()
     git checkout "$OSS_VENDOR_REPO_TAG" >> "$LOG_FILE" 2>&1
 
     ############################################
-    # Locate vkmark Recipe
+    # Locate platform-specific vkmark patches
+    # (e.g. meta-rdk-soc-realtek may ship its own
+    #  vkmark directory with additional patches)
     ############################################
 
+    vkmark_platform_recipe=$(find . -iname vkmark*.bbappend | head -n1)
+    if [[ -n "$vkmark_platform_recipe" ]]; then
+        plat_bbdir=$(dirname "$vkmark_platform_recipe")
+        plat_patch_file=$(find "$plat_bbdir" -iname "*.patch" | head -n1)
+        if [[ -n "$plat_patch_file" ]]; then
+            plat_patches_dir=$(dirname "$plat_patch_file")
+            cp "$plat_patches_dir"/*.patch "$VKMARK_PLATFORM_PATCHES_DIR"/ 2>/dev/null
+            echo "Collected platform-specific vkmark patches from $OSS_VENDOR_REPO_NAME"
+        fi
+    else
+        echo "No vkmark recipe/patches present in $OSS_VENDOR_REPO_NAME"
+    fi
+
+    cd "$ROOT_DIR"
+    rm -rf "$OSS_VENDOR_REPO_NAME"
+
+    ############################################
+    # Fetch vkmark recipe + patches from
+    # meta-rdk-oss-reference (primary source)
+    ############################################
+
+    OSS_REFERENCE_REPO_NAME="${SRC_OSS_REFERENCE##*/}"
+    OSS_REFERENCE_REPO_NAME="${OSS_REFERENCE_REPO_NAME%.git}"
+    rm -rf "$OSS_REFERENCE_REPO_NAME"
+    echo -e "Cloning $SRC_OSS_REFERENCE for vkmark recipe (version $OSS_VERSION)"
+    git clone "$SRC_OSS_REFERENCE" >> "$LOG_FILE" 2>&1
+    cd "$OSS_REFERENCE_REPO_NAME" || return 1
+
+    if [[ "$OSS_VERSION" != "default" && -n "$OSS_VERSION" ]]; then
+        git checkout "$OSS_VERSION" >> "$LOG_FILE" 2>&1
+    fi
+
     vkmark_recipe_path=$(find . -iname vkmark_git.bb | head -n1)
+    if [[ -z "$vkmark_recipe_path" ]]; then
+        echo -e "\e[1;41m vkmark recipe not found in $OSS_REFERENCE_REPO_NAME - $OSS_VERSION \e[0m" | tee -a "$LOG_FILE"
+        cd "$ROOT_DIR"
+        rm -rf "$OSS_REFERENCE_REPO_NAME" "$VKMARK_REF_PATCHES_DIR" "$VKMARK_PLATFORM_PATCHES_DIR"
+        return 1
+    fi
     echo "vkmark recipe: $vkmark_recipe_path"
 
     parse_vkmark_bb "$vkmark_recipe_path"
 
-    bbdir=$(dirname "$vkmark_recipe_path")
-    cd "$bbdir" || return 1
-
-    ############################################
-    # Locate Patches
-    ############################################
-
-    patch_file=$(find . -iname "*.patch" | head -n1)
-
-    if [[ -n "$patch_file" ]]; then
-        vkmark_patches_dir=$(dirname "$patch_file")
-	cd $vkmark_patches_dir
-	vkmark_patches_dir=$(pwd)
-        echo "vkmark patches dir: $vkmark_patches_dir"
+    ref_bbdir=$(dirname "$vkmark_recipe_path")
+    ref_patch_file=$(find "$ref_bbdir" -iname "*.patch" | head -n1)
+    if [[ -n "$ref_patch_file" ]]; then
+        ref_patches_dir=$(dirname "$ref_patch_file")
+        cp "$ref_patches_dir"/*.patch "$VKMARK_REF_PATCHES_DIR"/ 2>/dev/null
+        echo "Collected vkmark patches from $OSS_REFERENCE_REPO_NAME"
     fi
 
     cd "$ROOT_DIR"
+    rm -rf "$OSS_REFERENCE_REPO_NAME"
 
     ############################################
     # Clone Upstream vkmark
@@ -1425,28 +1366,30 @@ compile_vkmark()
     git checkout "$SRCREV_VKMARK" >> "$LOG_FILE" 2>&1
 
     ############################################
-    # Apply Patches (if any)
+    # Apply Patches
+    # Order: meta-rdk-oss-reference patches first,
+    #        then platform SOC OSS patches
     ############################################
 
-    if [[ ! -z "$vkmark_patches_dir" ]]; then
-        cp $vkmark_patches_dir/*.patch . 2>/dev/null
-        rm -rf "$ROOT_DIR/$OSS_VENDOR_REPO_NAME"
-
-	# Collect any patch files; avoid iterating on a literal "*.patch" when none exist
+    apply_patches_from_dir() {
+        local patch_dir="$1"
+        local source_label="$2"
         shopt -s nullglob
-        patches=( *.patch )
+        local patch_list=( "$patch_dir"/*.patch )
         shopt -u nullglob
-        if [ ${#patches[@]} -gt 0 ]; then
-            for p in "${patches[@]}"; do
-                echo "Applying $p"
+        if [ ${#patch_list[@]} -gt 0 ]; then
+            for p in "${patch_list[@]}"; do
+                echo "Applying $(basename "$p") from $source_label"
                 patch -p1 < "$p" >> "$LOG_FILE" 2>&1
             done
-            echo "vkmark source code patched"
         fi
-        vkmark_sourceCode_set="TRUE"
-    else
-        vkmark_sourceCode_set="TRUE"
-    fi
+    }
+
+    apply_patches_from_dir "$VKMARK_REF_PATCHES_DIR" "$OSS_REFERENCE_REPO_NAME"
+    apply_patches_from_dir "$VKMARK_PLATFORM_PATCHES_DIR" "$OSS_VENDOR_REPO_NAME"
+    echo "vkmark source code patched"
+    rm -rf "$VKMARK_REF_PATCHES_DIR" "$VKMARK_PLATFORM_PATCHES_DIR"
+    vkmark_sourceCode_set="TRUE"
 
     ############################################
     # Copy Vulkan headers into sysroot
@@ -1507,6 +1450,121 @@ compile_vkmark()
 }
 
 ############################################
+# Apply Realtek vulkan-headers patches
+# Fetches vulkan-headers patches from the Realtek
+# OSS vendor layer (meta-vendor-rdke-realtek-oss)
+# and applies them to the vulkan-headers source.
+# Must be called from within the vulkan_source dir.
+# Only runs for the REALTEK platform.
+############################################
+############################################
+# Apply Realtek OSS patches for a given recipe
+# Fetches patches for the requested recipe (e.g.
+# vulkan-headers, vulkan-tools) from the Realtek
+# OSS vendor layer (meta-vendor-rdke-realtek-oss)
+# and applies them to the source in the current dir.
+# $1 - recipe base name (e.g. vulkan-headers, vulkan-tools)
+# Must be called from within the target source dir.
+# Only runs for the REALTEK platform.
+############################################
+apply_realtek_oss_patches() {
+    [[ "$PLATFORM" != "REALTEK" ]] && return 0
+
+    local recipe_base="$1"
+    local target_source_dir="$PWD"
+    local patches_dir="$ROOT_DIR/${recipe_base}_patches_realtek"
+    rm -rf "$patches_dir"
+    mkdir -p "$patches_dir"
+
+    cd "$ROOT_DIR"
+
+    ############################################
+    # Resolve OSS layer version from realtek
+    # manifest via meta-vendor-rdke-realtek-oss
+    # (e.g. 2.3.0)
+    ############################################
+    local manifest_repo_name="${REALTEK_VENDOR_MANIFEST_REPO##*/}"
+    rm -rf "$manifest_repo_name"
+    git clone ${REALTEK_VENDOR_MANIFEST_REPO}.git >> "$LOG_FILE" 2>&1
+    cd "$manifest_repo_name" || { cd "$target_source_dir"; return 0; }
+    if [[ "$REALTEK_VENDOR_VERSION" != "default" && -n "$REALTEK_VENDOR_VERSION" ]]; then
+        git checkout "$REALTEK_VENDOR_VERSION" >> "$LOG_FILE" 2>&1
+    fi
+
+    local oss_layer_name="${REALTEK_VULKAN_HEADERS_OSS_REPO##*/}"
+    local soc_line result tmp oss_layer_tag
+    soc_line=$(grep -r --exclude-dir=.git --include="*.xml" "$oss_layer_name" .)
+    result=$(parse_project_line "$soc_line")
+    tmp="${result#*|}"
+    oss_layer_tag="${tmp%%|*}"
+
+    cd "$ROOT_DIR"
+    rm -rf "$manifest_repo_name"
+
+    if [[ -z "$oss_layer_tag" ]]; then
+        echo "Could not resolve OSS layer version for $recipe_base patches, skipping"
+        cd "$target_source_dir"
+        rm -rf "$patches_dir"
+        return 0
+    fi
+
+    ############################################
+    # Clone OSS vendor layer and collect patches
+    ############################################
+    echo "Cloning $oss_layer_name - $oss_layer_tag for $recipe_base patches"
+    rm -rf "$oss_layer_name"
+    git clone ${REALTEK_VULKAN_HEADERS_OSS_REPO}.git >> "$LOG_FILE" 2>&1
+    cd "$oss_layer_name" || { cd "$target_source_dir"; rm -rf "$patches_dir"; return 0; }
+    git checkout "$oss_layer_tag" >> "$LOG_FILE" 2>&1
+
+    local recipe_file recipe_bbdir found_base patch_dir
+    recipe_file=$(find . -iname "${recipe_base}*.bb" | head -n1)
+    if [[ -n "$recipe_file" ]]; then
+        recipe_bbdir=$(dirname "$recipe_file")
+        # Recipe base name without version/extension, e.g. vulkan-headers_1.4.303.bb -> vulkan-headers
+        found_base=$(basename "$recipe_file")
+        found_base="${found_base%.bb}"
+        found_base="${found_base%%_*}"
+        # Patches are stored in a subfolder named after the recipe (Yocto FILESEXTRAPATHS layout)
+        if [[ -d "$recipe_bbdir/$found_base" ]]; then
+            patch_dir="$recipe_bbdir/$found_base"
+        else
+            patch_dir="$recipe_bbdir"
+        fi
+        shopt -s nullglob
+        local collected=( "$patch_dir"/*.patch )
+        shopt -u nullglob
+        if [ ${#collected[@]} -gt 0 ]; then
+            cp "${collected[@]}" "$patches_dir"/ 2>/dev/null
+            echo "Collected $recipe_base patches from $oss_layer_name ($patch_dir)"
+        else
+            echo "No $recipe_base patches found in $oss_layer_name"
+        fi
+    else
+        echo "No $recipe_base recipe found in $oss_layer_name"
+    fi
+
+    cd "$ROOT_DIR"
+    rm -rf "$oss_layer_name"
+
+    ############################################
+    # Apply patches to the target source
+    ############################################
+    cd "$target_source_dir"
+    shopt -s nullglob
+    local patch_list=( "$patches_dir"/*.patch )
+    shopt -u nullglob
+    if [ ${#patch_list[@]} -gt 0 ]; then
+        for p in "${patch_list[@]}"; do
+            echo "Applying $recipe_base patch $(basename "$p")"
+            patch -p1 < "$p" >> "$LOG_FILE" 2>&1
+        done
+        echo "$recipe_base source patched"
+    fi
+    rm -rf "$patches_dir"
+}
+
+############################################
 # Copy Vulkan headers into sysroot
 ############################################
 install_vulkan_headers() {
@@ -1515,8 +1573,15 @@ install_vulkan_headers() {
     VAR_VULKAN_VERSION=${PLATFORM}_VULKAN_VERSION
     VULKAN_VERSION="${!VAR_VULKAN_VERSION}"
     VULKAN_VOLK_REQUIRED="false"
+    echo "INSTALLING VULKAN HEADERS"
     echo "VULKAN HEADER VERSION OBTAINED as $VULKAN_VERSION"
     case "$VULKAN_VERSION" in
+	"1.4.303")
+	      vulkan_header_srcrev="6a74a7d65cafa19e38ec116651436cce6efd5b2e"
+	      ;;
+	"1.4.341")
+	      vulkan_header_srcrev="b5c8f996196ba4aa6d8f97e52b5d3b6e70f7e4e2"
+	      ;;
         "1.3.247")
               vulkan_header_srcrev="95a13d7b7118d3824f0ef236bb0438d9d51f3634"
               ;;
@@ -1533,6 +1598,7 @@ install_vulkan_headers() {
               ;;
     esac
     git checkout $vulkan_header_srcrev >> "$LOG_FILE" 2>&1
+    apply_realtek_oss_patches "vulkan-headers"
     cp -r include/vulkan $SDKTARGETSYSROOT/usr/include/
     cp -r include/vk_video $SDKTARGETSYSROOT/usr/include/
     mkdir -p $SDKTARGETSYSROOT/usr/share/vulkan/registry
@@ -1569,6 +1635,12 @@ clone_vulkan_tools() {
     VULKAN_TOOLS_DIR=$(pwd)
     echo "VULKAN TOOLS VERSION OBTAINED as $VULKAN_VERSION"
     case "$VULKAN_VERSION" in
+	"1.4.303")
+              vulkan_tools_srcrev="4f965e1de79ba354fff816f1108cc25066847be0"
+              ;;
+        "1.4.341")
+              vulkan_tools_srcrev="48a4bcbdf619e57204783f8c1a04c76c160ddd5b"
+              ;;
         "1.3.247")
               vulkan_tools_srcrev="8bb9edd13f5027b6676f5229cb4a1822050b1f36"
               ;;
@@ -1584,6 +1656,7 @@ clone_vulkan_tools() {
               ;;
     esac
     git checkout $vulkan_tools_srcrev >> "$LOG_FILE" 2>&1
+    apply_realtek_oss_patches "vulkan-tools"
     CUBE_FILE="$VULKAN_TOOLS_DIR/cube/cube.c"
 }
 
@@ -2225,9 +2298,9 @@ pack_tdkv()
 	rm -rf ../TDK_Package/var/TDK/
 	cp MediaPipelineTests_stub/tdk_mediapipelinetests ../TDK_Package/usr/bin/
 	cp MediaPipelineTests_stub/tdk_mediapipelinetests_trickplay ../TDK_Package/usr/bin/
-	cp FireboltCompliance_Validation/graphics_validation/Essos_TDKTestApp ../TDK_Package/usr/bin
-        cp FireboltCompliance_Validation/graphics_validation/.libs/Westeros_TDKTestApp ../TDK_Package/usr/bin
-	cp FireboltCompliance_Validation/scripts/RunGraphicsTDKTest.sh ../TDK_Package/opt/TDK
+	cp Graphics_TestApplications/Essos_TDKTestApp ../TDK_Package/usr/bin
+        cp Graphics_TestApplications/.libs/Westeros_TDKTestApp ../TDK_Package/usr/bin
+	cp scripts/RunGraphicsTDKTest.sh ../TDK_Package/opt/TDK
 	cp Graphics_TestApplications/tiles_benchmark ../TDK_Package/usr/bin
         cp Graphics_TestApplications/motion_benchmark ../TDK_Package/usr/bin
         cp Graphics_TestApplications/vkmultithread ../TDK_Package/usr/bin
@@ -2422,11 +2495,7 @@ if [ $SKIP_PACKAGES != "TRUE" ];then
     sleep_bar
     setup_CURL
     sleep_bar
-    compile_JSONRPC
-    sleep_bar
     compile_TINYXML2
-    sleep_bar
-    compile_ZLIB
     sleep_bar
     update_m4
     compile_XKBCOMMON
