@@ -4708,8 +4708,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        # PackageManager Response result parser steps
-        elif tag == "packagemanager_list_packages_validation":
+        # AppPackageManager Response result parser steps
+        elif tag == "app_packagemanager_list_packages_validation":
             try:
                 if len(result) >= 1:
                     info["result"] = result
@@ -4718,7 +4718,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_list_packages":
+        elif tag == "app_packagemanager_list_packages":
             try:
                 appStatus = "FALSE"
                 info["result"] = result
@@ -4739,7 +4739,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["appStatus"] = "FALSE"
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_null_result_validation":
+        elif tag == "app_packagemanager_null_result_validation":
             try:
                 if otherInfo and "error" in otherInfo:
                     info["error_info"] = otherInfo["error"]
@@ -4754,7 +4754,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_check_install_package":
+        elif tag == "app_packagemanager_check_install_package":
             try:
                 info["result"] = result
                 for item in result:
@@ -4771,7 +4771,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_check_uninstall_package":
+        elif tag == "app_packagemanager_check_uninstall_package":
             try:
                 info["result"] = result
                 for item in result:
@@ -4788,7 +4788,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_negative_scenario_validation":
+        elif tag == "app_packagemanager_negative_scenario_validation":
             try:
                 info["otherInfo"] = otherInfo
                 message = otherInfo.get("error").get("message")
@@ -4800,7 +4800,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_check_package_state":
+        elif tag == "app_packagemanager_check_package_state":
             try:
                 info["result"] = result
                 if str(result).strip().lower() in str(expectedValues[0]).strip().lower():
@@ -4811,7 +4811,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_non_empty_result_check":
+        elif tag == "app_packagemanager_non_empty_result_check":
             try:
                 info["result"] = result
                 status = has_empty_values(result)
@@ -4980,6 +4980,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             except Exception as e:
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
@@ -5501,8 +5502,8 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
             else:
                 result = "FALSE"
 
-        # PackageManager Plugin Response result parser steps
-        elif tag == "packagemanager_check_app_status":
+        # AppPackageManager Plugin Response result parser steps
+        elif tag == "app_packagemanager_check_app_status":
             testStepResults = list(testStepResults[0].values())[0]
             appStatus = testStepResults[0].get("appStatus")
             if len(arg) and arg[0] == "launch_app":

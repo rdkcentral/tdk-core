@@ -85,7 +85,7 @@
     </testCase>
 
     <!-- Test case 04 -->
-    <testCase testCaseId="MM_04" testCaseName="MaintenanceManager_Check_On_Maintenance_StatusChange_Event" desc="Check if the event is triggered when there is a change in the maintenance state">
+    <testCase testCaseId="MM_04" testCaseName="MaintenanceManager_On_Maintenance_StatusChange_Event" desc="Check if the event is triggered when there is a change in the maintenance state">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
         <prerequisite requisiteId="1" requisiteName="Stop_Maintenance_If_Started">
@@ -111,7 +111,7 @@
     </testCase>
 
     <!-- Test case 05 -->
-    <testCase testCaseId="MM_05" testCaseName="MaintenanceManager_Check_Start_Maintenance_Twice" desc="Check start maintenance API returns success status as false when called twice simultaneously">
+    <testCase testCaseId="MM_05" testCaseName="MaintenanceManager_Start_Maintenance_Twice" desc="Check start maintenance API returns success status as false when called twice simultaneously">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
         <prerequisite requisiteId="1" requisiteName="Stop_Maintenance_If_Started">
@@ -191,7 +191,7 @@
     </testCase>
 
     <!-- Test case 07 -->
-    <testCase testCaseId="MM_07" testCaseName="MaintenanceManager_Check_MaintenanceActivity_Status" desc="Check the status of maintenance activity after initiating the start maintenance API">
+    <testCase testCaseId="MM_07" testCaseName="MaintenanceManager_Get_MaintenanceActivity_Status" desc="Check the status of maintenance activity after initiating the start maintenance API">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
         <prerequisite requisiteId="1" requisiteName="Stop_Maintenance_If_Started">
@@ -360,7 +360,7 @@
     </testCase>
 
     <!-- Test case 19 -->
-    <testCase testCaseId="MM_19" testCaseName="MaintenanceManager_Check_Get_MaintenanceActivity_Status_Error"  desc="Check if the getMaintenanceActivityStatus method returns an error when the plugin is in a deactivated state">
+    <testCase testCaseId="MM_19" testCaseName="MaintenanceManager_Get_MaintenanceActivity_Status_Error"  desc="Check if the getMaintenanceActivityStatus method returns an error when the plugin is in a deactivated state">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
@@ -395,7 +395,7 @@
     </testCase>
 
     <!-- Test case 20 -->
-    <testCase testCaseId="MM_20" testCaseName="MaintenanceManager_Check_Get_Maintenance_StartTime_Error"  desc="Check if the getMaintenanceStartTime method returns an error when the plugin is in a deactivated state">
+    <testCase testCaseId="MM_20" testCaseName="MaintenanceManager_Get_Maintenance_StartTime_Error"  desc="Check if the getMaintenanceStartTime method returns an error when the plugin is in a deactivated state">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
@@ -466,7 +466,7 @@
     </testCase>
 
     <!-- Test case 24 -->
-    <testCase testCaseId="MM_24" testCaseName="MaintenanceManager_Check_Stop_Maintenance_Error"  desc="Check if the stop maintenance methods returns an error when the plugin is in a deactivated state">
+    <testCase testCaseId="MM_24" testCaseName="MaintenanceManager_Stop_Maintenance_Error"  desc="Check if the stop maintenance methods returns an error when the plugin is in a deactivated state">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">

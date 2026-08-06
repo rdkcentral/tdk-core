@@ -9,8 +9,8 @@ RDKV_CERT_AVS_User_Preferences
    - [UserPreferences_SetAndGet_UI_Language](#userpreferences_setandget_ui_language)
    - [UserPreferences_ActivateDeactivate_Event_Test](#userpreferences_activatedeactivate_event_test)
    - [UserPreferences_ActivateDeactivate_All_Event_Test](#userpreferences_activatedeactivate_all_event_test)
-   - [UserPreferences_Verify_Get_UI_Language_Error](#userpreferences_verify_get_ui_language_error)
-   - [UserPreferences_Verify_SetUILanguage_without_Params](#userpreferences_verify_setuilanguage_without_params)
+   - [UserPreferences_Get_UI_Language_Error](#userpreferences_get_ui_language_error)
+   - [UserPreferences_SetUILanguage_without_Params](#userpreferences_setuilanguage_without_params)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -123,9 +123,9 @@ Validates all event on activating/deactivating the plugin
 
 ---
 
-<a id="userpreferences_verify_get_ui_language_error"></a>
+<a id="userpreferences_get_ui_language_error"></a>
 ### TestCase Name
-UserPreferences_Verify_Get_UI_Language_Error
+UserPreferences_Get_UI_Language_Error
 
 ### TestCase ID
 UP_04
@@ -157,9 +157,9 @@ Verify that the getUiLanguage method returns an error when the plugin is in a de
 
 ---
 
-<a id="userpreferences_verify_setuilanguage_without_params"></a>
+<a id="userpreferences_setuilanguage_without_params"></a>
 ### TestCase Name
-UserPreferences_Verify_SetUILanguage_without_Params
+UserPreferences_SetUILanguage_without_Params
 
 ### TestCase ID
 UP_05

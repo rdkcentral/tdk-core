@@ -6,10 +6,10 @@ RDKV_CERT_AVS_HDCP_Profile
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [Get_HDCP_Details](#get_hdcp_details)
-   - [Get_STB_Supported_HDCP_Version](#get_stb_supported_hdcp_version)
-   - [HdcpProfile_ActivateDeactivate_Event_Test](#hdcpprofile_activatedeactivate_event_test)
-   - [HdcpProfile_ActivateDeactivate_All_Event_Test](#hdcpprofile_activatedeactivate_all_event_test)
+   - [HDCPProfile_Get_HDCP_Details](#hdcpprofile_get_hdcp_details)
+   - [HDCPProfile_Get_STB_Supported_HDCP_Version](#hdcpprofile_get_stb_supported_hdcp_version)
+   - [HDCPProfile_ActivateDeactivate_Event_Test](#hdcpprofile_activatedeactivate_event_test)
+   - [HDCPProfile_ActivateDeactivate_All_Event_Test](#hdcpprofile_activatedeactivate_all_event_test)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -37,9 +37,9 @@ accessible via JSON-RPC under the callsign `org.rdk.HdcpProfile` (version 1)
 
 ## Test Cases
 
-<a id="get_hdcp_details"></a>
+<a id="hdcpprofile_get_hdcp_details"></a>
 ### TestCase Name
-Get_HDCP_Details
+HDCPProfile_Get_HDCP_Details
 
 ### TestCase ID
 HDCP_01
@@ -66,9 +66,9 @@ Get HDCP related data and verify
 
 ---
 
-<a id="get_stb_supported_hdcp_version"></a>
+<a id="hdcpprofile_get_stb_supported_hdcp_version"></a>
 ### TestCase Name
-Get_STB_Supported_HDCP_Version
+HDCPProfile_Get_STB_Supported_HDCP_Version
 
 ### TestCase ID
 HDCP_02
@@ -86,7 +86,7 @@ Get HDCP version supported by STB
 
 <a id="hdcpprofile_activatedeactivate_event_test"></a>
 ### TestCase Name
-HdcpProfile_ActivateDeactivate_Event_Test
+HDCPProfile_ActivateDeactivate_Event_Test
 
 ### TestCase ID
 HDCP_03
@@ -119,7 +119,7 @@ Validates statechange event on activating/deactivating the plugin
 
 <a id="hdcpprofile_activatedeactivate_all_event_test"></a>
 ### TestCase Name
-HdcpProfile_ActivateDeactivate_All_Event_Test
+HDCPProfile_ActivateDeactivate_All_Event_Test
 
 ### TestCase ID
 HDCP_04
