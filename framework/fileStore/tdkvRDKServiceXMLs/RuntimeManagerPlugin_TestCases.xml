@@ -62,25 +62,25 @@
         </prerequisite>
 
         <!-- PluginPreRequisite 3 -->
-        <prerequisite requisiteId="3" requisiteName="Activate_PackageManagerRDKEMS_Plugin">
+        <prerequisite requisiteId="3" requisiteName="Activate_AppPackageManager_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
-                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                    <param tag="plugin" value="org.rdk.AppPackageManager" indexOnly="true"/>
                 </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS"/>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppPackageManager"/>
             </testStep>
             <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppPackageManager"/>
                 <params>
-                    <param tag="callsign" value="org.rdk.PackageManagerRDKEMS"/>
+                    <param tag="callsign" value="org.rdk.AppPackageManager"/>
                 </params>
             </testStep>
             <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppPackageManager"/>
                 <params>
-                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                    <param tag="plugin" value="org.rdk.AppPackageManager" indexOnly="true"/>
                 </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS" expectedValues="activated"/>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppPackageManager" expectedValues="activated"/>
             </testStep>
         </prerequisite>
         
@@ -132,17 +132,17 @@
 
         <!-- PluginPreRequisite 6 -->
         <prerequisite requisiteId="6" requisiteName="Check_Existing_Package_Before_Install">
-            <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
-                <resultGeneration useMethodTag="packagemanager_list_packages">
+            <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="AppPackageManager" saveResult="true">
+                <resultGeneration useMethodTag="app_packagemanager_list_packages">
                     <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="PackageManager" delay="10">
-                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+            <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="AppPackageManager" delay="10">
+                <conditionalExecution enable="true" Id="1" useMethodTag="app_packagemanager_check_app_status"/>
                 <params>
                     <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 </params>
-                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                <resultGeneration useMethodTag="app_packagemanager_null_result_validation" arguments="empty_result_validation"/>
             </testStep>
             <testStep testStepId="3" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
                 <params>
@@ -161,7 +161,7 @@
                     <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="6" name="Install" method="Install_Package" pluginName="PackageManager" delay="3">
+            <testStep testStepId="6" name="Install" method="Install_Package" pluginName="AppPackageManager" delay="3">
                 <params>
                     <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                     <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
@@ -169,10 +169,10 @@
                     <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
                     <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
                 </params>
-                <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                <resultGeneration useMethodTag="app_packagemanager_null_result_validation"/>
             </testStep>
-            <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="PackageManager" delay="5">
-                <resultGeneration useMethodTag="packagemanager_check_install_package">
+            <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="AppPackageManager" delay="5">
+                <resultGeneration useMethodTag="app_packagemanager_check_install_package">
                     <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 </resultGeneration>
             </testStep>
@@ -775,23 +775,23 @@
                 </resultGeneration>
             </testStep>
             <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" pluginName="AppManager" delay="3">
-                <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <conditionalExecution enable="true" Id="1" useMethodTag="app_packagemanager_check_app_status"/>
                 <params>
                     <param tag="appId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 </params>
                 <resultGeneration useMethodTag="appmanager_null_result_validation"/>
             </testStep>
-            <testStep testStepId="3" name="Check_Package_Info" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
-                <resultGeneration useMethodTag="packagemanager_list_packages">
+            <testStep testStepId="3" name="Check_Package_Info" method="List_Package_Info" pluginName="AppPackageManager" saveResult="true">
+                <resultGeneration useMethodTag="app_packagemanager_list_packages">
                     <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="4" name="Uninstall_Package" method="Uninstall_Package" pluginName="PackageManager" delay="3">
-                <conditionalExecution enable="true" Id="3" useMethodTag="packagemanager_check_app_status"/>
+            <testStep testStepId="4" name="Uninstall_Package" method="Uninstall_Package" pluginName="AppPackageManager" delay="3">
+                <conditionalExecution enable="true" Id="3" useMethodTag="app_packagemanager_check_app_status"/>
                 <params>
                     <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 </params>
-                <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                <resultGeneration useMethodTag="app_packagemanager_null_result_validation" arguments="empty_result_validation"/>
             </testStep>
         </postrequisite>
     </pluginPostRequisite>
