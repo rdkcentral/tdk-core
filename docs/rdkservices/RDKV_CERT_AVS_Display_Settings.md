@@ -6,78 +6,78 @@ RDKV_CERT_AVS_Display_Settings
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [Check_Settop_Supported_Resolutions](#check_settop_supported_resolutions)
-   - [Check_Supported_Tv_Resolutions](#check_supported_tv_resolutions)
-   - [Check_Supported_Video_Displays](#check_supported_video_displays)
-   - [Check_Supported_Audio_Ports](#check_supported_audio_ports)
-   - [Check_Settop_HDR_Support](#check_settop_hdr_support)
-   - [Check_TV_HDR_Support](#check_tv_hdr_support)
-   - [Read_Host_EDID](#read_host_edid)
-   - [Read_Connected_Device_EDID](#read_connected_device_edid)
-   - [Set_And_Get_Supported_Audio_Modes_HDMI0](#set_and_get_supported_audio_modes_hdmi0)
-   - [Set_And_Get_Zoom_Settings](#set_and_get_zoom_settings)
-   - [Set_And_Get_VideoPort_Status_InStandby_Negative_Case](#set_and_get_videoport_status_instandby_negative_case)
-   - [Set_And_Get_MS12_Audio_Compression](#set_and_get_ms12_audio_compression)
-   - [Check_Current_Output_Settings](#check_current_output_settings)
-   - [Check_Active_Input_Value](#check_active_input_value)
-   - [SetAndGet_All_Supported_Resolutions](#setandget_all_supported_resolutions)
-   - [Enable_And_Disable_Dolby_Volume_Mode](#enable_and_disable_dolby_volume_mode)
-   - [Set_And_Get_Dialog_Enhancement](#set_and_get_dialog_enhancement)
-   - [Set_And_Get_Volume_Leveller_HDMI0](#set_and_get_volume_leveller_hdmi0)
-   - [Set_And_Get_DRC_Mode_HDMI0](#set_and_get_drc_mode_hdmi0)
-   - [Set_And_Get_Volume_Level_HDMI0](#set_and_get_volume_level_hdmi0)
-   - [Set_And_Get_Gain_HDMI0](#set_and_get_gain_hdmi0)
-   - [Mute_And_Unmute_Audio_HDMI0](#mute_and_unmute_audio_hdmi0)
-   - [Set_And_Get_Audio_Delay_HDMI0](#set_and_get_audio_delay_hdmi0)
-   - [Set_And_Get_Audio_Delay_Offset_HDMI0](#set_and_get_audio_delay_offset_hdmi0)
-   - [Check_Sink_Atmos_Capability](#check_sink_atmos_capability)
-   - [Enable_Disable_Audio_Atmos_Output_Mode](#enable_disable_audio_atmos_output_mode)
-   - [Get_TV_HDR_Capabilities](#get_tv_hdr_capabilities)
-   - [Is_Connected_Device_Repeater](#is_connected_device_repeater)
-   - [Get_Default_Resolution](#get_default_resolution)
-   - [Enable_And_Disable_AudioPort_HDMI0](#enable_and_disable_audioport_hdmi0)
-   - [Check_Settop_Audio_Capabilities_HDMI0](#check_settop_audio_capabilities_hdmi0)
-   - [Check_Settop_MS12_Capabilities_HDMI0](#check_settop_ms12_capabilities_hdmi0)
-   - [Set_And_Get_Volume_Leveller_Modes_HDMI0](#set_and_get_volume_leveller_modes_hdmi0)
-   - [Check_Supported_Resolutions](#check_supported_resolutions)
-   - [Check_Active_Input_Value_For_Invalid_Display](#check_active_input_value_for_invalid_display)
-   - [Check_VideoPort_Standby_Status_For_Invalid_Display](#check_videoport_standby_status_for_invalid_display)
-   - [Set_And_Get_Negative_Audio_Delay](#set_and_get_negative_audio_delay)
-   - [Check_Supported_Audio_Modes_Without_Audio_Port](#check_supported_audio_modes_without_audio_port)
-   - [Check_Current_And_Supported_Video_Formats](#check_current_and_supported_video_formats)
-   - [Check_Current_And_Supported_Audio_Formats](#check_current_and_supported_audio_formats)
-   - [Check_Resolution_Persisted_After_Reboot](#check_resolution_persisted_after_reboot)
-   - [Check_Resolution_Not_Persisted_After_Reboot](#check_resolution_not_persisted_after_reboot)
-   - [SetAndGet_Supported_Color_Depth_Capabilities](#setandget_supported_color_depth_capabilities)
-   - [Check_Resolution_PreChange_Event](#check_resolution_prechange_event)
-   - [Check_Resolution_Persisted_For_30Seconds_After_Reboot](#check_resolution_persisted_for_30seconds_after_reboot)
-   - [Check_Mute_Status_Changed_Event_HDMI0](#check_mute_status_changed_event_hdmi0)
-   - [Check_Volume_Level_Changed_Event_HDMI0](#check_volume_level_changed_event_hdmi0)
-   - [Set_And_Get_Negative_Volume_Level_HDMI0](#set_and_get_negative_volume_level_hdmi0)
-   - [Set_and_Get_Fader_Control_HDMI0](#set_and_get_fader_control_hdmi0)
-   - [Set_Empty_Fader_Control_HDMI0](#set_empty_fader_control_hdmi0)
-   - [Set_Fader_Control_OutofRange_HDMI0](#set_fader_control_outofrange_hdmi0)
-   - [Set_and_Get_Audio_Mixing_Status_HDMI0](#set_and_get_audio_mixing_status_hdmi0)
+   - [DisplaySettings_Get_Settop_Supported_Resolutions](#displaysettings_get_settop_supported_resolutions)
+   - [DisplaySettings_Get_Supported_Tv_Resolutions](#displaysettings_get_supported_tv_resolutions)
+   - [DisplaySettings_Get_Supported_Video_Displays](#displaysettings_get_supported_video_displays)
+   - [DisplaySettings_Get_Supported_Audio_Ports](#displaysettings_get_supported_audio_ports)
+   - [DisplaySettings_Get_Settop_HDR_Support](#displaysettings_get_settop_hdr_support)
+   - [DisplaySettings_Get_TV_HDR_Support](#displaysettings_get_tv_hdr_support)
+   - [DisplaySettings_Read_Host_EDID](#displaysettings_read_host_edid)
+   - [DisplaySettings_Read_Connected_Device_EDID](#displaysettings_read_connected_device_edid)
+   - [DisplaySettings_Set_And_Get_Supported_Audio_Modes_HDMI0](#displaysettings_set_and_get_supported_audio_modes_hdmi0)
+   - [DisplaySettings_Set_And_Get_Zoom_Settings](#displaysettings_set_and_get_zoom_settings)
+   - [DisplaySettings_Set_And_Get_VideoPort_Status_InStandby_Negative_Case](#displaysettings_set_and_get_videoport_status_instandby_negative_case)
+   - [DisplaySettings_Set_And_Get_MS12_Audio_Compression](#displaysettings_set_and_get_ms12_audio_compression)
+   - [DisplaySettings_Get_Current_Output_Settings](#displaysettings_get_current_output_settings)
+   - [DisplaySettings_Get_Active_Input_Value](#displaysettings_get_active_input_value)
+   - [DisplaySettings_SetAndGet_All_Supported_Resolutions](#displaysettings_setandget_all_supported_resolutions)
+   - [DisplaySettings_Enable_And_Disable_Dolby_Volume_Mode](#displaysettings_enable_and_disable_dolby_volume_mode)
+   - [DisplaySettings_Set_And_Get_Dialog_Enhancement](#displaysettings_set_and_get_dialog_enhancement)
+   - [DisplaySettings_Set_And_Get_Volume_Leveller_HDMI0](#displaysettings_set_and_get_volume_leveller_hdmi0)
+   - [DisplaySettings_Set_And_Get_DRC_Mode_HDMI0](#displaysettings_set_and_get_drc_mode_hdmi0)
+   - [DisplaySettings_Set_And_Get_Volume_Level_HDMI0](#displaysettings_set_and_get_volume_level_hdmi0)
+   - [DisplaySettings_Set_And_Get_Gain_HDMI0](#displaysettings_set_and_get_gain_hdmi0)
+   - [DisplaySettings_Mute_And_Unmute_Audio_HDMI0](#displaysettings_mute_and_unmute_audio_hdmi0)
+   - [DisplaySettings_Set_And_Get_Audio_Delay_HDMI0](#displaysettings_set_and_get_audio_delay_hdmi0)
+   - [DisplaySettings_Set_And_Get_Audio_Delay_Offset_HDMI0](#displaysettings_set_and_get_audio_delay_offset_hdmi0)
+   - [DisplaySettings_Get_Sink_Atmos_Capability](#displaysettings_get_sink_atmos_capability)
+   - [DisplaySettings_Enable_Disable_Audio_Atmos_Output_Mode](#displaysettings_enable_disable_audio_atmos_output_mode)
+   - [DisplaySettings_Get_TV_HDR_Capabilities](#displaysettings_get_tv_hdr_capabilities)
+   - [DisplaySettings_Is_Connected_Device_Repeater](#displaysettings_is_connected_device_repeater)
+   - [DisplaySettings_Get_Default_Resolution](#displaysettings_get_default_resolution)
+   - [DisplaySettings_Enable_And_Disable_AudioPort_HDMI0](#displaysettings_enable_and_disable_audioport_hdmi0)
+   - [DisplaySettings_Get_Settop_Audio_Capabilities_HDMI0](#displaysettings_get_settop_audio_capabilities_hdmi0)
+   - [DisplaySettings_Get_Settop_MS12_Capabilities_HDMI0](#displaysettings_get_settop_ms12_capabilities_hdmi0)
+   - [DisplaySettings_Set_And_Get_Volume_Leveller_Modes_HDMI0](#displaysettings_set_and_get_volume_leveller_modes_hdmi0)
+   - [DisplaySettings_Get_Supported_Resolutions](#displaysettings_get_supported_resolutions)
+   - [DisplaySettings_Get_Active_Input_Value_For_Invalid_Display](#displaysettings_get_active_input_value_for_invalid_display)
+   - [DisplaySettings_Get_VideoPort_Standby_Status_For_Invalid_Display](#displaysettings_get_videoport_standby_status_for_invalid_display)
+   - [DisplaySettings_Set_And_Get_Negative_Audio_Delay](#displaysettings_set_and_get_negative_audio_delay)
+   - [DisplaySettings_Get_Supported_Audio_Modes_Without_Audio_Port](#displaysettings_get_supported_audio_modes_without_audio_port)
+   - [DisplaySettings_Get_Current_And_Supported_Video_Formats](#displaysettings_get_current_and_supported_video_formats)
+   - [DisplaySettings_Get_Current_And_Supported_Audio_Formats](#displaysettings_get_current_and_supported_audio_formats)
+   - [DisplaySettings_Resolution_Persisted_After_Reboot](#displaysettings_resolution_persisted_after_reboot)
+   - [DisplaySettings_Resolution_Not_Persisted_After_Reboot](#displaysettings_resolution_not_persisted_after_reboot)
+   - [DisplaySettings_SetAndGet_Supported_Color_Depth_Capabilities](#displaysettings_setandget_supported_color_depth_capabilities)
+   - [DisplaySettings_Resolution_PreChange_Event](#displaysettings_resolution_prechange_event)
+   - [DisplaySettings_Resolution_Persisted_For_30Seconds_After_Reboot](#displaysettings_resolution_persisted_for_30seconds_after_reboot)
+   - [DisplaySettings_Mute_Status_Changed_Event_HDMI0](#displaysettings_mute_status_changed_event_hdmi0)
+   - [DisplaySettings_Volume_Level_Changed_Event_HDMI0](#displaysettings_volume_level_changed_event_hdmi0)
+   - [DisplaySettings_Set_And_Get_Negative_Volume_Level_HDMI0](#displaysettings_set_and_get_negative_volume_level_hdmi0)
+   - [DisplaySettings_Set_and_Get_Fader_Control_HDMI0](#displaysettings_set_and_get_fader_control_hdmi0)
+   - [DisplaySettings_Set_Empty_Fader_Control_HDMI0](#displaysettings_set_empty_fader_control_hdmi0)
+   - [DisplaySettings_Set_Fader_Control_OutofRange_HDMI0](#displaysettings_set_fader_control_outofrange_hdmi0)
+   - [DisplaySettings_Set_and_Get_Audio_Mixing_Status_HDMI0](#displaysettings_set_and_get_audio_mixing_status_hdmi0)
    - [DisplaySettings_ActivateDeactivate_Event_Test](#displaysettings_activatedeactivate_event_test)
-   - [DisplaySettings_Using_KeyCode_Verify_MuteStatus_After_Increasing_Volume_HDMI0](#displaysettings_using_keycode_verify_mutestatus_after_increasing_volume_hdmi0)
-   - [DisplaySettings_Using_KeyCode_Verify_MuteStatus_After_decreasing_Volume_HDMI0](#displaysettings_using_keycode_verify_mutestatus_after_decreasing_volume_hdmi0)
-   - [DisplaySettings_Using_KeyCode_Verify_MuteStatus_HDMI0](#displaysettings_using_keycode_verify_mutestatus_hdmi0)
-   - [Set_Mute_Invalid_audioPort](#set_mute_invalid_audioport)
-   - [Set_Mute_empty_audioPort](#set_mute_empty_audioport)
-   - [Get_Dialog_Enhancement_InvalidAudioPort](#get_dialog_enhancement_invalidaudioport)
-   - [Get_Dialog_Enhancement_EmptyAudioPort](#get_dialog_enhancement_emptyaudioport)
-   - [Get_Volume_Level_Invalid](#get_volume_level_invalid)
-   - [Get_Volume_Level_EmptyAudioPort](#get_volume_level_emptyaudioport)
-   - [DisplaySettings_Verify_VolumeLevelChanged_Event_Not_Triggered_with_Same_VolumeLevel_HDMI0](#displaysettings_verify_volumelevelchanged_event_not_triggered_with_same_volumelevel_hdmi0)
-   - [DisplaySettings_Verify_MuteStatusChanged_Event_Not_Triggered_with_Same_MuteStatus_HDMI0](#displaysettings_verify_mutestatuschanged_event_not_triggered_with_same_mutestatus_hdmi0)
-   - [Set_Invalid_Resolution](#set_invalid_resolution)
-   - [Set_Empty_Resolution](#set_empty_resolution)
-   - [Set_InvalidDataType_Resolution](#set_invaliddatatype_resolution)
-   - [Set_Empty_VideoDisplay](#set_empty_videodisplay)
-   - [Set_Invalid_VideoDisplay](#set_invalid_videodisplay)
-   - [Set_Invalid_Persist](#set_invalid_persist)
-   - [Set_Resolution_WithoutParameter](#set_resolution_withoutparameter)
-   - [DisplaySettings_Check_Display_Connected_Status_After_Light_Sleep_HDMI0](#displaysettings_check_display_connected_status_after_light_sleep_hdmi0)
+   - [DisplaySettings_Using_KeyCode_MuteStatus_After_Increasing_Volume_HDMI0](#displaysettings_using_keycode_mutestatus_after_increasing_volume_hdmi0)
+   - [DisplaySettings_Using_KeyCode_MuteStatus_After_decreasing_Volume_HDMI0](#displaysettings_using_keycode_mutestatus_after_decreasing_volume_hdmi0)
+   - [DisplaySettings_Using_KeyCode_MuteStatus_HDMI0](#displaysettings_using_keycode_mutestatus_hdmi0)
+   - [DisplaySettings_Set_Mute_Invalid_audioPort](#displaysettings_set_mute_invalid_audioport)
+   - [DisplaySettings_Set_Mute_empty_audioPort](#displaysettings_set_mute_empty_audioport)
+   - [DisplaySettings_Get_Dialog_Enhancement_InvalidAudioPort](#displaysettings_get_dialog_enhancement_invalidaudioport)
+   - [DisplaySettings_Get_Dialog_Enhancement_EmptyAudioPort](#displaysettings_get_dialog_enhancement_emptyaudioport)
+   - [DisplaySettings_Get_Volume_Level_Invalid](#displaysettings_get_volume_level_invalid)
+   - [DisplaySettings_Get_Volume_Level_EmptyAudioPort](#displaysettings_get_volume_level_emptyaudioport)
+   - [DisplaySettings_VolumeLevelChanged_Event_Not_Triggered_with_Same_VolumeLevel_HDMI0](#displaysettings_volumelevelchanged_event_not_triggered_with_same_volumelevel_hdmi0)
+   - [DisplaySettings_MuteStatusChanged_Event_Not_Triggered_with_Same_MuteStatus_HDMI0](#displaysettings_mutestatuschanged_event_not_triggered_with_same_mutestatus_hdmi0)
+   - [DisplaySettings_Set_Invalid_Resolution](#displaysettings_set_invalid_resolution)
+   - [DisplaySettings_Set_Empty_Resolution](#displaysettings_set_empty_resolution)
+   - [DisplaySettings_Set_InvalidDataType_Resolution](#displaysettings_set_invaliddatatype_resolution)
+   - [DisplaySettings_Set_Empty_VideoDisplay](#displaysettings_set_empty_videodisplay)
+   - [DisplaySettings_Set_Invalid_VideoDisplay](#displaysettings_set_invalid_videodisplay)
+   - [DisplaySettings_Set_Invalid_Persist](#displaysettings_set_invalid_persist)
+   - [DisplaySettings_Set_Resolution_WithoutParameter](#displaysettings_set_resolution_withoutparameter)
+   - [DisplaySettings_Display_Connected_Status_After_Light_Sleep_HDMI0](#displaysettings_display_connected_status_after_light_sleep_hdmi0)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -132,9 +132,9 @@ accessible via JSON-RPC under the callsign `org.rdk.DisplaySettings` (version 1)
 | 11 | Configure tv connection status during standby | `TV_CONNECTION_STATUS_DURING_STANDBY` must be set to 'TRUE' if a connected TV is detected during standby (lightsleep), otherwise 'FALSE' | The `TV_CONNECTION_STATUS_DURING_STANDBY` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
-<a id="check_settop_supported_resolutions"></a>
+<a id="displaysettings_get_settop_supported_resolutions"></a>
 ### TestCase Name
-Check_Settop_Supported_Resolutions
+DisplaySettings_Get_Settop_Supported_Resolutions
 
 ### TestCase ID
 DS_01
@@ -150,9 +150,9 @@ Check whether settop displays all supported resoltions
 
 ---
 
-<a id="check_supported_tv_resolutions"></a>
+<a id="displaysettings_get_supported_tv_resolutions"></a>
 ### TestCase Name
-Check_Supported_Tv_Resolutions
+DisplaySettings_Get_Supported_Tv_Resolutions
 
 ### TestCase ID
 DS_02
@@ -169,9 +169,9 @@ Check whether settop displays supported TV resoltions
 
 ---
 
-<a id="check_supported_video_displays"></a>
+<a id="displaysettings_get_supported_video_displays"></a>
 ### TestCase Name
-Check_Supported_Video_Displays
+DisplaySettings_Get_Supported_Video_Displays
 
 ### TestCase ID
 DS_03
@@ -187,9 +187,9 @@ Check whether settop displays supported video displays
 
 ---
 
-<a id="check_supported_audio_ports"></a>
+<a id="displaysettings_get_supported_audio_ports"></a>
 ### TestCase Name
-Check_Supported_Audio_Ports
+DisplaySettings_Get_Supported_Audio_Ports
 
 ### TestCase ID
 DS_04
@@ -205,9 +205,9 @@ Check whether settop lists supported audio ports
 
 ---
 
-<a id="check_settop_hdr_support"></a>
+<a id="displaysettings_get_settop_hdr_support"></a>
 ### TestCase Name
-Check_Settop_HDR_Support
+DisplaySettings_Get_Settop_HDR_Support
 
 ### TestCase ID
 DS_05
@@ -223,9 +223,9 @@ Check whether settop has HDR support or not
 
 ---
 
-<a id="check_tv_hdr_support"></a>
+<a id="displaysettings_get_tv_hdr_support"></a>
 ### TestCase Name
-Check_TV_HDR_Support
+DisplaySettings_Get_TV_HDR_Support
 
 ### TestCase ID
 DS_06
@@ -249,9 +249,9 @@ Check whether TV has HDR support or not
 
 ---
 
-<a id="read_host_edid"></a>
+<a id="displaysettings_read_host_edid"></a>
 ### TestCase Name
-Read_Host_EDID
+DisplaySettings_Read_Host_EDID
 
 ### TestCase ID
 DS_07
@@ -267,9 +267,9 @@ Check the EDID status of host
 
 ---
 
-<a id="read_connected_device_edid"></a>
+<a id="displaysettings_read_connected_device_edid"></a>
 ### TestCase Name
-Read_Connected_Device_EDID
+DisplaySettings_Read_Connected_Device_EDID
 
 ### TestCase ID
 DS_08
@@ -293,9 +293,9 @@ Check the EDID status of connected device
 
 ---
 
-<a id="set_and_get_supported_audio_modes_hdmi0"></a>
+<a id="displaysettings_set_and_get_supported_audio_modes_hdmi0"></a>
 ### TestCase Name
-Set_And_Get_Supported_Audio_Modes_HDMI0
+DisplaySettings_Set_And_Get_Supported_Audio_Modes_HDMI0
 
 ### TestCase ID
 DS_09
@@ -324,9 +324,9 @@ Check whether supported audio modes are able to set HDMI0 port
 
 ---
 
-<a id="set_and_get_zoom_settings"></a>
+<a id="displaysettings_set_and_get_zoom_settings"></a>
 ### TestCase Name
-Set_And_Get_Zoom_Settings
+DisplaySettings_Set_And_Get_Zoom_Settings
 
 ### TestCase ID
 DS_10
@@ -345,9 +345,9 @@ Check whether supported zoom modes are able to set and get
 
 ---
 
-<a id="set_and_get_videoport_status_instandby_negative_case"></a>
+<a id="displaysettings_set_and_get_videoport_status_instandby_negative_case"></a>
 ### TestCase Name
-Set_And_Get_VideoPort_Status_InStandby_Negative_Case
+DisplaySettings_Set_And_Get_VideoPort_Status_InStandby_Negative_Case
 
 ### TestCase ID
 DS_11
@@ -365,9 +365,9 @@ Checks the negative scenario for video port status in standby
 
 ---
 
-<a id="set_and_get_ms12_audio_compression"></a>
+<a id="displaysettings_set_and_get_ms12_audio_compression"></a>
 ### TestCase Name
-Set_And_Get_MS12_Audio_Compression
+DisplaySettings_Set_And_Get_MS12_Audio_Compression
 
 ### TestCase ID
 DS_12
@@ -394,9 +394,9 @@ Check whether MS12 audio compression values are able to set and get
 
 ---
 
-<a id="check_current_output_settings"></a>
+<a id="displaysettings_get_current_output_settings"></a>
 ### TestCase Name
-Check_Current_Output_Settings
+DisplaySettings_Get_Current_Output_Settings
 
 ### TestCase ID
 DS_13
@@ -412,9 +412,9 @@ Check the current output settings of device
 
 ---
 
-<a id="check_active_input_value"></a>
+<a id="displaysettings_get_active_input_value"></a>
 ### TestCase Name
-Check_Active_Input_Value
+DisplaySettings_Get_Active_Input_Value
 
 ### TestCase ID
 DS_14
@@ -431,9 +431,9 @@ Check the active input value
 
 ---
 
-<a id="setandget_all_supported_resolutions"></a>
+<a id="displaysettings_setandget_all_supported_resolutions"></a>
 ### TestCase Name
-SetAndGet_All_Supported_Resolutions
+DisplaySettings_SetAndGet_All_Supported_Resolutions
 
 ### TestCase ID
 DS_15
@@ -464,9 +464,9 @@ Set and get all the supported resolution by both TV and STB, also checks for the
 
 ---
 
-<a id="enable_and_disable_dolby_volume_mode"></a>
+<a id="displaysettings_enable_and_disable_dolby_volume_mode"></a>
 ### TestCase Name
-Enable_And_Disable_Dolby_Volume_Mode
+DisplaySettings_Enable_And_Disable_Dolby_Volume_Mode
 
 ### TestCase ID
 DS_16
@@ -492,9 +492,9 @@ Check whether dolby volume mode can enable and disable
 
 ---
 
-<a id="set_and_get_dialog_enhancement"></a>
+<a id="displaysettings_set_and_get_dialog_enhancement"></a>
 ### TestCase Name
-Set_And_Get_Dialog_Enhancement
+DisplaySettings_Set_And_Get_Dialog_Enhancement
 
 ### TestCase ID
 DS_17
@@ -512,9 +512,9 @@ Check whether dialog enhancement values are able to set and get
 
 ---
 
-<a id="set_and_get_volume_leveller_hdmi0"></a>
+<a id="displaysettings_set_and_get_volume_leveller_hdmi0"></a>
 ### TestCase Name
-Set_And_Get_Volume_Leveller_HDMI0
+DisplaySettings_Set_And_Get_Volume_Leveller_HDMI0
 
 ### TestCase ID
 DS_18
@@ -533,9 +533,9 @@ Check whether volume values are able to set and get for HDMI0 port
 
 ---
 
-<a id="set_and_get_drc_mode_hdmi0"></a>
+<a id="displaysettings_set_and_get_drc_mode_hdmi0"></a>
 ### TestCase Name
-Set_And_Get_DRC_Mode_HDMI0
+DisplaySettings_Set_And_Get_DRC_Mode_HDMI0
 
 ### TestCase ID
 DS_19
@@ -554,9 +554,9 @@ Check whether DRC mode values are able to set and get for HDMI0
 
 ---
 
-<a id="set_and_get_volume_level_hdmi0"></a>
+<a id="displaysettings_set_and_get_volume_level_hdmi0"></a>
 ### TestCase Name
-Set_And_Get_Volume_Level_HDMI0
+DisplaySettings_Set_And_Get_Volume_Level_HDMI0
 
 ### TestCase ID
 DS_20
@@ -575,9 +575,9 @@ Check whether volume level values are able to set and get for HDMI0 port
 
 ---
 
-<a id="set_and_get_gain_hdmi0"></a>
+<a id="displaysettings_set_and_get_gain_hdmi0"></a>
 ### TestCase Name
-Set_And_Get_Gain_HDMI0
+DisplaySettings_Set_And_Get_Gain_HDMI0
 
 ### TestCase ID
 DS_21
@@ -596,9 +596,9 @@ Check whether audio port gain values are able to set and get for HDMI0 port
 
 ---
 
-<a id="mute_and_unmute_audio_hdmi0"></a>
+<a id="displaysettings_mute_and_unmute_audio_hdmi0"></a>
 ### TestCase Name
-Mute_And_Unmute_Audio_HDMI0
+DisplaySettings_Mute_And_Unmute_Audio_HDMI0
 
 ### TestCase ID
 DS_22
@@ -617,9 +617,9 @@ Check whether audio is able to mute and unmute  for HDMI0 port
 
 ---
 
-<a id="set_and_get_audio_delay_hdmi0"></a>
+<a id="displaysettings_set_and_get_audio_delay_hdmi0"></a>
 ### TestCase Name
-Set_And_Get_Audio_Delay_HDMI0
+DisplaySettings_Set_And_Get_Audio_Delay_HDMI0
 
 ### TestCase ID
 DS_23
@@ -638,9 +638,9 @@ Check whether audio delay values are able to set and get for HDMI0 port
 
 ---
 
-<a id="set_and_get_audio_delay_offset_hdmi0"></a>
+<a id="displaysettings_set_and_get_audio_delay_offset_hdmi0"></a>
 ### TestCase Name
-Set_And_Get_Audio_Delay_Offset_HDMI0
+DisplaySettings_Set_And_Get_Audio_Delay_Offset_HDMI0
 
 ### TestCase ID
 DS_24
@@ -659,9 +659,9 @@ Check whether audio delay offset values are able to set and get for HDMI0
 
 ---
 
-<a id="check_sink_atmos_capability"></a>
+<a id="displaysettings_get_sink_atmos_capability"></a>
 ### TestCase Name
-Check_Sink_Atmos_Capability
+DisplaySettings_Get_Sink_Atmos_Capability
 
 ### TestCase ID
 DS_25
@@ -677,9 +677,9 @@ Check the the Atmos capability of the sink
 
 ---
 
-<a id="enable_disable_audio_atmos_output_mode"></a>
+<a id="displaysettings_enable_disable_audio_atmos_output_mode"></a>
 ### TestCase Name
-Enable_Disable_Audio_Atmos_Output_Mode
+DisplaySettings_Enable_Disable_Audio_Atmos_Output_Mode
 
 ### TestCase ID
 DS_26
@@ -695,9 +695,9 @@ Check whether audio atmos output mode is possile to enable and disable
 
 ---
 
-<a id="get_tv_hdr_capabilities"></a>
+<a id="displaysettings_get_tv_hdr_capabilities"></a>
 ### TestCase Name
-Get_TV_HDR_Capabilities
+DisplaySettings_Get_TV_HDR_Capabilities
 
 ### TestCase ID
 DS_27
@@ -714,9 +714,9 @@ Check the HDR capabilities of TV
 
 ---
 
-<a id="is_connected_device_repeater"></a>
+<a id="displaysettings_is_connected_device_repeater"></a>
 ### TestCase Name
-Is_Connected_Device_Repeater
+DisplaySettings_Is_Connected_Device_Repeater
 
 ### TestCase ID
 DS_28
@@ -733,9 +733,9 @@ Check whether connected device is a repeater
 
 ---
 
-<a id="get_default_resolution"></a>
+<a id="displaysettings_get_default_resolution"></a>
 ### TestCase Name
-Get_Default_Resolution
+DisplaySettings_Get_Default_Resolution
 
 ### TestCase ID
 DS_29
@@ -753,9 +753,9 @@ Check whether the default resolution is available in supported resolutions
 
 ---
 
-<a id="enable_and_disable_audioport_hdmi0"></a>
+<a id="displaysettings_enable_and_disable_audioport_hdmi0"></a>
 ### TestCase Name
-Enable_And_Disable_AudioPort_HDMI0
+DisplaySettings_Enable_And_Disable_AudioPort_HDMI0
 
 ### TestCase ID
 DS_30
@@ -774,9 +774,9 @@ Check whether able to enable and disable HDMI0 port
 
 ---
 
-<a id="check_settop_audio_capabilities_hdmi0"></a>
+<a id="displaysettings_get_settop_audio_capabilities_hdmi0"></a>
 ### TestCase Name
-Check_Settop_Audio_Capabilities_HDMI0
+DisplaySettings_Get_Settop_Audio_Capabilities_HDMI0
 
 ### TestCase ID
 DS_31
@@ -792,9 +792,9 @@ Check whether settop displays all supported audio capabilities
 
 ---
 
-<a id="check_settop_ms12_capabilities_hdmi0"></a>
+<a id="displaysettings_get_settop_ms12_capabilities_hdmi0"></a>
 ### TestCase Name
-Check_Settop_MS12_Capabilities_HDMI0
+DisplaySettings_Get_Settop_MS12_Capabilities_HDMI0
 
 ### TestCase ID
 DS_32
@@ -810,9 +810,9 @@ Check whether settop displays all supported MS12 capabilities
 
 ---
 
-<a id="set_and_get_volume_leveller_modes_hdmi0"></a>
+<a id="displaysettings_set_and_get_volume_leveller_modes_hdmi0"></a>
 ### TestCase Name
-Set_And_Get_Volume_Leveller_Modes_HDMI0
+DisplaySettings_Set_And_Get_Volume_Leveller_Modes_HDMI0
 
 ### TestCase ID
 DS_33
@@ -831,9 +831,9 @@ Check whether able to enables or disables volume leveling for HDMI0 port
 
 ---
 
-<a id="check_supported_resolutions"></a>
+<a id="displaysettings_get_supported_resolutions"></a>
 ### TestCase Name
-Check_Supported_Resolutions
+DisplaySettings_Get_Supported_Resolutions
 
 ### TestCase ID
 DS_34
@@ -852,9 +852,9 @@ Checks whether the supported resolutions list contains the common resolutions pr
 
 ---
 
-<a id="check_active_input_value_for_invalid_display"></a>
+<a id="displaysettings_get_active_input_value_for_invalid_display"></a>
 ### TestCase Name
-Check_Active_Input_Value_For_Invalid_Display
+DisplaySettings_Get_Active_Input_Value_For_Invalid_Display
 
 ### TestCase ID
 DS_35
@@ -870,9 +870,9 @@ Checks the active input value for invalid video display
 
 ---
 
-<a id="check_videoport_standby_status_for_invalid_display"></a>
+<a id="displaysettings_get_videoport_standby_status_for_invalid_display"></a>
 ### TestCase Name
-Check_VideoPort_Standby_Status_For_Invalid_Display
+DisplaySettings_Get_VideoPort_Standby_Status_For_Invalid_Display
 
 ### TestCase ID
 DS_36
@@ -889,9 +889,9 @@ Checks the video port standby status for invalid display
 
 ---
 
-<a id="set_and_get_negative_audio_delay"></a>
+<a id="displaysettings_set_and_get_negative_audio_delay"></a>
 ### TestCase Name
-Set_And_Get_Negative_Audio_Delay
+DisplaySettings_Set_And_Get_Negative_Audio_Delay
 
 ### TestCase ID
 DS_37
@@ -910,9 +910,9 @@ Check whether audio delay api accepts negative values
 
 ---
 
-<a id="check_supported_audio_modes_without_audio_port"></a>
+<a id="displaysettings_get_supported_audio_modes_without_audio_port"></a>
 ### TestCase Name
-Check_Supported_Audio_Modes_Without_Audio_Port
+DisplaySettings_Get_Supported_Audio_Modes_Without_Audio_Port
 
 ### TestCase ID
 DS_38
@@ -930,9 +930,9 @@ Validates the results of supported audio modes without passing audio port parame
 
 ---
 
-<a id="check_current_and_supported_video_formats"></a>
+<a id="displaysettings_get_current_and_supported_video_formats"></a>
 ### TestCase Name
-Check_Current_And_Supported_Video_Formats
+DisplaySettings_Get_Current_And_Supported_Video_Formats
 
 ### TestCase ID
 DS_39
@@ -956,9 +956,9 @@ Checks the current and supported video formats
 
 ---
 
-<a id="check_current_and_supported_audio_formats"></a>
+<a id="displaysettings_get_current_and_supported_audio_formats"></a>
 ### TestCase Name
-Check_Current_And_Supported_Audio_Formats
+DisplaySettings_Get_Current_And_Supported_Audio_Formats
 
 ### TestCase ID
 DS_40
@@ -982,9 +982,9 @@ Checks the current and supported audio formats
 
 ---
 
-<a id="check_resolution_persisted_after_reboot"></a>
+<a id="displaysettings_resolution_persisted_after_reboot"></a>
 ### TestCase Name
-Check_Resolution_Persisted_After_Reboot
+DisplaySettings_Resolution_Persisted_After_Reboot
 
 ### TestCase ID
 DS_41
@@ -1005,9 +1005,9 @@ Checks whether resolution persisted after reboot if persist set as true
 
 ---
 
-<a id="check_resolution_not_persisted_after_reboot"></a>
+<a id="displaysettings_resolution_not_persisted_after_reboot"></a>
 ### TestCase Name
-Check_Resolution_Not_Persisted_After_Reboot
+DisplaySettings_Resolution_Not_Persisted_After_Reboot
 
 ### TestCase ID
 DS_42
@@ -1029,9 +1029,9 @@ Checks whether resolution not persisted after reboot if persist set as false
 
 ---
 
-<a id="setandget_supported_color_depth_capabilities"></a>
+<a id="displaysettings_setandget_supported_color_depth_capabilities"></a>
 ### TestCase Name
-SetAndGet_Supported_Color_Depth_Capabilities
+DisplaySettings_SetAndGet_Supported_Color_Depth_Capabilities
 
 ### TestCase ID
 DS_43
@@ -1051,9 +1051,9 @@ Set and get all the supported color depth capabilities
 
 ---
 
-<a id="check_resolution_prechange_event"></a>
+<a id="displaysettings_resolution_prechange_event"></a>
 ### TestCase Name
-Check_Resolution_PreChange_Event
+DisplaySettings_Resolution_PreChange_Event
 
 ### TestCase ID
 DS_44
@@ -1075,9 +1075,9 @@ Set and get all the supported resolution by both TV and STB, also checks for the
 
 ---
 
-<a id="check_resolution_persisted_for_30seconds_after_reboot"></a>
+<a id="displaysettings_resolution_persisted_for_30seconds_after_reboot"></a>
 ### TestCase Name
-Check_Resolution_Persisted_For_30Seconds_After_Reboot
+DisplaySettings_Resolution_Persisted_For_30Seconds_After_Reboot
 
 ### TestCase ID
 DS_45
@@ -1098,9 +1098,9 @@ Checks whether resolution persisted for 30 seconds after reboot if persist set a
 
 ---
 
-<a id="check_mute_status_changed_event_hdmi0"></a>
+<a id="displaysettings_mute_status_changed_event_hdmi0"></a>
 ### TestCase Name
-Check_Mute_Status_Changed_Event_HDMI0
+DisplaySettings_Mute_Status_Changed_Event_HDMI0
 
 ### TestCase ID
 DS_46
@@ -1120,9 +1120,9 @@ Check whether audio is able to mute and unmute  for HDMI0 port and check Mute st
 
 ---
 
-<a id="check_volume_level_changed_event_hdmi0"></a>
+<a id="displaysettings_volume_level_changed_event_hdmi0"></a>
 ### TestCase Name
-Check_Volume_Level_Changed_Event_HDMI0
+DisplaySettings_Volume_Level_Changed_Event_HDMI0
 
 ### TestCase ID
 DS_47
@@ -1141,9 +1141,9 @@ Check whether volume level values are able to set and get for HDMI0 port and che
 
 ---
 
-<a id="set_and_get_negative_volume_level_hdmi0"></a>
+<a id="displaysettings_set_and_get_negative_volume_level_hdmi0"></a>
 ### TestCase Name
-Set_And_Get_Negative_Volume_Level_HDMI0
+DisplaySettings_Set_And_Get_Negative_Volume_Level_HDMI0
 
 ### TestCase ID
 DS_48
@@ -1161,9 +1161,9 @@ Check whether negative volume level values are able to set and get for HDMI0 por
 
 ---
 
-<a id="set_and_get_fader_control_hdmi0"></a>
+<a id="displaysettings_set_and_get_fader_control_hdmi0"></a>
 ### TestCase Name
-Set_and_Get_Fader_Control_HDMI0
+DisplaySettings_Set_and_Get_Fader_Control_HDMI0
 
 ### TestCase ID
 DS_49
@@ -1182,9 +1182,9 @@ Checks if able to set and get the mixerbalance betweeen main and associated audi
 
 ---
 
-<a id="set_empty_fader_control_hdmi0"></a>
+<a id="displaysettings_set_empty_fader_control_hdmi0"></a>
 ### TestCase Name
-Set_Empty_Fader_Control_HDMI0
+DisplaySettings_Set_Empty_Fader_Control_HDMI0
 
 ### TestCase ID
 DS_50
@@ -1201,9 +1201,9 @@ Checks if able to set the mixerbalance as empty
 
 ---
 
-<a id="set_fader_control_outofrange_hdmi0"></a>
+<a id="displaysettings_set_fader_control_outofrange_hdmi0"></a>
 ### TestCase Name
-Set_Fader_Control_OutofRange_HDMI0
+DisplaySettings_Set_Fader_Control_OutofRange_HDMI0
 
 ### TestCase ID
 DS_51
@@ -1220,9 +1220,9 @@ Checks if able to set the mixerbalance as out of range
 
 ---
 
-<a id="set_and_get_audio_mixing_status_hdmi0"></a>
+<a id="displaysettings_set_and_get_audio_mixing_status_hdmi0"></a>
 ### TestCase Name
-Set_and_Get_Audio_Mixing_Status_HDMI0
+DisplaySettings_Set_and_Get_Audio_Mixing_Status_HDMI0
 
 ### TestCase ID
 DS_52
@@ -1274,9 +1274,9 @@ Validates statechange event on activating/deactivating the plugin
 
 ---
 
-<a id="displaysettings_using_keycode_verify_mutestatus_after_increasing_volume_hdmi0"></a>
+<a id="displaysettings_using_keycode_mutestatus_after_increasing_volume_hdmi0"></a>
 ### TestCase Name
-DisplaySettings_Using_KeyCode_Verify_MuteStatus_After_Increasing_Volume_HDMI0
+DisplaySettings_Using_KeyCode_MuteStatus_After_Increasing_Volume_HDMI0
 
 ### TestCase ID
 DS_54
@@ -1323,9 +1323,9 @@ Verify the mute status after adjusting the volume (increase) using keycode on HD
 
 ---
 
-<a id="displaysettings_using_keycode_verify_mutestatus_after_decreasing_volume_hdmi0"></a>
+<a id="displaysettings_using_keycode_mutestatus_after_decreasing_volume_hdmi0"></a>
 ### TestCase Name
-DisplaySettings_Using_KeyCode_Verify_MuteStatus_After_decreasing_Volume_HDMI0
+DisplaySettings_Using_KeyCode_MuteStatus_After_decreasing_Volume_HDMI0
 
 ### TestCase ID
 DS_55
@@ -1372,9 +1372,9 @@ Verify the mute status after adjusting the volume (decrease) using keycode on HD
 
 ---
 
-<a id="displaysettings_using_keycode_verify_mutestatus_hdmi0"></a>
+<a id="displaysettings_using_keycode_mutestatus_hdmi0"></a>
 ### TestCase Name
-DisplaySettings_Using_KeyCode_Verify_MuteStatus_HDMI0
+DisplaySettings_Using_KeyCode_MuteStatus_HDMI0
 
 ### TestCase ID
 DS_56
@@ -1414,9 +1414,9 @@ Verify the mute status using keycode on HDMI0
 
 ---
 
-<a id="set_mute_invalid_audioport"></a>
+<a id="displaysettings_set_mute_invalid_audioport"></a>
 ### TestCase Name
-Set_Mute_Invalid_audioPort
+DisplaySettings_Set_Mute_Invalid_audioPort
 
 ### TestCase ID
 DS_57
@@ -1432,9 +1432,9 @@ Validate by setting up mute for invalid audioport
 
 ---
 
-<a id="set_mute_empty_audioport"></a>
+<a id="displaysettings_set_mute_empty_audioport"></a>
 ### TestCase Name
-Set_Mute_empty_audioPort
+DisplaySettings_Set_Mute_empty_audioPort
 
 ### TestCase ID
 DS_58
@@ -1450,9 +1450,9 @@ Validate by setting up mute for empty audioport
 
 ---
 
-<a id="get_dialog_enhancement_invalidaudioport"></a>
+<a id="displaysettings_get_dialog_enhancement_invalidaudioport"></a>
 ### TestCase Name
-Get_Dialog_Enhancement_InvalidAudioPort
+DisplaySettings_Get_Dialog_Enhancement_InvalidAudioPort
 
 ### TestCase ID
 DS_59
@@ -1468,9 +1468,9 @@ Validate by getting dialogEnhancement for invalid audioport
 
 ---
 
-<a id="get_dialog_enhancement_emptyaudioport"></a>
+<a id="displaysettings_get_dialog_enhancement_emptyaudioport"></a>
 ### TestCase Name
-Get_Dialog_Enhancement_EmptyAudioPort
+DisplaySettings_Get_Dialog_Enhancement_EmptyAudioPort
 
 ### TestCase ID
 DS_60
@@ -1486,9 +1486,9 @@ Validate by getting dialogEnhancement for empty audioport
 
 ---
 
-<a id="get_volume_level_invalid"></a>
+<a id="displaysettings_get_volume_level_invalid"></a>
 ### TestCase Name
-Get_Volume_Level_Invalid
+DisplaySettings_Get_Volume_Level_Invalid
 
 ### TestCase ID
 DS_61
@@ -1504,9 +1504,9 @@ Validate by getting VolumeLevel for invalid audioport
 
 ---
 
-<a id="get_volume_level_emptyaudioport"></a>
+<a id="displaysettings_get_volume_level_emptyaudioport"></a>
 ### TestCase Name
-Get_Volume_Level_EmptyAudioPort
+DisplaySettings_Get_Volume_Level_EmptyAudioPort
 
 ### TestCase ID
 DS_62
@@ -1522,9 +1522,9 @@ Validate by getting VolumeLevel for empty audioport
 
 ---
 
-<a id="displaysettings_verify_volumelevelchanged_event_not_triggered_with_same_volumelevel_hdmi0"></a>
+<a id="displaysettings_volumelevelchanged_event_not_triggered_with_same_volumelevel_hdmi0"></a>
 ### TestCase Name
-DisplaySettings_Verify_VolumeLevelChanged_Event_Not_Triggered_with_Same_VolumeLevel_HDMI0
+DisplaySettings_VolumeLevelChanged_Event_Not_Triggered_with_Same_VolumeLevel_HDMI0
 
 ### TestCase ID
 DS_63
@@ -1549,9 +1549,9 @@ To confirm that the volume level change event is not triggered when the volume r
 
 ---
 
-<a id="displaysettings_verify_mutestatuschanged_event_not_triggered_with_same_mutestatus_hdmi0"></a>
+<a id="displaysettings_mutestatuschanged_event_not_triggered_with_same_mutestatus_hdmi0"></a>
 ### TestCase Name
-DisplaySettings_Verify_MuteStatusChanged_Event_Not_Triggered_with_Same_MuteStatus_HDMI0
+DisplaySettings_MuteStatusChanged_Event_Not_Triggered_with_Same_MuteStatus_HDMI0
 
 ### TestCase ID
 DS_64
@@ -1587,9 +1587,9 @@ To confirm that the mute status change event is not triggered when the mute stat
 
 ---
 
-<a id="set_invalid_resolution"></a>
+<a id="displaysettings_set_invalid_resolution"></a>
 ### TestCase Name
-Set_Invalid_Resolution
+DisplaySettings_Set_Invalid_Resolution
 
 ### TestCase ID
 DS_65
@@ -1605,9 +1605,9 @@ Validate by setting up invalid resolution
 
 ---
 
-<a id="set_empty_resolution"></a>
+<a id="displaysettings_set_empty_resolution"></a>
 ### TestCase Name
-Set_Empty_Resolution
+DisplaySettings_Set_Empty_Resolution
 
 ### TestCase ID
 DS_66
@@ -1623,9 +1623,9 @@ Validate by setting up empty resolution
 
 ---
 
-<a id="set_invaliddatatype_resolution"></a>
+<a id="displaysettings_set_invaliddatatype_resolution"></a>
 ### TestCase Name
-Set_InvalidDataType_Resolution
+DisplaySettings_Set_InvalidDataType_Resolution
 
 ### TestCase ID
 DS_67
@@ -1641,9 +1641,9 @@ Validate by setting up invalid data type in resolution
 
 ---
 
-<a id="set_empty_videodisplay"></a>
+<a id="displaysettings_set_empty_videodisplay"></a>
 ### TestCase Name
-Set_Empty_VideoDisplay
+DisplaySettings_Set_Empty_VideoDisplay
 
 ### TestCase ID
 DS_68
@@ -1659,9 +1659,9 @@ Validate by setting up empty videoDisplay
 
 ---
 
-<a id="set_invalid_videodisplay"></a>
+<a id="displaysettings_set_invalid_videodisplay"></a>
 ### TestCase Name
-Set_Invalid_VideoDisplay
+DisplaySettings_Set_Invalid_VideoDisplay
 
 ### TestCase ID
 DS_69
@@ -1677,9 +1677,9 @@ Validate by setting up invalid videoDisplay
 
 ---
 
-<a id="set_invalid_persist"></a>
+<a id="displaysettings_set_invalid_persist"></a>
 ### TestCase Name
-Set_Invalid_Persist
+DisplaySettings_Set_Invalid_Persist
 
 ### TestCase ID
 DS_70
@@ -1695,9 +1695,9 @@ Validate by setting up invalid persist
 
 ---
 
-<a id="set_resolution_withoutparameter"></a>
+<a id="displaysettings_set_resolution_withoutparameter"></a>
 ### TestCase Name
-Set_Resolution_WithoutParameter
+DisplaySettings_Set_Resolution_WithoutParameter
 
 ### TestCase ID
 DS_71
@@ -1713,9 +1713,9 @@ Validate set currentResolution API without passing the parameter
 
 ---
 
-<a id="displaysettings_check_display_connected_status_after_light_sleep_hdmi0"></a>
+<a id="displaysettings_display_connected_status_after_light_sleep_hdmi0"></a>
 ### TestCase Name
-DisplaySettings_Check_Display_Connected_Status_After_Light_Sleep_HDMI0
+DisplaySettings_Display_Connected_Status_After_Light_Sleep_HDMI0
 
 ### TestCase ID
 DS_72

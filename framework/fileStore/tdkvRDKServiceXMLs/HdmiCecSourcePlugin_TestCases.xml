@@ -72,7 +72,7 @@
     </pluginPreRequisite>
 
     <!-- Test case 01 -->
-    <testCase testCaseId="HdmiCecSource_01" testCaseName="HdmiCecSource_Verify_Get_Device_List" desc="Verify that the getDeviceList method returns a list of devices that support CEC">
+    <testCase testCaseId="HdmiCecSource_01" testCaseName="HdmiCecSource_Get_Device_List" desc="Verify that the getDeviceList method returns a list of devices that support CEC">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -104,7 +104,7 @@
     </testCase>
 
     <!-- Test case 02 -->
-    <testCase testCaseId="HdmiCecSource_02" testCaseName="HdmiCecSource_Check_Empty_Device_List" desc="Verify that the getDeviceList method returns empty when the HDMI-CEC driver is disabled">
+    <testCase testCaseId="HdmiCecSource_02" testCaseName="HdmiCecSource_Empty_Device_List" desc="Verify that the getDeviceList method returns empty when the HDMI-CEC driver is disabled">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -186,7 +186,7 @@
     </testCase>
     
     <!-- Test case 04 -->
-    <testCase testCaseId="HdmiCecSource_04" testCaseName="HdmiCecSource_Verify_Get_OSD_Name" desc="Verify that the OSD (On-Screen Display) name can be set to a specified value and then retrieved correctly">
+    <testCase testCaseId="HdmiCecSource_04" testCaseName="HdmiCecSource_Get_OSD_Name" desc="Verify that the OSD (On-Screen Display) name can be set to a specified value and then retrieved correctly">
         <testCaseInfo testCaseType="setandget" revert="true" />
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -243,7 +243,7 @@
     </testCase>
 
     <!-- Test case 06 -->
-    <testCase testCaseId="HdmiCecSource_06" testCaseName="HdmiCecSource_Verify_Get_Vendor_Id" desc="Verify that the getVendorId method returns the correct vendor ID when called">
+    <testCase testCaseId="HdmiCecSource_06" testCaseName="HdmiCecSource_Get_Vendor_Id" desc="Verify that the getVendorId method returns the correct vendor ID when called">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -260,7 +260,7 @@
     </testCase>
     
     <!-- Test case 07 -->
-    <testCase testCaseId="HdmiCecSource_07" testCaseName="HdmiCecSource_Verify_Send_Standby_Message" desc="Verify if the sendStandbyMessage method sends a CEC standby message to the logical address of the device when the device is active">
+    <testCase testCaseId="HdmiCecSource_07" testCaseName="HdmiCecSource_Send_Standby_Message" desc="Verify if the sendStandbyMessage method sends a CEC standby message to the logical address of the device when the device is active">
         <testCaseInfo testCaseType="setandget" revert="true" />
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -300,7 +300,7 @@
     </testCase>
 
     <!-- Test case 08 -->
-    <testCase testCaseId="HdmiCecSource_08" testCaseName="HdmiCecSource_Verify_Send_Standby_Message_Error_When_HdmiCec_Driver_Not_Enabled" desc="Verify if the sendstandbymessage method returns an error when the hdmicec driver is not enabled">
+    <testCase testCaseId="HdmiCecSource_08" testCaseName="HdmiCecSource_Send_Standby_Message_Error_When_HdmiCec_Driver_Not_Enabled" desc="Verify if the sendstandbymessage method returns an error when the hdmicec driver is not enabled">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -369,7 +369,7 @@
     </testCase>
 
     <!-- Test case 11 -->
-    <testCase testCaseId="HdmiCecSource_11" testCaseName="HdmiCecSource_Verify_Set_Vendor_Id" desc="Verify if the setVendorId method successfully sets the vendor ID when a valid vendor ID is provided">
+    <testCase testCaseId="HdmiCecSource_11" testCaseName="HdmiCecSource_Set_Vendor_Id" desc="Verify if the setVendorId method successfully sets the vendor ID when a valid vendor ID is provided">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -397,7 +397,7 @@
     </testCase>
 
     <!-- Test case 12 -->
-    <testCase testCaseId="HdmiCecSource_12" testCaseName="HdmiCecSource_Verify_Perform_OTP_Action_Error_When_OTP_Action_Not_Enabled" desc="Verify if the performOTPAction method returns an error when the OTP action is not enabled">
+    <testCase testCaseId="HdmiCecSource_12" testCaseName="HdmiCecSource_Perform_OTP_Action_Error_When_OTP_Action_Not_Enabled" desc="Verify if the performOTPAction method returns an error when the OTP action is not enabled">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -450,7 +450,7 @@
     </testCase>
 
     <!-- Test case 13 -->
-    <testCase testCaseId="HdmiCecSource_13" testCaseName="HdmiCecSource_Verify_SendKeyPressEvent_without_Params" desc="Verify that the sendKeyPressEvent method returns an error when both the logical address and keycode are not provided">
+    <testCase testCaseId="HdmiCecSource_13" testCaseName="HdmiCecSource_SendKeyPressEvent_without_Params" desc="Verify that the sendKeyPressEvent method returns an error when both the logical address and keycode are not provided">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Check_Without_LogicalAddress_and_Keycode" method="HdmiCecSource_sendKeyPressEvent_Negative">
             <resultGeneration useMethodTag="system_check_negative_scenario"/>
@@ -458,7 +458,7 @@
     </testCase>
 
     <!-- Test case 14 -->
-    <testCase testCaseId="HdmiCecSource_14" testCaseName="HdmiCecSource_Check_Empty_DeviceList_with_No-CEC-Devices_Connected" desc="Verify that the getDeviceList method returns an empty list when no CEC-enabled devices are connected">
+    <testCase testCaseId="HdmiCecSource_14" testCaseName="HdmiCecSource_Empty_DeviceList_with_No-CEC-Devices_Connected" desc="Verify that the getDeviceList method returns an empty list when no CEC-enabled devices are connected">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -474,7 +474,7 @@
     </testCase>
 
     <!-- Test case 15 -->
-    <testCase testCaseId="HdmiCecSource_15" testCaseName="HdmiCecSource_Verify_Get_Active_Source_Status_False" desc="Verify that the getActiveSourceStatus method returns the correct active source status when the status is false">
+    <testCase testCaseId="HdmiCecSource_15" testCaseName="HdmiCecSource_Get_Active_Source_Status_False" desc="Verify that the getActiveSourceStatus method returns the correct active source status when the status is false">
         <testCaseInfo testCaseType="setandget" revert="true" />
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -524,7 +524,7 @@
     </testCase>
 
     <!-- Test case 16 -->
-    <testCase testCaseId="HdmiCecSource_16" testCaseName="HdmiCecSource_Verify_Get_Active_Source_Status_True" desc="Verify that the getActiveSourceStatus method returns the correct active source status when the status is true">
+    <testCase testCaseId="HdmiCecSource_16" testCaseName="HdmiCecSource_Get_Active_Source_Status_True" desc="Verify that the getActiveSourceStatus method returns the correct active source status when the status is true">
         <testCaseInfo testCaseType="setandget" revert="true" />
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -550,7 +550,7 @@
     </testCase>
 
     <!-- Test case 17 -->
-    <testCase testCaseId="HdmiCecSource_17" testCaseName="HdmiCecSource_Verify_OnDevice_InfoUpdated Event" desc="Check if the ondeviceinfoupdated event was triggered when updating the OSD name">
+    <testCase testCaseId="HdmiCecSource_17" testCaseName="HdmiCecSource_On_DeviceInfoUpdated_Event" desc="Check if the ondeviceinfoupdated event was triggered when updating the OSD name">
         <testCaseInfo testCaseType="setandget" revert="true" />
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -581,7 +581,7 @@
     </testCase>
 
     <!-- Test case 18 -->
-    <testCase testCaseId="HdmiCecSource_18" testCaseName="HdmiCecSource_Verify_Standby_MessageReceived_Event" desc="Check whether the standbymessagereceived event has been triggered">
+    <testCase testCaseId="HdmiCecSource_18" testCaseName="HdmiCecSource_Standby_MessageReceived_Event" desc="Check whether the standbymessagereceived event has been triggered">
         <testCaseInfo testCaseType="setandget" revert="true" />
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -624,7 +624,7 @@
     </testCase>
 
     <!-- Test case 19 -->
-    <testCase testCaseId="HdmiCecSource_19" testCaseName="HdmiCecSource_Verify_On_ActiveSource_StatusUpdated_Event_when_StandbyCalled" desc="Check whether the onActiveSourceStatusUpdated event has been triggered when the standby call is made">
+    <testCase testCaseId="HdmiCecSource_19" testCaseName="HdmiCecSource_On_ActiveSource_StatusUpdated_Event_when_StandbyCalled" desc="Check whether the onActiveSourceStatusUpdated event has been triggered when the standby call is made">
         <testCaseInfo testCaseType="setandget" revert="true" />
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -674,7 +674,7 @@
     </testCase>
 
     <!-- Test case 20 -->
-    <testCase testCaseId="HdmiCecSource_20" testCaseName="HdmiCecSource_Verify_On_ActiveSource_StatusUpdated_Event_when_PerformOTPCalled" desc="Check whether the onActiveSourceStatusUpdated event has been triggered when the perform OTP call is made">
+    <testCase testCaseId="HdmiCecSource_20" testCaseName="HdmiCecSource_On_ActiveSource_StatusUpdated_Event_when_PerformOTPCalled" desc="Check whether the onActiveSourceStatusUpdated event has been triggered when the perform OTP call is made">
         <testCaseInfo testCaseType="setandget" revert="true" />
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -814,7 +814,7 @@
     </testCase>
 
     <!-- Test case 23 -->
-    <testCase testCaseId="HdmiCecSource_23" testCaseName="HdmiCecSource_Verify_onDeviceInfoUpdated_event_not_triggered_same_OSD_name" desc="Verify if the onDeviceInfoUpdated event is not triggered when the OSD name is set to the same value as before">
+    <testCase testCaseId="HdmiCecSource_23" testCaseName="HdmiCecSource_On_DeviceInfoUpdated_Event_Not_Triggered_Same_OSD_Name" desc="Verify if the onDeviceInfoUpdated event is not triggered when the OSD name is set to the same value as before">
         <testCaseInfo testCaseType="setandget" revert="true" />
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -857,7 +857,7 @@
     </testCase>
 
     <!-- Test case 24 -->
-    <testCase testCaseId="HdmiCecSource_24" testCaseName="HdmiCecSource_Verify_onDeviceInfoUpdated_event_not_triggered_no_changes" desc="Verify if the onDeviceInfoUpdated event is not triggered when no changes are made to the vendor ID and OSD name">
+    <testCase testCaseId="HdmiCecSource_24" testCaseName="HdmiCecSource_On_DeviceInfoUpdated_Event_Not_Triggered_No_Changes" desc="Verify if the onDeviceInfoUpdated event is not triggered when no changes are made to the vendor ID and OSD name">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -879,7 +879,7 @@
     </testCase>
 
     <!-- Test case 25 -->
-    <testCase testCaseId="HdmiCecSource_25" testCaseName="HdmiCecSource_Verify_onDeviceInfoUpdated_event_triggered" desc="Verify if the onDeviceInfoUpdated event is triggered when the OSD name is updated multiple times in quick succession">
+    <testCase testCaseId="HdmiCecSource_25" testCaseName="HdmiCecSource_On_DeviceInfoUpdated_Event_With_Multiple_Updates" desc="Verify if the onDeviceInfoUpdated event is triggered when the OSD name is updated multiple times in quick succession">
         <testCaseInfo testCaseType="setandget" revert="true" />
         <testCasePreRequisite>
           <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -922,7 +922,7 @@
     </testCase>
 
     <!-- Test case 26 -->
-    <testCase testCaseId="HdmiCecSource_26" testCaseName="HdmiCecSource_Verify_Get_Vendor_ID_Error" desc="Verify that the getVendorId method returns an error when the plugin is in a deactivated state">
+    <testCase testCaseId="HdmiCecSource_26" testCaseName="HdmiCecSource_Get_Vendor_ID_Error" desc="Verify that the getVendorId method returns an error when the plugin is in a deactivated state">
             <testCaseInfo testCaseType="direct" />
 	    <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -985,7 +985,7 @@
     </testCase>
 
     <!-- Test case 27 -->
-    <testCase testCaseId="HdmiCecSource_27" testCaseName="HdmiCecSource_Verify_Get_OSD_Name_Error" desc="Verify that the getOSDName method returns an error when the plugin is in a deactivated state">
+    <testCase testCaseId="HdmiCecSource_27" testCaseName="HdmiCecSource_Get_OSD_Name_Error" desc="Verify that the getOSDName method returns an error when the plugin is in a deactivated state">
             <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -1048,7 +1048,7 @@
     </testCase>
 
     <!-- Test case 28 -->
-    <testCase testCaseId="HdmiCecSource_28" testCaseName="HdmiCecSource_Verify_Get_Device_List_Error" desc="Verify that the getDeviceList method returns an error when the plugin is in a deactivated state">
+    <testCase testCaseId="HdmiCecSource_28" testCaseName="HdmiCecSource_Get_Device_List_Error" desc="Verify that the getDeviceList method returns an error when the plugin is in a deactivated state">
             <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -1111,7 +1111,7 @@
     </testCase>
 
     <!-- Test case 29 -->
-    <testCase testCaseId="HdmiCecSource_29" testCaseName="HdmiCecSource_Verify_Get_Enabled_Error" desc="Verify that the getEnabled method returns an error when the plugin is in a deactivated state">
+    <testCase testCaseId="HdmiCecSource_29" testCaseName="HdmiCecSource_Get_Enabled_Error" desc="Verify that the getEnabled method returns an error when the plugin is in a deactivated state">
             <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -1174,7 +1174,7 @@
     </testCase>
 
     <!-- Test case 30 -->
-    <testCase testCaseId="HdmiCecSource_30" testCaseName="HdmiCecSource_Verify_Get_OTP_Enabled_Error" desc="Verify that the getOTPEnabled method returns an error when the plugin is in a deactivated state">
+    <testCase testCaseId="HdmiCecSource_30" testCaseName="HdmiCecSource_Get_OTP_Enabled_Error" desc="Verify that the getOTPEnabled method returns an error when the plugin is in a deactivated state">
             <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -1237,7 +1237,7 @@
     </testCase>
 
     <!-- Test case 31 -->
-    <testCase testCaseId="HdmiCecSource_31" testCaseName="HdmiCecSource_Verify_Send_Key_Press_Event_Invalid_LogicalAddress" desc="Verify if the sendKeyPressEvent method returns an error when an invalid logical address is provided">
+    <testCase testCaseId="HdmiCecSource_31" testCaseName="HdmiCecSource_Send_Key_Press_Event_Invalid_LogicalAddress" desc="Verify if the sendKeyPressEvent method returns an error when an invalid logical address is provided">
         <testCaseInfo testCaseType="direct"/>
 	<testStep testStepId="1" name="Send_Key_Press_Event_Invalid_Address" method="HdmiCecSource_sendKeyPressEvent_Negative">
 	    <params>
@@ -1249,7 +1249,7 @@
     </testCase>
 
     <!-- Test case 32 -->
-    <testCase testCaseId="HdmiCecSource_32" testCaseName="HdmiCecSource_Verify_Send_Key_Press_Event_Invalid_Keycode" desc="Verify if the sendKeyPressEvent method returns an error when an invalid keycode is provided">
+    <testCase testCaseId="HdmiCecSource_32" testCaseName="HdmiCecSource_Send_Key_Press_Event_Invalid_Keycode" desc="Verify if the sendKeyPressEvent method returns an error when an invalid keycode is provided">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Send_Key_Press_Event_Invalid_Keycode" method="HdmiCecSource_sendKeyPressEvent_Negative">
             <params>
@@ -1261,7 +1261,7 @@
     </testCase>
 
     <!-- Test case 33 -->
-    <testCase testCaseId="HdmiCecSource_33" testCaseName="HdmiCecSource_Verify_Send_Key_Press_Event_Invalid_Params" desc="Verify if the sendKeyPressEvent method returns an error when both the logical address and keycode are invalid">
+    <testCase testCaseId="HdmiCecSource_33" testCaseName="HdmiCecSource_Send_Key_Press_Event_Invalid_Params" desc="Verify if the sendKeyPressEvent method returns an error when both the logical address and keycode are invalid">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Send_Key_Press_Event_Invalid_Params" method="HdmiCecSource_sendKeyPressEvent_Negative">
             <params>
@@ -1273,7 +1273,7 @@
     </testCase>
 
     <!-- Test case 34 -->
-    <testCase testCaseId="HdmiCecSource_34" testCaseName="HdmiCecSource_Verify_Send_Key_Press_Event_No_KeyCode" desc="Verify if the sendKeyPressEvent method returns an error when the logical address is valid but the keycode is not provide">
+    <testCase testCaseId="HdmiCecSource_34" testCaseName="HdmiCecSource_Send_Key_Press_Event_No_KeyCode" desc="Verify if the sendKeyPressEvent method returns an error when the logical address is valid but the keycode is not provide">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Send_Key_Press_Event_No_KeyCode" method="HdmiCecSource_sendKeyPressEvent_Negative">
             <params>
@@ -1285,7 +1285,7 @@
     </testCase>
 
     <!-- Test case 35 -->
-    <testCase testCaseId="HdmiCecSource_35" testCaseName="HdmiCecSource_Verify_Send_Key_Press_Event_Error_No_Logical_Address" desc="Verify if the sendKeyPressEvent method returns an error when the keycode is valid but the logical address is not provided">
+    <testCase testCaseId="HdmiCecSource_35" testCaseName="HdmiCecSource_Send_Key_Press_Event_Error_No_Logical_Address" desc="Verify if the sendKeyPressEvent method returns an error when the keycode is valid but the logical address is not provided">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Send_Key_Press_Event_No_Logical_Address" method="HdmiCecSource_sendKeyPressEvent_Negative">
             <params>
@@ -1297,7 +1297,7 @@
     </testCase>
 
     <!-- Test case 36 -->
-    <testCase testCaseId="HdmiCecSource_36" testCaseName="HdmiCecSource_Verify_Send_Key_Press_Event_No_Param" desc="Verify if the sendKeyPressEvent method returns an error when neither the logical address nor the keycode is provided">
+    <testCase testCaseId="HdmiCecSource_36" testCaseName="HdmiCecSource_Send_Key_Press_Event_No_Param" desc="Verify if the sendKeyPressEvent method returns an error when neither the logical address nor the keycode is provided">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Send_Key_Press_Event_No_Params" method="HdmiCecSource_sendKeyPressEvent_Negative">
             <params>
@@ -1309,7 +1309,7 @@
     </testCase>
 
     <!-- Test case 37 -->
-    <testCase testCaseId="HdmiCecSource_37" testCaseName="Set_Invalid_OSD_Name" desc="Validate by setting up invalid OSD Name">
+    <testCase testCaseId="HdmiCecSource_37" testCaseName="HdmiCecSource_Set_Invalid_OSD_Name" desc="Validate by setting up invalid OSD Name">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Set_OSD_Name" method="HdmiCecSource_Set_OSD_Name_Negative">
             <params>
@@ -1320,7 +1320,7 @@
     </testCase>
 
     <!-- Test case 38 -->
-    <testCase testCaseId="HdmiCecSource_38" testCaseName="Set_Empty_VendorID" desc="Validate by setting up empty Vendor ID">
+    <testCase testCaseId="HdmiCecSource_38" testCaseName="HdmiCecSource_Set_Empty_VendorID" desc="Validate by setting up empty Vendor ID">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="HdmiCecSource_Set_Vendor_ID" method="HdmiCecSource_Set_Vendor_ID">
             <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
