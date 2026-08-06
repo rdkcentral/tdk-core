@@ -43,7 +43,7 @@
     	  </prerequisite>
         </pluginPreRequisite>
 
-        <testCase testCaseId="HDCP_01" testCaseName= "Get_HDCP_Details" desc="Get HDCP related data and verify">
+        <testCase testCaseId="HDCP_01" testCaseName= "HDCPProfile_Get_HDCP_Details" desc="Get HDCP related data and verify">
             <testCaseInfo testCaseType="direct"/>
 
             <testCasePreRequisite>
@@ -80,7 +80,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="HDCP_02" testCaseName= "Get_STB_Supported_HDCP_Version" desc="Get HDCP version supported by STB">
+        <testCase testCaseId="HDCP_02" testCaseName= "HDCPProfile_Get_STB_Supported_HDCP_Version" desc="Get HDCP version supported by STB">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_STB_Supported_HDCP_Version" method="Get_STB_Supported_HDCP_Version">
                 <resultGeneration useMethodTag="hdcpprofile_get_general_info" arguments="get_stb_hdcp_info" />
@@ -88,7 +88,7 @@
         </testCase>
 
 	<!-- Test case 03 -->
-        <testCase testCaseId="HDCP_03" testCaseName="HdcpProfile_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+        <testCase testCaseId="HDCP_03" testCaseName="HDCPProfile_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
             <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -144,7 +144,7 @@
         </testCase>
 
 	<!-- Test case 04 -->
-        <testCase testCaseId="HDCP_04" testCaseName="HdcpProfile_ActivateDeactivate_All_Event_Test" desc="Validates all event on Activating/deactivating the plugin">
+        <testCase testCaseId="HDCP_04" testCaseName="HDCPProfile_ActivateDeactivate_All_Event_Test" desc="Validates all event on Activating/deactivating the plugin">
             <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
