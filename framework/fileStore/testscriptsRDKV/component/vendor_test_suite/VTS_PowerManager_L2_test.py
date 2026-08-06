@@ -112,7 +112,7 @@ if "SUCCESS" in result.upper():
     #Set binary name
     binaryName = PowerManager_binaryName
     #Set binary config
-    binaryConfig = PowerManager_binaryConfig
+    binaryConfig = PowerManager_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else PowerManager_SINK_binaryConfig
     #Set Custom List of TestCases
     testCaseList = PowerManager_L2_List
     #Set basepath of test
