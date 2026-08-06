@@ -69,7 +69,7 @@
           </prerequisite>
         </pluginPreRequisite>
        
-        <testCase testCaseId="DS_01" testCaseName= "Check_Settop_Supported_Resolutions" desc="Check whether settop displays all supported resoltions">
+        <testCase testCaseId="DS_01" testCaseName="DisplaySettings_Get_Settop_Supported_Resolutions" desc="Check whether settop displays all supported resoltions">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Settop_Supported_Resolutions" method="Get_Supported_Settop_Resolutions">
                 <resultGeneration useMethodTag="check_settop_supported_resolutions">
@@ -78,7 +78,7 @@
             </testStep>
         </testCase>
         
-        <testCase testCaseId="DS_02" testCaseName= "Check_Supported_Tv_Resolutions"  desc="Check whether settop displays supported TV resoltions">
+        <testCase testCaseId="DS_02" testCaseName="DisplaySettings_Get_Supported_Tv_Resolutions"  desc="Check whether settop displays supported TV resoltions">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" >
                   <resultGeneration useMethodTag="display_connected_status" />
@@ -90,7 +90,7 @@
                 <resultGeneration useMethodTag="check_supported_tv_resolutions"/>
             </testStep>
         </testCase>
-        <testCase testCaseId="DS_03" testCaseName= "Check_Supported_Video_Displays" desc="Check whether settop displays supported video displays">
+        <testCase testCaseId="DS_03" testCaseName="DisplaySettings_Get_Supported_Video_Displays" desc="Check whether settop displays supported video displays">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Supported_Video_Displays" method="Get_Supported_VideoDisplays">
                 <resultGeneration useMethodTag="check_supported_video_displays">
@@ -99,7 +99,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_04" testCaseName= "Check_Supported_Audio_Ports" desc="Check whether settop lists supported audio ports">
+        <testCase testCaseId="DS_04" testCaseName="DisplaySettings_Get_Supported_Audio_Ports" desc="Check whether settop lists supported audio ports">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Supported_Audio_Ports" method="Get_Supported_AudioPorts">
                 <resultGeneration useMethodTag="check_supported_audio_ports">
@@ -108,7 +108,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_05" testCaseName= "Check_Settop_HDR_Support" desc="Check whether settop has HDR support or not">
+        <testCase testCaseId="DS_05" testCaseName="DisplaySettings_Get_Settop_HDR_Support" desc="Check whether settop has HDR support or not">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Settop_HDR_Support_Details" method="GetSettopHDRSupport">
                 <resultGeneration useMethodTag="check_settop_HDR_support">
@@ -117,7 +117,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_06" testCaseName= "Check_TV_HDR_Support" desc="Check whether TV has HDR support or not">
+        <testCase testCaseId="DS_06" testCaseName="DisplaySettings_Get_TV_HDR_Support" desc="Check whether TV has HDR support or not">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -132,14 +132,14 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_07" testCaseName= "Read_Host_EDID" desc="Check the EDID status of host">
+        <testCase testCaseId="DS_07" testCaseName= "DisplaySettings_Read_Host_EDID" desc="Check the EDID status of host">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Host_EDID_Details" method="Read_Host_EDID">
                 <resultGeneration useMethodTag="check_host_edid"/>
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_08" testCaseName= "Read_Connected_Device_EDID" desc="Check the EDID status of connected device">
+        <testCase testCaseId="DS_08" testCaseName= "DisplaySettings_Read_Connected_Device_EDID" desc="Check the EDID status of connected device">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -153,7 +153,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_09" testCaseName= "Set_And_Get_Supported_Audio_Modes_HDMI0"  desc="Check whether supported audio modes are able to set HDMI0 port">
+        <testCase testCaseId="DS_09" testCaseName= "DisplaySettings_Set_And_Get_Supported_Audio_Modes_HDMI0"  desc="Check whether supported audio modes are able to set HDMI0 port">
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="audiomodes"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" >
                   <resultGeneration useMethodTag="display_connected_status" />
@@ -197,7 +197,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_10" testCaseName= "Set_And_Get_Zoom_Settings"  desc="Check whether supported zoom modes are able to set and get">
+        <testCase testCaseId="DS_10" testCaseName= "DisplaySettings_Set_And_Get_Zoom_Settings"  desc="Check whether supported zoom modes are able to set and get">
             <testCaseInfo testCaseType="loop" revert="true"/>
             <testStep testStepId="1" name="Get_Zoom_Setting" method="Get_Zoom_Setting" saveResult="true" revertGet="yes" >
               <resultGeneration useMethodTag="check_zoom_settings" >
@@ -224,7 +224,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_11" testCaseName= "Set_And_Get_VideoPort_Status_InStandby_Negative_Case" desc="Checks the negative scenario for video port status in standby">
+        <testCase testCaseId="DS_11" testCaseName= "DisplaySettings_Set_And_Get_VideoPort_Status_InStandby_Negative_Case" desc="Checks the negative scenario for video port status in standby">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" >
                   <resultGeneration useMethodTag="display_connected_status" />
@@ -271,7 +271,7 @@
             </testStep-->
         </testCase>
 
-        <testCase testCaseId="DS_12" testCaseName= "Set_And_Get_MS12_Audio_Compression" desc="Check whether MS12 audio compression values are able to set and get" >
+        <testCase testCaseId="DS_12" testCaseName= "DisplaySettings_Set_And_Get_MS12_Audio_Compression" desc="Check whether MS12 audio compression values are able to set and get" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="AudioCompression" />
             <testStep testStepId="1" name="Get_MS12_Audio_Compression" method="Get_MS12_Audio_Compression" saveResult="true" revertGet="yes" >
               <resultGeneration useMethodTag="check_MS12_audio_compression" />
@@ -291,14 +291,14 @@
             </testStep>
         </testCase>              
 
-        <testCase testCaseId="DS_13" testCaseName= "Check_Current_Output_Settings" desc="Check the current output settings of device">
+        <testCase testCaseId="DS_13" testCaseName="DisplaySettings_Get_Current_Output_Settings" desc="Check the current output settings of device">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Current_Output_Settings" method="Get_Current_Output_Settings">
                 <resultGeneration useMethodTag="check_current_output_settings"/>
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_14" testCaseName= "Check_Active_Input_Value" desc="Check the active input value ">
+        <testCase testCaseId="DS_14" testCaseName="DisplaySettings_Get_Active_Input_Value" desc="Check the active input value ">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" >
                   <resultGeneration useMethodTag="display_connected_status" />
@@ -308,7 +308,7 @@
             </testStep>
         </testCase>
 
-	<testCase testCaseId="DS_15" testCaseName= "SetAndGet_All_Supported_Resolutions" desc="Set and get all the supported resolution by both TV and STB, also checks for the resolution changed event">
+	<testCase testCaseId="DS_15" testCaseName= "DisplaySettings_SetAndGet_All_Supported_Resolutions" desc="Set and get all the supported resolution by both TV and STB, also checks for the resolution changed event">
             <testCaseInfo testCaseType="loop" revert="true" />
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -358,7 +358,7 @@
             </testStep>
         </testCase>
 	
-	<testCase testCaseId="DS_16" testCaseName= "Enable_And_Disable_Dolby_Volume_Mode"  desc="Check whether dolby volume mode can enable and disable ">
+	<testCase testCaseId="DS_16" testCaseName= "DisplaySettings_Enable_And_Disable_Dolby_Volume_Mode"  desc="Check whether dolby volume mode can enable and disable ">
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="DolbyVolume"/>
             <testStep testStepId="1" name="Get_Dolby_Volume_Mode" method="Get_Dolby_Volume_Mode" saveResult="true" revertGet="yes" >
               <resultGeneration useMethodTag="check_dolby_volume_mode" >
@@ -379,7 +379,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_17" testCaseName= "Set_And_Get_Dialog_Enhancement" desc="Check whether dialog enhancement values are able to set and get" >
+        <testCase testCaseId="DS_17" testCaseName= "DisplaySettings_Set_And_Get_Dialog_Enhancement" desc="Check whether dialog enhancement values are able to set and get" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="DialogEnhancement" />
             <testStep testStepId="1" name="Get_Dialog_Enhancement" method="Get_Dialog_Enhancement" saveResult="true" revertGet="yes" >
               <resultGeneration useMethodTag="check_dialog_enhancement" />
@@ -400,7 +400,7 @@
         </testCase>
 
 
-        <testCase testCaseId="DS_18" testCaseName= "Set_And_Get_Volume_Leveller_HDMI0" desc="Check whether volume values are able to set and get for HDMI0 port" >
+        <testCase testCaseId="DS_18" testCaseName= "DisplaySettings_Set_And_Get_Volume_Leveller_HDMI0" desc="Check whether volume values are able to set and get for HDMI0 port" >
             <testCaseInfo testCaseType="loop" revert="true"  configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES,CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="VolumeLeveller,HDMI0" />
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
@@ -432,7 +432,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_19" testCaseName= "Set_And_Get_DRC_Mode_HDMI0" desc="Check whether DRC mode values are able to set and get for HDMI0" >
+        <testCase testCaseId="DS_19" testCaseName= "DisplaySettings_Set_And_Get_DRC_Mode_HDMI0" desc="Check whether DRC mode values are able to set and get for HDMI0" >
             <testCaseInfo testCaseType="loop" revert="true"  configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES,CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="DRCMode,HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
@@ -463,7 +463,7 @@
             </testStep>
         </testCase>
  
-        <testCase testCaseId="DS_20" testCaseName= "Set_And_Get_Volume_Level_HDMI0" desc="Check whether volume level values are able to set and get for HDMI0 port" >
+        <testCase testCaseId="DS_20" testCaseName= "DisplaySettings_Set_And_Get_Volume_Level_HDMI0" desc="Check whether volume level values are able to set and get for HDMI0 port" >
             <testCaseInfo testCaseType="loop"   configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0" />
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
@@ -488,7 +488,7 @@
             </testStep>
         </testCase>    
      
-        <testCase testCaseId="DS_21" testCaseName= "Set_And_Get_Gain_HDMI0" desc="Check whether audio port gain values are able to set and get for HDMI0 port" >
+        <testCase testCaseId="DS_21" testCaseName= "DisplaySettings_Set_And_Get_Gain_HDMI0" desc="Check whether audio port gain values are able to set and get for HDMI0 port" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS,DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0,Gain" />
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0">
@@ -519,7 +519,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_22" testCaseName= "Mute_And_Unmute_Audio_HDMI0" desc="Check whether audio is able to mute and unmute  for HDMI0 port" >
+        <testCase testCaseId="DS_22" testCaseName= "DisplaySettings_Mute_And_Unmute_Audio_HDMI0" desc="Check whether audio is able to mute and unmute  for HDMI0 port" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0">
@@ -550,7 +550,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_23" testCaseName= "Set_And_Get_Audio_Delay_HDMI0" desc="Check whether audio delay values are able to set and get for HDMI0 port" >
+        <testCase testCaseId="DS_23" testCaseName= "DisplaySettings_Set_And_Get_Audio_Delay_HDMI0" desc="Check whether audio delay values are able to set and get for HDMI0 port" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES,CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="AudioDelay,HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0">
@@ -581,7 +581,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_24" testCaseName= "Set_And_Get_Audio_Delay_Offset_HDMI0" desc="Check whether audio delay offset values are able to set and get for HDMI0" >
+        <testCase testCaseId="DS_24" testCaseName= "DisplaySettings_Set_And_Get_Audio_Delay_Offset_HDMI0" desc="Check whether audio delay offset values are able to set and get for HDMI0" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES,CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="AudioDelayOffset,HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0">
@@ -612,14 +612,14 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_25" testCaseName= "Check_Sink_Atmos_Capability" desc="Check the the Atmos capability of the sink">
+        <testCase testCaseId="DS_25" testCaseName="DisplaySettings_Get_Sink_Atmos_Capability" desc="Check the the Atmos capability of the sink">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="SinkAtmosCapability"/>
             <testStep testStepId="1" name="Check_Sink_Atmos_Capability" method="Get_Sink_Atmos_Capability">
                 <resultGeneration useMethodTag="check_sink_atmos_capability" />
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_26" testCaseName= "Enable_Disable_Audio_Atmos_Output_Mode" desc="Check whether audio atmos output mode is possile to enable and disable">
+        <testCase testCaseId="DS_26" testCaseName= "DisplaySettings_Enable_Disable_Audio_Atmos_Output_Mode" desc="Check whether audio atmos output mode is possile to enable and disable">
             <testCaseInfo testCaseType="loop" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="AudioAtmosOutputMode"/>
             <testStep testStepId="1" name="Enable_Disable_Audio_Atmos_Output_Mode" testStepType="loop" >
               <subtestStep subtestStepId="1" name="Enable_Disable_Audio_Atmos_Output_Mode" method="Set_Audio_Atmos_Output_Mode" >
@@ -631,7 +631,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_27" testCaseName= "Get_TV_HDR_Capabilities" desc="Check the HDR capabilities of TV">
+        <testCase testCaseId="DS_27" testCaseName= "DisplaySettings_Get_TV_HDR_Capabilities" desc="Check the HDR capabilities of TV">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" >
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -641,7 +641,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_28" testCaseName= "Is_Connected_Device_Repeater" desc="Check whether connected device is a repeater" >
+        <testCase testCaseId="DS_28" testCaseName= "DisplaySettings_Is_Connected_Device_Repeater" desc="Check whether connected device is a repeater" >
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="DeviceRepeater" />
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" >
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -653,7 +653,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_29" testCaseName= "Get_Default_Resolution" desc="Check whether the default resolution is available in supported resolutions" >
+        <testCase testCaseId="DS_29" testCaseName= "DisplaySettings_Get_Default_Resolution" desc="Check whether the default resolution is available in supported resolutions" >
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" >
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -671,7 +671,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_30" testCaseName= "Enable_And_Disable_AudioPort_HDMI0" desc="Check whether able to enable and disable HDMI0 port" >
+        <testCase testCaseId="DS_30" testCaseName= "DisplaySettings_Enable_And_Disable_AudioPort_HDMI0" desc="Check whether able to enable and disable HDMI0 port" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="enableaudioport"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0"/>
@@ -700,7 +700,7 @@
               </subtestStep>
             </testStep>
         </testCase>
-        <testCase testCaseId="DS_31" testCaseName= "Check_Settop_Audio_Capabilities_HDMI0" desc="Check whether settop displays all supported audio capabilities">
+        <testCase testCaseId="DS_31" testCaseName="DisplaySettings_Get_Settop_Audio_Capabilities_HDMI0" desc="Check whether settop displays all supported audio capabilities">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="audiocapabilities"/>
 	    <testStep testStepId="1" name="Get_Settop_Audio_Capabilities" method="Get_Settop_Audio_Capabilities" >
 		<params>
@@ -711,7 +711,7 @@
                 </resultGeneration>
             </testStep>
         </testCase>
-        <testCase testCaseId="DS_32" testCaseName= "Check_Settop_MS12_Capabilities_HDMI0" desc="Check whether settop displays all supported MS12 capabilities">
+        <testCase testCaseId="DS_32" testCaseName="DisplaySettings_Get_Settop_MS12_Capabilities_HDMI0" desc="Check whether settop displays all supported MS12 capabilities">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="ms12capabilities"/>
 	    <testStep testStepId="1" name="Get_Settop_MS12_Capabilities" method="Get_Settop_MS12_Capabilities" >
 		<params>
@@ -722,7 +722,7 @@
                 </resultGeneration>
             </testStep>
         </testCase>
-        <testCase testCaseId="DS_33" testCaseName= "Set_And_Get_Volume_Leveller_Modes_HDMI0" desc="Check whether able to enables or disables volume leveling for HDMI0 port" >
+        <testCase testCaseId="DS_33" testCaseName= "DisplaySettings_Set_And_Get_Volume_Leveller_Modes_HDMI0" desc="Check whether able to enables or disables volume leveling for HDMI0 port" >
             <testCaseInfo testCaseType="loop" revert="true"  configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES,CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="VolumeLeveller,HDMI0" />
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
@@ -753,7 +753,7 @@
               </subtestStep>
             </testStep>
         </testCase>
-        <testCase testCaseId="DS_34" testCaseName= "Check_Supported_Resolutions" desc="Checks whether the supported resolutions list contains the common resolutions present in the supported TV and Settop resolutions">
+        <testCase testCaseId="DS_34" testCaseName="DisplaySettings_Get_Supported_Resolutions" desc="Checks whether the supported resolutions list contains the common resolutions present in the supported TV and Settop resolutions">
             <testCaseInfo testCaseType="direct" revert="true" />
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -779,7 +779,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_35" testCaseName= "Check_Active_Input_Value_For_Invalid_Display" desc="Checks the active input value for invalid video display">
+        <testCase testCaseId="DS_35" testCaseName="DisplaySettings_Get_Active_Input_Value_For_Invalid_Display" desc="Checks the active input value for invalid video display">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Get_Active_Input" method="Get_Active_Input">
                 <params>
@@ -789,7 +789,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_36" testCaseName= "Check_VideoPort_Standby_Status_For_Invalid_Display" desc="Checks the video port standby status for invalid display" >
+        <testCase testCaseId="DS_36" testCaseName="DisplaySettings_Get_VideoPort_Standby_Status_For_Invalid_Display" desc="Checks the video port standby status for invalid display" >
             <testCaseInfo testCaseType="direct"  />
             <testStep testStepId="1" name="Get_VideoPort_Status_InStandby"  method="Get_VideoPort_Status_InStandby" >
                 <params>
@@ -806,7 +806,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_37" testCaseName= "Set_And_Get_Negative_Audio_Delay" desc="Check whether audio delay api accepts negative values" >
+        <testCase testCaseId="DS_37" testCaseName= "DisplaySettings_Set_And_Get_Negative_Audio_Delay" desc="Check whether audio delay api accepts negative values" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES,CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="AudioDelay,HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0">
@@ -837,7 +837,7 @@
             </testStep>
         </testCase>        
 
-        <testCase testCaseId="DS_38" testCaseName="Check_Supported_Audio_Modes_Without_Audio_Port"  desc="Validates the results of supported audio modes without passing audio port parameter">
+        <testCase testCaseId="DS_38" testCaseName="DisplaySettings_Get_Supported_Audio_Modes_Without_Audio_Port"  desc="Validates the results of supported audio modes without passing audio port parameter">
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" >
                   <resultGeneration useMethodTag="display_connected_status" />
@@ -851,7 +851,7 @@
             </testStep>
         </testCase>
  
-        <testCase testCaseId="DS_39" testCaseName= "Check_Current_And_Supported_Video_Formats"  desc="Checks the current and supported video formats">
+        <testCase testCaseId="DS_39" testCaseName="DisplaySettings_Get_Current_And_Supported_Video_Formats"  desc="Checks the current and supported video formats">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -865,7 +865,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_40" testCaseName= "Check_Current_And_Supported_Audio_Formats"  desc="Checks the current and supported audio formats">
+        <testCase testCaseId="DS_40" testCaseName="DisplaySettings_Get_Current_And_Supported_Audio_Formats"  desc="Checks the current and supported audio formats">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -879,7 +879,7 @@
             </testStep>
         </testCase>
 
-	<testCase testCaseId="DS_41" testCaseName= "Check_Resolution_Persisted_After_Reboot" desc="Checks whether resolution persisted after reboot if persist set as true">
+	<testCase testCaseId="DS_41" testCaseName="DisplaySettings_Resolution_Persisted_After_Reboot" desc="Checks whether resolution persisted after reboot if persist set as true">
             <testCaseInfo testCaseType="loop" revert="true" />
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -916,7 +916,7 @@
             </testStep>
         </testCase>
         
-	<testCase testCaseId="DS_42" testCaseName= "Check_Resolution_Not_Persisted_After_Reboot" desc="Checks whether resolution not persisted after reboot if persist set as false">
+	<testCase testCaseId="DS_42" testCaseName="DisplaySettings_Resolution_Not_Persisted_After_Reboot" desc="Checks whether resolution not persisted after reboot if persist set as false">
             <testCaseInfo testCaseType="loop" revert="true" />
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -958,7 +958,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_43" testCaseName= "SetAndGet_Supported_Color_Depth_Capabilities" desc="Set and get all the supported color depth capabilities">
+        <testCase testCaseId="DS_43" testCaseName= "DisplaySettings_SetAndGet_Supported_Color_Depth_Capabilities" desc="Set and get all the supported color depth capabilities">
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="ColorDepth"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -990,7 +990,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_44" testCaseName= "Check_Resolution_PreChange_Event" desc="Set and get all the supported resolution by both TV and STB, also checks for the resolution prechanged event">
+        <testCase testCaseId="DS_44" testCaseName="DisplaySettings_Resolution_PreChange_Event" desc="Set and get all the supported resolution by both TV and STB, also checks for the resolution prechanged event">
             <testCaseInfo testCaseType="loop" revert="true" />
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -1038,7 +1038,7 @@
               </subtestStep>
             </testStep>
         </testCase>
-        <testCase testCaseId="DS_45" testCaseName= "Check_Resolution_Persisted_For_30Seconds_After_Reboot" desc="Checks whether resolution persisted for 30 seconds after reboot if persist set as true">
+        <testCase testCaseId="DS_45" testCaseName="DisplaySettings_Resolution_Persisted_For_30Seconds_After_Reboot" desc="Checks whether resolution persisted for 30 seconds after reboot if persist set as true">
             <testCaseInfo testCaseType="loop" revert="true" />
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -1074,7 +1074,7 @@
               </subtestStep>
             </testStep>
        </testCase> 
-       <testCase testCaseId="DS_46" testCaseName= "Check_Mute_Status_Changed_Event_HDMI0" desc="Check whether audio is able to mute and unmute  for HDMI0 port and check Mute status changed event" >
+       <testCase testCaseId="DS_46" testCaseName="DisplaySettings_Mute_Status_Changed_Event_HDMI0" desc="Check whether audio is able to mute and unmute  for HDMI0 port and check Mute status changed event" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0">
@@ -1109,7 +1109,7 @@
               </subtestStep>
             </testStep>
         </testCase>
-        <testCase testCaseId="DS_47" testCaseName= "Check_Volume_Level_Changed_Event_HDMI0" desc="Check whether volume level values are able to set and get for HDMI0 port and check for volume level changed event" >
+        <testCase testCaseId="DS_47" testCaseName="DisplaySettings_Volume_Level_Changed_Event_HDMI0" desc="Check whether volume level values are able to set and get for HDMI0 port and check for volume level changed event" >
             <testCaseInfo testCaseType="loop"   configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0" />
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
@@ -1138,7 +1138,7 @@
               </subtestStep>
             </testStep>
         </testCase>
-        <testCase testCaseId="DS_48" testCaseName="Set_And_Get_Negative_Volume_Level_HDMI0" desc="Check whether negative volume level values are able to set and get for HDMI0 port" >
+        <testCase testCaseId="DS_48" testCaseName="DisplaySettings_Set_And_Get_Negative_Volume_Level_HDMI0" desc="Check whether negative volume level values are able to set and get for HDMI0 port" >
             <testCaseInfo testCaseType="loop"   configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0" />
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
@@ -1163,7 +1163,7 @@
         </testCase>
 
 	<!-- Test case 49 -->
-        <testCase testCaseId="DS_49" testCaseName= "Set_and_Get_Fader_Control_HDMI0" desc="Checks if able to set and get the mixerbalance betweeen main and associated audio">
+        <testCase testCaseId="DS_49" testCaseName= "DisplaySettings_Set_and_Get_Fader_Control_HDMI0" desc="Checks if able to set and get the mixerbalance betweeen main and associated audio">
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="FaderControl"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
@@ -1195,7 +1195,7 @@
     	</testCase>	
 
 	<!-- Test case 50 -->
-        <testCase testCaseId="DS_50" testCaseName= "Set_Empty_Fader_Control_HDMI0" desc="Checks if able to set the mixerbalance as empty">
+        <testCase testCaseId="DS_50" testCaseName= "DisplaySettings_Set_Empty_Fader_Control_HDMI0" desc="Checks if able to set the mixerbalance as empty">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="FaderControl"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
@@ -1211,7 +1211,7 @@
         </testCase>
 
 	<!-- Test case 51 -->
-        <testCase testCaseId="DS_51" testCaseName= "Set_Fader_Control_OutofRange_HDMI0" desc="Checks if able to set the mixerbalance as out of range">
+        <testCase testCaseId="DS_51" testCaseName= "DisplaySettings_Set_Fader_Control_OutofRange_HDMI0" desc="Checks if able to set the mixerbalance as out of range">
             <testCaseInfo testCaseType="loop" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="FaderControl"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
@@ -1229,7 +1229,7 @@
         </testCase>
 
 	<!-- Test case 52 -->
-        <testCase testCaseId="DS_52" testCaseName= "Set_and_Get_Audio_Mixing_Status_HDMI0" desc="Checks if able to enable/disable associated audio mixing">
+        <testCase testCaseId="DS_52" testCaseName= "DisplaySettings_Set_and_Get_Audio_Mixing_Status_HDMI0" desc="Checks if able to enable/disable associated audio mixing">
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="AudioMixing"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                 <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
@@ -1318,7 +1318,7 @@
 
        <!-- According to RDK tickets, setting the volume using the setVolumeLevel API does not reflect the mute status. Therefore, this test case has been commented out -->
        <!-- Test case 54 -->
-       <!--testCase testCaseId="DS_54" testCaseName="DisplaySettings_Verify_MuteStatus_After_Increasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (increase) on HDMI0">
+       <!--testCase testCaseId="DS_54" testCaseName="DisplaySettings_MuteStatus_After_Increasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (increase) on HDMI0">
             <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                   <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
@@ -1424,7 +1424,7 @@
        </testCase-->
 
        <!-- Test case 55 -->
-       <!--testCase testCaseId="DS_55" testCaseName="DisplaySettings_Verify_MuteStatus_After_Setting_Volume_To_Zero_HDMI0" desc="Verify the mute status after adjusting the volume (zero) on HDMI0">
+       <!--testCase testCaseId="DS_55" testCaseName="DisplaySettings_MuteStatus_After_Setting_Volume_To_Zero_HDMI0" desc="Verify the mute status after adjusting the volume (zero) on HDMI0">
             <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                   <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
@@ -1522,7 +1522,7 @@
        </testCase-->
 
        <!-- Test case 56 -->
-       <!--testCase testCaseId="DS_56" testCaseName="DisplaySettings_Verify_MuteStatus_After_Decreasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (decrease) on HDMI0">
+       <!--testCase testCaseId="DS_56" testCaseName="DisplaySettings_MuteStatus_After_Decreasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (decrease) on HDMI0">
             <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                   <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
@@ -1628,7 +1628,7 @@
        </testCase-->
 
        <!-- Test case 57 -->
-       <!--testCase testCaseId="DS_57" testCaseName="DisplaySettings_Verify_MuteStatus_After_Setting_Volume_To_Hundred_HDMI0" desc="Verify the mute status after adjusting the volume (Hundred) on HDMI0">
+       <!--testCase testCaseId="DS_57" testCaseName="DisplaySettings_MuteStatus_After_Setting_Volume_To_Hundred_HDMI0" desc="Verify the mute status after adjusting the volume (Hundred) on HDMI0">
             <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
 	    <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                   <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
@@ -1732,7 +1732,7 @@
        </testCase-->
 
        <!-- Test case 54 -->
-       <testCase testCaseId="DS_54" testCaseName="DisplaySettings_Using_KeyCode_Verify_MuteStatus_After_Increasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (increase) using keycode on HDMI0">
+       <testCase testCaseId="DS_54" testCaseName="DisplaySettings_Using_KeyCode_MuteStatus_After_Increasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (increase) using keycode on HDMI0">
             <testCaseInfo testCaseType="direct" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Activate_RDKWindowManager_Plugin">
@@ -1866,7 +1866,7 @@
        </testCase>
 
        <!-- Test case 55 -->
-       <testCase testCaseId="DS_55" testCaseName="DisplaySettings_Using_KeyCode_Verify_MuteStatus_After_decreasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (decrease) using keycode on HDMI0">
+       <testCase testCaseId="DS_55" testCaseName="DisplaySettings_Using_KeyCode_MuteStatus_After_decreasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (decrease) using keycode on HDMI0">
             <testCaseInfo testCaseType="direct" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Activate_RDKWindowManager_Plugin">
@@ -2000,7 +2000,7 @@
        </testCase>
 
        <!-- Test case 56 -->
-       <testCase testCaseId="DS_56" testCaseName="DisplaySettings_Using_KeyCode_Verify_MuteStatus_HDMI0" desc="Verify the mute status using keycode on HDMI0">
+       <testCase testCaseId="DS_56" testCaseName="DisplaySettings_Using_KeyCode_MuteStatus_HDMI0" desc="Verify the mute status using keycode on HDMI0">
             <testCaseInfo testCaseType="direct" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Activate_RDKWindowManager_Plugin">
@@ -2083,7 +2083,7 @@
        </testCase>
 
 	<!-- Test case 57 -->
-        <testCase testCaseId="DS_57" testCaseName="Set_Mute_Invalid_audioPort" desc="Validate by setting up mute for invalid audioport">
+        <testCase testCaseId="DS_57" testCaseName="DisplaySettings_Set_Mute_Invalid_audioPort" desc="Validate by setting up mute for invalid audioport">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Muted" method="Set_Muted">
                           <params>
@@ -2095,7 +2095,7 @@
         </testCase>
 
 	<!-- Test case 58 -->
-        <testCase testCaseId="DS_58" testCaseName="Set_Mute_empty_audioPort" desc="Validate by setting up mute for empty audioport">
+        <testCase testCaseId="DS_58" testCaseName="DisplaySettings_Set_Mute_empty_audioPort" desc="Validate by setting up mute for empty audioport">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Muted" method="Set_Muted">
                           <params>
@@ -2107,7 +2107,7 @@
         </testCase>
 		
 	<!-- Test case 59 -->
-        <testCase testCaseId="DS_59" testCaseName="Get_Dialog_Enhancement_InvalidAudioPort" desc="Validate by getting dialogEnhancement for invalid audioport">
+        <testCase testCaseId="DS_59" testCaseName="DisplaySettings_Get_Dialog_Enhancement_InvalidAudioPort" desc="Validate by getting dialogEnhancement for invalid audioport">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Get_Dialog_Enhancement" method="Get_Dialog_Enhancement">
                           <params>
@@ -2118,7 +2118,7 @@
         </testCase>
 
         <!-- Test case 60 -->
-        <testCase testCaseId="DS_60" testCaseName="Get_Dialog_Enhancement_EmptyAudioPort" desc="Validate by getting dialogEnhancement for empty audioport">
+        <testCase testCaseId="DS_60" testCaseName="DisplaySettings_Get_Dialog_Enhancement_EmptyAudioPort" desc="Validate by getting dialogEnhancement for empty audioport">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Get_Dialog_Enhancement" method="Get_Dialog_Enhancement">
                           <params>
@@ -2129,7 +2129,7 @@
         </testCase>
 
         <!-- Test case 61 -->
-        <testCase testCaseId="DS_61" testCaseName="Get_Volume_Level_Invalid" desc="Validate by getting VolumeLevel for invalid audioport">
+        <testCase testCaseId="DS_61" testCaseName="DisplaySettings_Get_Volume_Level_Invalid" desc="Validate by getting VolumeLevel for invalid audioport">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Get_Volume_Level" method="Get_Volume_Level">
                           <params>
@@ -2140,7 +2140,7 @@
         </testCase>
 		
 	<!-- Test case 62 -->
-        <testCase testCaseId="DS_62" testCaseName="Get_Volume_Level_EmptyAudioPort" desc="Validate by getting VolumeLevel for empty audioport">
+        <testCase testCaseId="DS_62" testCaseName="DisplaySettings_Get_Volume_Level_EmptyAudioPort" desc="Validate by getting VolumeLevel for empty audioport">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Get_Volume_Level" method="Get_Volume_Level">
                           <params>
@@ -2151,7 +2151,7 @@
         </testCase>
 
 	<!-- Test case 63 -->
-       <testCase testCaseId="DS_63" testCaseName="DisplaySettings_Verify_VolumeLevelChanged_Event_Not_Triggered_with_Same_VolumeLevel_HDMI0" desc="To confirm that the volume level change event is not triggered when the volume remains the same for HDMI0">
+       <testCase testCaseId="DS_63" testCaseName="DisplaySettings_VolumeLevelChanged_Event_Not_Triggered_with_Same_VolumeLevel_HDMI0" desc="To confirm that the volume level change event is not triggered when the volume remains the same for HDMI0">
             <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                   <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
@@ -2212,7 +2212,7 @@
        </testCase>
 
        <!-- Test case 64 -->
-       <testCase testCaseId="DS_64" testCaseName="DisplaySettings_Verify_MuteStatusChanged_Event_Not_Triggered_with_Same_MuteStatus_HDMI0" desc="To confirm that the mute status change event is not triggered when the mute status remains the same for HDMI0">
+       <testCase testCaseId="DS_64" testCaseName="DisplaySettings_MuteStatusChanged_Event_Not_Triggered_with_Same_MuteStatus_HDMI0" desc="To confirm that the mute status change event is not triggered when the mute status remains the same for HDMI0">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                   <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
@@ -2302,7 +2302,7 @@
        </testCase>
 
        <!-- Test case 65 -->
-       <testCase testCaseId="DS_65" testCaseName="Set_Invalid_Resolution" desc="Validate by setting up invalid resolution">
+       <testCase testCaseId="DS_65" testCaseName="DisplaySettings_Set_Invalid_Resolution" desc="Validate by setting up invalid resolution">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
                           <params>
@@ -2315,7 +2315,7 @@
        </testCase>
        
 	<!-- Test case 66 -->
-       <testCase testCaseId="DS_66" testCaseName="Set_Empty_Resolution" desc="Validate by setting up empty resolution">
+       <testCase testCaseId="DS_66" testCaseName="DisplaySettings_Set_Empty_Resolution" desc="Validate by setting up empty resolution">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
                           <params>
@@ -2328,7 +2328,7 @@
        </testCase>
        
        <!-- Test case 67 -->
-       <testCase testCaseId="DS_67" testCaseName="Set_InvalidDataType_Resolution" desc="Validate by setting up invalid data type in resolution">
+       <testCase testCaseId="DS_67" testCaseName="DisplaySettings_Set_InvalidDataType_Resolution" desc="Validate by setting up invalid data type in resolution">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
                           <params>
@@ -2341,7 +2341,7 @@
        </testCase>
        
        <!-- Test case 68 -->
-       <testCase testCaseId="DS_68" testCaseName="Set_Empty_VideoDisplay" desc="Validate by setting up empty videoDisplay">
+       <testCase testCaseId="DS_68" testCaseName="DisplaySettings_Set_Empty_VideoDisplay" desc="Validate by setting up empty videoDisplay">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
                           <params>
@@ -2354,7 +2354,7 @@
        </testCase>
        
        <!-- Test case 69 -->
-       <testCase testCaseId="DS_69" testCaseName="Set_Invalid_VideoDisplay" desc="Validate by setting up invalid videoDisplay">
+       <testCase testCaseId="DS_69" testCaseName="DisplaySettings_Set_Invalid_VideoDisplay" desc="Validate by setting up invalid videoDisplay">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
                           <params>
@@ -2367,7 +2367,7 @@
        </testCase>
        
        <!-- Test case 70 -->
-       <testCase testCaseId="DS_70" testCaseName="Set_Invalid_Persist" desc="Validate by setting up invalid persist">
+       <testCase testCaseId="DS_70" testCaseName="DisplaySettings_Set_Invalid_Persist" desc="Validate by setting up invalid persist">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Current_Resolution_Negative" method="Set_Current_Resolution_Negative">
                           <params>
@@ -2380,7 +2380,7 @@
        </testCase>
        
        <!-- Test case 71 -->
-       <testCase testCaseId="DS_71" testCaseName="Set_Resolution_WithoutParameter" desc="Validate set currentResolution API without passing the parameter">
+       <testCase testCaseId="DS_71" testCaseName="DisplaySettings_Set_Resolution_WithoutParameter" desc="Validate set currentResolution API without passing the parameter">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
                           <params>
@@ -2393,7 +2393,7 @@
 
        <!-- Test case 72 -->
        <!-- getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this testcase is modified -->
-       <testCase testCaseId="DS_72" testCaseName="DisplaySettings_Check_Display_Connected_Status_After_Light_Sleep_HDMI0" desc="Verify that the getConnectedVideoDisplays method returns the TV connected status when the device in light sleep mode">
+       <testCase testCaseId="DS_72" testCaseName="DisplaySettings_Display_Connected_Status_After_Light_Sleep_HDMI0" desc="Verify that the getConnectedVideoDisplays method returns the TV connected status when the device in light sleep mode">
             <testCaseInfo testCaseType="direct"/>
 	    <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" >
                   <resultGeneration useMethodTag="display_connected_status"/>

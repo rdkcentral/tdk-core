@@ -9,10 +9,10 @@ RDKV_CERT_AVS_MaintenanceManager
    - [MaintenanceManager_Get_MaintenanceActivity_Status](#maintenancemanager_get_maintenanceactivity_status)
    - [MaintenanceManager_Get_Maintenance_Mode](#maintenancemanager_get_maintenance_mode)
    - [MaintenanceManager_Start_Stop_Maintenance](#maintenancemanager_start_stop_maintenance)
-   - [MaintenanceManager_Check_On_Maintenance_StatusChange_Event](#maintenancemanager_check_on_maintenance_statuschange_event)
-   - [MaintenanceManager_Check_Start_Maintenance_Twice](#maintenancemanager_check_start_maintenance_twice)
+   - [MaintenanceManager_On_Maintenance_StatusChange_Event](#maintenancemanager_on_maintenance_statuschange_event)
+   - [MaintenanceManager_Start_Maintenance_Twice](#maintenancemanager_start_maintenance_twice)
    - [MaintenanceManager_Activate_Deactivate_Event_Test](#maintenancemanager_activate_deactivate_event_test)
-   - [MaintenanceManager_Check_MaintenanceActivity_Status](#maintenancemanager_check_maintenanceactivity_status)
+   - [MaintenanceManager_Get_MaintenanceActivity_Status](#maintenancemanager_get_maintenanceactivity_status)
    - [MaintenanceManager_Set_MaintenanceMode_With_Invalid_Parameters](#maintenancemanager_set_maintenancemode_with_invalid_parameters)
    - [MaintenanceManager_Set_MaintenanceMode_With_Empty_Parameters](#maintenancemanager_set_maintenancemode_with_empty_parameters)
    - [MaintenanceManager_Set_Invalid_Optout](#maintenancemanager_set_invalid_optout)
@@ -24,12 +24,12 @@ RDKV_CERT_AVS_MaintenanceManager
    - [MaintenanceManager_Set_Optout_Parameter_Only](#maintenancemanager_set_optout_parameter_only)
    - [MaintenanceManager_Set_Empty_Maintenancemode](#maintenancemanager_set_empty_maintenancemode)
    - [MaintenanceManager_Set_Empty_Optoutmode](#maintenancemanager_set_empty_optoutmode)
-   - [MaintenanceManager_Check_Get_MaintenanceActivity_Status_Error](#maintenancemanager_check_get_maintenanceactivity_status_error)
-   - [MaintenanceManager_Check_Get_Maintenance_StartTime_Error](#maintenancemanager_check_get_maintenance_starttime_error)
+   - [MaintenanceManager_Get_MaintenanceActivity_Status_Error](#maintenancemanager_get_maintenanceactivity_status_error)
+   - [MaintenanceManager_Get_Maintenance_StartTime_Error](#maintenancemanager_get_maintenance_starttime_error)
    - [MaintenanceManager_Set_Foreground_MaintenanceMode_with_Invalid_OptOut](#maintenancemanager_set_foreground_maintenancemode_with_invalid_optout)
    - [MaintenanceManager_Set_Background_MaintenanceMode_with_Empty_OptOut](#maintenancemanager_set_background_maintenancemode_with_empty_optout)
    - [MaintenanceManager_Set_Specialchars_MaintenanceMode_with_BYPASS_OPTOUT](#maintenancemanager_set_specialchars_maintenancemode_with_bypass_optout)
-   - [MaintenanceManager_Check_Stop_Maintenance_Error](#maintenancemanager_check_stop_maintenance_error)
+   - [MaintenanceManager_Stop_Maintenance_Error](#maintenancemanager_stop_maintenance_error)
    - [MaintenanceManager_Set_Numeric_MaintenanceMode_with_None_OptOut](#maintenancemanager_set_numeric_maintenancemode_with_none_optout)
    - [MaintenanceManager_Set_Foreground_MaintenanceMode_with_Numeric_OptOut](#maintenancemanager_set_foreground_maintenancemode_with_numeric_optout)
    - [MaintenanceManager_Set_Specialchars_MaintenanceMode_with_ENFORCE_OPTOUT_OptOut](#maintenancemanager_set_specialchars_maintenancemode_with_enforce_optout_optout)
@@ -131,9 +131,9 @@ Check if the start and stop maintenance methods were successful or not
 
 ---
 
-<a id="maintenancemanager_check_on_maintenance_statuschange_event"></a>
+<a id="maintenancemanager_on_maintenance_statuschange_event"></a>
 ### TestCase Name
-MaintenanceManager_Check_On_Maintenance_StatusChange_Event
+MaintenanceManager_On_Maintenance_StatusChange_Event
 
 ### TestCase ID
 MM_04
@@ -160,9 +160,9 @@ Check if the event is triggered when there is a change in the maintenance state
 
 ---
 
-<a id="maintenancemanager_check_start_maintenance_twice"></a>
+<a id="maintenancemanager_start_maintenance_twice"></a>
 ### TestCase Name
-MaintenanceManager_Check_Start_Maintenance_Twice
+MaintenanceManager_Start_Maintenance_Twice
 
 ### TestCase ID
 MM_05
@@ -221,9 +221,9 @@ Validates statechange event on Activating and deactivating the plugin
 
 ---
 
-<a id="maintenancemanager_check_maintenanceactivity_status"></a>
+<a id="maintenancemanager_get_maintenanceactivity_status"></a>
 ### TestCase Name
-MaintenanceManager_Check_MaintenanceActivity_Status
+MaintenanceManager_Get_MaintenanceActivity_Status
 
 ### TestCase ID
 MM_07
@@ -451,9 +451,9 @@ Check if the SetMaintenanceMode method returns an error when empty optoutmode pa
 
 ---
 
-<a id="maintenancemanager_check_get_maintenanceactivity_status_error"></a>
+<a id="maintenancemanager_get_maintenanceactivity_status_error"></a>
 ### TestCase Name
-MaintenanceManager_Check_Get_MaintenanceActivity_Status_Error
+MaintenanceManager_Get_MaintenanceActivity_Status_Error
 
 ### TestCase ID
 MM_19
@@ -479,9 +479,9 @@ Check if the getMaintenanceActivityStatus method returns an error when the plugi
 
 ---
 
-<a id="maintenancemanager_check_get_maintenance_starttime_error"></a>
+<a id="maintenancemanager_get_maintenance_starttime_error"></a>
 ### TestCase Name
-MaintenanceManager_Check_Get_Maintenance_StartTime_Error
+MaintenanceManager_Get_Maintenance_StartTime_Error
 
 ### TestCase ID
 MM_20
@@ -561,9 +561,9 @@ Check if the SetMaintenanceMode method returns an error when Maintenancemode as 
 
 ---
 
-<a id="maintenancemanager_check_stop_maintenance_error"></a>
+<a id="maintenancemanager_stop_maintenance_error"></a>
 ### TestCase Name
-MaintenanceManager_Check_Stop_Maintenance_Error
+MaintenanceManager_Stop_Maintenance_Error
 
 ### TestCase ID
 MM_24

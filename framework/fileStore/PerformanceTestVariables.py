@@ -40,3 +40,7 @@ app_download_url = ""
 google_bundle=""
 channelchange_bundle=""
 keytest_bundle=""
+invalid_download_url = "http://invalid.com/"
+
+#Configure any file of size upto 1GB
+Large_Validation_File = ""
